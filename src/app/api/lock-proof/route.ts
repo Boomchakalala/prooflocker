@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import crypto from "crypto";
 import { savePrediction } from "@/lib/storage";
 import { generateAuthorNumber } from "@/lib/utils";
+import { submitToDigitalEvidence, isDigitalEvidenceEnabled } from "@/lib/digitalEvidence";
 
 export async function POST(request: NextRequest) {
   try {
@@ -28,9 +29,6 @@ export async function POST(request: NextRequest) {
     const proofId = crypto.randomBytes(16).toString("hex");
     const predictionId = crypto.randomBytes(16).toString("hex");
 
-    // Simulate DAG transaction
-    const dagTransaction = `DAG${crypto.randomBytes(32).toString("hex")}`;
-
     // Current timestamp
     const timestamp = new Date().toISOString();
 
@@ -39,6 +37,34 @@ export async function POST(request: NextRequest) {
 
     // Generate consistent author number from userId
     const authorNumber = generateAuthorNumber(userId);
+
+    // Attempt to submit to Digital Evidence if configured
+    let onChainStatus: "pending" | "confirmed" = "pending";
+    let deReference: string | undefined;
+    let deEventId: string | undefined;
+    let confirmedAt: string | undefined;
+    let dagTransaction = `DAG${crypto.randomBytes(32).toString("hex")}`; // Fallback
+
+    if (isDigitalEvidenceEnabled()) {
+      console.log("Submitting to Digital Evidence...");
+      const deResult = await submitToDigitalEvidence(hash, {
+        proofId,
+        userId,
+      });
+
+      if (deResult.success) {
+        console.log("Digital Evidence submission successful:", deResult);
+        onChainStatus = "confirmed";
+        deReference = deResult.reference;
+        deEventId = deResult.eventId;
+        confirmedAt = deResult.timestamp;
+        dagTransaction = deResult.reference || dagTransaction; // Use DE reference as transaction ID
+      } else {
+        console.warn("Digital Evidence submission failed:", deResult.error);
+      }
+    } else {
+      console.log("Digital Evidence not enabled - proof will remain pending");
+    }
 
     // Save prediction to storage
     await savePrediction({
@@ -51,10 +77,13 @@ export async function POST(request: NextRequest) {
       timestamp,
       dagTransaction,
       proofId,
-      onChainStatus: "pending", // Mark as pending until real DAG integration
+      onChainStatus,
+      deReference,
+      deEventId,
+      confirmedAt,
     });
 
-    // Simulate network delay
+    // Simulate network delay for better UX
     await new Promise((resolve) => setTimeout(resolve, 1500));
 
     return NextResponse.json({
@@ -65,6 +94,9 @@ export async function POST(request: NextRequest) {
       timestamp,
       dagTransaction,
       authorNumber,
+      onChainStatus,
+      deReference,
+      deEventId,
     });
   } catch (error) {
     console.error("Error locking proof:", error);

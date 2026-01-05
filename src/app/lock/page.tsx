@@ -89,7 +89,7 @@ export default function LockPage() {
             Lock your prediction
           </h1>
           <p className="text-[#888] text-lg">
-            Create a tamper-proof fingerprint with verifiable timestamp
+            Create a tamper-proof fingerprint with verifiable proof reference
           </p>
         </div>
 
