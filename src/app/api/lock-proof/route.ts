@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import crypto from "crypto";
 import { savePrediction } from "@/lib/storage";
+import { generateAuthorNumber } from "@/lib/utils";
 
 export async function POST(request: NextRequest) {
   try {
@@ -33,19 +34,24 @@ export async function POST(request: NextRequest) {
     // Current timestamp
     const timestamp = new Date().toISOString();
 
-    // Create text preview (first 200 chars)
-    const textPreview = text.length > 200 ? text.slice(0, 200) + "..." : text;
+    // Create text preview (first 80 chars for feed)
+    const textPreview = text.length > 80 ? text.slice(0, 80) + "..." : text;
+
+    // Generate consistent author number from userId
+    const authorNumber = generateAuthorNumber(userId);
 
     // Save prediction to storage
     await savePrediction({
       id: predictionId,
       userId,
+      authorNumber,
       text,
       textPreview,
       hash,
       timestamp,
       dagTransaction,
       proofId,
+      onChainStatus: "pending", // Mark as pending until real DAG integration
     });
 
     // Simulate network delay
@@ -58,6 +64,7 @@ export async function POST(request: NextRequest) {
       hash,
       timestamp,
       dagTransaction,
+      authorNumber,
     });
   } catch (error) {
     console.error("Error locking proof:", error);
