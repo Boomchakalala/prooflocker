@@ -17,7 +17,7 @@ export default function PredictionCard({ prediction }: PredictionCardProps) {
   };
 
   return (
-    <div className="bg-[#141414] border border-[#1f1f1f] rounded-xl p-5 hover:border-[#2a2a2a] transition-colors">
+    <div className="glass rounded-xl p-5 hover:border-white/10 transition-all card-hover glow-blue">
       {/* Header with badge */}
       <div className="flex items-start justify-between mb-3">
         <div className="flex-1">
@@ -26,7 +26,7 @@ export default function PredictionCard({ prediction }: PredictionCardProps) {
           </p>
         </div>
         <div className="ml-4">
-          <span className="inline-flex items-center px-2.5 py-1 rounded-md bg-blue-500/10 border border-blue-500/20 text-blue-400 text-xs font-medium whitespace-nowrap">
+          <span className="inline-flex items-center px-2.5 py-1 rounded-md bg-gradient-to-r from-blue-500/20 to-purple-500/20 border border-blue-500/30 text-blue-400 text-xs font-medium whitespace-nowrap">
             <svg
               className="w-3 h-3 mr-1.5"
               fill="currentColor"
@@ -106,10 +106,10 @@ export default function PredictionCard({ prediction }: PredictionCardProps) {
       </div>
 
       {/* Actions */}
-      <div className="flex gap-2 pt-3 border-t border-[#1f1f1f]">
+      <div className="flex gap-2 pt-3 border-t border-white/5">
         <a
           href={`/verify?proofId=${prediction.proofId}`}
-          className="flex-1 text-center px-4 py-2 text-sm font-medium text-[#e0e0e0] bg-[#1a1a1a] hover:bg-[#202020] border border-[#2a2a2a] rounded-lg transition-colors"
+          className="flex-1 text-center px-4 py-2 text-sm font-medium text-[#e0e0e0] bg-white/5 hover:bg-white/10 border border-white/10 rounded-lg transition-all"
         >
           Verify
         </a>
@@ -118,7 +118,7 @@ export default function PredictionCard({ prediction }: PredictionCardProps) {
             const url = `${window.location.origin}/verify?proofId=${prediction.proofId}`;
             navigator.clipboard.writeText(url);
           }}
-          className="px-4 py-2 text-sm font-medium text-[#e0e0e0] bg-[#1a1a1a] hover:bg-[#202020] border border-[#2a2a2a] rounded-lg transition-colors"
+          className="px-4 py-2 text-sm font-medium text-[#e0e0e0] bg-white/5 hover:bg-white/10 border border-white/10 rounded-lg transition-all"
           title="Copy link"
         >
           <svg
