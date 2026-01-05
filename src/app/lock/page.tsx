@@ -147,7 +147,7 @@ export default function LockPage() {
               <li className="flex gap-2">
                 <span className="text-blue-500 flex-shrink-0 font-semibold">2.</span>
                 <span>
-                  The fingerprint is prepared for Constellation Network submission
+                  The fingerprint is submitted to Constellation Network Digital Evidence
                 </span>
               </li>
               <li className="flex gap-2">
@@ -217,7 +217,7 @@ export default function LockPage() {
               </p>
               <p className="text-sm text-[#888]">
                 No login required. Your full text is stored locally for display.
-                Only the SHA-256 fingerprint is prepared for blockchain submission.
+                Only the SHA-256 fingerprint is submitted to the blockchain.
                 {isAnonymous && (
                   <span className="block mt-1 text-green-400 font-medium">
                     ✓ You're using ProofLocker anonymously
