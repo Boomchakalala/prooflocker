@@ -1,201 +1,165 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import Link from "next/link";
+import PredictionCard from "@/components/PredictionCard";
+import { Prediction } from "@/lib/storage";
 
 export default function Home() {
-  const [text, setText] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [result, setResult] = useState<{
-    hash: string;
-    timestamp: string;
-    proofId: string;
-    dagTransaction: string;
-  } | null>(null);
+  const [activeTab, setActiveTab] = useState<"all" | "my">("all");
+  const [predictions, setPredictions] = useState<Prediction[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [userId, setUserId] = useState<string>("");
 
-  const handleLockProof = async () => {
-    if (!text.trim()) return;
+  useEffect(() => {
+    // Get or create user ID from localStorage
+    let storedUserId = localStorage.getItem("prooflocker-user-id");
+    if (!storedUserId) {
+      storedUserId = `user-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+      localStorage.setItem("prooflocker-user-id", storedUserId);
+    }
+    setUserId(storedUserId);
+  }, []);
 
+  useEffect(() => {
+    fetchPredictions();
+  }, [activeTab, userId]);
+
+  const fetchPredictions = async () => {
     setLoading(true);
     try {
-      const response = await fetch("/api/lock-proof", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ text }),
-      });
-
+      const endpoint =
+        activeTab === "all"
+          ? "/api/predictions"
+          : `/api/predictions?userId=${userId}`;
+      const response = await fetch(endpoint);
       const data = await response.json();
-      setResult(data);
+      setPredictions(data.predictions || []);
     } catch (error) {
-      console.error("Error locking proof:", error);
-      alert("Failed to lock proof. Please try again.");
+      console.error("Error fetching predictions:", error);
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800">
-      <div className="container mx-auto px-4 py-16">
-        <div className="max-w-3xl mx-auto">
-          {/* Header */}
-          <div className="text-center mb-12">
-            <h1 className="text-5xl font-bold text-gray-900 dark:text-white mb-4">
-              🔒 ProofLocker
-            </h1>
-            <p className="text-lg text-gray-600 dark:text-gray-300">
-              Lock your statements and predictions in time using Constellation Network
-            </p>
-            <p className="text-sm text-gray-500 dark:text-gray-400 mt-2">
-              Create immutable, verifiable proof that your text existed at a specific time
-            </p>
-          </div>
-
-          {/* Main Card */}
-          <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8">
-            {!result ? (
-              <>
-                <label
-                  htmlFor="text-input"
-                  className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
-                >
-                  Enter your statement or prediction
-                </label>
-                <textarea
-                  id="text-input"
-                  value={text}
-                  onChange={(e) => setText(e.target.value)}
-                  placeholder="e.g., I predict that Bitcoin will reach $100,000 by December 31, 2026"
-                  className="w-full h-48 px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent dark:bg-gray-700 dark:text-white resize-none"
-                  disabled={loading}
+    <div className="min-h-screen bg-[#0a0a0a]">
+      {/* Header */}
+      <header className="border-b border-[#1f1f1f] bg-[#0a0a0a] sticky top-0 z-50">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between h-16">
+            <div className="flex items-center gap-2">
+              <svg
+                className="w-6 h-6 text-blue-500"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z"
+                  clipRule="evenodd"
                 />
-
-                <div className="mt-6 flex items-center justify-between">
-                  <p className="text-sm text-gray-500 dark:text-gray-400">
-                    {text.length} characters
-                  </p>
-                  <button
-                    onClick={handleLockProof}
-                    disabled={!text.trim() || loading}
-                    className="px-8 py-3 bg-indigo-600 text-white font-semibold rounded-lg hover:bg-indigo-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors shadow-lg hover:shadow-xl"
-                  >
-                    {loading ? "Locking..." : "Lock Proof"}
-                  </button>
-                </div>
-
-                <div className="mt-8 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
-                  <h3 className="font-semibold text-blue-900 dark:text-blue-300 mb-2">
-                    How it works:
-                  </h3>
-                  <ol className="text-sm text-blue-800 dark:text-blue-400 space-y-1 list-decimal list-inside">
-                    <li>Your text is hashed using SHA-256</li>
-                    <li>The hash fingerprint is submitted to Constellation Network ($DAG)</li>
-                    <li>You receive a public proof reference</li>
-                    <li>Anyone can verify your proof later without revealing the original text</li>
-                  </ol>
-                </div>
-              </>
-            ) : (
-              <>
-                <div className="text-center mb-6">
-                  <div className="inline-flex items-center justify-center w-16 h-16 bg-green-100 dark:bg-green-900/30 rounded-full mb-4">
-                    <svg
-                      className="w-8 h-8 text-green-600 dark:text-green-400"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M5 13l4 4L19 7"
-                      />
-                    </svg>
-                  </div>
-                  <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
-                    Proof Locked Successfully!
-                  </h2>
-                  <p className="text-gray-600 dark:text-gray-400">
-                    Your statement has been secured on the Constellation Network
-                  </p>
-                </div>
-
-                <div className="space-y-4">
-                  <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-4">
-                    <label className="block text-xs font-semibold text-gray-500 dark:text-gray-400 mb-1">
-                      PROOF ID
-                    </label>
-                    <p className="font-mono text-sm text-gray-900 dark:text-white break-all">
-                      {result.proofId}
-                    </p>
-                  </div>
-
-                  <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-4">
-                    <label className="block text-xs font-semibold text-gray-500 dark:text-gray-400 mb-1">
-                      SHA-256 HASH
-                    </label>
-                    <p className="font-mono text-sm text-gray-900 dark:text-white break-all">
-                      {result.hash}
-                    </p>
-                  </div>
-
-                  <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-4">
-                    <label className="block text-xs font-semibold text-gray-500 dark:text-gray-400 mb-1">
-                      DAG TRANSACTION
-                    </label>
-                    <p className="font-mono text-sm text-gray-900 dark:text-white break-all">
-                      {result.dagTransaction}
-                    </p>
-                  </div>
-
-                  <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-4">
-                    <label className="block text-xs font-semibold text-gray-500 dark:text-gray-400 mb-1">
-                      TIMESTAMP
-                    </label>
-                    <p className="text-sm text-gray-900 dark:text-white">
-                      {new Date(result.timestamp).toLocaleString()}
-                    </p>
-                  </div>
-                </div>
-
-                <div className="mt-6 p-4 bg-yellow-50 dark:bg-yellow-900/20 rounded-lg">
-                  <p className="text-sm text-yellow-800 dark:text-yellow-300">
-                    <strong>Important:</strong> Save your Proof ID and original text. You'll need both to verify your proof later.
-                  </p>
-                </div>
-
-                <div className="mt-6 flex gap-4">
-                  <button
-                    onClick={() => {
-                      setResult(null);
-                      setText("");
-                    }}
-                    className="flex-1 px-6 py-3 bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-white font-semibold rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
-                  >
-                    Create New Proof
-                  </button>
-                  <a
-                    href="/verify"
-                    className="flex-1 px-6 py-3 bg-indigo-600 text-white font-semibold rounded-lg hover:bg-indigo-700 transition-colors text-center"
-                  >
-                    Verify a Proof
-                  </a>
-                </div>
-              </>
-            )}
-          </div>
-
-          {/* Info Footer */}
-          <div className="mt-8 text-center text-sm text-gray-600 dark:text-gray-400">
-            <p>
-              Powered by{" "}
-              <span className="font-semibold text-indigo-600 dark:text-indigo-400">
-                Constellation Network ($DAG)
-              </span>
-            </p>
+              </svg>
+              <h1 className="text-xl font-bold text-white">ProofLocker</h1>
+            </div>
+            <Link
+              href="/lock"
+              className="px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition-colors shadow-lg shadow-blue-500/20"
+            >
+              Lock prediction
+            </Link>
           </div>
         </div>
-      </div>
+      </header>
+
+      {/* Main content */}
+      <main className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Tabs */}
+        <div className="flex items-center gap-1 mb-6 p-1 bg-[#141414] border border-[#1f1f1f] rounded-lg w-fit">
+          <button
+            onClick={() => setActiveTab("all")}
+            className={`px-6 py-2 text-sm font-medium rounded-md transition-colors ${
+              activeTab === "all"
+                ? "bg-[#1f1f1f] text-white"
+                : "text-[#888] hover:text-white"
+            }`}
+          >
+            All predictions
+          </button>
+          <button
+            onClick={() => setActiveTab("my")}
+            className={`px-6 py-2 text-sm font-medium rounded-md transition-colors ${
+              activeTab === "my"
+                ? "bg-[#1f1f1f] text-white"
+                : "text-[#888] hover:text-white"
+            }`}
+          >
+            My predictions
+          </button>
+        </div>
+
+        {/* Feed */}
+        {loading ? (
+          <div className="flex items-center justify-center py-20">
+            <div className="animate-spin rounded-full h-8 w-8 border-2 border-blue-500 border-t-transparent"></div>
+          </div>
+        ) : predictions.length === 0 ? (
+          <div className="text-center py-20">
+            <svg
+              className="w-16 h-16 text-[#2a2a2a] mx-auto mb-4"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={1.5}
+                d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"
+              />
+            </svg>
+            <h3 className="text-lg font-medium text-[#e0e0e0] mb-2">
+              {activeTab === "all"
+                ? "No predictions yet"
+                : "You haven't locked any predictions"}
+            </h3>
+            <p className="text-[#888] mb-6">
+              {activeTab === "all"
+                ? "Be the first to lock a prediction on the blockchain"
+                : "Lock your first prediction to get started"}
+            </p>
+            <Link
+              href="/lock"
+              className="inline-flex items-center px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition-colors"
+            >
+              Lock your first prediction
+            </Link>
+          </div>
+        ) : (
+          <div className="grid gap-4 sm:grid-cols-1 lg:grid-cols-2">
+            {predictions.map((prediction) => (
+              <PredictionCard key={prediction.id} prediction={prediction} />
+            ))}
+          </div>
+        )}
+      </main>
+
+      {/* Footer */}
+      <footer className="border-t border-[#1f1f1f] mt-20">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+          <div className="flex items-center justify-between">
+            <p className="text-sm text-[#6b6b6b]">
+              Powered by Constellation Network ($DAG)
+            </p>
+            <Link
+              href="/verify"
+              className="text-sm text-[#888] hover:text-white transition-colors"
+            >
+              Verify a proof →
+            </Link>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 }
