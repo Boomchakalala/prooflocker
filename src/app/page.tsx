@@ -175,7 +175,7 @@ export default function Home() {
                       clipRule="evenodd"
                     />
                   </svg>
-                  No login required — tamper-proof fingerprints
+                  Anonymous. Public. Immutable.
                 </span>
               )}
             </div>
