@@ -48,7 +48,7 @@ export default function LockPage() {
   };
 
   const handleShare = () => {
-    const shareText = `I just locked a prediction on-chain with ProofLocker. The proof is final—no take-backs. Check it out and verify yourself: ${window.location.origin}/verify?proofId=${proofId}`;
+    const shareText = `I locked this prediction on-chain with ProofLocker. No edits. No excuses. Verify it yourself: ${window.location.origin}/verify?proofId=${proofId}`;
     navigator.clipboard.writeText(shareText);
     alert("Share message copied to clipboard!");
   };

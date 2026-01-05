@@ -421,7 +421,7 @@ function VerifyContent() {
               <button
                 onClick={() => {
                   const shareText = result.verified && result.proofDetails
-                    ? `I made a prediction and locked it on-chain. The proof is final. Verify it yourself: ${window.location.origin}/verify?proofId=${proofId}`
+                    ? `I locked this prediction on-chain with ProofLocker. No edits. No excuses. Verify it yourself: ${window.location.origin}/verify?proofId=${proofId}`
                     : `Check this ProofLocker verification: ${window.location.href}`;
                   navigator.clipboard.writeText(shareText);
                   alert("Share message copied to clipboard!");
