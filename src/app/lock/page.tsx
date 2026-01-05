@@ -12,6 +12,8 @@ export default function LockPage() {
   const [loading, setLoading] = useState(false);
   const [userId, setUserId] = useState<string>("");
   const [isAnonymous, setIsAnonymous] = useState(true);
+  const [locked, setLocked] = useState(false);
+  const [proofId, setProofId] = useState<string>("");
 
   useEffect(() => {
     const id = getOrCreateUserId();
@@ -31,7 +33,9 @@ export default function LockPage() {
       });
 
       if (response.ok) {
-        router.push("/");
+        const data = await response.json();
+        setProofId(data.proofId);
+        setLocked(true);
       } else {
         alert("Failed to lock prediction. Please try again.");
       }
@@ -41,6 +45,12 @@ export default function LockPage() {
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleShare = () => {
+    const shareText = `I just locked a prediction on-chain with ProofLocker. The proof is final—no take-backs. Check it out and verify yourself: ${window.location.origin}/verify?proofId=${proofId}`;
+    navigator.clipboard.writeText(shareText);
+    alert("Share message copied to clipboard!");
   };
 
   return (
