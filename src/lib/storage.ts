@@ -12,12 +12,14 @@ import path from "path";
 export interface Prediction {
   id: string;
   userId: string; // UUID for anonymous users, account ID for authenticated users
+  authorNumber: number; // Anonymous author identifier (e.g., 1234 for "Anon #1234")
   text: string;
   textPreview: string;
   hash: string;
   timestamp: string;
   dagTransaction: string;
   proofId: string;
+  onChainStatus: "pending" | "confirmed"; // Track on-chain confirmation status
   // Future fields for account linking:
   // accountId?: string;  // When anonymous user upgrades to account
   // migratedFrom?: string;  // Original anonymous userId if migrated
