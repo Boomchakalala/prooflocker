@@ -13,8 +13,8 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "ProofLocker - Lock Your Predictions in Time",
-  description: "Create tamper-proof, timestamped predictions using Constellation Network",
+  title: "ProofLocker - Lock Your Predictions On-Chain",
+  description: "Lock predictions on-chain. No edits. No excuses. Public accountability powered by Constellation Network.",
 };
 
 export default function RootLayout({

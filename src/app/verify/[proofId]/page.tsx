@@ -91,7 +91,7 @@ function VerifyContent() {
         <div className="mb-8 fade-in">
           <h1 className="text-4xl font-bold gradient-text mb-3">Verify proof</h1>
           <p className="text-[#888] text-lg">
-            Check if the fingerprint matches the original text
+            Check if a prediction was locked on-chain at a specific time
           </p>
         </div>
 
