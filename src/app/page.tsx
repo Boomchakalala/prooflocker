@@ -4,21 +4,19 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import PredictionCard from "@/components/PredictionCard";
 import { Prediction } from "@/lib/storage";
+import { getOrCreateUserId, isAnonymousUser } from "@/lib/user";
 
 export default function Home() {
   const [activeTab, setActiveTab] = useState<"all" | "my">("all");
   const [predictions, setPredictions] = useState<Prediction[]>([]);
   const [loading, setLoading] = useState(true);
   const [userId, setUserId] = useState<string>("");
+  const [isAnonymous, setIsAnonymous] = useState(true);
 
   useEffect(() => {
-    // Get or create user ID from localStorage
-    let storedUserId = localStorage.getItem("prooflocker-user-id");
-    if (!storedUserId) {
-      storedUserId = `user-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-      localStorage.setItem("prooflocker-user-id", storedUserId);
-    }
-    setUserId(storedUserId);
+    const id = getOrCreateUserId();
+    setUserId(id);
+    setIsAnonymous(isAnonymousUser());
   }, []);
 
   useEffect(() => {
@@ -147,10 +145,28 @@ export default function Home() {
       {/* Footer */}
       <footer className="border-t border-[#1f1f1f] mt-20">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-          <div className="flex items-center justify-between">
-            <p className="text-sm text-[#6b6b6b]">
-              Powered by Constellation Network ($DAG)
-            </p>
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div className="flex items-center gap-4">
+              <p className="text-sm text-[#6b6b6b]">
+                Powered by Constellation Network ($DAG)
+              </p>
+              {isAnonymous && (
+                <span className="flex items-center gap-1.5 text-xs text-[#888] bg-[#141414] px-2.5 py-1 rounded-md border border-[#1f1f1f]">
+                  <svg
+                    className="w-3.5 h-3.5 text-green-500"
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
+                  No login required — proofs live on-chain
+                </span>
+              )}
+            </div>
             <Link
               href="/verify"
               className="text-sm text-[#888] hover:text-white transition-colors"
