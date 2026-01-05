@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import PredictionCard from "@/components/PredictionCard";
 import ProofLockerLogo from "@/components/Logo";
+import DEStatusBanner from "@/components/DEStatusBanner";
 import { Prediction } from "@/lib/storage";
 import { getOrCreateUserId, isAnonymousUser } from "@/lib/user";
 
@@ -187,6 +188,9 @@ export default function Home() {
           </div>
         </div>
       </footer>
+
+      {/* Development status banner */}
+      <DEStatusBanner />
     </div>
   );
 }
