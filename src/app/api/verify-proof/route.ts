@@ -1,13 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import crypto from "crypto";
-
-// This should be shared with lock-proof route
-// In production, use a proper database
-const proofStore = new Map<string, {
-  hash: string;
-  timestamp: string;
-  dagTransaction: string;
-}>();
+import { getPredictionByProofId } from "@/lib/storage";
 
 export async function POST(request: NextRequest) {
   try {
@@ -20,13 +13,13 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Get the stored proof
-    const storedProof = proofStore.get(proofId);
+    // Get the stored prediction
+    const storedPrediction = await getPredictionByProofId(proofId);
 
-    if (!storedProof) {
+    if (!storedPrediction) {
       return NextResponse.json({
         verified: false,
-        message: "Proof ID not found",
+        message: "Proof ID not found. This prediction may not exist.",
       });
     }
 
@@ -34,7 +27,7 @@ export async function POST(request: NextRequest) {
     const hash = crypto.createHash("sha256").update(text).digest("hex");
 
     // Verify if the hash matches
-    const verified = hash === storedProof.hash;
+    const verified = hash === storedPrediction.hash;
 
     // Simulate network delay
     await new Promise((resolve) => setTimeout(resolve, 800));
@@ -44,7 +37,13 @@ export async function POST(request: NextRequest) {
       message: verified
         ? "Proof verified successfully! The text matches the original."
         : "Verification failed. The text does not match the original.",
-      proofDetails: verified ? storedProof : undefined,
+      proofDetails: verified
+        ? {
+            hash: storedPrediction.hash,
+            timestamp: storedPrediction.timestamp,
+            dagTransaction: storedPrediction.dagTransaction,
+          }
+        : undefined,
     });
   } catch (error) {
     console.error("Error verifying proof:", error);
