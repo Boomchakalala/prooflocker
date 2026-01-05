@@ -89,7 +89,7 @@ export default function LockPage() {
             Lock your prediction
           </h1>
           <p className="text-[#888] text-lg">
-            Create an immutable, timestamped proof of your statement or prediction
+            Create a tamper-proof fingerprint with verifiable timestamp
           </p>
         </div>
 
@@ -113,12 +113,12 @@ export default function LockPage() {
               <span className="text-sm text-[#6b6b6b]">
                 {text.length} characters
               </span>
-              {text.length > 200 && (
+              {text.length > 80 && (
                 <span className="text-xs text-yellow-500 flex items-center gap-1">
                   <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
                   </svg>
-                  Preview will be truncated in feed
+                  Preview in feed will be truncated to 80 characters
                 </span>
               )}
             </div>
@@ -142,22 +142,22 @@ export default function LockPage() {
             <ol className="space-y-2 text-sm text-[#a0a0a0]">
               <li className="flex gap-2">
                 <span className="text-blue-500 flex-shrink-0 font-semibold">1.</span>
-                <span>Your text is hashed using SHA-256</span>
+                <span>Your text is hashed using SHA-256 (tamper-proof fingerprint)</span>
               </li>
               <li className="flex gap-2">
                 <span className="text-blue-500 flex-shrink-0 font-semibold">2.</span>
                 <span>
-                  The hash fingerprint is submitted to Constellation Network
+                  The fingerprint is prepared for Constellation Network submission
                 </span>
               </li>
               <li className="flex gap-2">
                 <span className="text-blue-500 flex-shrink-0 font-semibold">3.</span>
-                <span>You receive a public proof reference</span>
+                <span>You receive a unique proof ID for verification</span>
               </li>
               <li className="flex gap-2">
                 <span className="text-blue-500 flex-shrink-0 font-semibold">4.</span>
                 <span>
-                  Anyone can verify the proof later without revealing the original text
+                  Anyone can verify the fingerprint without revealing your original text
                 </span>
               </li>
             </ol>
@@ -217,8 +217,7 @@ export default function LockPage() {
               </p>
               <p className="text-sm text-[#888]">
                 No login required. Your full text is stored locally for display.
-                Only the SHA-256 hash is submitted to the Constellation Network
-                blockchain.
+                Only the SHA-256 fingerprint is prepared for blockchain submission.
                 {isAnonymous && (
                   <span className="block mt-1 text-green-400 font-medium">
                     ✓ You're using ProofLocker anonymously

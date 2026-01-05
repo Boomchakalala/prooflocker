@@ -159,7 +159,7 @@ export default function Home() {
                 Powered by <span className="gradient-text font-semibold">Constellation Network ($DAG)</span>
               </p>
               {isAnonymous && (
-                <span className="flex items-center gap-1.5 text-xs text-[#888] glass px-2.5 py-1 rounded-md border border-white/5 pulse">
+                <span className="flex items-center gap-1.5 text-xs text-[#888] glass px-2.5 py-1 rounded-md border border-white/5">
                   <svg
                     className="w-3.5 h-3.5 text-green-500"
                     fill="currentColor"
@@ -171,7 +171,7 @@ export default function Home() {
                       clipRule="evenodd"
                     />
                   </svg>
-                  No login required — proofs live on-chain
+                  No login required — tamper-proof fingerprints
                 </span>
               )}
             </div>
