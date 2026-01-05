@@ -92,7 +92,7 @@ function VerifyContent() {
         <div className="mb-8 fade-in">
           <h1 className="text-4xl font-bold gradient-text mb-3">Verify proof</h1>
           <p className="text-[#888] text-lg">
-            Confirm that a prediction was locked at a specific time
+            Verify that a prediction's fingerprint matches the original text
           </p>
         </div>
 
@@ -158,13 +158,12 @@ function VerifyContent() {
                 <li className="flex gap-2">
                   <span className="text-blue-500 flex-shrink-0 font-semibold">2.</span>
                   <span>
-                    The hash is compared with the one stored on Constellation
-                    Network
+                    The fingerprint is compared with the stored proof
                   </span>
                 </li>
                 <li className="flex gap-2">
                   <span className="text-blue-500 flex-shrink-0 font-semibold">3.</span>
-                  <span>Verification result is returned with timestamp</span>
+                  <span>Result shows MATCH or NO MATCH with timestamp</span>
                 </li>
               </ol>
             </div>
@@ -204,17 +203,17 @@ function VerifyContent() {
           </div>
         ) : (
           <div className="glass rounded-xl p-6 glow-purple fade-in">
-            <div className="text-center mb-6">
+            <div className="text-center mb-8">
               <div
-                className={`inline-flex items-center justify-center w-20 h-20 rounded-full mb-4 border-2 ${
+                className={`inline-flex items-center justify-center w-24 h-24 rounded-full mb-6 border-4 ${
                   result.verified
-                    ? "bg-green-500/10 border-green-500/30"
-                    : "bg-red-500/10 border-red-500/30"
+                    ? "bg-green-500/10 border-green-500/30 shadow-lg shadow-green-500/20"
+                    : "bg-red-500/10 border-red-500/30 shadow-lg shadow-red-500/20"
                 }`}
               >
                 {result.verified ? (
                   <svg
-                    className="w-10 h-10 text-green-500"
+                    className="w-12 h-12 text-green-500"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -228,7 +227,7 @@ function VerifyContent() {
                   </svg>
                 ) : (
                   <svg
-                    className="w-10 h-10 text-red-500"
+                    className="w-12 h-12 text-red-500"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -242,52 +241,88 @@ function VerifyContent() {
                   </svg>
                 )}
               </div>
-              <h2
-                className={`text-3xl font-bold mb-2 ${
-                  result.verified ? "gradient-text" : "text-red-400"
-                }`}
-              >
-                {result.verified ? "Proof verified!" : "Verification failed"}
+
+              <div className={`inline-block px-6 py-2 rounded-full mb-4 font-bold text-2xl ${
+                result.verified
+                  ? "bg-green-500/20 text-green-400"
+                  : "bg-red-500/20 text-red-400"
+              }`}>
+                {result.verified ? "MATCH" : "NO MATCH"}
+              </div>
+
+              <h2 className={`text-2xl font-bold mb-2`}>
+                {result.verified ? (
+                  <span className="gradient-text">Fingerprint verified!</span>
+                ) : (
+                  <span className="text-red-400">Verification failed</span>
+                )}
               </h2>
-              <p className="text-[#a0a0a0]">{result.message}</p>
+              <p className="text-[#a0a0a0] max-w-md mx-auto">
+                {result.verified
+                  ? "The fingerprint matches perfectly. This text was locked at the timestamp shown below."
+                  : "The fingerprint does not match. The text you entered is different from the original."}
+              </p>
             </div>
 
             {result.verified && result.proofDetails && (
               <div className="space-y-4 mb-6">
                 <div className="glass border border-white/5 rounded-lg p-4">
                   <label className="block text-xs font-semibold text-[#6b6b6b] mb-2">
-                    SHA-256 HASH
+                    SHA-256 FINGERPRINT
                   </label>
-                  <code className="font-mono text-sm text-[#e0e0e0] break-all">
-                    {result.proofDetails.hash}
-                  </code>
+                  <div className="flex items-center justify-between">
+                    <code className="font-mono text-sm text-[#e0e0e0] break-all flex-1">
+                      {result.proofDetails.hash}
+                    </code>
+                    <button
+                      onClick={() => navigator.clipboard.writeText(result.proofDetails!.hash)}
+                      className="ml-3 p-2 hover:bg-white/10 rounded transition-colors"
+                      title="Copy fingerprint"
+                    >
+                      <svg
+                        className="w-4 h-4 text-[#888]"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"
+                        />
+                      </svg>
+                    </button>
+                  </div>
                 </div>
 
                 <div className="glass border border-white/5 rounded-lg p-4">
                   <label className="block text-xs font-semibold text-[#6b6b6b] mb-2">
-                    DAG TRANSACTION
-                  </label>
-                  <code className="font-mono text-sm text-[#e0e0e0] break-all">
-                    {result.proofDetails.dagTransaction}
-                  </code>
-                </div>
-
-                <div className="glass border border-white/5 rounded-lg p-4">
-                  <label className="block text-xs font-semibold text-[#6b6b6b] mb-2">
-                    LOCKED ON
+                    TIMESTAMP
                   </label>
                   <p className="text-sm text-[#e0e0e0]">
                     {new Date(result.proofDetails.timestamp).toLocaleString(
                       "en-US",
                       {
+                        weekday: "long",
                         month: "long",
                         day: "numeric",
                         year: "numeric",
                         hour: "2-digit",
                         minute: "2-digit",
+                        second: "2-digit",
                       }
                     )}
                   </p>
+                </div>
+
+                <div className="glass border border-white/5 rounded-lg p-4">
+                  <label className="block text-xs font-semibold text-[#6b6b6b] mb-2">
+                    DAG TRANSACTION ID
+                  </label>
+                  <code className="font-mono text-xs text-[#a0a0a0] break-all">
+                    {result.proofDetails.dagTransaction}
+                  </code>
                 </div>
               </div>
             )}
@@ -302,6 +337,19 @@ function VerifyContent() {
                 className="flex-1 px-6 py-3 bg-white/5 hover:bg-white/10 text-white font-semibold rounded-lg transition-all border border-white/10"
               >
                 Verify another
+              </button>
+              <button
+                onClick={() => {
+                  const url = window.location.href;
+                  navigator.clipboard.writeText(url);
+                }}
+                className="px-6 py-3 bg-white/5 hover:bg-white/10 text-white font-semibold rounded-lg transition-all border border-white/10 flex items-center gap-2"
+                title="Copy link"
+              >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
+                </svg>
+                Share
               </button>
               <Link
                 href="/"
