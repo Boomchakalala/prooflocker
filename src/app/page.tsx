@@ -57,7 +57,10 @@ export default function Home() {
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center gap-3">
               <ProofLockerLogo className="w-8 h-8" />
-              <h1 className="text-xl font-bold gradient-text">ProofLocker</h1>
+              <div>
+                <h1 className="text-xl font-bold gradient-text">ProofLocker</h1>
+                <p className="text-[10px] text-[#666] uppercase tracking-wider">On-chain accountability</p>
+              </div>
             </div>
             <Link
               href="/lock"
@@ -122,13 +125,13 @@ export default function Home() {
             </div>
             <h3 className="text-2xl font-bold gradient-text mb-3">
               {activeTab === "all"
-                ? "No predictions yet"
-                : "You haven't locked any predictions"}
+                ? "No predictions locked yet"
+                : "You haven't made your mark"}
             </h3>
             <p className="text-[#888] mb-8 text-lg">
               {activeTab === "all"
-                ? "Be the first to lock a prediction on the blockchain"
-                : "Lock your first prediction to get started"}
+                ? "Be the first to lock a prediction on-chain"
+                : "Make a prediction. Lock it. Own the outcome."}
             </p>
             <Link
               href="/lock"
