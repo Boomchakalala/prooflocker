@@ -246,7 +246,7 @@ function VerifyContent() {
                 )}
               </div>
 
-              <div className={`inline-block px-6 py-2 rounded-full mb-4 font-bold text-2xl ${
+              <div className={`inline-block px-6 py-2 rounded-full mb-4 font-bold text-3xl ${
                 result.verified
                   ? "bg-green-500/20 text-green-400"
                   : "bg-red-500/20 text-red-400"
