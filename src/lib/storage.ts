@@ -20,6 +20,10 @@ export interface Prediction {
   dagTransaction: string;
   proofId: string;
   onChainStatus: "pending" | "confirmed"; // Track on-chain confirmation status
+  // Digital Evidence metadata (when confirmed on-chain):
+  deReference?: string; // Constellation Digital Evidence reference/transaction ID
+  deEventId?: string; // Digital Evidence event ID
+  confirmedAt?: string; // ISO timestamp when on-chain confirmation succeeded
   // Future fields for account linking:
   // accountId?: string;  // When anonymous user upgrades to account
   // migratedFrom?: string;  // Original anonymous userId if migrated
