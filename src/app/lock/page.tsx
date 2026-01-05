@@ -3,18 +3,19 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { getOrCreateUserId, isAnonymousUser } from "@/lib/user";
 
 export default function LockPage() {
   const router = useRouter();
   const [text, setText] = useState("");
   const [loading, setLoading] = useState(false);
   const [userId, setUserId] = useState<string>("");
+  const [isAnonymous, setIsAnonymous] = useState(true);
 
   useEffect(() => {
-    const storedUserId = localStorage.getItem("prooflocker-user-id");
-    if (storedUserId) {
-      setUserId(storedUserId);
-    }
+    const id = getOrCreateUserId();
+    setUserId(id);
+    setIsAnonymous(isAnonymousUser());
   }, []);
 
   const handleLock = async () => {
@@ -198,11 +199,34 @@ export default function LockPage() {
 
         {/* Privacy notice */}
         <div className="mt-6 p-4 bg-[#141414] border border-[#1f1f1f] rounded-lg">
-          <p className="text-sm text-[#888]">
-            <span className="text-[#e0e0e0] font-medium">Privacy:</span> Your
-            full text is stored locally for display. Only the SHA-256 hash is
-            submitted to the Constellation Network blockchain.
-          </p>
+          <div className="flex items-start gap-3">
+            <svg
+              className="w-5 h-5 text-blue-500 flex-shrink-0 mt-0.5"
+              fill="currentColor"
+              viewBox="0 0 20 20"
+            >
+              <path
+                fillRule="evenodd"
+                d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
+                clipRule="evenodd"
+              />
+            </svg>
+            <div>
+              <p className="text-sm text-[#e0e0e0] font-medium mb-1">
+                Privacy & Anonymity
+              </p>
+              <p className="text-sm text-[#888]">
+                No login required. Your full text is stored locally for display.
+                Only the SHA-256 hash is submitted to the Constellation Network
+                blockchain.
+                {isAnonymous && (
+                  <span className="block mt-1 text-green-400">
+                    ✓ You're using ProofLocker anonymously
+                  </span>
+                )}
+              </p>
+            </div>
+          </div>
         </div>
       </main>
     </div>
