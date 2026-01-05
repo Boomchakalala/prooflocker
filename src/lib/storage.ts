@@ -1,15 +1,26 @@
 import fs from "fs/promises";
 import path from "path";
 
+/**
+ * Prediction data structure
+ *
+ * Future-proof design:
+ * - userId can be either anonymous UUID or authenticated account ID
+ * - When users upgrade from anonymous to authenticated, predictions can be migrated
+ * - Store both anonymous and authenticated user IDs for seamless transition
+ */
 export interface Prediction {
   id: string;
-  userId: string;
+  userId: string; // UUID for anonymous users, account ID for authenticated users
   text: string;
   textPreview: string;
   hash: string;
   timestamp: string;
   dagTransaction: string;
   proofId: string;
+  // Future fields for account linking:
+  // accountId?: string;  // When anonymous user upgrades to account
+  // migratedFrom?: string;  // Original anonymous userId if migrated
 }
 
 const DATA_DIR = path.join(process.cwd(), "data");
@@ -65,4 +76,32 @@ export async function getPredictionByProofId(
 ): Promise<Prediction | null> {
   const predictions = await readPredictions();
   return predictions.find((p) => p.proofId === proofId) || null;
+}
+
+/**
+ * Future function: Migrate predictions from anonymous user to authenticated account
+ * This will be used when implementing account linking
+ */
+export async function migratePredictions(
+  anonymousUserId: string,
+  authenticatedUserId: string
+): Promise<number> {
+  const predictions = await readPredictions();
+  let migratedCount = 0;
+
+  const updatedPredictions = predictions.map((p) => {
+    if (p.userId === anonymousUserId) {
+      migratedCount++;
+      return {
+        ...p,
+        userId: authenticatedUserId,
+        // Store original anonymous ID for audit trail
+        // migratedFrom: anonymousUserId,
+      };
+    }
+    return p;
+  });
+
+  await writePredictions(updatedPredictions);
+  return migratedCount;
 }
