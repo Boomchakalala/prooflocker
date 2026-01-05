@@ -42,6 +42,10 @@ export async function POST(request: NextRequest) {
             hash: storedPrediction.hash,
             timestamp: storedPrediction.timestamp,
             dagTransaction: storedPrediction.dagTransaction,
+            onChainStatus: storedPrediction.onChainStatus,
+            deReference: storedPrediction.deReference,
+            deEventId: storedPrediction.deEventId,
+            confirmedAt: storedPrediction.confirmedAt,
           }
         : undefined,
     });

@@ -1,13 +1,15 @@
 "use client";
 
 import { useState, useEffect, Suspense } from "react";
-import { useSearchParams } from "next/navigation";
+import { useParams } from "next/navigation";
 import Link from "next/link";
 import ProofLockerLogo from "@/components/Logo";
 
 function VerifyContent() {
-  const searchParams = useSearchParams();
-  const [proofId, setProofId] = useState("");
+  const params = useParams();
+  const proofIdFromUrl = params.proofId as string;
+
+  const [proofId, setProofId] = useState(proofIdFromUrl || "");
   const [text, setText] = useState("");
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<{
@@ -23,13 +25,6 @@ function VerifyContent() {
       confirmedAt?: string;
     };
   } | null>(null);
-
-  useEffect(() => {
-    const proofIdFromUrl = searchParams.get("proofId");
-    if (proofIdFromUrl) {
-      setProofId(proofIdFromUrl);
-    }
-  }, [searchParams]);
 
   const handleVerify = async () => {
     if (!proofId.trim() || !text.trim()) return;
@@ -96,7 +91,7 @@ function VerifyContent() {
         <div className="mb-8 fade-in">
           <h1 className="text-4xl font-bold gradient-text mb-3">Verify proof</h1>
           <p className="text-[#888] text-lg">
-            Verify that a prediction's fingerprint matches the original text
+            Check if the fingerprint matches the original text
           </p>
         </div>
 
@@ -167,7 +162,7 @@ function VerifyContent() {
                 </li>
                 <li className="flex gap-2">
                   <span className="text-blue-500 flex-shrink-0 font-semibold">3.</span>
-                  <span>Result shows MATCH or NO MATCH with timestamp</span>
+                  <span>Result shows MATCH or NO MATCH with proof details</span>
                 </li>
               </ol>
             </div>
@@ -246,7 +241,7 @@ function VerifyContent() {
                 )}
               </div>
 
-              <div className={`inline-block px-6 py-2 rounded-full mb-4 font-bold text-2xl ${
+              <div className={`inline-block px-6 py-2 rounded-full mb-4 font-bold text-3xl ${
                 result.verified
                   ? "bg-green-500/20 text-green-400"
                   : "bg-red-500/20 text-red-400"
@@ -254,7 +249,7 @@ function VerifyContent() {
                 {result.verified ? "MATCH" : "NO MATCH"}
               </div>
 
-              <h2 className={`text-2xl font-bold mb-2`}>
+              <h2 className="text-2xl font-bold mb-2">
                 {result.verified ? (
                   <span className="gradient-text">Fingerprint verified!</span>
                 ) : (
@@ -270,9 +265,10 @@ function VerifyContent() {
 
             {result.verified && result.proofDetails && (
               <div className="space-y-4 mb-6">
+                {/* Fingerprint */}
                 <div className="glass border border-white/5 rounded-lg p-4">
-                  <label className="block text-xs font-semibold text-[#6b6b6b] mb-2">
-                    SHA-256 FINGERPRINT
+                  <label className="block text-xs font-semibold text-[#6b6b6b] mb-2 uppercase tracking-wider">
+                    SHA-256 Fingerprint
                   </label>
                   <div className="flex items-center justify-between">
                     <code className="font-mono text-sm text-[#e0e0e0] break-all flex-1">
@@ -300,9 +296,28 @@ function VerifyContent() {
                   </div>
                 </div>
 
+                {/* Status Badge */}
                 <div className="glass border border-white/5 rounded-lg p-4">
-                  <label className="block text-xs font-semibold text-[#6b6b6b] mb-2">
-                    TIMESTAMP
+                  <label className="block text-xs font-semibold text-[#6b6b6b] mb-2 uppercase tracking-wider">
+                    On-chain Status
+                  </label>
+                  <span
+                    className={`inline-flex items-center px-3 py-1.5 rounded-md text-sm font-medium ${
+                      result.proofDetails.onChainStatus === "confirmed"
+                        ? "bg-green-500/10 border border-green-500/30 text-green-400"
+                        : "bg-yellow-500/10 border border-yellow-500/30 text-yellow-400"
+                    }`}
+                  >
+                    {result.proofDetails.onChainStatus === "confirmed"
+                      ? "Confirmed on-chain"
+                      : "Pending on-chain"}
+                  </span>
+                </div>
+
+                {/* Timestamp */}
+                <div className="glass border border-white/5 rounded-lg p-4">
+                  <label className="block text-xs font-semibold text-[#6b6b6b] mb-2 uppercase tracking-wider">
+                    Locked At
                   </label>
                   <p className="text-sm text-[#e0e0e0]">
                     {new Date(result.proofDetails.timestamp).toLocaleString(
@@ -320,14 +335,52 @@ function VerifyContent() {
                   </p>
                 </div>
 
-                <div className="glass border border-white/5 rounded-lg p-4">
-                  <label className="block text-xs font-semibold text-[#6b6b6b] mb-2">
-                    DAG TRANSACTION ID
-                  </label>
-                  <code className="font-mono text-xs text-[#a0a0a0] break-all">
-                    {result.proofDetails.dagTransaction}
-                  </code>
-                </div>
+                {/* On-chain Timestamp (if confirmed) */}
+                {result.proofDetails.onChainStatus === "confirmed" && result.proofDetails.confirmedAt && (
+                  <div className="glass border border-white/5 rounded-lg p-4">
+                    <label className="block text-xs font-semibold text-[#6b6b6b] mb-2 uppercase tracking-wider">
+                      Confirmed On-chain At
+                    </label>
+                    <p className="text-sm text-[#e0e0e0]">
+                      {new Date(result.proofDetails.confirmedAt).toLocaleString(
+                        "en-US",
+                        {
+                          weekday: "long",
+                          month: "long",
+                          day: "numeric",
+                          year: "numeric",
+                          hour: "2-digit",
+                          minute: "2-digit",
+                          second: "2-digit",
+                        }
+                      )}
+                    </p>
+                  </div>
+                )}
+
+                {/* Digital Evidence Reference (if available) */}
+                {result.proofDetails.deReference && (
+                  <div className="glass border border-white/5 rounded-lg p-4">
+                    <label className="block text-xs font-semibold text-[#6b6b6b] mb-2 uppercase tracking-wider">
+                      Digital Evidence Reference
+                    </label>
+                    <code className="font-mono text-xs text-[#a0a0a0] break-all">
+                      {result.proofDetails.deReference}
+                    </code>
+                  </div>
+                )}
+
+                {/* DAG Transaction ID (fallback) */}
+                {!result.proofDetails.deReference && (
+                  <div className="glass border border-white/5 rounded-lg p-4">
+                    <label className="block text-xs font-semibold text-[#6b6b6b] mb-2 uppercase tracking-wider">
+                      Transaction ID
+                    </label>
+                    <code className="font-mono text-xs text-[#a0a0a0] break-all">
+                      {result.proofDetails.dagTransaction}
+                    </code>
+                  </div>
+                )}
               </div>
             )}
 
@@ -335,7 +388,7 @@ function VerifyContent() {
               <button
                 onClick={() => {
                   setResult(null);
-                  setProofId("");
+                  setProofId(proofIdFromUrl || "");
                   setText("");
                 }}
                 className="flex-1 px-6 py-3 bg-white/5 hover:bg-white/10 text-white font-semibold rounded-lg transition-all border border-white/10"
@@ -348,7 +401,7 @@ function VerifyContent() {
                   navigator.clipboard.writeText(url);
                 }}
                 className="px-6 py-3 bg-white/5 hover:bg-white/10 text-white font-semibold rounded-lg transition-all border border-white/10 flex items-center gap-2"
-                title="Copy link"
+                title="Share proof link"
               >
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
