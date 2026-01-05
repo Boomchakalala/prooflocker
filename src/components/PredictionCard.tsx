@@ -12,6 +12,10 @@ export default function PredictionCard({ prediction }: PredictionCardProps) {
   const [copied, setCopied] = useState(false);
   const [linkCopied, setLinkCopied] = useState(false);
 
+  // Fallback for older predictions without authorNumber
+  const authorNumber = prediction.authorNumber || 1000;
+  const onChainStatus = prediction.onChainStatus || "pending";
+
   const copyHash = async () => {
     await navigator.clipboard.writeText(prediction.hash);
     setCopied(true);
@@ -32,10 +36,10 @@ export default function PredictionCard({ prediction }: PredictionCardProps) {
         <div className="flex items-center gap-3">
           <div className="flex items-center gap-2">
             <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center text-xs font-bold">
-              {prediction.authorNumber.toString().slice(0, 2)}
+              {authorNumber.toString().slice(0, 2)}
             </div>
             <span className="text-sm text-[#888]">
-              Anon #{prediction.authorNumber}
+              Anon #{authorNumber}
             </span>
           </div>
           <span className="text-xs text-[#666]">•</span>
@@ -45,12 +49,12 @@ export default function PredictionCard({ prediction }: PredictionCardProps) {
         </div>
         <span
           className={`inline-flex items-center px-2 py-1 rounded-md text-xs font-medium ${
-            prediction.onChainStatus === "confirmed"
+            onChainStatus === "confirmed"
               ? "bg-green-500/10 border border-green-500/30 text-green-400"
               : "bg-yellow-500/10 border border-yellow-500/30 text-yellow-400"
           }`}
         >
-          {prediction.onChainStatus === "confirmed"
+          {onChainStatus === "confirmed"
             ? "Confirmed on-chain"
             : "Pending on-chain"}
         </span>
