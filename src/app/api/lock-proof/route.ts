@@ -1,16 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import crypto from "crypto";
-
-// In-memory storage for proofs (in production, use a database)
-const proofStore = new Map<string, {
-  hash: string;
-  timestamp: string;
-  dagTransaction: string;
-}>();
+import { savePrediction } from "@/lib/storage";
 
 export async function POST(request: NextRequest) {
   try {
-    const { text } = await request.json();
+    const { text, userId } = await request.json();
 
     if (!text || typeof text !== "string") {
       return NextResponse.json(
@@ -19,34 +13,51 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    if (!userId || typeof userId !== "string") {
+      return NextResponse.json(
+        { error: "User ID is required" },
+        { status: 400 }
+      );
+    }
+
     // Hash the text using SHA-256
     const hash = crypto.createHash("sha256").update(text).digest("hex");
 
-    // Generate a unique proof ID
+    // Generate a unique proof ID and prediction ID
     const proofId = crypto.randomBytes(16).toString("hex");
+    const predictionId = crypto.randomBytes(16).toString("hex");
 
-    // Simulate DAG transaction (in production, this would be a real Constellation Network transaction)
+    // Simulate DAG transaction
     const dagTransaction = `DAG${crypto.randomBytes(32).toString("hex")}`;
 
     // Current timestamp
     const timestamp = new Date().toISOString();
 
-    // Store the proof
-    proofStore.set(proofId, {
+    // Create text preview (first 200 chars)
+    const textPreview = text.length > 200 ? text.slice(0, 200) + "..." : text;
+
+    // Save prediction to storage
+    await savePrediction({
+      id: predictionId,
+      userId,
+      text,
+      textPreview,
       hash,
       timestamp,
       dagTransaction,
+      proofId,
     });
 
     // Simulate network delay
-    await new Promise((resolve) => setTimeout(resolve, 1000));
+    await new Promise((resolve) => setTimeout(resolve, 1500));
 
     return NextResponse.json({
+      success: true,
+      predictionId,
       proofId,
       hash,
       timestamp,
       dagTransaction,
-      success: true,
     });
   } catch (error) {
     console.error("Error locking proof:", error);
