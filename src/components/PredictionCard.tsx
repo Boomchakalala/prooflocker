@@ -30,15 +30,15 @@ export default function PredictionCard({ prediction }: PredictionCardProps) {
   };
 
   return (
-    <div className="glass rounded-xl p-5 hover:border-white/10 transition-all card-hover glow-blue">
+    <div className="glass rounded-xl p-4 hover:border-white/10 transition-all card-hover glow-blue">
       {/* Header: Author + Time + Status */}
-      <div className="flex items-center justify-between mb-3">
-        <div className="flex items-center gap-3">
+      <div className="flex items-center justify-between mb-2">
+        <div className="flex items-center gap-2">
           <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center text-xs font-bold">
+            <div className="w-7 h-7 rounded-full bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center text-xs font-bold">
               {authorNumber.toString().slice(0, 2)}
             </div>
-            <span className="text-sm text-[#888]">
+            <span className="text-xs text-[#888]">
               Anon #{authorNumber}
             </span>
           </div>
@@ -48,7 +48,7 @@ export default function PredictionCard({ prediction }: PredictionCardProps) {
           </span>
         </div>
         <span
-          className={`inline-flex items-center px-2 py-1 rounded-md text-xs font-medium ${
+          className={`inline-flex items-center px-2 py-0.5 rounded-md text-xs font-medium ${
             onChainStatus === "confirmed"
               ? "bg-green-500/10 border border-green-500/30 text-green-400"
               : "bg-yellow-500/10 border border-yellow-500/30 text-yellow-400"
@@ -60,30 +60,30 @@ export default function PredictionCard({ prediction }: PredictionCardProps) {
         </span>
       </div>
 
-      {/* Prediction text */}
-      <p className="text-[#e0e0e0] text-[15px] leading-relaxed mb-4">
+      {/* Prediction text - MOST PROMINENT */}
+      <p className="text-[#e0e0e0] text-base leading-relaxed mb-3 font-medium">
         {prediction.textPreview}
       </p>
 
-      {/* Hash section */}
-      <div className="glass border border-white/5 rounded-lg p-3 mb-3">
+      {/* Hash section - LIGHTER/MONOSPACE */}
+      <div className="bg-black/20 border border-white/5 rounded-lg p-2.5 mb-3">
         <div className="flex items-center justify-between">
           <div className="flex-1 min-w-0">
-            <label className="block text-xs font-semibold text-[#6b6b6b] mb-1">
-              FINGERPRINT
+            <label className="block text-[10px] font-semibold text-[#666] mb-1 uppercase tracking-wider">
+              Fingerprint
             </label>
-            <code className="font-mono text-xs text-[#a0a0a0] break-all">
+            <code className="font-mono text-[11px] text-[#999] break-all">
               {prediction.hash.slice(0, 24)}...{prediction.hash.slice(-16)}
             </code>
           </div>
           <button
             onClick={copyHash}
-            className="ml-3 flex-shrink-0 p-2 hover:bg-white/10 rounded transition-colors"
-            title="Copy hash"
+            className="ml-2 flex-shrink-0 p-1.5 hover:bg-white/10 rounded transition-colors"
+            title="Copy fingerprint"
           >
             {copied ? (
               <svg
-                className="w-4 h-4 text-green-500"
+                className="w-3.5 h-3.5 text-green-500"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -97,7 +97,7 @@ export default function PredictionCard({ prediction }: PredictionCardProps) {
               </svg>
             ) : (
               <svg
-                className="w-4 h-4 text-[#888]"
+                className="w-3.5 h-3.5 text-[#888]"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -114,23 +114,23 @@ export default function PredictionCard({ prediction }: PredictionCardProps) {
         </div>
       </div>
 
-      {/* Actions */}
+      {/* Actions - PRIMARY Verify, SECONDARY Share */}
       <div className="flex gap-2">
         <a
           href={`/verify?proofId=${prediction.proofId}`}
-          className="flex-1 text-center px-4 py-2.5 text-sm font-medium text-white bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 rounded-lg transition-all btn-glow"
+          className="flex-1 text-center px-4 py-2 text-sm font-medium text-white bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 rounded-lg transition-all btn-glow"
         >
           Verify
         </a>
         <button
           onClick={copyLink}
-          className="px-4 py-2.5 text-sm font-medium text-[#e0e0e0] bg-white/5 hover:bg-white/10 border border-white/10 rounded-lg transition-all flex items-center gap-2"
+          className="px-3 py-2 text-sm font-medium text-[#888] bg-white/5 hover:bg-white/10 hover:text-[#e0e0e0] border border-white/10 rounded-lg transition-all flex items-center gap-1.5"
           title="Copy link"
         >
           {linkCopied ? (
             <>
               <svg
-                className="w-4 h-4 text-green-500"
+                className="w-3.5 h-3.5 text-green-500"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -147,7 +147,7 @@ export default function PredictionCard({ prediction }: PredictionCardProps) {
           ) : (
             <>
               <svg
-                className="w-4 h-4"
+                className="w-3.5 h-3.5"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
