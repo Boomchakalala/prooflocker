@@ -133,13 +133,16 @@ export async function submitToDigitalEvidence(
 /**
  * Verify a fingerprint against Digital Evidence
  *
+ * Note: This function is a placeholder. Update with actual verification
+ * endpoint when available from Digital Evidence API.
+ *
  * @param fingerprint - SHA-256 hash to verify
- * @param reference - Digital Evidence reference/transaction ID
+ * @param eventId - Digital Evidence event ID
  * @returns Verification result with details
  */
 export async function verifyDigitalEvidence(
   fingerprint: string,
-  reference: string
+  eventId: string
 ): Promise<{
   verified: boolean;
   timestamp?: string;
@@ -154,41 +157,11 @@ export async function verifyDigitalEvidence(
     };
   }
 
-  try {
-    const response = await fetch(`${config.apiUrl}/verify`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${config.apiKey}`,
-        "X-Org-Id": config.orgId,
-        "X-Tenant-Id": config.tenantId,
-      },
-      body: JSON.stringify({
-        fingerprint,
-        reference,
-      }),
-    });
-
-    if (!response.ok) {
-      return {
-        verified: false,
-        error: `API error: ${response.status}`,
-      };
-    }
-
-    const data = await response.json();
-
-    return {
-      verified: data.verified || data.match || false,
-      timestamp: data.timestamp || data.confirmedAt,
-    };
-  } catch (error) {
-    console.error("Error verifying with Digital Evidence:", error);
-    return {
-      verified: false,
-      error: error instanceof Error ? error.message : "Unknown error",
-    };
-  }
+  // Placeholder - update when verification endpoint is available
+  return {
+    verified: false,
+    error: "Verification endpoint not yet implemented",
+  };
 }
 
 /**
