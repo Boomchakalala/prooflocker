@@ -84,14 +84,9 @@ export async function submitToDigitalEvidence(
   }
 
   try {
-    // Submit to Constellation Digital Evidence API
-    const response = await fetch(`${config.apiUrl}/fingerprints`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "X-API-Key": config.apiKey,
-      },
-      body: JSON.stringify({
+    // CRITICAL: API expects an ARRAY of objects, not a single object
+    const payload = [
+      {
         attestation: {
           hash: fingerprint,
         },
@@ -99,30 +94,55 @@ export async function submitToDigitalEvidence(
           source: "ProofLocker",
           ...metadata,
         },
-      }),
+      },
+    ];
+
+    const payloadString = JSON.stringify(payload);
+
+    console.log("[Digital Evidence] Submitting fingerprint");
+    console.log("[Digital Evidence] Payload:", payloadString);
+
+    // Submit to Constellation Digital Evidence API
+    const response = await fetch(`${config.apiUrl}/fingerprints`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Accept": "application/json",
+        "X-API-Key": config.apiKey,
+      },
+      body: payloadString,
     });
 
+    console.log("[Digital Evidence] Response status:", response.status);
+
+    const responseText = await response.text();
+    console.log("[Digital Evidence] Response body:", responseText);
+
     if (!response.ok) {
-      const errorText = await response.text();
-      console.error("Digital Evidence API error:", response.status, errorText);
+      console.error("[Digital Evidence] API error:", response.status, responseText);
       return {
         success: false,
-        error: `API error: ${response.status}`,
+        error: `API error: ${response.status} - ${responseText}`,
       };
     }
 
-    const data = await response.json();
+    const data = JSON.parse(responseText);
+
+    // API returns an array of results, get the first one
+    const result = Array.isArray(data) ? data[0] : data;
+
+    console.log("[Digital Evidence] Parsed result:", JSON.stringify(result));
 
     // Extract eventId, hash, and accepted from response
     return {
       success: true,
-      eventId: data.eventId,
-      hash: data.hash,
-      accepted: data.accepted,
+      eventId: result.eventId,
+      hash: result.hash,
+      accepted: result.accepted,
       timestamp: new Date().toISOString(), // Use server time
     };
   } catch (error) {
-    console.error("Error submitting to Digital Evidence:", error);
+    console.error("[Digital Evidence] Error submitting:", error);
     return {
       success: false,
       error: error instanceof Error ? error.message : "Unknown error",
