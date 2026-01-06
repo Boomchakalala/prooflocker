@@ -2,28 +2,27 @@
  * Constellation Digital Evidence integration layer
  *
  * This module handles submission of fingerprints to Constellation Network's
- * Digital Evidence API. It uses a feature flag pattern: if API keys are not
+ * Digital Evidence API. It uses a feature flag pattern: if API key is not
  * configured, it gracefully degrades to "pending" status.
  *
  * Required environment variables:
  * - DE_API_KEY: Digital Evidence API key
- * - DE_ORG_ID: Organization ID
- * - DE_TENANT_ID: Tenant ID
- * - DE_API_URL: API endpoint (optional, defaults to production)
+ *
+ * Official API Documentation:
+ * POST https://de-api.constellationnetwork.io/v1/fingerprints
  */
 
 interface DigitalEvidenceConfig {
   apiKey: string;
-  orgId: string;
-  tenantId: string;
   apiUrl: string;
 }
 
 interface DigitalEvidenceResponse {
   success: boolean;
-  reference?: string; // Transaction/reference ID
-  eventId?: string; // Event ID
-  timestamp?: string; // On-chain timestamp
+  eventId?: string; // Event ID from Digital Evidence
+  hash?: string; // The fingerprint that was submitted
+  accepted?: boolean; // Whether the submission was accepted
+  timestamp?: string; // On-chain timestamp (server time)
   error?: string;
 }
 
@@ -31,11 +30,7 @@ interface DigitalEvidenceResponse {
  * Check if Digital Evidence API is configured
  */
 export function isDigitalEvidenceEnabled(): boolean {
-  return !!(
-    process.env.DE_API_KEY &&
-    process.env.DE_ORG_ID &&
-    process.env.DE_TENANT_ID
-  );
+  return !!process.env.DE_API_KEY;
 }
 
 /**
@@ -48,18 +43,31 @@ function getDigitalEvidenceConfig(): DigitalEvidenceConfig | null {
 
   return {
     apiKey: process.env.DE_API_KEY!,
-    orgId: process.env.DE_ORG_ID!,
-    tenantId: process.env.DE_TENANT_ID!,
-    apiUrl: process.env.DE_API_URL || "https://api.constellationnetwork.io/digital-evidence",
+    apiUrl: process.env.DE_API_URL || "https://de-api.constellationnetwork.io/v1",
   };
 }
 
 /**
  * Submit a fingerprint to Constellation Digital Evidence
  *
+ * Official API Spec:
+ * POST https://de-api.constellationnetwork.io/v1/fingerprints
+ * Headers:
+ *   - X-API-Key: <api_key>
+ *   - Content-Type: application/json
+ * Body:
+ *   {
+ *     "attestation": {
+ *       "hash": "<fingerprint>"
+ *     },
+ *     "metadata": {
+ *       "source": "ProofLocker"
+ *     }
+ *   }
+ *
  * @param fingerprint - SHA-256 hash of the prediction text
  * @param metadata - Additional metadata (e.g., proofId, userId)
- * @returns Response with reference, eventId, and timestamp if successful
+ * @returns Response with eventId, hash, and accepted status if successful
  */
 export async function submitToDigitalEvidence(
   fingerprint: string,
@@ -77,20 +85,19 @@ export async function submitToDigitalEvidence(
 
   try {
     // Submit to Constellation Digital Evidence API
-    const response = await fetch(`${config.apiUrl}/submit`, {
+    const response = await fetch(`${config.apiUrl}/fingerprints`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "Authorization": `Bearer ${config.apiKey}`,
-        "X-Org-Id": config.orgId,
-        "X-Tenant-Id": config.tenantId,
+        "X-API-Key": config.apiKey,
       },
       body: JSON.stringify({
-        fingerprint,
+        attestation: {
+          hash: fingerprint,
+        },
         metadata: {
-          ...metadata,
           source: "ProofLocker",
-          version: "1.0",
+          ...metadata,
         },
       }),
     });
@@ -106,13 +113,13 @@ export async function submitToDigitalEvidence(
 
     const data = await response.json();
 
-    // Extract reference, eventId, and timestamp from response
-    // Adjust these fields based on actual API response structure
+    // Extract eventId, hash, and accepted from response
     return {
       success: true,
-      reference: data.transactionId || data.reference || data.txId,
-      eventId: data.eventId || data.id,
-      timestamp: data.timestamp || data.confirmedAt || new Date().toISOString(),
+      eventId: data.eventId,
+      hash: data.hash,
+      accepted: data.accepted,
+      timestamp: new Date().toISOString(), // Use server time
     };
   } catch (error) {
     console.error("Error submitting to Digital Evidence:", error);
