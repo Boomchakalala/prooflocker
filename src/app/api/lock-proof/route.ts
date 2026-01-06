@@ -4,6 +4,8 @@ import { savePrediction } from "@/lib/storage";
 import { generateAuthorNumber } from "@/lib/utils";
 import { submitToDigitalEvidence, isDigitalEvidenceEnabled } from "@/lib/digitalEvidence";
 
+export const runtime = "nodejs";
+
 export async function POST(request: NextRequest) {
   try {
     const { text, userId } = await request.json();
