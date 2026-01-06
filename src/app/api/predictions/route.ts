@@ -6,19 +6,12 @@ export async function GET(request: NextRequest) {
     const { searchParams } = new URL(request.url);
     const userId = searchParams.get("userId");
 
-    console.log("[Predictions API] Fetching predictions from Supabase:", { userId: userId || "all" });
-
     let predictions;
     if (userId) {
       predictions = await getPredictionsByUserId(userId);
     } else {
       predictions = await getAllPredictions();
     }
-
-    console.log("[Predictions API] Fetched predictions:", {
-      count: predictions.length,
-      firstPreview: predictions[0]?.textPreview?.substring(0, 30),
-    });
 
     return NextResponse.json({
       predictions,
