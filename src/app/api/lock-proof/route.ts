@@ -5,15 +5,8 @@ import { generateAuthorNumber } from "@/lib/utils";
 import { submitToDigitalEvidence, isDigitalEvidenceEnabled } from "@/lib/digitalEvidence";
 
 export async function POST(request: NextRequest) {
-  console.log("[Lock Proof API] ========== Starting lock-proof request ==========");
-
   try {
     const { text, userId } = await request.json();
-
-    console.log("[Lock Proof API] Request data:", {
-      textLength: text?.length,
-      userId: userId?.substring(0, 8) + "...",
-    });
 
     if (!text || typeof text !== "string") {
       return NextResponse.json(
@@ -31,13 +24,10 @@ export async function POST(request: NextRequest) {
 
     // Hash the text using SHA-256
     const hash = crypto.createHash("sha256").update(text).digest("hex");
-    console.log("[Lock Proof API] Generated SHA-256 fingerprint:", hash);
 
     // Generate a unique proof ID and prediction ID
     const proofId = crypto.randomBytes(16).toString("hex");
     const predictionId = crypto.randomBytes(16).toString("hex");
-
-    console.log("[Lock Proof API] Generated IDs:", { predictionId, proofId });
 
     // Current timestamp
     const timestamp = new Date().toISOString();
