@@ -5,8 +5,15 @@ import { generateAuthorNumber } from "@/lib/utils";
 import { submitToDigitalEvidence, isDigitalEvidenceEnabled } from "@/lib/digitalEvidence";
 
 export async function POST(request: NextRequest) {
+  console.log("[Lock Proof API] ========== Starting lock-proof request ==========");
+
   try {
     const { text, userId } = await request.json();
+
+    console.log("[Lock Proof API] Request data:", {
+      textLength: text?.length,
+      userId: userId?.substring(0, 8) + "...",
+    });
 
     if (!text || typeof text !== "string") {
       return NextResponse.json(
@@ -24,10 +31,13 @@ export async function POST(request: NextRequest) {
 
     // Hash the text using SHA-256
     const hash = crypto.createHash("sha256").update(text).digest("hex");
+    console.log("[Lock Proof API] Generated SHA-256 fingerprint:", hash);
 
     // Generate a unique proof ID and prediction ID
     const proofId = crypto.randomBytes(16).toString("hex");
     const predictionId = crypto.randomBytes(16).toString("hex");
+
+    console.log("[Lock Proof API] Generated IDs:", { predictionId, proofId });
 
     // Current timestamp
     const timestamp = new Date().toISOString();
@@ -46,28 +56,28 @@ export async function POST(request: NextRequest) {
     let dagTransaction = `DAG${crypto.randomBytes(32).toString("hex")}`; // Fallback
 
     if (isDigitalEvidenceEnabled()) {
-      console.log("Submitting to Digital Evidence...");
+      console.log("[Lock Proof API] Digital Evidence enabled - submitting...");
       const deResult = await submitToDigitalEvidence(hash, {
         proofId,
         userId,
       });
 
       if (deResult.success) {
-        console.log("Digital Evidence submission successful:", deResult);
+        console.log("[Lock Proof API] Digital Evidence submission successful:", deResult);
         onChainStatus = "confirmed";
         deReference = deResult.reference;
         deEventId = deResult.eventId;
         confirmedAt = deResult.timestamp;
         dagTransaction = deResult.reference || dagTransaction; // Use DE reference as transaction ID
       } else {
-        console.warn("Digital Evidence submission failed:", deResult.error);
+        console.warn("[Lock Proof API] Digital Evidence submission failed:", deResult.error);
       }
     } else {
-      console.log("Digital Evidence not enabled - proof will remain pending");
+      console.log("[Lock Proof API] Digital Evidence not enabled - proof will remain pending");
     }
 
-    // Save prediction to storage
-    await savePrediction({
+    // Build prediction object
+    const prediction = {
       id: predictionId,
       userId,
       authorNumber,
@@ -81,7 +91,20 @@ export async function POST(request: NextRequest) {
       deReference,
       deEventId,
       confirmedAt,
+    };
+
+    console.log("[Lock Proof API] About to save prediction to Supabase:", {
+      id: prediction.id,
+      proofId: prediction.proofId,
+      textPreview: prediction.textPreview,
+      fingerprint: prediction.hash,
+      status: prediction.onChainStatus,
     });
+
+    // Save prediction to storage (Supabase)
+    await savePrediction(prediction);
+
+    console.log("[Lock Proof API] ========== Lock-proof completed successfully ==========");
 
     // Simulate network delay for better UX
     await new Promise((resolve) => setTimeout(resolve, 1500));
@@ -99,7 +122,8 @@ export async function POST(request: NextRequest) {
       deEventId,
     });
   } catch (error) {
-    console.error("Error locking proof:", error);
+    console.error("[Lock Proof API] ========== ERROR ==========");
+    console.error("[Lock Proof API] Error details:", error);
     return NextResponse.json(
       { error: "Failed to lock proof" },
       { status: 500 }
