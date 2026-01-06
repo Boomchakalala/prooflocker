@@ -100,6 +100,15 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     console.error("[Lock Proof API] ========== ERROR ==========");
     console.error("[Lock Proof API] Error details:", error);
+
+    // Check for duplicate fingerprint error
+    if (error instanceof Error && error.message === "DUPLICATE_FINGERPRINT") {
+      return NextResponse.json(
+        { error: "DUPLICATE_FINGERPRINT", message: "Already locked — this prediction fingerprint already exists." },
+        { status: 409 }
+      );
+    }
+
     return NextResponse.json(
       { error: "Failed to lock proof" },
       { status: 500 }

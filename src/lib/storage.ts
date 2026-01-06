@@ -101,6 +101,12 @@ export async function savePrediction(prediction: Prediction): Promise<void> {
 
   if (error) {
     console.error("[Storage] Supabase insert error:", error);
+
+    // Check for duplicate fingerprint (Postgres unique constraint violation)
+    if (error.code === "23505" && error.message.includes("fingerprint")) {
+      throw new Error("DUPLICATE_FINGERPRINT");
+    }
+
     throw new Error(`Failed to save prediction: ${error.message}`);
   }
 }
