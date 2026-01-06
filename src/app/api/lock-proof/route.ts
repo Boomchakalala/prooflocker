@@ -51,14 +51,15 @@ export async function POST(request: NextRequest) {
         userId,
       });
 
-      if (deResult.success) {
+      if (deResult.success && deResult.accepted) {
+        // Only mark as confirmed if API accepted the submission
         onChainStatus = "confirmed";
-        deReference = deResult.reference;
         deEventId = deResult.eventId;
+        deReference = deResult.hash || hash; // Store the fingerprint as reference
         confirmedAt = deResult.timestamp;
-        dagTransaction = deResult.reference || dagTransaction; // Use DE reference as transaction ID
+        dagTransaction = deResult.eventId || dagTransaction; // Use eventId as transaction ID
       } else {
-        console.warn("[Lock Proof API] Digital Evidence submission failed:", deResult.error);
+        console.warn("[Lock Proof API] Digital Evidence submission failed or not accepted:", deResult.error || "Not accepted");
       }
     }
 
