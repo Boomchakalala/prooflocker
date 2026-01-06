@@ -37,7 +37,14 @@ export default function LockPage() {
         setProofId(data.proofId);
         setLocked(true);
       } else {
-        alert("Failed to lock prediction. Please try again.");
+        const errorData = await response.json();
+
+        // Check for duplicate fingerprint error
+        if (errorData.error === "DUPLICATE_FINGERPRINT") {
+          alert("Already locked — this prediction fingerprint already exists.");
+        } else {
+          alert("Failed to lock prediction. Please try again.");
+        }
       }
     } catch (error) {
       console.error("Error locking prediction:", error);
