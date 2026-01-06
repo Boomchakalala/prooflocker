@@ -91,8 +91,6 @@ function predictionToRow(prediction: Prediction): Omit<PredictionRow, "created_a
 }
 
 export async function savePrediction(prediction: Prediction): Promise<void> {
-  console.log("[Storage] Saving prediction to Supabase:", { id: prediction.id, proofId: prediction.proofId });
-
   const row = predictionToRow(prediction);
 
   const { data, error } = await supabase
@@ -104,21 +102,6 @@ export async function savePrediction(prediction: Prediction): Promise<void> {
   if (error) {
     console.error("[Storage] Supabase insert error:", error);
     throw new Error(`Failed to save prediction: ${error.message}`);
-  }
-
-  console.log("[Storage] Successfully inserted prediction:", data);
-
-  // Verify the insert by selecting the row back
-  const { data: verifyData, error: verifyError } = await supabase
-    .from("predictions")
-    .select("*")
-    .eq("id", prediction.id)
-    .single();
-
-  if (verifyError) {
-    console.error("[Storage] Verification select error:", verifyError);
-  } else {
-    console.log("[Storage] Verified inserted row:", verifyData);
   }
 }
 
