@@ -18,12 +18,12 @@ export default function FullLogo({ className = "" }: { className?: string }) {
       </svg>
 
       {/* Wordmark and tagline */}
-      <div className="flex flex-col">
-        <span className="text-xl font-semibold text-white font-sans leading-tight">
+      <div className="flex flex-col gap-0.5">
+        <span className="text-xl font-bold text-white font-sans leading-none tracking-tight">
           ProofLocker
         </span>
-        <span className="text-xs text-white/70 font-normal leading-tight">
-          Predictions you can't take back.
+        <span className="text-xs text-white/60 font-normal leading-none tracking-normal">
+          Predictions. Locked forever.
         </span>
       </div>
     </div>
