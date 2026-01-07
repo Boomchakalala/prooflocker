@@ -44,6 +44,36 @@ export default function Home() {
     }
   };
 
+  const syncDEStatus = async () => {
+    setSyncing(true);
+    setSyncMessage(null);
+    try {
+      const response = await fetch("/api/sync-de-status", {
+        method: "POST",
+      });
+      const data = await response.json();
+
+      if (data.success) {
+        setSyncMessage(
+          data.updated > 0
+            ? `Updated ${data.updated} prediction${data.updated > 1 ? "s" : ""}`
+            : "All predictions are up to date"
+        );
+        // Refresh the feed to show updated statuses
+        await fetchPredictions();
+      } else {
+        setSyncMessage(data.message || "Failed to sync status");
+      }
+    } catch (error) {
+      console.error("Error syncing DE status:", error);
+      setSyncMessage("Failed to sync status");
+    } finally {
+      setSyncing(false);
+      // Clear message after 3 seconds
+      setTimeout(() => setSyncMessage(null), 3000);
+    }
+  };
+
   return (
     <div className="min-h-screen gradient-bg relative">
       {/* Decorative gradient orbs */}
