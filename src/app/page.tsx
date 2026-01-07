@@ -5,35 +5,48 @@ import Link from "next/link";
 import PredictionCard from "@/components/PredictionCard";
 import ProofLockerLogo from "@/components/Logo";
 import DEStatusBanner from "@/components/DEStatusBanner";
+import ClaimModal from "@/components/ClaimModal";
 import { Prediction } from "@/lib/storage";
-import { getOrCreateUserId, isAnonymousUser } from "@/lib/user";
+import { getOrCreateUserId } from "@/lib/user";
+import { useAuth } from "@/contexts/AuthContext";
+import { signOut } from "@/lib/auth";
 
 export default function Home() {
+  const { user, loading: authLoading } = useAuth();
   const [activeTab, setActiveTab] = useState<"all" | "my">("all");
   const [predictions, setPredictions] = useState<Prediction[]>([]);
   const [loading, setLoading] = useState(true);
-  const [userId, setUserId] = useState<string>("");
-  const [isAnonymous, setIsAnonymous] = useState(true);
+  const [anonId, setAnonId] = useState<string>("");
   const [syncing, setSyncing] = useState(false);
   const [syncMessage, setSyncMessage] = useState<string | null>(null);
+  const [showClaimModal, setShowClaimModal] = useState(false);
 
   useEffect(() => {
     const id = getOrCreateUserId();
-    setUserId(id);
-    setIsAnonymous(isAnonymousUser());
+    setAnonId(id);
   }, []);
 
   useEffect(() => {
-    fetchPredictions();
-  }, [activeTab, userId]);
+    if (!authLoading) {
+      fetchPredictions();
+    }
+  }, [activeTab, anonId, user, authLoading]);
 
   const fetchPredictions = async () => {
     setLoading(true);
     try {
-      const endpoint =
-        activeTab === "all"
-          ? "/api/predictions"
-          : `/api/predictions?userId=${userId}`;
+      let endpoint = "/api/predictions";
+
+      if (activeTab === "my") {
+        if (user) {
+          // Authenticated: filter by user_id
+          endpoint = `/api/predictions?userId=${user.id}`;
+        } else {
+          // Anonymous: filter by anon_id
+          endpoint = `/api/predictions?anonId=${anonId}`;
+        }
+      }
+
       const response = await fetch(endpoint);
       const data = await response.json();
       setPredictions(data.predictions || []);
