@@ -117,15 +117,7 @@ function signFingerprintValue(
  * Headers:
  *   - X-API-Key: <api_key>
  *   - Content-Type: application/json
- * Body:
- *   {
- *     "attestation": {
- *       "hash": "<fingerprint>"
- *     },
- *     "metadata": {
- *       "source": "ProofLocker"
- *     }
- *   }
+ * Body: [{ attestation: { content, proofs } }]
  *
  * @param fingerprint - SHA-256 hash of the prediction text
  * @param metadata - Additional metadata (e.g., proofId, userId)
@@ -141,72 +133,66 @@ export async function submitToDigitalEvidence(
   if (!config) {
     return {
       success: false,
-      error: "Digital Evidence API not configured",
+      error: "Digital Evidence API not configured - missing credentials",
     };
   }
 
   try {
     const orgId = process.env.DE_ORG_ID!;
     const tenantId = process.env.DE_TENANT_ID!;
+    const privateKeyHex = process.env.DE_SIGNING_PRIVATE_KEY_HEX!;
     const timestamp = new Date().toISOString();
 
-    // Generate unique IDs for this submission
-    // NOTE: API requires hex strings (not UUIDs) for certain fields
+    // Generate unique IDs
     const eventId = crypto.randomUUID();
-    const documentId = metadata?.proofId || crypto.randomUUID();
+    const documentId = metadata?.proofId || `prooflocker:${crypto.randomUUID()}`;
 
-    // signerId must be 64+ hex characters
-    const signerId = crypto.createHash('sha256').update('ProofLocker').digest('hex');
+    // Build FingerprintValue (attestation.content)
+    const fingerprintValue = {
+      orgId,
+      tenantId,
+      eventId,
+      signerId: "", // Will be filled with public key after signing
+      documentId,
+      documentRef: fingerprint, // The prediction hash
+      timestamp,
+      version: 1,
+    };
 
-    // documentRef must be hex pattern
-    const documentRef = crypto.createHash('sha256').update(documentId).digest('hex');
+    // Sign the fingerprint value
+    console.log("[Digital Evidence] Signing fingerprint value...");
+    const { publicKeyHex, signatureHex } = signFingerprintValue(fingerprintValue, privateKeyHex);
 
-    // proofId must be hex pattern
-    const proofId = crypto.createHash('sha256').update(crypto.randomUUID()).digest('hex');
+    // Set signerId to public key (must match proofs[0].id)
+    fingerprintValue.signerId = publicKeyHex;
 
-    // signature must be 64+ hex characters (placeholder until we implement real signing)
-    const signature = crypto.createHash('sha256').update('placeholder_signature_' + fingerprint).digest('hex');
+    // Build proof object
+    const proof = {
+      id: publicKeyHex, // Must match signerId
+      signature: signatureHex,
+      algorithm: "SECP256K1_RFC8785_V1",
+    };
 
-    // Build payload according to official API spec
+    // Build final payload (OMIT metadata.hash to avoid mismatch error)
     const payload = [
       {
         attestation: {
-          content: {
-            orgId,
-            tenantId,
-            eventId,
-            signerId,
-            documentId,
-            documentRef,
-            timestamp,
-            version: 1,
-          },
-          proofs: [
-            {
-              id: proofId,
-              signature,
-              algorithm: "SECP256K1_RFC8785_V1",
-            },
-          ],
-        },
-        metadata: {
-          hash: fingerprint, // Hash goes in metadata, not attestation
-          tags: {
-            source: "ProofLocker",
-            ...metadata,
-          },
+          content: fingerprintValue,
+          proofs: [proof],
         },
       },
     ];
 
-    // Debug logging BEFORE fetch
+    // Debug logging
     console.log("[Digital Evidence] ========== PRE-FETCH DEBUG ==========");
-    console.log("[Digital Evidence] typeof payload:", typeof payload);
-    console.log("[Digital Evidence] JSON.stringify(payload):", JSON.stringify(payload));
-    console.log("[Digital Evidence] JSON.stringify(payload).length:", JSON.stringify(payload).length);
-    console.log("[Digital Evidence] API URL:", `${config.apiUrl}/fingerprints`);
-    console.log("[Digital Evidence] Org ID:", orgId);
-    console.log("[Digital Evidence] Tenant ID:", tenantId);
+    console.log("[Digital Evidence] Event ID:", eventId);
+    console.log("[Digital Evidence] Document ID:", documentId);
+    console.log("[Digital Evidence] Document Ref (hash):", fingerprint);
+    console.log("[Digital Evidence] Public Key:", publicKeyHex);
+    console.log("[Digital Evidence] Signature:", signatureHex);
+    console.log("[Digital Evidence] Final JSON payload:");
+    console.log(JSON.stringify(payload, null, 2));
+    console.log("[Digital Evidence] Payload length:", JSON.stringify(payload).length);
 
     // Submit to Constellation Digital Evidence API
     const response = await fetch(`${config.apiUrl}/fingerprints`, {
@@ -219,17 +205,18 @@ export async function submitToDigitalEvidence(
       body: JSON.stringify(payload),
     });
 
-    // Debug logging AFTER fetch
+    // Debug logging
     console.log("[Digital Evidence] ========== POST-FETCH DEBUG ==========");
-    console.log("[Digital Evidence] response.status:", response.status);
-    console.log("[Digital Evidence] response.headers.get('content-type'):", response.headers.get("content-type"));
+    console.log("[Digital Evidence] HTTP Status:", response.status);
+    console.log("[Digital Evidence] Content-Type:", response.headers.get("content-type"));
 
     const responseText = await response.text();
-    console.log("[Digital Evidence] Raw response text:", responseText);
+    console.log("[Digital Evidence] Raw Response:");
+    console.log(responseText);
     console.log("[Digital Evidence] ========================================");
 
     if (!response.ok) {
-      console.error("[Digital Evidence] API error - Status:", response.status, "Body:", responseText);
+      console.error("[Digital Evidence] API error - Status:", response.status);
       return {
         success: false,
         error: `API error: ${response.status} - ${responseText}`,
@@ -241,17 +228,23 @@ export async function submitToDigitalEvidence(
     // API returns an array of results, get the first one
     const result = Array.isArray(data) ? data[0] : data;
 
-    console.log("[Digital Evidence] SUCCESS! Parsed result:", JSON.stringify(result));
+    console.log("[Digital Evidence] Parsed result:", JSON.stringify(result));
 
-    // Check if submission has errors (means pending, not confirmed)
+    // Check if submission was accepted
     const hasErrors = result.errors && result.errors.length > 0;
-    const isAccepted = !hasErrors && (result.accepted !== false);
+    const isAccepted = result.accepted === true;
 
     if (hasErrors) {
-      console.warn("[Digital Evidence] Submission received but has validation errors:", result.errors);
+      console.warn("[Digital Evidence] Submission has errors:", result.errors);
     }
 
-    // Extract eventId, hash, and accepted from response
+    if (isAccepted) {
+      console.log("[Digital Evidence] ✅ SUBMISSION ACCEPTED!");
+    } else {
+      console.warn("[Digital Evidence] ⚠️  Submission not accepted");
+    }
+
+    // Return result
     return {
       success: true,
       eventId: result.eventId || eventId,
