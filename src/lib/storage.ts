@@ -3,14 +3,16 @@ import { supabase } from "./supabase";
 /**
  * Prediction data structure
  *
- * Future-proof design:
- * - userId can be either anonymous UUID or authenticated account ID
- * - When users upgrade from anonymous to authenticated, predictions can be migrated
- * - Store both anonymous and authenticated user IDs for seamless transition
+ * Email-based claiming design:
+ * - anonId stores the anonymous user identifier from localStorage
+ * - userId is null until prediction is claimed via email
+ * - When user claims via email, userId is set and claimedAt timestamp is recorded
+ * - authorNumber derived from anonId for consistent anonymous display
  */
 export interface Prediction {
   id: string;
-  userId: string; // UUID for anonymous users, account ID for authenticated users
+  userId?: string | null; // Supabase Auth user ID (null until claimed)
+  anonId: string; // Anonymous identifier from localStorage
   authorNumber: number; // Anonymous author identifier (e.g., 1234 for "Anon #1234")
   text: string;
   textPreview: string;
@@ -25,9 +27,7 @@ export interface Prediction {
   deStatus?: string; // Digital Evidence API status (NEW, PENDING, CONFIRMED, etc.)
   deSubmittedAt?: string; // ISO timestamp when submitted to Digital Evidence
   confirmedAt?: string; // ISO timestamp when on-chain confirmation succeeded
-  // Future fields for account linking:
-  // accountId?: string;  // When anonymous user upgrades to account
-  // migratedFrom?: string;  // Original anonymous userId if migrated
+  claimedAt?: string; // ISO timestamp when claimed via email
 }
 
 /**
@@ -35,7 +35,8 @@ export interface Prediction {
  */
 interface PredictionRow {
   id: string;
-  user_id: string;
+  user_id: string | null;
+  anon_id: string;
   author_number: number;
   text: string;
   text_preview: string;
@@ -49,6 +50,7 @@ interface PredictionRow {
   de_status: string | null;
   de_submitted_at: string | null;
   confirmed_at: string | null;
+  claimed_at: string | null;
   created_at: string;
 }
 
@@ -58,7 +60,8 @@ interface PredictionRow {
 function rowToPrediction(row: PredictionRow): Prediction {
   return {
     id: row.id,
-    userId: row.user_id,
+    userId: row.user_id || undefined,
+    anonId: row.anon_id,
     authorNumber: row.author_number,
     text: row.text,
     textPreview: row.text_preview,
@@ -72,6 +75,7 @@ function rowToPrediction(row: PredictionRow): Prediction {
     deStatus: row.de_status || undefined,
     deSubmittedAt: row.de_submitted_at || undefined,
     confirmedAt: row.confirmed_at || undefined,
+    claimedAt: row.claimed_at || undefined,
   };
 }
 
