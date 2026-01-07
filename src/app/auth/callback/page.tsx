@@ -64,37 +64,6 @@ export default function AuthCallback() {
     handleCallback();
   }, [router, searchParams]);
 
-        setStatus("claiming");
-        setMessage("Claiming your predictions...");
-
-        // Get the anonymous ID from localStorage
-        const anonId = getOrCreateUserId();
-
-        // Claim all predictions with this anonId
-        const claimedCount = await claimPredictions(anonId, user.id);
-
-        setStatus("success");
-        setMessage(`Successfully claimed ${claimedCount} prediction${claimedCount !== 1 ? 's' : ''}!`);
-
-        // Redirect to home after 2 seconds
-        setTimeout(() => {
-          router.push("/");
-        }, 2000);
-      } catch (error) {
-        console.error("Auth callback error:", error);
-        setStatus("error");
-        setMessage(error instanceof Error ? error.message : "Authentication failed");
-
-        // Redirect to home after 3 seconds
-        setTimeout(() => {
-          router.push("/");
-        }, 3000);
-      }
-    };
-
-    handleCallback();
-  }, [router]);
-
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-600 via-blue-600 to-cyan-500">
       <div className="bg-white/10 backdrop-blur-md rounded-2xl p-8 max-w-md w-full mx-4">
