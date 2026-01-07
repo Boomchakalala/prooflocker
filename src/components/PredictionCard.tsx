@@ -89,7 +89,7 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
   };
 
   return (
-    <div className={`glass rounded-xl p-4 hover:border-white/10 transition-all card-hover glow-blue ${isNew() ? 'ring-1 ring-blue-500/20' : ''}`}>
+    <div className={`glass rounded-xl p-4 hover:border-white/10 transition-all card-hover glow-blue h-full flex flex-col ${isNew() ? 'ring-1 ring-blue-500/20' : ''}`}>
       {/* Header: Author + Time + Status + Claimed + Outcome */}
       <div className="flex items-center justify-between mb-2 flex-wrap gap-2">
         <div className="flex items-center gap-2 flex-wrap">

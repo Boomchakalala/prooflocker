@@ -335,7 +335,7 @@ export default function Home() {
             {predictions.map((prediction, index) => (
               <div
                 key={prediction.id}
-                className={`fade-in stagger-${Math.min(index + 1, 4)}`}
+                className={`fade-in stagger-${Math.min(index + 1, 4)} h-full`}
               >
                 <PredictionCard
                   prediction={prediction}
