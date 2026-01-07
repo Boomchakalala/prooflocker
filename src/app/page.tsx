@@ -217,6 +217,83 @@ export default function Home() {
               <div className="absolute inset-0 rounded-full bg-blue-500/20 blur-xl"></div>
             </div>
           </div>
+        ) : activeTab === "my" && !user ? (
+          // Anonymous user on "My predictions" tab - show claim UI
+          <div className="text-center py-20 fade-in">
+            <div className="max-w-2xl mx-auto">
+              <div className="inline-block p-6 glass rounded-2xl glow-purple mb-6 float">
+                <svg
+                  className="w-20 h-20 text-blue-500 mx-auto"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={1.5}
+                    d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+                  />
+                </svg>
+              </div>
+              <h3 className="text-2xl font-bold gradient-text mb-3">
+                You're posting anonymously
+              </h3>
+              <p className="text-[#888] mb-6 text-lg">
+                {predictions.length > 0 ? (
+                  <>You have {predictions.length} prediction{predictions.length !== 1 ? 's' : ''} on this device.</>
+                ) : (
+                  <>Your predictions are stored locally on this device only.</>
+                )}
+              </p>
+              <div className="bg-white/5 border border-white/10 rounded-xl p-6 mb-6 text-left">
+                <h4 className="text-white font-semibold mb-3 flex items-center gap-2">
+                  <svg className="w-5 h-5 text-cyan-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                  Why claim with email?
+                </h4>
+                <ul className="space-y-2 text-sm text-white/70">
+                  <li className="flex items-start gap-2">
+                    <svg className="w-4 h-4 text-green-500 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                    </svg>
+                    Access your predictions from any device
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <svg className="w-4 h-4 text-green-500 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                    </svg>
+                    Keep your predictions safe if you clear browser data
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <svg className="w-4 h-4 text-green-500 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                    </svg>
+                    Prove ownership of your predictions
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <svg className="w-4 h-4 text-green-500 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                    </svg>
+                    Still anonymous - predictions stay on-chain, public, immutable
+                  </li>
+                </ul>
+              </div>
+              <button
+                onClick={() => setShowClaimModal(true)}
+                className="inline-flex items-center px-8 py-4 bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-700 hover:to-blue-700 text-white font-semibold rounded-lg transition-all shadow-lg shadow-cyan-500/30 hover:shadow-cyan-500/50 btn-glow"
+              >
+                <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                </svg>
+                Claim with email
+              </button>
+              <p className="text-xs text-white/50 mt-4">
+                No password required. We'll send you a magic link.
+              </p>
+            </div>
+          </div>
         ) : predictions.length === 0 ? (
           <div className="text-center py-20 fade-in">
             <div className="inline-block p-6 glass rounded-2xl glow-purple mb-6 float">
