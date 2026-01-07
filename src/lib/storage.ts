@@ -228,28 +228,33 @@ export async function getPendingDEPredictions(limit: number = 20): Promise<Predi
 
 
 /**
- * Future function: Migrate predictions from anonymous user to authenticated account
- * This will be used when implementing account linking
+ * Claim predictions: Migrate predictions from anonymous user to authenticated account
+ * This is used when a user logs in to claim their anonymous predictions
  */
-export async function migratePredictions(
-  anonymousUserId: string,
+export async function claimPredictions(
+  anonId: string,
   authenticatedUserId: string
 ): Promise<number> {
-  const { data, error } = await supabase
+  const { error } = await supabase
     .from("predictions")
-    .update({ user_id: authenticatedUserId })
-    .eq("user_id", anonymousUserId);
+    .update({
+      user_id: authenticatedUserId,
+      claimed_at: new Date().toISOString()
+    })
+    .eq("anon_id", anonId)
+    .is("user_id", null); // Only claim unclaimed predictions
 
   if (error) {
-    console.error("[Storage] Error migrating predictions:", error);
-    return 0;
+    console.error("[Storage] Error claiming predictions:", error);
+    throw new Error(`Failed to claim predictions: ${error.message}`);
   }
 
-  // Count how many were updated
+  // Count how many were claimed
   const { count } = await supabase
     .from("predictions")
     .select("*", { count: "exact", head: true })
-    .eq("user_id", authenticatedUserId);
+    .eq("user_id", authenticatedUserId)
+    .eq("anon_id", anonId);
 
   return count || 0;
 }
