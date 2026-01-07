@@ -22,9 +22,12 @@ envFile.split('\n').forEach(line => {
 function signFingerprintValue(fingerprintValue, privateKeyHex) {
   console.log('\n--- SIGNING PROCESS ---');
 
+  // Create a copy without signerId for signing
+  const { signerId, ...valueToSign } = fingerprintValue;
+
   // Step 1: RFC 8785 canonicalize
-  const canonicalJson = canonicalize(fingerprintValue);
-  console.log('1. Canonical JSON:', canonicalJson);
+  const canonicalJson = canonicalize(valueToSign);
+  console.log('1. Canonical JSON (without signerId):', canonicalJson);
 
   // Step 2: SHA-256 hash of canonical JSON
   const hashBytes = crypto.createHash('sha256').update(canonicalJson, 'utf8').digest();

@@ -73,7 +73,7 @@ function getDigitalEvidenceConfig(): DigitalEvidenceConfig | null {
  * 6. sign truncatedHash with secp256k1
  * 7. signature format: signature.toDER('hex')
  *
- * @param fingerprintValue - The attestation.content object
+ * @param fingerprintValue - The attestation.content object (WITHOUT signerId field)
  * @param privateKeyHex - 32-byte secp256k1 private key in hex
  * @returns { publicKeyHex, signatureHex }
  */
@@ -81,8 +81,11 @@ function signFingerprintValue(
   fingerprintValue: any,
   privateKeyHex: string
 ): { publicKeyHex: string; signatureHex: string } {
+  // Create a copy without signerId for signing
+  const { signerId, ...valueToSign } = fingerprintValue;
+
   // Step 1: RFC 8785 canonicalize
-  const canonicalJson = canonicalize(fingerprintValue);
+  const canonicalJson = canonicalize(valueToSign);
 
   // Step 2: SHA-256 hash of canonical JSON
   const hashBytes = crypto.createHash("sha256").update(canonicalJson, "utf8").digest();
