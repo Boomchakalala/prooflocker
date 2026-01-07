@@ -16,6 +16,51 @@ export default function PredictionCard({ prediction }: PredictionCardProps) {
   const authorNumber = prediction.authorNumber || 1000;
   const onChainStatus = prediction.onChainStatus || "pending";
 
+  // Determine status display based on deStatus (more accurate than onChainStatus)
+  const getStatusDisplay = () => {
+    const deStatus = prediction.deStatus?.toUpperCase();
+
+    // If we have a DE status, use it for accurate display
+    if (deStatus) {
+      if (deStatus === "CONFIRMED") {
+        return {
+          label: "Confirmed on-chain",
+          color: "green",
+          className: "bg-green-500/10 border border-green-500/30 text-green-400",
+        };
+      } else if (deStatus === "PENDING" || deStatus === "NEW") {
+        return {
+          label: "Pending on-chain",
+          color: "yellow",
+          className: "bg-yellow-500/10 border border-yellow-500/30 text-yellow-400",
+        };
+      } else if (deStatus === "FAILED" || deStatus === "REJECTED") {
+        return {
+          label: "Failed on-chain",
+          color: "red",
+          className: "bg-red-500/10 border border-red-500/30 text-red-400",
+        };
+      }
+    }
+
+    // Fallback to onChainStatus for older predictions
+    if (onChainStatus === "confirmed") {
+      return {
+        label: "Confirmed on-chain",
+        color: "green",
+        className: "bg-green-500/10 border border-green-500/30 text-green-400",
+      };
+    }
+
+    return {
+      label: "Pending on-chain",
+      color: "yellow",
+      className: "bg-yellow-500/10 border border-yellow-500/30 text-yellow-400",
+    };
+  };
+
+  const statusDisplay = getStatusDisplay();
+
   const copyHash = async () => {
     await navigator.clipboard.writeText(prediction.hash);
     setCopied(true);
@@ -56,15 +101,9 @@ export default function PredictionCard({ prediction }: PredictionCardProps) {
           </span>
         </div>
         <span
-          className={`inline-flex items-center px-2 py-0.5 rounded-md text-xs font-medium ${
-            onChainStatus === "confirmed"
-              ? "bg-green-500/10 border border-green-500/30 text-green-400"
-              : "bg-yellow-500/10 border border-yellow-500/30 text-yellow-400"
-          }`}
+          className={`inline-flex items-center px-2 py-0.5 rounded-md text-xs font-medium ${statusDisplay.className}`}
         >
-          {onChainStatus === "confirmed"
-            ? "Confirmed on-chain"
-            : "Pending on-chain"}
+          {statusDisplay.label}
         </span>
       </div>
 
