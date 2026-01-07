@@ -23,29 +23,63 @@ async function testDigitalEvidenceAPI() {
   console.log('SHA-256 hash:', hash);
   console.log('Hash length:', hash.length);
 
-  // Build payload
+  const apiKey = envVars.DE_API_KEY;
+  const apiUrl = envVars.DE_API_URL || 'https://de-api.constellationnetwork.io/v1';
+  const orgId = envVars.DE_ORG_ID;
+  const tenantId = envVars.DE_TENANT_ID;
+
+  if (!apiKey || !orgId || !tenantId) {
+    console.error('\n❌ ERROR: Missing required environment variables');
+    console.error('DE_API_KEY:', apiKey ? 'SET' : 'NOT SET');
+    console.error('DE_ORG_ID:', orgId ? 'SET' : 'NOT SET');
+    console.error('DE_TENANT_ID:', tenantId ? 'SET' : 'NOT SET');
+    process.exit(1);
+  }
+
+  // Build payload according to official API spec
+  const timestamp = new Date().toISOString();
+  const eventId = crypto.randomUUID();
+  const documentId = crypto.randomUUID();
+  const proofId = crypto.randomUUID();
+
   const payload = [
     {
       attestation: {
+        content: {
+          orgId,
+          tenantId,
+          eventId,
+          signerId: 'ProofLocker',
+          documentId,
+          documentRef: `proof-${documentId}`,
+          timestamp,
+          version: 1,
+        },
+        proofs: [
+          {
+            id: proofId,
+            signature: 'placeholder_signature',
+            algorithm: 'SECP256K1_RFC8785_V1',
+          },
+        ],
+      },
+      metadata: {
         hash: hash,
+        tags: {
+          source: 'ProofLocker',
+          test: 'true',
+        },
       },
     },
   ];
-
-  const apiKey = envVars.DE_API_KEY;
-  const apiUrl = envVars.DE_API_URL || 'https://de-api.constellationnetwork.io/v1';
 
   console.log('\n--- PRE-FETCH DEBUG ---');
   console.log('typeof payload:', typeof payload);
   console.log('JSON.stringify(payload):', JSON.stringify(payload));
   console.log('JSON.stringify(payload).length:', JSON.stringify(payload).length);
   console.log('API URL:', `${apiUrl}/fingerprints`);
-  console.log('API Key (first 20 chars):', apiKey ? apiKey.substring(0, 20) + '...' : 'NOT SET');
-
-  if (!apiKey) {
-    console.error('\n❌ ERROR: DE_API_KEY not found in environment variables');
-    process.exit(1);
-  }
+  console.log('Org ID:', orgId);
+  console.log('Tenant ID:', tenantId);
 
   // Make the request
   console.log('\n--- MAKING REQUEST ---');
@@ -56,7 +90,7 @@ async function testDigitalEvidenceAPI() {
       headers: {
         'X-API-Key': apiKey,
         'Content-Type': 'application/json',
-        'Accept': 'application/json',
+        'Accept': '*/*',
       },
       body: JSON.stringify(payload),
     });
