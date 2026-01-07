@@ -107,6 +107,29 @@ export default function ProofPage() {
 
   const createdDate = new Date(prediction.timestamp);
   const isClaimed = !!prediction.userId;
+  const isHidden = prediction.moderationStatus === "hidden";
+
+  // If prediction is hidden, show removal message
+  if (isHidden) {
+    return (
+      <div className="min-h-screen bg-[#0a0a0a] flex items-center justify-center p-4">
+        <div className="max-w-md w-full text-center">
+          <div className="bg-red-500/5 border border-red-500/20 rounded-lg p-8">
+            <svg className="w-16 h-16 mx-auto mb-4 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" />
+            </svg>
+            <h2 className="text-xl font-semibold text-white mb-2">Content Removed</h2>
+            <p className="text-neutral-400 mb-6 text-sm">
+              This prediction has been removed for violating the rules.
+            </p>
+            <Link href="/" className="inline-block px-5 py-2 bg-neutral-800 hover:bg-neutral-700 text-white font-medium rounded-md transition-colors border border-neutral-700">
+              Return to ProofLocker
+            </Link>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-[#0a0a0a] text-white">
