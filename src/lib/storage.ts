@@ -48,7 +48,9 @@ interface PredictionRow {
   timestamp: string;
   dag_transaction: string;
   proof_id: string;
+  public_slug: string;
   status: "pending" | "confirmed";
+  outcome: string;
   de_reference: string | null;
   de_event_id: string | null;
   de_status: string | null;
