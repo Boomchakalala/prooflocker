@@ -119,13 +119,13 @@ export default function Home() {
       <header className="glass sticky top-0 z-50 border-b border-white/5">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
-            <div className="flex items-center gap-3">
-              <ProofLockerLogo className="w-8 h-8" />
+            <Link href="/" className="flex items-center gap-3 hover:opacity-80 transition-opacity">
+              <ProofLockerLogo className="w-8 h-8 text-white" />
               <div>
-                <h1 className="text-xl font-bold gradient-text">ProofLocker</h1>
-                <p className="text-[10px] text-[#666] uppercase tracking-wider">On-chain accountability</p>
+                <h1 className="text-xl font-bold text-white">ProofLocker</h1>
+                <p className="text-[10px] text-neutral-500 uppercase tracking-wider">Time-stamped predictions</p>
               </div>
-            </div>
+            </Link>
             <div className="flex items-center gap-4">
               {user && (
                 <div className="flex items-center gap-3">
@@ -148,7 +148,7 @@ export default function Home() {
               )}
               <Link
                 href="/lock"
-                className="px-5 py-2.5 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold rounded-lg transition-all shadow-lg shadow-blue-500/20 hover:shadow-blue-500/40 btn-glow"
+                className="px-5 py-2.5 bg-neutral-800 hover:bg-neutral-700 text-white font-medium rounded-md transition-all border border-neutral-700"
               >
                 Lock prediction
               </Link>
