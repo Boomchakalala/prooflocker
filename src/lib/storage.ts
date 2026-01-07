@@ -183,6 +183,45 @@ export async function getPredictionByProofId(
 }
 
 /**
+ * Update prediction fields (for DE status syncing)
+ */
+export async function updatePrediction(
+  id: string,
+  updates: Partial<Omit<PredictionRow, "id" | "created_at">>
+): Promise<void> {
+  const { error } = await supabase
+    .from("predictions")
+    .update(updates)
+    .eq("id", id);
+
+  if (error) {
+    console.error("[Storage] Error updating prediction:", error);
+    throw new Error(`Failed to update prediction: ${error.message}`);
+  }
+}
+
+/**
+ * Get predictions with non-confirmed DE status (for syncing)
+ */
+export async function getPendingDEPredictions(limit: number = 20): Promise<Prediction[]> {
+  const { data, error } = await supabase
+    .from("predictions")
+    .select("*")
+    .not("de_status", "eq", "CONFIRMED")
+    .not("de_event_id", "is", null)
+    .order("created_at", { ascending: false })
+    .limit(limit);
+
+  if (error) {
+    console.error("[Storage] Error fetching pending DE predictions:", error);
+    return [];
+  }
+
+  return (data || []).map(rowToPrediction);
+}
+
+
+/**
  * Future function: Migrate predictions from anonymous user to authenticated account
  * This will be used when implementing account linking
  */
