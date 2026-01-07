@@ -335,7 +335,11 @@ export default function Home() {
                 key={prediction.id}
                 className={`fade-in stagger-${Math.min(index + 1, 4)}`}
               >
-                <PredictionCard prediction={prediction} />
+                <PredictionCard
+                  prediction={prediction}
+                  currentUserId={user?.id}
+                  onOutcomeUpdate={fetchPredictions}
+                />
               </div>
             ))}
           </div>
