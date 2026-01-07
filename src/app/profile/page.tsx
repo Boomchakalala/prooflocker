@@ -12,6 +12,11 @@ export default function ProfilePage() {
   const router = useRouter();
   const [predictions, setPredictions] = useState<Prediction[]>([]);
   const [loading, setLoading] = useState(true);
+  const [pseudonym, setPseudonymState] = useState<string>("");
+  const [pseudonymInput, setPseudonymInput] = useState<string>("");
+  const [pseudonymError, setPseudonymError] = useState<string | null>(null);
+  const [pseudonymSuccess, setPseudonymSuccess] = useState(false);
+  const [settingPseudonym, setSettingPseudonym] = useState(false);
 
   useEffect(() => {
     // Redirect to home if not authenticated
@@ -33,11 +38,55 @@ export default function ProfilePage() {
     try {
       const response = await fetch(`/api/predictions?userId=${user.id}`);
       const data = await response.json();
-      setPredictions(data.predictions || []);
+      const preds = data.predictions || [];
+      setPredictions(preds);
+
+      // Get pseudonym from first prediction if it exists
+      if (preds.length > 0 && preds[0].pseudonym) {
+        setPseudonymState(preds[0].pseudonym);
+      }
     } catch (error) {
       console.error("Error fetching predictions:", error);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleSetPseudonym = async () => {
+    if (!pseudonymInput.trim()) {
+      setPseudonymError("Pseudonym cannot be empty");
+      return;
+    }
+
+    setSettingPseudonym(true);
+    setPseudonymError(null);
+    setPseudonymSuccess(false);
+
+    try {
+      const response = await fetch("/api/pseudonym", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ pseudonym: pseudonymInput }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        setPseudonymError(data.error || "Failed to set pseudonym");
+        return;
+      }
+
+      setPseudonymState(data.pseudonym);
+      setPseudonymSuccess(true);
+      setPseudonymInput("");
+
+      // Refresh predictions to show pseudonym
+      await fetchPredictions();
+    } catch (error) {
+      console.error("Error setting pseudonym:", error);
+      setPseudonymError("Failed to set pseudonym");
+    } finally {
+      setSettingPseudonym(false);
     }
   };
 
