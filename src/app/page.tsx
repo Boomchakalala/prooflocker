@@ -161,13 +161,13 @@ export default function Home() {
       <main className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 relative z-10">
         {/* Tabs and Sync Button */}
         <div className="flex items-center justify-between mb-6">
-          <div className="flex items-center gap-1 p-1 glass rounded-lg w-fit glow-blue">
+          <div className="flex items-center gap-1 p-1 glass rounded-lg w-fit">
             <button
               onClick={() => setActiveTab("all")}
               className={`px-6 py-2 text-sm font-medium rounded-md transition-all ${
                 activeTab === "all"
-                  ? "bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg"
-                  : "text-[#888] hover:text-white hover:bg-white/5"
+                  ? "bg-neutral-800 text-white border border-neutral-700"
+                  : "text-neutral-400 hover:text-white hover:bg-white/5"
               }`}
             >
               All predictions
@@ -176,8 +176,8 @@ export default function Home() {
               onClick={handleMyPredictionsClick}
               className={`px-6 py-2 text-sm font-medium rounded-md transition-all ${
                 activeTab === "my"
-                  ? "bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg"
-                  : "text-[#888] hover:text-white hover:bg-white/5"
+                  ? "bg-neutral-800 text-white border border-neutral-700"
+                  : "text-neutral-400 hover:text-white hover:bg-white/5"
               }`}
             >
               My predictions
@@ -188,7 +188,7 @@ export default function Home() {
           <button
             onClick={syncDEStatus}
             disabled={syncing}
-            className="px-4 py-2 glass text-sm font-medium text-[#888] hover:text-white rounded-lg transition-all hover:bg-white/5 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+            className="px-4 py-2 glass text-sm font-medium text-neutral-400 hover:text-white rounded-lg transition-all hover:bg-white/5 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
             title="Recheck on-chain status for pending predictions"
           >
             <svg
@@ -242,7 +242,7 @@ export default function Home() {
                   />
                 </svg>
               </div>
-              <h3 className="text-2xl font-bold gradient-text mb-3">
+              <h3 className="text-2xl font-bold text-white mb-3">
                 You're posting anonymously
               </h3>
               <p className="text-[#888] mb-6 text-lg">
