@@ -3,6 +3,7 @@ import crypto from "crypto";
 import { savePrediction } from "@/lib/storage";
 import { generateAuthorNumber } from "@/lib/utils";
 import { submitToDigitalEvidence, isDigitalEvidenceEnabled } from "@/lib/digitalEvidence";
+import { validatePredictionContent } from "@/lib/contentFilter";
 
 export const runtime = "nodejs";
 
@@ -20,6 +21,15 @@ export async function POST(request: NextRequest) {
     if (!anonId || typeof anonId !== "string") {
       return NextResponse.json(
         { error: "Anonymous ID is required" },
+        { status: 400 }
+      );
+    }
+
+    // Validate content against moderation filter
+    const validation = validatePredictionContent(text);
+    if (!validation.isValid) {
+      return NextResponse.json(
+        { error: validation.error },
         { status: 400 }
       );
     }
