@@ -185,12 +185,20 @@ export async function submitToDigitalEvidence(
 
     console.log("[Digital Evidence] SUCCESS! Parsed result:", JSON.stringify(result));
 
+    // Check if submission has errors (means pending, not confirmed)
+    const hasErrors = result.errors && result.errors.length > 0;
+    const isAccepted = !hasErrors && (result.accepted !== false);
+
+    if (hasErrors) {
+      console.warn("[Digital Evidence] Submission received but has validation errors:", result.errors);
+    }
+
     // Extract eventId, hash, and accepted from response
     return {
       success: true,
       eventId: result.eventId || eventId,
       hash: result.hash || fingerprint,
-      accepted: result.accepted !== false, // Assume accepted unless explicitly rejected
+      accepted: isAccepted,
       timestamp,
     };
   } catch (error) {
