@@ -37,8 +37,8 @@ export async function POST(request: NextRequest) {
     // Create text preview (first 80 chars for feed)
     const textPreview = text.length > 80 ? text.slice(0, 80) + "..." : text;
 
-    // Generate consistent author number from userId
-    const authorNumber = generateAuthorNumber(userId);
+    // Generate consistent author number from anonId
+    const authorNumber = generateAuthorNumber(anonId);
 
     // Attempt to submit to Digital Evidence if configured
     let onChainStatus: "pending" | "confirmed" = "pending";
@@ -54,7 +54,7 @@ export async function POST(request: NextRequest) {
 
       const deResult = await submitToDigitalEvidence(hash, {
         proofId,
-        userId,
+        userId: anonId,
       });
 
       if (deResult.success && deResult.accepted) {
@@ -77,7 +77,8 @@ export async function POST(request: NextRequest) {
     // Build prediction object
     const prediction = {
       id: predictionId,
-      userId,
+      userId: null, // Will be set when user claims with email
+      anonId, // Anonymous identifier from localStorage
       authorNumber,
       text,
       textPreview,
