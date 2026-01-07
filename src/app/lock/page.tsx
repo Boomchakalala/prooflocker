@@ -257,22 +257,22 @@ export default function LockPage() {
                 </svg>
               </div>
 
-              <h1 className="text-4xl font-black gradient-text mb-4">
+              <h1 className="text-4xl font-bold text-white mb-4">
                 Prediction locked.
               </h1>
-              <h2 className="text-2xl font-bold text-white mb-6">
+              <h2 className="text-2xl font-bold text-neutral-200 mb-6">
                 No take-backs.
               </h2>
 
-              <p className="text-[#a0a0a0] text-lg leading-relaxed max-w-xl mx-auto mb-8">
+              <p className="text-neutral-400 text-lg leading-relaxed max-w-xl mx-auto mb-8">
                 Your prediction is now on-chain with a cryptographic fingerprint. It's public, permanent, and cannot be edited. Time to own the outcome.
               </p>
 
               <div className="glass border border-white/5 rounded-lg p-4 mb-6 max-w-xl mx-auto">
-                <label className="block text-[10px] font-semibold text-[#666] mb-2 uppercase tracking-wider">
+                <label className="block text-[10px] font-semibold text-neutral-500 mb-2 uppercase tracking-wider">
                   Your Prediction
                 </label>
-                <p className="text-[#e0e0e0] text-sm leading-relaxed">
+                <p className="text-neutral-100 text-sm leading-relaxed">
                   {text}
                 </p>
               </div>
@@ -280,7 +280,7 @@ export default function LockPage() {
               <div className="flex flex-col sm:flex-row gap-3 max-w-xl mx-auto">
                 <button
                   onClick={handleShare}
-                  className="flex-1 px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold rounded-lg transition-all btn-glow flex items-center justify-center gap-2"
+                  className="flex-1 px-6 py-3 bg-neutral-800 hover:bg-neutral-700 text-white font-medium rounded-md transition-all border border-neutral-700 flex items-center justify-center gap-2"
                 >
                   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
@@ -289,13 +289,13 @@ export default function LockPage() {
                 </button>
                 <Link
                   href={`/verify?proofId=${proofId}`}
-                  className="flex-1 px-6 py-3 bg-white/5 hover:bg-white/10 text-white font-semibold rounded-lg transition-all border border-white/10 text-center"
+                  className="flex-1 px-6 py-3 bg-white/5 hover:bg-white/10 text-white font-medium rounded-md transition-all border border-white/10 text-center"
                 >
                   Verify now
                 </Link>
                 <Link
                   href="/"
-                  className="flex-1 px-6 py-3 bg-white/5 hover:bg-white/10 text-white font-semibold rounded-lg transition-all border border-white/10 text-center"
+                  className="flex-1 px-6 py-3 bg-white/5 hover:bg-white/10 text-white font-medium rounded-md transition-all border border-white/10 text-center"
                 >
                   Back to feed
                 </Link>
