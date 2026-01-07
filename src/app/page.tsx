@@ -120,7 +120,7 @@ export default function Home() {
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             <Link href="/" className="flex items-center gap-3 hover:opacity-80 transition-opacity">
-              <ProofLockerLogo className="w-8 h-8 text-white" />
+              <ProofLockerLogo className="w-8 h-8" />
               <div>
                 <h1 className="text-xl font-bold text-white">ProofLocker</h1>
                 <p className="text-[10px] text-neutral-500 uppercase tracking-wider">Time-stamped predictions</p>
