@@ -217,7 +217,7 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
       </div>
 
       {/* Actions - PRIMARY Verify, SECONDARY Share */}
-      <div className="flex gap-2">
+      <div className="flex gap-2 mt-auto">
         <Link
           href={`/proof/${prediction.publicSlug}`}
           className="flex-1 text-center px-4 py-2 text-sm font-medium text-white bg-gradient-to-r from-blue-600/80 to-purple-600/80 hover:from-blue-600 hover:to-purple-600 rounded-lg transition-all"
