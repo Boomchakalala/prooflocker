@@ -3,18 +3,24 @@
 import { useState } from "react";
 import { Prediction } from "@/lib/storage";
 import { formatRelativeTime } from "@/lib/utils";
+import OutcomeDropdown from "./OutcomeDropdown";
+import Link from "next/link";
 
 interface PredictionCardProps {
   prediction: Prediction;
+  currentUserId?: string | null; // Current authenticated user ID
+  onOutcomeUpdate?: () => void; // Callback to refresh predictions
 }
 
-export default function PredictionCard({ prediction }: PredictionCardProps) {
+export default function PredictionCard({ prediction, currentUserId, onOutcomeUpdate }: PredictionCardProps) {
   const [copied, setCopied] = useState(false);
   const [linkCopied, setLinkCopied] = useState(false);
 
   // Fallback for older predictions without authorNumber
   const authorNumber = prediction.authorNumber || 1000;
   const onChainStatus = prediction.onChainStatus || "pending";
+  const isClaimed = !!prediction.userId;
+  const isOwner = currentUserId && prediction.userId === currentUserId;
 
   // Determine status display based on deStatus (more accurate than onChainStatus)
   const getStatusDisplay = () => {
