@@ -14,8 +14,22 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "ProofLocker - Lock Your Predictions On-Chain",
-  description: "Lock predictions on-chain. No edits. No excuses. Public accountability powered by Constellation Network.",
+  title: "ProofLocker",
+  description: "Time-stamped prediction proofs. Claim later. Share receipts.",
+  icons: {
+    icon: "/icon.svg",
+  },
+  openGraph: {
+    title: "ProofLocker",
+    description: "Time-stamped prediction proofs. Claim later. Share receipts.",
+    type: "website",
+    siteName: "ProofLocker",
+  },
+  twitter: {
+    card: "summary",
+    title: "ProofLocker",
+    description: "Time-stamped prediction proofs. Claim later. Share receipts.",
+  },
 };
 
 export default function RootLayout({
