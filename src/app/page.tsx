@@ -316,12 +316,12 @@ export default function Home() {
             <h3 className="text-2xl font-bold text-white mb-3">
               {activeTab === "all"
                 ? "No predictions locked yet"
-                : "You haven't made your mark"}
+                : "No predictions"}
             </h3>
             <p className="text-neutral-400 mb-8 text-lg">
               {activeTab === "all"
-                ? "Be the first to lock a prediction on-chain"
-                : "Make a prediction. Lock it. Own the outcome."}
+                ? "No predictions have been locked yet"
+                : "Create your first immutable record"}
             </p>
             <Link
               href="/lock"

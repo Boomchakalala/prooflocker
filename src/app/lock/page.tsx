@@ -107,7 +107,7 @@ export default function LockPage() {
                 Lock your prediction
               </h1>
               <p className="text-neutral-400 text-lg">
-                Make it real. Lock it on-chain. Own the outcome.
+                Create an immutable, timestamped record.
               </p>
             </div>
 
