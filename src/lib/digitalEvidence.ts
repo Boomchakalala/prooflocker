@@ -2,19 +2,23 @@
  * Constellation Digital Evidence integration layer
  *
  * This module handles submission of fingerprints to Constellation Network's
- * Digital Evidence API. It uses a feature flag pattern: if API key is not
- * configured, it gracefully degrades to "pending" status.
+ * Digital Evidence API with proper cryptographic signing using SECP256K1_RFC8785_V1.
  *
  * Required environment variables:
  * - DE_API_KEY: Digital Evidence API key
  * - DE_TENANT_ID: Digital Evidence tenant ID
  * - DE_ORG_ID: Digital Evidence organization ID
+ * - DE_SIGNING_PRIVATE_KEY_HEX: 32-byte secp256k1 private key in hex
  *
  * Official API Documentation:
  * POST https://de-api.constellationnetwork.io/v1/fingerprints
  */
 
 import crypto from "crypto";
+import canonicalize from "json-canonicalize";
+import { ec as EC } from "elliptic";
+
+const ec = new EC("secp256k1");
 
 interface DigitalEvidenceConfig {
   apiKey: string;
@@ -34,7 +38,13 @@ interface DigitalEvidenceResponse {
  * Check if Digital Evidence API is configured
  */
 export function isDigitalEvidenceEnabled(): boolean {
-  return !!(process.env.DE_API_KEY && process.env.DE_TENANT_ID && process.env.DE_ORG_ID);
+  return !!(
+    process.env.DE_API_KEY &&
+    process.env.DE_TENANT_ID &&
+    process.env.DE_ORG_ID &&
+    process.env.DE_SIGNING_PRIVATE_KEY_HEX &&
+    process.env.DE_SIGNING_PRIVATE_KEY_HEX !== "your-32-byte-hex-private-key-here"
+  );
 }
 
 /**
@@ -49,6 +59,54 @@ function getDigitalEvidenceConfig(): DigitalEvidenceConfig | null {
     apiKey: process.env.DE_API_KEY!,
     apiUrl: process.env.DE_API_URL || "https://de-api.constellationnetwork.io/v1",
   };
+}
+
+/**
+ * Sign FingerprintValue according to SECP256K1_RFC8785_V1 spec
+ *
+ * Steps:
+ * 1. RFC 8785 canonicalize the FingerprintValue JSON
+ * 2. sha256(utf8(canonicalJson)) => hashBytes
+ * 3. convert hashBytes to hex string => hashHex
+ * 4. sha512(utf8(hashHex)) => sha512Hash
+ * 5. truncatedHash = sha512Hash.slice(0, 32)
+ * 6. sign truncatedHash with secp256k1
+ * 7. signature format: signature.toDER('hex')
+ *
+ * @param fingerprintValue - The attestation.content object
+ * @param privateKeyHex - 32-byte secp256k1 private key in hex
+ * @returns { publicKeyHex, signatureHex }
+ */
+function signFingerprintValue(
+  fingerprintValue: any,
+  privateKeyHex: string
+): { publicKeyHex: string; signatureHex: string } {
+  // Step 1: RFC 8785 canonicalize
+  const canonicalJson = canonicalize(fingerprintValue);
+
+  // Step 2: SHA-256 hash of canonical JSON
+  const hashBytes = crypto.createHash("sha256").update(canonicalJson, "utf8").digest();
+
+  // Step 3: Convert hash bytes to hex string
+  const hashHex = hashBytes.toString("hex");
+
+  // Step 4: SHA-512 hash of the hex string
+  const sha512Hash = crypto.createHash("sha512").update(hashHex, "utf8").digest();
+
+  // Step 5: Truncate to first 32 bytes
+  const truncatedHash = sha512Hash.slice(0, 32);
+
+  // Step 6: Sign with secp256k1
+  const keyPair = ec.keyFromPrivate(privateKeyHex, "hex");
+  const signature = keyPair.sign(truncatedHash);
+
+  // Step 7: DER encoding
+  const signatureHex = signature.toDER("hex");
+
+  // Get public key
+  const publicKeyHex = keyPair.getPublic().encode("hex", false);
+
+  return { publicKeyHex, signatureHex };
 }
 
 /**
