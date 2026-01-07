@@ -85,7 +85,8 @@ function rowToPrediction(row: PredictionRow): Prediction {
 function predictionToRow(prediction: Prediction): Omit<PredictionRow, "created_at"> {
   return {
     id: prediction.id,
-    user_id: prediction.userId,
+    user_id: prediction.userId || null,
+    anon_id: prediction.anonId,
     author_number: prediction.authorNumber,
     text: prediction.text,
     text_preview: prediction.textPreview,
@@ -99,6 +100,7 @@ function predictionToRow(prediction: Prediction): Omit<PredictionRow, "created_a
     de_status: prediction.deStatus || null,
     de_submitted_at: prediction.deSubmittedAt || null,
     confirmed_at: prediction.confirmedAt || null,
+    claimed_at: prediction.claimedAt || null,
   };
 }
 
