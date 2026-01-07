@@ -94,6 +94,9 @@ function rowToPrediction(row: PredictionRow): Prediction {
     deSubmittedAt: row.de_submitted_at || undefined,
     confirmedAt: row.confirmed_at || undefined,
     claimedAt: row.claimed_at || undefined,
+    moderationStatus: row.moderation_status,
+    hiddenReason: row.hidden_reason || undefined,
+    hiddenAt: row.hidden_at || undefined,
   };
 }
 
@@ -122,6 +125,9 @@ function predictionToRow(prediction: Prediction): Omit<PredictionRow, "created_a
     de_submitted_at: prediction.deSubmittedAt || null,
     confirmed_at: prediction.confirmedAt || null,
     claimed_at: prediction.claimedAt || null,
+    moderation_status: prediction.moderationStatus || "active",
+    hidden_reason: prediction.hiddenReason || null,
+    hidden_at: prediction.hiddenAt || null,
   };
 }
 
