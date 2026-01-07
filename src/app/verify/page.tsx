@@ -61,7 +61,7 @@ function VerifyContent() {
       </div>
 
       {/* Header */}
-      <header className="glass border-b border-white/5 relative z-10">
+      <header className="glass border-b border-white/5 sticky top-0 z-50 bg-[#0a0a0a]/80 backdrop-blur-xl">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             <Link
