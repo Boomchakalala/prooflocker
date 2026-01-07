@@ -84,42 +84,45 @@ export async function submitToDigitalEvidence(
   }
 
   try {
-    // CRITICAL: API expects an ARRAY of objects, not a single object
+    // MINIMAL payload - ONLY attestation.hash, NO metadata
     const payload = [
       {
         attestation: {
           hash: fingerprint,
         },
-        metadata: {
-          source: "ProofLocker",
-          ...metadata,
-        },
       },
     ];
 
-    const payloadString = JSON.stringify(payload);
-
-    console.log("[Digital Evidence] Submitting fingerprint");
-    console.log("[Digital Evidence] Payload:", payloadString);
+    // Debug logging BEFORE fetch
+    console.log("[Digital Evidence] ========== PRE-FETCH DEBUG ==========");
+    console.log("[Digital Evidence] typeof payload:", typeof payload);
+    console.log("[Digital Evidence] JSON.stringify(payload):", JSON.stringify(payload));
+    console.log("[Digital Evidence] JSON.stringify(payload).length:", JSON.stringify(payload).length);
+    console.log("[Digital Evidence] API URL:", `${config.apiUrl}/fingerprints`);
+    console.log("[Digital Evidence] API Key (first 20 chars):", config.apiKey.substring(0, 20) + "...");
 
     // Submit to Constellation Digital Evidence API
     const response = await fetch(`${config.apiUrl}/fingerprints`, {
       method: "POST",
       headers: {
+        "X-API-Key": config.apiKey,
         "Content-Type": "application/json",
         "Accept": "application/json",
-        "X-API-Key": config.apiKey,
       },
-      body: payloadString,
+      body: JSON.stringify(payload),
     });
 
-    console.log("[Digital Evidence] Response status:", response.status);
+    // Debug logging AFTER fetch
+    console.log("[Digital Evidence] ========== POST-FETCH DEBUG ==========");
+    console.log("[Digital Evidence] response.status:", response.status);
+    console.log("[Digital Evidence] response.headers.get('content-type'):", response.headers.get("content-type"));
 
     const responseText = await response.text();
-    console.log("[Digital Evidence] Response body:", responseText);
+    console.log("[Digital Evidence] Raw response text:", responseText);
+    console.log("[Digital Evidence] ========================================");
 
     if (!response.ok) {
-      console.error("[Digital Evidence] API error:", response.status, responseText);
+      console.error("[Digital Evidence] API error - Status:", response.status, "Body:", responseText);
       return {
         success: false,
         error: `API error: ${response.status} - ${responseText}`,
@@ -131,7 +134,7 @@ export async function submitToDigitalEvidence(
     // API returns an array of results, get the first one
     const result = Array.isArray(data) ? data[0] : data;
 
-    console.log("[Digital Evidence] Parsed result:", JSON.stringify(result));
+    console.log("[Digital Evidence] SUCCESS! Parsed result:", JSON.stringify(result));
 
     // Extract eventId, hash, and accepted from response
     return {
@@ -142,7 +145,7 @@ export async function submitToDigitalEvidence(
       timestamp: new Date().toISOString(), // Use server time
     };
   } catch (error) {
-    console.error("[Digital Evidence] Error submitting:", error);
+    console.error("[Digital Evidence] EXCEPTION:", error);
     return {
       success: false,
       error: error instanceof Error ? error.message : "Unknown error",
