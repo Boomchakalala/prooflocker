@@ -412,3 +412,61 @@ export async function claimPredictions(
 
   return count || 0;
 }
+
+/**
+ * Get all predictions for admin moderation (includes hidden ones)
+ */
+export async function getAllPredictionsForAdmin(): Promise<Prediction[]> {
+  const { data, error } = await supabase
+    .from("predictions")
+    .select("*")
+    .order("created_at", { ascending: false });
+
+  if (error) {
+    console.error("[Storage] Error fetching predictions for admin:", error);
+    return [];
+  }
+
+  return (data || []).map(rowToPrediction);
+}
+
+/**
+ * Hide a prediction (admin moderation)
+ */
+export async function hidePrediction(
+  id: string,
+  reason: string
+): Promise<void> {
+  const { error } = await supabase
+    .from("predictions")
+    .update({
+      moderation_status: "hidden",
+      hidden_reason: reason,
+      hidden_at: new Date().toISOString(),
+    })
+    .eq("id", id);
+
+  if (error) {
+    console.error("[Storage] Error hiding prediction:", error);
+    throw new Error(`Failed to hide prediction: ${error.message}`);
+  }
+}
+
+/**
+ * Unhide a prediction (admin moderation)
+ */
+export async function unhidePrediction(id: string): Promise<void> {
+  const { error } = await supabase
+    .from("predictions")
+    .update({
+      moderation_status: "active",
+      hidden_reason: null,
+      hidden_at: null,
+    })
+    .eq("id", id);
+
+  if (error) {
+    console.error("[Storage] Error unhiding prediction:", error);
+    throw new Error(`Failed to unhide prediction: ${error.message}`);
+  }
+}
