@@ -14,6 +14,8 @@ export default function Home() {
   const [loading, setLoading] = useState(true);
   const [userId, setUserId] = useState<string>("");
   const [isAnonymous, setIsAnonymous] = useState(true);
+  const [syncing, setSyncing] = useState(false);
+  const [syncMessage, setSyncMessage] = useState<string | null>(null);
 
   useEffect(() => {
     const id = getOrCreateUserId();
