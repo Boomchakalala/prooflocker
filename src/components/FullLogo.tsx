@@ -8,36 +8,24 @@ export default function FullLogo({ className = "" }: { className?: string }) {
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
       >
-        <defs>
-          <linearGradient id="tealGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor="#14b8a6" />
-            <stop offset="100%" stopColor="#06b6d4" />
-          </linearGradient>
-        </defs>
+        {/* Ultra-minimal mark: vertical bar intersecting dot - represents timestamp/finality */}
+        {/* Vertical bar */}
+        <rect x="18" y="8" width="4" height="24" fill="white" rx="2" />
 
-        {/* Abstract geometric mark - angular frame forming "P" */}
-        <path
-          d="M 8 8 L 8 32 L 11 32 L 11 11 L 24 11 L 24 20 L 27 20 L 27 8 Z"
-          fill="url(#tealGradient)"
-        />
-        <path
-          d="M 27 20 L 32 20 L 32 8 L 27 8 Z"
-          fill="url(#tealGradient)"
-          opacity="0.6"
-        />
-        <rect
-          x="16"
-          y="20"
-          width="3"
-          height="12"
-          fill="url(#tealGradient)"
-        />
+        {/* Intersecting dot with subtle glow */}
+        <circle cx="20" cy="20" r="3" fill="#10b981" />
+        <circle cx="20" cy="20" r="3" fill="#10b981" opacity="0.3" />
       </svg>
 
-      {/* Wordmark */}
-      <span className="text-xl font-semibold text-white font-sans">
-        ProofLocker
-      </span>
+      {/* Wordmark and tagline */}
+      <div className="flex flex-col">
+        <span className="text-xl font-semibold text-white font-sans leading-tight">
+          ProofLocker
+        </span>
+        <span className="text-xs text-white/70 font-normal leading-tight">
+          Immutable proof of public predictions.
+        </span>
+      </div>
     </div>
   );
 }
