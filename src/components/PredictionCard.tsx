@@ -90,9 +90,9 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
 
   return (
     <div className={`glass rounded-xl p-4 hover:border-white/10 transition-all card-hover glow-blue ${isNew() ? 'ring-1 ring-blue-500/20' : ''}`}>
-      {/* Header: Author + Time + Status */}
-      <div className="flex items-center justify-between mb-2">
-        <div className="flex items-center gap-2">
+      {/* Header: Author + Time + Status + Claimed */}
+      <div className="flex items-center justify-between mb-2 flex-wrap gap-2">
+        <div className="flex items-center gap-2 flex-wrap">
           <div className="flex items-center gap-2">
             <div className="w-7 h-7 rounded-full bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center text-xs font-bold">
               {authorNumber.toString().slice(0, 2)}
@@ -105,6 +105,17 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
           <span className={`text-xs ${isNew() ? 'text-blue-400 font-medium' : 'text-[#666]'}`}>
             {formatRelativeTime(prediction.timestamp)}
           </span>
+          {isClaimed && (
+            <>
+              <span className="text-xs text-[#666]">•</span>
+              <span className="inline-flex items-center px-2 py-0.5 rounded-md text-xs font-medium bg-blue-500/10 border border-blue-500/30 text-blue-400">
+                <svg className="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                </svg>
+                Claimed
+              </span>
+            </>
+          )}
         </div>
         <span
           className={`inline-flex items-center px-2 py-0.5 rounded-md text-xs font-medium ${statusDisplay.className}`}
