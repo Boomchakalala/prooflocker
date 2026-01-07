@@ -132,7 +132,7 @@ export default function Home() {
                     Profile
                   </Link>
                   <div className="text-right">
-                    <div className="text-sm text-white/80">{user.email}</div>
+                    <div className="text-xs text-white/50">{user.email}</div>
                     <button
                       onClick={handleSignOut}
                       className="text-xs text-white/50 hover:text-white/80 transition-colors"
