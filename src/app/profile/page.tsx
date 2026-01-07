@@ -106,7 +106,6 @@ export default function ProfilePage() {
   const invalidCount = predictions.filter((p) => p.outcome === "invalid").length;
   const pendingCount = predictions.filter((p) => p.outcome === "pending").length;
   const resolvedCount = correctCount + incorrectCount;
-  const accuracy = resolvedCount > 0 ? ((correctCount / resolvedCount) * 100).toFixed(1) : "N/A";
 
   const getOutcomeBadgeColor = (outcome: string) => {
     switch (outcome) {
