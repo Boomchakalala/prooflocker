@@ -229,22 +229,21 @@ export async function migratePredictions(
   anonymousUserId: string,
   authenticatedUserId: string
 ): Promise<number> {
-  const predictions = await readPredictions();
-  let migratedCount = 0;
+  const { data, error } = await supabase
+    .from("predictions")
+    .update({ user_id: authenticatedUserId })
+    .eq("user_id", anonymousUserId);
 
-  const updatedPredictions = predictions.map((p) => {
-    if (p.userId === anonymousUserId) {
-      migratedCount++;
-      return {
-        ...p,
-        userId: authenticatedUserId,
-        // Store original anonymous ID for audit trail
-        // migratedFrom: anonymousUserId,
-      };
-    }
-    return p;
-  });
+  if (error) {
+    console.error("[Storage] Error migrating predictions:", error);
+    return 0;
+  }
 
-  await writePredictions(updatedPredictions);
-  return migratedCount;
+  // Count how many were updated
+  const { count } = await supabase
+    .from("predictions")
+    .select("*", { count: "exact", head: true })
+    .eq("user_id", authenticatedUserId);
+
+  return count || 0;
 }
