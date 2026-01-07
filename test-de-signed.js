@@ -89,7 +89,7 @@ async function testDigitalEvidenceAPI() {
     process.exit(1);
   }
 
-  // Build FingerprintValue
+  // Build FingerprintValue (without signerId initially)
   const timestamp = new Date().toISOString();
   const eventId = crypto.randomUUID();
   const documentId = `prooflocker:${crypto.randomUUID()}`;
@@ -98,18 +98,17 @@ async function testDigitalEvidenceAPI() {
     orgId,
     tenantId,
     eventId,
-    signerId: '', // Will be filled after signing
     documentId,
     documentRef: hash,
     timestamp,
     version: 1,
   };
 
-  // Sign the fingerprint value
-  const { publicKeyHex, signatureHex } = signFingerprintValue(fingerprintValue, privateKeyHex);
-
-  // Set signerId to public key
-  fingerprintValue.signerId = publicKeyHex;
+  // Sign the fingerprint value (this adds signerId internally)
+  const { publicKeyHex, signatureHex, fingerprintValueWithSignerId } = signFingerprintValue(
+    fingerprintValue,
+    privateKeyHex
+  );
 
   // Build proof
   const proof = {
@@ -122,7 +121,7 @@ async function testDigitalEvidenceAPI() {
   const payload = [
     {
       attestation: {
-        content: fingerprintValue,
+        content: fingerprintValueWithSignerId,
         proofs: [proof],
       },
     },
