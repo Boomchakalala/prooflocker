@@ -54,7 +54,6 @@ function signFingerprintValue(fingerprintValue, privateKeyHex) {
   console.log('5. Truncated hash (32 bytes):', truncatedHash.toString('hex'));
 
   // Step 6: Sign with secp256k1
-  const keyPair = ec.keyFromPrivate(privateKeyHex, 'hex');
   const signature = keyPair.sign(truncatedHash);
 
   // Step 7: DER encoding
