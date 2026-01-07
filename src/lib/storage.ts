@@ -215,6 +215,23 @@ export async function getPredictionByProofId(
   return data ? rowToPrediction(data) : null;
 }
 
+export async function getPredictionBySlug(
+  slug: string
+): Promise<Prediction | null> {
+  const { data, error} = await supabase
+    .from("predictions")
+    .select("*")
+    .eq("public_slug", slug)
+    .single();
+
+  if (error) {
+    console.error("[Storage] Error fetching prediction by slug:", error);
+    return null;
+  }
+
+  return data ? rowToPrediction(data) : null;
+}
+
 /**
  * Update prediction fields (for DE status syncing)
  */
