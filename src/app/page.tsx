@@ -116,7 +116,7 @@ export default function Home() {
       </div>
 
       {/* Header */}
-      <header className="glass sticky top-0 z-50 border-b border-white/5">
+      <header className="glass sticky top-0 z-50 border-b border-white/5 bg-[#0a0a0a]/80 backdrop-blur-xl">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             <Link href="/" className="hover:opacity-90 transition-opacity">
@@ -354,7 +354,7 @@ export default function Home() {
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
             <div className="flex items-center gap-4">
               <p className="text-sm text-neutral-500">
-                Powered by <span className="text-white font-medium">Constellation Network ($DAG)</span>
+                Powered by <span className="text-white font-medium">Constellation Network (DAG)</span>
               </p>
               {!user && (
                 <span className="flex items-center gap-1.5 text-xs text-[#888] glass px-2.5 py-1 rounded-md border border-white/5">
