@@ -91,8 +91,8 @@ export default function LockPage() {
               </svg>
               Back to ProofLocker
             </Link>
-            <Link href="/" className="flex items-center gap-3 hover:opacity-80 transition-opacity">
-              <ProofLockerLogo className="w-6 h-6" />
+            <Link href="/" className="flex items-center gap-3 hover:opacity-90 transition-opacity">
+              <ProofLockerLogo className="w-8 h-8" />
               <span className="font-semibold text-white">ProofLocker</span>
             </Link>
           </div>
