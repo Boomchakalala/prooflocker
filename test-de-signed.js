@@ -1,7 +1,7 @@
 // Test script for Digital Evidence API with proper signing
 const crypto = require('crypto');
 const fs = require('fs');
-const canonicalize = require('json-canonicalize').default || require('json-canonicalize');
+const { canonicalize } = require('json-canonicalize');
 const { ec: EC } = require('elliptic');
 
 const ec = new EC('secp256k1');

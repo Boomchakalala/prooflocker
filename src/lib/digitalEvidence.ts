@@ -15,7 +15,7 @@
  */
 
 import crypto from "crypto";
-import canonicalize from "json-canonicalize";
+import { canonicalize } from "json-canonicalize";
 import { ec as EC } from "elliptic";
 
 const ec = new EC("secp256k1");
