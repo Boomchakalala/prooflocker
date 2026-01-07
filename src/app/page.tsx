@@ -87,6 +87,25 @@ export default function Home() {
     }
   };
 
+  const handleSignOut = async () => {
+    try {
+      await signOut();
+      // Refresh predictions after signing out
+      await fetchPredictions();
+    } catch (error) {
+      console.error("Error signing out:", error);
+    }
+  };
+
+  const handleMyPredictionsClick = () => {
+    if (!user && activeTab === "my") {
+      // If already on "My predictions" tab and not logged in, show claim modal
+      setShowClaimModal(true);
+    } else {
+      setActiveTab("my");
+    }
+  };
+
   return (
     <div className="min-h-screen gradient-bg relative">
       {/* Decorative gradient orbs */}
