@@ -294,6 +294,59 @@ export async function updatePredictionOutcome(
 }
 
 /**
+ * Set pseudonym for a user's predictions (immutable once set)
+ */
+export async function setPseudonym(
+  userId: string,
+  pseudonym: string
+): Promise<void> {
+  // Validate pseudonym format
+  const trimmed = pseudonym.trim();
+  if (trimmed.length < 2 || trimmed.length > 30) {
+    throw new Error("Pseudonym must be between 2 and 30 characters");
+  }
+
+  // Check if user already has a pseudonym set
+  const { data: existingPrediction, error: checkError } = await supabase
+    .from("predictions")
+    .select("pseudonym")
+    .eq("user_id", userId)
+    .not("pseudonym", "is", null)
+    .limit(1)
+    .single();
+
+  if (!checkError && existingPrediction) {
+    throw new Error("Pseudonym already set and cannot be changed");
+  }
+
+  // Check if pseudonym is already taken
+  const { data: duplicateCheck, error: duplicateError } = await supabase
+    .from("predictions")
+    .select("id")
+    .eq("pseudonym", trimmed)
+    .limit(1)
+    .single();
+
+  if (!duplicateError && duplicateCheck) {
+    throw new Error("This pseudonym is already taken");
+  }
+
+  // Update all user's predictions with the pseudonym
+  const { error } = await supabase
+    .from("predictions")
+    .update({ pseudonym: trimmed })
+    .eq("user_id", userId);
+
+  if (error) {
+    console.error("[Storage] Error setting pseudonym:", error);
+    if (error.code === "23505") {
+      throw new Error("This pseudonym is already taken");
+    }
+    throw new Error(`Failed to set pseudonym: ${error.message}`);
+  }
+}
+
+/**
  * Get predictions with non-confirmed DE status (for syncing)
  */
 export async function getPendingDEPredictions(limit: number = 20): Promise<Prediction[]> {
