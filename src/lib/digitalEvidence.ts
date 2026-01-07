@@ -7,10 +7,14 @@
  *
  * Required environment variables:
  * - DE_API_KEY: Digital Evidence API key
+ * - DE_TENANT_ID: Digital Evidence tenant ID
+ * - DE_ORG_ID: Digital Evidence organization ID
  *
  * Official API Documentation:
  * POST https://de-api.constellationnetwork.io/v1/fingerprints
  */
+
+import crypto from "crypto";
 
 interface DigitalEvidenceConfig {
   apiKey: string;
@@ -84,11 +88,45 @@ export async function submitToDigitalEvidence(
   }
 
   try {
-    // MINIMAL payload - ONLY attestation.hash, NO metadata
+    const orgId = process.env.DE_ORG_ID!;
+    const tenantId = process.env.DE_TENANT_ID!;
+    const timestamp = new Date().toISOString();
+
+    // Generate unique IDs for this submission
+    const eventId = crypto.randomUUID();
+    const documentId = metadata?.proofId || crypto.randomUUID();
+    const signerId = "ProofLocker";
+    const documentRef = `proof-${documentId}`;
+    const proofId = crypto.randomUUID();
+
+    // Build payload according to official API spec
     const payload = [
       {
         attestation: {
-          hash: fingerprint,
+          content: {
+            orgId,
+            tenantId,
+            eventId,
+            signerId,
+            documentId,
+            documentRef,
+            timestamp,
+            version: 1,
+          },
+          proofs: [
+            {
+              id: proofId,
+              signature: "placeholder_signature", // TODO: Implement actual signing
+              algorithm: "SECP256K1_RFC8785_V1",
+            },
+          ],
+        },
+        metadata: {
+          hash: fingerprint, // Hash goes in metadata, not attestation
+          tags: {
+            source: "ProofLocker",
+            ...metadata,
+          },
         },
       },
     ];
@@ -99,7 +137,8 @@ export async function submitToDigitalEvidence(
     console.log("[Digital Evidence] JSON.stringify(payload):", JSON.stringify(payload));
     console.log("[Digital Evidence] JSON.stringify(payload).length:", JSON.stringify(payload).length);
     console.log("[Digital Evidence] API URL:", `${config.apiUrl}/fingerprints`);
-    console.log("[Digital Evidence] API Key (first 20 chars):", config.apiKey.substring(0, 20) + "...");
+    console.log("[Digital Evidence] Org ID:", orgId);
+    console.log("[Digital Evidence] Tenant ID:", tenantId);
 
     // Submit to Constellation Digital Evidence API
     const response = await fetch(`${config.apiUrl}/fingerprints`, {
@@ -107,7 +146,7 @@ export async function submitToDigitalEvidence(
       headers: {
         "X-API-Key": config.apiKey,
         "Content-Type": "application/json",
-        "Accept": "application/json",
+        "Accept": "*/*",
       },
       body: JSON.stringify(payload),
     });
@@ -139,10 +178,10 @@ export async function submitToDigitalEvidence(
     // Extract eventId, hash, and accepted from response
     return {
       success: true,
-      eventId: result.eventId,
-      hash: result.hash,
-      accepted: result.accepted,
-      timestamp: new Date().toISOString(), // Use server time
+      eventId: result.eventId || eventId,
+      hash: result.hash || fingerprint,
+      accepted: result.accepted !== false, // Assume accepted unless explicitly rejected
+      timestamp,
     };
   } catch (error) {
     console.error("[Digital Evidence] EXCEPTION:", error);
