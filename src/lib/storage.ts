@@ -9,6 +9,8 @@ import { supabase } from "./supabase";
  * - When user claims via email, userId is set and claimedAt timestamp is recorded
  * - authorNumber derived from anonId for consistent anonymous display
  */
+export type PredictionOutcome = "pending" | "correct" | "incorrect" | "invalid";
+
 export interface Prediction {
   id: string;
   userId?: string | null; // Supabase Auth user ID (null until claimed)
@@ -20,7 +22,9 @@ export interface Prediction {
   timestamp: string;
   dagTransaction: string;
   proofId: string;
+  publicSlug: string; // Unique slug for public proof page
   onChainStatus: "pending" | "confirmed"; // Track on-chain confirmation status
+  outcome: PredictionOutcome; // Outcome: pending, correct, incorrect, invalid
   // Digital Evidence metadata (when confirmed on-chain):
   deReference?: string; // Constellation Digital Evidence reference/transaction ID
   deEventId?: string; // Digital Evidence event ID
