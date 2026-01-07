@@ -30,7 +30,7 @@ interface DigitalEvidenceResponse {
  * Check if Digital Evidence API is configured
  */
 export function isDigitalEvidenceEnabled(): boolean {
-  return !!process.env.DE_API_KEY;
+  return !!(process.env.DE_API_KEY && process.env.DE_TENANT_ID && process.env.DE_ORG_ID);
 }
 
 /**
