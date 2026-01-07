@@ -311,3 +311,99 @@ export function getDigitalEvidenceStatusMessage(): string {
   }
   return "Digital Evidence keys not configured - proofs will remain pending until keys are added";
 }
+
+/**
+ * Check the status of a fingerprint in Digital Evidence
+ *
+ * Queries the DE API to get the current status of a submitted fingerprint.
+ * This is used for syncing pending predictions to confirmed status.
+ *
+ * @param params - Either fingerprint hash or eventId
+ * @returns The current status and details from DE API
+ */
+export async function checkDigitalEvidenceStatus(params: {
+  fingerprint?: string;
+  eventId?: string;
+}): Promise<{
+  success: boolean;
+  status?: string; // NEW, PENDING, CONFIRMED, FAILED, REJECTED
+  eventId?: string;
+  fingerprint?: string;
+  timestamp?: string;
+  error?: string;
+}> {
+  const config = getDigitalEvidenceConfig();
+
+  if (!config) {
+    return {
+      success: false,
+      error: "Digital Evidence API not configured",
+    };
+  }
+
+  try {
+    // Build query parameters
+    const queryParams = new URLSearchParams();
+    if (params.fingerprint) {
+      queryParams.append("documentRef", params.fingerprint);
+    }
+    if (params.eventId) {
+      queryParams.append("eventId", params.eventId);
+    }
+
+    const url = `${config.apiUrl}/fingerprints?${queryParams.toString()}`;
+
+    console.log("[Digital Evidence] Checking status:", url);
+
+    const response = await fetch(url, {
+      method: "GET",
+      headers: {
+        "X-API-Key": config.apiKey,
+        "Accept": "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      console.error("[Digital Evidence] Status check failed:", response.status);
+      const errorText = await response.text();
+      return {
+        success: false,
+        error: `API error: ${response.status} - ${errorText}`,
+      };
+    }
+
+    const data = await response.json();
+    console.log("[Digital Evidence] Status response:", JSON.stringify(data));
+
+    // Parse response - the API may return an array or single object
+    const records = Array.isArray(data) ? data : [data];
+
+    if (records.length === 0) {
+      return {
+        success: false,
+        error: "Fingerprint not found in Digital Evidence",
+      };
+    }
+
+    // Get the most recent record
+    const record = records[0];
+
+    // Map the status from the API
+    // The actual field name may vary - adjust based on API response
+    const status = record.status || record.state || "PENDING";
+
+    return {
+      success: true,
+      status: status.toUpperCase(),
+      eventId: record.eventId || params.eventId,
+      fingerprint: record.documentRef || params.fingerprint,
+      timestamp: record.timestamp || record.createdAt,
+    };
+  } catch (error) {
+    console.error("[Digital Evidence] Status check exception:", error);
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : "Unknown error",
+    };
+  }
+}
