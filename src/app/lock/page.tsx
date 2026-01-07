@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import ProofLockerLogo from "@/components/Logo";
+import FullLogo from "@/components/FullLogo";
 import { getOrCreateUserId, isAnonymousUser } from "@/lib/user";
 
 export default function LockPage() {
@@ -91,9 +91,8 @@ export default function LockPage() {
               </svg>
               Back to ProofLocker
             </Link>
-            <Link href="/" className="flex items-center gap-3 hover:opacity-90 transition-opacity">
-              <ProofLockerLogo className="w-8 h-8" />
-              <span className="font-semibold text-white">ProofLocker</span>
+            <Link href="/" className="hover:opacity-90 transition-opacity">
+              <FullLogo />
             </Link>
           </div>
         </div>
