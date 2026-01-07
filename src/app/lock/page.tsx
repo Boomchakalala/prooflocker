@@ -43,7 +43,8 @@ export default function LockPage() {
         if (errorData.error === "DUPLICATE_FINGERPRINT") {
           alert("Already locked — this prediction fingerprint already exists.");
         } else {
-          alert("Failed to lock prediction. Please try again.");
+          // Show the actual error message from the API (e.g., content filter errors)
+          alert(errorData.error || "Failed to lock prediction. Please try again.");
         }
       }
     } catch (error) {
@@ -213,6 +214,11 @@ export default function LockPage() {
                   "Lock prediction"
                 )}
               </button>
+
+              {/* Content policy notice */}
+              <p className="mt-4 text-xs text-neutral-500 text-center">
+                No hate, harassment, or illegal content. We may remove predictions that violate the rules.
+              </p>
             </div>
 
             {/* Privacy notice */}
