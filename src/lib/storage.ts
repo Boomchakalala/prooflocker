@@ -46,6 +46,8 @@ interface PredictionRow {
   status: "pending" | "confirmed";
   de_reference: string | null;
   de_event_id: string | null;
+  de_status: string | null;
+  de_submitted_at: string | null;
   confirmed_at: string | null;
   created_at: string;
 }
@@ -67,6 +69,8 @@ function rowToPrediction(row: PredictionRow): Prediction {
     onChainStatus: row.status,
     deReference: row.de_reference || undefined,
     deEventId: row.de_event_id || undefined,
+    deStatus: row.de_status || undefined,
+    deSubmittedAt: row.de_submitted_at || undefined,
     confirmedAt: row.confirmed_at || undefined,
   };
 }
@@ -88,6 +92,8 @@ function predictionToRow(prediction: Prediction): Omit<PredictionRow, "created_a
     status: prediction.onChainStatus,
     de_reference: prediction.deReference || null,
     de_event_id: prediction.deEventId || null,
+    de_status: prediction.deStatus || null,
+    de_submitted_at: prediction.deSubmittedAt || null,
     confirmed_at: prediction.confirmedAt || null,
   };
 }
