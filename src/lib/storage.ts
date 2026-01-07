@@ -156,6 +156,7 @@ export async function getAllPredictions(): Promise<Prediction[]> {
   const { data, error } = await supabase
     .from("predictions")
     .select("*")
+    .eq("moderation_status", "active") // Only show active (non-hidden) predictions
     .order("created_at", { ascending: false });
 
   if (error) {
