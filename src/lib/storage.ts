@@ -251,6 +251,45 @@ export async function updatePrediction(
 }
 
 /**
+ * Update prediction outcome (only for claimed predictions)
+ */
+export async function updatePredictionOutcome(
+  id: string,
+  outcome: PredictionOutcome,
+  userId: string
+): Promise<void> {
+  // First verify the user owns this prediction and it's claimed
+  const { data: prediction, error: fetchError } = await supabase
+    .from("predictions")
+    .select("*")
+    .eq("id", id)
+    .single();
+
+  if (fetchError || !prediction) {
+    throw new Error("Prediction not found");
+  }
+
+  if (!prediction.user_id) {
+    throw new Error("Cannot set outcome for unclaimed prediction");
+  }
+
+  if (prediction.user_id !== userId) {
+    throw new Error("Unauthorized: You don't own this prediction");
+  }
+
+  // Update the outcome
+  const { error } = await supabase
+    .from("predictions")
+    .update({ outcome })
+    .eq("id", id);
+
+  if (error) {
+    console.error("[Storage] Error updating outcome:", error);
+    throw new Error(`Failed to update outcome: ${error.message}`);
+  }
+}
+
+/**
  * Get predictions with non-confirmed DE status (for syncing)
  */
 export async function getPendingDEPredictions(limit: number = 20): Promise<Prediction[]> {

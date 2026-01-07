@@ -86,7 +86,9 @@ export async function POST(request: NextRequest) {
       timestamp,
       dagTransaction,
       proofId,
+      publicSlug: proofId, // Use proofId as public slug for permanent links
       onChainStatus,
+      outcome: "pending" as const, // Default outcome
       deReference,
       deEventId,
       deStatus,
