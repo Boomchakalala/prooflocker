@@ -32,7 +32,7 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
         return {
           label: "Confirmed on-chain",
           color: "green",
-          className: "bg-green-500/10 border border-green-500/30 text-green-400",
+          className: "bg-green-500/10 border border-green-500/30 text-green-400 shadow-[0_0_8px_rgba(34,197,94,0.15)]",
         };
       } else if (deStatus === "PENDING" || deStatus === "NEW") {
         return {
@@ -54,7 +54,7 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
       return {
         label: "Confirmed on-chain",
         color: "green",
-        className: "bg-green-500/10 border border-green-500/30 text-green-400",
+        className: "bg-green-500/10 border border-green-500/30 text-green-400 shadow-[0_0_8px_rgba(34,197,94,0.15)]",
       };
     }
 
@@ -220,7 +220,7 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
       <div className="flex gap-2">
         <Link
           href={`/proof/${prediction.publicSlug}`}
-          className="flex-1 text-center px-4 py-2 text-sm font-medium text-white bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 rounded-lg transition-all btn-glow"
+          className="flex-1 text-center px-4 py-2 text-sm font-medium text-white bg-gradient-to-r from-blue-600/80 to-purple-600/80 hover:from-blue-600 hover:to-purple-600 rounded-lg transition-all"
           title="View permanent proof page"
         >
           View Proof
