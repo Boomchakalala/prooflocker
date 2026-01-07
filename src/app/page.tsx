@@ -357,8 +357,8 @@ export default function Home() {
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
             <div className="flex items-center gap-4">
-              <p className="text-sm text-[#6b6b6b]">
-                Powered by <span className="gradient-text font-semibold">Constellation Network ($DAG)</span>
+              <p className="text-sm text-neutral-500">
+                Powered by <span className="text-white font-medium">Constellation Network ($DAG)</span>
               </p>
               {!user && (
                 <span className="flex items-center gap-1.5 text-xs text-[#888] glass px-2.5 py-1 rounded-md border border-white/5">
