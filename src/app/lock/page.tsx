@@ -260,11 +260,11 @@ export default function LockPage() {
                 Prediction locked.
               </h1>
               <h2 className="text-2xl font-bold text-neutral-200 mb-6">
-                No take-backs.
+                Timestamp recorded.
               </h2>
 
               <p className="text-neutral-400 text-lg leading-relaxed max-w-xl mx-auto mb-8">
-                Your prediction is now on-chain with a cryptographic fingerprint. It's public, permanent, and cannot be edited. Time to own the outcome.
+                Your prediction is now on-chain with a cryptographic fingerprint. It's public, permanent, and cannot be edited.
               </p>
 
               <div className="glass border border-white/5 rounded-lg p-4 mb-6 max-w-xl mx-auto">
