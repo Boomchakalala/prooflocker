@@ -22,6 +22,8 @@ export interface Prediction {
   // Digital Evidence metadata (when confirmed on-chain):
   deReference?: string; // Constellation Digital Evidence reference/transaction ID
   deEventId?: string; // Digital Evidence event ID
+  deStatus?: string; // Digital Evidence API status (NEW, PENDING, CONFIRMED, etc.)
+  deSubmittedAt?: string; // ISO timestamp when submitted to Digital Evidence
   confirmedAt?: string; // ISO timestamp when on-chain confirmation succeeded
   // Future fields for account linking:
   // accountId?: string;  // When anonymous user upgrades to account
