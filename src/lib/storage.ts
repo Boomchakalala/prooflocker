@@ -156,6 +156,23 @@ export async function getPredictionsByUserId(
   return (data || []).map(rowToPrediction);
 }
 
+export async function getPredictionsByAnonId(
+  anonId: string
+): Promise<Prediction[]> {
+  const { data, error } = await supabase
+    .from("predictions")
+    .select("*")
+    .eq("anon_id", anonId)
+    .order("created_at", { ascending: false });
+
+  if (error) {
+    console.error("[Storage] Error fetching anon predictions:", error);
+    return [];
+  }
+
+  return (data || []).map(rowToPrediction);
+}
+
 export async function getPredictionById(id: string): Promise<Prediction | null> {
   const { data, error } = await supabase
     .from("predictions")
