@@ -8,7 +8,7 @@ export const runtime = "nodejs";
 
 export async function POST(request: NextRequest) {
   try {
-    const { text, userId } = await request.json();
+    const { text, userId: anonId } = await request.json();
 
     if (!text || typeof text !== "string") {
       return NextResponse.json(
@@ -17,9 +17,9 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    if (!userId || typeof userId !== "string") {
+    if (!anonId || typeof anonId !== "string") {
       return NextResponse.json(
-        { error: "User ID is required" },
+        { error: "Anonymous ID is required" },
         { status: 400 }
       );
     }
