@@ -1,29 +1,68 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { supabase } from "@/lib/supabase";
 import { claimPredictions } from "@/lib/storage";
 import { getOrCreateUserId } from "@/lib/user";
 
 export default function AuthCallback() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [status, setStatus] = useState<"loading" | "claiming" | "success" | "error">("loading");
   const [message, setMessage] = useState("Processing login...");
 
   useEffect(() => {
     const handleCallback = async () => {
       try {
-        // Exchange the code for a session
-        const { data: { user }, error } = await supabase.auth.getUser();
+        // Supabase automatically handles the auth callback
+        // Just wait a moment for the session to be established
+        await new Promise(resolve => setTimeout(resolve, 500));
 
-        if (error) {
-          throw error;
+        // Get the session
+        const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+
+        if (sessionError) {
+          console.error("Session error:", sessionError);
+          throw sessionError;
         }
 
-        if (!user) {
-          throw new Error("No user found");
+        if (!session || !session.user) {
+          throw new Error("No session found - please try logging in again");
         }
+
+        const user = session.user;
+
+        setStatus("claiming");
+        setMessage("Claiming your predictions...");
+
+        // Get the anonymous ID from localStorage
+        const anonId = getOrCreateUserId();
+
+        // Claim all predictions with this anonId
+        const claimedCount = await claimPredictions(anonId, user.id);
+
+        setStatus("success");
+        setMessage(`Successfully claimed ${claimedCount} prediction${claimedCount !== 1 ? 's' : ''}!`);
+
+        // Redirect to home after 2 seconds
+        setTimeout(() => {
+          router.push("/");
+        }, 2000);
+      } catch (error) {
+        console.error("Auth callback error:", error);
+        setStatus("error");
+        setMessage(error instanceof Error ? error.message : "Authentication failed");
+
+        // Redirect to home after 3 seconds
+        setTimeout(() => {
+          router.push("/");
+        }, 3000);
+      }
+    };
+
+    handleCallback();
+  }, [router, searchParams]);
 
         setStatus("claiming");
         setMessage("Claiming your predictions...");
