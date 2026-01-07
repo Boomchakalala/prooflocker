@@ -44,10 +44,14 @@ export async function POST(request: NextRequest) {
     let onChainStatus: "pending" | "confirmed" = "pending";
     let deReference: string | undefined;
     let deEventId: string | undefined;
+    let deStatus: string | undefined;
+    let deSubmittedAt: string | undefined;
     let confirmedAt: string | undefined;
     let dagTransaction = `DAG${crypto.randomBytes(32).toString("hex")}`; // Fallback
 
     if (isDigitalEvidenceEnabled()) {
+      deSubmittedAt = new Date().toISOString(); // Record submission time
+
       const deResult = await submitToDigitalEvidence(hash, {
         proofId,
         userId,
@@ -58,9 +62,14 @@ export async function POST(request: NextRequest) {
         onChainStatus = "confirmed";
         deEventId = deResult.eventId;
         deReference = deResult.hash || hash; // Store the fingerprint as reference
+        deStatus = "CONFIRMED"; // Mark as confirmed if accepted
         confirmedAt = deResult.timestamp;
         dagTransaction = deResult.eventId || dagTransaction; // Use eventId as transaction ID
       } else {
+        // Submission attempted but not yet confirmed
+        deEventId = deResult.eventId; // Store eventId even if not accepted yet
+        deReference = hash;
+        deStatus = "PENDING"; // Will be synced later
         console.warn("[Lock Proof API] Digital Evidence submission failed or not accepted:", deResult.error || "Not accepted");
       }
     }
@@ -79,6 +88,8 @@ export async function POST(request: NextRequest) {
       onChainStatus,
       deReference,
       deEventId,
+      deStatus,
+      deSubmittedAt,
       confirmedAt,
     };
 
