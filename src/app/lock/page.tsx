@@ -104,10 +104,10 @@ export default function LockPage() {
         {!locked ? (
           <>
             <div className="mb-8 fade-in">
-              <h1 className="text-4xl font-bold gradient-text mb-3">
+              <h1 className="text-4xl font-bold text-white mb-3">
                 Lock your prediction
               </h1>
-              <p className="text-[#888] text-lg">
+              <p className="text-neutral-400 text-lg">
                 Make it real. Lock it on-chain. Own the outcome.
               </p>
             </div>
@@ -185,7 +185,7 @@ export default function LockPage() {
               <button
                 onClick={handleLock}
                 disabled={!text.trim() || loading}
-                className="w-full px-6 py-4 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 disabled:from-gray-700 disabled:to-gray-700 disabled:text-[#555] disabled:cursor-not-allowed text-white font-semibold rounded-lg transition-all shadow-lg shadow-blue-500/20 disabled:shadow-none btn-glow"
+                className="w-full px-6 py-4 bg-neutral-800 hover:bg-neutral-700 disabled:bg-neutral-900 disabled:text-neutral-600 disabled:cursor-not-allowed text-white font-medium rounded-md transition-all border border-neutral-700 disabled:border-neutral-800"
               >
                 {loading ? (
                   <span className="flex items-center justify-center gap-2">
