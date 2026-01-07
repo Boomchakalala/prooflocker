@@ -350,7 +350,7 @@ export default function Home() {
               <p className="text-sm text-[#6b6b6b]">
                 Powered by <span className="gradient-text font-semibold">Constellation Network ($DAG)</span>
               </p>
-              {isAnonymous && (
+              {!user && (
                 <span className="flex items-center gap-1.5 text-xs text-[#888] glass px-2.5 py-1 rounded-md border border-white/5">
                   <svg
                     className="w-3.5 h-3.5 text-green-500"
@@ -382,6 +382,9 @@ export default function Home() {
 
       {/* Development status banner */}
       <DEStatusBanner />
+
+      {/* Claim Modal */}
+      {showClaimModal && <ClaimModal onClose={() => setShowClaimModal(false)} />}
     </div>
   );
 }
