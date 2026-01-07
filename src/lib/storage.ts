@@ -99,6 +99,7 @@ function predictionToRow(prediction: Prediction): Omit<PredictionRow, "created_a
     user_id: prediction.userId || null,
     anon_id: prediction.anonId,
     author_number: prediction.authorNumber,
+    pseudonym: prediction.pseudonym || null,
     text: prediction.text,
     text_preview: prediction.textPreview,
     fingerprint: prediction.hash,
