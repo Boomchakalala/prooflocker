@@ -119,8 +119,8 @@ export default function Home() {
       <header className="glass sticky top-0 z-50 border-b border-white/5">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
-            <Link href="/" className="flex items-center gap-3 hover:opacity-80 transition-opacity">
-              <ProofLockerLogo className="w-8 h-8" />
+            <Link href="/" className="flex items-center gap-3 hover:opacity-90 transition-opacity">
+              <ProofLockerLogo className="w-10 h-10" />
               <div>
                 <h1 className="text-xl font-bold text-white">ProofLocker</h1>
                 <p className="text-[10px] text-neutral-500 uppercase tracking-wider">Time-stamped predictions</p>
