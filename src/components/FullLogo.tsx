@@ -23,7 +23,7 @@ export default function FullLogo({ className = "" }: { className?: string }) {
           ProofLocker
         </span>
         <span className="text-xs text-white/70 font-normal leading-tight">
-          Immutable proof of public predictions.
+          Predictions, recorded on-chain.
         </span>
       </div>
     </div>
