@@ -1,8 +1,16 @@
 // Test script to call Digital Evidence API and show logs
 const crypto = require('crypto');
+const fs = require('fs');
 
-// Load environment variables
-require('dotenv').config({ path: '.env.local' });
+// Load environment variables from .env.local
+const envFile = fs.readFileSync('.env.local', 'utf8');
+const envVars = {};
+envFile.split('\n').forEach(line => {
+  const [key, ...valueParts] = line.split('=');
+  if (key && valueParts.length) {
+    envVars[key.trim()] = valueParts.join('=').trim();
+  }
+});
 
 async function testDigitalEvidenceAPI() {
   console.log('\n========== TESTING DIGITAL EVIDENCE API ==========\n');
@@ -24,8 +32,8 @@ async function testDigitalEvidenceAPI() {
     },
   ];
 
-  const apiKey = process.env.DE_API_KEY;
-  const apiUrl = process.env.DE_API_URL || 'https://de-api.constellationnetwork.io/v1';
+  const apiKey = envVars.DE_API_KEY;
+  const apiUrl = envVars.DE_API_URL || 'https://de-api.constellationnetwork.io/v1';
 
   console.log('\n--- PRE-FETCH DEBUG ---');
   console.log('typeof payload:', typeof payload);
