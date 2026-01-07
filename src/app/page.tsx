@@ -129,6 +129,12 @@ export default function Home() {
             <div className="flex items-center gap-4">
               {user && (
                 <div className="flex items-center gap-3">
+                  <Link
+                    href="/profile"
+                    className="text-sm text-white/80 hover:text-white transition-colors"
+                  >
+                    Profile
+                  </Link>
                   <div className="text-right">
                     <div className="text-sm text-white/80">{user.email}</div>
                     <button
