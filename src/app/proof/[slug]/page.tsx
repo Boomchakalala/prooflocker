@@ -1,13 +1,15 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useParams, useRouter } from "next/navigation";
+import { useParams } from "next/navigation";
 import Link from "next/link";
 import type { Prediction } from "@/lib/storage";
 
+// Note: This is a client component, so metadata must be set via document/head manipulation
+// or via server component. For now, we'll set it dynamically in useEffect.
+
 export default function ProofPage() {
   const params = useParams();
-  const router = useRouter();
   const slug = params.slug as string;
 
   const [prediction, setPrediction] = useState<Prediction | null>(null);
@@ -32,6 +34,12 @@ export default function ProofPage() {
 
         const data = await response.json();
         setPrediction(data.prediction);
+
+        // Set page title dynamically
+        if (data.prediction) {
+          const preview = data.prediction.text.substring(0, 60);
+          document.title = `${preview}${data.prediction.text.length > 60 ? '...' : ''} - ProofLocker`;
+        }
       } catch (err) {
         console.error("Error fetching proof:", err);
         setError("Failed to load proof");

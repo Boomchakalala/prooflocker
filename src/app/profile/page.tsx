@@ -28,6 +28,8 @@ export default function ProfilePage() {
   useEffect(() => {
     if (user) {
       fetchPredictions();
+      // Set page title
+      document.title = "Your Profile - ProofLocker";
     }
   }, [user]);
 
