@@ -126,12 +126,27 @@ export default function Home() {
                 <p className="text-[10px] text-[#666] uppercase tracking-wider">On-chain accountability</p>
               </div>
             </div>
-            <Link
-              href="/lock"
-              className="px-5 py-2.5 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold rounded-lg transition-all shadow-lg shadow-blue-500/20 hover:shadow-blue-500/40 btn-glow"
-            >
-              Lock prediction
-            </Link>
+            <div className="flex items-center gap-4">
+              {user && (
+                <div className="flex items-center gap-3">
+                  <div className="text-right">
+                    <div className="text-sm text-white/80">{user.email}</div>
+                    <button
+                      onClick={handleSignOut}
+                      className="text-xs text-white/50 hover:text-white/80 transition-colors"
+                    >
+                      Sign out
+                    </button>
+                  </div>
+                </div>
+              )}
+              <Link
+                href="/lock"
+                className="px-5 py-2.5 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold rounded-lg transition-all shadow-lg shadow-blue-500/20 hover:shadow-blue-500/40 btn-glow"
+              >
+                Lock prediction
+              </Link>
+            </div>
           </div>
         </div>
       </header>
@@ -152,7 +167,7 @@ export default function Home() {
               All predictions
             </button>
             <button
-              onClick={() => setActiveTab("my")}
+              onClick={handleMyPredictionsClick}
               className={`px-6 py-2 text-sm font-medium rounded-md transition-all ${
                 activeTab === "my"
                   ? "bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg"
