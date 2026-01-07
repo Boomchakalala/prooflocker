@@ -74,7 +74,7 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
   };
 
   const copyLink = async () => {
-    const url = `${window.location.origin}/verify?proofId=${prediction.proofId}`;
+    const url = `${window.location.origin}/proof/${prediction.publicSlug}`;
     await navigator.clipboard.writeText(url);
     setLinkCopied(true);
     setTimeout(() => setLinkCopied(false), 2000);
