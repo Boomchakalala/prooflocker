@@ -106,29 +106,61 @@ export default function Home() {
 
       {/* Main content */}
       <main className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 relative z-10">
-        {/* Tabs */}
-        <div className="flex items-center gap-1 mb-6 p-1 glass rounded-lg w-fit glow-blue">
+        {/* Tabs and Sync Button */}
+        <div className="flex items-center justify-between mb-6">
+          <div className="flex items-center gap-1 p-1 glass rounded-lg w-fit glow-blue">
+            <button
+              onClick={() => setActiveTab("all")}
+              className={`px-6 py-2 text-sm font-medium rounded-md transition-all ${
+                activeTab === "all"
+                  ? "bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg"
+                  : "text-[#888] hover:text-white hover:bg-white/5"
+              }`}
+            >
+              All predictions
+            </button>
+            <button
+              onClick={() => setActiveTab("my")}
+              className={`px-6 py-2 text-sm font-medium rounded-md transition-all ${
+                activeTab === "my"
+                  ? "bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg"
+                  : "text-[#888] hover:text-white hover:bg-white/5"
+              }`}
+            >
+              My predictions
+            </button>
+          </div>
+
+          {/* Sync Button */}
           <button
-            onClick={() => setActiveTab("all")}
-            className={`px-6 py-2 text-sm font-medium rounded-md transition-all ${
-              activeTab === "all"
-                ? "bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg"
-                : "text-[#888] hover:text-white hover:bg-white/5"
-            }`}
+            onClick={syncDEStatus}
+            disabled={syncing}
+            className="px-4 py-2 glass text-sm font-medium text-[#888] hover:text-white rounded-lg transition-all hover:bg-white/5 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+            title="Recheck on-chain status for pending predictions"
           >
-            All predictions
-          </button>
-          <button
-            onClick={() => setActiveTab("my")}
-            className={`px-6 py-2 text-sm font-medium rounded-md transition-all ${
-              activeTab === "my"
-                ? "bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg"
-                : "text-[#888] hover:text-white hover:bg-white/5"
-            }`}
-          >
-            My predictions
+            <svg
+              className={`w-4 h-4 ${syncing ? "animate-spin" : ""}`}
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+              />
+            </svg>
+            {syncing ? "Checking..." : "Recheck on-chain status"}
           </button>
         </div>
+
+        {/* Toast Notification */}
+        {syncMessage && (
+          <div className="mb-6 p-4 glass rounded-lg border border-blue-500/20 glow-blue fade-in">
+            <p className="text-sm text-white">{syncMessage}</p>
+          </div>
+        )}
 
         {/* Feed */}
         {loading ? (
