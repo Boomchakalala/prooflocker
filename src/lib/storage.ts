@@ -33,6 +33,10 @@ export interface Prediction {
   deSubmittedAt?: string; // ISO timestamp when submitted to Digital Evidence
   confirmedAt?: string; // ISO timestamp when on-chain confirmation succeeded
   claimedAt?: string; // ISO timestamp when claimed via email
+  // Moderation fields:
+  moderationStatus?: "active" | "hidden"; // Moderation status (active = visible, hidden = removed)
+  hiddenReason?: string; // Reason for hiding (if hidden)
+  hiddenAt?: string; // ISO timestamp when hidden
 }
 
 /**
@@ -60,6 +64,9 @@ interface PredictionRow {
   confirmed_at: string | null;
   claimed_at: string | null;
   created_at: string;
+  moderation_status: "active" | "hidden";
+  hidden_reason: string | null;
+  hidden_at: string | null;
 }
 
 /**
