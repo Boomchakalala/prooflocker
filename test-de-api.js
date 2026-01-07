@@ -40,7 +40,12 @@ async function testDigitalEvidenceAPI() {
   const timestamp = new Date().toISOString();
   const eventId = crypto.randomUUID();
   const documentId = crypto.randomUUID();
-  const proofId = crypto.randomUUID();
+
+  // API requires hex strings (not plain text or UUIDs) for certain fields
+  const signerId = crypto.createHash('sha256').update('ProofLocker').digest('hex');
+  const documentRef = crypto.createHash('sha256').update(documentId).digest('hex');
+  const proofId = crypto.createHash('sha256').update(crypto.randomUUID()).digest('hex');
+  const signature = crypto.createHash('sha256').update('placeholder_signature_' + hash).digest('hex');
 
   const payload = [
     {
@@ -49,16 +54,16 @@ async function testDigitalEvidenceAPI() {
           orgId,
           tenantId,
           eventId,
-          signerId: 'ProofLocker',
+          signerId,
           documentId,
-          documentRef: `proof-${documentId}`,
+          documentRef,
           timestamp,
           version: 1,
         },
         proofs: [
           {
             id: proofId,
-            signature: 'placeholder_signature',
+            signature,
             algorithm: 'SECP256K1_RFC8785_V1',
           },
         ],

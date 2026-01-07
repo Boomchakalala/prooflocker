@@ -93,11 +93,21 @@ export async function submitToDigitalEvidence(
     const timestamp = new Date().toISOString();
 
     // Generate unique IDs for this submission
+    // NOTE: API requires hex strings (not UUIDs) for certain fields
     const eventId = crypto.randomUUID();
     const documentId = metadata?.proofId || crypto.randomUUID();
-    const signerId = "ProofLocker";
-    const documentRef = `proof-${documentId}`;
-    const proofId = crypto.randomUUID();
+
+    // signerId must be 64+ hex characters
+    const signerId = crypto.createHash('sha256').update('ProofLocker').digest('hex');
+
+    // documentRef must be hex pattern
+    const documentRef = crypto.createHash('sha256').update(documentId).digest('hex');
+
+    // proofId must be hex pattern
+    const proofId = crypto.createHash('sha256').update(crypto.randomUUID()).digest('hex');
+
+    // signature must be 64+ hex characters (placeholder until we implement real signing)
+    const signature = crypto.createHash('sha256').update('placeholder_signature_' + fingerprint).digest('hex');
 
     // Build payload according to official API spec
     const payload = [
@@ -116,7 +126,7 @@ export async function submitToDigitalEvidence(
           proofs: [
             {
               id: proofId,
-              signature: "placeholder_signature", // TODO: Implement actual signing
+              signature,
               algorithm: "SECP256K1_RFC8785_V1",
             },
           ],
