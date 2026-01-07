@@ -74,10 +74,10 @@ export default function LockPage() {
           <div className="flex items-center justify-between h-16">
             <Link
               href="/"
-              className="flex items-center gap-2 text-[#888] hover:text-white transition-colors"
+              className="flex items-center gap-2 text-neutral-400 hover:text-white transition-colors text-sm"
             >
               <svg
-                className="w-5 h-5"
+                className="w-4 h-4"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -89,12 +89,12 @@ export default function LockPage() {
                   d="M10 19l-7-7m0 0l7-7m-7 7h18"
                 />
               </svg>
-              Back
+              Back to ProofLocker
             </Link>
-            <div className="flex items-center gap-3">
-              <ProofLockerLogo className="w-6 h-6" />
-              <span className="font-semibold gradient-text">ProofLocker</span>
-            </div>
+            <Link href="/" className="flex items-center gap-3 hover:opacity-80 transition-opacity">
+              <ProofLockerLogo className="w-6 h-6 text-white" />
+              <span className="font-semibold text-white">ProofLocker</span>
+            </Link>
           </div>
         </div>
       </header>
