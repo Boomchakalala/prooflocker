@@ -65,51 +65,56 @@ function getDigitalEvidenceConfig(): DigitalEvidenceConfig | null {
  * Sign FingerprintValue according to SECP256K1_RFC8785_V1 spec
  *
  * Steps:
- * 1. RFC 8785 canonicalize the FingerprintValue JSON
- * 2. sha256(utf8(canonicalJson)) => hashBytes
- * 3. convert hashBytes to hex string => hashHex
- * 4. sha512(utf8(hashHex)) => sha512Hash
- * 5. truncatedHash = sha512Hash.slice(0, 32)
- * 6. sign truncatedHash with secp256k1
- * 7. signature format: signature.toDER('hex')
+ * 1. Derive public key from private key
+ * 2. Set signerId to public key in fingerprintValue
+ * 3. RFC 8785 canonicalize the complete FingerprintValue JSON
+ * 4. sha256(utf8(canonicalJson)) => hashBytes
+ * 5. convert hashBytes to hex string => hashHex
+ * 6. sha512(utf8(hashHex)) => sha512Hash
+ * 7. truncatedHash = sha512Hash.slice(0, 32)
+ * 8. sign truncatedHash with secp256k1
+ * 9. signature format: signature.toDER('hex')
  *
- * @param fingerprintValue - The attestation.content object (WITHOUT signerId field)
+ * @param fingerprintValue - The attestation.content object
  * @param privateKeyHex - 32-byte secp256k1 private key in hex
- * @returns { publicKeyHex, signatureHex }
+ * @returns { publicKeyHex, signatureHex, fingerprintValueWithSignerId }
  */
 function signFingerprintValue(
   fingerprintValue: any,
   privateKeyHex: string
-): { publicKeyHex: string; signatureHex: string } {
-  // Create a copy without signerId for signing
-  const { signerId, ...valueToSign } = fingerprintValue;
-
-  // Step 1: RFC 8785 canonicalize
-  const canonicalJson = canonicalize(valueToSign);
-
-  // Step 2: SHA-256 hash of canonical JSON
-  const hashBytes = crypto.createHash("sha256").update(canonicalJson, "utf8").digest();
-
-  // Step 3: Convert hash bytes to hex string
-  const hashHex = hashBytes.toString("hex");
-
-  // Step 4: SHA-512 hash of the hex string
-  const sha512Hash = crypto.createHash("sha512").update(hashHex, "utf8").digest();
-
-  // Step 5: Truncate to first 32 bytes
-  const truncatedHash = sha512Hash.slice(0, 32);
-
-  // Step 6: Sign with secp256k1
+): { publicKeyHex: string; signatureHex: string; fingerprintValueWithSignerId: any } {
+  // Step 1: Derive public key from private key
   const keyPair = ec.keyFromPrivate(privateKeyHex, "hex");
-  const signature = keyPair.sign(truncatedHash);
-
-  // Step 7: DER encoding
-  const signatureHex = signature.toDER("hex");
-
-  // Get public key
   const publicKeyHex = keyPair.getPublic().encode("hex", false);
 
-  return { publicKeyHex, signatureHex };
+  // Step 2: Set signerId to public key
+  const fingerprintValueWithSignerId = {
+    ...fingerprintValue,
+    signerId: publicKeyHex,
+  };
+
+  // Step 3: RFC 8785 canonicalize
+  const canonicalJson = canonicalize(fingerprintValueWithSignerId);
+
+  // Step 4: SHA-256 hash of canonical JSON
+  const hashBytes = crypto.createHash("sha256").update(canonicalJson, "utf8").digest();
+
+  // Step 5: Convert hash bytes to hex string
+  const hashHex = hashBytes.toString("hex");
+
+  // Step 6: SHA-512 hash of the hex string
+  const sha512Hash = crypto.createHash("sha512").update(hashHex, "utf8").digest();
+
+  // Step 7: Truncate to first 32 bytes
+  const truncatedHash = sha512Hash.slice(0, 32);
+
+  // Step 8: Sign with secp256k1
+  const signature = keyPair.sign(truncatedHash);
+
+  // Step 9: DER encoding
+  const signatureHex = signature.toDER("hex");
+
+  return { publicKeyHex, signatureHex, fingerprintValueWithSignerId };
 }
 
 /**
@@ -150,24 +155,23 @@ export async function submitToDigitalEvidence(
     const eventId = crypto.randomUUID();
     const documentId = metadata?.proofId || `prooflocker:${crypto.randomUUID()}`;
 
-    // Build FingerprintValue (attestation.content)
+    // Build FingerprintValue (attestation.content) WITHOUT signerId initially
     const fingerprintValue = {
       orgId,
       tenantId,
       eventId,
-      signerId: "", // Will be filled with public key after signing
       documentId,
       documentRef: fingerprint, // The prediction hash
       timestamp,
       version: 1,
     };
 
-    // Sign the fingerprint value
+    // Sign the fingerprint value (this will add signerId internally)
     console.log("[Digital Evidence] Signing fingerprint value...");
-    const { publicKeyHex, signatureHex } = signFingerprintValue(fingerprintValue, privateKeyHex);
-
-    // Set signerId to public key (must match proofs[0].id)
-    fingerprintValue.signerId = publicKeyHex;
+    const { publicKeyHex, signatureHex, fingerprintValueWithSignerId } = signFingerprintValue(
+      fingerprintValue,
+      privateKeyHex
+    );
 
     // Build proof object
     const proof = {
@@ -180,7 +184,7 @@ export async function submitToDigitalEvidence(
     const payload = [
       {
         attestation: {
-          content: fingerprintValue,
+          content: fingerprintValueWithSignerId,
           proofs: [proof],
         },
       },
