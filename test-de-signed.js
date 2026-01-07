@@ -22,12 +22,20 @@ envFile.split('\n').forEach(line => {
 function signFingerprintValue(fingerprintValue, privateKeyHex) {
   console.log('\n--- SIGNING PROCESS ---');
 
-  // Create a copy without signerId for signing
-  const { signerId, ...valueToSign } = fingerprintValue;
+  // Step 1: Derive public key from private key
+  const keyPair = ec.keyFromPrivate(privateKeyHex, 'hex');
+  const publicKeyHex = keyPair.getPublic().encode('hex', false);
+  console.log('1. Public key:', publicKeyHex);
 
-  // Step 1: RFC 8785 canonicalize
-  const canonicalJson = canonicalize(valueToSign);
-  console.log('1. Canonical JSON (without signerId):', canonicalJson);
+  // Step 2: Set signerId to public key
+  const fingerprintValueWithSignerId = {
+    ...fingerprintValue,
+    signerId: publicKeyHex,
+  };
+
+  // Step 3: RFC 8785 canonicalize
+  const canonicalJson = canonicalize(fingerprintValueWithSignerId);
+  console.log('2. Canonical JSON (WITH signerId):', canonicalJson);
 
   // Step 2: SHA-256 hash of canonical JSON
   const hashBytes = crypto.createHash('sha256').update(canonicalJson, 'utf8').digest();
@@ -53,11 +61,7 @@ function signFingerprintValue(fingerprintValue, privateKeyHex) {
   const signatureHex = signature.toDER('hex');
   console.log('6. Signature (DER hex):', signatureHex);
 
-  // Get public key
-  const publicKeyHex = keyPair.getPublic().encode('hex', false);
-  console.log('7. Public key:', publicKeyHex);
-
-  return { publicKeyHex, signatureHex };
+  return { publicKeyHex, signatureHex, fingerprintValueWithSignerId };
 }
 
 async function testDigitalEvidenceAPI() {
