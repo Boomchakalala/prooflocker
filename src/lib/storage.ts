@@ -16,6 +16,7 @@ export interface Prediction {
   userId?: string | null; // Supabase Auth user ID (null until claimed)
   anonId: string; // Anonymous identifier from localStorage
   authorNumber: number; // Anonymous author identifier (e.g., 1234 for "Anon #1234")
+  pseudonym?: string; // Optional immutable pseudonym (set once by owner)
   text: string;
   textPreview: string;
   hash: string;
@@ -42,6 +43,7 @@ interface PredictionRow {
   user_id: string | null;
   anon_id: string;
   author_number: number;
+  pseudonym: string | null;
   text: string;
   text_preview: string;
   fingerprint: string;
@@ -69,6 +71,7 @@ function rowToPrediction(row: PredictionRow): Prediction {
     userId: row.user_id || undefined,
     anonId: row.anon_id,
     authorNumber: row.author_number,
+    pseudonym: row.pseudonym || undefined,
     text: row.text,
     textPreview: row.text_preview,
     hash: row.fingerprint,
