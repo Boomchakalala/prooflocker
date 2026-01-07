@@ -17,7 +17,7 @@ export const metadata: Metadata = {
   title: "ProofLocker",
   description: "Time-stamped prediction proofs. Claim later. Share receipts.",
   icons: {
-    icon: "/icon.svg",
+    icon: "/icon.png",
   },
   openGraph: {
     title: "ProofLocker",
