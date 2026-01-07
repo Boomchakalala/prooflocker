@@ -90,7 +90,7 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
 
   return (
     <div className={`glass rounded-xl p-4 hover:border-white/10 transition-all card-hover glow-blue ${isNew() ? 'ring-1 ring-blue-500/20' : ''}`}>
-      {/* Header: Author + Time + Status + Claimed */}
+      {/* Header: Author + Time + Status + Claimed + Outcome */}
       <div className="flex items-center justify-between mb-2 flex-wrap gap-2">
         <div className="flex items-center gap-2 flex-wrap">
           <div className="flex items-center gap-2">
@@ -117,17 +117,47 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
             </>
           )}
         </div>
-        <span
-          className={`inline-flex items-center px-2 py-0.5 rounded-md text-xs font-medium ${statusDisplay.className}`}
-        >
-          {statusDisplay.label}
-        </span>
+        <div className="flex items-center gap-2">
+          <span
+            className={`inline-flex items-center px-2 py-0.5 rounded-md text-xs font-medium ${statusDisplay.className}`}
+          >
+            {statusDisplay.label}
+          </span>
+        </div>
       </div>
 
       {/* Prediction text - MOST PROMINENT */}
       <p className="text-[#e0e0e0] text-base leading-relaxed mb-2 font-medium">
         {prediction.textPreview}
       </p>
+
+      {/* Outcome section - only for claimed predictions */}
+      {isClaimed && (
+        <div className="mb-2">
+          {isOwner ? (
+            <div className="flex items-center gap-2">
+              <span className="text-xs text-[#888]">Outcome:</span>
+              <OutcomeDropdown
+                predictionId={prediction.id}
+                currentOutcome={prediction.outcome}
+                onOutcomeChange={onOutcomeUpdate}
+              />
+            </div>
+          ) : (
+            <div className="flex items-center gap-2">
+              <span className="text-xs text-[#888]">Outcome:</span>
+              <span className={`inline-flex items-center px-2 py-0.5 rounded-md text-xs font-medium ${
+                prediction.outcome === 'correct' ? 'bg-green-500/10 border border-green-500/30 text-green-400' :
+                prediction.outcome === 'incorrect' ? 'bg-red-500/10 border border-red-500/30 text-red-400' :
+                prediction.outcome === 'invalid' ? 'bg-gray-500/10 border border-gray-500/30 text-gray-400' :
+                'bg-yellow-500/10 border border-yellow-500/30 text-yellow-400'
+              }`}>
+                {prediction.outcome.charAt(0).toUpperCase() + prediction.outcome.slice(1)}
+              </span>
+            </div>
+          )}
+        </div>
+      )}
 
       {/* Accountability line */}
       <p className="text-[10px] text-[#666] mb-3 flex items-center gap-1">
@@ -188,13 +218,13 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
 
       {/* Actions - PRIMARY Verify, SECONDARY Share */}
       <div className="flex gap-2">
-        <a
-          href={`/verify?proofId=${prediction.proofId}`}
+        <Link
+          href={`/proof/${prediction.publicSlug}`}
           className="flex-1 text-center px-4 py-2 text-sm font-medium text-white bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 rounded-lg transition-all btn-glow"
-          title="Check proof and verify on-chain record"
+          title="View permanent proof page"
         >
-          Check Proof
-        </a>
+          View Proof
+        </Link>
         <button
           onClick={copyLink}
           className="px-3 py-2 text-sm font-medium text-[#888] bg-white/5 hover:bg-white/10 hover:text-[#e0e0e0] border border-white/10 rounded-lg transition-all flex items-center gap-1.5"
