@@ -42,6 +42,9 @@ function AuthCallbackContent() {
 
               console.log("[Auth Callback] Calling claim API...");
               // Claim all predictions with this anonId via API
+              const controller = new AbortController();
+              const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
+
               const response = await fetch('/api/claim-predictions', {
                 method: 'POST',
                 headers: {
@@ -49,7 +52,10 @@ function AuthCallbackContent() {
                   'Authorization': `Bearer ${accessToken}`,
                 },
                 body: JSON.stringify({ anonId }),
+                signal: controller.signal,
               });
+
+              clearTimeout(timeoutId);
 
               if (!response.ok) {
                 const errorData = await response.json();
@@ -73,7 +79,12 @@ function AuthCallbackContent() {
             } catch (claimError) {
               console.error("[Auth Callback] Claim error:", claimError);
               setStatus("error");
-              setMessage(claimError instanceof Error ? claimError.message : "Failed to claim predictions");
+
+              if (claimError instanceof Error && claimError.name === 'AbortError') {
+                setMessage("Request timed out - but your predictions may have been claimed. Check your profile.");
+              } else {
+                setMessage(claimError instanceof Error ? claimError.message : "Failed to claim predictions");
+              }
 
               // Redirect to home after 3 seconds
               setTimeout(() => {
@@ -115,6 +126,9 @@ function AuthCallbackContent() {
 
           console.log("[Auth Callback] Calling claim API...");
           // Claim all predictions with this anonId via API
+          const controller = new AbortController();
+          const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
+
           const response = await fetch('/api/claim-predictions', {
             method: 'POST',
             headers: {
@@ -122,7 +136,10 @@ function AuthCallbackContent() {
               'Authorization': `Bearer ${accessToken}`,
             },
             body: JSON.stringify({ anonId }),
+            signal: controller.signal,
           });
+
+          clearTimeout(timeoutId);
 
           if (!response.ok) {
             const errorData = await response.json();
