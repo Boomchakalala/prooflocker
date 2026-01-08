@@ -185,7 +185,7 @@ export default function LockPage() {
               <button
                 onClick={handleLock}
                 disabled={!text.trim() || loading}
-                className="w-full px-6 py-4 bg-neutral-800 hover:bg-neutral-700 disabled:bg-neutral-900 disabled:text-neutral-600 disabled:cursor-not-allowed text-white font-medium rounded-md transition-all border border-neutral-700 disabled:border-neutral-800"
+                className="w-full px-6 py-4 bg-gradient-to-r from-blue-600/80 to-purple-600/80 hover:from-blue-600 hover:to-purple-600 disabled:bg-neutral-900 disabled:text-neutral-600 disabled:cursor-not-allowed text-white font-medium rounded-md transition-all disabled:from-neutral-900 disabled:to-neutral-900"
               >
                 {loading ? (
                   <span className="flex items-center justify-center gap-2">

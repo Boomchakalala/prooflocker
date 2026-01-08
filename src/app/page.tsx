@@ -144,7 +144,7 @@ export default function Home() {
               )}
               <Link
                 href="/lock"
-                className="px-5 py-2.5 bg-neutral-800 hover:bg-neutral-700 text-white font-medium rounded-md transition-all border border-neutral-700"
+                className="px-5 py-2.5 bg-gradient-to-r from-blue-600/80 to-purple-600/80 hover:from-blue-600 hover:to-purple-600 text-white font-medium rounded-md transition-all"
               >
                 Lock prediction
               </Link>
@@ -162,7 +162,7 @@ export default function Home() {
               onClick={() => setActiveTab("all")}
               className={`px-6 py-2 text-sm font-medium rounded-md transition-all ${
                 activeTab === "all"
-                  ? "bg-neutral-800 text-white border border-neutral-700"
+                  ? "bg-gradient-to-r from-blue-600/80 to-purple-600/80 hover:from-blue-600 hover:to-purple-600 text-white"
                   : "text-neutral-400 hover:text-white hover:bg-white/5"
               }`}
             >
@@ -172,7 +172,7 @@ export default function Home() {
               onClick={handleMyPredictionsClick}
               className={`px-6 py-2 text-sm font-medium rounded-md transition-all ${
                 activeTab === "my"
-                  ? "bg-neutral-800 text-white border border-neutral-700"
+                  ? "bg-gradient-to-r from-blue-600/80 to-purple-600/80 hover:from-blue-600 hover:to-purple-600 text-white"
                   : "text-neutral-400 hover:text-white hover:bg-white/5"
               }`}
             >
@@ -284,7 +284,7 @@ export default function Home() {
               </div>
               <button
                 onClick={() => setShowClaimModal(true)}
-                className="inline-flex items-center px-8 py-4 bg-neutral-800 hover:bg-neutral-700 text-white font-medium rounded-md transition-all border border-neutral-700"
+                className="inline-flex items-center px-8 py-4 bg-gradient-to-r from-blue-600/80 to-purple-600/80 hover:from-blue-600 hover:to-purple-600 text-white font-medium rounded-md transition-all"
               >
                 <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
@@ -325,7 +325,7 @@ export default function Home() {
             </p>
             <Link
               href="/lock"
-              className="inline-flex items-center px-8 py-4 bg-neutral-800 hover:bg-neutral-700 text-white font-medium rounded-md transition-all border border-neutral-700"
+              className="inline-flex items-center px-8 py-4 bg-gradient-to-r from-blue-600/80 to-purple-600/80 hover:from-blue-600 hover:to-purple-600 text-white font-medium rounded-md transition-all"
             >
               Lock your first prediction
             </Link>
