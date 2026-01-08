@@ -23,13 +23,32 @@ function AuthCallbackContent() {
             const user = session.user;
             console.log("[Auth Callback] User signed in:", user.id);
 
-            setStatus("claiming");
-            setMessage("Claiming your predictions...");
-
             try {
+              setStatus("claiming");
+              setMessage("Claiming your predictions...");
+
+              console.log("[Auth Callback] Getting anonId...");
+
               // Get the anonymous ID from localStorage
-              const anonId = getOrCreateUserId();
-              console.log("[Auth Callback] anonId:", anonId);
+              let anonId;
+              try {
+                anonId = getOrCreateUserId();
+                console.log("[Auth Callback] anonId:", anonId);
+              } catch (storageError) {
+                console.error("[Auth Callback] localStorage error:", storageError);
+                throw new Error("Failed to access local storage. Please try in a normal browser window (not incognito).");
+              }
+
+              if (!anonId) {
+                console.warn("[Auth Callback] No anonId, skipping claim");
+                setStatus("success");
+                setMessage("Logged in successfully!");
+                setTimeout(() => {
+                  subscription.unsubscribe();
+                  router.push("/?tab=my");
+                }, 2000);
+                return;
+              }
 
               // Get the current session to send with the request
               const { data: { session } } = await supabase.auth.getSession();
