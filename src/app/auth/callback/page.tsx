@@ -29,15 +29,18 @@ function AuthCallbackContent() {
             try {
               // Get the anonymous ID from localStorage
               const anonId = getOrCreateUserId();
+              console.log("[Auth Callback] anonId:", anonId);
 
               // Get the current session to send with the request
               const { data: { session } } = await supabase.auth.getSession();
               const accessToken = session?.access_token;
+              console.log("[Auth Callback] Has access token:", !!accessToken);
 
               if (!accessToken) {
                 throw new Error("No access token available");
               }
 
+              console.log("[Auth Callback] Calling claim API...");
               // Claim all predictions with this anonId via API
               const response = await fetch('/api/claim-predictions', {
                 method: 'POST',
@@ -50,8 +53,11 @@ function AuthCallbackContent() {
 
               if (!response.ok) {
                 const errorData = await response.json();
+                console.error("[Auth Callback] API error:", response.status, errorData);
                 throw new Error(errorData.error || 'Failed to claim predictions');
               }
+
+              console.log("[Auth Callback] Claim API response:", response.status);
 
               const data = await response.json();
               const claimedCount = data.claimedCount;
@@ -96,15 +102,18 @@ function AuthCallbackContent() {
 
           // Get the anonymous ID from localStorage
           const anonId = getOrCreateUserId();
+          console.log("[Auth Callback] anonId:", anonId);
 
           // Get the current session to send with the request
           const { data: { session: currentSession } } = await supabase.auth.getSession();
           const accessToken = currentSession?.access_token;
+          console.log("[Auth Callback] Has access token:", !!accessToken);
 
           if (!accessToken) {
             throw new Error("No access token available");
           }
 
+          console.log("[Auth Callback] Calling claim API...");
           // Claim all predictions with this anonId via API
           const response = await fetch('/api/claim-predictions', {
             method: 'POST',
@@ -117,8 +126,11 @@ function AuthCallbackContent() {
 
           if (!response.ok) {
             const errorData = await response.json();
+            console.error("[Auth Callback] API error:", response.status, errorData);
             throw new Error(errorData.error || 'Failed to claim predictions');
           }
+
+          console.log("[Auth Callback] Claim API response:", response.status);
 
           const data = await response.json();
           const claimedCount = data.claimedCount;
