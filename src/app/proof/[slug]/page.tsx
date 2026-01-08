@@ -63,9 +63,9 @@ function getOutcomeLabel(outcome: string, resolvedAt?: string): string {
 }
 
 function getOutcomeColor(outcome: string): string {
-  if (outcome === "correct") return "text-green-500";
-  if (outcome === "incorrect") return "text-red-500";
-  return "text-yellow-500";
+  if (outcome === "correct") return "bg-green-500/10 text-green-400 border-green-500/30";
+  if (outcome === "incorrect") return "bg-red-500/10 text-red-400 border-red-500/30";
+  return "bg-yellow-500/10 text-yellow-400 border-yellow-500/30";
 }
 
 export default async function ProofPage({ params }: Props) {
@@ -79,15 +79,15 @@ export default async function ProofPage({ params }: Props) {
   // If hidden, show removal message
   if (prediction.moderationStatus === "hidden") {
     return (
-      <div className="min-h-screen bg-white text-black flex items-center justify-center p-4">
-        <div className="max-w-md w-full text-center border border-neutral-300 rounded-lg p-8">
-          <h2 className="text-xl font-semibold mb-2">Content Removed</h2>
-          <p className="text-neutral-600 mb-6 text-sm">
+      <div className="min-h-screen bg-[#0a0a0a] flex items-center justify-center p-4">
+        <div className="max-w-md w-full text-center border border-neutral-800 rounded-lg p-8 bg-[#0d0d0d]">
+          <h2 className="text-xl font-semibold text-white mb-2">Content Removed</h2>
+          <p className="text-neutral-400 mb-6 text-sm">
             This proof has been removed for violating the rules.
           </p>
           <Link
             href="/"
-            className="inline-block px-5 py-2 bg-neutral-900 hover:bg-neutral-800 text-white font-medium rounded transition-colors text-sm"
+            className="inline-block px-5 py-2 bg-neutral-800 hover:bg-neutral-700 text-white font-medium rounded transition-colors text-sm border border-neutral-700"
           >
             Return to ProofLocker
           </Link>
@@ -100,32 +100,32 @@ export default async function ProofPage({ params }: Props) {
   const isResolved = prediction.outcome === "correct" || prediction.outcome === "incorrect";
 
   return (
-    <div className="min-h-screen bg-white text-black">
+    <div className="min-h-screen bg-[#0a0a0a] text-white">
       <div className="max-w-2xl mx-auto px-4 py-12">
         {/* Header */}
         <div className="mb-10">
           <Link
             href="/"
-            className="inline-flex items-center text-neutral-500 hover:text-black transition-colors mb-8 text-sm"
+            className="inline-flex items-center text-neutral-400 hover:text-white transition-colors mb-8 text-sm"
           >
-            ← Back
+            ← Back to ProofLocker
           </Link>
         </div>
 
         {/* Above the fold */}
         <div className="mb-12">
           {/* Prediction text - hero */}
-          <h1 className="text-3xl font-serif leading-relaxed mb-8 text-black">
+          <h1 className="text-3xl leading-relaxed mb-8 text-white font-medium">
             {prediction.text}
           </h1>
 
-          {/* Key metadata grid - ultra clean */}
+          {/* Key metadata grid */}
           <div className="grid grid-cols-2 gap-6 mb-6">
             <div>
               <div className="text-xs text-neutral-500 uppercase tracking-wide mb-1">
                 Locked
               </div>
-              <div className="font-mono text-sm text-black">
+              <div className="font-mono text-sm text-neutral-200">
                 {lockedDate.toLocaleString("en-US", {
                   month: "short",
                   day: "numeric",
@@ -141,7 +141,7 @@ export default async function ProofPage({ params }: Props) {
               <div className="text-xs text-neutral-500 uppercase tracking-wide mb-1">
                 Proof ID
               </div>
-              <div className="font-mono text-sm text-black break-all">
+              <div className="font-mono text-sm text-neutral-200 break-all">
                 {prediction.proofId.substring(0, 16)}...
               </div>
             </div>
@@ -153,10 +153,9 @@ export default async function ProofPage({ params }: Props) {
               Status
             </div>
             <div
-              className={`inline-block px-3 py-1 border rounded text-sm font-medium ${getOutcomeColor(
+              className={`inline-block px-3 py-1.5 border rounded text-sm font-medium ${getOutcomeColor(
                 prediction.outcome
               )}`}
-              style={{ borderColor: "currentColor" }}
             >
               {getOutcomeLabel(prediction.outcome, prediction.resolvedAt)}
             </div>
@@ -164,12 +163,12 @@ export default async function ProofPage({ params }: Props) {
 
           {/* Resolution info if present */}
           {isResolved && prediction.resolvedAt && (
-            <div className="mt-6 pt-6 border-t border-neutral-200">
+            <div className="mt-6 pt-6 border-t border-neutral-800">
               <div className="text-xs text-neutral-500 uppercase tracking-wide mb-3">
                 Resolution
               </div>
               {prediction.resolutionNote && (
-                <p className="text-sm text-neutral-700 mb-3 leading-relaxed">
+                <p className="text-sm text-neutral-300 mb-3 leading-relaxed">
                   {prediction.resolutionNote}
                 </p>
               )}
@@ -178,12 +177,12 @@ export default async function ProofPage({ params }: Props) {
                   href={prediction.resolutionUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-sm text-blue-600 hover:underline break-all"
+                  className="text-sm text-cyan-400 hover:underline break-all"
                 >
                   {prediction.resolutionUrl}
                 </a>
               )}
-              <div className="text-xs text-neutral-400 mt-2">
+              <div className="text-xs text-neutral-500 mt-2">
                 Resolved on{" "}
                 {new Date(prediction.resolvedAt).toLocaleDateString("en-US", {
                   month: "short",
@@ -196,13 +195,13 @@ export default async function ProofPage({ params }: Props) {
         </div>
 
         {/* Below the fold - technical details */}
-        <div className="pt-8 border-t border-neutral-200 space-y-6">
+        <div className="pt-8 border-t border-neutral-800 space-y-6">
           <div>
             <div className="text-xs text-neutral-500 uppercase tracking-wide mb-2">
               On-Chain Reference
             </div>
             {prediction.onChainStatus === "confirmed" && prediction.deReference ? (
-              <div className="font-mono text-xs text-neutral-700 bg-neutral-50 p-3 rounded border border-neutral-200 break-all">
+              <div className="font-mono text-xs text-neutral-300 bg-black/40 p-3 rounded border border-neutral-800 break-all">
                 {prediction.deReference}
               </div>
             ) : (
@@ -214,14 +213,14 @@ export default async function ProofPage({ params }: Props) {
             <div className="text-xs text-neutral-500 uppercase tracking-wide mb-2">
               Network
             </div>
-            <div className="text-sm text-black">Constellation Network (DAG)</div>
+            <div className="text-sm text-neutral-200">Constellation Network (DAG)</div>
           </div>
 
           <div>
             <div className="text-xs text-neutral-500 uppercase tracking-wide mb-2">
               Timestamp Source
             </div>
-            <div className="text-sm text-black">
+            <div className="text-sm text-neutral-200">
               {prediction.onChainStatus === "confirmed"
                 ? "On-chain (Constellation Digital Evidence)"
                 : "Proof creation timestamp"}
@@ -232,14 +231,14 @@ export default async function ProofPage({ params }: Props) {
             <div className="text-xs text-neutral-500 uppercase tracking-wide mb-2">
               SHA-256 Hash
             </div>
-            <div className="font-mono text-xs text-neutral-700 bg-neutral-50 p-3 rounded border border-neutral-200 break-all">
+            <div className="font-mono text-xs text-neutral-300 bg-black/40 p-3 rounded border border-neutral-800 break-all">
               {prediction.hash}
             </div>
           </div>
         </div>
 
         {/* Immutability note */}
-        <div className="mt-12 pt-8 border-t border-neutral-200">
+        <div className="mt-12 pt-8 border-t border-neutral-800">
           <p className="text-sm text-neutral-500 text-center">
             This proof cannot be edited after creation.
           </p>
@@ -247,7 +246,7 @@ export default async function ProofPage({ params }: Props) {
 
         {/* Footer branding */}
         <div className="mt-8 text-center">
-          <Link href="/" className="text-xs text-neutral-400 hover:text-black transition-colors">
+          <Link href="/" className="text-xs text-neutral-500 hover:text-white transition-colors">
             ProofLocker
           </Link>
         </div>
