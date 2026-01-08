@@ -37,10 +37,10 @@ function AuthCallbackContent() {
               setStatus("success");
               setMessage(`Successfully claimed ${claimedCount} prediction${claimedCount !== 1 ? 's' : ''}!`);
 
-              // Redirect to home after 2 seconds
+              // Redirect to My predictions tab after 2 seconds
               setTimeout(() => {
                 subscription.unsubscribe();
-                router.push("/");
+                router.push("/?tab=my");
               }, 2000);
             } catch (claimError) {
               console.error("[Auth Callback] Claim error:", claimError);
@@ -81,10 +81,10 @@ function AuthCallbackContent() {
           setStatus("success");
           setMessage(`Successfully claimed ${claimedCount} prediction${claimedCount !== 1 ? 's' : ''}!`);
 
-          // Redirect to home after 2 seconds
+          // Redirect to My predictions tab after 2 seconds
           setTimeout(() => {
             subscription.unsubscribe();
-            router.push("/");
+            router.push("/?tab=my");
           }, 2000);
         } else if (sessionError) {
           // Only treat it as an error if it's not just "no session yet"

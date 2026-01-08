@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
+import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import PredictionCard from "@/components/PredictionCard";
 import FullLogo from "@/components/FullLogo";
@@ -11,9 +12,11 @@ import { getOrCreateUserId } from "@/lib/user";
 import { useAuth } from "@/contexts/AuthContext";
 import { signOut } from "@/lib/auth";
 
-export default function Home() {
+function HomeContent() {
   const { user, loading: authLoading } = useAuth();
-  const [activeTab, setActiveTab] = useState<"all" | "my">("all");
+  const searchParams = useSearchParams();
+  const tabParam = searchParams.get("tab");
+  const [activeTab, setActiveTab] = useState<"all" | "my">(tabParam === "my" ? "my" : "all");
   const [predictions, setPredictions] = useState<Prediction[]>([]);
   const [loading, setLoading] = useState(true);
   const [anonId, setAnonId] = useState<string>("");
@@ -392,5 +395,20 @@ export default function Home() {
       {/* Claim Modal */}
       {showClaimModal && <ClaimModal onClose={() => setShowClaimModal(false)} />}
     </div>
+  );
+}
+
+export default function Home() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen gradient-bg flex items-center justify-center">
+        <div className="relative">
+          <div className="animate-spin rounded-full h-12 w-12 border-2 border-blue-500 border-t-transparent"></div>
+          <div className="absolute inset-0 rounded-full bg-blue-500/20 blur-xl"></div>
+        </div>
+      </div>
+    }>
+      <HomeContent />
+    </Suspense>
   );
 }
