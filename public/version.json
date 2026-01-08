@@ -1,0 +1,10 @@
+{
+  "commit": "3cb6a57",
+  "timestamp": "2026-01-08T20:15:00Z",
+  "message": "Gradient buttons + magic link redirect to My Predictions tab",
+  "features": [
+    "Blue-purple gradient on all action buttons",
+    "Magic link redirects to My predictions tab",
+    "Suspense wrapper for useSearchParams"
+  ]
+}
