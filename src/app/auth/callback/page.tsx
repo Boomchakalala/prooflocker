@@ -3,7 +3,6 @@
 import { useEffect, useState, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { supabase } from "@/lib/supabase";
-import { claimPredictions } from "@/lib/storage";
 import { getOrCreateUserId } from "@/lib/user";
 
 function AuthCallbackContent() {
@@ -31,8 +30,20 @@ function AuthCallbackContent() {
               // Get the anonymous ID from localStorage
               const anonId = getOrCreateUserId();
 
-              // Claim all predictions with this anonId
-              const claimedCount = await claimPredictions(anonId, user.id);
+              // Claim all predictions with this anonId via API
+              const response = await fetch('/api/claim-predictions', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ anonId }),
+              });
+
+              if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.error || 'Failed to claim predictions');
+              }
+
+              const data = await response.json();
+              const claimedCount = data.claimedCount;
 
               setStatus("success");
               setMessage(`Successfully claimed ${claimedCount} prediction${claimedCount !== 1 ? 's' : ''}!`);
@@ -75,8 +86,20 @@ function AuthCallbackContent() {
           // Get the anonymous ID from localStorage
           const anonId = getOrCreateUserId();
 
-          // Claim all predictions with this anonId
-          const claimedCount = await claimPredictions(anonId, user.id);
+          // Claim all predictions with this anonId via API
+          const response = await fetch('/api/claim-predictions', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ anonId }),
+          });
+
+          if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.error || 'Failed to claim predictions');
+          }
+
+          const data = await response.json();
+          const claimedCount = data.claimedCount;
 
           setStatus("success");
           setMessage(`Successfully claimed ${claimedCount} prediction${claimedCount !== 1 ? 's' : ''}!`);
