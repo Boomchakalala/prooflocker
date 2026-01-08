@@ -30,12 +30,22 @@ function AuthCallbackContent() {
               // Get the anonymous ID from localStorage
               const anonId = getOrCreateUserId();
 
+              // Get the current session to send with the request
+              const { data: { session } } = await supabase.auth.getSession();
+              const accessToken = session?.access_token;
+
+              if (!accessToken) {
+                throw new Error("No access token available");
+              }
+
               // Claim all predictions with this anonId via API
               const response = await fetch('/api/claim-predictions', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: {
+                  'Content-Type': 'application/json',
+                  'Authorization': `Bearer ${accessToken}`,
+                },
                 body: JSON.stringify({ anonId }),
-                credentials: 'include', // Important: send cookies with request
               });
 
               if (!response.ok) {
@@ -87,12 +97,22 @@ function AuthCallbackContent() {
           // Get the anonymous ID from localStorage
           const anonId = getOrCreateUserId();
 
+          // Get the current session to send with the request
+          const { data: { session: currentSession } } = await supabase.auth.getSession();
+          const accessToken = currentSession?.access_token;
+
+          if (!accessToken) {
+            throw new Error("No access token available");
+          }
+
           // Claim all predictions with this anonId via API
           const response = await fetch('/api/claim-predictions', {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${accessToken}`,
+            },
             body: JSON.stringify({ anonId }),
-            credentials: 'include', // Important: send cookies with request
           });
 
           if (!response.ok) {

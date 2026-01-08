@@ -1,21 +1,33 @@
 import { NextRequest, NextResponse } from "next/server";
 import { claimPredictions } from "@/lib/storage";
-import { createServerClient } from "@/lib/supabase-server";
+import { createClient } from "@supabase/supabase-js";
 
 export const runtime = "nodejs";
 
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
+
 export async function POST(request: NextRequest) {
   try {
-    // Create server-side Supabase client that reads from cookies
-    const supabase = await createServerClient();
+    // Get the access token from Authorization header
+    const authHeader = request.headers.get('authorization');
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+      return NextResponse.json(
+        { error: "Unauthorized - missing or invalid authorization header" },
+        { status: 401 }
+      );
+    }
 
-    // Get the authenticated user
-    const { data: { user }, error: authError } = await supabase.auth.getUser();
+    const accessToken = authHeader.substring(7); // Remove 'Bearer ' prefix
+
+    // Create Supabase client and validate the token
+    const supabase = createClient(supabaseUrl, supabaseAnonKey);
+    const { data: { user }, error: authError } = await supabase.auth.getUser(accessToken);
 
     if (authError || !user) {
       console.error("[Claim Predictions API] Auth error:", authError);
       return NextResponse.json(
-        { error: "Unauthorized - must be logged in to claim predictions" },
+        { error: "Unauthorized - invalid token" },
         { status: 401 }
       );
     }
