@@ -15,42 +15,102 @@ function AuthCallbackContent() {
   useEffect(() => {
     const handleCallback = async () => {
       try {
-        // Supabase automatically handles the auth callback
-        // Just wait a moment for the session to be established
-        await new Promise(resolve => setTimeout(resolve, 500));
+        // Supabase will automatically detect and exchange tokens from the URL
+        // We need to listen for the auth state change to know when the session is ready
+        const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
+          console.log("[Auth Callback] Auth event:", event, "Session:", session ? "Present" : "None");
 
-        // Get the session
+          if (event === 'SIGNED_IN' && session) {
+            const user = session.user;
+            console.log("[Auth Callback] User signed in:", user.id);
+
+            setStatus("claiming");
+            setMessage("Claiming your predictions...");
+
+            try {
+              // Get the anonymous ID from localStorage
+              const anonId = getOrCreateUserId();
+
+              // Claim all predictions with this anonId
+              const claimedCount = await claimPredictions(anonId, user.id);
+
+              setStatus("success");
+              setMessage(`Successfully claimed ${claimedCount} prediction${claimedCount !== 1 ? 's' : ''}!`);
+
+              // Redirect to home after 2 seconds
+              setTimeout(() => {
+                subscription.unsubscribe();
+                router.push("/");
+              }, 2000);
+            } catch (claimError) {
+              console.error("[Auth Callback] Claim error:", claimError);
+              setStatus("error");
+              setMessage(claimError instanceof Error ? claimError.message : "Failed to claim predictions");
+
+              // Redirect to home after 3 seconds
+              setTimeout(() => {
+                subscription.unsubscribe();
+                router.push("/");
+              }, 3000);
+            }
+          } else if (event === 'USER_UPDATED') {
+            // Session might be available now
+            const { data: { session: currentSession } } = await supabase.auth.getSession();
+            if (currentSession) {
+              console.log("[Auth Callback] Session available after USER_UPDATED");
+            }
+          }
+        });
+
+        // Also try to get session immediately in case it's already available
         const { data: { session }, error: sessionError } = await supabase.auth.getSession();
 
-        if (sessionError) {
-          console.error("Session error:", sessionError);
-          throw sessionError;
+        if (session) {
+          console.log("[Auth Callback] Session immediately available");
+          const user = session.user;
+
+          setStatus("claiming");
+          setMessage("Claiming your predictions...");
+
+          // Get the anonymous ID from localStorage
+          const anonId = getOrCreateUserId();
+
+          // Claim all predictions with this anonId
+          const claimedCount = await claimPredictions(anonId, user.id);
+
+          setStatus("success");
+          setMessage(`Successfully claimed ${claimedCount} prediction${claimedCount !== 1 ? 's' : ''}!`);
+
+          // Redirect to home after 2 seconds
+          setTimeout(() => {
+            subscription.unsubscribe();
+            router.push("/");
+          }, 2000);
+        } else if (sessionError) {
+          // Only treat it as an error if it's not just "no session yet"
+          if (sessionError.message !== "Auth session missing!") {
+            console.error("[Auth Callback] Session error:", sessionError);
+            throw sessionError;
+          } else {
+            console.log("[Auth Callback] Waiting for session from URL...");
+          }
+        } else {
+          // No session yet, waiting for onAuthStateChange
+          console.log("[Auth Callback] No session yet, waiting for auth state change...");
         }
 
-        if (!session || !session.user) {
-          throw new Error("No session found - please try logging in again");
-        }
-
-        const user = session.user;
-
-        setStatus("claiming");
-        setMessage("Claiming your predictions...");
-
-        // Get the anonymous ID from localStorage
-        const anonId = getOrCreateUserId();
-
-        // Claim all predictions with this anonId
-        const claimedCount = await claimPredictions(anonId, user.id);
-
-        setStatus("success");
-        setMessage(`Successfully claimed ${claimedCount} prediction${claimedCount !== 1 ? 's' : ''}!`);
-
-        // Redirect to home after 2 seconds
+        // Set a timeout in case auth never completes
         setTimeout(() => {
-          router.push("/");
-        }, 2000);
+          setStatus("error");
+          setMessage("Authentication timeout - please try again");
+          setTimeout(() => {
+            subscription.unsubscribe();
+            router.push("/");
+          }, 2000);
+        }, 10000); // 10 second timeout
+
       } catch (error) {
-        console.error("Auth callback error:", error);
+        console.error("[Auth Callback] Error:", error);
         setStatus("error");
         setMessage(error instanceof Error ? error.message : "Authentication failed");
 
