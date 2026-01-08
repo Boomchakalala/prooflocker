@@ -292,48 +292,26 @@ export default async function ProofPage({ params }: Props) {
           </div>
         )}
 
-        {/* Below the fold - technical details */}
-        <div className="pt-8 border-t border-neutral-800 space-y-6">
-          <div>
-            <div className="text-xs text-neutral-500 uppercase tracking-wide mb-2">
-              On-Chain Reference
-            </div>
-            {prediction.onChainStatus === "confirmed" && prediction.deReference ? (
-              <div className="font-mono text-xs text-neutral-300 bg-black/40 p-3 rounded border border-neutral-800 break-all">
-                {prediction.deReference}
+        {/* Below the fold - Additional technical details (only if not confirmed) */}
+        {prediction.onChainStatus !== "confirmed" && (
+          <div className="pt-8 border-t border-neutral-800 space-y-6">
+            <div>
+              <div className="text-xs text-neutral-500 uppercase tracking-wide mb-2">
+                On-Chain Reference
               </div>
-            ) : (
               <div className="text-sm text-neutral-500">Pending confirmation</div>
-            )}
-          </div>
+            </div>
 
-          <div>
-            <div className="text-xs text-neutral-500 uppercase tracking-wide mb-2">
-              Network
-            </div>
-            <div className="text-sm text-neutral-200">Constellation Network (DAG)</div>
-          </div>
-
-          <div>
-            <div className="text-xs text-neutral-500 uppercase tracking-wide mb-2">
-              Timestamp Source
-            </div>
-            <div className="text-sm text-neutral-200">
-              {prediction.onChainStatus === "confirmed"
-                ? "On-chain (Constellation Digital Evidence)"
-                : "Proof creation timestamp"}
+            <div>
+              <div className="text-xs text-neutral-500 uppercase tracking-wide mb-2">
+                Content Hash (SHA-256)
+              </div>
+              <div className="font-mono text-xs text-neutral-300 bg-black/40 p-3 rounded border border-neutral-800 break-all">
+                {prediction.hash}
+              </div>
             </div>
           </div>
-
-          <div>
-            <div className="text-xs text-neutral-500 uppercase tracking-wide mb-2">
-              SHA-256 Hash
-            </div>
-            <div className="font-mono text-xs text-neutral-300 bg-black/40 p-3 rounded border border-neutral-800 break-all">
-              {prediction.hash}
-            </div>
-          </div>
-        </div>
+        )}
 
         {/* Immutability note */}
         <div className="mt-12 pt-8 border-t border-neutral-800">
