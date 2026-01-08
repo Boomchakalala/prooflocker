@@ -1,15 +1,19 @@
 import { NextRequest, NextResponse } from "next/server";
 import { claimPredictions } from "@/lib/storage";
-import { getCurrentUser } from "@/lib/auth";
+import { createServerClient } from "@/lib/supabase-server";
 
 export const runtime = "nodejs";
 
 export async function POST(request: NextRequest) {
   try {
-    // Get the authenticated user
-    const user = await getCurrentUser();
+    // Create server-side Supabase client that reads from cookies
+    const supabase = await createServerClient();
 
-    if (!user) {
+    // Get the authenticated user
+    const { data: { user }, error: authError } = await supabase.auth.getUser();
+
+    if (authError || !user) {
+      console.error("[Claim Predictions API] Auth error:", authError);
       return NextResponse.json(
         { error: "Unauthorized - must be logged in to claim predictions" },
         { status: 401 }
