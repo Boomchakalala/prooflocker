@@ -35,6 +35,7 @@ function AuthCallbackContent() {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ anonId }),
+                credentials: 'include', // Important: send cookies with request
               });
 
               if (!response.ok) {
