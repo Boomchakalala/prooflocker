@@ -147,19 +147,37 @@ export default async function ProofPage({ params }: Props) {
             </div>
           </div>
 
-          {/* Status badge */}
-          <div className="mb-2">
+          {/* On-chain Status */}
+          <div className="mb-4">
             <div className="text-xs text-neutral-500 uppercase tracking-wide mb-2">
-              Status
+              On-Chain Status
             </div>
             <div
-              className={`inline-block px-3 py-1.5 border rounded text-sm font-medium ${getOutcomeColor(
-                prediction.outcome
-              )}`}
+              className={`inline-block px-3 py-1.5 border rounded text-sm font-medium ${
+                prediction.onChainStatus === "confirmed"
+                  ? "bg-green-500/10 text-green-400 border-green-500/30"
+                  : "bg-yellow-500/10 text-yellow-400 border-yellow-500/30"
+              }`}
             >
-              {getOutcomeLabel(prediction.outcome, prediction.resolvedAt)}
+              {prediction.onChainStatus === "confirmed" ? "Confirmed on Constellation Network" : "Pending Confirmation"}
             </div>
           </div>
+
+          {/* Outcome Status (only for claimed predictions) */}
+          {prediction.userId && (
+            <div className="mb-2">
+              <div className="text-xs text-neutral-500 uppercase tracking-wide mb-2">
+                Outcome
+              </div>
+              <div
+                className={`inline-block px-3 py-1.5 border rounded text-sm font-medium ${getOutcomeColor(
+                  prediction.outcome
+                )}`}
+              >
+                {getOutcomeLabel(prediction.outcome, prediction.resolvedAt)}
+              </div>
+            </div>
+          )}
 
           {/* Resolution info if present */}
           {isResolved && prediction.resolvedAt && (
