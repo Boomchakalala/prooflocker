@@ -26,6 +26,10 @@ export interface Prediction {
   publicSlug: string; // Unique slug for public proof page
   onChainStatus: "pending" | "confirmed"; // Track on-chain confirmation status
   outcome: PredictionOutcome; // Outcome: pending, correct, incorrect, invalid
+  // Resolution fields (user-controlled):
+  resolutionNote?: string; // Optional note added when resolving (max 280 chars)
+  resolutionUrl?: string; // Optional reference URL added when resolving
+  resolvedAt?: string; // ISO timestamp when resolved by user
   // Digital Evidence metadata (when confirmed on-chain):
   deReference?: string; // Constellation Digital Evidence reference/transaction ID
   deEventId?: string; // Digital Evidence event ID
@@ -57,6 +61,9 @@ interface PredictionRow {
   public_slug: string;
   status: "pending" | "confirmed";
   outcome: string;
+  resolution_note: string | null;
+  resolution_url: string | null;
+  resolved_at: string | null;
   de_reference: string | null;
   de_event_id: string | null;
   de_status: string | null;
@@ -88,6 +95,9 @@ function rowToPrediction(row: PredictionRow): Prediction {
     publicSlug: row.public_slug,
     onChainStatus: row.status,
     outcome: row.outcome as PredictionOutcome,
+    resolutionNote: row.resolution_note || undefined,
+    resolutionUrl: row.resolution_url || undefined,
+    resolvedAt: row.resolved_at || undefined,
     deReference: row.de_reference || undefined,
     deEventId: row.de_event_id || undefined,
     deStatus: row.de_status || undefined,
@@ -119,6 +129,9 @@ function predictionToRow(prediction: Prediction): Omit<PredictionRow, "created_a
     public_slug: prediction.publicSlug,
     status: prediction.onChainStatus,
     outcome: prediction.outcome,
+    resolution_note: prediction.resolutionNote || null,
+    resolution_url: prediction.resolutionUrl || null,
+    resolved_at: prediction.resolvedAt || null,
     de_reference: prediction.deReference || null,
     de_event_id: prediction.deEventId || null,
     de_status: prediction.deStatus || null,
