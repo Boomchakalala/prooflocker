@@ -1,9 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { Prediction } from "@/lib/storage";
+import { Prediction, type PredictionOutcome } from "@/lib/storage";
 import { formatRelativeTime } from "@/lib/utils";
-import OutcomeDropdown from "./OutcomeDropdown";
+import ResolutionModal from "./ResolutionModal";
 import Link from "next/link";
 
 interface PredictionCardProps {
@@ -15,12 +15,25 @@ interface PredictionCardProps {
 export default function PredictionCard({ prediction, currentUserId, onOutcomeUpdate }: PredictionCardProps) {
   const [copied, setCopied] = useState(false);
   const [linkCopied, setLinkCopied] = useState(false);
+  const [showResolutionModal, setShowResolutionModal] = useState(false);
 
   // Fallback for older predictions without authorNumber
   const authorNumber = prediction.authorNumber || 1000;
   const onChainStatus = prediction.onChainStatus || "pending";
   const isClaimed = !!prediction.userId;
   const isOwner = currentUserId && prediction.userId === currentUserId;
+
+  const getOutcomeLabel = (outcome: PredictionOutcome): string => {
+    if (outcome === "correct") return "True";
+    if (outcome === "incorrect") return "False";
+    return "Pending";
+  };
+
+  const getOutcomeClass = (outcome: PredictionOutcome): string => {
+    if (outcome === "correct") return "bg-green-500/10 border border-green-500/30 text-green-400";
+    if (outcome === "incorrect") return "bg-red-500/10 border border-red-500/30 text-red-400";
+    return "bg-yellow-500/10 border border-yellow-500/30 text-yellow-400";
+  };
 
   // Determine status display based on deStatus (more accurate than onChainStatus)
   const getStatusDisplay = () => {
@@ -134,28 +147,24 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
       {/* Outcome section - only for claimed predictions */}
       {isClaimed && (
         <div className="mb-2">
-          {isOwner ? (
-            <div className="flex items-center gap-2">
-              <span className="text-xs text-[#888]">Outcome:</span>
-              <OutcomeDropdown
-                predictionId={prediction.id}
-                currentOutcome={prediction.outcome}
-                onOutcomeChange={onOutcomeUpdate}
-              />
-            </div>
-          ) : (
-            <div className="flex items-center gap-2">
-              <span className="text-xs text-[#888]">Outcome:</span>
-              <span className={`inline-flex items-center px-2 py-0.5 rounded-md text-xs font-medium ${
-                prediction.outcome === 'correct' ? 'bg-green-500/10 border border-green-500/30 text-green-400' :
-                prediction.outcome === 'incorrect' ? 'bg-red-500/10 border border-red-500/30 text-red-400' :
-                prediction.outcome === 'invalid' ? 'bg-gray-500/10 border border-gray-500/30 text-gray-400' :
-                'bg-yellow-500/10 border border-yellow-500/30 text-yellow-400'
-              }`}>
-                {prediction.outcome.charAt(0).toUpperCase() + prediction.outcome.slice(1)}
+          <div className="flex items-center gap-2">
+            <span className="text-xs text-[#888]">Outcome:</span>
+            {isOwner ? (
+              <button
+                onClick={() => setShowResolutionModal(true)}
+                className={`inline-flex items-center px-2 py-0.5 rounded-md text-xs font-medium hover:opacity-80 transition-opacity ${getOutcomeClass(prediction.outcome)}`}
+              >
+                {getOutcomeLabel(prediction.outcome)}
+                <svg className="w-3 h-3 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                </svg>
+              </button>
+            ) : (
+              <span className={`inline-flex items-center px-2 py-0.5 rounded-md text-xs font-medium ${getOutcomeClass(prediction.outcome)}`}>
+                {getOutcomeLabel(prediction.outcome)}
               </span>
-            </div>
-          )}
+            )}
+          </div>
         </div>
       )}
 
@@ -267,6 +276,20 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
           )}
         </button>
       </div>
+
+      {/* Resolution Modal */}
+      {showResolutionModal && isOwner && (
+        <ResolutionModal
+          predictionId={prediction.id}
+          currentOutcome={prediction.outcome}
+          currentNote={prediction.resolutionNote}
+          currentUrl={prediction.resolutionUrl}
+          onClose={() => setShowResolutionModal(false)}
+          onSuccess={(newOutcome: PredictionOutcome) => {
+            onOutcomeUpdate?.();
+          }}
+        />
+      )}
     </div>
   );
 }
