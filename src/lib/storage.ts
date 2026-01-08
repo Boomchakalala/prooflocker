@@ -287,7 +287,9 @@ export async function updatePrediction(
 export async function updatePredictionOutcome(
   id: string,
   outcome: PredictionOutcome,
-  userId: string
+  userId: string,
+  resolutionNote?: string,
+  resolutionUrl?: string
 ): Promise<void> {
   // First verify the user owns this prediction and it's claimed
   const { data: prediction, error: fetchError } = await supabase
@@ -308,10 +310,31 @@ export async function updatePredictionOutcome(
     throw new Error("Unauthorized: You don't own this prediction");
   }
 
-  // Update the outcome
+  // Prepare update data
+  const updateData: Record<string, any> = {
+    outcome,
+  };
+
+  // If outcome is being set to resolved (correct or incorrect), save resolution data
+  if (outcome === "correct" || outcome === "incorrect") {
+    updateData.resolved_at = new Date().toISOString();
+    if (resolutionNote) {
+      updateData.resolution_note = resolutionNote;
+    }
+    if (resolutionUrl) {
+      updateData.resolution_url = resolutionUrl;
+    }
+  } else {
+    // If setting back to pending, clear resolution data
+    updateData.resolved_at = null;
+    updateData.resolution_note = null;
+    updateData.resolution_url = null;
+  }
+
+  // Update the outcome and resolution data
   const { error } = await supabase
     .from("predictions")
-    .update({ outcome })
+    .update(updateData)
     .eq("id", id);
 
   if (error) {

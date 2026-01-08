@@ -18,7 +18,7 @@ export async function PATCH(
     }
 
     const { id } = await params;
-    const { outcome } = await request.json();
+    const { outcome, resolutionNote, resolutionUrl } = await request.json();
 
     if (!outcome || !["pending", "correct", "incorrect", "invalid"].includes(outcome)) {
       return NextResponse.json(
@@ -27,12 +27,36 @@ export async function PATCH(
       );
     }
 
+    // Validate resolution note length
+    if (resolutionNote && resolutionNote.length > 280) {
+      return NextResponse.json(
+        { error: "Resolution note must be 280 characters or less" },
+        { status: 400 }
+      );
+    }
+
+    // Validate resolution URL format
+    if (resolutionUrl && !/^https?:\/\/.+/.test(resolutionUrl)) {
+      return NextResponse.json(
+        { error: "Resolution URL must be a valid http or https URL" },
+        { status: 400 }
+      );
+    }
+
     // Update the outcome (this function checks ownership)
-    await updatePredictionOutcome(id, outcome as PredictionOutcome, user.id);
+    await updatePredictionOutcome(
+      id,
+      outcome as PredictionOutcome,
+      user.id,
+      resolutionNote,
+      resolutionUrl
+    );
 
     return NextResponse.json({
       success: true,
       outcome,
+      resolutionNote,
+      resolutionUrl,
     });
   } catch (error) {
     console.error("[Update Outcome API] Error:", error);
