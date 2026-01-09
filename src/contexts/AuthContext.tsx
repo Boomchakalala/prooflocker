@@ -22,14 +22,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     let mounted = true;
     let completed = false;
 
-    // Failsafe: force loading to false after 2 seconds max
+    // Failsafe: force loading to false after 500ms max
     const failsafeTimeout = setTimeout(() => {
       if (mounted && !completed) {
         console.warn("[AuthContext] Auth initialization timed out, continuing without auth");
         setLoading(false);
         completed = true;
       }
-    }, 2000);
+    }, 500);
 
     // Get initial user
     getCurrentUser().then((user) => {

@@ -25,12 +25,12 @@ export async function sendMagicLink(email: string): Promise<{ success: boolean; 
  */
 export async function getCurrentUser(): Promise<User | null> {
   try {
-    // Add a timeout to prevent hanging
+    // Add a timeout to prevent hanging - reduced to 1 second
     const timeoutPromise = new Promise<null>((resolve) => {
       setTimeout(() => {
-        console.warn("[Auth] getUser() timed out after 5 seconds");
+        console.warn("[Auth] getUser() timed out after 1 second, continuing without auth");
         resolve(null);
-      }, 5000);
+      }, 1000);
     });
 
     const getUserPromise = supabase.auth.getUser().then(({ data: { user }, error }) => {
