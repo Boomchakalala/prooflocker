@@ -50,11 +50,22 @@ function HomeContent() {
         }
       }
 
-      const response = await fetch(endpoint);
+      // Add timeout to prevent hanging forever
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
+
+      const response = await fetch(endpoint, { signal: controller.signal });
+      clearTimeout(timeoutId);
+
       const data = await response.json();
       setPredictions(data.predictions || []);
     } catch (error) {
-      console.error("Error fetching predictions:", error);
+      if (error instanceof Error && error.name === 'AbortError') {
+        console.error("Fetch predictions timed out");
+      } else {
+        console.error("Error fetching predictions:", error);
+      }
+      setPredictions([]); // Set empty array on error
     } finally {
       setLoading(false);
     }

@@ -20,26 +20,30 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     let mounted = true;
+    let completed = false;
 
-    // Failsafe: force loading to false after 3 seconds max
+    // Failsafe: force loading to false after 2 seconds max
     const failsafeTimeout = setTimeout(() => {
-      if (mounted && loading) {
+      if (mounted && !completed) {
         console.warn("[AuthContext] Auth initialization timed out, continuing without auth");
         setLoading(false);
+        completed = true;
       }
-    }, 3000);
+    }, 2000);
 
     // Get initial user
     getCurrentUser().then((user) => {
-      if (mounted) {
+      if (mounted && !completed) {
         setUser(user);
         setLoading(false);
+        completed = true;
         clearTimeout(failsafeTimeout);
       }
     }).catch((error) => {
       console.error("[AuthContext] Error getting user:", error);
-      if (mounted) {
+      if (mounted && !completed) {
         setLoading(false);
+        completed = true;
         clearTimeout(failsafeTimeout);
       }
     });
@@ -48,7 +52,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const unsubscribe = onAuthStateChange((user) => {
       if (mounted) {
         setUser(user);
-        setLoading(false);
+        if (!completed) {
+          setLoading(false);
+          completed = true;
+        }
       }
     });
 
