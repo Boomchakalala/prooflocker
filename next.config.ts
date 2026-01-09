@@ -1,7 +1,9 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  allowedDevOrigins: [
+    'preview-hjmfjdaermhp.share.sandbox.dev'
+  ],
 };
 
 export default nextConfig;
