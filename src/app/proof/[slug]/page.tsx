@@ -106,6 +106,11 @@ export default async function ProofPage({ params }: Props) {
   const lockedDate = new Date(prediction.timestamp);
   const isResolved = prediction.outcome === "correct" || prediction.outcome === "incorrect";
 
+  // Generate the explorer URL once, outside of JSX
+  const explorerUrl = prediction.deReference
+    ? getDigitalEvidenceFingerprintUrl(prediction.deReference)
+    : null;
+
   return (
     <div className="min-h-screen bg-[#0a0a0a] text-white">
       <div className="max-w-2xl mx-auto px-4 py-12">
@@ -257,27 +262,20 @@ export default async function ProofPage({ params }: Props) {
                 <div className="text-xs text-neutral-400 uppercase tracking-wide mb-1">
                   Transaction Hash
                 </div>
-                {(() => {
-                  const explorerUrl = getDigitalEvidenceFingerprintUrl(prediction.deReference);
-                  if (explorerUrl) {
-                    return (
-                      <a
-                        href={explorerUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-sm text-cyan-400 hover:text-cyan-300 font-mono break-all underline"
-                      >
-                        {prediction.deReference}
-                      </a>
-                    );
-                  } else {
-                    return (
-                      <div className="text-sm text-neutral-300 font-mono break-all">
-                        {prediction.deReference}
-                      </div>
-                    );
-                  }
-                })()}
+                {explorerUrl ? (
+                  <a
+                    href={explorerUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-sm text-cyan-400 hover:text-cyan-300 font-mono break-all underline"
+                  >
+                    {prediction.deReference}
+                  </a>
+                ) : (
+                  <div className="text-sm text-neutral-300 font-mono break-all">
+                    {prediction.deReference}
+                  </div>
+                )}
               </div>
 
               {/* Block Timestamp */}
