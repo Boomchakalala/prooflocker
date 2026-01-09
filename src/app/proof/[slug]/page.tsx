@@ -1,8 +1,14 @@
 import { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { getPredictionBySlug, type Prediction } from "@/lib/storage";
+import { cache } from "react";
+import { getPredictionBySlug as _getPredictionBySlug, type Prediction } from "@/lib/storage";
 import { getDigitalEvidenceFingerprintUrl } from "@/lib/digitalEvidence";
+
+// Cache the prediction fetch to avoid duplicate queries
+// When both generateMetadata() and the component call this with the same slug,
+// it will only execute once
+const getPredictionBySlug = cache(_getPredictionBySlug);
 
 // Make this a dynamic page
 export const dynamic = "force-dynamic";
