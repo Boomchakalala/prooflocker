@@ -30,13 +30,17 @@ function HomeContent() {
   }, []);
 
   useEffect(() => {
-    if (!authLoading) {
+    if (!authLoading && anonId) {
+      console.log("[HomePage] Fetching predictions...", { activeTab, anonId: anonId?.substring(0, 8), userId: user?.id?.substring(0, 8) });
       fetchPredictions();
+    } else if (!authLoading && !anonId) {
+      console.log("[HomePage] Waiting for anonId...");
     }
   }, [activeTab, anonId, user, authLoading]);
 
   const fetchPredictions = async () => {
     setLoading(true);
+    const startTime = Date.now();
     try {
       let endpoint = "/api/predictions";
 
@@ -50,24 +54,30 @@ function HomeContent() {
         }
       }
 
+      console.log("[HomePage] Fetching from:", endpoint);
+
       // Add timeout to prevent hanging forever
       const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
+      const timeoutId = setTimeout(() => {
+        console.error("[HomePage] Fetch timeout after 5 seconds");
+        controller.abort();
+      }, 5000); // 5 second timeout
 
       const response = await fetch(endpoint, { signal: controller.signal });
       clearTimeout(timeoutId);
 
       const data = await response.json();
+      console.log(`[HomePage] Fetch completed in ${Date.now() - startTime}ms, got ${data.predictions?.length || 0} predictions`);
       setPredictions(data.predictions || []);
     } catch (error) {
+      console.error(`[HomePage] Fetch failed after ${Date.now() - startTime}ms:`, error);
       if (error instanceof Error && error.name === 'AbortError') {
-        console.error("Fetch predictions timed out");
-      } else {
-        console.error("Error fetching predictions:", error);
+        console.error("[HomePage] Request was aborted (timeout)");
       }
       setPredictions([]); // Set empty array on error
     } finally {
       setLoading(false);
+      console.log(`[HomePage] Loading state set to false after ${Date.now() - startTime}ms`);
     }
   };
 
