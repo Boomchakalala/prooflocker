@@ -50,11 +50,29 @@ function HomeContent() {
         }
       }
 
-      const response = await fetch(endpoint);
+      // Add 10 second timeout to prevent hanging
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 10000);
+
+      const response = await fetch(endpoint, {
+        signal: controller.signal,
+        cache: "no-store", // Prevent stale data on Vercel
+      });
+      clearTimeout(timeoutId);
+
+      if (!response.ok) {
+        throw new Error(`API returned ${response.status}`);
+      }
+
       const data = await response.json();
       setPredictions(data.predictions || []);
     } catch (error) {
       console.error("Error fetching predictions:", error);
+      if (error instanceof Error && error.name === 'AbortError') {
+        console.error("Fetch timed out after 10 seconds");
+        // Show error to user
+        alert("Failed to load predictions - connection timeout. Please refresh the page.");
+      }
     } finally {
       setLoading(false);
     }
