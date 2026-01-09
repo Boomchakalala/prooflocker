@@ -313,6 +313,34 @@ export function getDigitalEvidenceStatusMessage(): string {
 }
 
 /**
+ * Generate a Digital Evidence Explorer deep link URL for a fingerprint hash
+ *
+ * The official explorer format is:
+ * https://digitalevidence.constellationnetwork.io/fingerprint/<hash>
+ *
+ * Validates the hash is a hex string with at least 32 characters before generating URL.
+ *
+ * @param hash - The fingerprint hash (hex string)
+ * @returns The explorer URL, or null if the hash is invalid
+ */
+export function getDigitalEvidenceFingerprintUrl(hash: string): string | null {
+  if (!hash) {
+    return null;
+  }
+
+  // Trim whitespace
+  const trimmedHash = hash.trim();
+
+  // Validate: must be hex (0-9, a-f, A-F) and at least 32 characters
+  const hexPattern = /^[0-9a-fA-F]{32,}$/;
+  if (!hexPattern.test(trimmedHash)) {
+    return null;
+  }
+
+  return `https://digitalevidence.constellationnetwork.io/fingerprint/${trimmedHash}`;
+}
+
+/**
  * Check the status of a fingerprint in Digital Evidence
  *
  * Queries the DE API to get the current status of a submitted fingerprint.

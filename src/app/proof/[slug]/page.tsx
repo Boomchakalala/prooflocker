@@ -2,6 +2,7 @@ import { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getPredictionBySlug, type Prediction } from "@/lib/storage";
+import { getDigitalEvidenceFingerprintUrl } from "@/lib/digitalEvidence";
 
 // Make this a dynamic page
 export const dynamic = "force-dynamic";
@@ -250,14 +251,27 @@ export default async function ProofPage({ params }: Props) {
                 <div className="text-xs text-neutral-400 uppercase tracking-wide mb-1">
                   Transaction Hash
                 </div>
-                <a
-                  href={`https://be-mainnet.constellationnetwork.io/block/${prediction.deReference}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-sm text-cyan-400 hover:text-cyan-300 font-mono break-all underline"
-                >
-                  {prediction.deReference}
-                </a>
+                {(() => {
+                  const explorerUrl = getDigitalEvidenceFingerprintUrl(prediction.deReference);
+                  if (explorerUrl) {
+                    return (
+                      <a
+                        href={explorerUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-sm text-cyan-400 hover:text-cyan-300 font-mono break-all underline"
+                      >
+                        {prediction.deReference}
+                      </a>
+                    );
+                  } else {
+                    return (
+                      <div className="text-sm text-neutral-300 font-mono break-all">
+                        {prediction.deReference}
+                      </div>
+                    );
+                  }
+                })()}
               </div>
 
               {/* Block Timestamp */}
