@@ -24,14 +24,30 @@ export async function sendMagicLink(email: string): Promise<{ success: boolean; 
  * Get the current authenticated user
  */
 export async function getCurrentUser(): Promise<User | null> {
-  const { data: { user }, error } = await supabase.auth.getUser();
+  try {
+    // Add a timeout to prevent hanging
+    const timeoutPromise = new Promise<null>((resolve) => {
+      setTimeout(() => {
+        console.warn("[Auth] getUser() timed out after 5 seconds");
+        resolve(null);
+      }, 5000);
+    });
 
-  if (error) {
-    console.error("[Auth] Error getting current user:", error);
+    const getUserPromise = supabase.auth.getUser().then(({ data: { user }, error }) => {
+      if (error) {
+        console.error("[Auth] Error getting current user:", error);
+        return null;
+      }
+      return user;
+    });
+
+    // Race between the actual call and the timeout
+    const user = await Promise.race([getUserPromise, timeoutPromise]);
+    return user;
+  } catch (error) {
+    console.error("[Auth] Exception in getCurrentUser:", error);
     return null;
   }
-
-  return user;
 }
 
 /**
