@@ -27,13 +27,10 @@ function HomeContent() {
   useEffect(() => {
     const id = getOrCreateUserId();
     setAnonId(id);
-    console.log("[HomePage] Component mounted, anonId:", id);
   }, []);
 
   useEffect(() => {
-    console.log("[HomePage] Effect triggered:", { authLoading, activeTab, anonId, user: !!user });
     if (!authLoading) {
-      console.log("[HomePage] Calling fetchPredictions");
       fetchPredictions();
     }
   }, [activeTab, anonId, user, authLoading]);

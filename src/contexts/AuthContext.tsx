@@ -16,52 +16,29 @@ const AuthContext = createContext<AuthContextType>({
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false); // Start as false - don't block page load
 
   useEffect(() => {
     let mounted = true;
-    let completed = false;
 
-    // Failsafe: force loading to false after 500ms max
-    const failsafeTimeout = setTimeout(() => {
-      if (mounted && !completed) {
-        console.warn("[AuthContext] Auth initialization timed out, continuing without auth");
-        setLoading(false);
-        completed = true;
-      }
-    }, 500);
-
-    // Get initial user
+    // Get initial user in background, don't block the UI
     getCurrentUser().then((user) => {
-      if (mounted && !completed) {
+      if (mounted) {
         setUser(user);
-        setLoading(false);
-        completed = true;
-        clearTimeout(failsafeTimeout);
       }
     }).catch((error) => {
       console.error("[AuthContext] Error getting user:", error);
-      if (mounted && !completed) {
-        setLoading(false);
-        completed = true;
-        clearTimeout(failsafeTimeout);
-      }
     });
 
     // Listen for auth changes
     const unsubscribe = onAuthStateChange((user) => {
       if (mounted) {
         setUser(user);
-        if (!completed) {
-          setLoading(false);
-          completed = true;
-        }
       }
     });
 
     return () => {
       mounted = false;
-      clearTimeout(failsafeTimeout);
       unsubscribe();
     };
   }, []);
