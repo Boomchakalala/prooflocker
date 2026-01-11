@@ -34,7 +34,6 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
   const isClaimed = !!prediction.userId;
   const isOwner = currentUserId && prediction.userId === currentUserId;
   const lifecycleStatus = prediction.lifecycleStatus || "locked";
-  const displayOutcome = prediction.adminOverridden ? prediction.finalOutcome : prediction.outcome;
 
   const copyHash = async () => {
     await navigator.clipboard.writeText(prediction.hash);
@@ -103,10 +102,9 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
       <div className="flex items-center gap-2 mb-3">
         <span className="text-[10px] uppercase tracking-wide text-white/40">Outcome</span>
         <OutcomeBadge
-          outcome={displayOutcome || "pending"}
+          outcome={prediction.outcome || "pending"}
           size="sm"
           showLabel="short"
-          adminOverridden={prediction.adminOverridden}
         />
       </div>
 
