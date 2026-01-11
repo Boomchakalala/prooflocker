@@ -4,7 +4,7 @@ import { useState, useEffect, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import PredictionCard from "@/components/PredictionCard";
-import FullLogo from "@/components/FullLogo";
+import BrandLogo from "@/components/BrandLogo";
 import DEStatusBanner from "@/components/DEStatusBanner";
 import ClaimModal from "@/components/ClaimModal";
 import { Prediction } from "@/lib/storage";
@@ -149,9 +149,7 @@ function HomeContent() {
       <header className="glass sticky top-0 z-50 border-b border-white/5 bg-[#0a0a0a]/80 backdrop-blur-xl">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
-            <Link href="/" className="hover:opacity-90 transition-opacity">
-              <FullLogo />
-            </Link>
+            <BrandLogo />
             <div className="flex items-center gap-4">
               {user && (
                 <div className="flex items-center gap-3">
