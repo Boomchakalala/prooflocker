@@ -172,9 +172,9 @@ function HomeContent() {
       </header>
 
       {/* Main content */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 relative z-10">
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5 relative z-10">
         {/* Tabs and Sync Button */}
-        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 mb-4">
           <div className="flex items-center gap-1 p-1 glass rounded-lg w-fit">
             <button
               onClick={() => setActiveTab("all")}
@@ -242,7 +242,7 @@ function HomeContent() {
 
         {/* Toast Notification */}
         {syncMessage && (
-          <div className="mb-6 p-4 glass rounded-lg border border-blue-500/20 glow-blue fade-in">
+          <div className="mb-4 p-3 glass rounded-lg border border-blue-500/20 glow-blue fade-in">
             <p className="text-sm text-white">{syncMessage}</p>
           </div>
         )}
@@ -372,7 +372,7 @@ function HomeContent() {
             <p className="text-sm text-white/40 mb-4 sm:hidden">
               Lock predictions now so you can prove you said it first later.
             </p>
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
             {filteredPredictions.map((prediction, index) => (
               <div
                 key={prediction.id}
