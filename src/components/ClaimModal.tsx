@@ -37,6 +37,15 @@ export default function ClaimModal({ onClose, onSuccess }: ClaimModalProps) {
         return;
       }
 
+      // Check if email confirmation is needed (only for signup)
+      if (mode === "signup" && authResult.needsEmailConfirmation) {
+        console.log("[ClaimModal] Email confirmation required");
+        setSuccess(true);
+        setClaimedCount(0);
+        setLoading(false);
+        return;
+      }
+
       // Step 2: Immediately claim predictions
       setClaiming(true);
       setLoading(false);
@@ -49,7 +58,11 @@ export default function ClaimModal({ onClose, onSuccess }: ClaimModalProps) {
         const accessToken = session?.access_token;
 
         if (!accessToken) {
-          throw new Error("No access token available");
+          // This shouldn't happen for sign-in, but handle gracefully
+          console.error("[ClaimModal] No access token after successful auth");
+          setError("Session not ready. Please try signing in again.");
+          setClaiming(false);
+          return;
         }
 
         // Call claim API

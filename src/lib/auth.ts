@@ -4,12 +4,12 @@ import type { User } from "@supabase/supabase-js";
 /**
  * Sign up a new user with email and password
  */
-export async function signUpWithPassword(email: string, password: string): Promise<{ success: boolean; error?: string; user?: User }> {
+export async function signUpWithPassword(email: string, password: string): Promise<{ success: boolean; error?: string; user?: User; session?: any; needsEmailConfirmation?: boolean }> {
   const { data, error } = await supabase.auth.signUp({
     email,
     password,
     options: {
-      emailRedirectTo: typeof window !== 'undefined' ? `${window.location.origin}` : undefined,
+      emailRedirectTo: typeof window !== 'undefined' ? `${window.location.origin}/auth/callback` : undefined,
     },
   });
 
@@ -22,7 +22,16 @@ export async function signUpWithPassword(email: string, password: string): Promi
     return { success: false, error: "Failed to create account" };
   }
 
-  return { success: true, user: data.user };
+  // Check if email confirmation is needed
+  const needsEmailConfirmation = !data.session;
+  console.log("[Auth] Sign up successful. Needs email confirmation:", needsEmailConfirmation);
+
+  return {
+    success: true,
+    user: data.user,
+    session: data.session,
+    needsEmailConfirmation
+  };
 }
 
 /**
