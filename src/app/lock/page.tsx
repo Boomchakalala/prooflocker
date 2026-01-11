@@ -108,7 +108,7 @@ export default function LockPage() {
                 Lock your prediction
               </h1>
               <p className="text-neutral-400 text-lg">
-                Create an immutable, timestamped record.
+                Create a timestamped record you can verify later.
               </p>
             </div>
 
@@ -208,12 +208,15 @@ export default function LockPage() {
                         d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
                       />
                     </svg>
-                    Locking on-chain...
+                    Locking...
                   </span>
                 ) : (
-                  "Lock prediction"
+                  "Lock my prediction"
                 )}
               </button>
+              <p className="text-xs text-white/50 text-center mt-2">
+                Publicly timestamped • Verifiable later
+              </p>
 
               {/* Content policy notice */}
               <p className="mt-4 text-xs text-neutral-500 text-center">
