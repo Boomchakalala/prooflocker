@@ -81,6 +81,12 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
             <span className="text-sm text-neutral-400">Anon #{authorNumber}</span>
             <span className="text-xs text-neutral-600">•</span>
             <span className="text-sm text-neutral-500">{formatRelativeTime(prediction.timestamp)}</span>
+            {prediction.category && (
+              <>
+                <span className="text-xs text-neutral-600">•</span>
+                <span className="text-xs text-neutral-600">{prediction.category}</span>
+              </>
+            )}
           </div>
         </div>
 

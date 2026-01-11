@@ -9,7 +9,7 @@ export const runtime = "nodejs";
 
 export async function POST(request: NextRequest) {
   try {
-    const { text, userId: anonId } = await request.json();
+    const { text, userId: anonId, category } = await request.json();
 
     if (!text || typeof text !== "string") {
       return NextResponse.json(
@@ -24,6 +24,10 @@ export async function POST(request: NextRequest) {
         { status: 400 }
       );
     }
+
+    // Validate and default category
+    const validCategories = ["Crypto", "Politics", "Markets", "Tech", "Sports", "Culture", "Personal", "Other"];
+    const predictionCategory = category && validCategories.includes(category) ? category : "Other";
 
     // Validate content against moderation filter
     const validation = validatePredictionContent(text);
@@ -99,6 +103,7 @@ export async function POST(request: NextRequest) {
       publicSlug: proofId, // Use proofId as public slug for permanent links
       onChainStatus,
       outcome: "pending" as const, // Default outcome
+      category: predictionCategory,
       deReference,
       deEventId,
       deStatus,
