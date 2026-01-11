@@ -165,9 +165,9 @@ function HomeContent() {
               )}
               <Link
                 href="/lock"
-                className="px-5 py-2.5 bg-gradient-to-r from-blue-600/80 to-purple-600/80 hover:from-blue-600 hover:to-purple-600 text-white font-medium rounded-md transition-all"
+                className="hidden sm:flex px-5 py-2.5 bg-gradient-to-r from-blue-600/80 to-purple-600/80 hover:from-blue-600 hover:to-purple-600 text-white font-medium rounded-md transition-all"
               >
-                Lock prediction
+                Lock my prediction
               </Link>
             </div>
           </div>
@@ -352,7 +352,12 @@ function HomeContent() {
             </Link>
           </div>
         ) : (
-          <div className="grid gap-4 sm:grid-cols-1 lg:grid-cols-2">
+          <>
+            {/* Context hint - Mobile only */}
+            <p className="text-sm text-white/40 mb-4 sm:hidden">
+              Lock predictions now so you can prove you said it first later.
+            </p>
+            <div className="grid gap-4 sm:grid-cols-1 lg:grid-cols-2">
             {predictions.map((prediction, index) => (
               <div
                 key={prediction.id}
@@ -366,6 +371,7 @@ function HomeContent() {
               </div>
             ))}
           </div>
+          </>
         )}
       </main>
 
