@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { signUpWithPassword, signInWithPassword } from "@/lib/auth";
+import { signUpWithPassword, signInWithPassword, resendConfirmationEmail } from "@/lib/auth";
 import { getOrCreateUserId } from "@/lib/user";
 import { supabase } from "@/lib/supabase";
 
@@ -16,10 +16,29 @@ export default function ClaimModal({ onClose, onSuccess }: ClaimModalProps) {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [claiming, setClaiming] = useState(false);
+  const [resending, setResending] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
   const [claimedCount, setClaimedCount] = useState(0);
   const [needsEmailConfirmation, setNeedsEmailConfirmation] = useState(false);
+  const [confirmationEmail, setConfirmationEmail] = useState("");
+
+  const handleResendConfirmation = async () => {
+    setResending(true);
+    setError("");
+
+    const result = await resendConfirmationEmail(confirmationEmail);
+
+    if (result.success) {
+      setError(""); // Clear any error
+      // Show success message in the UI
+      alert("Confirmation email sent! Check your inbox.");
+    } else {
+      setError(result.error || "Failed to resend confirmation email");
+    }
+
+    setResending(false);
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -42,6 +61,7 @@ export default function ClaimModal({ onClose, onSuccess }: ClaimModalProps) {
       if (mode === "signup" && authResult.needsEmailConfirmation) {
         console.log("[ClaimModal] Email confirmation required");
         setNeedsEmailConfirmation(true);
+        setConfirmationEmail(email);
         setSuccess(true);
         setClaimedCount(0);
         setLoading(false);
@@ -133,7 +153,10 @@ export default function ClaimModal({ onClose, onSuccess }: ClaimModalProps) {
             <div className="flex gap-2 mb-6 p-1 bg-black/20 rounded-lg">
               <button
                 type="button"
-                onClick={() => setMode("signup")}
+                onClick={() => {
+                  setMode("signup");
+                  setError("");
+                }}
                 className={`flex-1 py-2 px-4 rounded-md text-sm font-medium transition-all ${
                   mode === "signup"
                     ? "bg-white/20 text-white"
@@ -144,7 +167,10 @@ export default function ClaimModal({ onClose, onSuccess }: ClaimModalProps) {
               </button>
               <button
                 type="button"
-                onClick={() => setMode("signin")}
+                onClick={() => {
+                  setMode("signin");
+                  setError("");
+                }}
                 className={`flex-1 py-2 px-4 rounded-md text-sm font-medium transition-all ${
                   mode === "signin"
                     ? "bg-white/20 text-white"
@@ -203,7 +229,10 @@ export default function ClaimModal({ onClose, onSuccess }: ClaimModalProps) {
                 disabled={loading}
                 className="w-full bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600 text-white font-semibold py-3 px-6 rounded-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                {loading ? "Please wait..." : mode === "signup" ? "Create account" : "Sign in"}
+                {loading
+                  ? (mode === "signup" ? "Creating..." : "Signing in...")
+                  : (mode === "signup" ? "Create account" : "Sign in")
+                }
               </button>
             </form>
 
@@ -240,11 +269,31 @@ export default function ClaimModal({ onClose, onSuccess }: ClaimModalProps) {
                     <h2 className="text-2xl font-bold text-white">
                       Check your email!
                     </h2>
-                    <p className="text-white/70 text-sm text-center">
-                      We sent you a confirmation link. Click it to activate your account and claim your predictions.
+                    <p className="text-white/70 text-sm text-center px-4">
+                      We sent a confirmation link to <span className="font-medium text-white">{confirmationEmail}</span>
                     </p>
-                    <p className="text-white/50 text-xs text-center">
-                      Don't see it? Check your spam folder or try signing up again.
+                    <p className="text-white/60 text-sm text-center px-4">
+                      Click the link to activate your account, then sign in to claim your predictions.
+                    </p>
+
+                    <div className="mt-4 pt-4 border-t border-white/10 w-full">
+                      <button
+                        onClick={handleResendConfirmation}
+                        disabled={resending}
+                        className="w-full px-4 py-2 text-sm text-white/80 hover:text-white bg-white/10 hover:bg-white/20 rounded-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                      >
+                        {resending ? "Sending..." : "Resend confirmation email"}
+                      </button>
+                      <button
+                        onClick={onClose}
+                        className="w-full px-4 py-2 mt-2 text-sm text-white/60 hover:text-white transition-all"
+                      >
+                        Close
+                      </button>
+                    </div>
+
+                    <p className="text-white/40 text-xs text-center mt-2">
+                      Don't see it? Check your spam folder.
                     </p>
                   </>
                 ) : (
