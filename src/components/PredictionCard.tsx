@@ -109,18 +109,18 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
       </div>
 
       {/* Main content: Prediction text - VISUAL FOCUS */}
-      <p className="text-white text-xl leading-snug mb-3 font-normal flex-grow">
+      <p className="text-white text-xl leading-snug mb-4 font-normal flex-grow">
         {prediction.textPreview}
       </p>
 
-      {/* Status line: Outcome */}
-      <div className="flex items-center gap-2 mb-3">
-        <span className="text-xs text-neutral-500">Outcome:</span>
-        <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium border ${outcomeDisplay.class}`}>
+      {/* Status line: Outcome - More prominent */}
+      <div className="flex items-center gap-2.5 mb-4">
+        <span className="text-xs text-neutral-600 uppercase tracking-wide font-medium">Status</span>
+        <span className={`inline-flex items-center px-3 py-1.5 rounded-full text-xs font-semibold border ${outcomeDisplay.class}`}>
           {outcomeDisplay.label}
           {prediction.adminOverridden && (
             <svg
-              className="w-3 h-3 ml-1"
+              className="w-3 h-3 ml-1.5"
               fill="currentColor"
               viewBox="0 0 20 20"
               title="Admin finalized"
@@ -137,56 +137,56 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
 
       {/* Resolution note */}
       {prediction.resolutionNote && (
-        <div className="mb-3 p-2.5 bg-white/5 border border-white/10 rounded-lg">
-          <p className="text-xs text-neutral-500 mb-1">Resolution note:</p>
-          <p className="text-sm text-neutral-300">{prediction.resolutionNote}</p>
+        <div className="mb-4 p-3 bg-white/5 border border-white/10 rounded-lg">
+          <p className="text-xs text-neutral-500 mb-1.5 font-medium">Resolution note</p>
+          <p className="text-sm text-neutral-300 leading-relaxed">{prediction.resolutionNote}</p>
         </div>
       )}
 
       {/* Resolution URL */}
       {prediction.resolutionUrl && (
-        <div className="mb-3">
+        <div className="mb-4">
           <a
             href={prediction.resolutionUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="text-xs text-blue-400 hover:text-blue-300 underline flex items-center gap-1"
+            className="text-xs text-blue-400 hover:text-blue-300 underline flex items-center gap-1.5 font-medium"
           >
-            <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
             </svg>
-            Evidence
+            View evidence
           </a>
         </div>
       )}
 
       {/* Admin note */}
       {prediction.adminOverridden && prediction.adminNote && (
-        <div className="mb-3 p-2.5 bg-purple-500/5 border border-purple-500/20 rounded-lg">
-          <p className="text-xs text-purple-400 mb-1 flex items-center gap-1">
-            <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+        <div className="mb-4 p-3 bg-purple-500/5 border border-purple-500/20 rounded-lg">
+          <p className="text-xs text-purple-400 mb-1.5 flex items-center gap-1.5 font-medium">
+            <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20">
               <path fillRule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
             </svg>
-            Admin note:
+            Admin note
           </p>
-          <p className="text-sm text-neutral-300">{prediction.adminNote}</p>
+          <p className="text-sm text-neutral-300 leading-relaxed">{prediction.adminNote}</p>
         </div>
       )}
 
-      {/* Metadata: FINGERPRINT */}
-      <div className="bg-black/40 border border-white/5 rounded-lg p-2 mb-3">
+      {/* Metadata: FINGERPRINT - Reduced visual noise */}
+      <div className="bg-black/30 border border-white/5 rounded-lg p-2.5 mb-4">
         <div className="flex items-center justify-between gap-2">
           <div className="flex-1 min-w-0">
-            <label className="block text-[10px] font-semibold text-neutral-600 mb-1 uppercase tracking-wider">
-              FINGERPRINT
+            <label className="block text-[9px] font-medium text-neutral-700 mb-1 uppercase tracking-wider">
+              Fingerprint
             </label>
-            <code className="font-mono text-xs text-neutral-500 truncate block">
-              {prediction.hash.slice(0, 24)}...{prediction.hash.slice(-16)}
+            <code className="font-mono text-[11px] text-neutral-500 truncate block leading-tight">
+              {prediction.hash.slice(0, 20)}...{prediction.hash.slice(-12)}
             </code>
           </div>
           <button
             onClick={copyHash}
-            className="flex-shrink-0 p-1 hover:bg-white/10 rounded transition-colors"
+            className="flex-shrink-0 p-1.5 hover:bg-white/10 rounded transition-colors"
             title="Copy fingerprint"
           >
             {copied ? (
@@ -222,24 +222,24 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
         </div>
       </div>
 
-      {/* Actions row */}
-      <div className="flex flex-col gap-1.5">
+      {/* Actions row - Clearer hierarchy */}
+      <div className="flex flex-col gap-2">
         {/* Primary action: View Proof - DOMINATES */}
         <Link
           href={`/proof/${prediction.publicSlug}`}
-          className="w-full text-center px-5 py-2.5 text-sm font-semibold text-white bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 rounded-lg transition-all shadow-lg shadow-blue-500/20"
+          className="w-full text-center px-5 py-3 text-sm font-semibold text-white bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 rounded-lg transition-all shadow-lg shadow-blue-500/20 hover:shadow-blue-500/30"
           title="View permanent proof page"
         >
           View Proof
         </Link>
 
         {/* Secondary actions row */}
-        <div className="flex gap-1.5">
-          {/* Resolve button - ONLY when owner, solid green */}
+        <div className="flex gap-2">
+          {/* Resolve button - Secondary but actionable */}
           {canResolve && (
             <button
               onClick={() => setShowResolveModal(true)}
-              className="flex-1 px-4 py-2 text-sm font-medium text-white bg-green-600 hover:bg-green-500 rounded-lg transition-all"
+              className="flex-1 px-4 py-2.5 text-sm font-medium text-white bg-green-600/90 hover:bg-green-600 rounded-lg transition-all border border-green-500/30"
             >
               Resolve
             </button>
@@ -248,7 +248,7 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
           {/* Share button - ghost style, muted */}
           <button
             onClick={copyLink}
-            className="px-4 py-2 text-sm font-medium text-neutral-500 hover:text-neutral-300 hover:bg-white/5 rounded-lg transition-all flex items-center gap-2"
+            className={`px-4 py-2.5 text-sm font-medium text-neutral-500 hover:text-neutral-300 hover:bg-white/5 rounded-lg transition-all flex items-center justify-center gap-2 ${!canResolve ? 'flex-1' : ''}`}
             title="Copy link"
           >
             {linkCopied ? (
