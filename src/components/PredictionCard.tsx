@@ -34,123 +34,6 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
   const lifecycleStatus = prediction.lifecycleStatus || "locked";
   const displayOutcome = prediction.adminOverridden ? prediction.finalOutcome : prediction.outcome;
 
-  const getOutcomeLabel = (outcome: PredictionOutcome): string => {
-    if (outcome === "correct") return "True";
-    if (outcome === "incorrect") return "False";
-    if (outcome === "invalid") return "Invalid";
-    return "Pending";
-  };
-
-  const getOutcomeClass = (outcome: PredictionOutcome): string => {
-    if (outcome === "correct") return "bg-green-500/10 border border-green-500/30 text-green-400";
-    if (outcome === "incorrect") return "bg-red-500/10 border border-red-500/30 text-red-400";
-    if (outcome === "invalid") return "bg-gray-500/10 border border-gray-500/30 text-gray-400";
-    return "bg-yellow-500/10 border border-yellow-500/30 text-yellow-400";
-  };
-
-  // Get lifecycle status text (for simplified status line)
-  const getLifecycleStatusText = (): string => {
-    switch (lifecycleStatus) {
-      case "resolved":
-        return "Resolved";
-      case "contested":
-        return "Contested";
-      case "final":
-        return "Final";
-      default:
-        return "Locked";
-    }
-  };
-
-  // Get on-chain status text (for simplified status line)
-  const getOnChainStatusText = (): string => {
-    const deStatus = prediction.deStatus?.toUpperCase();
-    if (deStatus === "CONFIRMED") return "On-chain";
-    if (deStatus === "FAILED" || deStatus === "REJECTED") return "Failed";
-    if (onChainStatus === "confirmed") return "On-chain";
-    return "Pending";
-  };
-
-  // Build status line parts
-  const statusParts = [
-    getLifecycleStatusText(),
-    getOnChainStatusText(),
-  ];
-  if (isClaimed) {
-    statusParts.push("Claimed");
-  }
-  const statusLine = `Status: ${statusParts.join(" · ")}`;
-
-  // Get lifecycle status badge
-  const getLifecycleStatusBadge = () => {
-    switch (lifecycleStatus) {
-      case "locked":
-        return {
-          label: "Locked",
-          className: "bg-blue-500/10 border border-blue-500/30 text-blue-400",
-        };
-      case "resolved":
-        return {
-          label: "Resolved",
-          className: "bg-green-500/10 border border-green-500/30 text-green-400",
-        };
-      case "contested":
-        return {
-          label: "Contested",
-          className: "bg-orange-500/10 border border-orange-500/30 text-orange-400",
-        };
-      case "final":
-        return {
-          label: "Final",
-          className: "bg-purple-500/10 border border-purple-500/30 text-purple-400 ring-1 ring-purple-500/20",
-        };
-      default:
-        return {
-          label: "Locked",
-          className: "bg-blue-500/10 border border-blue-500/30 text-blue-400",
-        };
-    }
-  };
-
-  // Determine on-chain status display based on deStatus
-  const getOnChainStatusDisplay = () => {
-    const deStatus = prediction.deStatus?.toUpperCase();
-
-    if (deStatus) {
-      if (deStatus === "CONFIRMED") {
-        return {
-          label: "On-chain",
-          className: "bg-green-500/10 border border-green-500/30 text-green-400",
-        };
-      } else if (deStatus === "PENDING" || deStatus === "NEW") {
-        return {
-          label: "Pending",
-          className: "bg-yellow-500/10 border border-yellow-500/30 text-yellow-400",
-        };
-      } else if (deStatus === "FAILED" || deStatus === "REJECTED") {
-        return {
-          label: "Failed",
-          className: "bg-red-500/10 border border-red-500/30 text-red-400",
-        };
-      }
-    }
-
-    if (onChainStatus === "confirmed") {
-      return {
-        label: "On-chain",
-        className: "bg-green-500/10 border border-green-500/30 text-green-400",
-      };
-    }
-
-    return {
-      label: "Pending",
-      className: "bg-yellow-500/10 border border-yellow-500/30 text-yellow-400",
-    };
-  };
-
-  const onChainStatusDisplay = getOnChainStatusDisplay();
-  const lifecycleStatusBadge = getLifecycleStatusBadge();
-
   const copyHash = async () => {
     await navigator.clipboard.writeText(prediction.hash);
     setCopied(true);
@@ -164,154 +47,145 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
     setTimeout(() => setLinkCopied(false), 2000);
   };
 
-  // Check if prediction is new (within last 5 minutes)
-  const isNew = () => {
-    const now = new Date();
-    const past = new Date(prediction.timestamp);
-    const diffMs = now.getTime() - past.getTime();
-    return diffMs < 5 * 60 * 1000; // 5 minutes
+  // Determine on-chain status
+  const isOnChain = () => {
+    const deStatus = prediction.deStatus?.toUpperCase();
+    return deStatus === "CONFIRMED" || onChainStatus === "confirmed";
   };
 
   // Determine if user can resolve (owner and not finalized)
   const canResolve = isOwner && lifecycleStatus !== "final";
 
-  // Determine if user can contest (authenticated, not owner, prediction is resolved/contested)
-  const canContest =
-    currentUserId &&
-    !isOwner &&
-    (lifecycleStatus === "resolved" || lifecycleStatus === "contested");
+  // Get outcome label and styling
+  const getOutcomeDisplay = () => {
+    const outcome = displayOutcome || "pending";
+    if (outcome === "correct") return { label: "True", class: "bg-green-500/10 border-green-500/30 text-green-400" };
+    if (outcome === "incorrect") return { label: "False", class: "bg-red-500/10 border-red-500/30 text-red-400" };
+    if (outcome === "invalid") return { label: "Invalid", class: "bg-neutral-500/10 border-neutral-500/30 text-neutral-400" };
+    return { label: "Pending", class: "bg-yellow-500/10 border-yellow-500/30 text-yellow-400" };
+  };
+
+  const outcomeDisplay = getOutcomeDisplay();
 
   return (
-    <div
-      className={`glass rounded-xl p-5 hover:border-white/10 transition-all card-hover glow-blue flex flex-col ${
-        isNew() ? "ring-1 ring-blue-500/20" : ""
-      }`}
-    >
-      {/* Header: Author + Time */}
-      <div className="flex items-center justify-between mb-3">
-        <div className="flex items-center gap-2">
-          <div className="w-7 h-7 rounded-full bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center text-xs font-bold">
-            {authorNumber.toString().slice(0, 2)}
+    <div className="glass rounded-xl p-6 hover:border-white/10 transition-all flex flex-col h-full shadow-lg shadow-purple-500/5">
+      {/* Header row: Badge + Author + Time + Status Pills */}
+      <div className="flex items-start justify-between mb-4">
+        <div className="flex items-center gap-3 flex-wrap">
+          {/* Small circular badge with number */}
+          <div className="w-8 h-8 rounded-full bg-blue-500/20 flex items-center justify-center text-xs font-semibold text-blue-400 border border-blue-500/30">
+            {authorNumber.toString().slice(-2)}
           </div>
-          <span className="text-sm text-white/60">Anon #{authorNumber}</span>
-          <span className="text-xs text-white/30">•</span>
-          <span
-            className={`text-sm ${
-              isNew() ? "text-blue-400 font-medium" : "text-white/40"
-            }`}
-          >
-            {formatRelativeTime(prediction.timestamp)}
+
+          <div className="flex items-center gap-2 flex-wrap">
+            <span className="text-sm text-neutral-400">Anon #{authorNumber}</span>
+            <span className="text-xs text-neutral-600">•</span>
+            <span className="text-sm text-neutral-500">{formatRelativeTime(prediction.timestamp)}</span>
+          </div>
+        </div>
+
+        {/* Inline status pills */}
+        <div className="flex items-center gap-1.5 flex-wrap justify-end">
+          {isClaimed && (
+            <span className="px-2 py-0.5 text-[10px] font-medium rounded bg-blue-500/10 border border-blue-500/30 text-blue-400">
+              Claimed
+            </span>
+          )}
+          <span className="px-2 py-0.5 text-[10px] font-medium rounded bg-blue-500/10 border border-blue-500/30 text-blue-400">
+            Locked
           </span>
+          {isOnChain() && (
+            <span className="px-2 py-0.5 text-[10px] font-medium rounded bg-green-500/10 border border-green-500/30 text-green-400">
+              On-chain
+            </span>
+          )}
         </div>
       </div>
 
-      {/* Prediction text - MOST PROMINENT */}
-      <p className="text-white text-lg leading-relaxed mb-4 font-medium">
+      {/* Main content: Prediction text - VISUAL FOCUS */}
+      <p className="text-white text-xl leading-relaxed mb-4 font-normal flex-grow">
         {prediction.textPreview}
       </p>
 
-      {/* Simplified Status Line */}
-      <p className="text-xs text-white/50 mb-4">{statusLine}</p>
-
-      {/* Outcome section */}
-      {isClaimed && (
-        <div className="mb-3">
-          <div className="flex items-center gap-2 flex-wrap">
-            <span className="text-xs text-[#888]">Outcome:</span>
-            <span
-              className={`inline-flex items-center px-2 py-0.5 rounded-md text-xs font-medium ${getOutcomeClass(
-                displayOutcome || "pending"
-              )}`}
+      {/* Status line: Outcome */}
+      <div className="flex items-center gap-2 mb-4">
+        <span className="text-xs text-neutral-500">Outcome:</span>
+        <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium border ${outcomeDisplay.class}`}>
+          {outcomeDisplay.label}
+          {prediction.adminOverridden && (
+            <svg
+              className="w-3 h-3 ml-1"
+              fill="currentColor"
+              viewBox="0 0 20 20"
+              title="Admin finalized"
             >
-              {getOutcomeLabel(displayOutcome || "pending")}
-              {prediction.adminOverridden && (
-                <svg
-                  className="w-3 h-3 ml-1"
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
-                  title="Admin finalized"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                    clipRule="evenodd"
-                  />
-                </svg>
-              )}
-            </span>
-          </div>
-
-          {/* Resolution note */}
-          {prediction.resolutionNote && (
-            <div className="mt-2 p-2 bg-white/5 border border-white/10 rounded-lg">
-              <p className="text-xs text-[#888] mb-1">Resolution note:</p>
-              <p className="text-sm text-[#e0e0e0]">{prediction.resolutionNote}</p>
-            </div>
+              <path
+                fillRule="evenodd"
+                d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                clipRule="evenodd"
+              />
+            </svg>
           )}
+        </span>
+      </div>
 
-          {/* Resolution URL */}
-          {prediction.resolutionUrl && (
-            <div className="mt-2">
-              <a
-                href={prediction.resolutionUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-xs text-blue-400 hover:text-blue-300 underline flex items-center gap-1"
-              >
-                <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                </svg>
-                Evidence
-              </a>
-            </div>
-          )}
-
-          {/* Admin note */}
-          {prediction.adminOverridden && prediction.adminNote && (
-            <div className="mt-2 p-2 bg-purple-500/5 border border-purple-500/20 rounded-lg">
-              <p className="text-xs text-purple-400 mb-1 flex items-center gap-1">
-                <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                </svg>
-                Admin note:
-              </p>
-              <p className="text-sm text-[#e0e0e0]">{prediction.adminNote}</p>
-            </div>
-          )}
+      {/* Resolution note */}
+      {prediction.resolutionNote && (
+        <div className="mb-4 p-3 bg-white/5 border border-white/10 rounded-lg">
+          <p className="text-xs text-neutral-500 mb-1">Resolution note:</p>
+          <p className="text-sm text-neutral-300">{prediction.resolutionNote}</p>
         </div>
       )}
 
-      {/* Accountability line */}
-      <p className="text-[10px] text-[#666] mb-3 flex items-center gap-1">
-        <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
-          <path
-            fillRule="evenodd"
-            d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z"
-            clipRule="evenodd"
-          />
-        </svg>
-        Publicly locked • Verifiable forever
-      </p>
+      {/* Resolution URL */}
+      {prediction.resolutionUrl && (
+        <div className="mb-4">
+          <a
+            href={prediction.resolutionUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-xs text-blue-400 hover:text-blue-300 underline flex items-center gap-1"
+          >
+            <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+            </svg>
+            Evidence
+          </a>
+        </div>
+      )}
 
-      {/* Hash section - SOFTER ON MOBILE */}
-      <div className="bg-black/20 border border-white/5 rounded-lg p-2.5 mb-3 sm:block hidden">
+      {/* Admin note */}
+      {prediction.adminOverridden && prediction.adminNote && (
+        <div className="mb-4 p-3 bg-purple-500/5 border border-purple-500/20 rounded-lg">
+          <p className="text-xs text-purple-400 mb-1 flex items-center gap-1">
+            <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+              <path fillRule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+            </svg>
+            Admin note:
+          </p>
+          <p className="text-sm text-neutral-300">{prediction.adminNote}</p>
+        </div>
+      )}
+
+      {/* Metadata: FINGERPRINT */}
+      <div className="bg-black/40 border border-white/5 rounded-lg p-3 mb-4">
         <div className="flex items-center justify-between">
           <div className="flex-1 min-w-0">
-            <label className="block text-[10px] font-semibold text-[#666] mb-1 uppercase tracking-wider">
-              Fingerprint
+            <label className="block text-[10px] font-semibold text-neutral-600 mb-1.5 uppercase tracking-wider">
+              FINGERPRINT
             </label>
-            <code className="font-mono text-[11px] text-[#999] break-all">
+            <code className="font-mono text-xs text-neutral-500 break-all">
               {prediction.hash.slice(0, 24)}...{prediction.hash.slice(-16)}
             </code>
           </div>
           <button
             onClick={copyHash}
-            className="ml-2 flex-shrink-0 p-1.5 hover:bg-white/10 rounded transition-colors"
+            className="ml-3 flex-shrink-0 p-1.5 hover:bg-white/10 rounded transition-colors"
             title="Copy fingerprint"
           >
             {copied ? (
               <svg
-                className="w-3.5 h-3.5 text-green-500"
+                className="w-4 h-4 text-green-500"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -325,7 +199,7 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
               </svg>
             ) : (
               <svg
-                className="w-3.5 h-3.5 text-[#888]"
+                className="w-4 h-4 text-neutral-600"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -342,54 +216,39 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
         </div>
       </div>
 
-      {/* Action buttons */}
-      <div className="flex flex-col gap-2 mt-auto">
-        {/* Primary actions: Resolve / Contest */}
-        {(canResolve || canContest) && (
-          <div className="flex gap-2">
-            {canResolve && (
-              <button
-                onClick={() => setShowResolveModal(true)}
-                className="flex-1 px-4 py-2 text-sm font-medium text-white/80 hover:text-white bg-white/5 hover:bg-white/10 border border-white/20 hover:border-white/30 rounded-lg transition-all flex items-center justify-center gap-2"
-              >
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-                Resolve
-              </button>
-            )}
-            {canContest && (
-              <button
-                onClick={() => setShowContestModal(true)}
-                className="flex-1 px-4 py-2 text-sm font-medium text-white bg-gradient-to-r from-orange-600/80 to-red-600/80 hover:from-orange-600 hover:to-red-600 rounded-lg transition-all flex items-center justify-center gap-2"
-              >
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-                </svg>
-                Contest
-              </button>
-            )}
-          </div>
-        )}
+      {/* Actions row */}
+      <div className="flex flex-col gap-2">
+        {/* Primary action: View Proof - DOMINATES */}
+        <Link
+          href={`/proof/${prediction.publicSlug}`}
+          className="w-full text-center px-5 py-3 text-sm font-semibold text-white bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 rounded-lg transition-all shadow-lg shadow-blue-500/20"
+          title="View permanent proof page"
+        >
+          View Proof
+        </Link>
 
-        {/* Secondary actions: View Proof + Share */}
+        {/* Secondary actions row */}
         <div className="flex gap-2">
-          <Link
-            href={`/proof/${prediction.publicSlug}`}
-            className="flex-1 text-center px-4 py-2 text-sm font-medium text-white bg-gradient-to-r from-blue-600/80 to-purple-600/80 hover:from-blue-600 hover:to-purple-600 rounded-lg transition-all"
-            title="View permanent proof page"
-          >
-            View Proof
-          </Link>
+          {/* Resolve button - ONLY when owner, solid green */}
+          {canResolve && (
+            <button
+              onClick={() => setShowResolveModal(true)}
+              className="flex-1 px-4 py-2.5 text-sm font-medium text-white bg-green-600 hover:bg-green-500 rounded-lg transition-all"
+            >
+              Resolve
+            </button>
+          )}
+
+          {/* Share button - ghost style, muted */}
           <button
             onClick={copyLink}
-            className="px-3 py-2 text-sm font-medium text-[#888] bg-white/5 hover:bg-white/10 hover:text-[#e0e0e0] border border-white/10 rounded-lg transition-all flex items-center gap-1.5"
+            className="px-4 py-2.5 text-sm font-medium text-neutral-500 hover:text-neutral-300 hover:bg-white/5 rounded-lg transition-all flex items-center gap-2"
             title="Copy link"
           >
             {linkCopied ? (
               <>
                 <svg
-                  className="w-3.5 h-3.5 text-green-500"
+                  className="w-4 h-4 text-green-500"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -406,7 +265,7 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
             ) : (
               <>
                 <svg
-                  className="w-3.5 h-3.5"
+                  className="w-4 h-4"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -418,7 +277,7 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
                     d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"
                   />
                 </svg>
-                <span className="text-xs">Share</span>
+                <span className="hidden sm:inline">Share</span>
               </>
             )}
           </button>
