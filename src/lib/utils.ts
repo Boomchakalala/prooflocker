@@ -15,6 +15,7 @@ export function generateAuthorNumber(userId: string): number {
 
 /**
  * Format relative time (e.g., "2 minutes ago", "3 hours ago")
+ * Falls back to UTC date for older timestamps
  */
 export function formatRelativeTime(timestamp: string): string {
   const now = new Date();
@@ -32,5 +33,5 @@ export function formatRelativeTime(timestamp: string): string {
   if (diffDays === 1) return "1 day ago";
   if (diffDays < 30) return `${diffDays} days ago`;
 
-  return past.toLocaleDateString();
+  return past.toLocaleDateString("en-US", { timeZone: "UTC" }) + " UTC";
 }

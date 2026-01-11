@@ -33,7 +33,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     day: "numeric",
     month: "short",
     year: "numeric",
-  });
+    timeZone: "UTC",
+  }) + " UTC";
 
   // Shorten text for preview (max ~100 chars for social cards)
   const previewText = prediction.text.length > 100
@@ -147,6 +148,16 @@ export default async function ProofPage({ params }: Props) {
                     hour: "2-digit",
                     minute: "2-digit",
                     second: "2-digit",
+                    timeZone: "UTC",
+                  })} UTC
+                </div>
+                <div className="font-mono text-xs text-neutral-500 mt-1">
+                  Your local: {lockedDate.toLocaleString("en-US", {
+                    month: "short",
+                    day: "numeric",
+                    year: "numeric",
+                    hour: "2-digit",
+                    minute: "2-digit",
                     timeZoneName: "short",
                   })}
                 </div>
@@ -166,6 +177,16 @@ export default async function ProofPage({ params }: Props) {
                       hour: "2-digit",
                       minute: "2-digit",
                       second: "2-digit",
+                      timeZone: "UTC",
+                    })} UTC
+                  </div>
+                  <div className="font-mono text-xs text-neutral-500 mt-1">
+                    Your local: {new Date(prediction.resolvedAt).toLocaleString("en-US", {
+                      month: "short",
+                      day: "numeric",
+                      year: "numeric",
+                      hour: "2-digit",
+                      minute: "2-digit",
                       timeZoneName: "short",
                     })}
                   </div>
