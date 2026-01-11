@@ -37,7 +37,7 @@ export async function signUpWithPassword(email: string, password: string): Promi
 /**
  * Sign in an existing user with email and password
  */
-export async function signInWithPassword(email: string, password: string): Promise<{ success: boolean; error?: string; user?: User }> {
+export async function signInWithPassword(email: string, password: string): Promise<{ success: boolean; error?: string; user?: User; session?: any; needsEmailConfirmation?: boolean }> {
   const { data, error } = await supabase.auth.signInWithPassword({
     email,
     password,
@@ -52,7 +52,12 @@ export async function signInWithPassword(email: string, password: string): Promi
     return { success: false, error: "Failed to sign in" };
   }
 
-  return { success: true, user: data.user };
+  return {
+    success: true,
+    user: data.user,
+    session: data.session,
+    needsEmailConfirmation: false  // Sign-in always has a session
+  };
 }
 
 /**
