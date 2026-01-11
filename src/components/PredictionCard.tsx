@@ -248,7 +248,7 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
           {/* Share button - ghost style, muted */}
           <button
             onClick={copyLink}
-            className={`px-4 py-2.5 text-sm font-medium text-neutral-500 hover:text-neutral-300 hover:bg-white/5 rounded-lg transition-all flex items-center justify-center gap-2 ${!canResolve ? 'flex-1' : ''}`}
+            className={`px-3 py-2 text-sm font-medium text-neutral-500 hover:text-neutral-300 hover:bg-white/5 rounded-lg transition-all flex items-center justify-center gap-2 ${!canResolve ? 'flex-1' : ''}`}
             title="Copy link"
           >
             {linkCopied ? (
