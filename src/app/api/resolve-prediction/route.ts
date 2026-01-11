@@ -1,8 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getServerUser, createServerSupabaseClient } from "@/lib/supabase-server";
+import { createClient } from "@supabase/supabase-js";
 
 export const dynamic = 'force-dynamic';
 export const maxDuration = 10;
+
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
 
 /**
  * POST /api/resolve-prediction
@@ -10,15 +13,30 @@ export const maxDuration = 10;
  */
 export async function POST(request: NextRequest) {
   try {
-    // Get authenticated user from server-side (via cookies)
-    const user = await getServerUser();
-
-    if (!user) {
+    // Get the access token from Authorization header
+    const authHeader = request.headers.get('authorization');
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
       return NextResponse.json(
         { error: "Authentication required" },
         { status: 401 }
       );
     }
+
+    const accessToken = authHeader.substring(7); // Remove 'Bearer ' prefix
+
+    // Create Supabase client and validate the token
+    const supabase = createClient(supabaseUrl, supabaseAnonKey);
+    const { data: { user }, error: authError } = await supabase.auth.getUser(accessToken);
+
+    if (authError || !user) {
+      console.error("[Resolve API] Auth error:", authError);
+      return NextResponse.json(
+        { error: "Authentication required" },
+        { status: 401 }
+      );
+    }
+
+    console.log("[Resolve API] Authenticated user:", user.id);
 
     const body = await request.json();
     const { predictionId, outcome, resolutionNote, resolutionUrl } = body;
@@ -37,9 +55,6 @@ export async function POST(request: NextRequest) {
         { status: 400 }
       );
     }
-
-    // Create server-side Supabase client with user's auth context
-    const supabase = await createServerSupabaseClient();
 
     // Call Supabase RPC function (RLS will ensure only owner can resolve)
     const { data, error } = await supabase.rpc("resolve_prediction", {
