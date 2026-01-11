@@ -4,6 +4,7 @@ import Script from "next/script";
 import "./globals.css";
 import { AuthProvider } from "@/contexts/AuthContext";
 import AnalyticsTracker from "@/components/AnalyticsTracker";
+import AuthDebugPanel from "@/components/AuthDebugPanel";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -69,6 +70,7 @@ export default function RootLayout({
         <AuthProvider>
           <AnalyticsTracker />
           {children}
+          <AuthDebugPanel />
         </AuthProvider>
       </body>
     </html>
