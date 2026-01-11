@@ -309,7 +309,7 @@ function VerifyContent() {
                     }`}
                   >
                     {result.proofDetails.onChainStatus === "confirmed"
-                      ? "Confirmed on-chain"
+                      ? "Prediction locked"
                       : "Pending on-chain"}
                   </span>
                 </div>

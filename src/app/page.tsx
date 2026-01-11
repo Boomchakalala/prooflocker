@@ -348,7 +348,7 @@ function HomeContent() {
               href="/lock"
               className="inline-flex items-center px-8 py-4 bg-gradient-to-r from-blue-600/80 to-purple-600/80 hover:from-blue-600 hover:to-purple-600 text-white font-medium rounded-md transition-all"
             >
-              Lock your first prediction
+              Lock my first prediction
             </Link>
           </div>
         ) : (
