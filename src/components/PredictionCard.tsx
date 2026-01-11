@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Prediction, type PredictionOutcome } from "@/lib/storage";
 import { formatRelativeTime } from "@/lib/utils";
 import Link from "next/link";
+import ResolveModal from "./ResolveModal";
 
 interface PredictionCardProps {
   prediction: Prediction & {
@@ -422,22 +423,19 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
         </div>
       </div>
 
-      {/* Modals - Placeholders for now */}
+      {/* Resolve Modal */}
       {showResolveModal && (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-          <div className="bg-[#1a1a1a] rounded-xl p-6 max-w-md w-full">
-            <h3 className="text-xl font-bold text-white mb-4">Resolve Prediction</h3>
-            <p className="text-[#888] mb-4">
-              ResolveModal component coming next! This will allow you to set the outcome.
-            </p>
-            <button
-              onClick={() => setShowResolveModal(false)}
-              className="w-full px-4 py-2 bg-white/10 hover:bg-white/20 text-white rounded-lg transition-all"
-            >
-              Close
-            </button>
-          </div>
-        </div>
+        <ResolveModal
+          predictionId={prediction.id}
+          currentOutcome={prediction.outcome}
+          currentNote={prediction.resolutionNote}
+          currentUrl={prediction.resolutionUrl}
+          onClose={() => setShowResolveModal(false)}
+          onSuccess={() => {
+            setShowResolveModal(false);
+            onOutcomeUpdate?.();
+          }}
+        />
       )}
 
       {showContestModal && (
