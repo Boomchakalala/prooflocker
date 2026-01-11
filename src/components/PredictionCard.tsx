@@ -173,11 +173,11 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
         <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
           <path fillRule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clipRule="evenodd" />
         </svg>
-        Locked publicly. Cannot be edited. Ever.
+        Publicly locked • Verifiable forever
       </p>
 
-      {/* Hash section - LIGHTER/MONOSPACE */}
-      <div className="bg-black/20 border border-white/5 rounded-lg p-2.5 mb-3">
+      {/* Hash section - SOFTER ON MOBILE */}
+      <div className="bg-black/20 border border-white/5 rounded-lg p-2.5 mb-3 sm:block hidden">
         <div className="flex items-center justify-between">
           <div className="flex-1 min-w-0">
             <label className="block text-[10px] font-semibold text-[#666] mb-1 uppercase tracking-wider">
