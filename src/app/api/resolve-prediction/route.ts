@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { supabase } from "@/lib/supabase";
-import { getCurrentUser } from "@/lib/auth";
+import { getServerUser, createServerSupabaseClient } from "@/lib/supabase-server";
 
 export const dynamic = 'force-dynamic';
 export const maxDuration = 10;
@@ -11,7 +10,8 @@ export const maxDuration = 10;
  */
 export async function POST(request: NextRequest) {
   try {
-    const user = await getCurrentUser();
+    // Get authenticated user from server-side (via cookies)
+    const user = await getServerUser();
 
     if (!user) {
       return NextResponse.json(
@@ -38,7 +38,10 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Call Supabase RPC function
+    // Create server-side Supabase client with user's auth context
+    const supabase = await createServerSupabaseClient();
+
+    // Call Supabase RPC function (RLS will ensure only owner can resolve)
     const { data, error } = await supabase.rpc("resolve_prediction", {
       p_prediction_id: predictionId,
       p_outcome: outcome,
@@ -48,6 +51,15 @@ export async function POST(request: NextRequest) {
 
     if (error) {
       console.error("[Resolve API] RPC error:", error);
+
+      // Provide clearer error messages for common issues
+      if (error.message.includes("permission denied") || error.message.includes("policy")) {
+        return NextResponse.json(
+          { error: "You can only resolve your own predictions" },
+          { status: 403 }
+        );
+      }
+
       return NextResponse.json(
         { error: error.message || "Failed to resolve prediction" },
         { status: 500 }
