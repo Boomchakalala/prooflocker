@@ -29,7 +29,7 @@ export function getOutcomeConfig(outcome: PredictionOutcome) {
       };
     default:
       return {
-        label: "Unresolved",
+        label: "Pending",
         longLabel: "Pending",
         class: "bg-yellow-500/10 text-yellow-400 border-yellow-500/30",
       };
