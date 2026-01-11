@@ -74,8 +74,15 @@ export default function ResolveModal({
   };
 
   return (
-    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-      <div className="bg-gradient-to-br from-[#1a1a1a] to-[#0a0a0a] rounded-xl p-6 max-w-md w-full border border-white/10 shadow-2xl">
+    <div
+      className="fixed inset-0 bg-black/70 backdrop-blur-md flex items-center justify-center z-[100] p-4 overflow-y-auto"
+      onClick={onClose}
+    >
+      <div
+        className="bg-gradient-to-br from-[#1a1a1a] to-[#0a0a0a] rounded-xl p-6 w-full border border-white/10 shadow-2xl my-8 max-h-[85vh] overflow-y-auto"
+        style={{ maxWidth: 'min(92vw, 720px)' }}
+        onClick={(e) => e.stopPropagation()}
+      >
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
           <h3 className="text-xl font-bold text-white flex items-center gap-2">
