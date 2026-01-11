@@ -276,7 +276,7 @@ export default async function ProofPage({ params }: Props) {
             </h2>
 
             {/* Trust Badges */}
-            <div className="grid grid-cols-2 gap-3 mb-6">
+            <div className="grid grid-cols-2 gap-3 mb-5">
               <div className="flex items-center gap-2 text-xs text-neutral-400">
                 <svg className="w-4 h-4 text-cyan-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
@@ -303,16 +303,8 @@ export default async function ProofPage({ params }: Props) {
               </div>
             </div>
 
-            {/* Microcopy */}
-            <div className="mb-4 p-3 bg-cyan-500/5 border border-cyan-500/20 rounded-lg">
-              <p className="text-xs text-neutral-300 leading-relaxed">
-                This proof is anchored on <span className="text-cyan-400 font-medium">Constellation Network</span>, a distributed ledger technology (DAG).
-                The original statement is <strong className="text-white">immutable and permanently timestamped</strong>. Only the resolution outcome can be updated by the owner.
-              </p>
-            </div>
-
             {/* Technical Details */}
-            <div className="space-y-4 mt-5">
+            <div className="space-y-4">
               {/* Network */}
               <div>
                 <div className="text-xs text-neutral-400 uppercase tracking-wide mb-1.5">

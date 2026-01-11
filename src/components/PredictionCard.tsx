@@ -101,7 +101,7 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
 
       {/* Status line: Outcome - More prominent */}
       <div className="flex items-center gap-2 mb-3">
-        <span className="text-[10px] uppercase tracking-wide text-white/40">Result</span>
+        <span className="text-[10px] uppercase tracking-wide text-white/40">Outcome</span>
         <OutcomeBadge
           outcome={displayOutcome || "pending"}
           size="sm"
