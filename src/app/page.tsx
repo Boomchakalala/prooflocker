@@ -176,7 +176,7 @@ function HomeContent() {
       </header>
 
       {/* Main content */}
-      <main className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 relative z-10">
+      <main className="max-w-[950px] mx-auto px-4 sm:px-6 lg:px-8 py-8 relative z-10">
         {/* Tabs and Sync Button */}
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center gap-1 p-1 glass rounded-lg w-fit">
@@ -358,11 +358,11 @@ function HomeContent() {
             <p className="text-sm text-white/40 mb-4 sm:hidden">
               Lock predictions now so you can prove you said it first later.
             </p>
-            <div className="grid gap-4 sm:grid-cols-1 lg:grid-cols-2">
+            <div className="space-y-4">
             {predictions.map((prediction, index) => (
               <div
                 key={prediction.id}
-                className={`fade-in stagger-${Math.min(index + 1, 4)} h-full`}
+                className={`fade-in stagger-${Math.min(index + 1, 4)}`}
               >
                 <PredictionCard
                   prediction={prediction}

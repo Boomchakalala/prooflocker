@@ -48,6 +48,39 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
     return "bg-yellow-500/10 border border-yellow-500/30 text-yellow-400";
   };
 
+  // Get lifecycle status text (for simplified status line)
+  const getLifecycleStatusText = (): string => {
+    switch (lifecycleStatus) {
+      case "resolved":
+        return "Resolved";
+      case "contested":
+        return "Contested";
+      case "final":
+        return "Final";
+      default:
+        return "Locked";
+    }
+  };
+
+  // Get on-chain status text (for simplified status line)
+  const getOnChainStatusText = (): string => {
+    const deStatus = prediction.deStatus?.toUpperCase();
+    if (deStatus === "CONFIRMED") return "On-chain";
+    if (deStatus === "FAILED" || deStatus === "REJECTED") return "Failed";
+    if (onChainStatus === "confirmed") return "On-chain";
+    return "Pending";
+  };
+
+  // Build status line parts
+  const statusParts = [
+    getLifecycleStatusText(),
+    getOnChainStatusText(),
+  ];
+  if (isClaimed) {
+    statusParts.push("Claimed");
+  }
+  const statusLine = `Status: ${statusParts.join(" · ")}`;
+
   // Get lifecycle status badge
   const getLifecycleStatusBadge = () => {
     switch (lifecycleStatus) {
