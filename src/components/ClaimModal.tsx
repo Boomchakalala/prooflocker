@@ -1,46 +1,107 @@
 "use client";
 
 import { useState } from "react";
-import { sendMagicLink } from "@/lib/auth";
+import { signUpWithPassword, signInWithPassword } from "@/lib/auth";
+import { getOrCreateUserId } from "@/lib/user";
+import { supabase } from "@/lib/supabase";
 
 interface ClaimModalProps {
   onClose: () => void;
+  onSuccess?: () => void;
 }
 
-export default function ClaimModal({ onClose }: ClaimModalProps) {
+export default function ClaimModal({ onClose, onSuccess }: ClaimModalProps) {
+  const [mode, setMode] = useState<"signup" | "signin">("signup");
   const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
-  const [sent, setSent] = useState(false);
+  const [claiming, setClaiming] = useState(false);
   const [error, setError] = useState("");
+  const [success, setSuccess] = useState(false);
+  const [claimedCount, setClaimedCount] = useState(0);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     setError("");
 
-    const result = await sendMagicLink(email);
+    try {
+      // Step 1: Sign up or sign in
+      const authResult = mode === "signup"
+        ? await signUpWithPassword(email, password)
+        : await signInWithPassword(email, password);
 
-    if (result.success) {
-      setSent(true);
-    } else {
-      setError(result.error || "Failed to send email");
+      if (!authResult.success || !authResult.user) {
+        setError(authResult.error || "Authentication failed");
+        setLoading(false);
+        return;
+      }
+
+      // Step 2: Immediately claim predictions
+      setClaiming(true);
+      setLoading(false);
+
+      try {
+        const anonId = getOrCreateUserId();
+
+        // Get access token
+        const { data: { session } } = await supabase.auth.getSession();
+        const accessToken = session?.access_token;
+
+        if (!accessToken) {
+          throw new Error("No access token available");
+        }
+
+        // Call claim API
+        const response = await fetch('/api/claim-predictions', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${accessToken}`,
+          },
+          body: JSON.stringify({ anonId }),
+        });
+
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(errorData.error || 'Failed to claim predictions');
+        }
+
+        const data = await response.json();
+        setClaimedCount(data.claimedCount);
+        setSuccess(true);
+
+        // Close modal and refresh after 2 seconds
+        setTimeout(() => {
+          onSuccess?.();
+          onClose();
+        }, 2000);
+
+      } catch (claimError) {
+        console.error("[ClaimModal] Claim error:", claimError);
+        setError(claimError instanceof Error ? claimError.message : "Failed to claim predictions");
+        setClaiming(false);
+      }
+
+    } catch (authError) {
+      console.error("[ClaimModal] Auth error:", authError);
+      setError(authError instanceof Error ? authError.message : "Authentication failed");
+      setLoading(false);
     }
-
-    setLoading(false);
   };
 
   return (
-    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-      <div className="bg-gradient-to-br from-purple-900/90 via-blue-900/90 to-cyan-900/90 backdrop-blur-md rounded-2xl p-8 max-w-md w-full border border-white/10 shadow-2xl">
-        {!sent ? (
+    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-end sm:items-center justify-center z-50 p-0 sm:p-4">
+      <div className="bg-gradient-to-br from-purple-900/95 via-blue-900/95 to-cyan-900/95 backdrop-blur-md rounded-t-3xl sm:rounded-2xl p-6 sm:p-8 w-full sm:max-w-md sm:w-full border-t sm:border border-white/10 shadow-2xl animate-slide-up sm:animate-none max-h-[90vh] overflow-y-auto">
+        {!claiming && !success ? (
           <>
             <div className="flex justify-between items-start mb-6">
               <div>
                 <h2 className="text-2xl font-bold text-white mb-2">
-                  Claim Your Predictions
+                  Claim my predictions
                 </h2>
                 <p className="text-white/70 text-sm">
-                  Enter your email to claim ownership and access your predictions across devices
+                  Save access across devices
                 </p>
               </div>
               <button
@@ -53,10 +114,36 @@ export default function ClaimModal({ onClose }: ClaimModalProps) {
               </button>
             </div>
 
+            {/* Toggle between sign up and sign in */}
+            <div className="flex gap-2 mb-6 p-1 bg-black/20 rounded-lg">
+              <button
+                type="button"
+                onClick={() => setMode("signup")}
+                className={`flex-1 py-2 px-4 rounded-md text-sm font-medium transition-all ${
+                  mode === "signup"
+                    ? "bg-white/20 text-white"
+                    : "text-white/60 hover:text-white"
+                }`}
+              >
+                Create account
+              </button>
+              <button
+                type="button"
+                onClick={() => setMode("signin")}
+                className={`flex-1 py-2 px-4 rounded-md text-sm font-medium transition-all ${
+                  mode === "signin"
+                    ? "bg-white/20 text-white"
+                    : "text-white/60 hover:text-white"
+                }`}
+              >
+                Sign in
+              </button>
+            </div>
+
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
                 <label htmlFor="email" className="block text-sm font-medium text-white/80 mb-2">
-                  Email address
+                  Email
                 </label>
                 <input
                   id="email"
@@ -65,8 +152,29 @@ export default function ClaimModal({ onClose }: ClaimModalProps) {
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="your@email.com"
                   required
+                  autoComplete="email"
                   className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-white/40 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent"
                 />
+              </div>
+
+              <div>
+                <label htmlFor="password" className="block text-sm font-medium text-white/80 mb-2">
+                  Password
+                </label>
+                <input
+                  id="password"
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder={mode === "signup" ? "Create a password" : "Enter your password"}
+                  required
+                  autoComplete={mode === "signup" ? "new-password" : "current-password"}
+                  minLength={6}
+                  className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-white/40 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent"
+                />
+                {mode === "signup" && (
+                  <p className="text-xs text-white/50 mt-1">Minimum 6 characters</p>
+                )}
               </div>
 
               {error && (
@@ -80,46 +188,48 @@ export default function ClaimModal({ onClose }: ClaimModalProps) {
                 disabled={loading}
                 className="w-full bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600 text-white font-semibold py-3 px-6 rounded-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                {loading ? "Sending..." : "Send Magic Link"}
+                {loading ? "Please wait..." : mode === "signup" ? "Create account" : "Sign in"}
               </button>
             </form>
 
             <div className="mt-6 pt-6 border-t border-white/10">
               <div className="flex items-start gap-3 text-xs text-white/60">
                 <svg className="w-5 h-5 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
                 </svg>
                 <p>
-                  We'll send a magic link to your email. Click it to claim all predictions made from this browser. No password required.
+                  {mode === "signup"
+                    ? "Your email is private and never shown publicly. You'll remain Anon in the feed."
+                    : "Welcome back. Your predictions are waiting."
+                  }
                 </p>
               </div>
             </div>
           </>
         ) : (
-          <>
-            <div className="text-center">
-              <div className="w-16 h-16 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-4">
-                <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                </svg>
+          <div className="text-center py-4">
+            {claiming && !success ? (
+              <div className="flex flex-col items-center gap-4">
+                <div className="w-16 h-16 border-4 border-white/30 border-t-white rounded-full animate-spin" />
+                <p className="text-white text-lg">Claiming your predictions...</p>
               </div>
-              <h2 className="text-2xl font-bold text-white mb-2">
-                Check Your Email
-              </h2>
-              <p className="text-white/70 text-sm mb-6">
-                We've sent a magic link to <span className="font-semibold text-white">{email}</span>
-              </p>
-              <p className="text-white/60 text-xs mb-6">
-                Click the link in your email to claim your predictions. The link will expire in 15 minutes.
-              </p>
-              <button
-                onClick={onClose}
-                className="bg-white/10 hover:bg-white/20 text-white font-semibold py-2 px-6 rounded-lg transition-all duration-200"
-              >
-                Close
-              </button>
-            </div>
-          </>
+            ) : (
+              <div className="flex flex-col items-center gap-4">
+                <div className="w-16 h-16 bg-green-500 rounded-full flex items-center justify-center">
+                  <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                  </svg>
+                </div>
+                <h2 className="text-2xl font-bold text-white">
+                  Success!
+                </h2>
+                <p className="text-white/70 text-sm">
+                  Claimed {claimedCount} prediction{claimedCount !== 1 ? 's' : ''}
+                </p>
+                <p className="text-white/50 text-xs">You're signed in. Your predictions are saved.</p>
+              </div>
+            )}
+          </div>
         )}
       </div>
     </div>

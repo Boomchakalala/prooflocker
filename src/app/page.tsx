@@ -430,7 +430,12 @@ function HomeContent() {
       </div>
 
       {/* Claim Modal */}
-      {showClaimModal && <ClaimModal onClose={() => setShowClaimModal(false)} />}
+      {showClaimModal && (
+        <ClaimModal
+          onClose={() => setShowClaimModal(false)}
+          onSuccess={fetchPredictions}
+        />
+      )}
     </div>
   );
 }
