@@ -106,15 +106,18 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
           size="sm"
           showLabel="short"
         />
+        {/* Has note indicator */}
+        {prediction.resolutionNote && (
+          <span
+            className="inline-flex items-center gap-1 px-1.5 py-0.5 bg-white/5 border border-white/10 rounded text-[10px] text-white/50"
+            title="Has resolution note"
+          >
+            <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z" />
+            </svg>
+          </span>
+        )}
       </div>
-
-      {/* Resolution note */}
-      {prediction.resolutionNote && (
-        <div className="mb-3 p-2.5 bg-white/5 border border-white/10 rounded-lg">
-          <p className="text-xs text-neutral-500 mb-1 font-medium">Resolution note</p>
-          <p className="text-sm text-neutral-300 leading-relaxed">{prediction.resolutionNote}</p>
-        </div>
-      )}
 
       {/* Resolution URL */}
       {prediction.resolutionUrl && (
