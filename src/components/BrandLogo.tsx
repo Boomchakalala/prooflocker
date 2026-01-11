@@ -2,13 +2,13 @@ import Link from "next/link";
 import Image from "next/image";
 
 /**
- * BrandLogo component - ProofLocker approved horizontal logo
+ * BrandLogo component - ProofLocker horizontal logo with tagline
  *
- * Uses the approved logo PNG at /public/brand/prooflocker-horizontal.png
+ * Uses the approved logo PNG at /brand/prooflocker-horizontal.png
  *
  * Sizing:
- * - Mobile: 24px height
- * - Desktop: 28px height
+ * - Mobile: 28px height
+ * - Desktop: 32px height
  * - Width: auto (preserves aspect ratio)
  *
  * Usage:
@@ -16,17 +16,21 @@ import Image from "next/image";
  */
 export default function BrandLogo() {
   return (
-    <Link href="/" className="block group">
-      {/* Horizontal logo - scales responsively */}
-      <div className="relative h-6 w-auto sm:h-7">
+    <Link href="/" className="block">
+      <div className="flex flex-col">
+        {/* Horizontal logo */}
         <Image
           src="/brand/prooflocker-horizontal.png"
           alt="ProofLocker"
-          width={120}
-          height={28}
-          className="h-6 w-auto sm:h-7 object-contain transition-opacity group-hover:opacity-90"
+          width={140}
+          height={32}
+          className="h-7 w-auto sm:h-8 object-contain"
           priority
         />
+        {/* Tagline */}
+        <p className="text-xs text-white/60 leading-tight mt-0.5 hidden sm:block">
+          Predictions. Locked forever.
+        </p>
       </div>
     </Link>
   );
