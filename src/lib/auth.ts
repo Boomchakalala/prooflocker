@@ -1,6 +1,7 @@
 import { supabase } from "./supabase";
 import type { User } from "@supabase/supabase-js";
 import { ensurePublicHandle } from "./public-handle";
+import { getSiteUrl } from "./config";
 
 /**
  * Validate email format
@@ -70,9 +71,7 @@ export async function signUpWithPassword(
     email,
     password,
     options: {
-      emailRedirectTo: typeof window !== 'undefined'
-        ? `${window.location.origin}/auth/callback`
-        : 'https://prooflocker.io/auth/callback',
+      emailRedirectTo: `${getSiteUrl()}/auth/callback`,
       data: {
         signup_source: 'web',
       }
@@ -177,9 +176,7 @@ export async function resendConfirmationEmail(
     type: 'signup',
     email: email,
     options: {
-      emailRedirectTo: typeof window !== 'undefined'
-        ? `${window.location.origin}/auth/callback`
-        : 'https://prooflocker.io/auth/callback',
+      emailRedirectTo: `${getSiteUrl()}/auth/callback`,
     }
   });
 
