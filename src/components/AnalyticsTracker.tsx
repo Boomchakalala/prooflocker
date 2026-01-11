@@ -1,9 +1,9 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, Suspense } from "react";
 import { usePathname, useSearchParams } from "next/navigation";
 
-export default function AnalyticsTracker() {
+function AnalyticsTrackerContent() {
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
@@ -30,4 +30,12 @@ export default function AnalyticsTracker() {
   }, [pathname, searchParams]);
 
   return null;
+}
+
+export default function AnalyticsTracker() {
+  return (
+    <Suspense fallback={null}>
+      <AnalyticsTrackerContent />
+    </Suspense>
+  );
 }
