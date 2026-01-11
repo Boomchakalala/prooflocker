@@ -25,6 +25,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     getCurrentUser().then((user) => {
       if (mounted) {
         setUser(user);
+        if (user) {
+          console.log("[AuthContext] ✓ Session restored successfully for user:", user.id);
+        } else {
+          console.log("[AuthContext] No session to restore");
+        }
       }
     }).catch((error) => {
       console.error("[AuthContext] Error getting user:", error);
@@ -34,6 +39,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const unsubscribe = onAuthStateChange((user) => {
       if (mounted) {
         setUser(user);
+        if (user) {
+          console.log("[AuthContext] Auth state changed - user logged in:", user.id);
+        } else {
+          console.log("[AuthContext] Auth state changed - user logged out");
+        }
       }
     });
 
