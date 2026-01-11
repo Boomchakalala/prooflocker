@@ -62,7 +62,7 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
     if (outcome === "correct") return { label: "True", class: "bg-green-500/10 border-green-500/30 text-green-400" };
     if (outcome === "incorrect") return { label: "False", class: "bg-red-500/10 border-red-500/30 text-red-400" };
     if (outcome === "invalid") return { label: "Invalid", class: "bg-neutral-500/10 border-neutral-500/30 text-neutral-400" };
-    return { label: "Pending", class: "bg-yellow-500/10 border-yellow-500/30 text-yellow-400" };
+    return { label: "Awaiting outcome", class: "bg-yellow-500/10 border-yellow-500/20 text-yellow-400/90" };
   };
 
   const outcomeDisplay = getOutcomeDisplay();
@@ -116,7 +116,7 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
       {/* Status line: Outcome - More prominent */}
       <div className="flex items-center gap-2 mb-3">
         <span className="text-xs text-neutral-600 uppercase tracking-wide font-medium">Status</span>
-        <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold border ${outcomeDisplay.class}`}>
+        <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold border ${outcomeDisplay.class}`}>
           {outcomeDisplay.label}
           {prediction.adminOverridden && (
             <svg
