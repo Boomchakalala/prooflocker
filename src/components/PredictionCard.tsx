@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Prediction, type PredictionOutcome } from "@/lib/storage";
 import { formatRelativeTime } from "@/lib/utils";
+import { getSiteUrl } from "@/lib/config";
 import Link from "next/link";
 import ResolveModal from "./ResolveModal";
 import ContestModal from "./ContestModal";
