@@ -43,7 +43,7 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
     if (deStatus) {
       if (deStatus === "CONFIRMED") {
         return {
-          label: "Confirmed on-chain",
+          label: "Prediction locked",
           color: "green",
           className: "bg-green-500/10 border border-green-500/30 text-green-400 shadow-[0_0_8px_rgba(34,197,94,0.15)]",
         };
@@ -65,7 +65,7 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
     // Fallback to onChainStatus for older predictions
     if (onChainStatus === "confirmed") {
       return {
-        label: "Confirmed on-chain",
+        label: "Prediction locked",
         color: "green",
         className: "bg-green-500/10 border border-green-500/30 text-green-400 shadow-[0_0_8px_rgba(34,197,94,0.15)]",
       };
