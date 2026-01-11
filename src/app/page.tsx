@@ -147,36 +147,26 @@ function HomeContent() {
 
       {/* Header */}
       <header className="glass sticky top-0 z-50 border-b border-white/5 bg-[#0a0a0a]/80 backdrop-blur-xl">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-14 md:h-16">
-            <BrandLogo />
-            <div className="flex items-center gap-4">
-              {user && (
-                <>
-                  <Link
-                    href="/profile"
-                    className="hidden md:inline-block text-sm text-white/70 hover:text-white transition-colors"
-                  >
-                    Profile
-                  </Link>
-                  <div className="flex flex-col items-end leading-tight">
-                    <div className="text-sm text-white font-medium">{getPublicHandle(user)}</div>
-                    <button
-                      onClick={handleSignOut}
-                      className="text-xs text-white/50 hover:text-white/80 transition-colors"
-                    >
-                      Sign out
-                    </button>
-                  </div>
-                </>
-              )}
-              <Link
-                href="/lock"
-                className="hidden sm:flex px-5 py-2.5 bg-gradient-to-r from-blue-600/80 to-purple-600/80 hover:from-blue-600 hover:to-purple-600 text-white font-medium rounded-md transition-all"
-              >
-                Lock my prediction
-              </Link>
-            </div>
+        <div className="mx-auto max-w-6xl px-4 flex h-14 md:h-16 items-center justify-between">
+          <BrandLogo />
+          <div className="flex items-center gap-4">
+            {user && (
+              <div className="flex flex-col items-end leading-tight">
+                <div className="text-sm text-white font-medium">{getPublicHandle(user)}</div>
+                <button
+                  onClick={handleSignOut}
+                  className="text-xs text-white/60 hover:text-white transition-colors"
+                >
+                  Sign out
+                </button>
+              </div>
+            )}
+            <Link
+              href="/lock"
+              className="hidden sm:flex px-5 py-2.5 bg-gradient-to-r from-blue-600/80 to-purple-600/80 hover:from-blue-600 hover:to-purple-600 text-white font-medium rounded-md transition-all"
+            >
+              Lock my prediction
+            </Link>
           </div>
         </div>
       </header>
