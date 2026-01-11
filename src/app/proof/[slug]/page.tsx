@@ -267,8 +267,8 @@ export default async function ProofPage({ params }: Props) {
 
         {/* VERIFY THIS PROOF - Enhanced verification section */}
         {prediction.onChainStatus === "confirmed" && prediction.deReference && (
-          <div className="mb-8 p-6 bg-neutral-900/50 border-2 border-cyan-500/30 rounded-lg">
-            <h2 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
+          <div className="mb-8 p-5 bg-neutral-900/50 border-2 border-cyan-500/30 rounded-lg">
+            <h2 className="text-lg font-semibold text-white mb-3 flex items-center gap-2">
               <svg className="w-5 h-5 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
               </svg>
@@ -276,7 +276,7 @@ export default async function ProofPage({ params }: Props) {
             </h2>
 
             {/* Trust Badges */}
-            <div className="grid grid-cols-2 gap-3 mb-5">
+            <div className="grid grid-cols-2 gap-3 mb-4">
               <div className="flex items-center gap-2 text-xs text-neutral-400">
                 <svg className="w-4 h-4 text-cyan-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
@@ -365,14 +365,10 @@ export default async function ProofPage({ params }: Props) {
               </div>
             </div>
 
-            {/* Explanation */}
-            <div className="mt-5 pt-5 border-t border-neutral-700">
-              <p className="text-xs text-neutral-400 leading-relaxed mb-2">
-                This proof is anchored on <span className="text-neutral-300 font-medium">Constellation Network</span> (DAG).
-                The original statement is immutable—only the outcome status can be updated by the owner.
-              </p>
-              <p className="text-xs text-neutral-500 leading-relaxed">
-                Anyone can independently verify the content hash and timestamp using the transaction reference above.
+            {/* Single concise explanation */}
+            <div className="mt-4 pt-4 border-t border-neutral-700/50">
+              <p className="text-xs text-neutral-400 leading-relaxed">
+                Anchored on Constellation Network (DAG). The statement is immutable—only the outcome can be updated.
               </p>
             </div>
           </div>
