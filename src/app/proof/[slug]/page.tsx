@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { cache } from "react";
 import { getPredictionBySlug as _getPredictionBySlug, type Prediction } from "@/lib/storage";
 import { getDigitalEvidenceFingerprintUrl } from "@/lib/digitalEvidence";
+import { getSiteUrl, getAbsoluteUrl } from "@/lib/config";
 
 // Cache the prediction fetch to avoid duplicate queries
 // When both generateMetadata() and the component call this with the same slug,

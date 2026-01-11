@@ -5,6 +5,7 @@ import "./globals.css";
 import { AuthProvider } from "@/contexts/AuthContext";
 import AnalyticsTracker from "@/components/AnalyticsTracker";
 import AuthDebugPanel from "@/components/AuthDebugPanel";
+import { getSiteUrl, getAbsoluteUrl } from "@/lib/config";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -16,22 +17,35 @@ const jetbrainsMono = JetBrains_Mono({
   subsets: ["latin"],
 });
 
+const siteUrl = getSiteUrl();
+
 export const metadata: Metadata = {
   title: "ProofLocker",
   description: "Time-stamped prediction proofs. Claim later. Share receipts.",
+  metadataBase: new URL(siteUrl),
   icons: {
     icon: "/icon.png",
   },
   openGraph: {
     title: "ProofLocker",
     description: "Time-stamped prediction proofs. Claim later. Share receipts.",
+    url: siteUrl,
     type: "website",
     siteName: "ProofLocker",
+    images: [
+      {
+        url: getAbsoluteUrl("/og.png"),
+        width: 1200,
+        height: 630,
+        alt: "ProofLocker - Time-stamped prediction proofs",
+      },
+    ],
   },
   twitter: {
-    card: "summary",
+    card: "summary_large_image",
     title: "ProofLocker",
     description: "Time-stamped prediction proofs. Claim later. Share receipts.",
+    images: [getAbsoluteUrl("/og.png")],
   },
 };
 
