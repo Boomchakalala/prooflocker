@@ -7,23 +7,35 @@ if (!supabaseUrl || !supabaseAnonKey) {
   throw new Error('Missing Supabase environment variables')
 }
 
-// Safe storage wrapper that catches localStorage errors
-function getSafeStorage() {
-  if (typeof window === 'undefined') {
-    return undefined;
-  }
-
-  try {
-    // Test if we can actually use localStorage
-    const testKey = '__supabase_test__';
-    window.localStorage.setItem(testKey, 'test');
-    window.localStorage.removeItem(testKey);
-    return window.localStorage;
-  } catch (error) {
-    console.warn('[Supabase] localStorage not available, sessions will not persist:', error);
-    return undefined;
-  }
-}
+// Custom storage adapter that works with SSR
+// This ensures localStorage is used on the client, not during SSR
+const customStorageAdapter = {
+  getItem: (key: string) => {
+    if (typeof window === 'undefined') return null;
+    try {
+      return window.localStorage.getItem(key);
+    } catch (error) {
+      console.warn('[Supabase] localStorage.getItem failed:', error);
+      return null;
+    }
+  },
+  setItem: (key: string, value: string) => {
+    if (typeof window === 'undefined') return;
+    try {
+      window.localStorage.setItem(key, value);
+    } catch (error) {
+      console.warn('[Supabase] localStorage.setItem failed:', error);
+    }
+  },
+  removeItem: (key: string) => {
+    if (typeof window === 'undefined') return;
+    try {
+      window.localStorage.removeItem(key);
+    } catch (error) {
+      console.warn('[Supabase] localStorage.removeItem failed:', error);
+    }
+  },
+};
 
 export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
   auth: {
@@ -31,8 +43,8 @@ export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
     autoRefreshToken: true,
     persistSession: true,
     detectSessionInUrl: true,
-    // Use safe storage wrapper
-    storage: getSafeStorage(),
+    // Use custom storage adapter that properly handles SSR
+    storage: customStorageAdapter,
     flowType: 'pkce', // Use PKCE flow for better security
   }
 })

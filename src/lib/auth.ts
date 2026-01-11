@@ -167,28 +167,26 @@ export async function resendConfirmationEmail(
 
 /**
  * Get the current authenticated user
+ * Uses getSession() to read from localStorage first for instant session restoration
  */
 export async function getCurrentUser(): Promise<User | null> {
   try {
-    // Add a timeout to prevent hanging - reduced to 500ms for faster page loads
-    const timeoutPromise = new Promise<null>((resolve) => {
-      setTimeout(() => {
-        console.warn("[Auth] getUser() timed out after 500ms, continuing without auth");
-        resolve(null);
-      }, 500);
-    });
+    // First try to get session from localStorage (fast, no network call)
+    const { data: { session }, error: sessionError } = await supabase.auth.getSession();
 
-    const getUserPromise = supabase.auth.getUser().then(({ data: { user }, error }) => {
-      if (error) {
-        console.error("[Auth] Error getting current user:", error);
-        return null;
-      }
-      return user;
-    });
+    if (sessionError) {
+      console.error("[Auth] Error getting session:", sessionError);
+      return null;
+    }
 
-    // Race between the actual call and the timeout
-    const user = await Promise.race([getUserPromise, timeoutPromise]);
-    return user;
+    if (!session) {
+      console.log("[Auth] No session found in storage");
+      return null;
+    }
+
+    // Session exists, return the user
+    console.log("[Auth] Session restored from storage for user:", session.user.id);
+    return session.user;
   } catch (error) {
     console.error("[Auth] Exception in getCurrentUser:", error);
     return null;
