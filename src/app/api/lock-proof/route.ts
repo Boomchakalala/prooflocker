@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import crypto from "crypto";
-import { savePrediction } from "@/lib/storage";
+import { savePrediction, type PredictionCategory } from "@/lib/storage";
 import { generateAuthorNumber } from "@/lib/utils";
 import { submitToDigitalEvidence, isDigitalEvidenceEnabled } from "@/lib/digitalEvidence";
 import { validatePredictionContent } from "@/lib/contentFilter";
@@ -26,8 +26,8 @@ export async function POST(request: NextRequest) {
     }
 
     // Validate and default category
-    const validCategories = ["Crypto", "Politics", "Markets", "Tech", "Sports", "Culture", "Personal", "Other"];
-    const predictionCategory = category && validCategories.includes(category) ? category : "Other";
+    const validCategories: PredictionCategory[] = ["Crypto", "Politics", "Markets", "Tech", "Sports", "Culture", "Personal", "Other"];
+    const predictionCategory: PredictionCategory = category && validCategories.includes(category) ? category : "Other";
 
     // Validate content against moderation filter
     const validation = validatePredictionContent(text);
