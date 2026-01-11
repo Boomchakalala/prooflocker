@@ -150,16 +150,16 @@ function HomeContent() {
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-14 md:h-16">
             <BrandLogo />
-            <div className="flex items-center gap-3 sm:gap-4">
+            <div className="flex items-center gap-4">
               {user && (
-                <div className="flex items-center gap-2 sm:gap-3">
+                <>
                   <Link
                     href="/profile"
-                    className="hidden md:block text-sm text-white/80 hover:text-white transition-colors"
+                    className="hidden md:inline-block text-sm text-white/70 hover:text-white transition-colors"
                   >
                     Profile
                   </Link>
-                  <div className="text-right">
+                  <div className="flex flex-col items-end leading-tight">
                     <div className="text-sm text-white font-medium">{getPublicHandle(user)}</div>
                     <button
                       onClick={handleSignOut}
@@ -168,7 +168,7 @@ function HomeContent() {
                       Sign out
                     </button>
                   </div>
-                </div>
+                </>
               )}
               <Link
                 href="/lock"
