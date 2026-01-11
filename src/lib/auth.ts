@@ -1,5 +1,6 @@
 import { supabase } from "./supabase";
 import type { User } from "@supabase/supabase-js";
+import { ensurePublicHandle } from "./public-handle";
 
 /**
  * Validate email format
@@ -91,6 +92,15 @@ export async function signUpWithPassword(
 
   if (!data.user) {
     return { success: false, error: "Failed to create account. Please try again." };
+  }
+
+  // Generate and store public handle for new user
+  try {
+    const publicHandle = await ensurePublicHandle(data.user);
+    console.log("[Auth] ✓ Public handle generated:", publicHandle);
+  } catch (handleError) {
+    console.error("[Auth] Warning: Failed to generate public handle:", handleError);
+    // Don't fail signup if handle generation fails - can be retried later
   }
 
   // Check if email confirmation is needed
