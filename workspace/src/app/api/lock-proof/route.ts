@@ -1,14 +1,15 @@
 import { NextRequest, NextResponse } from "next/server";
 import crypto from "crypto";
-import { savePrediction } from "@/lib/storage";
+import { savePrediction, type PredictionCategory } from "@/lib/storage";
 import { generateAuthorNumber } from "@/lib/utils";
 import { submitToDigitalEvidence, isDigitalEvidenceEnabled } from "@/lib/digitalEvidence";
+import { validatePredictionContent } from "@/lib/contentFilter";
 
 export const runtime = "nodejs";
 
 export async function POST(request: NextRequest) {
   try {
-    const { text, userId: anonId } = await request.json();
+    const { text, userId: anonId, category } = await request.json();
 
     if (!text || typeof text !== "string") {
       return NextResponse.json(
@@ -20,6 +21,19 @@ export async function POST(request: NextRequest) {
     if (!anonId || typeof anonId !== "string") {
       return NextResponse.json(
         { error: "Anonymous ID is required" },
+        { status: 400 }
+      );
+    }
+
+    // Validate and default category
+    const validCategories: PredictionCategory[] = ["Crypto", "Politics", "Markets", "Tech", "Sports", "Culture", "Personal", "Other"];
+    const predictionCategory: PredictionCategory = category && validCategories.includes(category) ? category : "Other";
+
+    // Validate content against moderation filter
+    const validation = validatePredictionContent(text);
+    if (!validation.isValid) {
+      return NextResponse.json(
+        { error: validation.error },
         { status: 400 }
       );
     }
@@ -89,6 +103,7 @@ export async function POST(request: NextRequest) {
       publicSlug: proofId, // Use proofId as public slug for permanent links
       onChainStatus,
       outcome: "pending" as const, // Default outcome
+      category: predictionCategory,
       deReference,
       deEventId,
       deStatus,
