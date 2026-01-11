@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { claimPredictions } from "@/lib/storage";
 import { createClient } from "@supabase/supabase-js";
+import { ensurePublicHandle } from "@/lib/public-handle";
 
 export const runtime = "nodejs";
 
@@ -30,6 +31,15 @@ export async function POST(request: NextRequest) {
         { error: "Unauthorized - invalid token" },
         { status: 401 }
       );
+    }
+
+    // Ensure user has a public handle (generate if first claim)
+    try {
+      const publicHandle = await ensurePublicHandle(user);
+      console.log("[Claim Predictions API] ✓ Public handle ensured:", publicHandle);
+    } catch (handleError) {
+      console.error("[Claim Predictions API] Warning: Failed to ensure public handle:", handleError);
+      // Continue with claim even if handle generation fails
     }
 
     const { anonId } = await request.json();
