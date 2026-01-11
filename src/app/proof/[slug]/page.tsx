@@ -330,10 +330,122 @@ export default async function ProofPage({ params }: Props) {
               </div>
             </div>
 
+        {/* VERIFY THIS PROOF - Enhanced verification section */}
+        {prediction.onChainStatus === "confirmed" && prediction.deReference && (
+          <div className="mb-8 p-6 bg-neutral-900/50 border-2 border-cyan-500/30 rounded-lg">
+            <h2 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
+              <svg className="w-5 h-5 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+              </svg>
+              VERIFY THIS PROOF
+            </h2>
+
+            {/* Trust Badges */}
+            <div className="grid grid-cols-2 gap-3 mb-6">
+              <div className="flex items-center gap-2 text-xs text-neutral-400">
+                <svg className="w-4 h-4 text-cyan-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                </svg>
+                <span className="text-neutral-300">Immutable record</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <svg className="w-4 h-4 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <span className="text-xs text-neutral-300">Timestamped (UTC)</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <svg className="w-4 h-4 text-cyan-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8V7a4 4 0 118 0v5m-8 4h8" />
+                </svg>
+                <span className="text-xs text-neutral-300">SHA-256 content hash</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <svg className="w-4 h-4 text-cyan-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <span className="text-xs text-neutral-300">Publicly verifiable</span>
+              </div>
+            </div>
+
+            {/* Microcopy */}
+            <div className="mb-4 p-3 bg-cyan-500/5 border border-cyan-500/20 rounded-lg">
+              <p className="text-xs text-neutral-300 leading-relaxed">
+                This proof is anchored on <span className="text-cyan-400 font-medium">Constellation Network</span>, a distributed ledger technology (DAG).
+                The original statement is <strong className="text-white">immutable and permanently timestamped</strong>. Only the resolution outcome can be updated by the owner.
+              </p>
+            </div>
+
+            {/* Technical Details */}
+            <div className="space-y-4 mt-5">
+              {/* Network */}
+              <div>
+                <div className="text-xs text-neutral-400 uppercase tracking-wide mb-1.5">
+                  Network
+                </div>
+                <div className="text-sm text-white font-medium">
+                  Constellation Network (DAG)
+                </div>
+              </div>
+
+              {/* Transaction Hash with Copy */}
+              <div>
+                <div className="text-xs text-neutral-400 uppercase tracking-wide mb-2">
+                  Transaction Hash
+                </div>
+                <div className="flex items-start gap-2">
+                  {explorerUrl ? (
+                    <a
+                      href={explorerUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-sm text-cyan-400 hover:text-cyan-300 font-mono break-all underline flex-1"
+                    >
+                      {prediction.deReference}
+                    </a>
+                  ) : (
+                    <div className="text-sm text-neutral-300 font-mono break-all flex-1">
+                      {prediction.deReference}
+                    </div>
+                  )}
+                  <CopyButton text={prediction.deReference || ""} iconSize="sm" />
+                </div>
+              </div>
+
+              {/* Block Timestamp */}
+              {prediction.confirmedAt && (
+                <div>
+                  <div className="text-xs text-neutral-400 uppercase tracking-wide mb-1">
+                    Block Timestamp (UTC)
+                  </div>
+                  <div className="text-sm text-white font-mono">
+                    {new Date(prediction.confirmedAt).toUTCString()}
+                  </div>
+                </div>
+              )}
+
+              {/* Content Hash */}
+              <div>
+                <div className="text-xs text-neutral-400 uppercase tracking-wide mb-2">
+                  Content Hash (SHA-256)
+                </div>
+                <div className="flex items-start gap-2 bg-black/40 p-3 rounded border border-neutral-800/50">
+                  <code className="text-sm text-neutral-300 font-mono break-all flex-1">
+                    {prediction.hash}
+                  </code>
+                  <CopyButton text={prediction.hash} iconSize="sm" />
+                </div>
+              </div>
+            </div>
+
             {/* Explanation */}
-            <div className="mt-4 pt-4 border-t border-neutral-700">
-              <p className="text-xs text-neutral-400 leading-relaxed">
-                This proof was recorded on-chain. The original content cannot be modified or deleted.
+            <div className="mt-5 pt-5 border-t border-neutral-700">
+              <p className="text-xs text-neutral-400 leading-relaxed mb-2">
+                This proof is anchored on <span className="text-neutral-300 font-medium">Constellation Network</span> (DAG).
+                The original statement is immutable—only the outcome status can be updated by the owner.
+              </p>
+              <p className="text-xs text-neutral-500 leading-relaxed">
+                Anyone can independently verify the content hash and timestamp using the transaction reference above.
               </p>
             </div>
           </div>
