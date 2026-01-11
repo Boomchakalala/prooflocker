@@ -7,6 +7,7 @@ import { getSiteUrl } from "@/lib/config";
 import Link from "next/link";
 import ResolveModal from "./ResolveModal";
 import ContestModal from "./ContestModal";
+import OutcomeBadge from "./OutcomeBadge";
 
 interface PredictionCardProps {
   prediction: Prediction & {
@@ -57,17 +58,6 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
   // Determine if user can resolve (owner and not finalized)
   const canResolve = isOwner && lifecycleStatus !== "final";
 
-  // Get outcome label and styling
-  const getOutcomeDisplay = () => {
-    const outcome = displayOutcome || "pending";
-    if (outcome === "correct") return { label: "True", class: "bg-green-500/10 border-green-500/30 text-green-400" };
-    if (outcome === "incorrect") return { label: "False", class: "bg-red-500/10 border-red-500/30 text-red-400" };
-    if (outcome === "invalid") return { label: "Invalid", class: "bg-neutral-500/10 border-neutral-500/30 text-neutral-400" };
-    return { label: "Unresolved", class: "bg-yellow-500/10 border-yellow-500/20 text-yellow-400/80" };
-  };
-
-  const outcomeDisplay = getOutcomeDisplay();
-
   return (
     <div className="glass rounded-lg p-4 hover:border-white/10 transition-all flex flex-col h-full shadow-lg shadow-purple-500/5">
       {/* Header row: Badge + Author + Time + Status Pills */}
@@ -112,23 +102,12 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
       {/* Status line: Outcome - More prominent */}
       <div className="flex items-center gap-2 mb-3">
         <span className="text-[10px] uppercase tracking-wide text-white/40">Result</span>
-        <span className={`inline-flex items-center px-2 py-[2px] rounded-full text-xs font-semibold border ${outcomeDisplay.class}`}>
-          {outcomeDisplay.label}
-          {prediction.adminOverridden && (
-            <svg
-              className="w-3 h-3 ml-1.5"
-              fill="currentColor"
-              viewBox="0 0 20 20"
-            >
-              <title>Admin finalized</title>
-              <path
-                fillRule="evenodd"
-                d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                clipRule="evenodd"
-              />
-            </svg>
-          )}
-        </span>
+        <OutcomeBadge
+          outcome={displayOutcome || "pending"}
+          size="sm"
+          showLabel="short"
+          adminOverridden={prediction.adminOverridden}
+        />
       </div>
 
       {/* Resolution note */}
