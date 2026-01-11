@@ -94,87 +94,102 @@ export default function ResolveModal({
           </button>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-6">
           {/* Outcome Selection */}
           <div>
-            <label className="block text-sm font-medium text-white/80 mb-2">
+            <label className="block text-sm font-medium text-white/90 mb-3">
               What's the outcome?
             </label>
-            <div className="grid grid-cols-2 gap-2">
+
+            {/* Primary outcomes: Correct and Incorrect */}
+            <div className="grid grid-cols-2 gap-3 mb-3">
               <button
                 type="button"
                 onClick={() => setOutcome("correct")}
-                className={`px-4 py-3 rounded-lg border-2 font-medium transition-all ${
+                className={`px-5 py-4 rounded-lg border-2 font-semibold text-base transition-all ${
                   outcome === "correct"
-                    ? getOutcomeColor("correct") + " ring-2 ring-green-500/30"
-                    : "bg-white/5 border-white/10 text-white/50 hover:bg-white/10 hover:text-white"
+                    ? "bg-green-500/20 border-green-500/60 text-green-300 ring-2 ring-green-500/40 shadow-lg shadow-green-500/20"
+                    : "bg-white/5 border-white/10 text-white/60 hover:bg-white/10 hover:text-white hover:border-white/20"
                 }`}
               >
-                ✓ Correct
+                <div className="flex items-center justify-center gap-2">
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                  </svg>
+                  Correct
+                </div>
               </button>
               <button
                 type="button"
                 onClick={() => setOutcome("incorrect")}
-                className={`px-4 py-3 rounded-lg border-2 font-medium transition-all ${
+                className={`px-5 py-4 rounded-lg border-2 font-semibold text-base transition-all ${
                   outcome === "incorrect"
-                    ? getOutcomeColor("incorrect") + " ring-2 ring-red-500/30"
-                    : "bg-white/5 border-white/10 text-white/50 hover:bg-white/10 hover:text-white"
+                    ? "bg-red-500/20 border-red-500/60 text-red-300 ring-2 ring-red-500/40 shadow-lg shadow-red-500/20"
+                    : "bg-white/5 border-white/10 text-white/60 hover:bg-white/10 hover:text-white hover:border-white/20"
                 }`}
               >
-                ✗ Incorrect
+                <div className="flex items-center justify-center gap-2">
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                  Incorrect
+                </div>
               </button>
+            </div>
+
+            {/* Secondary outcomes: Invalid and Pending */}
+            <div className="grid grid-cols-2 gap-2">
               <button
                 type="button"
                 onClick={() => setOutcome("invalid")}
-                className={`px-4 py-3 rounded-lg border-2 font-medium transition-all ${
+                className={`px-3 py-2 rounded-lg border font-medium text-sm transition-all ${
                   outcome === "invalid"
-                    ? getOutcomeColor("invalid") + " ring-2 ring-gray-500/30"
-                    : "bg-white/5 border-white/10 text-white/50 hover:bg-white/10 hover:text-white"
+                    ? "bg-gray-500/20 border-gray-500/50 text-gray-400"
+                    : "bg-white/5 border-white/10 text-white/40 hover:bg-white/10 hover:text-white/60"
                 }`}
               >
-                ⊘ Invalid
+                Invalid
               </button>
               <button
                 type="button"
                 onClick={() => setOutcome("pending")}
-                className={`px-4 py-3 rounded-lg border-2 font-medium transition-all ${
+                className={`px-3 py-2 rounded-lg border font-medium text-sm transition-all ${
                   outcome === "pending"
-                    ? getOutcomeColor("pending") + " ring-2 ring-yellow-500/30"
-                    : "bg-white/5 border-white/10 text-white/50 hover:bg-white/10 hover:text-white"
+                    ? "bg-yellow-500/20 border-yellow-500/50 text-yellow-400"
+                    : "bg-white/5 border-white/10 text-white/40 hover:bg-white/10 hover:text-white/60"
                 }`}
               >
-                ⏳ Pending
+                Pending
               </button>
             </div>
             <p className="text-xs text-white/40 mt-2">
-              Choose "Invalid" if the prediction can't be verified
+              Use "Invalid" if the prediction can't be verified
             </p>
           </div>
 
           {/* Resolution Note (Optional) */}
           <div>
-            <label htmlFor="note" className="block text-sm font-medium text-white/80 mb-2">
-              Resolution note <span className="text-white/40">(optional)</span>
+            <label htmlFor="note" className="block text-sm font-medium text-white/90 mb-2">
+              Why? <span className="text-white/50 font-normal">(optional)</span>
             </label>
             <textarea
               id="note"
               value={resolutionNote}
               onChange={(e) => setResolutionNote(e.target.value)}
-              placeholder="Explain why this outcome is correct (e.g., 'Bitcoin hit $100K on Dec 15, 2026 according to CoinMarketCap')"
+              placeholder="Brief explanation of the outcome"
               maxLength={280}
               rows={3}
-              className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-white/30 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
+              className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-white/30 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-transparent resize-none transition-all"
             />
-            <div className="flex items-center justify-between mt-1">
-              <p className="text-xs text-white/40">Max 280 characters</p>
+            <div className="flex items-center justify-end mt-1">
               <p className="text-xs text-white/40">{resolutionNote.length}/280</p>
             </div>
           </div>
 
           {/* Evidence URL (Optional) */}
           <div>
-            <label htmlFor="url" className="block text-sm font-medium text-white/80 mb-2">
-              Evidence link <span className="text-white/40">(optional)</span>
+            <label htmlFor="url" className="block text-sm font-medium text-white/90 mb-2">
+              Proof or reference <span className="text-white/50 font-normal">(optional)</span>
             </label>
             <input
               id="url"
@@ -182,11 +197,8 @@ export default function ResolveModal({
               value={resolutionUrl}
               onChange={(e) => setResolutionUrl(e.target.value)}
               placeholder="https://example.com/proof"
-              className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-white/30 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-white/30 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-transparent transition-all"
             />
-            <p className="text-xs text-white/40 mt-1">
-              Link to evidence (news article, screenshot, etc.)
-            </p>
           </div>
 
           {/* Error Message */}
@@ -197,48 +209,42 @@ export default function ResolveModal({
           )}
 
           {/* Action Buttons */}
-          <div className="flex gap-3 pt-2">
-            <button
-              type="button"
-              onClick={onClose}
-              className="flex-1 px-4 py-3 bg-white/5 hover:bg-white/10 text-white rounded-lg transition-all border border-white/10"
-              disabled={loading}
-            >
-              Cancel
-            </button>
+          <div className="flex flex-col gap-3 pt-4">
             <button
               type="submit"
               disabled={loading}
-              className="flex-1 px-4 py-3 bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white font-semibold rounded-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+              className="w-full px-6 py-4 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white font-semibold text-base rounded-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40 disabled:shadow-none"
             >
               {loading ? (
                 <>
-                  <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                  Saving...
+                  <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                  Confirming...
                 </>
               ) : (
                 <>
                   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                   </svg>
-                  Save Resolution
+                  Confirm resolution
                 </>
               )}
             </button>
+
+            {/* Permanence warning */}
+            <p className="text-xs text-neutral-400 text-center font-medium -mt-1">
+              This resolution is public and permanent
+            </p>
+
+            <button
+              type="button"
+              onClick={onClose}
+              className="w-full px-4 py-2.5 bg-white/5 hover:bg-white/10 text-white/70 hover:text-white text-sm rounded-lg transition-all border border-white/10"
+              disabled={loading}
+            >
+              Go back
+            </button>
           </div>
         </form>
-
-        {/* Info Box */}
-        <div className="mt-4 p-3 bg-blue-500/5 border border-blue-500/20 rounded-lg">
-          <p className="text-xs text-blue-400 flex items-start gap-2">
-            <svg className="w-4 h-4 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
-              <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
-            </svg>
-            <span>
-              Your resolution is public and permanent. Other users can contest it if they disagree.
-            </span>
-          </p>
-        </div>
       </div>
     </div>
   );
