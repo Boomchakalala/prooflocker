@@ -10,6 +10,7 @@ import { supabase } from "./supabase";
  * - authorNumber derived from anonId for consistent anonymous display
  */
 export type PredictionOutcome = "pending" | "correct" | "incorrect" | "invalid";
+export type PredictionCategory = "Crypto" | "Politics" | "Markets" | "Tech" | "Sports" | "Culture" | "Personal" | "Other";
 
 export interface Prediction {
   id: string;
@@ -26,6 +27,7 @@ export interface Prediction {
   publicSlug: string; // Unique slug for public proof page
   onChainStatus: "pending" | "confirmed"; // Track on-chain confirmation status
   outcome: PredictionOutcome; // Outcome: pending, correct, incorrect, invalid
+  category: PredictionCategory; // Category for organization and filtering
   // Resolution fields (user-controlled):
   resolutionNote?: string; // Optional note added when resolving (max 280 chars)
   resolutionUrl?: string; // Optional reference URL added when resolving
@@ -61,6 +63,7 @@ interface PredictionRow {
   public_slug: string;
   status: "pending" | "confirmed";
   outcome: string;
+  category: string;
   resolution_note: string | null;
   resolution_url: string | null;
   resolved_at: string | null;
@@ -95,6 +98,7 @@ function rowToPrediction(row: PredictionRow): Prediction {
     publicSlug: row.public_slug,
     onChainStatus: row.status,
     outcome: row.outcome as PredictionOutcome,
+    category: row.category as PredictionCategory,
     resolutionNote: row.resolution_note || undefined,
     resolutionUrl: row.resolution_url || undefined,
     resolvedAt: row.resolved_at || undefined,
@@ -129,6 +133,7 @@ function predictionToRow(prediction: Prediction): Omit<PredictionRow, "created_a
     public_slug: prediction.publicSlug,
     status: prediction.onChainStatus,
     outcome: prediction.outcome,
+    category: prediction.category,
     resolution_note: prediction.resolutionNote || null,
     resolution_url: prediction.resolutionUrl || null,
     resolved_at: prediction.resolvedAt || null,
