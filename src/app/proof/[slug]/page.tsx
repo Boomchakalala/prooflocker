@@ -5,6 +5,8 @@ import { cache } from "react";
 import { getPredictionBySlug as _getPredictionBySlug, type Prediction } from "@/lib/storage";
 import { getDigitalEvidenceFingerprintUrl } from "@/lib/digitalEvidence";
 import { getSiteUrl, getAbsoluteUrl } from "@/lib/config";
+import OutcomeBadge from "@/components/OutcomeBadge";
+import CopyButton from "@/components/CopyButton";
 
 // Cache the prediction fetch to avoid duplicate queries
 // When both generateMetadata() and the component call this with the same slug,
@@ -126,26 +128,26 @@ export default async function ProofPage({ params }: Props) {
 
   return (
     <div className="min-h-screen bg-[#0a0a0a] text-white">
-      <div className="max-w-2xl mx-auto px-4 py-12">
-        {/* Header */}
-        <div className="mb-10">
+      <div className="max-w-2xl mx-auto px-4 py-8">
+        {/* Header - tightened */}
+        <div className="mb-6">
           <Link
             href="/"
-            className="inline-flex items-center text-neutral-400 hover:text-white transition-colors mb-8 text-sm"
+            className="inline-flex items-center text-neutral-400 hover:text-white transition-colors mb-4 text-sm"
           >
             ← Back to ProofLocker
           </Link>
         </div>
 
-        {/* Above the fold */}
-        <div className="mb-8">
+        {/* Above the fold - tightened */}
+        <div className="mb-6">
           {/* Prediction text - hero */}
-          <h1 className="text-3xl leading-relaxed mb-8 text-white font-medium">
+          <h1 className="text-3xl leading-relaxed mb-6 text-white font-medium">
             {prediction.text}
           </h1>
 
           {/* Timestamps - Clear separation between locked and resolved */}
-          <div className="mb-6 pb-6 border-b border-neutral-800">
+          <div className="mb-5 pb-5 border-b border-neutral-800">
             <div className="space-y-3">
               {/* Locked timestamp */}
               <div>
@@ -236,13 +238,7 @@ export default async function ProofPage({ params }: Props) {
               <div className="text-xs text-neutral-500 uppercase tracking-wide mb-2">
                 Outcome
               </div>
-              <div
-                className={`inline-block px-3 py-1.5 border rounded text-sm font-medium ${getOutcomeColor(
-                  prediction.outcome
-                )}`}
-              >
-                {getOutcomeLabel(prediction.outcome, prediction.resolvedAt)}
-              </div>
+              <OutcomeBadge outcome={prediction.outcome} size="md" showLabel="long" />
             </div>
           )}
 
