@@ -47,6 +47,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   const title = `${previewText} | ProofLocker`;
   const description = `Locked on ${dateStr} • Proof ${shortProofId} • Immutable timestamp proof on Constellation Network`;
+  const pageUrl = getAbsoluteUrl(`/proof/${slug}`);
 
   return {
     title,
@@ -54,13 +55,23 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     openGraph: {
       title: previewText,
       description: `Locked on ${dateStr} • Proof ${shortProofId}`,
+      url: pageUrl,
       type: "website",
       siteName: "ProofLocker",
+      images: [
+        {
+          url: getAbsoluteUrl("/og.png"),
+          width: 1200,
+          height: 630,
+          alt: "ProofLocker - Time-stamped prediction proofs",
+        },
+      ],
     },
     twitter: {
-      card: "summary",
+      card: "summary_large_image",
       title: previewText,
       description: `Locked on ${dateStr} • Proof ${shortProofId}`,
+      images: [getAbsoluteUrl("/og.png")],
     },
   };
 }
