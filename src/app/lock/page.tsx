@@ -15,6 +15,7 @@ export default function LockPage() {
   const [isAnonymous, setIsAnonymous] = useState(true);
   const [locked, setLocked] = useState(false);
   const [proofId, setProofId] = useState<string>("");
+  const [howItWorksExpanded, setHowItWorksExpanded] = useState(false);
 
   const categories = ["Crypto", "Politics", "Markets", "Tech", "Sports", "Culture", "Personal", "Other"];
 
@@ -132,9 +133,15 @@ export default function LockPage() {
                   disabled={loading}
                 />
                 <div className="flex items-center justify-between mt-2">
-                  <span className="text-sm text-[#6b6b6b]">
-                    {text.length} characters
-                  </span>
+                  {text.length > 0 && (
+                    <span className="text-sm text-[#6b6b6b]">
+                      {text.length} characters
+                      {text.length < 20 && text.length > 0 && (
+                        <span className="ml-2 text-xs text-neutral-600">· Concise predictions work best</span>
+                      )}
+                    </span>
+                  )}
+                  {text.length === 0 && <span></span>}
                   {text.length > 80 && (
                     <span className="text-xs text-yellow-500 flex items-center gap-1">
                       <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
@@ -152,7 +159,7 @@ export default function LockPage() {
                   htmlFor="category-select"
                   className="block text-sm font-medium text-[#e0e0e0] mb-3"
                 >
-                  Category <span className="text-neutral-500 font-normal">(optional)</span>
+                  Category <span className="text-blue-400 font-normal">(recommended)</span>
                 </label>
                 <div className="grid grid-cols-4 gap-2">
                   {categories.map((cat) => (
@@ -172,53 +179,102 @@ export default function LockPage() {
                   ))}
                 </div>
                 <p className="text-xs text-neutral-500 mt-2">
-                  Help others discover your prediction. Defaults to "Other" if skipped.
+                  Helps others discover your prediction
                 </p>
               </div>
 
+              {/* How it works - Collapsible */}
               <div className="glass border border-white/5 rounded-lg p-4 mb-6">
-                <h3 className="text-sm font-semibold text-[#e0e0e0] mb-3 flex items-center gap-2">
+                <button
+                  onClick={() => setHowItWorksExpanded(!howItWorksExpanded)}
+                  className="w-full flex items-center justify-between text-left group"
+                >
+                  <h3 className="text-sm font-semibold text-[#e0e0e0] flex items-center gap-2">
+                    <svg
+                      className="w-4 h-4 text-blue-500"
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                    How it works — immutable & on-chain
+                  </h3>
                   <svg
-                    className="w-4 h-4 text-blue-500"
+                    className={`w-4 h-4 text-neutral-500 transition-transform ${
+                      howItWorksExpanded ? "rotate-180" : ""
+                    }`}
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  </svg>
+                </button>
+                {howItWorksExpanded && (
+                  <ol className="space-y-2 text-sm text-[#a0a0a0] mt-3 pt-3 border-t border-white/5">
+                    <li className="flex gap-2">
+                      <span className="text-blue-500 flex-shrink-0 font-semibold">1.</span>
+                      <span>Your text is hashed using SHA-256 (cryptographic fingerprint)</span>
+                    </li>
+                    <li className="flex gap-2">
+                      <span className="text-blue-500 flex-shrink-0 font-semibold">2.</span>
+                      <span>
+                        Fingerprint is submitted on-chain—permanent and immutable
+                      </span>
+                    </li>
+                    <li className="flex gap-2">
+                      <span className="text-blue-500 flex-shrink-0 font-semibold">3.</span>
+                      <span>You get a proof ID to share and verify</span>
+                    </li>
+                    <li className="flex gap-2">
+                      <span className="text-blue-500 flex-shrink-0 font-semibold">4.</span>
+                      <span>
+                        Once locked, it cannot be edited. Ever.
+                      </span>
+                    </li>
+                  </ol>
+                )}
+              </div>
+
+              {/* Privacy notice - Moved above CTA */}
+              <div className="glass rounded-lg p-4 border border-white/5 mb-6">
+                <div className="flex items-start gap-3">
+                  <svg
+                    className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5"
                     fill="currentColor"
                     viewBox="0 0 20 20"
                   >
                     <path
                       fillRule="evenodd"
-                      d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
+                      d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
                       clipRule="evenodd"
                     />
                   </svg>
-                  How it works
-                </h3>
-                <ol className="space-y-2 text-sm text-[#a0a0a0]">
-                  <li className="flex gap-2">
-                    <span className="text-blue-500 flex-shrink-0 font-semibold">1.</span>
-                    <span>Your text is hashed using SHA-256 (cryptographic fingerprint)</span>
-                  </li>
-                  <li className="flex gap-2">
-                    <span className="text-blue-500 flex-shrink-0 font-semibold">2.</span>
-                    <span>
-                      Fingerprint is submitted on-chain—permanent and immutable
-                    </span>
-                  </li>
-                  <li className="flex gap-2">
-                    <span className="text-blue-500 flex-shrink-0 font-semibold">3.</span>
-                    <span>You get a proof ID to share and verify</span>
-                  </li>
-                  <li className="flex gap-2">
-                    <span className="text-blue-500 flex-shrink-0 font-semibold">4.</span>
-                    <span>
-                      Once locked, it cannot be edited. Ever.
-                    </span>
-                  </li>
-                </ol>
+                  <div>
+                    <p className="text-sm text-[#e0e0e0] font-medium mb-1">
+                      Privacy & Anonymity
+                    </p>
+                    <p className="text-sm text-[#888]">
+                      No login required. Only the SHA-256 fingerprint is submitted to the blockchain.
+                      {isAnonymous && (
+                        <span className="block mt-1 text-green-400 font-medium text-xs">
+                          ✓ You're using ProofLocker anonymously
+                        </span>
+                      )}
+                    </p>
+                  </div>
+                </div>
               </div>
 
+              {/* Primary CTA - Enhanced */}
               <button
                 onClick={handleLock}
                 disabled={!text.trim() || loading}
-                className="w-full px-6 py-4 bg-gradient-to-r from-blue-600/80 to-purple-600/80 hover:from-blue-600 hover:to-purple-600 disabled:bg-neutral-900 disabled:text-neutral-600 disabled:cursor-not-allowed text-white font-medium rounded-md transition-all disabled:from-neutral-900 disabled:to-neutral-900"
+                className="relative w-full px-6 py-5 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 disabled:bg-neutral-900 disabled:text-neutral-600 disabled:cursor-not-allowed text-white font-semibold text-base rounded-lg transition-all disabled:from-neutral-900 disabled:to-neutral-900 shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40 disabled:shadow-none"
               >
                 {loading ? (
                   <span className="flex items-center justify-center gap-2">
@@ -247,45 +303,16 @@ export default function LockPage() {
                   "Lock my prediction"
                 )}
               </button>
-              <p className="text-xs text-white/50 text-center mt-2">
-                Publicly timestamped • Verifiable later
+
+              {/* Permanence warning */}
+              <p className="text-xs text-neutral-400 text-center mt-3 font-medium">
+                This action is permanent and cannot be undone
               </p>
 
               {/* Content policy notice */}
-              <p className="mt-4 text-xs text-neutral-500 text-center">
-                No hate, harassment, or illegal content. We may remove predictions that violate the rules.
+              <p className="mt-4 text-xs text-neutral-600 text-center">
+                No hate, harassment, or illegal content
               </p>
-            </div>
-
-            {/* Privacy notice */}
-            <div className="mt-6 glass rounded-lg p-4 border border-white/5 fade-in">
-              <div className="flex items-start gap-3">
-                <svg
-                  className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5"
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                    clipRule="evenodd"
-                  />
-                </svg>
-                <div>
-                  <p className="text-sm text-[#e0e0e0] font-medium mb-1">
-                    Privacy & Anonymity
-                  </p>
-                  <p className="text-sm text-[#888]">
-                    No login required. Your full text is stored locally for display.
-                    Only the SHA-256 fingerprint is submitted to the blockchain.
-                    {isAnonymous && (
-                      <span className="block mt-1 text-green-400 font-medium">
-                        ✓ You're using ProofLocker anonymously
-                      </span>
-                    )}
-                  </p>
-                </div>
-              </div>
             </div>
           </>
         ) : (
