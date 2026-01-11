@@ -11,7 +11,7 @@ import { Prediction } from "@/lib/storage";
 import { getOrCreateUserId } from "@/lib/user";
 import { useAuth } from "@/contexts/AuthContext";
 import { signOut } from "@/lib/auth";
-import { getUserDisplayLabel } from "@/lib/user-display";
+import { getPublicHandle } from "@/lib/public-handle";
 
 function HomeContent() {
   const { user, loading: authLoading } = useAuth();
@@ -154,7 +154,7 @@ function HomeContent() {
                     Profile
                   </Link>
                   <div className="text-right">
-                    <div className="text-sm text-white font-medium">{getUserDisplayLabel(user)}</div>
+                    <div className="text-sm text-white font-medium">{getPublicHandle(user)}</div>
                     <button
                       onClick={handleSignOut}
                       className="text-xs text-white/50 hover:text-white/80 transition-colors"
