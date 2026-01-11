@@ -108,68 +108,74 @@ export default function ResolveModal({
               What's the outcome?
             </label>
 
-            {/* Primary outcomes: Correct and Incorrect */}
-            <div className="grid grid-cols-2 gap-3 mb-3">
+            {/* All outcomes in consistent grid */}
+            <div className="grid grid-cols-2 gap-3">
+              {/* Correct */}
               <button
                 type="button"
                 onClick={() => setOutcome("correct")}
-                className={`px-5 py-4 rounded-lg border-2 font-semibold text-base transition-all ${
+                className={`w-full h-14 rounded-lg border-2 font-semibold text-base transition-all flex items-center justify-center gap-2 ${
                   outcome === "correct"
                     ? "bg-green-500/20 border-green-500/60 text-green-300 ring-2 ring-green-500/40 shadow-lg shadow-green-500/20"
                     : "bg-white/5 border-white/10 text-white/60 hover:bg-white/10 hover:text-white hover:border-white/20"
                 }`}
               >
-                <div className="flex items-center justify-center gap-2">
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                  </svg>
-                  Correct
-                </div>
+                <svg className="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                </svg>
+                Correct
               </button>
+
+              {/* Incorrect */}
               <button
                 type="button"
                 onClick={() => setOutcome("incorrect")}
-                className={`px-5 py-4 rounded-lg border-2 font-semibold text-base transition-all ${
+                className={`w-full h-14 rounded-lg border-2 font-semibold text-base transition-all flex items-center justify-center gap-2 ${
                   outcome === "incorrect"
                     ? "bg-red-500/20 border-red-500/60 text-red-300 ring-2 ring-red-500/40 shadow-lg shadow-red-500/20"
                     : "bg-white/5 border-white/10 text-white/60 hover:bg-white/10 hover:text-white hover:border-white/20"
                 }`}
               >
-                <div className="flex items-center justify-center gap-2">
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                  </svg>
-                  Incorrect
-                </div>
+                <svg className="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+                Incorrect
               </button>
-            </div>
 
-            {/* Secondary outcomes: Invalid and Pending */}
-            <div className="grid grid-cols-2 gap-2">
+              {/* Invalid */}
               <button
                 type="button"
                 onClick={() => setOutcome("invalid")}
-                className={`px-3 py-2 rounded-lg border font-medium text-sm transition-all ${
+                className={`w-full h-14 rounded-lg border-2 font-semibold text-base transition-all flex items-center justify-center gap-2 ${
                   outcome === "invalid"
-                    ? "bg-gray-500/20 border-gray-500/50 text-gray-400"
-                    : "bg-white/5 border-white/10 text-white/40 hover:bg-white/10 hover:text-white/60"
+                    ? "bg-gray-500/20 border-gray-500/60 text-gray-300 ring-2 ring-gray-500/40 shadow-lg shadow-gray-500/20"
+                    : "bg-white/5 border-white/10 text-white/60 hover:bg-white/10 hover:text-white hover:border-white/20"
                 }`}
               >
+                <svg className="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" />
+                </svg>
                 Invalid
               </button>
+
+              {/* Pending */}
               <button
                 type="button"
                 onClick={() => setOutcome("pending")}
-                className={`px-3 py-2 rounded-lg border font-medium text-sm transition-all ${
+                className={`w-full h-14 rounded-lg border-2 font-semibold text-base transition-all flex items-center justify-center gap-2 ${
                   outcome === "pending"
-                    ? "bg-yellow-500/20 border-yellow-500/50 text-yellow-400"
-                    : "bg-white/5 border-white/10 text-white/40 hover:bg-white/10 hover:text-white/60"
+                    ? "bg-yellow-500/20 border-yellow-500/60 text-yellow-300 ring-2 ring-yellow-500/40 shadow-lg shadow-yellow-500/20"
+                    : "bg-white/5 border-white/10 text-white/60 hover:bg-white/10 hover:text-white hover:border-white/20"
                 }`}
               >
+                <svg className="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
                 Pending
               </button>
             </div>
-            <p className="text-xs text-white/40 mt-2">
+
+            <p className="text-xs text-white/40 mt-3">
               Use "Invalid" if the prediction can't be verified
             </p>
           </div>
