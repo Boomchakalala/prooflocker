@@ -89,31 +89,31 @@ export default function ResolveModal({
 
       {/* Modal Container */}
       <div
-        className="relative w-full max-w-2xl overflow-hidden rounded-2xl bg-gradient-to-br from-[#1a1a1a] to-[#0a0a0a] border border-white/10 shadow-2xl flex flex-col"
+        className="relative w-full max-w-2xl max-h-[90vh] overflow-hidden rounded-2xl bg-gradient-to-br from-[#1a1a1a] to-[#0a0a0a] border border-white/10 shadow-2xl flex flex-col"
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Fixed Header */}
-        <div className="flex items-center justify-between p-5 border-b border-white/10">
-          <h3 className="text-xl font-bold text-white flex items-center gap-2">
-            <svg className="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-            </svg>
-            Resolve Prediction
-          </h3>
-          <button
-            onClick={onClose}
-            className="text-white/50 hover:text-white transition-colors"
-            type="button"
-          >
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-            </svg>
-          </button>
-        </div>
+        <form onSubmit={handleSubmit} className="flex flex-col h-full min-h-0">
+          {/* Sticky Header */}
+          <div className="sticky top-0 z-10 flex items-center justify-between p-5 border-b border-white/10 bg-gradient-to-br from-[#1a1a1a] to-[#0a0a0a] flex-shrink-0">
+            <h3 className="text-xl font-bold text-white flex items-center gap-2">
+              <svg className="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              Resolve Prediction
+            </h3>
+            <button
+              onClick={onClose}
+              className="text-white/50 hover:text-white transition-colors"
+              type="button"
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
 
-        <form onSubmit={handleSubmit} className="flex flex-col flex-1 min-h-0">
-          {/* Scrollable Content */}
-          <div className="overflow-y-auto max-h-[70vh] p-5 space-y-4">
+          {/* Scrollable Body */}
+          <div className="flex-1 min-h-0 overflow-y-auto overscroll-contain touch-pan-y p-5 space-y-4">
             {/* Outcome Selection */}
             <div>
               <label className="block text-sm font-medium text-white/90 mb-2">
@@ -234,8 +234,8 @@ export default function ResolveModal({
             )}
           </div>
 
-          {/* Fixed Footer with Action Buttons */}
-          <div className="p-5 border-t border-white/10 bg-[#0a0a0a]/50 backdrop-blur-sm">
+          {/* Sticky Footer with Action Buttons */}
+          <div className="sticky bottom-0 z-10 p-5 border-t border-white/10 bg-[#0a0a0a]/50 backdrop-blur-sm flex-shrink-0">
             <div className="flex flex-col gap-1.5">
               <button
                 type="submit"
