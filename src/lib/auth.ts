@@ -27,6 +27,10 @@ function getFriendlyErrorMessage(error: any): string {
     return 'This email is already registered. Try signing in instead.';
   }
 
+  if (message.includes('email') && (message.includes('send') || message.includes('rate') || message.includes('limit'))) {
+    return 'Email service temporarily unavailable. Your account was created - try signing in instead.';
+  }
+
   if (message.includes('password')) {
     return 'Password must be at least 6 characters.';
   }
@@ -65,13 +69,24 @@ export async function signUpWithPassword(
     email,
     password,
     options: {
-      emailRedirectTo: typeof window !== 'undefined' ? `${window.location.origin}/auth/callback` : undefined,
+      emailRedirectTo: typeof window !== 'undefined'
+        ? `${window.location.origin}/auth/callback`
+        : 'https://prooflocker.io/auth/callback',
+      data: {
+        signup_source: 'web',
+      }
     },
   });
 
   if (error) {
-    console.error("[Auth] Error signing up:", error);
-    return { success: false, error: getFriendlyErrorMessage(error) };
+    console.error("[Auth] ❌ SIGNUP ERROR DETAILS:", {
+      message: error.message,
+      status: error.status,
+      name: error.name,
+      code: error.code,
+      fullError: error,
+    });
+    return { success: false, error: `${getFriendlyErrorMessage(error)} (Code: ${error.status || 'unknown'})` };
   }
 
   if (!data.user) {
@@ -152,7 +167,9 @@ export async function resendConfirmationEmail(
     type: 'signup',
     email: email,
     options: {
-      emailRedirectTo: typeof window !== 'undefined' ? `${window.location.origin}/auth/callback` : undefined,
+      emailRedirectTo: typeof window !== 'undefined'
+        ? `${window.location.origin}/auth/callback`
+        : 'https://prooflocker.io/auth/callback',
     }
   });
 
