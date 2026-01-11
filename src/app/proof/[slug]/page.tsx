@@ -193,7 +193,7 @@ export default async function ProofPage({ params }: Props) {
                   : "bg-yellow-500/10 text-yellow-400 border-yellow-500/30"
               }`}
             >
-              {prediction.onChainStatus === "confirmed" ? "Confirmed on Constellation Network" : "Pending Confirmation"}
+              {prediction.onChainStatus === "confirmed" ? "Locked on Constellation Network" : "Pending Confirmation"}
             </div>
           </div>
 
