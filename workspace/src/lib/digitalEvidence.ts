@@ -1,0 +1,409 @@
+/**
+ * Constellation Digital Evidence integration layer
+ *
+ * This module handles submission of fingerprints to Constellation Network's
+ * Digital Evidence API with proper cryptographic signing using SECP256K1_RFC8785_V1.
+ *
+ * Required environment variables:
+ * - DE_API_KEY: Digital Evidence API key
+ * - DE_TENANT_ID: Digital Evidence tenant ID
+ * - DE_ORG_ID: Digital Evidence organization ID
+ * - DE_SIGNING_PRIVATE_KEY_HEX: 32-byte secp256k1 private key in hex
+ *
+ * Official API Documentation:
+ * POST https://de-api.constellationnetwork.io/v1/fingerprints
+ */
+
+import crypto from "crypto";
+import { canonicalize } from "json-canonicalize";
+import { ec as EC } from "elliptic";
+
+const ec = new EC("secp256k1");
+
+interface DigitalEvidenceConfig {
+  apiKey: string;
+  apiUrl: string;
+}
+
+interface DigitalEvidenceResponse {
+  success: boolean;
+  eventId?: string; // Event ID from Digital Evidence
+  hash?: string; // The fingerprint that was submitted
+  accepted?: boolean; // Whether the submission was accepted
+  timestamp?: string; // On-chain timestamp (server time)
+  error?: string;
+}
+
+/**
+ * Check if Digital Evidence API is configured
+ */
+export function isDigitalEvidenceEnabled(): boolean {
+  return !!(
+    process.env.DE_API_KEY &&
+    process.env.DE_TENANT_ID &&
+    process.env.DE_ORG_ID &&
+    process.env.DE_SIGNING_PRIVATE_KEY_HEX &&
+    process.env.DE_SIGNING_PRIVATE_KEY_HEX !== "your-32-byte-hex-private-key-here"
+  );
+}
+
+/**
+ * Get Digital Evidence configuration
+ */
+function getDigitalEvidenceConfig(): DigitalEvidenceConfig | null {
+  if (!isDigitalEvidenceEnabled()) {
+    return null;
+  }
+
+  return {
+    apiKey: process.env.DE_API_KEY!,
+    apiUrl: process.env.DE_API_URL || "https://de-api.constellationnetwork.io/v1",
+  };
+}
+
+/**
+ * Sign FingerprintValue according to SECP256K1_RFC8785_V1 spec
+ *
+ * Steps:
+ * 1. Derive public key from private key
+ * 2. Set signerId to public key in fingerprintValue
+ * 3. RFC 8785 canonicalize the complete FingerprintValue JSON
+ * 4. sha256(utf8(canonicalJson)) => hashBytes
+ * 5. convert hashBytes to hex string => hashHex
+ * 6. sha512(utf8(hashHex)) => sha512Hash
+ * 7. truncatedHash = sha512Hash.slice(0, 32)
+ * 8. sign truncatedHash with secp256k1
+ * 9. signature format: signature.toDER('hex')
+ *
+ * @param fingerprintValue - The attestation.content object
+ * @param privateKeyHex - 32-byte secp256k1 private key in hex
+ * @returns { publicKeyHex, signatureHex, fingerprintValueWithSignerId }
+ */
+function signFingerprintValue(
+  fingerprintValue: any,
+  privateKeyHex: string
+): { publicKeyHex: string; signatureHex: string; fingerprintValueWithSignerId: any } {
+  // Step 1: Derive public key from private key
+  const keyPair = ec.keyFromPrivate(privateKeyHex, "hex");
+  const publicKeyHex = keyPair.getPublic().encode("hex", false);
+
+  // Step 2: Set signerId to public key
+  const fingerprintValueWithSignerId = {
+    ...fingerprintValue,
+    signerId: publicKeyHex,
+  };
+
+  // Step 3: RFC 8785 canonicalize
+  const canonicalJson = canonicalize(fingerprintValueWithSignerId);
+
+  // Step 4: SHA-256 hash of canonical JSON
+  const hashBytes = crypto.createHash("sha256").update(canonicalJson, "utf8").digest();
+
+  // Step 5: Convert hash bytes to hex string
+  const hashHex = hashBytes.toString("hex");
+
+  // Step 6: SHA-512 hash of the hex string
+  const sha512Hash = crypto.createHash("sha512").update(hashHex, "utf8").digest();
+
+  // Step 7: Truncate to first 32 bytes
+  const truncatedHash = sha512Hash.slice(0, 32);
+
+  // Step 8: Sign with secp256k1
+  const signature = keyPair.sign(truncatedHash);
+
+  // Step 9: DER encoding
+  const signatureHex = signature.toDER("hex");
+
+  return { publicKeyHex, signatureHex, fingerprintValueWithSignerId };
+}
+
+/**
+ * Submit a fingerprint to Constellation Digital Evidence
+ *
+ * Official API Spec:
+ * POST https://de-api.constellationnetwork.io/v1/fingerprints
+ * Headers:
+ *   - X-API-Key: <api_key>
+ *   - Content-Type: application/json
+ * Body: [{ attestation: { content, proofs } }]
+ *
+ * @param fingerprint - SHA-256 hash of the prediction text
+ * @param metadata - Additional metadata (e.g., proofId, userId)
+ * @returns Response with eventId, hash, and accepted status if successful
+ */
+export async function submitToDigitalEvidence(
+  fingerprint: string,
+  metadata?: Record<string, string>
+): Promise<DigitalEvidenceResponse> {
+  const config = getDigitalEvidenceConfig();
+
+  // If not configured, return pending status
+  if (!config) {
+    return {
+      success: false,
+      error: "Digital Evidence API not configured - missing credentials",
+    };
+  }
+
+  try {
+    const orgId = process.env.DE_ORG_ID!;
+    const tenantId = process.env.DE_TENANT_ID!;
+    const privateKeyHex = process.env.DE_SIGNING_PRIVATE_KEY_HEX!;
+    const timestamp = new Date().toISOString();
+
+    // Generate unique IDs
+    const eventId = crypto.randomUUID();
+    const documentId = metadata?.proofId || `prooflocker:${crypto.randomUUID()}`;
+
+    // Build FingerprintValue (attestation.content) WITHOUT signerId initially
+    const fingerprintValue = {
+      orgId,
+      tenantId,
+      eventId,
+      documentId,
+      documentRef: fingerprint, // The prediction hash
+      timestamp,
+      version: 1,
+    };
+
+    // Sign the fingerprint value (this will add signerId internally)
+    console.log("[Digital Evidence] Signing fingerprint value...");
+    const { publicKeyHex, signatureHex, fingerprintValueWithSignerId } = signFingerprintValue(
+      fingerprintValue,
+      privateKeyHex
+    );
+
+    // Build proof object
+    const proof = {
+      id: publicKeyHex, // Must match signerId
+      signature: signatureHex,
+      algorithm: "SECP256K1_RFC8785_V1",
+    };
+
+    // Build final payload (OMIT metadata.hash to avoid mismatch error)
+    const payload = [
+      {
+        attestation: {
+          content: fingerprintValueWithSignerId,
+          proofs: [proof],
+        },
+      },
+    ];
+
+    // Debug logging
+    console.log("[Digital Evidence] ========== PRE-FETCH DEBUG ==========");
+    console.log("[Digital Evidence] Event ID:", eventId);
+    console.log("[Digital Evidence] Document ID:", documentId);
+    console.log("[Digital Evidence] Document Ref (hash):", fingerprint);
+    console.log("[Digital Evidence] Public Key:", publicKeyHex);
+    console.log("[Digital Evidence] Signature:", signatureHex);
+    console.log("[Digital Evidence] Final JSON payload:");
+    console.log(JSON.stringify(payload, null, 2));
+    console.log("[Digital Evidence] Payload length:", JSON.stringify(payload).length);
+
+    // Submit to Constellation Digital Evidence API
+    const response = await fetch(`${config.apiUrl}/fingerprints`, {
+      method: "POST",
+      headers: {
+        "X-API-Key": config.apiKey,
+        "Content-Type": "application/json",
+        "Accept": "*/*",
+      },
+      body: JSON.stringify(payload),
+    });
+
+    // Debug logging
+    console.log("[Digital Evidence] ========== POST-FETCH DEBUG ==========");
+    console.log("[Digital Evidence] HTTP Status:", response.status);
+    console.log("[Digital Evidence] Content-Type:", response.headers.get("content-type"));
+
+    const responseText = await response.text();
+    console.log("[Digital Evidence] Raw Response:");
+    console.log(responseText);
+    console.log("[Digital Evidence] ========================================");
+
+    if (!response.ok) {
+      console.error("[Digital Evidence] API error - Status:", response.status);
+      return {
+        success: false,
+        error: `API error: ${response.status} - ${responseText}`,
+      };
+    }
+
+    const data = JSON.parse(responseText);
+
+    // API returns an array of results, get the first one
+    const result = Array.isArray(data) ? data[0] : data;
+
+    console.log("[Digital Evidence] Parsed result:", JSON.stringify(result));
+
+    // Check if submission was accepted
+    const hasErrors = result.errors && result.errors.length > 0;
+    const isAccepted = result.accepted === true;
+
+    if (hasErrors) {
+      console.warn("[Digital Evidence] Submission has errors:", result.errors);
+    }
+
+    if (isAccepted) {
+      console.log("[Digital Evidence] ✅ SUBMISSION ACCEPTED!");
+    } else {
+      console.warn("[Digital Evidence] ⚠️  Submission not accepted");
+    }
+
+    // Return result
+    return {
+      success: true,
+      eventId: result.eventId || eventId,
+      hash: result.hash || fingerprint,
+      accepted: isAccepted,
+      timestamp,
+    };
+  } catch (error) {
+    console.error("[Digital Evidence] EXCEPTION:", error);
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : "Unknown error",
+    };
+  }
+}
+
+/**
+ * Verify a fingerprint against Digital Evidence
+ *
+ * Note: This function is a placeholder. Update with actual verification
+ * endpoint when available from Digital Evidence API.
+ *
+ * @param fingerprint - SHA-256 hash to verify
+ * @param eventId - Digital Evidence event ID
+ * @returns Verification result with details
+ */
+export async function verifyDigitalEvidence(
+  fingerprint: string,
+  eventId: string
+): Promise<{
+  verified: boolean;
+  timestamp?: string;
+  error?: string;
+}> {
+  const config = getDigitalEvidenceConfig();
+
+  if (!config) {
+    return {
+      verified: false,
+      error: "Digital Evidence API not configured",
+    };
+  }
+
+  // Placeholder - update when verification endpoint is available
+  return {
+    verified: false,
+    error: "Verification endpoint not yet implemented",
+  };
+}
+
+/**
+ * Get a friendly message about Digital Evidence status
+ */
+export function getDigitalEvidenceStatusMessage(): string {
+  if (isDigitalEvidenceEnabled()) {
+    return "Digital Evidence integration active";
+  }
+  return "Digital Evidence keys not configured - proofs will remain pending until keys are added";
+}
+
+/**
+ * Check the status of a fingerprint in Digital Evidence
+ *
+ * Queries the DE API to get the current status of a submitted fingerprint.
+ * This is used for syncing pending predictions to confirmed status.
+ *
+ * @param params - Either fingerprint hash or eventId
+ * @returns The current status and details from DE API
+ */
+export async function checkDigitalEvidenceStatus(params: {
+  fingerprint?: string;
+  eventId?: string;
+}): Promise<{
+  success: boolean;
+  status?: string; // NEW, PENDING, CONFIRMED, FAILED, REJECTED
+  eventId?: string;
+  fingerprint?: string;
+  timestamp?: string;
+  error?: string;
+}> {
+  const config = getDigitalEvidenceConfig();
+
+  if (!config) {
+    return {
+      success: false,
+      error: "Digital Evidence API not configured",
+    };
+  }
+
+  try {
+    // Build query parameters
+    const queryParams = new URLSearchParams();
+    if (params.fingerprint) {
+      queryParams.append("documentRef", params.fingerprint);
+    }
+    if (params.eventId) {
+      queryParams.append("eventId", params.eventId);
+    }
+
+    const url = `${config.apiUrl}/fingerprints?${queryParams.toString()}`;
+
+    console.log("[Digital Evidence] Checking status:", url);
+
+    const response = await fetch(url, {
+      method: "GET",
+      headers: {
+        "X-API-Key": config.apiKey,
+        "Accept": "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      console.error("[Digital Evidence] Status check failed:", response.status);
+      const errorText = await response.text();
+      return {
+        success: false,
+        error: `API error: ${response.status} - ${errorText}`,
+      };
+    }
+
+    const data = await response.json();
+    console.log("[Digital Evidence] Status response:", JSON.stringify(data));
+
+    // Parse response - the API may return an array or single object
+    const records = Array.isArray(data) ? data : [data];
+
+    if (records.length === 0) {
+      return {
+        success: false,
+        error: "Fingerprint not found in Digital Evidence",
+      };
+    }
+
+    // Get the most recent record
+    const record = records[0];
+
+    // Map the status from the API
+    // The actual field name may vary - adjust based on API response
+    const status = record.status || record.state || "PENDING";
+
+    return {
+      success: true,
+      status: status.toUpperCase(),
+      eventId: record.eventId || params.eventId,
+      fingerprint: record.documentRef || params.fingerprint,
+      timestamp: record.timestamp || record.createdAt,
+    };
+  } catch (error) {
+    console.error("[Digital Evidence] Status check exception:", error);
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : "Unknown error",
+    };
+  }
+}
