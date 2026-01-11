@@ -10,14 +10,14 @@ export function getOutcomeConfig(outcome: PredictionOutcome) {
   switch (outcome) {
     case "correct":
       return {
-        label: "True",
-        longLabel: "Resolved: True",
+        label: "Correct",
+        longLabel: "Resolved: Correct",
         class: "bg-green-500/10 text-green-400 border-green-500/30",
       };
     case "incorrect":
       return {
-        label: "False",
-        longLabel: "Resolved: False",
+        label: "Incorrect",
+        longLabel: "Resolved: Incorrect",
         class: "bg-red-500/10 text-red-400 border-red-500/30",
       };
     case "invalid":
