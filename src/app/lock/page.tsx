@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import BrandLogo from "@/components/BrandLogo";
 import { getOrCreateUserId, isAnonymousUser } from "@/lib/user";
+import { getSiteUrl } from "@/lib/config";
 
 export default function LockPage() {
   const router = useRouter();
@@ -60,7 +61,7 @@ export default function LockPage() {
   };
 
   const handleShare = () => {
-    const shareText = `I locked this prediction on-chain with ProofLocker. No edits. No excuses. Verify it yourself: ${window.location.origin}/verify?proofId=${proofId}`;
+    const shareText = `I locked this prediction on-chain with ProofLocker. No edits. No excuses. Verify it yourself: ${getSiteUrl()}/verify?proofId=${proofId}`;
     navigator.clipboard.writeText(shareText);
     alert("Share message copied to clipboard!");
   };

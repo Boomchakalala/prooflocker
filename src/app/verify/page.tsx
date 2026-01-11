@@ -4,6 +4,7 @@ import { useState, useEffect, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import ProofLockerLogo from "@/components/Logo";
+import { getSiteUrl } from "@/lib/config";
 
 function VerifyContent() {
   const searchParams = useSearchParams();
