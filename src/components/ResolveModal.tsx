@@ -89,12 +89,13 @@ export default function ResolveModal({
 
       {/* Modal Container */}
       <div
-        className="relative w-full max-w-2xl max-h-[90vh] overflow-hidden rounded-2xl bg-gradient-to-br from-[#1a1a1a] to-[#0a0a0a] border border-white/10 shadow-2xl flex flex-col"
+        className="relative w-full max-w-2xl max-h-[calc(100vh-2rem)] overflow-hidden rounded-2xl bg-gradient-to-br from-[#1a1a1a] to-[#0a0a0a] border border-white/10 shadow-2xl"
         onClick={(e) => e.stopPropagation()}
       >
-        <form onSubmit={handleSubmit} className="flex flex-col h-full min-h-0">
-          {/* Sticky Header */}
-          <div className="sticky top-0 z-10 flex items-center justify-between p-5 border-b border-white/10 bg-gradient-to-br from-[#1a1a1a] to-[#0a0a0a] flex-shrink-0">
+        {/* Single Scroll Container */}
+        <div className="h-full overflow-y-auto overscroll-contain">
+          {/* Header */}
+          <div className="flex items-center justify-between p-5 border-b border-white/10">
             <h3 className="text-xl font-bold text-white flex items-center gap-2">
               <svg className="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -112,8 +113,9 @@ export default function ResolveModal({
             </button>
           </div>
 
-          {/* Scrollable Body */}
-          <div className="flex-1 min-h-0 overflow-y-auto overscroll-contain touch-pan-y p-5 space-y-4">
+          {/* Form Content */}
+          <form onSubmit={handleSubmit}>
+            <div className="p-5 space-y-4">
             {/* Outcome Selection */}
             <div>
               <label className="block text-sm font-medium text-white/90 mb-2">
@@ -232,47 +234,48 @@ export default function ResolveModal({
                 <p className="text-sm text-red-400">{error}</p>
               </div>
             )}
-          </div>
-
-          {/* Sticky Footer with Action Buttons */}
-          <div className="sticky bottom-0 z-10 p-5 border-t border-white/10 bg-[#0a0a0a]/50 backdrop-blur-sm flex-shrink-0">
-            <div className="flex flex-col gap-1.5">
-              <button
-                type="submit"
-                disabled={loading}
-                className="w-full px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white font-semibold text-base rounded-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40 disabled:shadow-none"
-              >
-                {loading ? (
-                  <>
-                    <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                    Confirming...
-                  </>
-                ) : (
-                  <>
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                    </svg>
-                    Confirm resolution
-                  </>
-                )}
-              </button>
-
-              {/* Permanence warning */}
-              <p className="text-[11px] text-neutral-500 text-center font-medium px-2 leading-tight">
-                This resolution is public and permanent
-              </p>
-
-              <button
-                type="button"
-                onClick={onClose}
-                className="w-full px-4 py-2 bg-white/5 hover:bg-white/10 text-white/70 hover:text-white text-sm rounded-lg transition-all border border-white/10"
-                disabled={loading}
-              >
-                Go back
-              </button>
             </div>
-          </div>
-        </form>
+
+            {/* Footer with Action Buttons */}
+            <div className="p-5 border-t border-white/10 bg-[#0a0a0a]/50 backdrop-blur-sm">
+              <div className="flex flex-col gap-1.5">
+                <button
+                  type="submit"
+                  disabled={loading}
+                  className="w-full px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white font-semibold text-base rounded-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40 disabled:shadow-none"
+                >
+                  {loading ? (
+                    <>
+                      <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                      Confirming...
+                    </>
+                  ) : (
+                    <>
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                      </svg>
+                      Confirm resolution
+                    </>
+                  )}
+                </button>
+
+                {/* Permanence warning */}
+                <p className="text-[11px] text-neutral-500 text-center font-medium px-2 leading-tight">
+                  This resolution is public and permanent
+                </p>
+
+                <button
+                  type="button"
+                  onClick={onClose}
+                  className="w-full px-4 py-2 bg-white/5 hover:bg-white/10 text-white/70 hover:text-white text-sm rounded-lg transition-all border border-white/10"
+                  disabled={loading}
+                >
+                  Go back
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
       </div>
     </div>
   );
