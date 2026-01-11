@@ -9,11 +9,14 @@ import { getOrCreateUserId, isAnonymousUser } from "@/lib/user";
 export default function LockPage() {
   const router = useRouter();
   const [text, setText] = useState("");
+  const [category, setCategory] = useState<string>("Other");
   const [loading, setLoading] = useState(false);
   const [userId, setUserId] = useState<string>("");
   const [isAnonymous, setIsAnonymous] = useState(true);
   const [locked, setLocked] = useState(false);
   const [proofId, setProofId] = useState<string>("");
+
+  const categories = ["Crypto", "Politics", "Markets", "Tech", "Sports", "Culture", "Personal", "Other"];
 
   useEffect(() => {
     const id = getOrCreateUserId();
@@ -29,7 +32,7 @@ export default function LockPage() {
       const response = await fetch("/api/lock-proof", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ text, userId }),
+        body: JSON.stringify({ text, userId, category }),
       });
 
       if (response.ok) {
@@ -141,6 +144,36 @@ export default function LockPage() {
                     </span>
                   )}
                 </div>
+              </div>
+
+              {/* Category selector */}
+              <div className="mb-6">
+                <label
+                  htmlFor="category-select"
+                  className="block text-sm font-medium text-[#e0e0e0] mb-3"
+                >
+                  Category <span className="text-neutral-500 font-normal">(optional)</span>
+                </label>
+                <div className="grid grid-cols-4 gap-2">
+                  {categories.map((cat) => (
+                    <button
+                      key={cat}
+                      type="button"
+                      onClick={() => setCategory(cat)}
+                      className={`px-3 py-2 text-sm font-medium rounded-lg transition-all ${
+                        category === cat
+                          ? "bg-gradient-to-r from-blue-600/80 to-purple-600/80 text-white border border-blue-500/50"
+                          : "glass text-neutral-400 hover:text-white hover:bg-white/5 border border-white/10"
+                      }`}
+                      disabled={loading}
+                    >
+                      {cat}
+                    </button>
+                  ))}
+                </div>
+                <p className="text-xs text-neutral-500 mt-2">
+                  Help others discover your prediction. Defaults to "Other" if skipped.
+                </p>
               </div>
 
               <div className="glass border border-white/5 rounded-lg p-4 mb-6">
