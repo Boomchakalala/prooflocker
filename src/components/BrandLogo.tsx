@@ -16,19 +16,19 @@ import Image from "next/image";
  */
 export default function BrandLogo() {
   return (
-    <Link href="/" className="block">
-      <div className="flex flex-col">
+    <Link href="/" className="block shrink-0">
+      <div className="flex flex-col gap-0.5">
         {/* Horizontal logo */}
         <Image
           src="/brand/prooflocker-horizontal.png"
           alt="ProofLocker"
-          width={140}
+          width={180}
           height={32}
-          className="h-7 w-auto sm:h-8 object-contain"
+          className="h-7 w-auto md:h-8"
           priority
         />
-        {/* Tagline */}
-        <p className="text-xs text-white/60 leading-tight mt-0.5 hidden sm:block">
+        {/* Tagline - only one */}
+        <p className="text-xs text-white/60 leading-tight hidden sm:block">
           Predictions. Locked forever.
         </p>
       </div>
