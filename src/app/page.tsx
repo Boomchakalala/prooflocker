@@ -18,12 +18,15 @@ function HomeContent() {
   const searchParams = useSearchParams();
   const tabParam = searchParams.get("tab");
   const [activeTab, setActiveTab] = useState<"all" | "my">(tabParam === "my" ? "my" : "all");
+  const [selectedCategory, setSelectedCategory] = useState<string>("all");
   const [predictions, setPredictions] = useState<Prediction[]>([]);
   const [loading, setLoading] = useState(true);
   const [anonId, setAnonId] = useState<string>("");
   const [syncing, setSyncing] = useState(false);
   const [syncMessage, setSyncMessage] = useState<string | null>(null);
   const [showClaimModal, setShowClaimModal] = useState(false);
+
+  const categories = ["all", "Crypto", "Politics", "Markets", "Tech", "Sports", "Culture", "Personal", "Other"];
 
   useEffect(() => {
     const id = getOrCreateUserId();
@@ -78,6 +81,11 @@ function HomeContent() {
       setLoading(false);
     }
   };
+
+  // Filter predictions by category
+  const filteredPredictions = selectedCategory === "all"
+    ? predictions
+    : predictions.filter(p => p.category === selectedCategory);
 
   const syncDEStatus = async () => {
     setSyncing(true);
@@ -178,7 +186,7 @@ function HomeContent() {
       {/* Main content */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 relative z-10">
         {/* Tabs and Sync Button */}
-        <div className="flex items-center justify-between mb-6">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
           <div className="flex items-center gap-1 p-1 glass rounded-lg w-fit">
             <button
               onClick={() => setActiveTab("all")}
@@ -201,6 +209,24 @@ function HomeContent() {
               My predictions
             </button>
           </div>
+
+          {/* Category Filter - Only show on "All predictions" tab */}
+          {activeTab === "all" && (
+            <div className="flex items-center gap-2 overflow-x-auto">
+              <span className="text-xs text-neutral-500 whitespace-nowrap">Filter:</span>
+              <select
+                value={selectedCategory}
+                onChange={(e) => setSelectedCategory(e.target.value)}
+                className="px-3 py-1.5 text-sm glass border border-white/10 rounded-lg text-neutral-300 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-transparent"
+              >
+                {categories.map((cat) => (
+                  <option key={cat} value={cat} className="bg-[#0a0a0a]">
+                    {cat === "all" ? "All categories" : cat}
+                  </option>
+                ))}
+              </select>
+            </div>
+          )}
 
           {/* Sync Button */}
           <button
@@ -319,6 +345,54 @@ function HomeContent() {
             </div>
           </div>
         ) : predictions.length === 0 ? (
+                <h4 className="text-white font-semibold mb-3 flex items-center gap-2">
+                  <svg className="w-5 h-5 text-cyan-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                  Why claim with email?
+                </h4>
+                <ul className="space-y-2 text-sm text-white/70">
+                  <li className="flex items-start gap-2">
+                    <svg className="w-4 h-4 text-green-500 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                    </svg>
+                    Access your predictions from any device
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <svg className="w-4 h-4 text-green-500 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                    </svg>
+                    Keep your predictions safe if you clear browser data
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <svg className="w-4 h-4 text-green-500 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                    </svg>
+                    Prove ownership of your predictions
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <svg className="w-4 h-4 text-green-500 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                    </svg>
+                    Still anonymous - predictions stay on-chain, public, immutable
+                  </li>
+                </ul>
+              </div>
+              <button
+                onClick={() => setShowClaimModal(true)}
+                className="inline-flex items-center px-8 py-4 bg-gradient-to-r from-blue-600/80 to-purple-600/80 hover:from-blue-600 hover:to-purple-600 text-white font-medium rounded-md transition-all"
+              >
+                <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                </svg>
+                Claim my predictions
+              </button>
+              <p className="text-xs text-white/50 mt-4">
+                Save access across devices
+              </p>
+            </div>
+          </div>
+        ) : predictions.length === 0 ? (
           <div className="text-center py-20 fade-in">
             <div className="inline-block p-6 glass rounded-2xl glow-purple mb-6 float">
               <svg
@@ -359,7 +433,7 @@ function HomeContent() {
               Lock predictions now so you can prove you said it first later.
             </p>
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-            {predictions.map((prediction, index) => (
+            {filteredPredictions.map((prediction, index) => (
               <div
                 key={prediction.id}
                 className={`fade-in stagger-${Math.min(index + 1, 4)}`}
