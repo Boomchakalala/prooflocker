@@ -2,22 +2,48 @@ import { supabase } from "./supabase";
 import type { User } from "@supabase/supabase-js";
 
 /**
- * Send a magic link to the user's email
+ * Sign up a new user with email and password
  */
-export async function sendMagicLink(email: string): Promise<{ success: boolean; error?: string }> {
-  const { error } = await supabase.auth.signInWithOtp({
+export async function signUpWithPassword(email: string, password: string): Promise<{ success: boolean; error?: string; user?: User }> {
+  const { data, error } = await supabase.auth.signUp({
     email,
+    password,
     options: {
-      emailRedirectTo: typeof window !== 'undefined' ? `${window.location.origin}/auth/callback` : undefined,
+      emailRedirectTo: typeof window !== 'undefined' ? `${window.location.origin}` : undefined,
     },
   });
 
   if (error) {
-    console.error("[Auth] Error sending magic link:", error);
+    console.error("[Auth] Error signing up:", error);
     return { success: false, error: error.message };
   }
 
-  return { success: true };
+  if (!data.user) {
+    return { success: false, error: "Failed to create account" };
+  }
+
+  return { success: true, user: data.user };
+}
+
+/**
+ * Sign in an existing user with email and password
+ */
+export async function signInWithPassword(email: string, password: string): Promise<{ success: boolean; error?: string; user?: User }> {
+  const { data, error } = await supabase.auth.signInWithPassword({
+    email,
+    password,
+  });
+
+  if (error) {
+    console.error("[Auth] Error signing in:", error);
+    return { success: false, error: error.message };
+  }
+
+  if (!data.user) {
+    return { success: false, error: "Failed to sign in" };
+  }
+
+  return { success: true, user: data.user };
 }
 
 /**
