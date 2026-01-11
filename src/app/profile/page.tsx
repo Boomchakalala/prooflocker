@@ -269,7 +269,7 @@ export default function ProfilePage() {
                 href="/lock"
                 className="inline-block px-5 py-2 bg-neutral-800 hover:bg-neutral-700 text-white font-medium rounded-md transition-colors border border-neutral-700"
               >
-                Lock your first prediction
+                Lock my first prediction
               </Link>
             </div>
           ) : (
