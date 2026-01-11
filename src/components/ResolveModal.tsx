@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { PredictionOutcome } from "@/lib/storage";
+import { supabase } from "@/lib/supabase";
 
 interface ResolveModalProps {
   predictionId: string;
@@ -40,10 +41,19 @@ export default function ResolveModal({
     setError("");
 
     try {
+      // Get the current session and access token
+      const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+
+      if (sessionError || !session?.access_token) {
+        throw new Error("You must be logged in to resolve predictions");
+      }
+
       const response = await fetch("/api/resolve-prediction", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        credentials: "include", // Include cookies for authentication
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${session.access_token}`,
+        },
         body: JSON.stringify({
           predictionId,
           outcome,
