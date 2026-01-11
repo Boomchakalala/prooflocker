@@ -19,6 +19,7 @@ export default function ClaimModal({ onClose, onSuccess }: ClaimModalProps) {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
   const [claimedCount, setClaimedCount] = useState(0);
+  const [needsEmailConfirmation, setNeedsEmailConfirmation] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -40,6 +41,7 @@ export default function ClaimModal({ onClose, onSuccess }: ClaimModalProps) {
       // Check if email confirmation is needed (only for signup)
       if (mode === "signup" && authResult.needsEmailConfirmation) {
         console.log("[ClaimModal] Email confirmation required");
+        setNeedsEmailConfirmation(true);
         setSuccess(true);
         setClaimedCount(0);
         setLoading(false);
@@ -233,13 +235,29 @@ export default function ClaimModal({ onClose, onSuccess }: ClaimModalProps) {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                   </svg>
                 </div>
-                <h2 className="text-2xl font-bold text-white">
-                  Success!
-                </h2>
-                <p className="text-white/70 text-sm">
-                  Claimed {claimedCount} prediction{claimedCount !== 1 ? 's' : ''}
-                </p>
-                <p className="text-white/50 text-xs">You're signed in. Your predictions are saved.</p>
+                {needsEmailConfirmation ? (
+                  <>
+                    <h2 className="text-2xl font-bold text-white">
+                      Check your email!
+                    </h2>
+                    <p className="text-white/70 text-sm text-center">
+                      We sent you a confirmation link. Click it to activate your account and claim your predictions.
+                    </p>
+                    <p className="text-white/50 text-xs text-center">
+                      Don't see it? Check your spam folder or try signing up again.
+                    </p>
+                  </>
+                ) : (
+                  <>
+                    <h2 className="text-2xl font-bold text-white">
+                      Success!
+                    </h2>
+                    <p className="text-white/70 text-sm">
+                      Claimed {claimedCount} prediction{claimedCount !== 1 ? 's' : ''}
+                    </p>
+                    <p className="text-white/50 text-xs">You're signed in. Your predictions are saved.</p>
+                  </>
+                )}
               </div>
             )}
           </div>
