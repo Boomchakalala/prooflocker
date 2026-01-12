@@ -6,6 +6,7 @@ import Link from "next/link";
 import BrandLogo from "@/components/BrandLogo";
 import { getOrCreateUserId, isAnonymousUser } from "@/lib/user";
 import { getSiteUrl } from "@/lib/config";
+import { supabase } from "@/lib/supabase";
 
 export default function LockPage() {
   const router = useRouter();
@@ -31,9 +32,21 @@ export default function LockPage() {
 
     setLoading(true);
     try {
+      // Get auth session to pass to API
+      const { data: { session } } = await supabase.auth.getSession();
+
+      const headers: Record<string, string> = {
+        "Content-Type": "application/json",
+      };
+
+      // Add auth token if user is logged in
+      if (session?.access_token) {
+        headers["Authorization"] = `Bearer ${session.access_token}`;
+      }
+
       const response = await fetch("/api/lock-proof", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers,
         body: JSON.stringify({ text, userId, category }),
       });
 
