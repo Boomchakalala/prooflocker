@@ -20,7 +20,7 @@ export default function BrandLogo() {
           alt="ProofLocker"
           className="h-7 w-auto md:h-8"
         />
-        <p className="text-xs text-white/50 mt-[1px] leading-none hidden sm:block">
+        <p className="text-xs text-white/50 mt-[1px] leading-none">
           Predictions. Locked forever.
         </p>
       </div>
