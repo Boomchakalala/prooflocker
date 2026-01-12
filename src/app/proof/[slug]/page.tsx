@@ -79,14 +79,16 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 function getOutcomeLabel(outcome: string, resolvedAt?: string): string {
-  if (outcome === "correct") return "Resolved: True";
-  if (outcome === "incorrect") return "Resolved: False";
+  if (outcome === "correct") return "Resolved: Correct";
+  if (outcome === "incorrect") return "Resolved: Incorrect";
+  if (outcome === "invalid") return "Invalid";
   return "Pending";
 }
 
 function getOutcomeColor(outcome: string): string {
   if (outcome === "correct") return "bg-green-500/10 text-green-400 border-green-500/30";
   if (outcome === "incorrect") return "bg-red-500/10 text-red-400 border-red-500/30";
+  if (outcome === "invalid") return "bg-neutral-500/10 text-neutral-400 border-neutral-500/30";
   return "bg-yellow-500/10 text-yellow-400 border-yellow-500/30";
 }
 
