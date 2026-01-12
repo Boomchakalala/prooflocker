@@ -179,11 +179,26 @@ export default async function ProofPage({ params }: Props) {
           </div>
           <div className="space-y-2.5 text-sm">
             {/* Locked on */}
-            <div className="flex justify-between items-start gap-4">
+            <div className="flex justify-between items-center gap-4">
               <span className="text-neutral-400">Locked on</span>
-              <div className="text-right">
+              <div className="text-neutral-300 font-mono text-sm">
+                {lockedDate.toLocaleString("en-US", {
+                  month: "short",
+                  day: "numeric",
+                  year: "numeric",
+                  hour: "2-digit",
+                  minute: "2-digit",
+                  timeZone: "UTC",
+                })} UTC
+              </div>
+            </div>
+
+            {/* Resolved on (if applicable) */}
+            {isResolved && prediction.resolvedAt && (
+              <div className="flex justify-between items-center gap-4">
+                <span className="text-neutral-400">Resolved on</span>
                 <div className="text-neutral-300 font-mono text-sm">
-                  {lockedDate.toLocaleString("en-US", {
+                  {new Date(prediction.resolvedAt).toLocaleString("en-US", {
                     month: "short",
                     day: "numeric",
                     year: "numeric",
@@ -191,45 +206,6 @@ export default async function ProofPage({ params }: Props) {
                     minute: "2-digit",
                     timeZone: "UTC",
                   })} UTC
-                </div>
-                <div className="text-xs text-neutral-500 mt-0.5">
-                  {lockedDate.toLocaleString("en-US", {
-                    month: "short",
-                    day: "numeric",
-                    year: "numeric",
-                    hour: "2-digit",
-                    minute: "2-digit",
-                    timeZoneName: "short",
-                  })}
-                </div>
-              </div>
-            </div>
-
-            {/* Resolved on (if applicable) */}
-            {isResolved && prediction.resolvedAt && (
-              <div className="flex justify-between items-start gap-4">
-                <span className="text-neutral-400">Resolved on</span>
-                <div className="text-right">
-                  <div className="text-neutral-300 font-mono text-sm">
-                    {new Date(prediction.resolvedAt).toLocaleString("en-US", {
-                      month: "short",
-                      day: "numeric",
-                      year: "numeric",
-                      hour: "2-digit",
-                      minute: "2-digit",
-                      timeZone: "UTC",
-                    })} UTC
-                  </div>
-                  <div className="text-xs text-neutral-500 mt-0.5">
-                    {new Date(prediction.resolvedAt).toLocaleString("en-US", {
-                      month: "short",
-                      day: "numeric",
-                      year: "numeric",
-                      hour: "2-digit",
-                      minute: "2-digit",
-                      timeZoneName: "short",
-                    })}
-                  </div>
                 </div>
               </div>
             )}
