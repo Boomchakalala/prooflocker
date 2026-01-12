@@ -58,9 +58,9 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
   const canResolve = isOwner && lifecycleStatus !== "final";
 
   return (
-    <div className="glass rounded-lg p-4 hover:border-white/10 transition-all flex flex-col h-full shadow-lg shadow-purple-500/5">
+    <div className="glass rounded-lg p-3 md:p-4 hover:border-white/10 transition-all flex flex-col h-full shadow-lg shadow-purple-500/5">
       {/* Header row: Badge + Author + Time + Status Pills */}
-      <div className="flex items-start justify-between mb-2">
+      <div className="flex items-start justify-between mb-1.5 md:mb-2">
         <div className="flex items-center gap-2 flex-wrap">
           {/* Small circular badge with number */}
           <div className="w-7 h-7 rounded-full bg-blue-500/20 flex items-center justify-center text-xs font-semibold text-blue-400 border border-blue-500/30">
@@ -94,12 +94,12 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
       </div>
 
       {/* Main content: Prediction text - VISUAL FOCUS */}
-      <p className="text-white text-lg leading-snug mb-3 font-normal flex-grow line-clamp-2">
+      <p className="text-white text-lg leading-snug mb-2 md:mb-3 font-normal flex-grow line-clamp-2">
         {prediction.textPreview}
       </p>
 
       {/* Status line: Outcome - More prominent */}
-      <div className="flex items-center gap-2 mb-3">
+      <div className="flex items-center gap-2 mb-2 md:mb-3">
         <span className="text-[10px] uppercase tracking-wide text-white/40">Outcome</span>
         <OutcomeBadge
           outcome={prediction.outcome || "pending"}
