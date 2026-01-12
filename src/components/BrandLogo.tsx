@@ -14,13 +14,13 @@ export default function BrandLogo() {
         className="h-7 w-7 md:h-8 md:w-8"
       />
       {/* Wordmark + Tagline */}
-      <div className="flex flex-col justify-center">
+      <div className="flex flex-col justify-center -space-y-0.5 md:space-y-0">
         <img
           src="/brand/prooflocker-wordmark.svg"
           alt="ProofLocker"
           className="h-7 w-auto md:h-8"
         />
-        <p className="text-xs text-white/50 mt-0 md:mt-[1px] leading-none">
+        <p className="text-xs text-white/50 leading-none">
           Predictions. Locked forever.
         </p>
       </div>
