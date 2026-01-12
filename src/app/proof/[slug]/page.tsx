@@ -132,17 +132,17 @@ export default async function ProofPage({ params }: Props) {
     <div className="min-h-screen bg-[#0a0a0a] text-white">
       <div className="max-w-2xl mx-auto px-4 py-8">
         {/* Header */}
-        <div className="mb-8">
+        <div className="mb-6">
           <Link
             href="/"
-            className="inline-flex items-center text-neutral-400 hover:text-white transition-colors mb-6 text-sm"
+            className="inline-flex items-center text-neutral-400 hover:text-white transition-colors text-sm"
           >
             ← Back to ProofLocker
           </Link>
         </div>
 
         {/* SECTION 1: Prediction Statement */}
-        <div className="mb-8">
+        <div className="mb-6">
           <h1 className="text-3xl leading-relaxed text-white font-medium">
             {prediction.text}
           </h1>
@@ -150,11 +150,11 @@ export default async function ProofPage({ params }: Props) {
 
         {/* SECTION 2: Outcome + Resolution Date (for claimed predictions) */}
         {prediction.userId && (
-          <div className="mb-8 pb-8 border-b border-neutral-800">
-            <div className="text-xs text-neutral-500 uppercase tracking-wide mb-3">
+          <div className="mb-6 pb-6 border-b border-neutral-800">
+            <div className="text-xs text-neutral-500 uppercase tracking-wide mb-2">
               Outcome
             </div>
-            <div className="mb-3">
+            <div className="mb-2">
               <OutcomeBadge outcome={prediction.outcome} size="md" showLabel="long" />
             </div>
             {isResolved && prediction.resolvedAt && (
@@ -173,16 +173,16 @@ export default async function ProofPage({ params }: Props) {
         )}
 
         {/* SECTION 3: Record Details */}
-        <div className="mb-8 pb-8 border-b border-neutral-800">
-          <div className="text-xs text-neutral-500 uppercase tracking-wide mb-4">
+        <div className="mb-6 pb-6 border-b border-neutral-800">
+          <div className="text-xs text-neutral-500 uppercase tracking-wide mb-3">
             Record Details
           </div>
-          <div className="space-y-3 text-sm">
+          <div className="space-y-2.5 text-sm">
             {/* Locked on */}
-            <div className="flex justify-between items-start">
+            <div className="flex justify-between items-start gap-4">
               <span className="text-neutral-400">Locked on</span>
               <div className="text-right">
-                <div className="text-neutral-300 font-mono">
+                <div className="text-neutral-300 font-mono text-sm">
                   {lockedDate.toLocaleString("en-US", {
                     month: "short",
                     day: "numeric",
@@ -207,10 +207,10 @@ export default async function ProofPage({ params }: Props) {
 
             {/* Resolved on (if applicable) */}
             {isResolved && prediction.resolvedAt && (
-              <div className="flex justify-between items-start">
+              <div className="flex justify-between items-start gap-4">
                 <span className="text-neutral-400">Resolved on</span>
                 <div className="text-right">
-                  <div className="text-neutral-300 font-mono">
+                  <div className="text-neutral-300 font-mono text-sm">
                     {new Date(prediction.resolvedAt).toLocaleString("en-US", {
                       month: "short",
                       day: "numeric",
@@ -235,7 +235,7 @@ export default async function ProofPage({ params }: Props) {
             )}
 
             {/* On-chain network */}
-            <div className="flex justify-between items-center">
+            <div className="flex justify-between items-center gap-4">
               <span className="text-neutral-400">On-chain network</span>
               <div
                 className={`px-2.5 py-1 border rounded text-xs font-medium ${
@@ -250,14 +250,14 @@ export default async function ProofPage({ params }: Props) {
           </div>
         </div>
 
-        {/* SECTION 4: Resolution Summary (if present) */}
+        {/* SECTION 4: Resolution Summary (if present) - WHY */}
         {isResolved && prediction.resolvedAt && prediction.resolutionNote && (
-          <div className="mb-8 pb-8 border-b border-neutral-800">
-            <div className="text-xs text-neutral-500 uppercase tracking-wide mb-3">
+          <div className="mb-6 pb-6 border-b border-neutral-800">
+            <div className="text-xs text-neutral-500 uppercase tracking-wide mb-2">
               Resolution Summary
             </div>
-            <div className="bg-neutral-900/50 border border-neutral-800 rounded-lg p-4">
-              <p className="text-sm text-neutral-300 leading-relaxed mb-3">
+            <div className="bg-neutral-900/50 border border-neutral-800 rounded-lg p-3">
+              <p className="text-sm text-neutral-300 leading-relaxed">
                 {prediction.resolutionNote}
               </p>
               {prediction.resolutionUrl && (
@@ -265,7 +265,7 @@ export default async function ProofPage({ params }: Props) {
                   href={prediction.resolutionUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-sm text-cyan-400 hover:text-cyan-300 break-all underline"
+                  className="text-sm text-cyan-400 hover:text-cyan-300 break-all underline inline-block mt-2"
                 >
                   {prediction.resolutionUrl}
                 </a>
@@ -274,37 +274,30 @@ export default async function ProofPage({ params }: Props) {
           </div>
         )}
 
-        {/* SECTION 5: On-Chain Proof (confirmed only) */}
+        {/* SECTION 5: On-Chain Proof (confirmed only) - HOW */}
         {prediction.onChainStatus === "confirmed" && prediction.deReference && (
-          <div className="mb-8">
-            <div className="text-xs text-neutral-500 uppercase tracking-wide mb-4">
+          <div className="mb-6">
+            <div className="text-xs text-neutral-500 uppercase tracking-wide mb-3">
               On-Chain Proof
             </div>
 
-            {/* Explanatory text */}
-            <div className="mb-6 p-4 bg-neutral-900/30 border border-neutral-800 rounded-lg">
-              <p className="text-sm text-neutral-300 leading-relaxed">
-                This proof is recorded using Digital Evidence on the Constellation Network (DAG),
-                providing an immutable, timestamped, and publicly verifiable record.
-                The original statement is permanently locked and cannot be altered.
-              </p>
-            </div>
+            {/* Explanatory intro */}
+            <p className="text-sm text-neutral-400 leading-relaxed mb-4">
+              This proof is recorded using Digital Evidence on the Constellation Network (DAG),
+              providing an immutable, timestamped, and publicly verifiable record.
+            </p>
 
             {/* Technical proof details */}
-            <div className="space-y-5">
+            <div className="space-y-3 text-sm">
               {/* Network */}
-              <div>
-                <div className="text-xs text-neutral-400 mb-1.5">
-                  Network
-                </div>
-                <div className="text-sm text-neutral-300">
-                  Constellation Network (DAG)
-                </div>
+              <div className="flex justify-between items-center gap-4">
+                <span className="text-neutral-400">Network</span>
+                <span className="text-neutral-300">Constellation Network (DAG)</span>
               </div>
 
               {/* Transaction Hash */}
               <div>
-                <div className="text-xs text-neutral-400 mb-2">
+                <div className="text-xs text-neutral-400 mb-1.5">
                   Transaction Hash
                 </div>
                 <div className="flex items-start gap-2">
@@ -328,11 +321,9 @@ export default async function ProofPage({ params }: Props) {
 
               {/* Block Timestamp */}
               {prediction.confirmedAt && (
-                <div>
-                  <div className="text-xs text-neutral-400 mb-1.5">
-                    Block Timestamp (UTC)
-                  </div>
-                  <div className="text-sm text-neutral-300 font-mono">
+                <div className="flex justify-between items-start gap-4">
+                  <span className="text-neutral-400">Block timestamp</span>
+                  <div className="text-neutral-300 font-mono text-right text-xs">
                     {new Date(prediction.confirmedAt).toUTCString()}
                   </div>
                 </div>
@@ -340,11 +331,11 @@ export default async function ProofPage({ params }: Props) {
 
               {/* Content Hash (SHA-256) */}
               <div>
-                <div className="text-xs text-neutral-400 mb-2">
+                <div className="text-xs text-neutral-400 mb-1.5">
                   Content Hash (SHA-256)
                 </div>
-                <div className="flex items-start gap-2 bg-black/40 p-3 rounded border border-neutral-800/50">
-                  <code className="text-sm text-neutral-300 font-mono break-all flex-1">
+                <div className="flex items-start gap-2 bg-black/40 p-2.5 rounded border border-neutral-800/50">
+                  <code className="text-xs text-neutral-300 font-mono break-all flex-1">
                     {prediction.hash}
                   </code>
                   <CopyButton text={prediction.hash} iconSize="sm" />
@@ -356,22 +347,20 @@ export default async function ProofPage({ params }: Props) {
 
         {/* Pending confirmation section */}
         {prediction.onChainStatus !== "confirmed" && (
-          <div className="mb-8">
-            <div className="text-xs text-neutral-500 uppercase tracking-wide mb-4">
+          <div className="mb-6">
+            <div className="text-xs text-neutral-500 uppercase tracking-wide mb-3">
               On-Chain Proof
             </div>
-            <div className="space-y-4">
-              <div>
-                <div className="text-xs text-neutral-400 mb-1.5">
-                  Status
-                </div>
-                <div className="text-sm text-neutral-400">Pending confirmation</div>
+            <div className="space-y-3 text-sm">
+              <div className="flex justify-between items-center">
+                <span className="text-neutral-400">Status</span>
+                <span className="text-neutral-400">Pending confirmation</span>
               </div>
               <div>
-                <div className="text-xs text-neutral-400 mb-2">
+                <div className="text-xs text-neutral-400 mb-1.5">
                   Content Hash (SHA-256)
                 </div>
-                <div className="font-mono text-xs text-neutral-300 bg-black/40 p-3 rounded border border-neutral-800 break-all">
+                <div className="font-mono text-xs text-neutral-300 bg-black/40 p-2.5 rounded border border-neutral-800 break-all">
                   {prediction.hash}
                 </div>
               </div>
@@ -380,8 +369,8 @@ export default async function ProofPage({ params }: Props) {
         )}
 
         {/* Footer */}
-        <div className="mt-12 pt-8 border-t border-neutral-800">
-          <p className="text-sm text-neutral-500 text-center mb-4">
+        <div className="mt-10 pt-6 border-t border-neutral-800">
+          <p className="text-sm text-neutral-500 text-center mb-3">
             This proof cannot be edited after creation.
           </p>
           <div className="text-center">
