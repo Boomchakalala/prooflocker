@@ -4,8 +4,12 @@ import { savePrediction, type PredictionCategory } from "@/lib/storage";
 import { generateAuthorNumber } from "@/lib/utils";
 import { submitToDigitalEvidence, isDigitalEvidenceEnabled } from "@/lib/digitalEvidence";
 import { validatePredictionContent } from "@/lib/contentFilter";
+import { createClient } from "@supabase/supabase-js";
 
 export const runtime = "nodejs";
+
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
 
 export async function POST(request: NextRequest) {
   try {
@@ -36,6 +40,26 @@ export async function POST(request: NextRequest) {
         { error: validation.error },
         { status: 400 }
       );
+    }
+
+    // Check if user is authenticated (optional - supports both anon and authenticated)
+    let authenticatedUserId: string | null = null;
+    const authHeader = request.headers.get('authorization');
+
+    if (authHeader && authHeader.startsWith('Bearer ')) {
+      const accessToken = authHeader.substring(7);
+      const supabase = createClient(supabaseUrl, supabaseAnonKey);
+
+      try {
+        const { data: { user } } = await supabase.auth.getUser(accessToken);
+        if (user) {
+          authenticatedUserId = user.id;
+          console.log("[Lock Proof API] Authenticated user creating prediction:", user.id);
+        }
+      } catch (authError) {
+        console.warn("[Lock Proof API] Auth check failed:", authError);
+        // Continue without authentication - prediction will be anonymous
+      }
     }
 
     // Hash the text using SHA-256
@@ -91,7 +115,7 @@ export async function POST(request: NextRequest) {
     // Build prediction object
     const prediction = {
       id: predictionId,
-      userId: null, // Will be set when user claims with email
+      userId: authenticatedUserId || null, // Set immediately if logged in, otherwise null until claimed
       anonId, // Anonymous identifier from localStorage
       authorNumber,
       text,
@@ -109,6 +133,7 @@ export async function POST(request: NextRequest) {
       deStatus,
       deSubmittedAt,
       confirmedAt,
+      claimedAt: authenticatedUserId ? new Date().toISOString() : undefined, // Mark as claimed if authenticated
     };
 
     // Save prediction to storage (Supabase)
