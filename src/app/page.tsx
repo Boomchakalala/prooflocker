@@ -371,10 +371,6 @@ function HomeContent() {
           </div>
         ) : (
           <>
-            {/* Context hint - Mobile only */}
-            <p className="text-sm text-white/40 mb-4 sm:hidden">
-              Lock predictions now so you can prove you said it first later.
-            </p>
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
             {filteredPredictions.map((prediction, index) => (
               <div
@@ -433,19 +429,6 @@ function HomeContent() {
 
       {/* Development status banner */}
       <DEStatusBanner />
-
-      {/* Mobile Sticky CTA */}
-      <div className="sm:hidden fixed bottom-0 left-0 right-0 z-40 p-4 bg-gradient-to-t from-[#0a0a0a] via-[#0a0a0a] to-transparent pointer-events-none">
-        <Link
-          href="/lock"
-          className="pointer-events-auto block w-full px-6 py-4 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold text-center rounded-lg shadow-2xl shadow-blue-500/25 transition-all active:scale-95"
-        >
-          Lock my prediction
-        </Link>
-        <p className="text-xs text-white/50 text-center mt-2 pointer-events-none">
-          Publicly timestamped • Verifiable later
-        </p>
-      </div>
 
       {/* Claim Modal */}
       {showClaimModal && (
