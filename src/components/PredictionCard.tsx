@@ -33,7 +33,6 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
   const onChainStatus = prediction.onChainStatus || "pending";
   const isClaimed = !!prediction.userId;
   const isOwner = currentUserId && prediction.userId === currentUserId;
-  const lifecycleStatus = prediction.lifecycleStatus || "locked";
 
   const copyHash = async () => {
     await navigator.clipboard.writeText(prediction.hash);
@@ -73,8 +72,8 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
     return deStatus === "CONFIRMED" || onChainStatus === "confirmed";
   };
 
-  // Determine if user can resolve (owner and not finalized)
-  const canResolve = isOwner && lifecycleStatus !== "final";
+  // Determine if user can resolve (owner and still pending)
+  const canResolve = isOwner && prediction.outcome === "pending";
 
   return (
     <div className="glass rounded-lg p-3 md:p-4 hover:border-white/10 transition-all flex flex-col h-full shadow-lg shadow-purple-500/5">
