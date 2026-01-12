@@ -14,7 +14,7 @@ export default function BrandLogo() {
         className="h-7 w-7 md:h-8 md:w-8"
       />
       {/* Wordmark + Tagline */}
-      <div className="flex flex-col justify-center -space-y-0.5 md:space-y-0">
+      <div className="flex flex-col justify-center -space-y-0.5 md:space-y-[1px]">
         <img
           src="/brand/prooflocker-wordmark.svg"
           alt="ProofLocker"
