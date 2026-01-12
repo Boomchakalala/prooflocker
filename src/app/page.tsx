@@ -176,8 +176,9 @@ function HomeContent() {
 
       {/* Main content */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5 relative z-10">
-        {/* Tabs and Sync Button */}
-        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 mb-4">
+        {/* Tabs */}
+        <div className="flex flex-col gap-3 mb-4">
+          {/* Tab buttons row */}
           <div className="flex items-center gap-1 p-1 glass rounded-lg w-fit">
             <button
               onClick={() => setActiveTab("all")}
@@ -201,47 +202,49 @@ function HomeContent() {
             </button>
           </div>
 
-          {/* Category Filter - Only show on "All predictions" tab */}
+          {/* Filter + Recheck row - Only show on "All predictions" tab */}
           {activeTab === "all" && (
-            <div className="flex items-center gap-2 overflow-x-auto">
-              <span className="text-xs text-neutral-500 whitespace-nowrap">Filter:</span>
-              <select
-                value={selectedCategory}
-                onChange={(e) => setSelectedCategory(e.target.value)}
-                className="px-3 py-1.5 text-sm glass border border-white/10 rounded-lg text-neutral-300 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-transparent"
+            <div className="flex items-center justify-between gap-3">
+              {/* Category Filter - Left side */}
+              <div className="flex items-center gap-2 overflow-x-auto">
+                <span className="text-xs text-neutral-500 whitespace-nowrap">Filter:</span>
+                <select
+                  value={selectedCategory}
+                  onChange={(e) => setSelectedCategory(e.target.value)}
+                  className="px-3 py-1.5 text-sm glass border border-white/10 rounded-lg text-neutral-300 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-transparent"
+                >
+                  {categories.map((cat) => (
+                    <option key={cat} value={cat} className="bg-[#0a0a0a]">
+                      {cat === "all" ? "All categories" : cat}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              {/* Recheck Button - Right side */}
+              <button
+                onClick={syncDEStatus}
+                disabled={syncing}
+                className="px-2 py-1.5 md:px-3 md:py-2 glass text-xs md:text-sm font-medium text-neutral-400 hover:text-white rounded-lg transition-all hover:bg-white/5 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-1.5 flex-shrink-0"
+                title="Recheck on-chain status for pending predictions"
               >
-                {categories.map((cat) => (
-                  <option key={cat} value={cat} className="bg-[#0a0a0a]">
-                    {cat === "all" ? "All categories" : cat}
-                  </option>
-                ))}
-              </select>
+                <svg
+                  className={`w-3.5 h-3.5 ${syncing ? "animate-spin" : ""}`}
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+                  />
+                </svg>
+                <span className="hidden sm:inline">{syncing ? "Checking..." : "Recheck"}</span>
+              </button>
             </div>
           )}
-
-          {/* Sync Button */}
-          <button
-            onClick={syncDEStatus}
-            disabled={syncing}
-            className="px-2 py-2 md:px-4 md:py-2 glass text-xs md:text-sm font-medium text-neutral-400 hover:text-white rounded-lg transition-all hover:bg-white/5 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-1.5 md:gap-2"
-            title="Recheck on-chain status for pending predictions"
-          >
-            <svg
-              className={`w-3.5 h-3.5 md:w-4 md:h-4 ${syncing ? "animate-spin" : ""}`}
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
-              />
-            </svg>
-            <span className="hidden md:inline">{syncing ? "Checking..." : "Recheck on-chain status"}</span>
-            <span className="md:hidden">{syncing ? "..." : "Recheck"}</span>
-          </button>
         </div>
 
         {/* Toast Notification */}
@@ -392,32 +395,23 @@ function HomeContent() {
 
       {/* Footer */}
       <footer className="border-t border-white/5 mt-20 glass relative z-10">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
-            <div className="flex items-center gap-4">
-              <p className="text-sm text-neutral-500">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+          {/* Mobile: 2 rows, Desktop: 1 row */}
+          <div className="flex flex-col md:flex-row items-center justify-between gap-4 md:gap-6">
+            {/* Row 1 on mobile: Credibility line */}
+            <div className="flex flex-col md:flex-row items-center gap-3 md:gap-4 text-center md:text-left">
+              <p className="text-xs md:text-sm text-neutral-500">
                 Powered by <span className="text-white font-medium">Constellation Network (DAG)</span>
               </p>
-              {!user && (
-                <span className="flex items-center gap-1.5 text-xs text-[#888] glass px-2.5 py-1 rounded-md border border-white/5">
-                  <svg
-                    className="w-3.5 h-3.5 text-green-500"
-                    fill="currentColor"
-                    viewBox="0 0 20 20"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                  Anonymous. Public. Immutable.
-                </span>
-              )}
+              <span className="text-xs text-neutral-500">
+                Anonymous • Public • Immutable
+              </span>
             </div>
+
+            {/* Row 2 on mobile: Single clear CTA */}
             <Link
               href="/verify"
-              className="text-sm text-[#888] hover:text-white transition-colors flex items-center gap-1"
+              className="w-full md:w-auto text-center md:text-left px-4 py-2.5 md:px-0 md:py-0 text-sm text-neutral-400 hover:text-white transition-colors flex items-center justify-center md:justify-start gap-1.5 rounded-lg md:rounded-none hover:bg-white/5 md:hover:bg-transparent"
             >
               Verify a proof
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">

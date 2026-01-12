@@ -179,7 +179,17 @@ export async function getAllPredictions(): Promise<Prediction[]> {
 
   if (error) {
     console.error("[Storage] Error fetching all predictions:", error);
-    return [];
+
+    // Fallback to cached production data for local testing
+    try {
+      const fs = require('fs');
+      const cached = JSON.parse(fs.readFileSync('/tmp/predictions-cache.json', 'utf-8'));
+      console.log(`[Storage] Using cached data: ${cached.predictions?.length || 0} predictions`);
+      return cached.predictions || [];
+    } catch (cacheError) {
+      console.error("[Storage] Cache fallback failed:", cacheError);
+      return [];
+    }
   }
 
   return (data || []).map(rowToPrediction);
