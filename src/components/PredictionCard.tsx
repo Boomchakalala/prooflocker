@@ -208,72 +208,65 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
 
       {/* Actions row - Clearer hierarchy */}
       <div className="flex flex-col gap-1.5">
-        {/* Primary action: View Proof - DOMINATES */}
-        <Link
-          href={`/proof/${prediction.publicSlug}`}
-          className="w-full text-center px-4 py-2.5 text-sm font-semibold text-white bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 rounded-lg transition-all shadow-lg shadow-blue-500/20 hover:shadow-blue-500/30"
-          title="View permanent proof page"
-        >
-          View Proof
-        </Link>
-
-        {/* Secondary actions row */}
+        {/* Primary action row: View Proof + Share */}
         <div className="flex gap-1.5">
-          {/* Resolve button - Secondary but actionable */}
-          {canResolve && (
-            <button
-              onClick={() => setShowResolveModal(true)}
-              className="flex-1 px-3 py-2 text-sm font-medium text-white bg-green-600/90 hover:bg-green-600 rounded-lg transition-all border border-green-500/30"
-            >
-              Resolve
-            </button>
-          )}
+          <Link
+            href={`/proof/${prediction.publicSlug}`}
+            className="flex-1 text-center px-4 py-2.5 text-sm font-semibold text-white bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 rounded-lg transition-all shadow-lg shadow-blue-500/20 hover:shadow-blue-500/30"
+            title="View permanent proof page"
+          >
+            View Proof
+          </Link>
 
           {/* Share button - Only for claimed predictions owned by current user */}
           {canShare && (
             <button
               onClick={copyLink}
-              className={`px-2 md:px-3 py-2 text-xs md:text-sm font-medium text-neutral-500 hover:text-neutral-300 hover:bg-white/5 rounded-lg transition-all flex items-center justify-center gap-1.5 md:gap-2 ${!canResolve ? 'flex-1' : ''}`}
+              className="px-3 py-2.5 text-sm font-medium text-neutral-400 hover:text-white bg-white/5 hover:bg-white/10 rounded-lg transition-all border border-white/10"
               title="Share prediction"
             >
               {linkCopied ? (
-                <>
-                  <svg
-                    className="w-3.5 h-3.5 md:w-4 md:h-4 text-green-500"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M5 13l4 4L19 7"
-                    />
-                  </svg>
-                  <span className="text-green-500">Copied</span>
-                </>
+                <svg
+                  className="w-4 h-4 text-green-500"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M5 13l4 4L19 7"
+                  />
+                </svg>
               ) : (
-                <>
-                  <svg
-                    className="w-3.5 h-3.5 md:w-4 md:h-4"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"
-                    />
-                  </svg>
-                  <span>Share</span>
-                </>
+                <svg
+                  className="w-4 h-4"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"
+                  />
+                </svg>
               )}
             </button>
           )}
         </div>
+
+        {/* Secondary action: Resolve button */}
+        {canResolve && (
+          <button
+            onClick={() => setShowResolveModal(true)}
+            className="w-full px-3 py-2 text-sm font-medium text-white bg-green-600/90 hover:bg-green-600 rounded-lg transition-all border border-green-500/30"
+          >
+            Resolve
+          </button>
+        )}
       </div>
 
       {/* Resolve Modal */}
