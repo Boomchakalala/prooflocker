@@ -119,48 +119,52 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
 
   return (
     <div className="glass rounded-lg p-3 md:p-4 hover:border-white/10 transition-all flex flex-col h-full shadow-lg shadow-purple-500/5">
-      {/* Header row: Badge + Author + Time + Status Pills */}
-      <div className="flex items-center justify-between gap-2 mb-1.5 md:mb-2">
-        <div className="flex items-center gap-2 min-w-0 flex-1 overflow-hidden">
-          {/* Small circular badge with number */}
+      {/* Header: Stacked on mobile, single row on desktop */}
+      <div className="mb-2 md:mb-3">
+        {/* Row 1: Avatar + Anon + Time (always visible, single line) */}
+        <div className="flex items-center gap-2 mb-1.5">
+          {/* Avatar */}
           <div className="w-7 h-7 flex-shrink-0 rounded-full bg-blue-500/20 flex items-center justify-center text-xs font-semibold text-blue-400 border border-blue-500/30">
             {authorNumber.toString().slice(-2)}
           </div>
 
-          {/* Meta info: Anon + time + category - Single line with truncation */}
-          <div className="flex items-center gap-1.5 min-w-0 overflow-hidden">
-            <span className="text-xs text-neutral-400 whitespace-nowrap truncate min-w-0">Anon #{authorNumber}</span>
-            <span className="text-xs text-neutral-600 flex-shrink-0">•</span>
-            <span className="text-xs text-neutral-500 whitespace-nowrap flex-shrink-0">{formatRelativeTime(prediction.timestamp)}</span>
-            {prediction.category && (
-              <>
-                <span className="text-xs text-neutral-600 flex-shrink-0">•</span>
-                <span className="px-2 py-0.5 text-[10px] font-semibold rounded-full bg-gradient-to-r from-blue-500/15 to-purple-500/15 border border-blue-500/30 text-blue-300 leading-tight whitespace-nowrap flex-shrink-0">
-                  {prediction.category}
-                </span>
-              </>
-            )}
+          {/* Anon + Time */}
+          <div className="flex items-center gap-1.5 min-w-0 flex-1">
+            <span className="text-xs text-neutral-400 whitespace-nowrap">Anon #{authorNumber}</span>
+            <span className="text-xs text-neutral-600">•</span>
+            <span className="text-xs text-neutral-500 whitespace-nowrap">{formatRelativeTime(prediction.timestamp)}</span>
           </div>
         </div>
 
-        {/* Status badges with mobile overflow handling */}
-        {/* Mobile: show max 2 badges + overflow pill */}
-        <div className="flex sm:hidden items-center gap-1 justify-end flex-shrink-0">
-          {mobileBadges.map((badge) => (
-            <span key={badge.id}>{badge.content}</span>
-          ))}
-          {overflowCount > 0 && (
-            <span className="px-1.5 py-0.5 text-[9px] font-medium rounded bg-white/5 border border-white/10 text-neutral-400 whitespace-nowrap leading-tight flex-shrink-0">
-              +{overflowCount}
-            </span>
-          )}
-        </div>
+        {/* Row 2: Category + Status badges */}
+        <div className="flex items-center justify-between gap-2 pl-9">
+          {/* Category pill (left side) */}
+          <div className="flex items-center min-w-0">
+            {prediction.category && (
+              <span className="px-2 py-0.5 text-[10px] font-semibold rounded-full bg-gradient-to-r from-blue-500/15 to-purple-500/15 border border-blue-500/30 text-blue-300 leading-tight whitespace-nowrap">
+                {prediction.category}
+              </span>
+            )}
+          </div>
 
-        {/* Desktop: show all badges */}
-        <div className="hidden sm:flex items-center gap-1 justify-end flex-shrink-0">
-          {allBadges.map((badge) => (
-            <span key={badge.id}>{badge.content}</span>
-          ))}
+          {/* Status badges (right side) - Mobile with overflow */}
+          <div className="flex sm:hidden items-center gap-1 flex-shrink-0">
+            {mobileBadges.map((badge) => (
+              <span key={badge.id}>{badge.content}</span>
+            ))}
+            {overflowCount > 0 && (
+              <span className="px-1.5 py-0.5 text-[9px] font-medium rounded bg-white/5 border border-white/10 text-neutral-400 whitespace-nowrap leading-tight flex-shrink-0">
+                +{overflowCount}
+              </span>
+            )}
+          </div>
+
+          {/* Status badges (right side) - Desktop all badges */}
+          <div className="hidden sm:flex items-center gap-1 flex-shrink-0">
+            {allBadges.map((badge) => (
+              <span key={badge.id}>{badge.content}</span>
+            ))}
+          </div>
         </div>
       </div>
 
