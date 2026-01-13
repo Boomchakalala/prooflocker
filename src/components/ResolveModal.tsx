@@ -162,7 +162,8 @@ export default function ResolveModal({
                 <button
                   type="button"
                   onClick={() => setOutcome("correct")}
-                  className={`w-full h-11 sm:h-12 rounded-lg border font-semibold text-xs sm:text-sm transition-all flex items-center justify-center gap-1.5 sm:gap-2 ${\n                    outcome === "correct"
+                  className={`w-full h-11 sm:h-12 rounded-lg border font-semibold text-xs sm:text-sm transition-all flex items-center justify-center gap-1.5 sm:gap-2 ${
+                    outcome === "correct"
                       ? "bg-green-500/15 border-green-500/50 text-green-300 ring-1 ring-green-500/30 shadow-md shadow-green-500/10"
                       : "bg-white/[0.03] border-white/[0.08] text-white/60 hover:bg-white/[0.06] hover:text-white hover:border-white/15"
                   }`}
