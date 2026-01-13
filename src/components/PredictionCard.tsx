@@ -134,9 +134,9 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
         </div>
 
         {/* Row 2: Category + All status badges (no overflow) */}
-        <div className="flex items-start justify-between gap-2 pl-2">
+        <div className="flex items-center justify-between gap-2 pl-2">
           {/* Category pill (left side, less indent) */}
-          <div className="flex items-center min-w-0 pt-0.5">
+          <div className="flex items-center min-w-0">
             {prediction.category && (
               <span className="px-2 py-0.5 text-[10px] font-semibold rounded-full bg-gradient-to-r from-blue-500/15 to-purple-500/15 border border-blue-500/30 text-blue-300 leading-tight whitespace-nowrap">
                 {prediction.category}
@@ -144,8 +144,8 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
             )}
           </div>
 
-          {/* All status badges (right side) - Always show all, allow wrapping */}
-          <div className="flex items-center gap-1 flex-wrap justify-end flex-shrink-0 max-w-[65%]">
+          {/* All status badges (right side) - Single line, no wrapping */}
+          <div className="flex items-center gap-1 justify-end flex-shrink-0">
             {allBadges.map((badge) => (
               <span key={badge.id}>{badge.content}</span>
             ))}
