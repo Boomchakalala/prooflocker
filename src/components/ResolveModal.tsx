@@ -149,26 +149,25 @@ export default function ResolveModal({
 
         {/* Form Content (scrolls naturally) */}
         <form onSubmit={handleSubmit}>
-          <div className="px-5 py-4 space-y-4">
+          <div className="px-4 sm:px-5 py-4 space-y-4">
             {/* Outcome Selection */}
             <div>
               <label className="block text-sm font-medium text-white/90 mb-2">
                 What's the outcome?
               </label>
 
-              {/* All outcomes in consistent grid */}
-              <div className="grid grid-cols-2 gap-2.5">
+              {/* All outcomes in consistent grid - Better mobile layout */}
+              <div className="grid grid-cols-2 gap-2">
                 {/* Correct */}
                 <button
                   type="button"
                   onClick={() => setOutcome("correct")}
-                  className={`w-full h-12 rounded-lg border font-semibold text-sm transition-all flex items-center justify-center gap-2 ${
-                    outcome === "correct"
+                  className={`w-full h-11 sm:h-12 rounded-lg border font-semibold text-xs sm:text-sm transition-all flex items-center justify-center gap-1.5 sm:gap-2 ${\n                    outcome === "correct"
                       ? "bg-green-500/15 border-green-500/50 text-green-300 ring-1 ring-green-500/30 shadow-md shadow-green-500/10"
                       : "bg-white/[0.03] border-white/[0.08] text-white/60 hover:bg-white/[0.06] hover:text-white hover:border-white/15"
                   }`}
                 >
-                  <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-3.5 h-3.5 sm:w-4 sm:h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                   </svg>
                   Correct
@@ -178,13 +177,13 @@ export default function ResolveModal({
                 <button
                   type="button"
                   onClick={() => setOutcome("incorrect")}
-                  className={`w-full h-12 rounded-lg border font-semibold text-sm transition-all flex items-center justify-center gap-2 ${
+                  className={`w-full h-11 sm:h-12 rounded-lg border font-semibold text-xs sm:text-sm transition-all flex items-center justify-center gap-1.5 sm:gap-2 ${
                     outcome === "incorrect"
                       ? "bg-red-500/15 border-red-500/50 text-red-300 ring-1 ring-red-500/30 shadow-md shadow-red-500/10"
                       : "bg-white/[0.03] border-white/[0.08] text-white/60 hover:bg-white/[0.06] hover:text-white hover:border-white/15"
                   }`}
                 >
-                  <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-3.5 h-3.5 sm:w-4 sm:h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                   </svg>
                   Incorrect
@@ -194,13 +193,13 @@ export default function ResolveModal({
                 <button
                   type="button"
                   onClick={() => setOutcome("invalid")}
-                  className={`w-full h-12 rounded-lg border font-semibold text-sm transition-all flex items-center justify-center gap-2 ${
+                  className={`w-full h-11 sm:h-12 rounded-lg border font-semibold text-xs sm:text-sm transition-all flex items-center justify-center gap-1.5 sm:gap-2 ${
                     outcome === "invalid"
                       ? "bg-gray-500/15 border-gray-500/50 text-gray-300 ring-1 ring-gray-500/30 shadow-md shadow-gray-500/10"
                       : "bg-white/[0.03] border-white/[0.08] text-white/60 hover:bg-white/[0.06] hover:text-white hover:border-white/15"
                   }`}
                 >
-                  <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-3.5 h-3.5 sm:w-4 sm:h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" />
                   </svg>
                   Invalid
@@ -210,13 +209,13 @@ export default function ResolveModal({
                 <button
                   type="button"
                   onClick={() => setOutcome("pending")}
-                  className={`w-full h-12 rounded-lg border font-semibold text-sm transition-all flex items-center justify-center gap-2 ${
+                  className={`w-full h-11 sm:h-12 rounded-lg border font-semibold text-xs sm:text-sm transition-all flex items-center justify-center gap-1.5 sm:gap-2 ${
                     outcome === "pending"
                       ? "bg-yellow-500/15 border-yellow-500/50 text-yellow-300 ring-1 ring-yellow-500/30 shadow-md shadow-yellow-500/10"
                       : "bg-white/[0.03] border-white/[0.08] text-white/60 hover:bg-white/[0.06] hover:text-white hover:border-white/15"
                   }`}
                 >
-                  <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-3.5 h-3.5 sm:w-4 sm:h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                   </svg>
                   Pending
@@ -271,12 +270,12 @@ export default function ResolveModal({
           </div>
 
           {/* Footer with Actions (not sticky - scrolls with content) */}
-          <div className="px-5 py-4 border-t border-white/10 bg-[#0a0a0a]/50">
+          <div className="px-4 sm:px-5 py-4 border-t border-white/10 bg-[#0a0a0a]/50">
             <div className="flex flex-col gap-1.5">
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white font-semibold text-base rounded-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40 disabled:shadow-none"
+                className="w-full px-5 sm:px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white font-semibold text-sm sm:text-base rounded-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40 disabled:shadow-none"
               >
                 {loading ? (
                   <>
@@ -294,7 +293,7 @@ export default function ResolveModal({
               </button>
 
               {/* Permanence notice */}
-              <p className="text-[11px] text-neutral-500 text-center font-medium px-2 leading-tight">
+              <p className="text-[10px] sm:text-[11px] text-neutral-500 text-center font-medium px-2 leading-tight">
                 This resolution is public and permanent
               </p>
 
