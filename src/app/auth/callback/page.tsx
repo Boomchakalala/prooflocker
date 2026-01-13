@@ -16,42 +16,27 @@ function AuthCallbackContent() {
       try {
         console.log("[Auth Callback] Starting auth callback");
 
-        // CRITICAL: Check for PKCE code in URL and exchange it for session
-        const code = searchParams.get('code');
+        // With implicit flow, Supabase automatically detects and sets the session from URL
+        // Wait a moment for Supabase to process the session from URL
+        await new Promise(resolve => setTimeout(resolve, 500));
 
-        if (code) {
-          console.log("[Auth Callback] PKCE code found, exchanging for session...");
+        // Get the session that Supabase extracted from the URL
+        const { data: { session }, error: sessionError } = await supabase.auth.getSession();
 
-          // Exchange the code for a session (REQUIRED for PKCE flow)
-          const { data, error } = await supabase.auth.exchangeCodeForSession(code);
-
-          if (error) {
-            console.error("[Auth Callback] Code exchange failed:", error);
-            throw new Error(`Authentication failed: ${error.message}`);
-          }
-
-          if (!data.session) {
-            console.error("[Auth Callback] No session after code exchange");
-            throw new Error("Failed to create session");
-          }
-
-          console.log("[Auth Callback] Session created successfully:", data.session.user.id);
-
-          // Now proceed with claiming predictions
-          await claimPredictions(data.session);
-        } else {
-          // No code - check if session already exists (fallback)
-          console.log("[Auth Callback] No code param, checking for existing session...");
-          const { data: { session }, error: sessionError } = await supabase.auth.getSession();
-
-          if (session) {
-            console.log("[Auth Callback] Existing session found:", session.user.id);
-            await claimPredictions(session);
-          } else {
-            console.error("[Auth Callback] No code and no session:", sessionError);
-            throw new Error("No authentication code or session found");
-          }
+        if (sessionError) {
+          console.error("[Auth Callback] Session error:", sessionError);
+          throw new Error(`Authentication failed: ${sessionError.message}`);
         }
+
+        if (!session) {
+          console.error("[Auth Callback] No session found after callback");
+          throw new Error("Authentication failed - no session created");
+        }
+
+        console.log("[Auth Callback] Session found:", session.user.id);
+
+        // Now proceed with claiming predictions
+        await claimPredictions(session);
       } catch (error) {
         console.error("[Auth Callback] Error:", error);
         setStatus("error");
