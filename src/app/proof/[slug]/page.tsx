@@ -352,6 +352,110 @@ export default async function ProofPage({ params }: Props) {
           </div>
         )}
 
+        {/* SECTION 6: Resolution On-Chain Proof (when resolution is confirmed) */}
+        {isResolved && prediction.resolutionDeStatus === "CONFIRMED" && prediction.resolutionDeHash && (
+          <div className="mb-6">
+            <div className="text-xs text-neutral-500 uppercase tracking-wide mb-3">
+              Resolution On-Chain Proof
+            </div>
+
+            {/* Trust summary block */}
+            <div className="mb-4 p-3 bg-purple-500/5 border border-purple-500/30 rounded-lg">
+              <div className="max-w-lg mx-auto">
+                <div className="flex items-center gap-2 mb-3">
+                  <svg className="w-4 h-4 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                  </svg>
+                  <h3 className="text-sm font-medium text-white">Resolution locked on-chain</h3>
+                </div>
+                <div className="grid grid-cols-2 gap-2 text-xs">
+                  <div className="flex items-center gap-1.5 text-neutral-400">
+                    <svg className="w-3.5 h-3.5 text-purple-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                    </svg>
+                    <span className="text-neutral-300">Immutable outcome</span>
+                  </div>
+                  <div className="flex items-center gap-1.5 text-neutral-400">
+                    <svg className="w-3.5 h-3.5 text-purple-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    <span className="text-neutral-300">Resolution timestamped</span>
+                  </div>
+                  <div className="flex items-center gap-1.5 text-neutral-400">
+                    <svg className="w-3.5 h-3.5 text-purple-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                    </svg>
+                    <span className="text-neutral-300">SHA-256 resolution hash</span>
+                  </div>
+                  <div className="flex items-center gap-1.5 text-neutral-400">
+                    <svg className="w-3.5 h-3.5 text-purple-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    <span className="text-neutral-300">Publicly verifiable</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Explanatory sentence */}
+            <p className="text-sm text-neutral-400 leading-relaxed mb-4">
+              The outcome resolution was recorded on-chain with Digital Evidence, creating an immutable and timestamped record of when and how this prediction was resolved.
+            </p>
+
+            {/* Technical proof details */}
+            <div className="space-y-3 text-sm">
+              {/* Resolution Transaction Hash */}
+              {prediction.resolutionDeReference && (
+                <div>
+                  <div className="text-xs text-neutral-400 mb-1.5">
+                    Resolution Transaction Hash
+                  </div>
+                  <div className="flex items-start gap-2">
+                    {prediction.resolutionDeReference && getDigitalEvidenceFingerprintUrl(prediction.resolutionDeReference) ? (
+                      <a
+                        href={getDigitalEvidenceFingerprintUrl(prediction.resolutionDeReference)}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-sm text-purple-400 hover:text-purple-300 font-mono break-all underline flex-1"
+                      >
+                        {prediction.resolutionDeReference}
+                      </a>
+                    ) : (
+                      <div className="text-sm text-neutral-300 font-mono break-all flex-1">
+                        {prediction.resolutionDeReference}
+                      </div>
+                    )}
+                    <CopyButton text={prediction.resolutionDeReference || ""} iconSize="sm" />
+                  </div>
+                </div>
+              )}
+
+              {/* Resolution Block Timestamp */}
+              {prediction.resolutionDeTimestamp && (
+                <div className="flex justify-between items-start gap-4">
+                  <span className="text-neutral-400">Resolution block timestamp</span>
+                  <div className="text-neutral-300 font-mono text-right text-xs">
+                    {new Date(prediction.resolutionDeTimestamp).toUTCString()}
+                  </div>
+                </div>
+              )}
+
+              {/* Resolution Hash (SHA-256) */}
+              <div>
+                <div className="text-xs text-neutral-400 mb-1.5">
+                  Resolution Data Hash (SHA-256)
+                </div>
+                <div className="flex items-start gap-2 bg-black/40 p-2.5 rounded border border-neutral-800/50">
+                  <code className="text-xs text-neutral-300 font-mono break-all flex-1">
+                    {prediction.resolutionDeHash}
+                  </code>
+                  <CopyButton text={prediction.resolutionDeHash} iconSize="sm" />
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* Pending confirmation section */}
         {prediction.onChainStatus !== "confirmed" && (
           <div className="mb-6">
