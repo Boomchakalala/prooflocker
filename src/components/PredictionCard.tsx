@@ -82,47 +82,33 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
   const isResolved = prediction.outcome !== "pending";
   const canResolve = isOwner && !isResolved;
 
-  // Determine resolve button state, text, and colors
-  const resolveButtonText = isResolved ? "Resolved" : "Resolve";
-  const resolveButtonEnabled = canResolve;
-
-  // Color system matching proof page
-  const getResolveButtonClasses = () => {
-    // Owner + pending = can resolve (green, enabled)
-    if (canResolve) {
-      return "text-white bg-green-500/20 hover:bg-green-500/30 border-green-500/40 cursor-pointer";
-    }
-
-    // Resolved states - match proof page outcome colors
-    if (isResolved) {
-      const outcome = prediction.outcome;
-      if (outcome === "correct") {
-        return "text-green-400 bg-green-500/10 border-green-500/30 cursor-not-allowed";
-      }
-      if (outcome === "incorrect") {
-        return "text-red-400 bg-red-500/10 border-red-500/30 cursor-not-allowed";
-      }
-      if (outcome === "invalid") {
-        return "text-neutral-400 bg-neutral-500/10 border-neutral-500/30 cursor-not-allowed";
-      }
-    }
-
-    // Not owner + pending = cannot resolve (yellow/muted)
-    return "text-yellow-400/70 bg-yellow-500/10 border-yellow-500/30 cursor-not-allowed";
-  };
-
-  // Determine caption text for resolve button
-  const getResolveCaption = () => {
-    if (!isOwner && !isResolved) {
-      return "Only the author can resolve";
-    }
+  // Determine helper text (ALWAYS shown)
+  const getHelperText = () => {
     if (isResolved) {
       return isResolutionOnChain() ? "Resolved on-chain" : "Resolved";
     }
     if (canResolve) {
       return "Ready to resolve";
     }
-    return null;
+    if (!isOwner) {
+      return "Only the creator can resolve";
+    }
+    return "Not ready to resolve yet";
+  };
+
+  // Get badge color for resolved state
+  const getResolvedBadgeColor = () => {
+    const outcome = prediction.outcome;
+    if (outcome === "correct") {
+      return "bg-green-500/15 border-green-500/40 text-green-300";
+    }
+    if (outcome === "incorrect") {
+      return "bg-red-500/15 border-red-500/40 text-red-300";
+    }
+    if (outcome === "invalid") {
+      return "bg-neutral-500/15 border-neutral-500/40 text-neutral-300";
+    }
+    return "bg-yellow-500/15 border-yellow-500/40 text-yellow-300";
   };
 
   // Determine if user can share (owner and claimed)
@@ -265,75 +251,56 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
         </div>
       </div>
 
-      {/* Actions row - Compact layout with buttons on same line */}
-      <div className="flex flex-col gap-2">
-        {/* Action row: View Proof + Resolve on same line */}
-        <div className="flex gap-1.5">
+      {/* FIXED FOOTER - Always identical structure */}
+      <div className="flex flex-col gap-2 min-h-[76px]">
+        {/* Row: [View Proof] + [Action Slot] - Both flex-1, h-12 */}
+        <div className="flex gap-2">
+          {/* Left: View Proof button */}
           <Link
             href={`/proof/${prediction.publicSlug}`}
-            className="flex-1 text-center px-3 py-2 text-sm font-semibold text-white bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 rounded-lg transition-all shadow-lg shadow-blue-500/20 hover:shadow-blue-500/30"
+            className="flex-1 h-12 flex items-center justify-center text-sm font-semibold text-white bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 rounded-lg transition-all shadow-lg shadow-blue-500/20 hover:shadow-blue-500/30"
             title="View permanent proof page"
           >
             View Proof
           </Link>
 
-          <button
-            onClick={() => resolveButtonEnabled && setShowResolveModal(true)}
-            disabled={!resolveButtonEnabled}
-            className={`flex-1 px-3 py-2 text-sm font-medium rounded-lg transition-all border ${getResolveButtonClasses()}`}
-          >
-            {resolveButtonText}
-          </button>
-
-          {/* Share button - Only for claimed predictions owned by current user */}
-          {canShare && (
-            <button
-              onClick={copyLink}
-              className="px-3 py-2 text-sm font-medium text-neutral-400 hover:text-white bg-white/5 hover:bg-white/10 rounded-lg transition-all border border-white/10"
-              title="Share prediction"
-            >
-              {linkCopied ? (
-                <svg
-                  className="w-4 h-4 text-green-500"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M5 13l4 4L19 7"
-                  />
+          {/* Right: Action Slot */}
+          <div className="flex-1 h-12 flex items-center justify-center gap-2">
+            {isResolved ? (
+              /* Resolved: Non-clickable badge */
+              <div className={`flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg border text-sm font-medium ${getResolvedBadgeColor()}`}>
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                 </svg>
-              ) : (
-                <svg
-                  className="w-4 h-4"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"
-                  />
-                </svg>
-              )}
-            </button>
-          )}
+                {isResolutionOnChain() ? "Resolved on-chain" : "Resolved"}
+              </div>
+            ) : (
+              /* Pending: Resolve button (enabled or disabled) */
+              <button
+                onClick={() => canResolve && setShowResolveModal(true)}
+                disabled={!canResolve}
+                className={`w-full h-full flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg border text-sm font-medium transition-all ${
+                  canResolve
+                    ? "text-white bg-green-500/20 hover:bg-green-500/30 border-green-500/40 cursor-pointer"
+                    : "text-neutral-400 bg-white/5 border-white/10 cursor-not-allowed"
+                }`}
+              >
+                {!isOwner && (
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                  </svg>
+                )}
+                Resolve
+              </button>
+            )}
+          </div>
         </div>
 
-        {/* Caption area - ALWAYS RENDERED for consistent height */}
-        <div className="min-h-[20px] px-1 py-1.5">
-          {getResolveCaption() ? (
-            <p className="text-[10px] text-neutral-500 text-center leading-tight">
-              {getResolveCaption()}
-            </p>
-          ) : (
-            <div className="h-[20px]" aria-hidden="true" />
-          )}
+        {/* Helper/status line - ALWAYS rendered */}
+        <div className="min-h-[20px] flex items-center justify-center px-2">
+          <p className="text-[10px] text-neutral-500 text-center leading-tight">
+            {getHelperText()}
+          </p>
         </div>
       </div>
 
