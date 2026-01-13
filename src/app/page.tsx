@@ -463,33 +463,35 @@ function HomeContent() {
 
       {/* Footer - Sticky footer at bottom */}
       <footer className="border-t border-white/5 glass relative z-10">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-          {/* 3-column layout: Left, Center, Right */}
-          <div className="flex flex-col md:flex-row items-center justify-between gap-4 md:gap-6">
-            {/* Left: Credibility line */}
-            <div className="text-center md:text-left">
-              <p className="text-xs md:text-sm text-neutral-500">
-                Secured by <span className="text-white font-medium">Digital Evidence</span> on <span className="text-white font-medium">Constellation (DAG)</span>
+        <div className="max-w-7xl mx-auto px-6 lg:px-8 py-4">
+          {/* 3-column grid layout */}
+          <div className="grid grid-cols-1 md:grid-cols-3 items-center gap-3 md:gap-6">
+            {/* Left: Credibility line (primary) */}
+            <div className="justify-self-center md:justify-self-start">
+              <p className="text-xs md:text-sm text-neutral-400">
+                Powered by <span className="text-white/90 font-medium">Digital Evidence</span> on <span className="text-white/90 font-medium">Constellation (DAG)</span>
               </p>
             </div>
 
-            {/* Center: Core values */}
-            <div className="text-center">
-              <span className="text-xs text-neutral-500">
+            {/* Center: Core values (secondary/metadata) */}
+            <div className="justify-self-center">
+              <span className="text-[10px] md:text-xs text-neutral-600 font-medium tracking-wide">
                 Anonymous • Public • Immutable
               </span>
             </div>
 
-            {/* Right: CTA */}
-            <Link
-              href="/verify"
-              className="text-center md:text-right px-4 py-2.5 md:px-0 md:py-0 text-sm text-neutral-400 hover:text-white transition-colors flex items-center gap-1.5 rounded-lg md:rounded-none hover:bg-white/5 md:hover:bg-transparent"
-            >
-              Verify a proof
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-              </svg>
-            </Link>
+            {/* Right: CTA (primary) */}
+            <div className="justify-self-center md:justify-self-end">
+              <Link
+                href="/verify"
+                className="inline-flex items-center gap-1.5 text-sm text-neutral-400 hover:text-white transition-colors group"
+              >
+                <span>Verify a proof</span>
+                <svg className="w-3.5 h-3.5 transition-transform group-hover:translate-x-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                </svg>
+              </Link>
+            </div>
           </div>
         </div>
       </footer>
