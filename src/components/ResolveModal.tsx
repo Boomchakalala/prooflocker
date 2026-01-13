@@ -98,19 +98,19 @@ export default function ResolveModal({
       {/* Backdrop */}
       <div className="absolute inset-0 bg-black/70 backdrop-blur-sm" />
 
-      {/* Modal Container - Full height minus app header */}
+      {/* Modal Container - Single scroll container */}
       <div
-        className="relative w-full max-w-2xl rounded-2xl bg-gradient-to-br from-[#1a1a1a] to-[#0a0a0a] border border-white/10 shadow-2xl flex flex-col"
+        className="relative w-full max-w-2xl rounded-2xl bg-gradient-to-br from-[#1a1a1a] to-[#0a0a0a] border border-white/10 shadow-2xl overflow-y-auto"
         style={{
-          height: 'calc(100dvh - var(--header-h) - 2rem)',
-          maxHeight: 'calc(100dvh - var(--header-h) - 2rem)',
+          maxHeight: 'calc(100dvh - var(--header-h) - 3rem)',
+          marginTop: '0.5rem',
         }}
         onClick={(e) => e.stopPropagation()}
       >
-        {/* 1. STICKY PANEL HEADER */}
-        <div className="flex-shrink-0 sticky top-0 z-10 bg-gradient-to-br from-[#1a1a1a] to-[#0a0a0a] rounded-t-2xl border-b border-white/10">
+        {/* Panel Header (not sticky - scrolls with content) */}
+        <div className="px-5 pt-5 pb-4 border-b border-white/10">
           {/* Top bar with title and close */}
-          <div className="flex items-center justify-between px-5 py-4">
+          <div className="flex items-center justify-between mb-3">
             <h3 className="text-xl font-bold text-white flex items-center gap-2">
               <svg className="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -129,26 +129,24 @@ export default function ResolveModal({
           </div>
 
           {/* Helper text */}
-          <div className="px-5 pb-3">
-            <p className="text-sm text-white/60 mb-3">
-              Choose the outcome and optionally add a note or proof.
-            </p>
+          <p className="text-sm text-white/60 mb-3">
+            Choose the outcome and optionally add a note or proof.
+          </p>
 
-            {/* Prediction preview */}
-            <div className="glass rounded-lg p-3 border border-white/5">
-              <p className="text-xs text-white/40 mb-1 uppercase tracking-wider font-medium">
-                Prediction
-              </p>
-              <p className="text-sm text-white/90 leading-relaxed line-clamp-2">
-                {truncatedText}
-              </p>
-            </div>
+          {/* Prediction preview */}
+          <div className="glass rounded-lg p-3 border border-white/5">
+            <p className="text-xs text-white/40 mb-1 uppercase tracking-wider font-medium">
+              Prediction
+            </p>
+            <p className="text-sm text-white/90 leading-relaxed line-clamp-2">
+              {truncatedText}
+            </p>
           </div>
         </div>
 
-        {/* 2. SCROLLABLE FORM CONTENT */}
-        <form onSubmit={handleSubmit} className="flex flex-col flex-1 min-h-0">
-          <div className="flex-1 overflow-y-auto overscroll-contain px-5 py-4 space-y-4">
+        {/* Form Content (scrolls naturally) */}
+        <form onSubmit={handleSubmit}>
+          <div className="px-5 py-4 space-y-4">
             {/* Outcome Selection */}
             <div>
               <label className="block text-sm font-medium text-white/90 mb-2">
@@ -269,14 +267,8 @@ export default function ResolveModal({
             )}
           </div>
 
-          {/* 3. STICKY FOOTER WITH ACTIONS */}
-          <div
-            className="flex-shrink-0 sticky bottom-0 z-10 px-5 py-4 border-t border-white/10 bg-[#0a0a0a]/95 backdrop-blur-sm rounded-b-2xl"
-            style={{
-              // Safe area insets for iOS
-              paddingBottom: 'max(1rem, env(safe-area-inset-bottom))',
-            }}
-          >
+          {/* Footer with Actions (not sticky - scrolls with content) */}
+          <div className="px-5 py-4 border-t border-white/10 bg-[#0a0a0a]/50">
             <div className="flex flex-col gap-1.5">
               <button
                 type="submit"
