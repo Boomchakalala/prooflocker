@@ -84,9 +84,6 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
     return "bg-yellow-500/15 border-yellow-500/40 text-yellow-300";
   };
 
-  // Determine if user can share (owner and claimed)
-  const canShare = isOwner && isClaimed;
-
   return (
     <div className="glass rounded-lg p-3 md:p-4 hover:border-white/10 transition-all flex flex-col h-full shadow-lg shadow-purple-500/5">
       {/* Header row: Badge + Author + Time + Status Pills */}
