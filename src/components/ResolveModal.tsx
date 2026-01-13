@@ -88,7 +88,7 @@ export default function ResolveModal({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-4"
+      className="fixed inset-0 z-[9999] flex items-center justify-center p-4"
       onClick={onClose}
       style={{
         // CSS variable for app header height
@@ -99,11 +99,11 @@ export default function ResolveModal({
       }}
     >
       {/* Backdrop */}
-      <div className="absolute inset-0 bg-black/70 backdrop-blur-sm" />
+      <div className="absolute inset-0 bg-black/70 backdrop-blur-sm z-0" />
 
       {/* Modal Container - Single scroll container with better mobile support */}
       <div
-        className="relative w-full max-w-2xl rounded-2xl bg-gradient-to-br from-[#1a1a1a] to-[#0a0a0a] border border-white/10 shadow-2xl overflow-y-auto"
+        className="relative z-10 w-full max-w-2xl rounded-2xl bg-gradient-to-br from-[#1a1a1a] to-[#0a0a0a] border border-white/10 shadow-2xl overflow-y-auto"
         style={{
           // Use dvh for better mobile support and account for safe areas
           maxHeight: 'min(calc(100dvh - var(--header-h) - 2rem - env(safe-area-inset-top) - env(safe-area-inset-bottom)), 90vh)',
