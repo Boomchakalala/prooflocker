@@ -262,23 +262,31 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
         </div>
       </div>
 
-      {/* Actions row - Consistent structure for all cards */}
-      <div className="flex flex-col gap-1.5">
-        {/* Primary action row: View Proof + Share */}
+      {/* Actions row - Compact layout with buttons on same line */}
+      <div className="flex flex-col gap-1">
+        {/* Action row: View Proof + Resolve on same line */}
         <div className="flex gap-1.5">
           <Link
             href={`/proof/${prediction.publicSlug}`}
-            className="flex-1 text-center px-4 py-2.5 text-sm font-semibold text-white bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 rounded-lg transition-all shadow-lg shadow-blue-500/20 hover:shadow-blue-500/30"
+            className="flex-1 text-center px-3 py-2 text-sm font-semibold text-white bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 rounded-lg transition-all shadow-lg shadow-blue-500/20 hover:shadow-blue-500/30"
             title="View permanent proof page"
           >
             View Proof
           </Link>
 
+          <button
+            onClick={() => resolveButtonEnabled && setShowResolveModal(true)}
+            disabled={!resolveButtonEnabled}
+            className={`flex-1 px-3 py-2 text-sm font-medium rounded-lg transition-all border ${getResolveButtonClasses()}`}
+          >
+            {resolveButtonText}
+          </button>
+
           {/* Share button - Only for claimed predictions owned by current user */}
           {canShare && (
             <button
               onClick={copyLink}
-              className="px-3 py-2.5 text-sm font-medium text-neutral-400 hover:text-white bg-white/5 hover:bg-white/10 rounded-lg transition-all border border-white/10"
+              className="px-3 py-2 text-sm font-medium text-neutral-400 hover:text-white bg-white/5 hover:bg-white/10 rounded-lg transition-all border border-white/10"
               title="Share prediction"
             >
               {linkCopied ? (
@@ -314,30 +322,15 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
           )}
         </div>
 
-        {/* Secondary action: Resolve button - ALWAYS RENDERED */}
-        <div className="flex flex-col gap-0.5 min-h-[44px]">
-          <button
-            onClick={() => resolveButtonEnabled && setShowResolveModal(true)}
-            disabled={!resolveButtonEnabled}
-            className={`w-full px-3 py-2 text-sm font-medium rounded-lg transition-all border ${
-              resolveButtonEnabled
-                ? "text-white bg-green-600/90 hover:bg-green-600 border-green-500/30 cursor-pointer"
-                : "text-neutral-500 bg-neutral-800/50 border-neutral-700/50 cursor-not-allowed"
-            }`}
-          >
-            {resolveButtonText}
-          </button>
-
-          {/* Caption area - ALWAYS RENDERED for consistent height */}
-          <div className="min-h-[16px] px-1">
-            {getResolveCaption() ? (
-              <p className="text-[10px] text-neutral-500 text-center leading-tight">
-                {getResolveCaption()}
-              </p>
-            ) : (
-              <div className="h-[16px]" aria-hidden="true" />
-            )}
-          </div>
+        {/* Caption area - ALWAYS RENDERED for consistent height */}
+        <div className="min-h-[14px] px-1">
+          {getResolveCaption() ? (
+            <p className="text-[10px] text-neutral-500 text-center leading-tight">
+              {getResolveCaption()}
+            </p>
+          ) : (
+            <div className="h-[14px]" aria-hidden="true" />
+          )}
         </div>
       </div>
 
