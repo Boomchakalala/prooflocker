@@ -14,211 +14,44 @@ function AuthCallbackContent() {
   useEffect(() => {
     const handleCallback = async () => {
       try {
-        // Supabase will automatically detect and exchange tokens from the URL
-        // We need to listen for the auth state change to know when the session is ready
-        const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
-          console.log("[Auth Callback] Auth event:", event, "Session:", session ? "Present" : "None");
+        console.log("[Auth Callback] Starting auth callback");
 
-          if (event === 'SIGNED_IN' && session) {
-            const user = session.user;
-            console.log("[Auth Callback] User signed in:", user.id);
+        // CRITICAL: Check for PKCE code in URL and exchange it for session
+        const code = searchParams.get('code');
 
-            try {
-              setStatus("claiming");
-              setMessage("Claiming your predictions...");
+        if (code) {
+          console.log("[Auth Callback] PKCE code found, exchanging for session...");
 
-              console.log("[Auth Callback] Getting anonId...");
+          // Exchange the code for a session (REQUIRED for PKCE flow)
+          const { data, error } = await supabase.auth.exchangeCodeForSession(code);
 
-              // Get the anonymous ID from localStorage
-              let anonId;
-              try {
-                anonId = getOrCreateUserId();
-                console.log("[Auth Callback] anonId:", anonId);
-              } catch (storageError) {
-                console.error("[Auth Callback] localStorage error:", storageError);
-                throw new Error("Failed to access local storage. Please try in a normal browser window (not incognito).");
-              }
-
-              if (!anonId) {
-                console.warn("[Auth Callback] No anonId, skipping claim");
-                setStatus("success");
-                setMessage("Logged in successfully!");
-                setTimeout(() => {
-                  subscription.unsubscribe();
-                  router.push("/?tab=my");
-                }, 2000);
-                return;
-              }
-
-              // Get the current session to send with the request
-              const { data: { session } } = await supabase.auth.getSession();
-              const accessToken = session?.access_token;
-              console.log("[Auth Callback] Has access token:", !!accessToken);
-
-              if (!accessToken) {
-                throw new Error("No access token available");
-              }
-
-              console.log("[Auth Callback] Calling claim API...");
-              // Claim all predictions with this anonId via API
-              const controller = new AbortController();
-              const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
-
-              const response = await fetch('/api/claim-predictions', {
-                method: 'POST',
-                headers: {
-                  'Content-Type': 'application/json',
-                  'Authorization': `Bearer ${accessToken}`,
-                },
-                body: JSON.stringify({ anonId }),
-                signal: controller.signal,
-              });
-
-              clearTimeout(timeoutId);
-
-              if (!response.ok) {
-                const errorData = await response.json();
-                console.error("[Auth Callback] API error:", response.status, errorData);
-                throw new Error(errorData.error || 'Failed to claim predictions');
-              }
-
-              console.log("[Auth Callback] Claim API response:", response.status);
-
-              const data = await response.json();
-              const claimedCount = data.claimedCount;
-
-              setStatus("success");
-              setMessage(`Successfully claimed ${claimedCount} prediction${claimedCount !== 1 ? 's' : ''}!`);
-
-              // Redirect to My predictions tab after 2 seconds
-              setTimeout(() => {
-                subscription.unsubscribe();
-                router.push("/?tab=my");
-              }, 2000);
-            } catch (claimError) {
-              console.error("[Auth Callback] Claim error:", claimError);
-              setStatus("error");
-
-              if (claimError instanceof Error && claimError.name === 'AbortError') {
-                setMessage("Request timed out - but your predictions may have been claimed. Check your profile.");
-              } else {
-                setMessage(claimError instanceof Error ? claimError.message : "Failed to claim predictions");
-              }
-
-              // Redirect to home after 3 seconds
-              setTimeout(() => {
-                subscription.unsubscribe();
-                router.push("/");
-              }, 3000);
-            }
-          } else if (event === 'USER_UPDATED') {
-            // Session might be available now
-            const { data: { session: currentSession } } = await supabase.auth.getSession();
-            if (currentSession) {
-              console.log("[Auth Callback] Session available after USER_UPDATED");
-            }
+          if (error) {
+            console.error("[Auth Callback] Code exchange failed:", error);
+            throw new Error(`Authentication failed: ${error.message}`);
           }
-        });
 
-        // Also try to get session immediately in case it's already available
-        const { data: { session }, error: sessionError } = await supabase.auth.getSession();
-
-        if (session) {
-          console.log("[Auth Callback] Session immediately available");
-          const user = session.user;
-
-          try {
-            setStatus("claiming");
-            setMessage("Claiming your predictions...");
-
-            // Get the anonymous ID from localStorage
-            const anonId = getOrCreateUserId();
-            console.log("[Auth Callback] anonId:", anonId);
-
-            // Get the current session to send with the request
-            const { data: { session: currentSession } } = await supabase.auth.getSession();
-            const accessToken = currentSession?.access_token;
-            console.log("[Auth Callback] Has access token:", !!accessToken);
-
-            if (!accessToken) {
-              throw new Error("No access token available");
-            }
-
-            console.log("[Auth Callback] Calling claim API...");
-            // Claim all predictions with this anonId via API
-            const controller = new AbortController();
-            const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
-
-            const response = await fetch('/api/claim-predictions', {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${accessToken}`,
-              },
-              body: JSON.stringify({ anonId }),
-              signal: controller.signal,
-            });
-
-            clearTimeout(timeoutId);
-
-            if (!response.ok) {
-              const errorData = await response.json();
-              console.error("[Auth Callback] API error:", response.status, errorData);
-              throw new Error(errorData.error || 'Failed to claim predictions');
-            }
-
-            console.log("[Auth Callback] Claim API response:", response.status);
-
-            const data = await response.json();
-            const claimedCount = data.claimedCount;
-
-            setStatus("success");
-            setMessage(`Successfully claimed ${claimedCount} prediction${claimedCount !== 1 ? 's' : ''}!`);
-
-            // Redirect to My predictions tab after 2 seconds
-            setTimeout(() => {
-              subscription.unsubscribe();
-              router.push("/?tab=my");
-            }, 2000);
-          } catch (claimError) {
-            console.error("[Auth Callback] Claim error:", claimError);
-            setStatus("error");
-
-            if (claimError instanceof Error && claimError.name === 'AbortError') {
-              setMessage("Request timed out - but your predictions may have been claimed. Check your profile.");
-            } else {
-              setMessage(claimError instanceof Error ? claimError.message : "Failed to claim predictions");
-            }
-
-            // Redirect to home after 3 seconds
-            setTimeout(() => {
-              subscription.unsubscribe();
-              router.push("/");
-            }, 3000);
+          if (!data.session) {
+            console.error("[Auth Callback] No session after code exchange");
+            throw new Error("Failed to create session");
           }
-        } else if (sessionError) {
-          // Only treat it as an error if it's not just "no session yet"
-          if (sessionError.message !== "Auth session missing!") {
-            console.error("[Auth Callback] Session error:", sessionError);
-            throw sessionError;
-          } else {
-            console.log("[Auth Callback] Waiting for session from URL...");
-          }
+
+          console.log("[Auth Callback] Session created successfully:", data.session.user.id);
+
+          // Now proceed with claiming predictions
+          await claimPredictions(data.session);
         } else {
-          // No session yet, waiting for onAuthStateChange
-          console.log("[Auth Callback] No session yet, waiting for auth state change...");
+          // No code - check if session already exists (fallback)
+          console.log("[Auth Callback] No code param, checking for existing session...");
+          const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+
+          if (session) {
+            console.log("[Auth Callback] Existing session found:", session.user.id);
+            await claimPredictions(session);
+          } else {
+            console.error("[Auth Callback] No code and no session:", sessionError);
+            throw new Error("No authentication code or session found");
+          }
         }
-
-        // Set a timeout in case auth never completes
-        setTimeout(() => {
-          setStatus("error");
-          setMessage("Authentication timeout - please try again");
-          setTimeout(() => {
-            subscription.unsubscribe();
-            router.push("/");
-          }, 2000);
-        }, 10000); // 10 second timeout
-
       } catch (error) {
         console.error("[Auth Callback] Error:", error);
         setStatus("error");
@@ -230,6 +63,94 @@ function AuthCallbackContent() {
         }, 3000);
       }
     };
+
+    async function claimPredictions(session: any) {
+      try {
+        setStatus("claiming");
+        setMessage("Claiming your predictions...");
+
+        const user = session.user;
+        const accessToken = session.access_token;
+
+        console.log("[Auth Callback] User:", user.id);
+        console.log("[Auth Callback] Has access token:", !!accessToken);
+
+        // Get the anonymous ID from localStorage
+        let anonId;
+        try {
+          anonId = getOrCreateUserId();
+          console.log("[Auth Callback] anonId:", anonId);
+        } catch (storageError) {
+          console.error("[Auth Callback] localStorage error:", storageError);
+          throw new Error("Failed to access local storage. Please try in a normal browser window (not incognito).");
+        }
+
+        if (!anonId) {
+          console.warn("[Auth Callback] No anonId, skipping claim");
+          setStatus("success");
+          setMessage("Logged in successfully!");
+          setTimeout(() => {
+            router.push("/?tab=my");
+          }, 2000);
+          return;
+        }
+
+        if (!accessToken) {
+          throw new Error("No access token available");
+        }
+
+        console.log("[Auth Callback] Calling claim API...");
+
+        // Claim all predictions with this anonId via API
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
+
+        const response = await fetch('/api/claim-predictions', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${accessToken}`,
+          },
+          body: JSON.stringify({ anonId }),
+          signal: controller.signal,
+        });
+
+        clearTimeout(timeoutId);
+
+        if (!response.ok) {
+          const errorData = await response.json();
+          console.error("[Auth Callback] API error:", response.status, errorData);
+          throw new Error(errorData.error || 'Failed to claim predictions');
+        }
+
+        console.log("[Auth Callback] Claim API response:", response.status);
+
+        const data = await response.json();
+        const claimedCount = data.claimedCount || 0;
+
+        setStatus("success");
+        setMessage(`Successfully claimed ${claimedCount} prediction${claimedCount !== 1 ? 's' : ''}!`);
+
+        // Redirect to My predictions tab after 2 seconds
+        setTimeout(() => {
+          router.push("/?tab=my");
+        }, 2000);
+      } catch (claimError) {
+        console.error("[Auth Callback] Claim error:", claimError);
+        setStatus("error");
+
+        if (claimError instanceof Error && claimError.name === 'AbortError') {
+          setMessage("Request timed out - but your predictions may have been claimed. Check your profile.");
+        } else {
+          setMessage(claimError instanceof Error ? claimError.message : "Failed to claim predictions");
+        }
+
+        // Redirect to home after 3 seconds
+        setTimeout(() => {
+          router.push("/");
+        }, 3000);
+      }
+    }
 
     handleCallback();
   }, [router, searchParams]);
