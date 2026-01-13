@@ -154,8 +154,8 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
       </div>
 
       {/* Main content: Prediction text - VISUAL FOCUS */}
-      <p className="text-white text-lg leading-relaxed mb-2 md:mb-3 font-normal flex-grow line-clamp-2">
-        {prediction.textPreview}
+      <p className="text-white text-lg leading-relaxed mb-2 md:mb-3 font-normal flex-grow line-clamp-2 min-w-0">
+        {prediction.text}
       </p>
 
       {/* Status line: Outcome - More prominent */}
@@ -318,7 +318,7 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
       {showContestModal && (
         <ContestModal
           predictionId={prediction.id}
-          predictionText={prediction.textPreview}
+          predictionText={prediction.text}
           onClose={() => setShowContestModal(false)}
           onSuccess={() => {
             setShowContestModal(false);
