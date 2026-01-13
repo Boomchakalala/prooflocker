@@ -442,10 +442,10 @@ export default function LockPage() {
               )}
             </div>
 
-              {/* CTA section with auth-aware sharing */}
-              <div className="space-y-3 max-w-md mx-auto">
-                {/* Primary CTA - Auth-aware */}
-                {isAnonymous ? (
+            {/* CTA section with auth-aware sharing */}
+            <div className="space-y-3 max-w-md mx-auto">
+              {/* Primary CTA - Auth-aware */}
+              {isAnonymous ? (
                   <Link
                     href="/auth"
                     className="block w-full px-6 py-4 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white font-semibold text-base rounded-lg transition-all shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40 flex items-center justify-center gap-2"
