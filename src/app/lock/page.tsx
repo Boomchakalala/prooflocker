@@ -455,32 +455,49 @@ export default function LockPage() {
                 )}
               </div>
 
-              {/* Tightened CTA section */}
-              <div className="space-y-2 max-w-md mx-auto">
-                {/* Primary CTA */}
-                <Link
-                  href="/"
-                  className="block w-full px-6 py-4 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white font-semibold text-base rounded-lg transition-all shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40"
-                >
-                  Back to feed
-                </Link>
+              {/* CTA section with auth-aware sharing */}
+              <div className="space-y-3 max-w-md mx-auto">
+                {/* Primary CTA - Auth-aware */}
+                {isAnonymous ? (
+                  <Link
+                    href="/auth"
+                    className="block w-full px-6 py-4 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white font-semibold text-base rounded-lg transition-all shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40 flex items-center justify-center gap-2"
+                  >
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
+                    </svg>
+                    Sign in to share
+                  </Link>
+                ) : (
+                  <button
+                    onClick={handleShare}
+                    className="w-full px-6 py-4 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white font-semibold text-base rounded-lg transition-all shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40 flex items-center justify-center gap-2"
+                  >
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
+                    </svg>
+                    Share proof
+                  </button>
+                )}
+
+                {/* Explanatory micro-copy */}
+                <p className="text-[11px] text-neutral-500 text-center leading-tight">
+                  Only the creator of this prediction can share the proof
+                </p>
 
                 {/* Secondary CTAs */}
                 <div className="flex gap-2">
-                  <button
-                    onClick={handleShare}
-                    className="flex-1 px-4 py-3 bg-neutral-800 hover:bg-neutral-700 text-white font-medium text-sm rounded-lg transition-all border border-neutral-700 flex items-center justify-center gap-2"
+                  <Link
+                    href="/"
+                    className="flex-1 px-4 py-3 bg-neutral-800 hover:bg-neutral-700 text-white font-medium text-sm rounded-lg transition-all border border-neutral-700 text-center"
                   >
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
-                    </svg>
-                    Share
-                  </button>
+                    Back to feed
+                  </Link>
                   <Link
                     href={`/verify?proofId=${proofId}`}
                     className="flex-1 px-4 py-3 bg-white/5 hover:bg-white/10 text-white font-medium text-sm rounded-lg transition-all border border-white/10 text-center"
                   >
-                    Verify
+                    Verify on-chain
                   </Link>
                 </div>
               </div>
