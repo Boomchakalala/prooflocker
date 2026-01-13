@@ -32,13 +32,19 @@ export interface Prediction {
   resolutionNote?: string; // Optional note added when resolving (max 280 chars)
   resolutionUrl?: string; // Optional reference URL added when resolving
   resolvedAt?: string; // ISO timestamp when resolved by user
-  // Digital Evidence metadata (when confirmed on-chain):
+  // Digital Evidence metadata (when prediction locked on-chain):
   deReference?: string; // Constellation Digital Evidence reference/transaction ID
   deEventId?: string; // Digital Evidence event ID
   deStatus?: string; // Digital Evidence API status (NEW, PENDING, CONFIRMED, etc.)
   deSubmittedAt?: string; // ISO timestamp when submitted to Digital Evidence
   confirmedAt?: string; // ISO timestamp when on-chain confirmation succeeded
   claimedAt?: string; // ISO timestamp when claimed via email
+  // Resolution Digital Evidence metadata (when resolution locked on-chain):
+  resolutionDeHash?: string; // Hash of resolution data submitted to Digital Evidence
+  resolutionDeTimestamp?: string; // ISO timestamp when resolution was recorded on-chain
+  resolutionDeReference?: string; // Digital Evidence reference/transaction ID for resolution
+  resolutionDeEventId?: string; // Digital Evidence event ID for resolution
+  resolutionDeStatus?: string; // Digital Evidence API status for resolution (PENDING, CONFIRMED, etc.)
   // Moderation fields:
   moderationStatus?: "active" | "hidden"; // Moderation status (active = visible, hidden = removed)
   hiddenReason?: string; // Reason for hiding (if hidden)
@@ -73,6 +79,11 @@ interface PredictionRow {
   de_submitted_at: string | null;
   confirmed_at: string | null;
   claimed_at: string | null;
+  resolution_de_hash: string | null;
+  resolution_de_timestamp: string | null;
+  resolution_de_reference: string | null;
+  resolution_de_event_id: string | null;
+  resolution_de_status: string | null;
   created_at: string;
   moderation_status: "active" | "hidden";
   hidden_reason: string | null;
@@ -108,6 +119,11 @@ function rowToPrediction(row: PredictionRow): Prediction {
     deSubmittedAt: row.de_submitted_at || undefined,
     confirmedAt: row.confirmed_at || undefined,
     claimedAt: row.claimed_at || undefined,
+    resolutionDeHash: row.resolution_de_hash || undefined,
+    resolutionDeTimestamp: row.resolution_de_timestamp || undefined,
+    resolutionDeReference: row.resolution_de_reference || undefined,
+    resolutionDeEventId: row.resolution_de_event_id || undefined,
+    resolutionDeStatus: row.resolution_de_status || undefined,
     moderationStatus: row.moderation_status,
     hiddenReason: row.hidden_reason || undefined,
     hiddenAt: row.hidden_at || undefined,
