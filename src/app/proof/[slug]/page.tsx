@@ -413,7 +413,7 @@ export default async function ProofPage({ params }: Props) {
                   <div className="flex items-start gap-2">
                     {prediction.resolutionDeReference && getDigitalEvidenceFingerprintUrl(prediction.resolutionDeReference) ? (
                       <a
-                        href={getDigitalEvidenceFingerprintUrl(prediction.resolutionDeReference)}
+                        href={getDigitalEvidenceFingerprintUrl(prediction.resolutionDeReference) || undefined}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="text-sm text-purple-400 hover:text-purple-300 font-mono break-all underline flex-1"
