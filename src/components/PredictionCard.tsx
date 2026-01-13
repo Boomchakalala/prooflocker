@@ -286,6 +286,7 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
       {showResolveModal && (
         <ResolveModal
           predictionId={prediction.id}
+          predictionText={prediction.text}
           currentOutcome={prediction.outcome}
           currentNote={prediction.resolutionNote}
           currentUrl={prediction.resolutionUrl}
