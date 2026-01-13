@@ -225,7 +225,7 @@ function HomeContent() {
       </header>
 
       {/* Main content */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-5 md:py-5 relative z-10">
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-5 md:pt-24 md:pb-8 relative z-10">
         {/* Tabs */}
         <div className="flex flex-col gap-3 mb-4">
           {/* Tab buttons row */}
