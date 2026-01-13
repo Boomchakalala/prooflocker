@@ -120,21 +120,21 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
   return (
     <div className="glass rounded-lg p-3 md:p-4 hover:border-white/10 transition-all flex flex-col h-full shadow-lg shadow-purple-500/5">
       {/* Header row: Badge + Author + Time + Status Pills */}
-      <div className="flex items-start justify-between gap-2 mb-1.5 md:mb-2">
-        <div className="flex items-center gap-2 min-w-0 flex-1">
+      <div className="flex items-center justify-between gap-2 mb-1.5 md:mb-2">
+        <div className="flex items-center gap-2 min-w-0 flex-1 overflow-hidden">
           {/* Small circular badge with number */}
           <div className="w-7 h-7 flex-shrink-0 rounded-full bg-blue-500/20 flex items-center justify-center text-xs font-semibold text-blue-400 border border-blue-500/30">
             {authorNumber.toString().slice(-2)}
           </div>
 
-          {/* Meta info: Anon + time + category - Single line, no wrapping */}
+          {/* Meta info: Anon + time + category - Single line with truncation */}
           <div className="flex items-center gap-1.5 min-w-0 overflow-hidden">
-            <span className="text-xs text-neutral-400 whitespace-nowrap">Anon #{authorNumber}</span>
-            <span className="text-xs text-neutral-600">•</span>
-            <span className="text-xs text-neutral-500 whitespace-nowrap">{formatRelativeTime(prediction.timestamp)}</span>
+            <span className="text-xs text-neutral-400 whitespace-nowrap truncate min-w-0">Anon #{authorNumber}</span>
+            <span className="text-xs text-neutral-600 flex-shrink-0">•</span>
+            <span className="text-xs text-neutral-500 whitespace-nowrap flex-shrink-0">{formatRelativeTime(prediction.timestamp)}</span>
             {prediction.category && (
               <>
-                <span className="text-xs text-neutral-600">•</span>
+                <span className="text-xs text-neutral-600 flex-shrink-0">•</span>
                 <span className="px-2 py-0.5 text-[10px] font-semibold rounded-full bg-gradient-to-r from-blue-500/15 to-purple-500/15 border border-blue-500/30 text-blue-300 leading-tight whitespace-nowrap flex-shrink-0">
                   {prediction.category}
                 </span>
