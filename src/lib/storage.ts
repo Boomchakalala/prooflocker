@@ -173,19 +173,9 @@ function predictionToRow(prediction: Prediction): Omit<PredictionRow, "created_a
 export async function savePrediction(prediction: Prediction): Promise<void> {
   const row = predictionToRow(prediction);
 
-  // TEMPORARY FIX: Remove resolution_de_* fields until Supabase schema cache refreshes
-  const {
-    resolution_de_hash,
-    resolution_de_timestamp,
-    resolution_de_reference,
-    resolution_de_event_id,
-    resolution_de_status,
-    ...safeRow
-  } = row;
-
   const { data, error } = await supabase
     .from("predictions")
-    .insert(safeRow)
+    .insert(row)
     .select()
     .single();
 
