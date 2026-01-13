@@ -83,6 +83,40 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
     return "bg-yellow-500/15 border-yellow-500/40 text-yellow-300";
   };
 
+  // Build ordered badges array for overflow handling
+  const allBadges = [
+    {
+      id: 'claimed',
+      show: isClaimed,
+      content: (
+        <span className="px-1.5 sm:px-2 py-0.5 text-[9px] sm:text-[10px] font-medium rounded bg-blue-500/10 border border-blue-500/30 text-blue-400 whitespace-nowrap leading-tight flex-shrink-0">
+          Claimed
+        </span>
+      )
+    },
+    {
+      id: 'locked',
+      show: isOnChain(),
+      content: (
+        <span className="px-1.5 sm:px-2 py-0.5 text-[9px] sm:text-[10px] font-medium rounded bg-green-500/10 border border-green-500/30 text-green-400 whitespace-nowrap leading-tight flex-shrink-0">
+          Locked on-chain
+        </span>
+      )
+    },
+    {
+      id: 'resolved',
+      show: isResolutionOnChain(),
+      content: (
+        <span className="px-1.5 sm:px-2 py-0.5 text-[9px] sm:text-[10px] font-medium rounded bg-purple-500/10 border border-purple-500/30 text-purple-400 whitespace-nowrap leading-tight flex-shrink-0">
+          Resolved on-chain
+        </span>
+      )
+    }
+  ].filter(badge => badge.show);
+
+  const mobileBadges = allBadges.slice(0, 2);
+  const overflowCount = Math.max(0, allBadges.length - 2);
+
   return (
     <div className="glass rounded-lg p-3 md:p-4 hover:border-white/10 transition-all flex flex-col h-full shadow-lg shadow-purple-500/5">
       {/* Header row: Badge + Author + Time + Status Pills */}
@@ -109,23 +143,24 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
           </div>
         </div>
 
-        {/* Inline status pills - Consistent badge row with min-height */}
-        <div className="flex items-center gap-1 flex-wrap justify-end flex-shrink-0 min-h-[20px]">
-          {isClaimed && (
-            <span className="px-1.5 sm:px-2 py-0.5 text-[9px] sm:text-[10px] font-medium rounded bg-blue-500/10 border border-blue-500/30 text-blue-400 whitespace-nowrap leading-tight">
-              Claimed
+        {/* Status badges with mobile overflow handling */}
+        {/* Mobile: show max 2 badges + overflow pill */}
+        <div className="flex sm:hidden items-center gap-1 justify-end flex-shrink-0">
+          {mobileBadges.map((badge) => (
+            <span key={badge.id}>{badge.content}</span>
+          ))}
+          {overflowCount > 0 && (
+            <span className="px-1.5 py-0.5 text-[9px] font-medium rounded bg-white/5 border border-white/10 text-neutral-400 whitespace-nowrap leading-tight flex-shrink-0">
+              +{overflowCount}
             </span>
           )}
-          {isOnChain() && (
-            <span className="px-1.5 sm:px-2 py-0.5 text-[9px] sm:text-[10px] font-medium rounded bg-green-500/10 border border-green-500/30 text-green-400 whitespace-nowrap leading-tight">
-              Locked on-chain
-            </span>
-          )}
-          {isResolutionOnChain() && (
-            <span className="px-1.5 sm:px-2 py-0.5 text-[9px] sm:text-[10px] font-medium rounded bg-purple-500/10 border border-purple-500/30 text-purple-400 whitespace-nowrap leading-tight">
-              Resolved on-chain
-            </span>
-          )}
+        </div>
+
+        {/* Desktop: show all badges */}
+        <div className="hidden sm:flex items-center gap-1 justify-end flex-shrink-0">
+          {allBadges.map((badge) => (
+            <span key={badge.id}>{badge.content}</span>
+          ))}
         </div>
       </div>
 
