@@ -78,8 +78,24 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
     return resolutionDeStatus === "CONFIRMED" && prediction.outcome !== "pending";
   };
 
-  // Determine if user can resolve (owner and still pending)
-  const canResolve = isOwner && prediction.outcome === "pending";
+  // Compute resolution state
+  const isResolved = prediction.outcome !== "pending";
+  const canResolve = isOwner && !isResolved;
+
+  // Determine resolve button state and text
+  const resolveButtonText = isResolved ? "Resolved" : "Resolve";
+  const resolveButtonEnabled = canResolve;
+
+  // Determine caption text for resolve button
+  const getResolveCaption = () => {
+    if (!isOwner && !isResolved) {
+      return "Only the author can resolve";
+    }
+    if (isResolved) {
+      return isResolutionOnChain() ? "Resolved on-chain" : "Resolved";
+    }
+    return null; // Owned + pending = no caption needed
+  };
 
   // Determine if user can share (owner and claimed)
   const canShare = isOwner && isClaimed;
@@ -221,7 +237,7 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
         </div>
       </div>
 
-      {/* Actions row - Clearer hierarchy */}
+      {/* Actions row - Consistent structure for all cards */}
       <div className="flex flex-col gap-1.5">
         {/* Primary action row: View Proof + Share */}
         <div className="flex gap-1.5">
@@ -273,15 +289,31 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
           )}
         </div>
 
-        {/* Secondary action: Resolve button */}
-        {canResolve && (
+        {/* Secondary action: Resolve button - ALWAYS RENDERED */}
+        <div className="flex flex-col gap-0.5 min-h-[44px]">
           <button
-            onClick={() => setShowResolveModal(true)}
-            className="w-full px-3 py-2 text-sm font-medium text-white bg-green-600/90 hover:bg-green-600 rounded-lg transition-all border border-green-500/30"
+            onClick={() => resolveButtonEnabled && setShowResolveModal(true)}
+            disabled={!resolveButtonEnabled}
+            className={`w-full px-3 py-2 text-sm font-medium rounded-lg transition-all border ${
+              resolveButtonEnabled
+                ? "text-white bg-green-600/90 hover:bg-green-600 border-green-500/30 cursor-pointer"
+                : "text-neutral-500 bg-neutral-800/50 border-neutral-700/50 cursor-not-allowed"
+            }`}
           >
-            Resolve
+            {resolveButtonText}
           </button>
-        )}
+
+          {/* Caption area - ALWAYS RENDERED for consistent height */}
+          <div className="min-h-[16px] px-1">
+            {getResolveCaption() ? (
+              <p className="text-[10px] text-neutral-500 text-center leading-tight">
+                {getResolveCaption()}
+              </p>
+            ) : (
+              <div className="h-[16px]" aria-hidden="true" />
+            )}
+          </div>
+        </div>
       </div>
 
       {/* Resolve Modal */}
