@@ -346,22 +346,23 @@ export default function LockPage() {
         ) : (
           <div className="fade-in">
             {/* Confirmation screen - Single centered hero card */}
-            <div className="glass rounded-xl p-8 text-center glow-purple mb-6">
-              <div className="inline-flex items-center justify-center w-24 h-24 rounded-full mb-6 bg-blue-500/20 border-4 border-blue-500/40 shadow-2xl shadow-blue-500/30">
-                <svg className="w-12 h-12 text-blue-400" fill="currentColor" viewBox="0 0 20 20">
+            <div className="glass rounded-xl p-8 text-center glow-purple">
+              {/* Compressed hero section */}
+              <div className="inline-flex items-center justify-center w-20 h-20 rounded-full mb-4 bg-blue-500/20 border-4 border-blue-500/40 shadow-2xl shadow-blue-500/30">
+                <svg className="w-10 h-10 text-blue-400" fill="currentColor" viewBox="0 0 20 20">
                   <path fillRule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clipRule="evenodd" />
                 </svg>
               </div>
 
-              <h1 className="text-4xl font-bold text-white mb-3">
+              <h1 className="text-4xl font-bold text-white mb-2">
                 Locked on-chain.
               </h1>
-              <p className="text-xl text-neutral-400 mb-6">
+              <p className="text-xl text-neutral-400 mb-4">
                 Timestamp recorded via Digital Evidence.
               </p>
 
-              {/* Short bullets */}
-              <ul className="space-y-2 mb-8 text-sm text-neutral-500 max-w-md mx-auto text-left">
+              {/* Compact bullet list */}
+              <ul className="space-y-1.5 mb-6 text-sm text-neutral-500 max-w-md mx-auto text-left">
                 <li className="flex items-start gap-2">
                   <svg className="w-4 h-4 text-blue-500 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
@@ -382,100 +383,106 @@ export default function LockPage() {
                 </li>
               </ul>
 
-              {/* Your prediction card */}
+              {/* Grouped confirmation artifact: Prediction + Proof details in ONE block */}
               <div className="glass border border-white/5 rounded-lg p-4 mb-6 max-w-xl mx-auto">
-                <label className="block text-[10px] font-semibold text-neutral-500 mb-2 uppercase tracking-wider">
-                  Your Prediction
-                </label>
-                <p className="text-neutral-100 text-sm leading-relaxed">
-                  {text}
-                </p>
-              </div>
+                {/* Your prediction */}
+                <div className="pb-4 border-b border-white/5">
+                  <label className="block text-[10px] font-semibold text-neutral-500 mb-2 uppercase tracking-wider">
+                    Your Prediction
+                  </label>
+                  <p className="text-neutral-100 text-sm leading-relaxed">
+                    {text}
+                  </p>
+                </div>
 
-              {/* Proof Summary - Compact section below (not as primary focus) */}
-              {(fingerprint || timestamp) && (
-                <div className="glass border border-white/5 rounded-lg p-4 mb-8 max-w-xl mx-auto">
-                  <div className="flex items-center gap-2 mb-3">
-                    <svg className="w-4 h-4 text-blue-500" fill="currentColor" viewBox="0 0 20 20">
-                      <path fillRule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                    </svg>
-                    <h3 className="text-xs font-semibold text-neutral-400 uppercase tracking-wider">
-                      Proof Details
-                    </h3>
-                  </div>
+                {/* Proof details - directly below, no large gap */}
+                {(fingerprint || timestamp) && (
+                  <div className="pt-4">
+                    <div className="flex items-center gap-2 mb-3">
+                      <svg className="w-3.5 h-3.5 text-blue-500" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                      </svg>
+                      <h3 className="text-xs font-semibold text-neutral-500 uppercase tracking-wider">
+                        Proof Details
+                      </h3>
+                    </div>
 
-                  <div className="space-y-3 text-left">
-                    {fingerprint && (
-                      <div>
-                        <label className="block text-[10px] font-semibold text-neutral-600 mb-1 uppercase tracking-wider">
-                          Fingerprint
-                        </label>
-                        <div className="flex items-center gap-2 bg-white/[0.02] rounded p-2">
-                          <code className="text-xs text-neutral-400 flex-1 font-mono break-all">
-                            {truncateFingerprint(fingerprint)}
-                          </code>
-                          <button
-                            onClick={copyFingerprint}
-                            className="flex-shrink-0 p-1 hover:bg-white/10 rounded transition-colors"
-                            title="Copy"
-                          >
-                            <svg className="w-3.5 h-3.5 text-neutral-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
-                            </svg>
-                          </button>
+                    <div className="space-y-2.5 text-left">
+                      {fingerprint && (
+                        <div>
+                          <label className="block text-[10px] font-semibold text-neutral-600 mb-1 uppercase tracking-wider">
+                            Fingerprint
+                          </label>
+                          <div className="flex items-center gap-2 bg-white/[0.02] rounded p-2">
+                            <code className="text-xs text-neutral-400 flex-1 font-mono break-all">
+                              {truncateFingerprint(fingerprint)}
+                            </code>
+                            <button
+                              onClick={copyFingerprint}
+                              className="flex-shrink-0 p-1 hover:bg-white/10 rounded transition-colors"
+                              title="Copy"
+                            >
+                              <svg className="w-3.5 h-3.5 text-neutral-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                              </svg>
+                            </button>
+                          </div>
                         </div>
-                      </div>
-                    )}
+                      )}
 
-                    {timestamp && (
+                      {timestamp && (
+                        <div>
+                          <label className="block text-[10px] font-semibold text-neutral-600 mb-1 uppercase tracking-wider">
+                            Timestamp (UTC)
+                          </label>
+                          <p className="text-xs text-neutral-400 font-mono bg-white/[0.02] rounded p-2">
+                            {new Date(timestamp).toUTCString()}
+                          </p>
+                        </div>
+                      )}
+
                       <div>
                         <label className="block text-[10px] font-semibold text-neutral-600 mb-1 uppercase tracking-wider">
-                          Timestamp (UTC)
+                          Network
                         </label>
-                        <p className="text-xs text-neutral-400 font-mono bg-white/[0.02] rounded p-2">
-                          {new Date(timestamp).toUTCString()}
-                        </p>
-                      </div>
-                    )}
-
-                    <div>
-                      <label className="block text-[10px] font-semibold text-neutral-600 mb-1 uppercase tracking-wider">
-                        Network
-                      </label>
-                      <div className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-blue-500/10 border border-blue-500/20 rounded-full">
-                        <div className="w-1.5 h-1.5 rounded-full bg-blue-500"></div>
-                        <span className="text-xs text-blue-400 font-medium">Constellation (DAG)</span>
+                        <div className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-blue-500/10 border border-blue-500/20 rounded-full">
+                          <div className="w-1.5 h-1.5 rounded-full bg-blue-500"></div>
+                          <span className="text-xs text-blue-400 font-medium">Constellation (DAG)</span>
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
-              )}
+                )}
+              </div>
 
-              {/* Primary CTA */}
-              <Link
-                href="/"
-                className="inline-block w-full max-w-md px-6 py-4 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white font-semibold text-base rounded-lg transition-all shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40 mb-3"
-              >
-                Back to feed
-              </Link>
-
-              {/* Secondary CTAs */}
-              <div className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
-                <button
-                  onClick={handleShare}
-                  className="flex-1 px-6 py-3 bg-neutral-800 hover:bg-neutral-700 text-white font-medium rounded-md transition-all border border-neutral-700 flex items-center justify-center gap-2"
-                >
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
-                  </svg>
-                  Share proof
-                </button>
+              {/* Tightened CTA section */}
+              <div className="space-y-2 max-w-md mx-auto">
+                {/* Primary CTA */}
                 <Link
-                  href={`/verify?proofId=${proofId}`}
-                  className="flex-1 px-6 py-3 bg-white/5 hover:bg-white/10 text-white font-medium rounded-md transition-all border border-white/10 text-center"
+                  href="/"
+                  className="block w-full px-6 py-4 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white font-semibold text-base rounded-lg transition-all shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40"
                 >
-                  Verify now
+                  Back to feed
                 </Link>
+
+                {/* Secondary CTAs */}
+                <div className="flex gap-2">
+                  <button
+                    onClick={handleShare}
+                    className="flex-1 px-4 py-3 bg-neutral-800 hover:bg-neutral-700 text-white font-medium text-sm rounded-lg transition-all border border-neutral-700 flex items-center justify-center gap-2"
+                  >
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
+                    </svg>
+                    Share
+                  </button>
+                  <Link
+                    href={`/verify?proofId=${proofId}`}
+                    className="flex-1 px-4 py-3 bg-white/5 hover:bg-white/10 text-white font-medium text-sm rounded-lg transition-all border border-white/10 text-center"
+                  >
+                    Verify
+                  </Link>
+                </div>
               </div>
             </div>
           </div>
