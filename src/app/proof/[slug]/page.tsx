@@ -296,16 +296,16 @@ export default async function ProofPage({ params }: Props) {
             </div>
 
             {/* Explanatory sentence */}
-            <p className="text-sm text-neutral-400 leading-relaxed mb-4">
-              Recorded with Digital Evidence on the Constellation Network (DAG), providing an immutable, timestamped, and publicly verifiable record.
+            <p className="text-xs text-neutral-500 mb-4">
+              Recorded on-chain via Digital Evidence.
             </p>
 
             {/* Technical proof details */}
-            <div className="space-y-3 text-sm">
+            <div className="space-y-2.5 text-sm">
               {/* Transaction Hash */}
               <div>
-                <div className="text-xs text-neutral-400 mb-1.5">
-                  Transaction Hash
+                <div className="text-xs text-neutral-500 mb-1">
+                  Transaction
                 </div>
                 <div className="flex items-start gap-2">
                   {explorerUrl ? (
@@ -329,7 +329,7 @@ export default async function ProofPage({ params }: Props) {
               {/* Block Timestamp */}
               {prediction.confirmedAt && (
                 <div className="flex justify-between items-start gap-4">
-                  <span className="text-neutral-400">Block timestamp</span>
+                  <span className="text-neutral-500 text-xs">Timestamp (UTC)</span>
                   <div className="text-neutral-300 font-mono text-right text-xs">
                     {new Date(prediction.confirmedAt).toUTCString()}
                   </div>
@@ -338,8 +338,8 @@ export default async function ProofPage({ params }: Props) {
 
               {/* Content Hash (SHA-256) */}
               <div>
-                <div className="text-xs text-neutral-400 mb-1.5">
-                  Content Hash (SHA-256)
+                <div className="text-xs text-neutral-500 mb-1">
+                  Content hash
                 </div>
                 <div className="flex items-start gap-2 bg-black/40 p-2.5 rounded border border-neutral-800/50">
                   <code className="text-xs text-neutral-300 font-mono break-all flex-1">
@@ -398,17 +398,17 @@ export default async function ProofPage({ params }: Props) {
             </div>
 
             {/* Explanatory sentence */}
-            <p className="text-sm text-neutral-400 leading-relaxed mb-4">
-              The outcome resolution was recorded on-chain with Digital Evidence, creating an immutable and timestamped record of when and how this prediction was resolved.
+            <p className="text-xs text-neutral-500 mb-4">
+              Resolution recorded on-chain via Digital Evidence.
             </p>
 
             {/* Technical proof details */}
-            <div className="space-y-3 text-sm">
+            <div className="space-y-2.5 text-sm">
               {/* Resolution Transaction Hash */}
               {prediction.resolutionDeReference && (
                 <div>
-                  <div className="text-xs text-neutral-400 mb-1.5">
-                    Resolution Transaction Hash
+                  <div className="text-xs text-neutral-500 mb-1">
+                    Resolution transaction
                   </div>
                   <div className="flex items-start gap-2">
                     {prediction.resolutionDeReference && getDigitalEvidenceFingerprintUrl(prediction.resolutionDeReference) ? (
