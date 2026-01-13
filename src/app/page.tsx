@@ -138,7 +138,14 @@ function HomeContent() {
   };
 
   return (
-    <div className="min-h-screen gradient-bg relative">
+    <div
+      className="min-h-screen gradient-bg relative"
+      style={{
+        // CSS variable for header height
+        ['--header-h' as string]: '56px',
+        ['--header-h-md' as string]: '64px',
+      }}
+    >
       {/* Decorative gradient orbs */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-20 -left-40 w-80 h-80 bg-blue-500/10 rounded-full blur-3xl" />
@@ -146,9 +153,14 @@ function HomeContent() {
         <div className="absolute bottom-20 left-1/2 w-80 h-80 bg-cyan-500/10 rounded-full blur-3xl" />
       </div>
 
-      {/* Header */}
-      <header className="glass sticky top-0 z-50 border-b border-white/5 bg-[#0a0a0a]/80 backdrop-blur-xl">
-        <div className="mx-auto max-w-6xl px-4 flex h-14 md:h-16 items-center justify-between">
+      {/* Header - Fixed */}
+      <header
+        className="glass fixed top-0 left-0 right-0 z-50 border-b border-white/5 bg-[#0a0a0a]/80 backdrop-blur-xl"
+        style={{
+          height: 'var(--header-h)',
+        }}
+      >
+        <div className="mx-auto max-w-6xl px-4 flex h-full items-center justify-between">
           <BrandLogo />
           <div className="flex items-center gap-3 md:gap-4">
             {/* Desktop: Show user info inline */}
@@ -224,8 +236,15 @@ function HomeContent() {
         </div>
       </header>
 
-      {/* Main content */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-5 md:pt-24 md:pb-8 relative z-10">
+      {/* Main content - Scroll Container */}
+      <main
+        className="overflow-y-auto relative z-10"
+        style={{
+          marginTop: 'var(--header-h)',
+          height: 'calc(100dvh - var(--header-h))',
+        }}
+      >
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4 pb-5">
         {/* Tabs */}
         <div className="flex flex-col gap-3 mb-4">
           {/* Tab buttons row */}
@@ -441,7 +460,6 @@ function HomeContent() {
           </div>
           </>
         )}
-      </main>
 
       {/* Footer */}
       <footer className="border-t border-white/5 mt-20 glass relative z-10">
