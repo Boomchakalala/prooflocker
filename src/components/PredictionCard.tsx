@@ -171,7 +171,7 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
       </div>
 
       {/* Main content: Prediction text - VISUAL FOCUS */}
-      <p className="text-white text-lg leading-snug mb-2 md:mb-3 font-normal flex-grow line-clamp-2">
+      <p className="text-white text-lg leading-relaxed mb-2 md:mb-3 font-normal flex-grow line-clamp-2">
         {prediction.textPreview}
       </p>
 
@@ -263,7 +263,7 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
       </div>
 
       {/* Actions row - Compact layout with buttons on same line */}
-      <div className="flex flex-col gap-1">
+      <div className="flex flex-col gap-2">
         {/* Action row: View Proof + Resolve on same line */}
         <div className="flex gap-1.5">
           <Link
@@ -323,13 +323,13 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
         </div>
 
         {/* Caption area - ALWAYS RENDERED for consistent height */}
-        <div className="min-h-[14px] px-1">
+        <div className="min-h-[20px] px-1 py-1.5">
           {getResolveCaption() ? (
             <p className="text-[10px] text-neutral-500 text-center leading-tight">
               {getResolveCaption()}
             </p>
           ) : (
-            <div className="h-[14px]" aria-hidden="true" />
+            <div className="h-[20px]" aria-hidden="true" />
           )}
         </div>
       </div>
