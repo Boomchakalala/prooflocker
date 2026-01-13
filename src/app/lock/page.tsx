@@ -489,7 +489,6 @@ export default function LockPage() {
                 </div>
               </div>
             </div>
-          </div>
         )}
       </main>
     </div>
