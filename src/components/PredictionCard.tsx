@@ -144,8 +144,8 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
             <span className="text-xs text-neutral-500">{formatRelativeTime(prediction.timestamp)}</span>
             {prediction.category && (
               <>
-                <span className="text-xs text-neutral-600 hidden sm:inline">•</span>
-                <span className="px-1.5 py-0.5 text-[10px] sm:text-xs sm:px-0 sm:py-0 font-medium rounded sm:rounded-none bg-white/5 sm:bg-transparent border sm:border-0 border-white/10 text-neutral-500 sm:text-neutral-600 leading-tight">
+                <span className="text-xs text-neutral-600">•</span>
+                <span className="px-2 py-0.5 text-[10px] font-semibold rounded-full bg-gradient-to-r from-blue-500/15 to-purple-500/15 border border-blue-500/30 text-blue-300 leading-tight">
                   {prediction.category}
                 </span>
               </>
