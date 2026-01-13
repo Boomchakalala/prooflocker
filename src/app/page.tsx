@@ -141,9 +141,8 @@ function HomeContent() {
     <div
       className="min-h-screen gradient-bg relative"
       style={{
-        // CSS variable for header height
-        ['--header-h' as string]: '56px',
-        ['--header-h-md' as string]: '64px',
+        // CSS variable for header height - single value for simplicity
+        ['--header-h' as string]: '64px',
       }}
     >
       {/* Decorative gradient orbs */}
@@ -489,6 +488,8 @@ function HomeContent() {
           </div>
         </div>
       </footer>
+        </div>
+      </main>
 
       {/* Development status banner */}
       <DEStatusBanner />
