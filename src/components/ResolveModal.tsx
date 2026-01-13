@@ -89,33 +89,31 @@ export default function ResolveModal({
 
       {/* Modal Container */}
       <div
-        className="relative w-full max-w-2xl max-h-[calc(100vh-2rem)] overflow-hidden rounded-2xl bg-gradient-to-br from-[#1a1a1a] to-[#0a0a0a] border border-white/10 shadow-2xl"
-        onClick={(e) => e.stopPropagation()}
+        className="relative w-full max-w-2xl max-h-[calc(100vh-4rem)] flex flex-col overflow-hidden rounded-2xl bg-gradient-to-br from-[#1a1a1a] to-[#0a0a0a] border border-white/10 shadow-2xl"
+        onClick=(e) => e.stopPropagation()}
       >
-        {/* Single Scroll Container */}
-        <div className="h-full overflow-y-auto overscroll-contain">
-          {/* Header */}
-          <div className="flex items-center justify-between p-5 border-b border-white/10">
-            <h3 className="text-xl font-bold text-white flex items-center gap-2">
-              <svg className="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-              Resolve Prediction
-            </h3>
-            <button
-              onClick={onClose}
-              className="text-white/50 hover:text-white transition-colors"
-              type="button"
-            >
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-              </svg>
-            </button>
-          </div>
+        {/* Header - Fixed */}
+        <div className="flex-shrink-0 flex items-center justify-between p-5 border-b border-white/10">
+          <h3 className="text-xl font-bold text-white flex items-center gap-2">
+            <svg className="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            Resolve Prediction
+          </h3>
+          <button
+            onClick={onClose}
+            className="text-white/50 hover:text-white transition-colors"
+            type="button"
+          >
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
 
-          {/* Form Content */}
-          <form onSubmit={handleSubmit}>
-            <div className="p-5 space-y-4">
+        {/* Scrollable Form Content */}
+        <form onSubmit={handleSubmit} className="flex flex-col flex-1 min-h-0">
+          <div className="flex-1 overflow-y-auto overscroll-contain p-5 space-y-4">
             {/* Outcome Selection */}
             <div>
               <label className="block text-sm font-medium text-white/90 mb-2">
