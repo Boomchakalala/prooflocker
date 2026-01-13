@@ -283,15 +283,25 @@ export default function ProfilePage() {
                   <div className="flex items-start justify-between gap-4">
                     <div className="flex-1 min-w-0">
                       <p className="text-neutral-200 mb-2 line-clamp-2 group-hover:text-white transition-colors">{prediction.text}</p>
-                      <p className="text-xs text-neutral-500">
-                        {new Date(prediction.timestamp).toLocaleDateString("en-US", {
-                          year: "numeric",
-                          month: "short",
-                          day: "numeric",
-                          hour: "2-digit",
-                          minute: "2-digit",
-                        })}
-                      </p>
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <p className="text-xs text-neutral-500">
+                          {new Date(prediction.timestamp).toLocaleDateString("en-US", {
+                            year: "numeric",
+                            month: "short",
+                            day: "numeric",
+                            hour: "2-digit",
+                            minute: "2-digit",
+                          })}
+                        </p>
+                        {prediction.category && (
+                          <>
+                            <span className="text-xs text-neutral-600">•</span>
+                            <span className="px-2 py-0.5 text-[10px] font-semibold rounded-full bg-gradient-to-r from-blue-500/15 to-purple-500/15 border border-blue-500/30 text-blue-300">
+                              {prediction.category}
+                            </span>
+                          </>
+                        )}
+                      </div>
                     </div>
                     <span
                       className={`inline-flex items-center px-3 py-1 rounded-md border text-xs font-medium whitespace-nowrap ${getOutcomeBadgeColor(
