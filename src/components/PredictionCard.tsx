@@ -24,7 +24,6 @@ interface PredictionCardProps {
 
 export default function PredictionCard({ prediction, currentUserId, onOutcomeUpdate }: PredictionCardProps) {
   const [copied, setCopied] = useState(false);
-  const [linkCopied, setLinkCopied] = useState(false);
   const [showResolveModal, setShowResolveModal] = useState(false);
   const [showContestModal, setShowContestModal] = useState(false);
 
@@ -38,32 +37,6 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
     await navigator.clipboard.writeText(prediction.hash);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
-  };
-
-  const copyLink = async () => {
-    const url = `${getSiteUrl()}/proof/${prediction.publicSlug}`;
-
-    // Try native share on mobile devices
-    if (navigator.share) {
-      try {
-        await navigator.share({
-          title: 'ProofLocker Prediction',
-          text: prediction.textPreview,
-          url: url
-        });
-        return; // Success, don't show copied state
-      } catch (err) {
-        // User cancelled or share failed, fall back to copy
-        if ((err as Error).name === 'AbortError') {
-          return; // User cancelled, don't copy
-        }
-      }
-    }
-
-    // Fallback to clipboard copy
-    await navigator.clipboard.writeText(url);
-    setLinkCopied(true);
-    setTimeout(() => setLinkCopied(false), 2000);
   };
 
   // Determine on-chain status
