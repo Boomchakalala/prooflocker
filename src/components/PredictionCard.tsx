@@ -82,9 +82,34 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
   const isResolved = prediction.outcome !== "pending";
   const canResolve = isOwner && !isResolved;
 
-  // Determine resolve button state and text
+  // Determine resolve button state, text, and colors
   const resolveButtonText = isResolved ? "Resolved" : "Resolve";
   const resolveButtonEnabled = canResolve;
+
+  // Color system matching proof page
+  const getResolveButtonClasses = () => {
+    // Owner + pending = can resolve (green, enabled)
+    if (canResolve) {
+      return "text-white bg-green-500/20 hover:bg-green-500/30 border-green-500/40 cursor-pointer";
+    }
+
+    // Resolved states - match proof page outcome colors
+    if (isResolved) {
+      const outcome = prediction.outcome;
+      if (outcome === "correct") {
+        return "text-green-400 bg-green-500/10 border-green-500/30 cursor-not-allowed";
+      }
+      if (outcome === "incorrect") {
+        return "text-red-400 bg-red-500/10 border-red-500/30 cursor-not-allowed";
+      }
+      if (outcome === "invalid") {
+        return "text-neutral-400 bg-neutral-500/10 border-neutral-500/30 cursor-not-allowed";
+      }
+    }
+
+    // Not owner + pending = cannot resolve (yellow/muted)
+    return "text-yellow-400/70 bg-yellow-500/10 border-yellow-500/30 cursor-not-allowed";
+  };
 
   // Determine caption text for resolve button
   const getResolveCaption = () => {
