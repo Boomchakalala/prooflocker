@@ -90,7 +90,7 @@ export default function ResolveModal({
       {/* Modal Container */}
       <div
         className="relative w-full max-w-2xl max-h-[calc(100vh-4rem)] flex flex-col overflow-hidden rounded-2xl bg-gradient-to-br from-[#1a1a1a] to-[#0a0a0a] border border-white/10 shadow-2xl"
-        onClick=(e) => e.stopPropagation()}
+        onClick={(e) => e.stopPropagation()}
       >
         {/* Header - Fixed */}
         <div className="flex-shrink-0 flex items-center justify-between p-5 border-b border-white/10">
@@ -234,8 +234,8 @@ export default function ResolveModal({
             )}
             </div>
 
-            {/* Footer with Action Buttons */}
-            <div className="p-5 border-t border-white/10 bg-[#0a0a0a]/50 backdrop-blur-sm">
+          {/* Footer with Action Buttons - Fixed */}
+          <div className="flex-shrink-0 p-5 border-t border-white/10 bg-[#0a0a0a]/50 backdrop-blur-sm">
               <div className="flex flex-col gap-1.5">
                 <button
                   type="submit"
