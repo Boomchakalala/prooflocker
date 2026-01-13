@@ -114,9 +114,6 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
     }
   ].filter(badge => badge.show);
 
-  const mobileBadges = allBadges.slice(0, 2);
-  const overflowCount = Math.max(0, allBadges.length - 2);
-
   return (
     <div className="glass rounded-lg p-3 md:p-4 hover:border-white/10 transition-all flex flex-col h-full shadow-lg shadow-purple-500/5">
       {/* Header: Stacked on mobile, single row on desktop */}
@@ -136,10 +133,10 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
           </div>
         </div>
 
-        {/* Row 2: Category + Status badges */}
-        <div className="flex items-center justify-between gap-2 pl-9">
-          {/* Category pill (left side) */}
-          <div className="flex items-center min-w-0">
+        {/* Row 2: Category + All status badges (no overflow) */}
+        <div className="flex items-start justify-between gap-2 pl-2">
+          {/* Category pill (left side, less indent) */}
+          <div className="flex items-center min-w-0 pt-0.5">
             {prediction.category && (
               <span className="px-2 py-0.5 text-[10px] font-semibold rounded-full bg-gradient-to-r from-blue-500/15 to-purple-500/15 border border-blue-500/30 text-blue-300 leading-tight whitespace-nowrap">
                 {prediction.category}
@@ -147,20 +144,8 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
             )}
           </div>
 
-          {/* Status badges (right side) - Mobile with overflow */}
-          <div className="flex sm:hidden items-center gap-1 flex-shrink-0">
-            {mobileBadges.map((badge) => (
-              <span key={badge.id}>{badge.content}</span>
-            ))}
-            {overflowCount > 0 && (
-              <span className="px-1.5 py-0.5 text-[9px] font-medium rounded bg-white/5 border border-white/10 text-neutral-400 whitespace-nowrap leading-tight flex-shrink-0">
-                +{overflowCount}
-              </span>
-            )}
-          </div>
-
-          {/* Status badges (right side) - Desktop all badges */}
-          <div className="hidden sm:flex items-center gap-1 flex-shrink-0">
+          {/* All status badges (right side) - Always show all, allow wrapping */}
+          <div className="flex items-center gap-1 flex-wrap justify-end flex-shrink-0 max-w-[65%]">
             {allBadges.map((badge) => (
               <span key={badge.id}>{badge.content}</span>
             ))}
