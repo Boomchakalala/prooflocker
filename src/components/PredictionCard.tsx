@@ -114,9 +114,16 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
               Claimed
             </span>
           )}
-          <span className="px-2 py-0.5 text-[10px] font-medium rounded bg-green-500/10 border border-green-500/30 text-green-400">
-            Locked on-chain
-          </span>
+          {isOnChain() && (
+            <span className="px-2 py-0.5 text-[10px] font-medium rounded bg-green-500/10 border border-green-500/30 text-green-400">
+              Locked on-chain
+            </span>
+          )}
+          {isResolutionOnChain() && (
+            <span className="px-2 py-0.5 text-[10px] font-medium rounded bg-purple-500/10 border border-purple-500/30 text-purple-400">
+              Resolved on-chain
+            </span>
+          )}
         </div>
       </div>
 
