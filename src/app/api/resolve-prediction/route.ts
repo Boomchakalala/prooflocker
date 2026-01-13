@@ -12,6 +12,7 @@ const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
 /**
  * POST /api/resolve-prediction
  * Allow prediction owner to set outcome (correct/incorrect/invalid)
+ * Submits resolution to Digital Evidence for immutable on-chain record
  */
 export async function POST(request: NextRequest) {
   try {
@@ -58,36 +59,109 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Call Supabase RPC function (RLS will ensure only owner can resolve)
-    const { data, error } = await supabase.rpc("resolve_prediction", {
-      p_prediction_id: predictionId,
-      p_outcome: outcome,
-      p_resolution_note: resolutionNote || null,
-      p_resolution_url: resolutionUrl || null,
-    });
+    // Fetch the prediction to verify ownership
+    const { data: prediction, error: fetchError } = await supabase
+      .from("predictions")
+      .select("*")
+      .eq("id", predictionId)
+      .single();
 
-    if (error) {
-      console.error("[Resolve API] RPC error:", error);
-
-      // Provide clearer error messages for common issues
-      if (error.message.includes("permission denied") || error.message.includes("policy")) {
-        return NextResponse.json(
-          { error: "You can only resolve your own predictions" },
-          { status: 403 }
-        );
-      }
-
+    if (fetchError || !prediction) {
+      console.error("[Resolve API] Prediction not found:", fetchError);
       return NextResponse.json(
-        { error: error.message || "Failed to resolve prediction" },
+        { error: "Prediction not found" },
+        { status: 404 }
+      );
+    }
+
+    // Verify ownership
+    if (prediction.user_id !== user.id) {
+      return NextResponse.json(
+        { error: "You can only resolve your own predictions" },
+        { status: 403 }
+      );
+    }
+
+    // Prepare resolution data
+    const resolvedAt = new Date().toISOString();
+
+    // Create resolution hash (outcome + timestamp + prediction ID for uniqueness)
+    const resolutionData = JSON.stringify({
+      predictionId,
+      outcome,
+      resolvedAt,
+      resolutionNote: resolutionNote || null,
+      resolutionUrl: resolutionUrl || null,
+    });
+    const resolutionHash = crypto.createHash("sha256").update(resolutionData).digest("hex");
+
+    console.log("[Resolve API] Resolution hash created:", resolutionHash);
+
+    // Prepare update data (resolution fields)
+    const updateData: Record<string, any> = {
+      outcome,
+      resolved_at: resolvedAt,
+      resolution_note: resolutionNote || null,
+      resolution_url: resolutionUrl || null,
+    };
+
+    // If outcome is being set back to pending, clear resolution data
+    if (outcome === "pending") {
+      updateData.resolved_at = null;
+      updateData.resolution_note = null;
+      updateData.resolution_url = null;
+    }
+
+    // Submit resolution to Digital Evidence (if enabled and outcome is final)
+    if (isDigitalEvidenceEnabled() && outcome !== "pending") {
+      console.log("[Resolve API] Submitting resolution to Digital Evidence...");
+
+      const deResult = await submitToDigitalEvidence(resolutionHash, {
+        proofId: prediction.proof_id,
+        userId: user.id,
+        type: "resolution",
+        outcome,
+      });
+
+      // Store Digital Evidence metadata
+      updateData.resolution_de_hash = resolutionHash;
+
+      if (deResult.success && deResult.accepted) {
+        console.log("[Resolve API] Resolution accepted by Digital Evidence");
+        updateData.resolution_de_timestamp = deResult.timestamp;
+        updateData.resolution_de_reference = deResult.hash || resolutionHash;
+        updateData.resolution_de_event_id = deResult.eventId;
+        updateData.resolution_de_status = "CONFIRMED";
+      } else {
+        console.warn("[Resolve API] Resolution DE submission not accepted:", deResult.error);
+        updateData.resolution_de_event_id = deResult.eventId || null;
+        updateData.resolution_de_status = "PENDING";
+      }
+    }
+
+    // Update the prediction
+    const { error: updateError } = await supabase
+      .from("predictions")
+      .update(updateData)
+      .eq("id", predictionId);
+
+    if (updateError) {
+      console.error("[Resolve API] Update error:", updateError);
+      return NextResponse.json(
+        { error: updateError.message || "Failed to resolve prediction" },
         { status: 500 }
       );
     }
 
-    console.log("[Resolve API] Success:", data);
+    console.log("[Resolve API] Success - Resolution recorded on-chain");
 
     return NextResponse.json({
       success: true,
-      ...data,
+      outcome,
+      resolvedAt,
+      resolutionHash,
+      resolutionDeStatus: updateData.resolution_de_status || null,
+      resolutionDeEventId: updateData.resolution_de_event_id || null,
     });
   } catch (error) {
     console.error("[Resolve API] Error:", error);

@@ -72,6 +72,12 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
     return deStatus === "CONFIRMED" || onChainStatus === "confirmed";
   };
 
+  // Determine if resolution is on-chain
+  const isResolutionOnChain = () => {
+    const resolutionDeStatus = prediction.resolutionDeStatus?.toUpperCase();
+    return resolutionDeStatus === "CONFIRMED" && prediction.outcome !== "pending";
+  };
+
   // Determine if user can resolve (owner and still pending)
   const canResolve = isOwner && prediction.outcome === "pending";
 
