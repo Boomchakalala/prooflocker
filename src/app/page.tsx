@@ -139,7 +139,7 @@ function HomeContent() {
 
   return (
     <div
-      className="min-h-screen gradient-bg relative"
+      className="min-h-screen gradient-bg relative flex flex-col"
       style={{
         // CSS variable for header height - single value for simplicity
         ['--header-h' as string]: '64px',
@@ -235,15 +235,14 @@ function HomeContent() {
         </div>
       </header>
 
-      {/* Main content - Scroll Container */}
+      {/* Main content - Flex 1 to push footer down */}
       <main
-        className="overflow-y-auto relative z-10"
+        className="flex-1 relative z-10"
         style={{
           marginTop: 'var(--header-h)',
-          height: 'calc(100dvh - var(--header-h))',
         }}
       >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4 pb-5">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4 pb-12">
         {/* Tabs */}
         <div className="flex flex-col gap-3 mb-4">
           {/* Tab buttons row */}
@@ -459,16 +458,18 @@ function HomeContent() {
           </div>
           </>
         )}
+        </div>
+      </main>
 
-      {/* Footer */}
-      <footer className="border-t border-white/5 mt-20 glass relative z-10">
+      {/* Footer - Sticky footer at bottom */}
+      <footer className="border-t border-white/5 glass relative z-10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           {/* Mobile: 2 rows, Desktop: 1 row */}
           <div className="flex flex-col md:flex-row items-center justify-between gap-4 md:gap-6">
             {/* Row 1 on mobile: Credibility line */}
             <div className="flex flex-col md:flex-row items-center gap-3 md:gap-4 text-center md:text-left">
               <p className="text-xs md:text-sm text-neutral-500">
-                Powered by <span className="text-white font-medium">Constellation Network (DAG)</span>
+                Secured by <span className="text-white font-medium">Digital Evidence</span> on <span className="text-white font-medium">Constellation (DAG)</span>
               </p>
               <span className="text-xs text-neutral-500">
                 Anonymous • Public • Immutable
@@ -488,8 +489,6 @@ function HomeContent() {
           </div>
         </div>
       </footer>
-        </div>
-      </main>
 
       {/* Development status banner */}
       <DEStatusBanner />
