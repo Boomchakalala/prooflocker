@@ -433,7 +433,7 @@ export default async function ProofPage({ params }: Props) {
               {/* Resolution Block Timestamp */}
               {prediction.resolutionDeTimestamp && (
                 <div className="flex justify-between items-start gap-4">
-                  <span className="text-neutral-400">Resolution block timestamp</span>
+                  <span className="text-neutral-500 text-xs">Resolution timestamp (UTC)</span>
                   <div className="text-neutral-300 font-mono text-right text-xs">
                     {new Date(prediction.resolutionDeTimestamp).toUTCString()}
                   </div>
@@ -442,8 +442,8 @@ export default async function ProofPage({ params }: Props) {
 
               {/* Resolution Hash (SHA-256) */}
               <div>
-                <div className="text-xs text-neutral-400 mb-1.5">
-                  Resolution Data Hash (SHA-256)
+                <div className="text-xs text-neutral-500 mb-1">
+                  Resolution hash
                 </div>
                 <div className="flex items-start gap-2 bg-black/40 p-2.5 rounded border border-neutral-800/50">
                   <code className="text-xs text-neutral-300 font-mono break-all flex-1">
@@ -468,8 +468,8 @@ export default async function ProofPage({ params }: Props) {
                 <span className="text-neutral-400">Pending confirmation</span>
               </div>
               <div>
-                <div className="text-xs text-neutral-400 mb-1.5">
-                  Content Hash (SHA-256)
+                <div className="text-xs text-neutral-500 mb-1">
+                  Content hash
                 </div>
                 <div className="font-mono text-xs text-neutral-300 bg-black/40 p-2.5 rounded border border-neutral-800 break-all">
                   {prediction.hash}
