@@ -111,18 +111,18 @@ export default function ResolveModal({
         onClick={(e) => e.stopPropagation()}
       >
         {/* Panel Header (not sticky - scrolls with content) */}
-        <div className="px-5 pt-5 pb-4 border-b border-white/10">
+        <div className="px-4 sm:px-5 pt-4 sm:pt-5 pb-3 sm:pb-4 border-b border-white/10">
           {/* Top bar with title and close */}
-          <div className="flex items-center justify-between mb-3">
-            <h3 className="text-xl font-bold text-white flex items-center gap-2">
-              <svg className="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <div className="flex items-center justify-between mb-2 sm:mb-3">
+            <h3 className="text-lg sm:text-xl font-bold text-white flex items-center gap-2">
+              <svg className="w-4 h-4 sm:w-5 sm:h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
               Resolve prediction
             </h3>
             <button
               onClick={onClose}
-              className="text-white/50 hover:text-white transition-colors"
+              className="text-white/50 hover:text-white transition-colors p-1"
               type="button"
             >
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -132,16 +132,16 @@ export default function ResolveModal({
           </div>
 
           {/* Helper text */}
-          <p className="text-sm text-white/60 mb-3">
+          <p className="text-xs sm:text-sm text-white/60 mb-2 sm:mb-3">
             Choose the outcome and optionally add a note or proof.
           </p>
 
           {/* Prediction preview */}
-          <div className="glass rounded-lg p-3 border border-white/5">
-            <p className="text-xs text-white/40 mb-1 uppercase tracking-wider font-medium">
+          <div className="glass rounded-lg p-2.5 sm:p-3 border border-white/5">
+            <p className="text-[10px] sm:text-xs text-white/40 mb-1 uppercase tracking-wider font-medium">
               Prediction
             </p>
-            <p className="text-sm text-white/90 leading-relaxed line-clamp-2">
+            <p className="text-xs sm:text-sm text-white/90 leading-relaxed line-clamp-2">
               {truncatedText}
             </p>
           </div>
