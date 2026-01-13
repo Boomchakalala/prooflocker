@@ -161,7 +161,7 @@ function HomeContent() {
       >
         <div className="mx-auto max-w-6xl px-4 flex h-full items-center justify-between">
           <BrandLogo />
-          <div className="flex items-center gap-3 md:gap-4">
+          <div className="flex items-center gap-2 md:gap-4">
             {/* Desktop: Show user info inline */}
             {user && (
               <div className="hidden md:flex flex-col items-end leading-tight">
@@ -178,7 +178,15 @@ function HomeContent() {
               </div>
             )}
 
-            {/* Mobile: Show user icon with dropdown */}
+            {/* Lock CTA */}
+            <Link
+              href="/lock"
+              className="flex px-3 py-2 md:px-5 md:py-2.5 bg-gradient-to-r from-blue-600/80 to-purple-600/80 hover:from-blue-600 hover:to-purple-600 text-white text-sm md:text-base font-medium rounded-md transition-all whitespace-nowrap"
+            >
+              Lock my prediction
+            </Link>
+
+            {/* Mobile: Show user icon with dropdown - MOVED TO RIGHT */}
             {user && (
               <div className="relative md:hidden">
                 <button
@@ -223,14 +231,6 @@ function HomeContent() {
                 )}
               </div>
             )}
-
-            {/* Lock CTA */}
-            <Link
-              href="/lock"
-              className="flex px-3 py-2 md:px-5 md:py-2.5 bg-gradient-to-r from-blue-600/80 to-purple-600/80 hover:from-blue-600 hover:to-purple-600 text-white text-sm md:text-base font-medium rounded-md transition-all whitespace-nowrap"
-            >
-              Lock my prediction
-            </Link>
           </div>
         </div>
       </header>
