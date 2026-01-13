@@ -87,20 +87,21 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
     <div className="glass rounded-lg p-3 md:p-4 hover:border-white/10 transition-all flex flex-col h-full shadow-lg shadow-purple-500/5">
       {/* Header row: Badge + Author + Time + Status Pills */}
       <div className="flex items-start justify-between gap-2 mb-1.5 md:mb-2">
-        <div className="flex items-center gap-2 flex-wrap min-w-0 flex-1">
+        <div className="flex items-center gap-2 min-w-0 flex-1">
           {/* Small circular badge with number */}
           <div className="w-7 h-7 flex-shrink-0 rounded-full bg-blue-500/20 flex items-center justify-center text-xs font-semibold text-blue-400 border border-blue-500/30">
             {authorNumber.toString().slice(-2)}
           </div>
 
-          <div className="flex items-center gap-1.5 flex-wrap min-w-0">
-            <span className="text-xs text-neutral-400">Anon #{authorNumber}</span>
+          {/* Meta info: Anon + time + category - Single line, no wrapping */}
+          <div className="flex items-center gap-1.5 min-w-0 overflow-hidden">
+            <span className="text-xs text-neutral-400 whitespace-nowrap">Anon #{authorNumber}</span>
             <span className="text-xs text-neutral-600">•</span>
-            <span className="text-xs text-neutral-500">{formatRelativeTime(prediction.timestamp)}</span>
+            <span className="text-xs text-neutral-500 whitespace-nowrap">{formatRelativeTime(prediction.timestamp)}</span>
             {prediction.category && (
               <>
                 <span className="text-xs text-neutral-600">•</span>
-                <span className="px-2 py-0.5 text-[10px] font-semibold rounded-full bg-gradient-to-r from-blue-500/15 to-purple-500/15 border border-blue-500/30 text-blue-300 leading-tight">
+                <span className="px-2 py-0.5 text-[10px] font-semibold rounded-full bg-gradient-to-r from-blue-500/15 to-purple-500/15 border border-blue-500/30 text-blue-300 leading-tight whitespace-nowrap flex-shrink-0">
                   {prediction.category}
                 </span>
               </>
@@ -227,35 +228,35 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
           {/* Left: View Proof button */}
           <Link
             href={`/proof/${prediction.publicSlug}`}
-            className="flex-1 h-12 flex items-center justify-center text-sm font-semibold text-white bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 rounded-lg transition-all shadow-lg shadow-blue-500/20 hover:shadow-blue-500/30"
+            className="flex-1 h-12 flex items-center justify-center text-sm font-semibold text-white bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 rounded-lg transition-all shadow-lg shadow-blue-500/20 hover:shadow-blue-500/30 whitespace-nowrap"
             title="View permanent proof page"
           >
             View Proof
           </Link>
 
-          {/* Right: Action Slot */}
-          <div className="flex-1 h-12 flex items-center justify-center gap-2">
+          {/* Right: Action Slot - Fixed h-12 */}
+          <div className="flex-1 h-12 flex items-center justify-center">
             {isResolved ? (
-              /* Resolved: Non-clickable badge */
-              <div className={`flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg border text-sm font-medium ${getResolvedBadgeColor()}`}>
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              /* Resolved: Non-clickable badge with consistent height */
+              <div className={`w-full h-full flex items-center justify-center gap-1.5 px-3 rounded-lg border text-sm font-medium whitespace-nowrap ${getResolvedBadgeColor()}`}>
+                <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                 </svg>
-                {isResolutionOnChain() ? "Resolved on-chain" : "Resolved"}
+                <span className="truncate">Resolved</span>
               </div>
             ) : (
-              /* Pending: Resolve button (enabled or disabled) */
+              /* Pending: Resolve button (enabled or disabled) - Fixed h-12 */
               <button
                 onClick={() => canResolve && setShowResolveModal(true)}
                 disabled={!canResolve}
-                className={`w-full h-full flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg border text-sm font-medium transition-all ${
+                className={`w-full h-full flex items-center justify-center gap-1.5 px-3 rounded-lg border text-sm font-medium transition-all whitespace-nowrap ${
                   canResolve
                     ? "text-white bg-green-500/20 hover:bg-green-500/30 border-green-500/40 cursor-pointer"
                     : "text-neutral-400 bg-white/5 border-white/10 cursor-not-allowed"
                 }`}
               >
                 {!isOwner && (
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
                   </svg>
                 )}
