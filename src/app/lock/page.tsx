@@ -344,116 +344,103 @@ export default function LockPage() {
             </div>
           </>
         ) : (
-          <div className="fade-in">
-            {/* Confirmation screen - Single centered hero card */}
-            <div className="glass rounded-xl p-8 text-center glow-purple">
-              {/* Compressed hero section */}
-              <div className="inline-flex items-center justify-center w-20 h-20 rounded-full mb-4 bg-blue-500/20 border-4 border-blue-500/40 shadow-2xl shadow-blue-500/30">
-                <svg className="w-10 h-10 text-blue-400" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clipRule="evenodd" />
-                </svg>
-              </div>
-
-              <h1 className="text-4xl font-bold text-white mb-2">
-                Locked on-chain.
-              </h1>
-              <p className="text-xl text-neutral-400 mb-4">
-                Timestamp recorded via Digital Evidence.
-              </p>
-
-              {/* Compact bullet list */}
-              <ul className="space-y-1.5 mb-6 text-sm text-neutral-500 max-w-md mx-auto text-left">
-                <li className="flex items-start gap-2">
-                  <svg className="w-4 h-4 text-blue-500 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+          <div className="fade-in space-y-6">
+            {/* Compact status banner */}
+            <div className="glass rounded-lg p-4 border border-green-500/20 bg-green-500/5">
+              <div className="flex items-center gap-3">
+                <div className="flex-shrink-0 w-10 h-10 rounded-full bg-green-500/20 flex items-center justify-center">
+                  <svg className="w-5 h-5 text-green-400" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clipRule="evenodd" />
                   </svg>
-                  <span>Immutable fingerprint generated</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <svg className="w-4 h-4 text-blue-500 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                  </svg>
-                  <span>Publicly verifiable record</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <svg className="w-4 h-4 text-blue-500 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                  </svg>
-                  <span>No edits — only verification</span>
-                </li>
-              </ul>
-
-              {/* Grouped confirmation artifact: Prediction + Proof details in ONE block */}
-              <div className="glass border border-white/5 rounded-lg p-4 mb-6 max-w-xl mx-auto">
-                {/* Your prediction */}
-                <div className="pb-4 border-b border-white/5">
-                  <label className="block text-[10px] font-semibold text-neutral-500 mb-2 uppercase tracking-wider">
-                    Your Prediction
-                  </label>
-                  <p className="text-neutral-100 text-sm leading-relaxed">
-                    {text}
-                  </p>
                 </div>
+                <div className="flex-1">
+                  <h2 className="text-lg font-semibold text-white">Prediction locked on-chain</h2>
+                  <p className="text-sm text-neutral-400">Timestamp permanently recorded via Digital Evidence</p>
+                </div>
+              </div>
+            </div>
 
-                {/* Proof details - directly below, no large gap */}
-                {(fingerprint || timestamp) && (
-                  <div className="pt-4">
-                    <div className="flex items-center gap-2 mb-3">
-                      <svg className="w-3.5 h-3.5 text-blue-500" fill="currentColor" viewBox="0 0 20 20">
-                        <path fillRule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                      </svg>
-                      <h3 className="text-xs font-semibold text-neutral-500 uppercase tracking-wider">
-                        Proof Details
-                      </h3>
+            {/* Prediction text - THE HERO */}
+            <div className="glass rounded-xl p-8 border border-white/10 glow-purple text-center">
+              <label className="block text-xs font-semibold text-neutral-500 mb-4 uppercase tracking-wider">
+                Your Prediction
+              </label>
+              <p className="text-2xl text-white leading-relaxed font-normal">
+                {text}
+              </p>
+            </div>
+
+            {/* Expandable proof details */}
+            <div className="glass rounded-lg border border-white/5">
+              <button
+                onClick={() => setHowItWorksExpanded(!howItWorksExpanded)}
+                className="w-full flex items-center justify-between p-4 text-left group"
+              >
+                <div className="flex items-center gap-2">
+                  <svg className="w-4 h-4 text-blue-500" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                  </svg>
+                  <span className="text-sm font-medium text-white">View on-chain proof</span>
+                </div>
+                <svg
+                  className={`w-4 h-4 text-neutral-500 transition-transform ${
+                    howItWorksExpanded ? "rotate-180" : ""
+                  }`}
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                </svg>
+              </button>
+
+              {howItWorksExpanded && (fingerprint || timestamp) && (
+                <div className="px-4 pb-4 pt-2 border-t border-white/5 space-y-3">
+                  {timestamp && (
+                    <div>
+                      <label className="block text-[10px] font-semibold text-neutral-600 mb-1.5 uppercase tracking-wider">
+                        Timestamp (UTC)
+                      </label>
+                      <p className="text-xs text-neutral-300 font-mono bg-white/[0.02] rounded p-2.5">
+                        {new Date(timestamp).toUTCString()}
+                      </p>
                     </div>
+                  )}
 
-                    <div className="space-y-2.5 text-left">
-                      {fingerprint && (
-                        <div>
-                          <label className="block text-[10px] font-semibold text-neutral-600 mb-1 uppercase tracking-wider">
-                            Fingerprint
-                          </label>
-                          <div className="flex items-center gap-2 bg-white/[0.02] rounded p-2">
-                            <code className="text-xs text-neutral-400 flex-1 font-mono break-all">
-                              {truncateFingerprint(fingerprint)}
-                            </code>
-                            <button
-                              onClick={copyFingerprint}
-                              className="flex-shrink-0 p-1 hover:bg-white/10 rounded transition-colors"
-                              title="Copy"
-                            >
-                              <svg className="w-3.5 h-3.5 text-neutral-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
-                              </svg>
-                            </button>
-                          </div>
-                        </div>
-                      )}
-
-                      {timestamp && (
-                        <div>
-                          <label className="block text-[10px] font-semibold text-neutral-600 mb-1 uppercase tracking-wider">
-                            Timestamp (UTC)
-                          </label>
-                          <p className="text-xs text-neutral-400 font-mono bg-white/[0.02] rounded p-2">
-                            {new Date(timestamp).toUTCString()}
-                          </p>
-                        </div>
-                      )}
-
-                      <div>
-                        <label className="block text-[10px] font-semibold text-neutral-600 mb-1 uppercase tracking-wider">
-                          Network
-                        </label>
-                        <div className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-blue-500/10 border border-blue-500/20 rounded-full">
-                          <div className="w-1.5 h-1.5 rounded-full bg-blue-500"></div>
-                          <span className="text-xs text-blue-400 font-medium">Constellation (DAG)</span>
-                        </div>
+                  {fingerprint && (
+                    <div>
+                      <label className="block text-[10px] font-semibold text-neutral-600 mb-1.5 uppercase tracking-wider">
+                        Fingerprint (SHA-256)
+                      </label>
+                      <div className="flex items-center gap-2 bg-white/[0.02] rounded p-2.5">
+                        <code className="text-xs text-neutral-400 flex-1 font-mono break-all">
+                          {truncateFingerprint(fingerprint)}
+                        </code>
+                        <button
+                          onClick={copyFingerprint}
+                          className="flex-shrink-0 p-1.5 hover:bg-white/10 rounded transition-colors"
+                          title="Copy fingerprint"
+                        >
+                          <svg className="w-3.5 h-3.5 text-neutral-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                          </svg>
+                        </button>
                       </div>
                     </div>
+                  )}
+
+                  <div>
+                    <label className="block text-[10px] font-semibold text-neutral-600 mb-1.5 uppercase tracking-wider">
+                      Network
+                    </label>
+                    <div className="inline-flex items-center gap-1.5 px-2.5 py-1.5 bg-blue-500/10 border border-blue-500/20 rounded-full">
+                      <div className="w-1.5 h-1.5 rounded-full bg-blue-500"></div>
+                      <span className="text-xs text-blue-400 font-medium">Constellation (DAG)</span>
+                    </div>
                   </div>
-                )}
-              </div>
+                </div>
+              )}
+            </div>
 
               {/* CTA section with auth-aware sharing */}
               <div className="space-y-3 max-w-md mx-auto">
