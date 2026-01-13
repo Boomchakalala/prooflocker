@@ -119,7 +119,10 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
     if (isResolved) {
       return isResolutionOnChain() ? "Resolved on-chain" : "Resolved";
     }
-    return null; // Owned + pending = no caption needed
+    if (canResolve) {
+      return "Ready to resolve";
+    }
+    return null;
   };
 
   // Determine if user can share (owner and claimed)
