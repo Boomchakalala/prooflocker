@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { createPortal } from "react-dom";
 import { PredictionOutcome } from "@/lib/storage";
 import { supabase } from "@/lib/supabase";
 
@@ -14,7 +15,7 @@ interface ResolveModalProps {
   onSuccess: () => void;
 }
 
-export default function ResolveModal({
+function ResolveModalContent({
   predictionId,
   predictionText,
   currentOutcome,
@@ -29,11 +30,42 @@ export default function ResolveModal({
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  // Lock body scroll when modal is open
+  // iOS Safari scroll lock with position restoration
   useEffect(() => {
-    document.body.style.overflow = 'hidden';
+    // Store the original scroll position
+    const scrollY = window.scrollY;
+    const body = document.body;
+    const scrollBarWidth = window.innerWidth - document.documentElement.clientWidth;
+
+    // Lock scroll for all browsers
+    body.style.overflow = 'hidden';
+
+    // Add padding to prevent layout shift from scrollbar removal
+    if (scrollBarWidth > 0) {
+      body.style.paddingRight = `${scrollBarWidth}px`;
+    }
+
+    // iOS Safari specific: freeze position
+    body.style.position = 'fixed';
+    body.style.top = `-${scrollY}px`;
+    body.style.left = '0';
+    body.style.right = '0';
+    body.style.width = '100%';
+
     return () => {
-      document.body.style.overflow = 'unset';
+      // Restore scroll for all browsers
+      body.style.overflow = '';
+      body.style.paddingRight = '';
+
+      // iOS Safari specific: restore position and scroll
+      body.style.position = '';
+      body.style.top = '';
+      body.style.left = '';
+      body.style.right = '';
+      body.style.width = '';
+
+      // Restore scroll position
+      window.scrollTo(0, scrollY);
     };
   }, []);
 
@@ -88,25 +120,21 @@ export default function ResolveModal({
 
   return (
     <div
-      className="fixed inset-0 z-[9999] flex items-center justify-center p-4"
+      className="fixed inset-0 z-[10000] flex items-center justify-center p-4"
       onClick={onClose}
       style={{
-        // CSS variable for app header height
-        ['--header-h' as string]: '64px',
-        // Add padding top on mobile to account for header
-        paddingTop: 'max(1rem, env(safe-area-inset-top))',
-        paddingBottom: 'max(1rem, env(safe-area-inset-bottom))',
+        WebkitOverflowScrolling: 'touch',
       }}
     >
       {/* Backdrop */}
-      <div className="absolute inset-0 bg-black/70 backdrop-blur-sm z-0" />
+      <div className="absolute inset-0 bg-black/70 backdrop-blur-sm" />
 
       {/* Modal Container - Single scroll container with better mobile support */}
       <div
         className="relative z-10 w-full max-w-2xl rounded-2xl bg-gradient-to-br from-[#1a1a1a] to-[#0a0a0a] border border-white/10 shadow-2xl overflow-y-auto"
         style={{
-          // Use dvh for better mobile support and account for safe areas
-          maxHeight: 'min(calc(100dvh - var(--header-h) - 2rem - env(safe-area-inset-top) - env(safe-area-inset-bottom)), 90vh)',
+          maxHeight: '90dvh',
+          WebkitOverflowScrolling: 'touch',
         }}
         onClick={(e) => e.stopPropagation()}
       >
@@ -311,5 +339,21 @@ export default function ResolveModal({
         </form>
       </div>
     </div>
+  );
+}
+
+export default function ResolveModal(props: ResolveModalProps) {
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+    return () => setMounted(false);
+  }, []);
+
+  if (!mounted) return null;
+
+  return createPortal(
+    <ResolveModalContent {...props} />,
+    document.body
   );
 }
