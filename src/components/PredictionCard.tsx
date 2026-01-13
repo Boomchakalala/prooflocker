@@ -87,40 +87,42 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
   return (
     <div className="glass rounded-lg p-3 md:p-4 hover:border-white/10 transition-all flex flex-col h-full shadow-lg shadow-purple-500/5">
       {/* Header row: Badge + Author + Time + Status Pills */}
-      <div className="flex items-start justify-between mb-1.5 md:mb-2">
-        <div className="flex items-center gap-2 flex-wrap">
+      <div className="flex items-start justify-between gap-2 mb-1.5 md:mb-2">
+        <div className="flex items-center gap-2 flex-wrap min-w-0 flex-1">
           {/* Small circular badge with number */}
-          <div className="w-7 h-7 rounded-full bg-blue-500/20 flex items-center justify-center text-xs font-semibold text-blue-400 border border-blue-500/30">
+          <div className="w-7 h-7 flex-shrink-0 rounded-full bg-blue-500/20 flex items-center justify-center text-xs font-semibold text-blue-400 border border-blue-500/30">
             {authorNumber.toString().slice(-2)}
           </div>
 
-          <div className="flex items-center gap-2 flex-wrap">
+          <div className="flex items-center gap-1.5 flex-wrap min-w-0">
             <span className="text-xs text-neutral-400">Anon #{authorNumber}</span>
             <span className="text-xs text-neutral-600">•</span>
             <span className="text-xs text-neutral-500">{formatRelativeTime(prediction.timestamp)}</span>
             {prediction.category && (
               <>
-                <span className="text-xs text-neutral-600">•</span>
-                <span className="text-xs text-neutral-600">{prediction.category}</span>
+                <span className="text-xs text-neutral-600 hidden sm:inline">•</span>
+                <span className="px-1.5 py-0.5 text-[10px] sm:text-xs sm:px-0 sm:py-0 font-medium rounded sm:rounded-none bg-white/5 sm:bg-transparent border sm:border-0 border-white/10 text-neutral-500 sm:text-neutral-600 leading-tight">
+                  {prediction.category}
+                </span>
               </>
             )}
           </div>
         </div>
 
-        {/* Inline status pills */}
-        <div className="flex items-center gap-1 flex-wrap justify-end">
+        {/* Inline status pills - Consistent badge row with min-height */}
+        <div className="flex items-center gap-1 flex-wrap justify-end flex-shrink-0 min-h-[20px]">
           {isClaimed && (
-            <span className="px-2 py-0.5 text-[10px] font-medium rounded bg-blue-500/10 border border-blue-500/30 text-blue-400">
+            <span className="px-1.5 sm:px-2 py-0.5 text-[9px] sm:text-[10px] font-medium rounded bg-blue-500/10 border border-blue-500/30 text-blue-400 whitespace-nowrap leading-tight">
               Claimed
             </span>
           )}
           {isOnChain() && (
-            <span className="px-2 py-0.5 text-[10px] font-medium rounded bg-green-500/10 border border-green-500/30 text-green-400">
+            <span className="px-1.5 sm:px-2 py-0.5 text-[9px] sm:text-[10px] font-medium rounded bg-green-500/10 border border-green-500/30 text-green-400 whitespace-nowrap leading-tight">
               Locked on-chain
             </span>
           )}
           {isResolutionOnChain() && (
-            <span className="px-2 py-0.5 text-[10px] font-medium rounded bg-purple-500/10 border border-purple-500/30 text-purple-400">
+            <span className="px-1.5 sm:px-2 py-0.5 text-[9px] sm:text-[10px] font-medium rounded bg-purple-500/10 border border-purple-500/30 text-purple-400 whitespace-nowrap leading-tight">
               Resolved on-chain
             </span>
           )}
