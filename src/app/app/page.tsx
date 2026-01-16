@@ -255,45 +255,50 @@ function AppFeedContent() {
             </button>
           </div>
 
-          {/* Filter + Recheck row */}
+          {/* Category Pills + Recheck row */}
           {activeTab === "all" && (
-            <div className="flex items-center justify-between gap-3">
-              <div className="flex items-center gap-2 overflow-x-auto">
-                <span className="text-xs text-neutral-500 whitespace-nowrap">Filter:</span>
-                <select
-                  value={selectedCategory}
-                  onChange={(e) => setSelectedCategory(e.target.value)}
-                  className="px-3 py-1.5 text-sm glass border border-white/10 rounded-lg text-neutral-300 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-transparent"
-                >
-                  {categories.map((cat) => (
-                    <option key={cat} value={cat} className="bg-[#0a0a0a]">
-                      {cat === "all" ? "All categories" : cat}
-                    </option>
-                  ))}
-                </select>
+            <div className="flex flex-col gap-3">
+              {/* Category pills */}
+              <div className="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-hide">
+                {categories.map((cat) => (
+                  <button
+                    key={cat}
+                    onClick={() => setSelectedCategory(cat)}
+                    className={`px-4 py-2 text-sm font-medium rounded-full transition-all whitespace-nowrap flex-shrink-0 ${
+                      selectedCategory === cat
+                        ? "bg-gradient-to-r from-blue-600/80 to-purple-600/80 hover:from-blue-600 hover:to-purple-600 text-white border border-blue-500/30"
+                        : "glass border border-white/10 text-neutral-400 hover:text-white hover:bg-white/5"
+                    }`}
+                  >
+                    {cat === "all" ? "All" : cat}
+                  </button>
+                ))}
               </div>
 
-              <button
-                onClick={syncDEStatus}
-                disabled={syncing}
-                className="px-2 py-1.5 md:px-3 md:py-2 glass text-xs md:text-sm font-medium text-neutral-400 hover:text-white rounded-lg transition-all hover:bg-white/5 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-1.5 flex-shrink-0"
-                title="Recheck on-chain status for pending proofs"
-              >
-                <svg
-                  className={`w-3.5 h-3.5 ${syncing ? "animate-spin" : ""}`}
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
+              {/* Recheck button */}
+              <div className="flex justify-end">
+                <button
+                  onClick={syncDEStatus}
+                  disabled={syncing}
+                  className="px-3 py-2 glass text-sm font-medium text-neutral-400 hover:text-white rounded-lg transition-all hover:bg-white/5 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-1.5"
+                  title="Recheck on-chain status for pending proofs"
                 >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
-                  />
-                </svg>
-                <span className="hidden sm:inline">{syncing ? "Checking..." : "Recheck"}</span>
-              </button>
+                  <svg
+                    className={`w-3.5 h-3.5 ${syncing ? "animate-spin" : ""}`}
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+                    />
+                  </svg>
+                  <span>{syncing ? "Checking..." : "Recheck status"}</span>
+                </button>
+              </div>
             </div>
           )}
         </div>
