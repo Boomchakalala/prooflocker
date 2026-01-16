@@ -228,24 +228,24 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
 
       {/* Actions row - Clearer hierarchy */}
       <div className="flex flex-col gap-1.5">
-        {/* Primary action row: View Proof + Share */}
+        {/* Primary action row: View Details + Share */}
         <div className="flex gap-1.5">
           <Link
             href={`/proof/${prediction.publicSlug}`}
             className="flex-1 text-center px-4 py-2.5 text-sm font-semibold text-white bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 rounded-lg transition-all shadow-lg shadow-blue-500/20 hover:shadow-blue-500/30"
-            title="View permanent proof page"
+            title="View full proof details"
           >
-            Open proof card
+            View proof
           </Link>
 
-          {/* Share button - Only for claimed predictions owned by current user */}
-          {canShare && (
-            <button
-              onClick={copyLink}
-              className="px-3 py-2.5 text-sm font-medium text-neutral-400 hover:text-white bg-white/5 hover:bg-white/10 rounded-lg transition-all border border-white/10"
-              title="Share prediction"
-            >
-              {linkCopied ? (
+          {/* Share button - Always visible for all proofs */}
+          <button
+            onClick={copyLink}
+            className="px-4 py-2.5 text-sm font-medium text-white glass hover:bg-white/10 rounded-lg transition-all border border-white/10 flex items-center gap-2"
+            title="Share this proof"
+          >
+            {linkCopied ? (
+              <>
                 <svg
                   className="w-4 h-4 text-green-500"
                   fill="none"
@@ -259,7 +259,10 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
                     d="M5 13l4 4L19 7"
                   />
                 </svg>
-              ) : (
+                <span className="hidden sm:inline">Copied</span>
+              </>
+            ) : (
+              <>
                 <svg
                   className="w-4 h-4"
                   fill="none"
@@ -273,9 +276,10 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
                     d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"
                   />
                 </svg>
-              )}
-            </button>
-          )}
+                <span className="hidden sm:inline">Share</span>
+              </>
+            )}
+          </button>
         </div>
 
         {/* Secondary action: Resolve button */}
