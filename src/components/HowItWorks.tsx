@@ -33,10 +33,13 @@ export default function HowItWorks() {
   ];
 
   return (
-    <div className="relative z-10 py-20 px-4">
+    <div className="relative z-10 py-16 px-4">
       <div className="max-w-6xl mx-auto">
-        <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-5xl font-bold text-white mb-4">
+        <div className="text-center mb-12">
+          <h2 className="text-3xl md:text-5xl font-bold text-white mb-4 flex items-center justify-center gap-3">
+            <svg className="w-8 h-8 md:w-10 md:h-10 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+            </svg>
             How it works
           </h2>
           <p className="text-lg text-neutral-400 max-w-2xl mx-auto">
