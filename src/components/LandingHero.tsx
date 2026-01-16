@@ -33,7 +33,7 @@ export default function LandingHero() {
             href="/app"
             className="relative w-full sm:w-auto px-8 py-4 glass border border-white/10 hover:border-white/20 text-white text-lg font-medium rounded-lg transition-all"
           >
-            Explore proofs
+            Explore predictions
           </Link>
         </div>
 

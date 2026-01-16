@@ -139,7 +139,7 @@ function AppFeedContent() {
 
       {/* Header */}
       <header className="glass sticky top-0 z-50 border-b border-white/5 bg-[#0a0a0a]/80 backdrop-blur-xl">
-        <div className="mx-auto max-w-6xl px-4 flex h-14 md:h-16 items-center justify-between">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 flex h-14 md:h-16 items-center justify-between">
           <Link href="/">
             <BrandLogo />
           </Link>
