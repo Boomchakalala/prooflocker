@@ -9,8 +9,6 @@ import OutcomeBadge from "@/components/OutcomeBadge";
 import CopyButton from "@/components/CopyButton";
 
 // Cache the prediction fetch to avoid duplicate queries
-// When both generateMetadata() and the component call this with the same slug,
-// it will only execute once
 const getPredictionBySlug = cache(_getPredictionBySlug);
 
 // Make this a dynamic page
@@ -30,7 +28,6 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     };
   }
 
-  // Format date for share card
   const lockedDate = new Date(prediction.timestamp);
   const dateStr = lockedDate.toLocaleDateString("en-US", {
     day: "numeric",
@@ -39,12 +36,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     timeZone: "UTC",
   }) + " UTC";
 
-  // Shorten text for preview (max ~100 chars for social cards)
   const previewText = prediction.text.length > 100
     ? prediction.text.substring(0, 97) + "..."
     : prediction.text;
 
-  // Shortened proof ID (first 8 chars)
   const shortProofId = prediction.proofId.substring(0, 8);
 
   const title = `${previewText} | ProofLocker`;
@@ -78,20 +73,6 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-function getOutcomeLabel(outcome: string, resolvedAt?: string): string {
-  if (outcome === "correct") return "Resolved: Correct";
-  if (outcome === "incorrect") return "Resolved: Incorrect";
-  if (outcome === "invalid") return "Invalid";
-  return "Pending";
-}
-
-function getOutcomeColor(outcome: string): string {
-  if (outcome === "correct") return "bg-green-500/10 text-green-400 border-green-500/30";
-  if (outcome === "incorrect") return "bg-red-500/10 text-red-400 border-red-500/30";
-  if (outcome === "invalid") return "bg-neutral-500/10 text-neutral-400 border-neutral-500/30";
-  return "bg-yellow-500/10 text-yellow-400 border-yellow-500/30";
-}
-
 export default async function ProofPage({ params }: Props) {
   const { slug } = await params;
   const prediction = await getPredictionBySlug(slug);
@@ -103,15 +84,15 @@ export default async function ProofPage({ params }: Props) {
   // If hidden, show removal message
   if (prediction.moderationStatus === "hidden") {
     return (
-      <div className="min-h-screen bg-[#0a0a0a] flex items-center justify-center p-4">
-        <div className="max-w-md w-full text-center border border-neutral-800 rounded-lg p-8 bg-[#0d0d0d]">
+      <div className="min-h-screen gradient-bg flex items-center justify-center p-4">
+        <div className="max-w-md w-full text-center glass border border-white/10 rounded-xl p-8">
           <h2 className="text-xl font-semibold text-white mb-2">Content Removed</h2>
           <p className="text-neutral-400 mb-6 text-sm">
             This proof has been removed for violating the rules.
           </p>
           <Link
             href="/"
-            className="inline-block px-5 py-2 bg-neutral-800 hover:bg-neutral-700 text-white font-medium rounded transition-colors text-sm border border-neutral-700"
+            className="inline-block px-5 py-2 bg-gradient-to-r from-blue-600/80 to-purple-600/80 hover:from-blue-600 hover:to-purple-600 text-white font-medium rounded-lg transition-all"
           >
             Return to ProofLocker
           </Link>
@@ -122,373 +103,241 @@ export default async function ProofPage({ params }: Props) {
 
   const lockedDate = new Date(prediction.timestamp);
   const isResolved = prediction.outcome === "correct" || prediction.outcome === "incorrect";
-
-  // Generate the explorer URL once, outside of JSX
   const explorerUrl = prediction.deReference
     ? getDigitalEvidenceFingerprintUrl(prediction.deReference)
     : null;
 
   return (
-    <div className="min-h-screen bg-[#0a0a0a] text-white">
-      <div className="max-w-2xl mx-auto px-4 py-8">
-        {/* Header */}
-        <div className="mb-6">
+    <div className="min-h-screen gradient-bg text-white relative">
+      {/* Decorative gradient orbs */}
+      <div className="fixed inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute top-20 -left-40 w-80 h-80 bg-blue-500/10 rounded-full blur-3xl" />
+        <div className="absolute top-40 -right-40 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl" />
+      </div>
+
+      <div className="relative z-10 max-w-4xl mx-auto px-4 py-8 md:py-12">
+        {/* Header with back button */}
+        <div className="mb-8">
           <Link
-            href="/"
-            className="inline-flex items-center text-neutral-400 hover:text-white transition-colors text-sm"
+            href="/app"
+            className="inline-flex items-center gap-2 text-neutral-400 hover:text-white transition-colors text-sm group"
           >
-            ← Back to ProofLocker
+            <svg className="w-4 h-4 group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+            </svg>
+            Back to feed
           </Link>
         </div>
 
-        {/* SECTION 1: Prediction Statement */}
-        <div className="mb-6">
-          <h1 className="text-3xl leading-relaxed text-white font-medium">
-            {prediction.text}
-          </h1>
-        </div>
-
-        {/* SECTION 2: Outcome + Resolution Date (for claimed predictions) */}
-        {prediction.userId && (
-          <div className="mb-6 pb-6 border-b border-neutral-800">
-            <div className="text-xs text-neutral-500 uppercase tracking-wide mb-2">
-              Outcome
-            </div>
-            <div className="mb-2">
-              <OutcomeBadge outcome={prediction.outcome} size="md" showLabel="long" />
-            </div>
-            {isResolved && prediction.resolvedAt && (
-              <div className="text-sm text-neutral-400">
-                Resolved on {new Date(prediction.resolvedAt).toLocaleString("en-US", {
-                  month: "long",
-                  day: "numeric",
-                  year: "numeric",
-                  hour: "2-digit",
-                  minute: "2-digit",
-                  timeZone: "UTC",
-                })} UTC
-              </div>
-            )}
-          </div>
-        )}
-
-        {/* SECTION 3: Record Details */}
-        <div className="mb-6 pb-6 border-b border-neutral-800">
-          <div className="text-xs text-neutral-500 uppercase tracking-wide mb-3">
-            Record Details
-          </div>
-          <div className="space-y-2.5 text-sm">
-            {/* Locked on */}
-            <div className="flex justify-between items-center gap-4">
-              <span className="text-neutral-400">Locked on</span>
-              <div className="text-neutral-300 font-mono text-sm">
-                {lockedDate.toLocaleString("en-US", {
-                  month: "short",
-                  day: "numeric",
-                  year: "numeric",
-                  hour: "2-digit",
-                  minute: "2-digit",
-                  timeZone: "UTC",
-                })} UTC
+        {/* Main card container */}
+        <div className="glass border border-white/10 rounded-2xl overflow-hidden">
+          {/* Prediction statement - Hero section */}
+          <div className="p-8 md:p-10 border-b border-white/10 bg-gradient-to-br from-white/5 to-transparent">
+            <div className="flex items-start justify-between gap-4 mb-6">
+              <div>
+                <div className="text-sm text-neutral-500 mb-2">Prediction</div>
+                <h1 className="text-2xl md:text-3xl leading-relaxed text-white font-medium">
+                  {prediction.text}
+                </h1>
               </div>
             </div>
 
-            {/* Resolved on (if applicable) */}
-            {isResolved && prediction.resolvedAt && (
-              <div className="flex justify-between items-center gap-4">
-                <span className="text-neutral-400">Resolved on</span>
-                <div className="text-neutral-300 font-mono text-sm">
-                  {new Date(prediction.resolvedAt).toLocaleString("en-US", {
-                    month: "short",
+            {/* Outcome badge */}
+            <div className="flex items-center gap-3 flex-wrap">
+              <div className="text-xs text-neutral-500 uppercase tracking-wide">Status</div>
+              <OutcomeBadge outcome={prediction.outcome} size="lg" showLabel="long" />
+            </div>
+          </div>
+
+          {/* Key details section */}
+          <div className="p-8 md:p-10 border-b border-white/10">
+            <h2 className="text-lg font-semibold text-white mb-6">Proof Details</h2>
+            <div className="grid md:grid-cols-2 gap-6">
+              {/* Locked timestamp */}
+              <div className="glass border border-white/10 rounded-lg p-4">
+                <div className="text-xs text-neutral-500 uppercase tracking-wide mb-2">Locked On</div>
+                <div className="text-white font-medium">
+                  {lockedDate.toLocaleDateString("en-US", {
+                    month: "long",
                     day: "numeric",
                     year: "numeric",
+                    timeZone: "UTC",
+                  })}
+                </div>
+                <div className="text-sm text-neutral-400 font-mono mt-1">
+                  {lockedDate.toLocaleTimeString("en-US", {
                     hour: "2-digit",
                     minute: "2-digit",
                     timeZone: "UTC",
                   })} UTC
                 </div>
               </div>
-            )}
 
-            {/* On-chain network */}
-            <div className="flex justify-between items-center gap-4">
-              <span className="text-neutral-400">On-chain network</span>
-              <div
-                className={`px-2.5 py-1 border rounded text-xs font-medium ${
-                  prediction.onChainStatus === "confirmed"
-                    ? "bg-green-500/10 text-green-400 border-green-500/30"
-                    : "bg-yellow-500/10 text-yellow-400 border-yellow-500/30"
-                }`}
-              >
-                {prediction.onChainStatus === "confirmed" ? "Constellation Network" : "Pending"}
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* SECTION 4: Resolution Summary (if present) - WHY */}
-        {isResolved && prediction.resolvedAt && prediction.resolutionNote && (
-          <div className="mb-6 pb-6 border-b border-neutral-800">
-            <div className="text-xs text-neutral-500 uppercase tracking-wide mb-2">
-              Resolution Summary
-            </div>
-            <div className="bg-neutral-900/50 border border-neutral-800 rounded-lg p-3">
-              <p className="text-sm text-neutral-300 leading-relaxed">
-                {prediction.resolutionNote}
-              </p>
-              {prediction.resolutionUrl && (
-                <a
-                  href={prediction.resolutionUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-sm text-cyan-400 hover:text-cyan-300 break-all underline inline-block mt-2"
-                >
-                  {prediction.resolutionUrl}
-                </a>
-              )}
-            </div>
-          </div>
-        )}
-
-        {/* SECTION 5: On-Chain Proof (confirmed only) - HOW */}
-        {prediction.onChainStatus === "confirmed" && prediction.deReference && (
-          <div className="mb-6">
-            <div className="text-xs text-neutral-500 uppercase tracking-wide mb-3">
-              On-Chain Proof
-            </div>
-
-            {/* Trust summary block */}
-            <div className="mb-4 p-3 bg-cyan-500/5 border border-cyan-500/30 rounded-lg">
-              <div className="max-w-lg mx-auto">
-                <div className="flex items-center gap-2 mb-3">
-                  <svg className="w-4 h-4 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-                  </svg>
-                  <h3 className="text-sm font-medium text-white">Verify this proof</h3>
-                </div>
-                <div className="grid grid-cols-2 gap-2 text-xs">
-                  <div className="flex items-center gap-1.5 text-neutral-400">
-                    <svg className="w-3.5 h-3.5 text-cyan-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-                    </svg>
-                    <span className="text-neutral-300">Immutable record</span>
+              {/* Resolved timestamp */}
+              {isResolved && prediction.resolvedAt && (
+                <div className="glass border border-white/10 rounded-lg p-4">
+                  <div className="text-xs text-neutral-500 uppercase tracking-wide mb-2">Resolved On</div>
+                  <div className="text-white font-medium">
+                    {new Date(prediction.resolvedAt).toLocaleDateString("en-US", {
+                      month: "long",
+                      day: "numeric",
+                      year: "numeric",
+                      timeZone: "UTC",
+                    })}
                   </div>
-                  <div className="flex items-center gap-1.5 text-neutral-400">
-                    <svg className="w-3.5 h-3.5 text-cyan-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                    <span className="text-neutral-300">Timestamped (UTC)</span>
-                  </div>
-                  <div className="flex items-center gap-1.5 text-neutral-400">
-                    <svg className="w-3.5 h-3.5 text-cyan-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
-                    </svg>
-                    <span className="text-neutral-300">SHA-256 content hash</span>
-                  </div>
-                  <div className="flex items-center gap-1.5 text-neutral-400">
-                    <svg className="w-3.5 h-3.5 text-cyan-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                    <span className="text-neutral-300">Publicly verifiable</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Explanatory sentence */}
-            <p className="text-sm text-neutral-400 leading-relaxed mb-4">
-              Recorded with Digital Evidence on the Constellation Network (DAG), providing an immutable, timestamped, and publicly verifiable record.
-            </p>
-
-            {/* Technical proof details */}
-            <div className="space-y-3 text-sm">
-              {/* Transaction Hash */}
-              <div>
-                <div className="text-xs text-neutral-400 mb-1.5">
-                  Transaction Hash
-                </div>
-                <div className="flex items-start gap-2">
-                  {explorerUrl ? (
-                    <a
-                      href={explorerUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-sm text-cyan-400 hover:text-cyan-300 font-mono break-all underline flex-1"
-                    >
-                      {prediction.deReference}
-                    </a>
-                  ) : (
-                    <div className="text-sm text-neutral-300 font-mono break-all flex-1">
-                      {prediction.deReference}
-                    </div>
-                  )}
-                  <CopyButton text={prediction.deReference || ""} iconSize="sm" />
-                </div>
-              </div>
-
-              {/* Block Timestamp */}
-              {prediction.confirmedAt && (
-                <div className="flex justify-between items-start gap-4">
-                  <span className="text-neutral-400">Block timestamp</span>
-                  <div className="text-neutral-300 font-mono text-right text-xs">
-                    {new Date(prediction.confirmedAt).toUTCString()}
+                  <div className="text-sm text-neutral-400 font-mono mt-1">
+                    {new Date(prediction.resolvedAt).toLocaleTimeString("en-US", {
+                      hour: "2-digit",
+                      minute: "2-digit",
+                      timeZone: "UTC",
+                    })} UTC
                   </div>
                 </div>
               )}
 
-              {/* Content Hash (SHA-256) */}
-              <div>
-                <div className="text-xs text-neutral-400 mb-1.5">
-                  Content Hash (SHA-256)
+              {/* Network status */}
+              <div className="glass border border-white/10 rounded-lg p-4">
+                <div className="text-xs text-neutral-500 uppercase tracking-wide mb-2">Network</div>
+                <div className="flex items-center gap-2">
+                  <div
+                    className={`px-3 py-1.5 border rounded-full text-xs font-medium ${
+                      prediction.onChainStatus === "confirmed"
+                        ? "bg-green-500/10 text-green-400 border-green-500/30"
+                        : "bg-yellow-500/10 text-yellow-400 border-yellow-500/30"
+                    }`}
+                  >
+                    {prediction.onChainStatus === "confirmed" ? "Confirmed" : "Pending"}
+                  </div>
                 </div>
-                <div className="flex items-start gap-2 bg-black/40 p-2.5 rounded border border-neutral-800/50">
-                  <code className="text-xs text-neutral-300 font-mono break-all flex-1">
-                    {prediction.hash}
-                  </code>
-                  <CopyButton text={prediction.hash} iconSize="sm" />
+                <div className="text-sm text-neutral-400 mt-2">Constellation Network</div>
+              </div>
+
+              {/* Author */}
+              <div className="glass border border-white/10 rounded-lg p-4">
+                <div className="text-xs text-neutral-500 uppercase tracking-wide mb-2">Author</div>
+                <div className="flex items-center gap-2">
+                  <div className="w-8 h-8 rounded-full bg-gradient-to-r from-cyan-500 to-blue-500 flex items-center justify-center text-white text-xs font-bold">
+                    #{prediction.authorNumber}
+                  </div>
+                  <div>
+                    <div className="text-white font-medium">Anon #{prediction.authorNumber}</div>
+                    {prediction.userId && (
+                      <div className="text-xs text-cyan-400">Claimed</div>
+                    )}
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-        )}
 
-        {/* SECTION 6: Resolution On-Chain Proof (when resolution is confirmed) */}
-        {isResolved && prediction.resolutionDeStatus === "CONFIRMED" && prediction.resolutionDeHash && (
-          <div className="mb-6">
-            <div className="text-xs text-neutral-500 uppercase tracking-wide mb-3">
-              Resolution On-Chain Proof
-            </div>
-
-            {/* Trust summary block */}
-            <div className="mb-4 p-3 bg-purple-500/5 border border-purple-500/30 rounded-lg">
-              <div className="max-w-lg mx-auto">
-                <div className="flex items-center gap-2 mb-3">
-                  <svg className="w-4 h-4 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-                  </svg>
-                  <h3 className="text-sm font-medium text-white">Resolution locked on-chain</h3>
-                </div>
-                <div className="grid grid-cols-2 gap-2 text-xs">
-                  <div className="flex items-center gap-1.5 text-neutral-400">
-                    <svg className="w-3.5 h-3.5 text-purple-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+          {/* Resolution notes */}
+          {isResolved && prediction.resolutionNote && (
+            <div className="p-8 md:p-10 border-b border-white/10 bg-white/5">
+              <h2 className="text-lg font-semibold text-white mb-4">Resolution Summary</h2>
+              <div className="glass border border-white/10 rounded-lg p-5">
+                <p className="text-neutral-200 leading-relaxed mb-3">
+                  {prediction.resolutionNote}
+                </p>
+                {prediction.resolutionUrl && (
+                  <a
+                    href={prediction.resolutionUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 text-sm text-cyan-400 hover:text-cyan-300 underline"
+                  >
+                    View evidence
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
                     </svg>
-                    <span className="text-neutral-300">Immutable outcome</span>
-                  </div>
-                  <div className="flex items-center gap-1.5 text-neutral-400">
-                    <svg className="w-3.5 h-3.5 text-purple-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                    <span className="text-neutral-300">Resolution timestamped</span>
-                  </div>
-                  <div className="flex items-center gap-1.5 text-neutral-400">
-                    <svg className="w-3.5 h-3.5 text-purple-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
-                    </svg>
-                    <span className="text-neutral-300">SHA-256 resolution hash</span>
-                  </div>
-                  <div className="flex items-center gap-1.5 text-neutral-400">
-                    <svg className="w-3.5 h-3.5 text-purple-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                    <span className="text-neutral-300">Publicly verifiable</span>
-                  </div>
-                </div>
+                  </a>
+                )}
               </div>
             </div>
+          )}
 
-            {/* Explanatory sentence */}
-            <p className="text-sm text-neutral-400 leading-relaxed mb-4">
-              The outcome resolution was recorded on-chain with Digital Evidence, creating an immutable and timestamped record of when and how this prediction was resolved.
-            </p>
+          {/* Technical proof */}
+          {prediction.onChainStatus === "confirmed" && prediction.deReference && (
+            <div className="p-8 md:p-10">
+              <h2 className="text-lg font-semibold text-white mb-4">On-Chain Verification</h2>
 
-            {/* Technical proof details */}
-            <div className="space-y-3 text-sm">
-              {/* Resolution Transaction Hash */}
-              {prediction.resolutionDeReference && (
-                <div>
-                  <div className="text-xs text-neutral-400 mb-1.5">
-                    Resolution Transaction Hash
-                  </div>
+              {/* Trust badges */}
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
+                <div className="glass border border-cyan-500/20 rounded-lg p-3 text-center">
+                  <svg className="w-5 h-5 text-cyan-400 mx-auto mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                  </svg>
+                  <div className="text-xs text-neutral-300">Immutable</div>
+                </div>
+                <div className="glass border border-cyan-500/20 rounded-lg p-3 text-center">
+                  <svg className="w-5 h-5 text-cyan-400 mx-auto mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                  <div className="text-xs text-neutral-300">Timestamped</div>
+                </div>
+                <div className="glass border border-cyan-500/20 rounded-lg p-3 text-center">
+                  <svg className="w-5 h-5 text-cyan-400 mx-auto mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                  </svg>
+                  <div className="text-xs text-neutral-300">SHA-256</div>
+                </div>
+                <div className="glass border border-cyan-500/20 rounded-lg p-3 text-center">
+                  <svg className="w-5 h-5 text-cyan-400 mx-auto mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                  <div className="text-xs text-neutral-300">Verifiable</div>
+                </div>
+              </div>
+
+              {/* Technical details */}
+              <div className="space-y-4">
+                {/* Transaction hash */}
+                <div className="glass border border-white/10 rounded-lg p-4">
+                  <div className="text-xs text-neutral-500 uppercase tracking-wide mb-2">Transaction Hash</div>
                   <div className="flex items-start gap-2">
-                    {prediction.resolutionDeReference && getDigitalEvidenceFingerprintUrl(prediction.resolutionDeReference) ? (
+                    {explorerUrl ? (
                       <a
-                        href={getDigitalEvidenceFingerprintUrl(prediction.resolutionDeReference)}
+                        href={explorerUrl}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-sm text-purple-400 hover:text-purple-300 font-mono break-all underline flex-1"
+                        className="text-sm text-cyan-400 hover:text-cyan-300 font-mono break-all underline flex-1"
                       >
-                        {prediction.resolutionDeReference}
+                        {prediction.deReference}
                       </a>
                     ) : (
                       <div className="text-sm text-neutral-300 font-mono break-all flex-1">
-                        {prediction.resolutionDeReference}
+                        {prediction.deReference}
                       </div>
                     )}
-                    <CopyButton text={prediction.resolutionDeReference || ""} iconSize="sm" />
+                    <CopyButton text={prediction.deReference || ""} iconSize="sm" />
                   </div>
                 </div>
-              )}
 
-              {/* Resolution Block Timestamp */}
-              {prediction.resolutionDeTimestamp && (
-                <div className="flex justify-between items-start gap-4">
-                  <span className="text-neutral-400">Resolution block timestamp</span>
-                  <div className="text-neutral-300 font-mono text-right text-xs">
-                    {new Date(prediction.resolutionDeTimestamp).toUTCString()}
+                {/* Content hash */}
+                <div className="glass border border-white/10 rounded-lg p-4">
+                  <div className="text-xs text-neutral-500 uppercase tracking-wide mb-2">Content Hash (SHA-256)</div>
+                  <div className="flex items-start gap-2">
+                    <code className="text-xs text-neutral-300 font-mono break-all flex-1">
+                      {prediction.hash}
+                    </code>
+                    <CopyButton text={prediction.hash} iconSize="sm" />
                   </div>
                 </div>
-              )}
-
-              {/* Resolution Hash (SHA-256) */}
-              <div>
-                <div className="text-xs text-neutral-400 mb-1.5">
-                  Resolution Data Hash (SHA-256)
-                </div>
-                <div className="flex items-start gap-2 bg-black/40 p-2.5 rounded border border-neutral-800/50">
-                  <code className="text-xs text-neutral-300 font-mono break-all flex-1">
-                    {prediction.resolutionDeHash}
-                  </code>
-                  <CopyButton text={prediction.resolutionDeHash} iconSize="sm" />
-                </div>
               </div>
             </div>
-          </div>
-        )}
-
-        {/* Pending confirmation section */}
-        {prediction.onChainStatus !== "confirmed" && (
-          <div className="mb-6">
-            <div className="text-xs text-neutral-500 uppercase tracking-wide mb-3">
-              On-Chain Proof
-            </div>
-            <div className="space-y-3 text-sm">
-              <div className="flex justify-between items-center">
-                <span className="text-neutral-400">Status</span>
-                <span className="text-neutral-400">Pending confirmation</span>
-              </div>
-              <div>
-                <div className="text-xs text-neutral-400 mb-1.5">
-                  Content Hash (SHA-256)
-                </div>
-                <div className="font-mono text-xs text-neutral-300 bg-black/40 p-2.5 rounded border border-neutral-800 break-all">
-                  {prediction.hash}
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
+          )}
+        </div>
 
         {/* Footer */}
-        <div className="mt-10 pt-6 border-t border-neutral-800">
-          <p className="text-sm text-neutral-500 text-center mb-3">
-            This proof cannot be edited after creation.
+        <div className="mt-12 text-center">
+          <p className="text-sm text-neutral-500 mb-4">
+            This proof is immutable and cannot be edited
           </p>
-          <div className="text-center">
-            <Link href="/" className="text-xs text-neutral-500 hover:text-white transition-colors">
-              ProofLocker
-            </Link>
-          </div>
+          <Link
+            href="/app"
+            className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-600/80 to-purple-600/80 hover:from-blue-600 hover:to-purple-600 text-white font-medium rounded-lg transition-all"
+          >
+            Explore more proofs
+          </Link>
         </div>
       </div>
     </div>
