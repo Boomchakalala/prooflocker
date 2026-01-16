@@ -241,7 +241,7 @@ function AppFeedContent() {
                   : "text-neutral-400 hover:text-white hover:bg-white/5"
               }`}
             >
-              Public proofs
+              Explore proofs
             </button>
             <button
               onClick={handleMyProofsClick}
