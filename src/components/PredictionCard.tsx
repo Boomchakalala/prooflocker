@@ -81,42 +81,34 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
   // Determine if user can resolve (owner and still pending)
   const canResolve = isOwner && prediction.outcome === "pending";
 
-  // Determine if user can share (owner and claimed)
-  const canShare = isOwner && isClaimed;
-
   return (
     <div className="glass rounded-lg p-3 md:p-4 hover:border-white/10 transition-all flex flex-col h-full shadow-lg shadow-purple-500/5">
-      {/* Header row: Badge + Author + Time + Status Pills */}
-      <div className="flex items-start justify-between mb-1.5 md:mb-2">
-        <div className="flex items-center gap-2 flex-wrap">
-          {/* Small circular badge with number */}
-          <div className="w-7 h-7 rounded-full bg-blue-500/20 flex items-center justify-center text-xs font-semibold text-blue-400 border border-blue-500/30">
+      {/* Top row: Author info + Status chips */}
+      <div className="flex items-start justify-between mb-2 gap-2">
+        {/* Left: Author info + time + category */}
+        <div className="flex items-center gap-2 flex-wrap flex-1 min-w-0">
+          <div className="w-7 h-7 rounded-full bg-blue-500/20 flex items-center justify-center text-xs font-semibold text-blue-400 border border-blue-500/30 flex-shrink-0">
             {authorNumber.toString().slice(-2)}
           </div>
-
-          <div className="flex items-center gap-2 flex-wrap">
-            <span className="text-xs text-neutral-400">Anon #{authorNumber}</span>
-            <span className="text-xs text-neutral-600">•</span>
-            <span className="text-xs text-neutral-500">{formatRelativeTime(prediction.timestamp)}</span>
+          <div className="flex items-center gap-2 flex-wrap text-xs text-neutral-400 min-w-0">
+            <span className="whitespace-nowrap">Anon #{authorNumber}</span>
+            <span className="text-neutral-600">•</span>
+            <span className="whitespace-nowrap">{formatRelativeTime(prediction.timestamp)}</span>
             {prediction.category && (
               <>
-                <span className="text-xs text-neutral-600">•</span>
-                <span className="text-xs text-neutral-600">{prediction.category}</span>
+                <span className="text-neutral-600">•</span>
+                <span className="px-2 py-0.5 text-[10px] font-medium rounded bg-white/5 border border-white/10 text-neutral-400 whitespace-nowrap">
+                  {prediction.category}
+                </span>
               </>
             )}
           </div>
         </div>
 
-        {/* Inline status pills */}
-        <div className="flex items-center gap-1 flex-wrap justify-end">
-          {/* Only show Claimed badge if user owns this proof */}
-          {isClaimed && isOwner && (
-            <span className="px-2 py-0.5 text-[10px] font-medium rounded bg-cyan-500/10 border border-cyan-500/20 text-cyan-400">
-              Yours
-            </span>
-          )}
+        {/* Right: Status chips */}
+        <div className="flex items-center gap-1 flex-shrink-0">
           {isOnChain() && (
-            <span className="px-2 py-0.5 text-[10px] font-medium rounded bg-purple-500/10 border border-purple-500/30 text-purple-400 flex items-center gap-1">
+            <span className="px-2 py-0.5 text-[10px] font-medium rounded bg-purple-500/10 border border-purple-500/30 text-purple-400 flex items-center gap-1 whitespace-nowrap">
               <svg className="w-2.5 h-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
               </svg>
@@ -124,7 +116,7 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
             </span>
           )}
           {isResolutionOnChain() && (
-            <span className="px-2 py-0.5 text-[10px] font-medium rounded bg-green-500/10 border border-green-500/30 text-green-400 flex items-center gap-1">
+            <span className="px-2 py-0.5 text-[10px] font-medium rounded bg-green-500/10 border border-green-500/30 text-green-400 flex items-center gap-1 whitespace-nowrap">
               <svg className="w-2.5 h-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
@@ -134,13 +126,13 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
         </div>
       </div>
 
-      {/* Main content: Prediction text - VISUAL FOCUS */}
-      <p className="text-white text-lg leading-snug mb-2 md:mb-3 font-normal flex-grow line-clamp-2">
+      {/* Prediction text */}
+      <p className="text-white text-lg leading-snug mb-3 font-normal flex-grow line-clamp-2">
         {prediction.textPreview}
       </p>
 
-      {/* Status line: Outcome - More prominent */}
-      <div className="flex items-center gap-2 mb-2 md:mb-3">
+      {/* Outcome row */}
+      <div className="flex items-center gap-2 mb-3">
         <span className="text-[10px] uppercase tracking-wide text-white/40">Outcome</span>
         <OutcomeBadge
           outcome={prediction.outcome || "pending"}
@@ -162,7 +154,7 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
 
       {/* Resolution URL */}
       {prediction.resolutionUrl && (
-        <div className="mb-2 md:mb-3">
+        <div className="mb-3">
           <a
             href={prediction.resolutionUrl}
             target="_blank"
@@ -177,8 +169,8 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
         </div>
       )}
 
-      {/* Metadata: FINGERPRINT - Reduced visual noise */}
-      <div className="bg-black/30 border border-white/5 rounded-lg p-2 mb-2 md:mb-3">
+      {/* Fingerprint */}
+      <div className="bg-black/30 border border-white/5 rounded-lg p-2 mb-3">
         <div className="flex items-center justify-between gap-2">
           <div className="flex-1 min-w-0">
             <label className="block text-[9px] font-medium text-neutral-700 mb-0.5 uppercase tracking-wider">
@@ -226,69 +218,61 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
         </div>
       </div>
 
-      {/* Actions row - Clearer hierarchy */}
-      <div className="flex flex-col gap-1.5">
-        {/* Primary action row: View Details + Share */}
-        <div className="flex gap-1.5">
-          <Link
-            href={`/proof/${prediction.publicSlug}`}
-            className="flex-1 text-center px-4 py-2.5 text-sm font-semibold text-white bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 rounded-lg transition-all shadow-lg shadow-blue-500/20 hover:shadow-blue-500/30"
-            title="View full proof details"
-          >
-            View proof
-          </Link>
+      {/* Bottom CTA row - Consistent layout */}
+      <div className="flex gap-2">
+        {/* Primary action - Full width */}
+        <Link
+          href={`/proof/${prediction.publicSlug}`}
+          className="flex-1 text-center px-4 py-2.5 text-sm font-semibold text-white bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 rounded-lg transition-all shadow-lg shadow-blue-500/20 hover:shadow-blue-500/30"
+          title="View full proof details"
+        >
+          Open proof card
+        </Link>
 
-          {/* Share button - Always visible for all proofs */}
+        {/* Secondary actions - Small, consistent size */}
+        {canResolve ? (
+          <button
+            onClick={() => setShowResolveModal(true)}
+            className="px-3 py-2.5 text-sm font-medium text-white bg-green-600/90 hover:bg-green-600 rounded-lg transition-all border border-green-500/30 whitespace-nowrap"
+            title="Resolve this prediction"
+          >
+            Resolve
+          </button>
+        ) : (
           <button
             onClick={copyLink}
-            className="px-4 py-2.5 text-sm font-medium text-white glass hover:bg-white/10 rounded-lg transition-all border border-white/10 flex items-center gap-2"
+            className="px-3 py-2.5 text-sm font-medium text-white glass hover:bg-white/10 rounded-lg transition-all border border-white/10 whitespace-nowrap"
             title="Share this proof"
           >
             {linkCopied ? (
-              <>
-                <svg
-                  className="w-4 h-4 text-green-500"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M5 13l4 4L19 7"
-                  />
-                </svg>
-                <span className="hidden sm:inline">Copied</span>
-              </>
+              <svg
+                className="w-4 h-4 text-green-500"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M5 13l4 4L19 7"
+                />
+              </svg>
             ) : (
-              <>
-                <svg
-                  className="w-4 h-4"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"
-                  />
-                </svg>
-                <span className="hidden sm:inline">Share</span>
-              </>
+              <svg
+                className="w-4 h-4"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"
+                />
+              </svg>
             )}
-          </button>
-        </div>
-
-        {/* Secondary action: Resolve button */}
-        {canResolve && (
-          <button
-            onClick={() => setShowResolveModal(true)}
-            className="w-full px-3 py-2 text-sm font-medium text-white bg-green-600/90 hover:bg-green-600 rounded-lg transition-all border border-green-500/30"
-          >
-            Resolve
           </button>
         )}
       </div>
