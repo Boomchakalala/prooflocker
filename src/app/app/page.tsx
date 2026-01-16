@@ -452,16 +452,6 @@ function AppFeedContent() {
                 Anonymous • Public • Immutable
               </span>
             </div>
-
-            <Link
-              href="/verify"
-              className="w-full md:w-auto text-center md:text-left px-4 py-2.5 md:px-0 md:py-0 text-sm text-neutral-400 hover:text-white transition-colors flex items-center justify-center md:justify-start gap-1.5 rounded-lg md:rounded-none hover:bg-white/5 md:hover:bg-transparent"
-            >
-              Verify a prediction
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-              </svg>
-            </Link>
           </div>
         </div>
       </footer>

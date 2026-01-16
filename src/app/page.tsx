@@ -74,12 +74,6 @@ export default function LandingPage() {
 
             <div className="flex items-center gap-6">
               <Link
-                href="/verify"
-                className="text-sm text-neutral-400 hover:text-white transition-colors"
-              >
-                Verify a prediction
-              </Link>
-              <Link
                 href="/app"
                 className="text-sm text-neutral-400 hover:text-white transition-colors"
               >
