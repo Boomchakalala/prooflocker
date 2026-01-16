@@ -42,7 +42,7 @@ export default function LandingPage() {
                 Ready to lock your prediction?
               </h2>
               <p className="text-lg md:text-xl text-neutral-300 mb-8 max-w-2xl mx-auto">
-                Create your first proof in 10 seconds.
+                Create your first prediction in 10 seconds.
               </p>
               <Link
                 href="/lock"
@@ -77,13 +77,13 @@ export default function LandingPage() {
                 href="/verify"
                 className="text-sm text-neutral-400 hover:text-white transition-colors"
               >
-                Verify a proof
+                Verify a prediction
               </Link>
               <Link
                 href="/app"
                 className="text-sm text-neutral-400 hover:text-white transition-colors"
               >
-                Explore proofs
+                Explore predictions
               </Link>
             </div>
           </div>

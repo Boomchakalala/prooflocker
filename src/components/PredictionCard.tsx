@@ -108,13 +108,13 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
         </div>
 
         {/* Right: Status chips */}
-        <div className="flex items-center gap-1 flex-shrink-0">
+        <div className="flex items-center gap-1 flex-shrink-0 flex-wrap justify-end">
           {isOnChain() && (
             <span className="px-2 py-0.5 text-[10px] font-medium rounded bg-purple-500/10 border border-purple-500/30 text-purple-400 flex items-center gap-1 whitespace-nowrap">
               <svg className="w-2.5 h-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
               </svg>
-              Locked
+              Locked on-chain
             </span>
           )}
           {isResolutionOnChain() && (
@@ -122,7 +122,7 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
               <svg className="w-2.5 h-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
-              Resolved
+              Resolved on-chain
             </span>
           )}
         </div>
@@ -223,49 +223,89 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
       {/* Bottom CTA row - Consistent layout for all states */}
       <div className="flex flex-col gap-2">
         <div className="flex gap-2">
-          {/* Primary action - View proof */}
+          {/* Primary action - View prediction */}
           <Link
             href={`/proof/${prediction.publicSlug}`}
             className="flex-1 text-center px-4 py-2.5 text-sm font-semibold text-white bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 rounded-lg transition-all shadow-lg shadow-blue-500/20 hover:shadow-blue-500/30"
-            title="View full proof details"
+            title="View full prediction details"
           >
-            Open proof card
+            Open prediction
           </Link>
 
-          {/* Secondary action - Resolve or Resolved button */}
-          {isPending ? (
-            // Pending: Show Resolve button (enabled if owner, disabled otherwise)
+          {/* Secondary actions row */}
+          <div className="flex gap-2">
+            {/* Resolve or Resolved button */}
+            {isPending ? (
+              // Pending: Show Resolve button (purple/neutral, enabled if owner, disabled otherwise)
+              <button
+                onClick={canResolve ? () => setShowResolveModal(true) : undefined}
+                disabled={!canResolve}
+                className={`px-3 py-2.5 text-sm font-medium rounded-lg transition-all border whitespace-nowrap flex items-center gap-1.5 ${
+                  canResolve
+                    ? "text-white bg-purple-600/90 hover:bg-purple-600 border-purple-500/30 cursor-pointer"
+                    : "text-neutral-500 bg-neutral-800/50 border-neutral-700/30 cursor-not-allowed opacity-60"
+                }`}
+                title={canResolve ? "Resolve this prediction" : "Only the creator can resolve"}
+              >
+                {!canResolve && (
+                  <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                  </svg>
+                )}
+                Resolve
+              </button>
+            ) : (
+              // Resolved: Show Resolved button (green for correct, red for incorrect)
+              <button
+                disabled
+                className={`px-3 py-2.5 text-sm font-medium rounded-lg border whitespace-nowrap cursor-not-allowed ${
+                  prediction.outcome === "correct"
+                    ? "text-green-400 bg-green-500/10 border-green-500/30"
+                    : "text-red-400 bg-red-500/10 border-red-500/30"
+                }`}
+                title={`Resolved as ${prediction.outcome}`}
+              >
+                Resolved
+              </button>
+            )}
+
+            {/* Share button - Always visible */}
             <button
-              onClick={canResolve ? () => setShowResolveModal(true) : undefined}
-              disabled={!canResolve}
-              className={`px-4 py-2.5 text-sm font-medium rounded-lg transition-all border whitespace-nowrap flex items-center gap-1.5 ${
-                canResolve
-                  ? "text-white bg-green-600/90 hover:bg-green-600 border-green-500/30 cursor-pointer"
-                  : "text-neutral-500 bg-neutral-800/50 border-neutral-700/30 cursor-not-allowed opacity-60"
-              }`}
-              title={canResolve ? "Resolve this prediction" : "Only the creator can resolve"}
+              onClick={copyLink}
+              className="px-3 py-2.5 text-sm font-medium text-white glass hover:bg-white/10 rounded-lg transition-all border border-white/10"
+              title="Share this prediction"
             >
-              {!canResolve && (
-                <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+              {linkCopied ? (
+                <svg
+                  className="w-4 h-4 text-green-500"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M5 13l4 4L19 7"
+                  />
+                </svg>
+              ) : (
+                <svg
+                  className="w-4 h-4"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"
+                  />
                 </svg>
               )}
-              Resolve
             </button>
-          ) : (
-            // Resolved: Show Resolved button (same size, different color based on outcome)
-            <button
-              disabled
-              className={`px-4 py-2.5 text-sm font-medium rounded-lg border whitespace-nowrap cursor-not-allowed ${
-                prediction.outcome === "correct"
-                  ? "text-green-400 bg-green-500/10 border-green-500/30"
-                  : "text-red-400 bg-red-500/10 border-red-500/30"
-              }`}
-              title={`Resolved as ${prediction.outcome}`}
-            >
-              Resolved
-            </button>
-          )}
+          </div>
         </div>
 
         {/* Helper text when Resolve is disabled */}
