@@ -1,5 +1,6 @@
 import Link from "next/link";
 import BrandLogo from "@/components/BrandLogo";
+import LandingHeader from "@/components/LandingHeader";
 import LandingHero from "@/components/LandingHero";
 import HowItWorks from "@/components/HowItWorks";
 import WhyProofLocker from "@/components/WhyProofLocker";
@@ -17,25 +18,7 @@ export default function LandingPage() {
       </div>
 
       {/* Header */}
-      <header className="glass sticky top-0 z-50 border-b border-white/5 bg-[#0a0a0a]/80 backdrop-blur-xl">
-        <div className="mx-auto max-w-6xl px-4 flex h-14 md:h-16 items-center justify-between">
-          <BrandLogo />
-          <div className="flex items-center gap-3 md:gap-4">
-            <Link
-              href="/app"
-              className="hidden sm:block text-sm md:text-base text-neutral-300 hover:text-white transition-colors"
-            >
-              Explore proofs
-            </Link>
-            <Link
-              href="/lock"
-              className="flex px-3 py-2 md:px-5 md:py-2.5 bg-gradient-to-r from-blue-600/80 to-purple-600/80 hover:from-blue-600 hover:to-purple-600 text-white text-sm md:text-base font-medium rounded-md transition-all whitespace-nowrap"
-            >
-              Lock my prediction
-            </Link>
-          </div>
-        </div>
-      </header>
+      <LandingHeader />
 
       {/* Main content */}
       <main>
