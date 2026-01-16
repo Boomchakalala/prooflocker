@@ -290,7 +290,7 @@ function AppFeedContent() {
                       d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
                     />
                   </svg>
-                  <span>{syncing ? "Checking..." : "Recheck status"}</span>
+                  <span>{syncing ? "Checking..." : "Refresh statuses"}</span>
                 </button>
               </div>
             </div>
@@ -446,7 +446,7 @@ function AppFeedContent() {
           <div className="flex flex-col md:flex-row items-center justify-between gap-4 md:gap-6">
             <div className="flex flex-col md:flex-row items-center gap-3 md:gap-4 text-center md:text-left">
               <p className="text-xs md:text-sm text-neutral-500">
-                Powered by <span className="text-white font-medium">Constellation Network (DAG)</span>
+                <span className="text-white/70">Secured by on-chain timestamps</span>
               </p>
               <span className="text-xs text-neutral-500">
                 Anonymous • Public • Immutable

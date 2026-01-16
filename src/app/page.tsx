@@ -64,7 +64,7 @@ export default function LandingPage() {
           <div className="flex flex-col md:flex-row items-center justify-between gap-6">
             <div className="flex flex-col md:flex-row items-center gap-4 text-center md:text-left">
               <p className="text-sm text-neutral-500">
-                Powered by <span className="text-white font-medium">Constellation Network (DAG)</span>
+                <span className="text-white/70">Secured by on-chain timestamps</span>
               </p>
               <span className="hidden md:block text-neutral-700">•</span>
               <span className="text-sm text-neutral-500">
