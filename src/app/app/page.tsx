@@ -218,7 +218,7 @@ function AppFeedContent() {
         {/* Page header */}
         <div className="flex items-center justify-between mb-6">
           <div>
-            <h1 className="text-2xl md:text-3xl font-bold text-white mb-1">Explore proofs</h1>
+            <h1 className="text-2xl md:text-3xl font-bold text-white mb-1">Explore predictions</h1>
             <p className="text-sm text-neutral-400">Browse public predictions locked on-chain</p>
           </div>
           <Link
@@ -241,7 +241,7 @@ function AppFeedContent() {
                   : "text-neutral-400 hover:text-white hover:bg-white/5"
               }`}
             >
-              Explore proofs
+              Explore predictions
             </button>
             <button
               onClick={handleMyProofsClick}
@@ -251,7 +251,7 @@ function AppFeedContent() {
                   : "text-neutral-400 hover:text-white hover:bg-white/5"
               }`}
             >
-              My proofs
+              My predictions
             </button>
           </div>
 
@@ -341,9 +341,9 @@ function AppFeedContent() {
               </h3>
               <p className="text-[#888] mb-6 text-lg">
                 {predictions.length > 0 ? (
-                  <>You have {predictions.length} proof{predictions.length !== 1 ? 's' : ''} on this device.</>
+                  <>You have {predictions.length} prediction{predictions.length !== 1 ? 's' : ''} on this device.</>
                 ) : (
-                  <>Your proofs are stored locally on this device only.</>
+                  <>Your predictions are stored locally on this device only.</>
                 )}
               </p>
               <div className="bg-white/5 border border-white/10 rounded-xl p-6 mb-6 text-left">
