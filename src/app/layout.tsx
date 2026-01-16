@@ -5,6 +5,7 @@ import "./globals.css";
 import { AuthProvider } from "@/contexts/AuthContext";
 import AnalyticsTracker from "@/components/AnalyticsTracker";
 import AuthDebugPanel from "@/components/AuthDebugPanel";
+import EnvIndicator from "@/components/EnvIndicator";
 import { getSiteUrl, getAbsoluteUrl } from "@/lib/config";
 
 const inter = Inter({
@@ -86,6 +87,7 @@ export default function RootLayout({
           {children}
           <AuthDebugPanel />
         </AuthProvider>
+        <EnvIndicator />
       </body>
     </html>
   );

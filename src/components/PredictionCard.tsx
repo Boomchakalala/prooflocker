@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { Prediction, type PredictionOutcome } from "@/lib/storage";
 import { formatRelativeTime } from "@/lib/utils";
-import { getSiteUrl } from "@/lib/config";
 import Link from "next/link";
 import ResolveModal from "./ResolveModal";
 import ContestModal from "./ContestModal";
@@ -24,7 +23,6 @@ interface PredictionCardProps {
 
 export default function PredictionCard({ prediction, currentUserId, onOutcomeUpdate }: PredictionCardProps) {
   const [copied, setCopied] = useState(false);
-  const [linkCopied, setLinkCopied] = useState(false);
   const [showResolveModal, setShowResolveModal] = useState(false);
   const [showContestModal, setShowContestModal] = useState(false);
 
@@ -33,38 +31,11 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
   const onChainStatus = prediction.onChainStatus || "pending";
   const isClaimed = !!prediction.userId;
   const isOwner = currentUserId && prediction.userId === currentUserId;
-  const lifecycleStatus = prediction.lifecycleStatus || "locked";
 
   const copyHash = async () => {
     await navigator.clipboard.writeText(prediction.hash);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
-  };
-
-  const copyLink = async () => {
-    const url = `${getSiteUrl()}/proof/${prediction.publicSlug}`;
-
-    // Try native share on mobile devices
-    if (navigator.share) {
-      try {
-        await navigator.share({
-          title: 'ProofLocker Prediction',
-          text: prediction.textPreview,
-          url: url
-        });
-        return; // Success, don't show copied state
-      } catch (err) {
-        // User cancelled or share failed, fall back to copy
-        if ((err as Error).name === 'AbortError') {
-          return; // User cancelled, don't copy
-        }
-      }
-    }
-
-    // Fallback to clipboard copy
-    await navigator.clipboard.writeText(url);
-    setLinkCopied(true);
-    setTimeout(() => setLinkCopied(false), 2000);
   };
 
   // Determine on-chain status
@@ -73,48 +44,118 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
     return deStatus === "CONFIRMED" || onChainStatus === "confirmed";
   };
 
-  // Determine if user can resolve (owner and not finalized)
-  const canResolve = isOwner && lifecycleStatus !== "final";
+  // Determine if resolution is on-chain
+  const isResolutionOnChain = () => {
+    const resolutionDeStatus = prediction.resolutionDeStatus?.toUpperCase();
+    return resolutionDeStatus === "CONFIRMED" && prediction.outcome !== "pending";
+  };
+
+  // Compute resolution state
+  const isResolved = prediction.outcome !== "pending";
+  const canResolve = isOwner && !isResolved;
+
+  // Determine helper text (ALWAYS shown)
+  const getHelperText = () => {
+    if (isResolved) {
+      return isResolutionOnChain() ? "Resolved on-chain" : "Resolved";
+    }
+    if (canResolve) {
+      return "Ready to resolve";
+    }
+    if (!isOwner) {
+      return "Only the creator can resolve";
+    }
+    return "Not ready to resolve yet";
+  };
+
+  // Get badge color for resolved state
+  const getResolvedBadgeColor = () => {
+    const outcome = prediction.outcome;
+    if (outcome === "correct") {
+      return "bg-green-500/15 border-green-500/40 text-green-300";
+    }
+    if (outcome === "incorrect") {
+      return "bg-red-500/15 border-red-500/40 text-red-300";
+    }
+    if (outcome === "invalid") {
+      return "bg-neutral-500/15 border-neutral-500/40 text-neutral-300";
+    }
+    return "bg-yellow-500/15 border-yellow-500/40 text-yellow-300";
+  };
+
+  // Build ordered badges array for overflow handling
+  const allBadges = [
+    {
+      id: 'claimed',
+      show: isClaimed,
+      content: (
+        <span className="px-1.5 sm:px-2 py-0.5 text-[9px] sm:text-[10px] font-medium rounded bg-blue-500/10 border border-blue-500/30 text-blue-400 whitespace-nowrap leading-tight flex-shrink-0">
+          Claimed
+        </span>
+      )
+    },
+    {
+      id: 'locked',
+      show: isOnChain(),
+      content: (
+        <span className="px-1.5 sm:px-2 py-0.5 text-[9px] sm:text-[10px] font-medium rounded bg-green-500/10 border border-green-500/30 text-green-400 whitespace-nowrap leading-tight flex-shrink-0">
+          Locked on-chain
+        </span>
+      )
+    },
+    {
+      id: 'resolved',
+      show: isResolutionOnChain(),
+      content: (
+        <span className="px-1.5 sm:px-2 py-0.5 text-[9px] sm:text-[10px] font-medium rounded bg-purple-500/10 border border-purple-500/30 text-purple-400 whitespace-nowrap leading-tight flex-shrink-0">
+          Resolved on-chain
+        </span>
+      )
+    }
+  ].filter(badge => badge.show);
 
   return (
     <div className="glass rounded-lg p-3 md:p-4 hover:border-white/10 transition-all flex flex-col h-full shadow-lg shadow-purple-500/5">
-      {/* Header row: Badge + Author + Time + Status Pills */}
-      <div className="flex items-start justify-between mb-1.5 md:mb-2">
-        <div className="flex items-center gap-2 flex-wrap">
-          {/* Small circular badge with number */}
-          <div className="w-7 h-7 rounded-full bg-blue-500/20 flex items-center justify-center text-xs font-semibold text-blue-400 border border-blue-500/30">
+      {/* Header: Stacked on mobile, single row on desktop */}
+      <div className="mb-2 md:mb-3">
+        {/* Row 1: Avatar + Anon + Time (always visible, single line) */}
+        <div className="flex items-center gap-2 mb-1.5">
+          {/* Avatar */}
+          <div className="w-7 h-7 flex-shrink-0 rounded-full bg-blue-500/20 flex items-center justify-center text-xs font-semibold text-blue-400 border border-blue-500/30">
             {authorNumber.toString().slice(-2)}
           </div>
 
-          <div className="flex items-center gap-2 flex-wrap">
-            <span className="text-xs text-neutral-400">Anon #{authorNumber}</span>
+          {/* Anon + Time */}
+          <div className="flex items-center gap-1.5 min-w-0 flex-1">
+            <span className="text-xs text-neutral-400 whitespace-nowrap">Anon #{authorNumber}</span>
             <span className="text-xs text-neutral-600">•</span>
-            <span className="text-xs text-neutral-500">{formatRelativeTime(prediction.timestamp)}</span>
-            {prediction.category && (
-              <>
-                <span className="text-xs text-neutral-600">•</span>
-                <span className="text-xs text-neutral-600">{prediction.category}</span>
-              </>
-            )}
+            <span className="text-xs text-neutral-500 whitespace-nowrap">{formatRelativeTime(prediction.timestamp)}</span>
           </div>
         </div>
 
-        {/* Inline status pills */}
-        <div className="flex items-center gap-1 flex-wrap justify-end">
-          {isClaimed && (
-            <span className="px-2 py-0.5 text-[10px] font-medium rounded bg-blue-500/10 border border-blue-500/30 text-blue-400">
-              Claimed
-            </span>
-          )}
-          <span className="px-2 py-0.5 text-[10px] font-medium rounded bg-green-500/10 border border-green-500/30 text-green-400">
-            Locked on-chain
-          </span>
+        {/* Row 2: Category + All status badges (no overflow) */}
+        <div className="flex items-center justify-between gap-2 pl-2">
+          {/* Category pill (left side, less indent) */}
+          <div className="flex items-center min-w-0">
+            {prediction.category && (
+              <span className="px-2 py-0.5 text-[10px] font-semibold rounded-full bg-gradient-to-r from-blue-500/15 to-purple-500/15 border border-blue-500/30 text-blue-300 leading-tight whitespace-nowrap">
+                {prediction.category}
+              </span>
+            )}
+          </div>
+
+          {/* All status badges (right side) - Single line, no wrapping */}
+          <div className="flex items-center gap-1 justify-end flex-shrink-0">
+            {allBadges.map((badge) => (
+              <span key={badge.id}>{badge.content}</span>
+            ))}
+          </div>
         </div>
       </div>
 
       {/* Main content: Prediction text - VISUAL FOCUS */}
-      <p className="text-white text-lg leading-snug mb-2 md:mb-3 font-normal flex-grow line-clamp-2">
-        {prediction.textPreview}
+      <p className="text-white text-lg leading-relaxed mb-2 md:mb-3 font-normal flex-grow line-clamp-2 min-w-0">
+        {prediction.text}
       </p>
 
       {/* Status line: Outcome - More prominent */}
@@ -204,71 +245,56 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
         </div>
       </div>
 
-      {/* Actions row - Clearer hierarchy */}
-      <div className="flex flex-col gap-1.5">
-        {/* Primary action: View Proof - DOMINATES */}
-        <Link
-          href={`/proof/${prediction.publicSlug}`}
-          className="w-full text-center px-4 py-2.5 text-sm font-semibold text-white bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 rounded-lg transition-all shadow-lg shadow-blue-500/20 hover:shadow-blue-500/30"
-          title="View permanent proof page"
-        >
-          View Proof
-        </Link>
-
-        {/* Secondary actions row */}
-        <div className="flex gap-1.5">
-          {/* Resolve button - Secondary but actionable */}
-          {canResolve && (
-            <button
-              onClick={() => setShowResolveModal(true)}
-              className="flex-1 px-3 py-2 text-sm font-medium text-white bg-green-600/90 hover:bg-green-600 rounded-lg transition-all border border-green-500/30"
-            >
-              Resolve
-            </button>
-          )}
-
-          {/* Share button - compact but visible */}
-          <button
-            onClick={copyLink}
-            className={`px-2 md:px-3 py-2 text-xs md:text-sm font-medium text-neutral-500 hover:text-neutral-300 hover:bg-white/5 rounded-lg transition-all flex items-center justify-center gap-1.5 md:gap-2 ${!canResolve ? 'flex-1' : ''}`}
-            title="Share prediction"
+      {/* FIXED FOOTER - Always identical structure */}
+      <div className="flex flex-col gap-2 min-h-[76px]">
+        {/* Row: [View Proof] + [Action Slot] - Both flex-1, h-12 */}
+        <div className="flex gap-2">
+          {/* Left: View Proof button */}
+          <Link
+            href={`/proof/${prediction.publicSlug}`}
+            className="flex-1 h-12 flex items-center justify-center text-sm font-semibold text-white bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 rounded-lg transition-all shadow-lg shadow-blue-500/20 hover:shadow-blue-500/30 whitespace-nowrap"
+            title="View permanent proof page"
           >
-            {linkCopied ? (
-              <>
-                <svg
-                  className="w-3.5 h-3.5 md:w-4 md:h-4 text-green-500"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M5 13l4 4L19 7"
-                  />
+            View Proof
+          </Link>
+
+          {/* Right: Action Slot - Fixed h-12 */}
+          <div className="flex-1 h-12 flex items-center justify-center">
+            {isResolved ? (
+              /* Resolved: Non-clickable badge with consistent height */
+              <div className={`w-full h-full flex items-center justify-center gap-1.5 px-3 rounded-lg border text-sm font-medium whitespace-nowrap ${getResolvedBadgeColor()}`}>
+                <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                 </svg>
-                <span className="text-green-500">Copied</span>
-              </>
+                <span className="truncate">Resolved</span>
+              </div>
             ) : (
-              <>
-                <svg
-                  className="w-3.5 h-3.5 md:w-4 md:h-4"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"
-                  />
-                </svg>
-                <span>Share</span>
-              </>
+              /* Pending: Resolve button (enabled or disabled) - Fixed h-12 */
+              <button
+                onClick={() => canResolve && setShowResolveModal(true)}
+                disabled={!canResolve}
+                className={`w-full h-full flex items-center justify-center gap-1.5 px-3 rounded-lg border text-sm font-medium transition-all whitespace-nowrap ${
+                  canResolve
+                    ? "text-white bg-green-500/20 hover:bg-green-500/30 border-green-500/40 cursor-pointer"
+                    : "text-neutral-400 bg-white/5 border-white/10 cursor-not-allowed"
+                }`}
+              >
+                {!isOwner && (
+                  <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                  </svg>
+                )}
+                Resolve
+              </button>
             )}
-          </button>
+          </div>
+        </div>
+
+        {/* Helper/status line - ALWAYS rendered */}
+        <div className="min-h-[20px] flex items-center justify-center px-2">
+          <p className="text-[10px] text-neutral-500 text-center leading-tight">
+            {getHelperText()}
+          </p>
         </div>
       </div>
 
@@ -276,6 +302,7 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
       {showResolveModal && (
         <ResolveModal
           predictionId={prediction.id}
+          predictionText={prediction.text}
           currentOutcome={prediction.outcome}
           currentNote={prediction.resolutionNote}
           currentUrl={prediction.resolutionUrl}
@@ -291,7 +318,7 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
       {showContestModal && (
         <ContestModal
           predictionId={prediction.id}
-          predictionText={prediction.textPreview}
+          predictionText={prediction.text}
           onClose={() => setShowContestModal(false)}
           onSuccess={() => {
             setShowContestModal(false);

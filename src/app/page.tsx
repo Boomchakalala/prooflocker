@@ -138,7 +138,13 @@ function HomeContent() {
   };
 
   return (
-    <div className="min-h-screen gradient-bg relative">
+    <div
+      className="min-h-screen gradient-bg relative flex flex-col"
+      style={{
+        // CSS variable for header height - single value for simplicity
+        ['--header-h' as string]: '64px',
+      }}
+    >
       {/* Decorative gradient orbs */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-20 -left-40 w-80 h-80 bg-blue-500/10 rounded-full blur-3xl" />
@@ -146,11 +152,16 @@ function HomeContent() {
         <div className="absolute bottom-20 left-1/2 w-80 h-80 bg-cyan-500/10 rounded-full blur-3xl" />
       </div>
 
-      {/* Header */}
-      <header className="glass sticky top-0 z-50 border-b border-white/5 bg-[#0a0a0a]/80 backdrop-blur-xl">
-        <div className="mx-auto max-w-6xl px-4 flex h-14 md:h-16 items-center justify-between">
+      {/* Header - Fixed */}
+      <header
+        className="glass fixed top-0 left-0 right-0 z-50 border-b border-white/5 bg-[#0a0a0a]/80 backdrop-blur-xl"
+        style={{
+          height: 'var(--header-h)',
+        }}
+      >
+        <div className="mx-auto max-w-6xl px-4 flex h-full items-center justify-between">
           <BrandLogo />
-          <div className="flex items-center gap-3 md:gap-4">
+          <div className="flex items-center gap-2 md:gap-4">
             {/* Desktop: Show user info inline */}
             {user && (
               <div className="hidden md:flex flex-col items-end leading-tight">
@@ -167,7 +178,15 @@ function HomeContent() {
               </div>
             )}
 
-            {/* Mobile: Show user icon with dropdown */}
+            {/* Lock CTA */}
+            <Link
+              href="/lock"
+              className="flex px-3 py-2 md:px-5 md:py-2.5 bg-gradient-to-r from-blue-600/80 to-purple-600/80 hover:from-blue-600 hover:to-purple-600 text-white text-sm md:text-base font-medium rounded-md transition-all whitespace-nowrap"
+            >
+              Lock my prediction
+            </Link>
+
+            {/* Mobile: Show user icon with dropdown - MOVED TO RIGHT */}
             {user && (
               <div className="relative md:hidden">
                 <button
@@ -212,20 +231,18 @@ function HomeContent() {
                 )}
               </div>
             )}
-
-            {/* Lock CTA */}
-            <Link
-              href="/lock"
-              className="flex px-3 py-2 md:px-5 md:py-2.5 bg-gradient-to-r from-blue-600/80 to-purple-600/80 hover:from-blue-600 hover:to-purple-600 text-white text-sm md:text-base font-medium rounded-md transition-all whitespace-nowrap"
-            >
-              Lock my prediction
-            </Link>
           </div>
         </div>
       </header>
 
-      {/* Main content */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-5 md:py-5 relative z-10">
+      {/* Main content - Flex 1 to push footer down */}
+      <main
+        className="flex-1 relative z-10"
+        style={{
+          marginTop: 'var(--header-h)',
+        }}
+      >
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4 pb-12">
         {/* Tabs */}
         <div className="flex flex-col gap-3 mb-4">
           {/* Tab buttons row */}
@@ -254,45 +271,56 @@ function HomeContent() {
 
           {/* Filter + Recheck row - Only show on "All predictions" tab */}
           {activeTab === "all" && (
-            <div className="flex items-center justify-between gap-3">
-              {/* Category Filter - Left side */}
-              <div className="flex items-center gap-2 overflow-x-auto">
-                <span className="text-xs text-neutral-500 whitespace-nowrap">Filter:</span>
-                <select
-                  value={selectedCategory}
-                  onChange={(e) => setSelectedCategory(e.target.value)}
-                  className="px-3 py-1.5 text-sm glass border border-white/10 rounded-lg text-neutral-300 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-transparent"
-                >
+            <div className="space-y-3">
+              {/* Category Filter Pills */}
+              <div>
+                <div className="flex items-center gap-2 mb-2">
+                  <svg className="w-3.5 h-3.5 text-neutral-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
+                  </svg>
+                  <span className="text-xs font-medium text-neutral-500 uppercase tracking-wider">Filter by category</span>
+                </div>
+                <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-hide">
                   {categories.map((cat) => (
-                    <option key={cat} value={cat} className="bg-[#0a0a0a]">
-                      {cat === "all" ? "All categories" : cat}
-                    </option>
+                    <button
+                      key={cat}
+                      onClick={() => setSelectedCategory(cat)}
+                      className={`px-3 py-1.5 text-xs font-medium rounded-full transition-all whitespace-nowrap flex-shrink-0 ${
+                        selectedCategory === cat
+                          ? "bg-gradient-to-r from-blue-500/20 to-purple-500/20 text-white border-2 border-blue-500/40 shadow-lg shadow-blue-500/20"
+                          : "bg-white/5 text-neutral-400 hover:text-white hover:bg-white/10 border border-white/10"
+                      }`}
+                    >
+                      {cat === "all" ? "All" : cat}
+                    </button>
                   ))}
-                </select>
+                </div>
               </div>
 
-              {/* Recheck Button - Right side */}
-              <button
-                onClick={syncDEStatus}
-                disabled={syncing}
-                className="px-2 py-1.5 md:px-3 md:py-2 glass text-xs md:text-sm font-medium text-neutral-400 hover:text-white rounded-lg transition-all hover:bg-white/5 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-1.5 flex-shrink-0"
-                title="Recheck on-chain status for pending predictions"
-              >
-                <svg
-                  className={`w-3.5 h-3.5 ${syncing ? "animate-spin" : ""}`}
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
+              {/* Recheck Button */}
+              <div className="flex justify-end">
+                <button
+                  onClick={syncDEStatus}
+                  disabled={syncing}
+                  className="px-3 py-1.5 glass text-xs font-medium text-neutral-400 hover:text-white rounded-lg transition-all hover:bg-white/5 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-1.5"
+                  title="Recheck on-chain status for pending predictions"
                 >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
-                  />
-                </svg>
-                <span className="hidden sm:inline">{syncing ? "Checking..." : "Recheck"}</span>
-              </button>
+                  <svg
+                    className={`w-3.5 h-3.5 ${syncing ? "animate-spin" : ""}`}
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+                    />
+                  </svg>
+                  {syncing ? "Checking..." : "Recheck status"}
+                </button>
+              </div>
             </div>
           )}
         </div>
@@ -441,33 +469,40 @@ function HomeContent() {
           </div>
           </>
         )}
+        </div>
       </main>
 
-      {/* Footer */}
-      <footer className="border-t border-white/5 mt-20 glass relative z-10">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-          {/* Mobile: 2 rows, Desktop: 1 row */}
-          <div className="flex flex-col md:flex-row items-center justify-between gap-4 md:gap-6">
-            {/* Row 1 on mobile: Credibility line */}
-            <div className="flex flex-col md:flex-row items-center gap-3 md:gap-4 text-center md:text-left">
-              <p className="text-xs md:text-sm text-neutral-500">
-                Powered by <span className="text-white font-medium">Constellation Network (DAG)</span>
+      {/* Footer - Sticky footer at bottom */}
+      <footer className="border-t border-white/5 glass relative z-10">
+        <div className="max-w-7xl mx-auto px-6 lg:px-8 py-4">
+          {/* 3-column grid layout */}
+          <div className="grid grid-cols-1 md:grid-cols-3 items-center gap-3 md:gap-6">
+            {/* Left: Credibility line (primary) */}
+            <div className="justify-self-center md:justify-self-start">
+              <p className="text-xs md:text-sm text-neutral-400">
+                Powered by <span className="text-white/90 font-medium">Digital Evidence</span> on <span className="text-white/90 font-medium">Constellation (DAG)</span>
               </p>
-              <span className="text-xs text-neutral-500">
+            </div>
+
+            {/* Center: Core values (secondary/metadata) */}
+            <div className="justify-self-center">
+              <span className="text-[10px] md:text-xs text-neutral-600 font-medium tracking-wide">
                 Anonymous • Public • Immutable
               </span>
             </div>
 
-            {/* Row 2 on mobile: Single clear CTA */}
-            <Link
-              href="/verify"
-              className="w-full md:w-auto text-center md:text-left px-4 py-2.5 md:px-0 md:py-0 text-sm text-neutral-400 hover:text-white transition-colors flex items-center justify-center md:justify-start gap-1.5 rounded-lg md:rounded-none hover:bg-white/5 md:hover:bg-transparent"
-            >
-              Verify a proof
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-              </svg>
-            </Link>
+            {/* Right: CTA (primary) */}
+            <div className="justify-self-center md:justify-self-end">
+              <Link
+                href="/verify"
+                className="inline-flex items-center gap-1.5 text-sm text-neutral-400 hover:text-white transition-colors group"
+              >
+                <span>Verify a proof</span>
+                <svg className="w-3.5 h-3.5 transition-transform group-hover:translate-x-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                </svg>
+              </Link>
+            </div>
           </div>
         </div>
       </footer>
