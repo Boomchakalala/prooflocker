@@ -2,7 +2,7 @@ import Link from "next/link";
 
 export default function LandingHero() {
   return (
-    <div className="relative z-10 text-center py-20 md:py-32 px-4">
+    <div className="relative z-10 text-center py-12 md:py-20 px-4">
       <div className="max-w-4xl mx-auto">
         {/* Main headline */}
         <h1 className="text-5xl md:text-7xl font-bold text-white mb-6 tracking-tight">
@@ -18,18 +18,22 @@ export default function LandingHero() {
         </p>
 
         {/* CTA Buttons */}
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-8">
+        <div className="relative flex flex-col sm:flex-row items-center justify-center gap-4 mb-8">
+          {/* Radial glow behind primary CTA */}
+          <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+            <div className="w-64 h-64 bg-gradient-to-r from-blue-500/20 to-purple-500/20 rounded-full blur-3xl"></div>
+          </div>
           <Link
             href="/lock"
-            className="w-full sm:w-auto px-8 py-4 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white text-lg font-semibold rounded-lg transition-all shadow-lg hover:shadow-purple-500/50 glow-purple"
+            className="relative w-full sm:w-auto px-8 py-4 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white text-lg font-semibold rounded-lg transition-all shadow-lg hover:shadow-purple-500/50"
           >
             Lock my prediction
           </Link>
           <Link
             href="/app"
-            className="w-full sm:w-auto px-8 py-4 glass border border-white/10 hover:border-white/20 text-white text-lg font-medium rounded-lg transition-all"
+            className="relative w-full sm:w-auto px-8 py-4 glass border border-white/10 hover:border-white/20 text-white text-lg font-medium rounded-lg transition-all"
           >
-            Explore public proofs
+            Explore proofs
           </Link>
         </div>
 
