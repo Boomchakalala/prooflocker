@@ -1,3 +1,5 @@
+"use client";
+
 import PredictionCard from "./PredictionCard";
 import { Prediction } from "@/lib/storage";
 
@@ -41,7 +43,6 @@ export default function ProofCardPreview() {
         <PredictionCard
           prediction={samplePrediction}
           currentUserId={null}
-          onOutcomeUpdate={() => {}}
         />
       </div>
     </div>
