@@ -52,8 +52,8 @@ export default function LockPage() {
 
       if (response.ok) {
         const data = await response.json();
-        setProofId(data.proofId);
-        setLocked(true);
+        // Redirect to proof page instead of showing success screen
+        router.push(`/proof/${data.publicSlug || data.proofId}`);
       } else {
         const errorData = await response.json();
 
@@ -108,7 +108,7 @@ export default function LockPage() {
                   d="M10 19l-7-7m0 0l7-7m-7 7h18"
                 />
               </svg>
-              Back to ProofLocker
+              Back
             </Link>
             <BrandLogo />
           </div>
@@ -312,13 +312,13 @@ export default function LockPage() {
                     Locking...
                   </span>
                 ) : (
-                  "Lock my prediction"
+                  "Lock on-chain"
                 )}
               </button>
 
-              {/* Permanence warning */}
-              <p className="text-xs text-neutral-400 text-center mt-3 font-medium">
-                This action is permanent and cannot be undone
+              {/* Microcopy */}
+              <p className="text-xs text-neutral-400 text-center mt-3">
+                Fingerprint + timestamp. Immutable proof.
               </p>
 
               {/* Content policy notice */}
