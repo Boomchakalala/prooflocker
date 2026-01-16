@@ -59,7 +59,7 @@ export default function LandingPage() {
                 Ready to lock your prediction?
               </h2>
               <p className="text-lg md:text-xl text-neutral-300 mb-8 max-w-2xl mx-auto">
-                Join thousands who've already timestamped their claims on-chain
+                Create your first proof in 10 seconds.
               </p>
               <Link
                 href="/lock"
