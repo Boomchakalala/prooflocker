@@ -26,7 +26,7 @@ export default function LandingHeader() {
       <header className="glass sticky top-0 z-50 border-b border-white/5 bg-[#0a0a0a]/80 backdrop-blur-xl">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 flex h-14 md:h-16 items-center justify-between">
           <BrandLogo />
-          <div className="flex items-center gap-3 md:gap-4">
+          <div className="flex items-center gap-6 md:gap-8">
             <Link
               href="/app"
               className="hidden sm:block text-sm md:text-base text-neutral-300 hover:text-white transition-colors"
@@ -43,13 +43,13 @@ export default function LandingHeader() {
                 Sign in
               </button>
             ) : (
-              /* Show user menu if logged in */
+              /* Show user menu if logged in - subtle pill style */
               <div className="relative">
                 <button
                   onClick={() => setShowUserMenu(!showUserMenu)}
-                  className="hidden sm:flex items-center gap-2 text-sm text-neutral-300 hover:text-white transition-colors"
+                  className="hidden sm:flex items-center gap-2 px-3 py-1.5 bg-white/5 border border-white/10 rounded-full text-sm text-white/60 hover:text-white hover:bg-white/10 transition-all"
                 >
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                   </svg>
                   <span>{getPublicHandle(user)}</span>

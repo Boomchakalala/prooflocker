@@ -32,18 +32,25 @@ export default function ProofCardPreview() {
   };
 
   return (
-    <div className="relative z-10 py-12 px-4">
-      <div className="max-w-2xl mx-auto">
-        <div className="text-center mb-8">
-          <p className="text-sm text-neutral-500 uppercase tracking-wide mb-2">Example proof</p>
-          <h3 className="text-2xl font-bold text-white">See how it looks</h3>
+    <div className="relative z-10 py-16 px-4">
+      <div className="max-w-6xl mx-auto">
+        <div className="text-center mb-12">
+          <h2 className="text-3xl md:text-5xl font-bold text-white mb-4">
+            See how it looks
+          </h2>
+          <p className="text-lg text-neutral-400 max-w-2xl mx-auto">
+            Real prediction card example with all the details
+          </p>
         </div>
 
-        {/* Use the actual PredictionCard component with sample data */}
-        <PredictionCard
-          prediction={samplePrediction}
-          currentUserId={null}
-        />
+        {/* Tighter container for the card */}
+        <div className="max-w-2xl mx-auto">
+          {/* Use the actual PredictionCard component with sample data */}
+          <PredictionCard
+            prediction={samplePrediction}
+            currentUserId={null}
+          />
+        </div>
       </div>
     </div>
   );
