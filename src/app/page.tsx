@@ -61,18 +61,14 @@ export default function LandingPage() {
       {/* Footer */}
       <footer className="border-t border-white/5 mt-20 glass relative z-10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-6">
-            <div className="flex flex-col md:flex-row items-center gap-4 text-center md:text-left">
-              <p className="text-sm text-neutral-500">
-                <span className="text-white/70">Secured by on-chain timestamps</span>
-              </p>
-              <span className="hidden md:block text-neutral-700">•</span>
-              <span className="text-sm text-neutral-500">
-                Anonymous • Public • Immutable
-              </span>
-            </div>
-
-            <div className="flex items-center gap-6">
+          <div className="flex items-center justify-between gap-4">
+            <p className="text-sm text-neutral-500 hidden md:block">
+              <span className="text-white/70">Secured by on-chain timestamps</span>
+            </p>
+            <p className="flex-1 text-center text-sm text-neutral-500">
+              Anonymous • Public • Immutable
+            </p>
+            <div className="hidden md:flex items-center gap-6 w-[200px] justify-end">
               <Link
                 href="/app"
                 className="text-sm text-neutral-400 hover:text-white transition-colors"
