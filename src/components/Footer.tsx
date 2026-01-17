@@ -5,19 +5,41 @@ export default function Footer() {
     <footer className="border-t border-white/5 glass relative z-10">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10">
         <div className="flex flex-col gap-4">
-          {/* Main footer row */}
-          <div className="flex items-center justify-between gap-4">
+          {/* Main footer row - On web: 3-col layout, On mobile: centered tagline only */}
+          <div className="flex items-center justify-between gap-4 md:relative">
             <p className="text-xs md:text-sm text-neutral-500 hidden md:block">
               <span className="text-white/70">Powered by Digital Evidence (DAG)</span>
             </p>
-            <p className="flex-1 text-center text-xs md:text-sm text-neutral-500">
+            <p className="flex-1 text-center text-xs md:text-sm text-neutral-500 md:absolute md:left-1/2 md:-translate-x-1/2">
               Anonymous • Public • Immutable
             </p>
-            <div className="hidden md:block w-[200px]"></div>
+            {/* Legal links - On web: right-aligned, On mobile: hidden (shown in row below) */}
+            <div className="hidden md:flex md:items-center md:gap-4 md:text-xs md:text-neutral-600 md:whitespace-nowrap">
+              <Link
+                href="/legal/terms"
+                className="hover:text-neutral-400 transition-colors focus:outline-none focus:text-neutral-300"
+              >
+                Terms
+              </Link>
+              <span className="text-neutral-700">•</span>
+              <Link
+                href="/legal/privacy"
+                className="hover:text-neutral-400 transition-colors focus:outline-none focus:text-neutral-300"
+              >
+                Privacy
+              </Link>
+              <span className="text-neutral-700">•</span>
+              <Link
+                href="/legal/disclaimer"
+                className="hover:text-neutral-400 transition-colors focus:outline-none focus:text-neutral-300"
+              >
+                Disclaimer
+              </Link>
+            </div>
           </div>
 
-          {/* Legal links row */}
-          <div className="flex items-center justify-center gap-6 text-[10px] text-neutral-600">
+          {/* Legal links row - Mobile only: centered */}
+          <div className="flex items-center justify-center gap-6 text-[10px] text-neutral-600 md:hidden">
             <Link
               href="/legal/terms"
               className="hover:text-neutral-400 transition-colors focus:outline-none focus:text-neutral-300"
