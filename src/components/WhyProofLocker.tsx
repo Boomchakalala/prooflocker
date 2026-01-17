@@ -61,17 +61,17 @@ export default function WhyProofLocker() {
           {features.map((feature, index) => (
             <div
               key={index}
-              className="glass border border-white/10 rounded-2xl sm:rounded-3xl p-5 sm:p-8 hover:border-white/20 transition-all group"
+              className="glass border border-white/10 rounded-2xl sm:rounded-3xl p-5 sm:p-8 hover:border-white/20 transition-all group md:h-full md:flex md:flex-col"
             >
               {/* Mobile: flex layout (icon left, text right), Desktop: stacked */}
-              <div className="flex gap-4 items-start">
+              <div className="flex gap-4 items-start md:flex-col md:items-start">
                 {/* Icon container */}
                 <div className={`inline-flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 rounded-xl bg-gradient-to-r ${feature.gradient} text-white shrink-0 group-hover:scale-110 transition-transform`}>
                   {feature.icon}
                 </div>
 
                 {/* Text content */}
-                <div className="min-w-0 flex-1">
+                <div className="min-w-0 flex-1 md:mt-3">
                   <h3 className="text-lg sm:text-xl font-semibold text-white mb-2">
                     {feature.title}
                   </h3>

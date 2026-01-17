@@ -52,21 +52,21 @@ export default function HowItWorks() {
           </div>
         </div>
 
-        {/* Steps Grid - Desktop: [Card][Arrow][Card][Arrow][Card], Mobile: Stack */}
-        <div className="grid grid-cols-1 lg:grid-cols-[1fr_auto_1fr_auto_1fr] gap-4 sm:gap-6 lg:gap-8 items-stretch">
+        {/* Steps Grid - Mobile: Stack, Web: 5-col grid with arrows */}
+        <div className="grid grid-cols-1 lg:grid-cols-[1fr_auto_1fr_auto_1fr] gap-4 sm:gap-6 lg:gap-6 items-stretch md:items-center">
           {steps.map((step, index) => (
             <Fragment key={index}>
               {/* Step Card */}
-              <div className="glass border border-white/10 rounded-2xl sm:rounded-3xl p-5 sm:p-8 h-full hover:border-purple-500/30 transition-all group">
+              <div className="glass border border-white/10 rounded-2xl sm:rounded-3xl p-5 sm:p-8 md:h-full md:flex md:flex-col hover:border-purple-500/30 transition-all group">
                 {/* Mobile: 2-column layout, Desktop: stacked */}
-                <div className="flex gap-4 items-start">
+                <div className="flex gap-4 items-start md:flex-col md:items-start">
                   {/* Number badge */}
                   <div className="inline-flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-gradient-to-r from-blue-600 to-purple-600 text-white font-bold text-lg shrink-0 group-hover:scale-110 transition-transform">
                     {step.number}
                   </div>
 
                   {/* Content column */}
-                  <div className="min-w-0 flex-1">
+                  <div className="min-w-0 flex-1 md:mt-4">
                     {/* Icon + Title */}
                     <div className="flex items-center gap-3 mb-2 sm:mb-3">
                       <div className="text-cyan-500 flex-shrink-0">
@@ -87,7 +87,7 @@ export default function HowItWorks() {
 
               {/* Arrow between cards (desktop only, separate grid element) */}
               {index < steps.length - 1 && (
-                <div className="hidden lg:flex items-center justify-center opacity-60">
+                <div className="hidden lg:flex items-center justify-center opacity-60 self-center">
                   <svg className="w-8 h-8 text-purple-500/50 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                   </svg>
