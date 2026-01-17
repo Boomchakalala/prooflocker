@@ -38,7 +38,7 @@ export default function LandingHero() {
         </div>
 
         {/* Quick reassurance */}
-        <p className="text-xs text-neutral-400 mt-3">
+        <p className="text-sm text-neutral-400 mt-4 text-center mx-auto max-w-[30ch] leading-relaxed opacity-70">
           No signup required · Takes 10 seconds · Free forever
         </p>
 

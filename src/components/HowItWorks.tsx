@@ -46,7 +46,7 @@ export default function HowItWorks() {
             How it works
           </h2>
           <div className="flex justify-center">
-            <p className="text-base sm:text-lg text-neutral-400 max-w-[26ch] sm:max-w-3xl mx-auto leading-relaxed opacity-80 lg:whitespace-nowrap">
+            <p className="text-base sm:text-lg text-neutral-400 max-w-[32ch] sm:max-w-3xl mx-auto text-center leading-relaxed opacity-80 lg:whitespace-nowrap">
               Three steps to lock a prediction with immutable, timestamped proof
             </p>
           </div>
