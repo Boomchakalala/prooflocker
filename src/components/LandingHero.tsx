@@ -14,7 +14,7 @@ export default function LandingHero() {
 
         {/* Subheading */}
         <p className="text-xl md:text-2xl text-neutral-300 mb-12 max-w-2xl mx-auto">
-          Lock a claim now. Prove it later.
+          Say it now. Prove it later.
         </p>
 
         {/* CTA Buttons */}
