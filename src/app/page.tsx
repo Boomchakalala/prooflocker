@@ -6,6 +6,7 @@ import HowItWorks from "@/components/HowItWorks";
 import WhyProofLocker from "@/components/WhyProofLocker";
 import ProofCardPreview from "@/components/ProofCardPreview";
 import DEStatusBanner from "@/components/DEStatusBanner";
+import Footer from "@/components/Footer";
 
 export default function LandingPage() {
   return (
@@ -58,27 +59,7 @@ export default function LandingPage() {
         </div>
       </main>
 
-      {/* Footer */}
-      <footer className="border-t border-white/5 mt-20 glass relative z-10">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          <div className="flex items-center justify-between gap-4">
-            <p className="text-sm text-neutral-500 hidden md:block">
-              <span className="text-white/70">Powered by Digital Evidence (DAG)</span>
-            </p>
-            <p className="flex-1 text-center text-sm text-neutral-500">
-              Anonymous • Public • Immutable
-            </p>
-            <div className="hidden md:flex items-center gap-6 w-[200px] justify-end">
-              <Link
-                href="/app"
-                className="text-sm text-neutral-400 hover:text-white transition-colors"
-              >
-                Explore predictions
-              </Link>
-            </div>
-          </div>
-        </div>
-      </footer>
+      <Footer />
 
       {/* Development status banner */}
       <DEStatusBanner />
