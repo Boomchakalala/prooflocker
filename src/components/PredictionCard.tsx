@@ -98,47 +98,59 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
   return (
     <div className="glass rounded-lg p-4 md:p-4 hover:border-white/10 transition-all flex flex-col h-full shadow-lg shadow-purple-500/5">
       {/* 1. HEADER ROW - Author info + badges */}
-      <div className="flex items-start justify-between mb-2 gap-2">
-        {/* Left: Author info + category inline */}
-        <div className="flex items-center gap-2 min-w-0 flex-1 flex-wrap">
-          <div className="w-7 h-7 rounded-full bg-blue-500/20 flex items-center justify-center text-xs font-semibold text-blue-400 border border-blue-500/30 flex-shrink-0">
-            {authorNumber.toString().slice(-2)}
+      <div className="mb-2">
+        {/* Top row: Author info (left) + Status badges (right) - Mobile layout */}
+        <div className="flex items-center justify-between gap-2 flex-nowrap mb-1">
+          {/* Left: Avatar + Author info */}
+          <div className="flex items-center gap-2 min-w-0 flex-1">
+            <div className="w-7 h-7 rounded-full bg-blue-500/20 flex items-center justify-center text-xs font-semibold text-blue-400 border border-blue-500/30 flex-shrink-0">
+              {authorNumber.toString().slice(-2)}
+            </div>
+            <div className="flex items-center gap-1.5 text-[11px] md:text-xs text-neutral-400 min-w-0">
+              <span className="whitespace-nowrap flex-shrink-0">Anon #{authorNumber}</span>
+              <span className="text-neutral-600 flex-shrink-0">•</span>
+              <span className="whitespace-nowrap truncate">{formatRelativeTime(prediction.timestamp)}</span>
+              {/* Category badge - inline on desktop only */}
+              {prediction.category && (
+                <>
+                  <span className="text-neutral-600 flex-shrink-0 hidden md:inline">•</span>
+                  <span className="px-1.5 py-0.5 text-[10px] font-medium rounded bg-white/5 border border-white/10 text-neutral-400 whitespace-nowrap hidden md:inline-block">
+                    {prediction.category}
+                  </span>
+                </>
+              )}
+            </div>
           </div>
-          <div className="flex items-center gap-1.5 text-[11px] md:text-xs text-neutral-400 min-w-0">
-            <span className="whitespace-nowrap flex-shrink-0">Anon #{authorNumber}</span>
-            <span className="text-neutral-600 flex-shrink-0">•</span>
-            <span className="whitespace-nowrap">{formatRelativeTime(prediction.timestamp)}</span>
-            {/* Category badge - inline, auto-width pill */}
-            {prediction.category && (
-              <>
-                <span className="text-neutral-600 flex-shrink-0">•</span>
-                <span className="px-1.5 py-0.5 text-[10px] font-medium rounded bg-white/5 border border-white/10 text-neutral-400 whitespace-nowrap">
-                  {prediction.category}
-                </span>
-              </>
+
+          {/* Right: Status badges */}
+          <div className="flex items-center gap-1 flex-shrink-0">
+            {isOnChain() && (
+              <span className="px-2 py-0.5 text-[10px] font-medium rounded bg-purple-500/10 border border-purple-500/30 text-purple-400 flex items-center gap-1 whitespace-nowrap">
+                <svg className="w-2.5 h-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                </svg>
+                Locked
+              </span>
+            )}
+            {isResolutionOnChain() && (
+              <span className="px-2 py-0.5 text-[10px] font-medium rounded bg-green-500/10 border border-green-500/30 text-green-400 flex items-center gap-1 whitespace-nowrap">
+                <svg className="w-2.5 h-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                Resolved
+              </span>
             )}
           </div>
         </div>
 
-        {/* Right: Status badges */}
-        <div className="flex items-center gap-1 flex-shrink-0">
-          {isOnChain() && (
-            <span className="px-2 py-0.5 text-[10px] font-medium rounded bg-purple-500/10 border border-purple-500/30 text-purple-400 flex items-center gap-1 whitespace-nowrap">
-              <svg className="w-2.5 h-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-              </svg>
-              Locked
+        {/* Category row - Mobile only, separate line below */}
+        {prediction.category && (
+          <div className="md:hidden">
+            <span className="inline-block px-1.5 py-0.5 text-[10px] font-medium rounded bg-white/5 border border-white/10 text-neutral-400 whitespace-nowrap">
+              {prediction.category}
             </span>
-          )}
-          {isResolutionOnChain() && (
-            <span className="px-2 py-0.5 text-[10px] font-medium rounded bg-green-500/10 border border-green-500/30 text-green-400 flex items-center gap-1 whitespace-nowrap">
-              <svg className="w-2.5 h-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-              Resolved
-            </span>
-          )}
-        </div>
+          </div>
+        )}
       </div>
 
       {/* 3. TITLE - Prediction text */}
