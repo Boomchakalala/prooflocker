@@ -222,6 +222,29 @@ function AppFeedContent() {
             <h1 className="text-2xl md:text-3xl font-bold text-white mb-1">Explore predictions</h1>
             <p className="text-sm text-neutral-400">Browse public predictions locked on-chain</p>
           </div>
+          {/* Refresh button - Mobile only, icon-only */}
+          {activeTab === "all" && (
+            <button
+              onClick={syncDEStatus}
+              disabled={syncing}
+              className="md:hidden h-9 w-9 glass text-neutral-400 hover:text-white rounded-lg transition-all hover:bg-white/5 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center flex-shrink-0"
+              title="Recheck on-chain status for pending proofs"
+            >
+              <svg
+                className={`w-4 h-4 ${syncing ? "animate-spin" : ""}`}
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+                />
+              </svg>
+            </button>
+          )}
         </div>
 
         {/* Tabs */}
@@ -252,14 +275,14 @@ function AppFeedContent() {
 
           {/* Category Pills + Refresh row */}
           {activeTab === "all" && (
-            <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
+            <div className="flex items-center gap-3">
               {/* Category pills */}
               <div className="flex items-center gap-2 overflow-x-auto no-scrollbar flex-1">
                 {categories.map((cat) => (
                   <button
                     key={cat}
                     onClick={() => setSelectedCategory(cat)}
-                    className={`px-3 py-1.5 sm:px-4 sm:py-2 text-xs sm:text-sm font-medium rounded-full transition-all whitespace-nowrap flex-shrink-0 ${
+                    className={`px-3 py-1.5 text-xs font-medium rounded-full transition-all whitespace-nowrap flex-shrink-0 ${
                       selectedCategory === cat
                         ? "bg-gradient-to-r from-blue-600/80 to-purple-600/80 hover:from-blue-600 hover:to-purple-600 text-white border border-blue-500/30"
                         : "glass border border-white/10 text-neutral-400 hover:text-white hover:bg-white/5"
@@ -270,11 +293,11 @@ function AppFeedContent() {
                 ))}
               </div>
 
-              {/* Refresh button */}
+              {/* Refresh button - Desktop only */}
               <button
                 onClick={syncDEStatus}
                 disabled={syncing}
-                className="px-3 py-1.5 sm:py-2 glass text-xs sm:text-sm font-medium text-neutral-400 hover:text-white rounded-lg transition-all hover:bg-white/5 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-1.5 flex-shrink-0 self-end sm:self-auto"
+                className="hidden md:flex px-3 py-2 glass text-sm font-medium text-neutral-400 hover:text-white rounded-lg transition-all hover:bg-white/5 disabled:opacity-50 disabled:cursor-not-allowed items-center gap-1.5 flex-shrink-0"
                 title="Recheck on-chain status for pending proofs"
               >
                 <svg
