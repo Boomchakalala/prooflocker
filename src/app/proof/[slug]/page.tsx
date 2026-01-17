@@ -361,19 +361,19 @@ export default async function ProofPage({ params }: Props) {
           {/* On-Chain Proof Section 2: Prediction Resolved (only if resolved) */}
           {/* Polish: Added step label, unified icon system matching Step 1, reduced gap from previous section */}
           {isResolved && prediction.resolvedAt && (
-            <div className="p-6 md:p-8">
+            <div className="p-4 md:p-8">
               <div className="text-[10px] text-green-400 font-medium uppercase tracking-wider mb-1">Step 2</div>
               <h2 className="text-base font-semibold text-white mb-1">Prediction Resolved</h2>
-              <p className="text-xs text-neutral-400 mb-5">This prediction outcome was permanently recorded on the blockchain</p>
+              <p className="text-xs text-neutral-400 mb-4 md:mb-5">This prediction outcome was permanently recorded on the blockchain</p>
 
               {/* Resolved trust badges - Polish: Unified with Step 1 layout */}
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-3 mb-5">
-                <div className={`glass rounded-lg p-3 text-center ${
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-2 md:gap-3 mb-4 md:mb-5">
+                <div className={`glass rounded-lg p-2.5 md:p-3 text-center ${
                   prediction.outcome === "correct"
                     ? "border border-green-500/20"
                     : "border border-red-500/20"
                 }`}>
-                  <svg className={`w-5 h-5 mx-auto mb-1 ${
+                  <svg className={`w-4 h-4 md:w-5 md:h-5 mx-auto mb-1 ${
                     prediction.outcome === "correct" ? "text-green-400" : "text-red-400"
                   }`} fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
                     {prediction.outcome === "correct" ? (
@@ -384,14 +384,14 @@ export default async function ProofPage({ params }: Props) {
                   </svg>
                   <div className="text-[10px] text-neutral-300 font-medium">{prediction.outcome === "correct" ? "Correct" : "Incorrect"}</div>
                 </div>
-                <div className="glass border border-green-500/20 rounded-lg p-3 text-center">
-                  <svg className="w-5 h-5 text-green-400 mx-auto mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+                <div className="glass border border-green-500/20 rounded-lg p-2.5 md:p-3 text-center">
+                  <svg className="w-4 h-4 md:w-5 md:h-5 text-green-400 mx-auto mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                   </svg>
                   <div className="text-[10px] text-neutral-300 font-medium">Timestamped</div>
                 </div>
-                <div className="glass border border-green-500/20 rounded-lg p-3 text-center">
-                  <svg className="w-5 h-5 text-green-400 mx-auto mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+                <div className="glass border border-green-500/20 rounded-lg p-2.5 md:p-3 text-center">
+                  <svg className="w-4 h-4 md:w-5 md:h-5 text-green-400 mx-auto mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                   </svg>
                   <div className="text-[10px] text-neutral-300 font-medium">Immutable</div>
@@ -399,11 +399,11 @@ export default async function ProofPage({ params }: Props) {
               </div>
 
               {/* Resolution details */}
-              <div className="space-y-3">
+              <div className="space-y-2.5 md:space-y-3">
                 {/* Resolved timestamp */}
-                <div className="glass border border-white/10 rounded-lg p-4">
+                <div className="glass border border-white/10 rounded-lg p-3 md:p-4">
                   <div className="text-[10px] text-neutral-500 uppercase tracking-wider mb-2">Resolution Timestamp</div>
-                  <div className="text-xs text-neutral-300">
+                  <div className="text-xs md:text-sm text-neutral-300">
                     {new Date(prediction.resolvedAt).toLocaleString("en-US", {
                       month: "long",
                       day: "numeric",
@@ -417,7 +417,7 @@ export default async function ProofPage({ params }: Props) {
 
                 {/* Resolution transaction hash (if available) */}
                 {prediction.resolutionDeReference && (
-                  <div className="glass border border-white/10 rounded-lg p-4">
+                  <div className="glass border border-white/10 rounded-lg p-3 md:p-4">
                     <div className="text-[10px] text-neutral-500 uppercase tracking-wider mb-2">Resolution Transaction Hash</div>
                     <div className="flex items-start gap-2">
                       {resolutionExplorerUrl ? (
@@ -425,12 +425,12 @@ export default async function ProofPage({ params }: Props) {
                           href={resolutionExplorerUrl}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="text-xs text-cyan-400 hover:text-cyan-300 font-mono break-all underline flex-1"
+                          className="text-[11px] md:text-xs text-cyan-400 hover:text-cyan-300 font-mono break-all underline flex-1 min-w-0"
                         >
                           {prediction.resolutionDeReference}
                         </a>
                       ) : (
-                        <div className="text-xs text-neutral-300 font-mono break-all flex-1">
+                        <div className="text-[11px] md:text-xs text-neutral-300 font-mono break-all flex-1 min-w-0">
                           {prediction.resolutionDeReference}
                         </div>
                       )}
@@ -440,7 +440,7 @@ export default async function ProofPage({ params }: Props) {
                 )}
 
                 {/* Outcome */}
-                <div className="glass border border-white/10 rounded-lg p-4">
+                <div className="glass border border-white/10 rounded-lg p-3 md:p-4">
                   <div className="text-[10px] text-neutral-500 uppercase tracking-wider mb-2">Final Outcome</div>
                   <div className={`inline-flex items-center gap-2 px-2.5 py-1 rounded-lg font-medium text-xs ${
                     prediction.outcome === "correct"
@@ -457,13 +457,13 @@ export default async function ProofPage({ params }: Props) {
 
         {/* Footer */}
         {/* Polish: Consistent spacing (mt-8 matches 16px unit system) */}
-        <div className="mt-8 text-center">
-          <p className="text-xs text-neutral-500 mb-4">
+        <div className="mt-6 md:mt-8 text-center pb-safe">
+          <p className="text-xs text-neutral-500 mb-3 md:mb-4">
             This prediction is immutable and cannot be edited
           </p>
           <Link
             href="/app"
-            className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-600/80 to-purple-600/80 hover:from-blue-600 hover:to-purple-600 text-white font-medium rounded-lg transition-all text-sm"
+            className="inline-flex items-center gap-2 px-5 md:px-6 py-2.5 md:py-3 bg-gradient-to-r from-blue-600/80 to-purple-600/80 hover:from-blue-600 hover:to-purple-600 text-white font-medium rounded-lg transition-all text-sm"
           >
             Explore more predictions
           </Link>
