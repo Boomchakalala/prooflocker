@@ -37,6 +37,11 @@ export default function LandingHero() {
           </Link>
         </div>
 
+        {/* Quick reassurance */}
+        <p className="text-xs text-neutral-400 mt-3">
+          No signup required · Takes 10 seconds · Free forever
+        </p>
+
         {/* Trust badges - Premium chips */}
         <div className="flex flex-wrap items-center justify-center gap-3 text-sm mt-12 opacity-80">
           <div className="glass border border-white/10 rounded-full px-4 py-2 flex items-center gap-2 glow-blue">

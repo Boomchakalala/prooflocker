@@ -32,14 +32,14 @@ export default function ProofCardPreview() {
   };
 
   return (
-    <div className="relative z-10 py-16 px-4">
+    <div className="relative z-10 py-12 px-4">
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-12">
           <h2 className="text-3xl md:text-5xl font-bold text-white mb-4">
             See how it looks
           </h2>
           <p className="text-lg text-neutral-400 max-w-2xl mx-auto">
-            Real prediction card example with all the details
+            Here's what your proof card will look like once locked
           </p>
         </div>
 
