@@ -40,8 +40,8 @@ export default function LandingHero() {
         </div>
 
         {/* Quick reassurance */}
-        <div className="mx-auto max-w-fit text-center mt-3 md:w-[min(520px,100%)]">
-          <p className="text-xs sm:text-sm text-neutral-400 leading-tight opacity-70 whitespace-nowrap">
+        <div className="flex justify-center mt-3">
+          <p className="text-xs sm:text-sm text-neutral-400 leading-tight opacity-70 whitespace-nowrap text-center">
             No signup required · Takes 10 seconds · Free forever
           </p>
         </div>
