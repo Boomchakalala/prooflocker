@@ -20,7 +20,7 @@ export default function LandingHero() {
         </div>
 
         {/* CTA Buttons */}
-        <div className="relative flex flex-col sm:flex-row items-center justify-center gap-4 mb-4">
+        <div className="relative flex flex-col sm:flex-row items-center justify-center gap-4 mb-4 md:w-[min(520px,100%)] md:mx-auto">
           {/* Radial glow behind primary CTA */}
           <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
             <div className="w-64 h-64 bg-gradient-to-r from-blue-500/20 to-purple-500/20 rounded-full blur-3xl"></div>
@@ -40,7 +40,7 @@ export default function LandingHero() {
         </div>
 
         {/* Quick reassurance */}
-        <div className="mx-auto max-w-fit text-center mt-3">
+        <div className="mx-auto max-w-fit text-center mt-3 md:w-[min(520px,100%)]">
           <p className="text-xs sm:text-sm text-neutral-400 leading-tight opacity-70 whitespace-nowrap">
             No signup required · Takes 10 seconds · Free forever
           </p>
