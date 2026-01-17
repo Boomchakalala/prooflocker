@@ -89,6 +89,12 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
   const canResolve = isOwner && prediction.outcome === "pending";
   const isPending = prediction.outcome === "pending";
 
+  // Truncate title to max 100 characters
+  const MAX_TITLE_LENGTH = 100;
+  const displayTitle = prediction.textPreview.length > MAX_TITLE_LENGTH
+    ? prediction.textPreview.slice(0, MAX_TITLE_LENGTH) + "…"
+    : prediction.textPreview;
+
   return (
     <div className="glass rounded-lg p-3 md:p-4 hover:border-white/10 transition-all flex flex-col h-full shadow-lg shadow-purple-500/5">
       {/* 1. HEADER ROW - Author info + badges */}
@@ -136,7 +142,7 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
 
       {/* 3. TITLE - Prediction text */}
       <h3 className="text-white text-base mb-3 font-normal w-full min-w-0 line-clamp-2 leading-snug min-h-[2.75em]">
-        {prediction.textPreview}
+        {displayTitle}
       </h3>
 
       {/* 4. OUTCOME ROW */}
