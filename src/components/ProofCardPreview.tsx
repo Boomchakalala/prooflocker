@@ -32,7 +32,7 @@ export default function ProofCardPreview() {
   };
 
   return (
-    <div className="relative z-10 py-8 sm:py-10 md:py-16 px-4">
+    <div className="relative z-10 py-12 md:py-16 px-4">
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-5 sm:mb-8 md:mb-12">
           <h2 className="text-3xl md:text-5xl font-bold text-white mb-1.5 sm:mb-2 md:mb-3">

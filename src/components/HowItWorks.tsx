@@ -33,7 +33,7 @@ export default function HowItWorks() {
   ];
 
   return (
-    <div className="relative z-10 py-8 sm:py-10 md:py-16 px-4">
+    <div className="relative z-10 py-12 md:py-16 px-4">
       <div className="max-w-6xl mx-auto md:px-6">
         {/* Header */}
         <div className="text-center mb-5 sm:mb-8 md:mb-12">

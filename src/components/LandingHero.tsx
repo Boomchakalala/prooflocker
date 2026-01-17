@@ -2,7 +2,7 @@ import Link from "next/link";
 
 export default function LandingHero() {
   return (
-    <div className="relative z-10 text-center py-8 sm:py-10 md:py-16 px-4">
+    <div className="relative z-10 text-center py-12 md:py-16 px-4">
       <div className="max-w-4xl mx-auto">
         {/* Main headline */}
         <h1 className="text-5xl md:text-7xl font-bold text-white mb-3 sm:mb-4 md:mb-5 tracking-tight leading-tight">

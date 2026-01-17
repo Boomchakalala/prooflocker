@@ -22,7 +22,7 @@ export default function LandingPage() {
       <LandingHeader />
 
       {/* Main content */}
-      <main className="space-y-8 sm:space-y-12 md:space-y-16">
+      <main className="space-y-12 md:space-y-16">
         {/* Hero Section */}
         <LandingHero />
 
@@ -36,7 +36,7 @@ export default function LandingPage() {
         <WhyProofLocker />
 
         {/* Final CTA Section */}
-        <div className="relative z-10 py-8 sm:py-10 md:py-14 px-4">
+        <div className="relative z-10 py-12 md:py-16 px-4">
           <div className="max-w-4xl mx-auto text-center">
             <div className="glass border border-white/10 rounded-3xl p-5 sm:p-7 md:p-10 glow-purple">
               <h2 className="text-3xl md:text-5xl font-bold text-white mb-2.5 sm:mb-3 md:mb-5">
