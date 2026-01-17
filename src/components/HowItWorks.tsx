@@ -33,11 +33,11 @@ export default function HowItWorks() {
   ];
 
   return (
-    <div className="relative z-10 py-10 sm:py-16 px-4">
+    <div className="relative z-10 py-8 sm:py-10 md:py-16 px-4">
       <div className="max-w-6xl mx-auto md:px-6">
         {/* Header */}
-        <div className="text-center mb-8 sm:mb-12">
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-3 sm:mb-4 flex items-center justify-center gap-3">
+        <div className="text-center mb-6 sm:mb-10 md:mb-12">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-2 sm:mb-3 md:mb-4 flex items-center justify-center gap-3">
             <svg className="w-7 h-7 sm:w-8 sm:h-8 md:w-10 md:h-10 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
             </svg>
@@ -51,14 +51,14 @@ export default function HowItWorks() {
         </div>
 
         {/* Steps Grid */}
-        <div className="space-y-4 sm:space-y-6 md:grid md:grid-cols-3 md:gap-6 lg:gap-8 md:space-y-0">
+        <div className="space-y-3 sm:space-y-4 md:space-y-6 md:grid md:grid-cols-3 md:gap-6 lg:gap-8 md:space-y-0">
           {steps.map((step, index) => (
             <div
               key={index}
-              className="glass border border-white/10 rounded-2xl sm:rounded-3xl p-6 sm:p-8 hover:border-purple-500/30 transition-all group"
+              className="glass border border-white/10 rounded-2xl sm:rounded-3xl p-4 sm:p-6 md:p-8 hover:border-purple-500/30 transition-all group"
             >
               {/* Number Badge and Title Row */}
-              <div className="flex items-center gap-3 mb-3 sm:mb-4">
+              <div className="flex items-center gap-2 sm:gap-3 mb-2 sm:mb-3 md:mb-4">
                 <div className="inline-flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 text-white font-bold text-lg sm:text-xl group-hover:scale-110 transition-transform shadow-lg shadow-purple-500/20 flex-shrink-0">
                   {step.number}
                 </div>

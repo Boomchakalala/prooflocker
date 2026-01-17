@@ -32,10 +32,10 @@ export default function ProofCardPreview() {
   };
 
   return (
-    <div className="relative z-10 py-10 sm:py-16 px-4">
+    <div className="relative z-10 py-8 sm:py-10 md:py-16 px-4">
       <div className="max-w-6xl mx-auto">
-        <div className="text-center mb-8 sm:mb-12">
-          <h2 className="text-3xl md:text-5xl font-bold text-white mb-4">
+        <div className="text-center mb-6 sm:mb-10 md:mb-12">
+          <h2 className="text-3xl md:text-5xl font-bold text-white mb-2 sm:mb-3 md:mb-4">
             See how it looks
           </h2>
           <div className="mx-auto max-w-fit overflow-hidden">
