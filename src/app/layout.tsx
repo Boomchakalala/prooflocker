@@ -25,7 +25,12 @@ export const metadata: Metadata = {
   description: "Time-stamped prediction proofs. Claim later. Share receipts.",
   metadataBase: new URL(siteUrl),
   icons: {
-    icon: "/icon.png",
+    icon: [
+      { url: "/favicons/favicon-16x16.png", sizes: "16x16", type: "image/png" },
+      { url: "/favicons/favicon-32x32.png", sizes: "32x32", type: "image/png" },
+      { url: "/favicons/favicon.ico" },
+    ],
+    apple: "/favicons/apple-touch-icon.png",
   },
   openGraph: {
     title: "ProofLocker",
