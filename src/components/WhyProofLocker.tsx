@@ -61,22 +61,22 @@ export default function WhyProofLocker() {
           {features.map((feature, index) => (
             <div
               key={index}
-              className="glass border border-white/10 rounded-2xl sm:rounded-3xl p-5 sm:p-8 hover:border-white/20 transition-all group md:h-full md:flex md:flex-col md:justify-start"
+              className="glass border border-white/10 rounded-2xl sm:rounded-3xl p-5 sm:p-8 md:p-8 hover:border-white/20 transition-all group md:h-full md:flex md:flex-col md:justify-start"
             >
               <div className="md:flex md:items-start md:gap-4">
                 {/* Icon container - left on desktop */}
                 <div className="md:shrink-0 md:mt-1">
-                  <div className={`inline-flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 rounded-xl bg-gradient-to-r ${feature.gradient} text-white shrink-0 group-hover:scale-110 transition-transform mb-4 md:mb-0`}>
+                  <div className={`inline-flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 rounded-xl bg-gradient-to-r ${feature.gradient} text-white group-hover:scale-110 transition-transform mb-4 md:mb-0 shrink-0`}>
                     {feature.icon}
                   </div>
                 </div>
 
                 {/* Text content - right on desktop */}
                 <div className="md:min-w-0">
-                  <h3 className="text-lg sm:text-xl font-semibold text-white mb-2">
+                  <h3 className="text-lg sm:text-xl font-semibold text-white mb-2 md:leading-tight">
                     {feature.title}
                   </h3>
-                  <p className="text-sm sm:text-base text-neutral-400 leading-relaxed opacity-80">
+                  <p className="text-sm sm:text-base text-neutral-400 leading-relaxed opacity-80 md:mt-2">
                     {feature.description}
                   </p>
                 </div>
