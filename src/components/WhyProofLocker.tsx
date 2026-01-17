@@ -51,7 +51,7 @@ export default function WhyProofLocker() {
             Why ProofLocker?
           </h2>
           <p className="text-base sm:text-lg text-neutral-400 max-w-[28ch] sm:max-w-2xl mx-auto leading-relaxed opacity-80">
-            The simplest way to prove you called it first — and stand by it
+            The simplest way to prove you called it.
           </p>
         </div>
 
