@@ -51,39 +51,28 @@ export default function HowItWorks() {
         </div>
 
         {/* Steps Grid */}
-        <div className="space-y-4 sm:space-y-6 md:flex md:items-center md:gap-4 lg:gap-6 md:space-y-0">
+        <div className="space-y-4 sm:space-y-6 md:grid md:grid-cols-3 md:gap-6 lg:gap-8 md:space-y-0">
           {steps.map((step, index) => (
-            <>
-              <div
-                key={index}
-                className="glass border border-white/10 rounded-2xl sm:rounded-3xl p-6 sm:p-8 hover:border-purple-500/30 transition-all group flex-1"
-              >
-                {/* Number Badge and Title Row */}
-                <div className="flex items-center gap-3 mb-3 sm:mb-4">
-                  <div className="inline-flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 text-white font-bold text-lg sm:text-xl group-hover:scale-110 transition-transform shadow-lg shadow-purple-500/20 flex-shrink-0">
-                    {step.number}
-                  </div>
-                  <h3 className="text-lg sm:text-xl font-bold text-white flex items-center gap-2">
-                    {step.icon}
-                    {step.title}
-                  </h3>
+            <div
+              key={index}
+              className="glass border border-white/10 rounded-2xl sm:rounded-3xl p-6 sm:p-8 hover:border-purple-500/30 transition-all group"
+            >
+              {/* Number Badge and Title Row */}
+              <div className="flex items-center gap-3 mb-3 sm:mb-4">
+                <div className="inline-flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 text-white font-bold text-lg sm:text-xl group-hover:scale-110 transition-transform shadow-lg shadow-purple-500/20 flex-shrink-0">
+                  {step.number}
                 </div>
-
-                {/* Description */}
-                <p className="text-sm sm:text-base text-neutral-400 leading-relaxed">
-                  {step.description}
-                </p>
+                <h3 className="text-lg sm:text-xl font-bold text-white flex items-center gap-2">
+                  {step.icon}
+                  {step.title}
+                </h3>
               </div>
 
-              {/* Arrow between steps */}
-              {index < steps.length - 1 && (
-                <div className="hidden md:flex items-center justify-center text-purple-500/40 flex-shrink-0">
-                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                  </svg>
-                </div>
-              )}
-            </>
+              {/* Description */}
+              <p className="text-sm sm:text-base text-neutral-400 leading-relaxed">
+                {step.description}
+              </p>
+            </div>
           ))}
         </div>
       </div>
