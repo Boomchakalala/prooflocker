@@ -50,9 +50,11 @@ export default function WhyProofLocker() {
           <h2 className="text-3xl sm:text-5xl font-bold text-white mb-3 sm:mb-4 leading-tight">
             Why ProofLocker?
           </h2>
-          <p className="text-base sm:text-lg text-neutral-400 max-w-[28ch] sm:max-w-2xl mx-auto leading-relaxed opacity-80">
-            The simplest way to prove you called it.
-          </p>
+          <div className="mx-auto max-w-fit overflow-hidden">
+            <p className="text-sm sm:text-base text-neutral-400 text-center leading-tight opacity-75 whitespace-nowrap">
+              The simplest way to prove you called it.
+            </p>
+          </div>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
