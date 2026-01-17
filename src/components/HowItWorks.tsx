@@ -53,11 +53,11 @@ export default function HowItWorks() {
         </div>
 
         {/* Steps Grid - Desktop: [Card][Arrow][Card][Arrow][Card], Mobile: Stack */}
-        <div className="grid grid-cols-1 lg:grid-cols-[1fr_auto_1fr_auto_1fr] gap-8 lg:gap-0 items-center">
+        <div className="grid grid-cols-1 lg:grid-cols-[1fr_auto_1fr_auto_1fr] gap-6 lg:gap-8 items-stretch">
           {steps.map((step, index) => (
             <Fragment key={index}>
               {/* Step Card */}
-              <div className="glass border border-white/10 rounded-2xl p-8 hover:border-purple-500/30 transition-all group">
+              <div className="glass border border-white/10 rounded-2xl p-8 h-full hover:border-purple-500/30 transition-all group">
                 {/* Number badge */}
                 <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-gradient-to-r from-blue-600 to-purple-600 text-white font-bold text-lg mb-6 group-hover:scale-110 transition-transform">
                   {step.number}
@@ -81,8 +81,8 @@ export default function HowItWorks() {
 
               {/* Arrow between cards (desktop only, separate grid element) */}
               {index < steps.length - 1 && (
-                <div className="hidden lg:flex items-center justify-center px-4">
-                  <svg className="w-8 h-8 text-purple-500/30 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div className="hidden lg:flex items-center justify-center opacity-60">
+                  <svg className="w-8 h-8 text-purple-500/50 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                   </svg>
                 </div>
