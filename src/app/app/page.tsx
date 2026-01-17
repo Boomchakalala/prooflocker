@@ -252,14 +252,14 @@ function AppFeedContent() {
 
           {/* Category Pills + Refresh row */}
           {activeTab === "all" && (
-            <div className="flex items-center gap-3">
+            <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
               {/* Category pills */}
-              <div className="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-hide flex-1">
+              <div className="flex items-center gap-2 overflow-x-auto no-scrollbar flex-1">
                 {categories.map((cat) => (
                   <button
                     key={cat}
                     onClick={() => setSelectedCategory(cat)}
-                    className={`px-4 py-2 text-sm font-medium rounded-full transition-all whitespace-nowrap flex-shrink-0 ${
+                    className={`px-3 py-1.5 sm:px-4 sm:py-2 text-xs sm:text-sm font-medium rounded-full transition-all whitespace-nowrap flex-shrink-0 ${
                       selectedCategory === cat
                         ? "bg-gradient-to-r from-blue-600/80 to-purple-600/80 hover:from-blue-600 hover:to-purple-600 text-white border border-blue-500/30"
                         : "glass border border-white/10 text-neutral-400 hover:text-white hover:bg-white/5"
@@ -274,7 +274,7 @@ function AppFeedContent() {
               <button
                 onClick={syncDEStatus}
                 disabled={syncing}
-                className="px-3 py-2 glass text-sm font-medium text-neutral-400 hover:text-white rounded-lg transition-all hover:bg-white/5 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-1.5 flex-shrink-0"
+                className="px-3 py-1.5 sm:py-2 glass text-xs sm:text-sm font-medium text-neutral-400 hover:text-white rounded-lg transition-all hover:bg-white/5 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-1.5 flex-shrink-0 self-end sm:self-auto"
                 title="Recheck on-chain status for pending proofs"
               >
                 <svg
