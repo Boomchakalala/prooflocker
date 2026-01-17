@@ -2,10 +2,10 @@ import Link from "next/link";
 
 export default function LandingHero() {
   return (
-    <div className="relative z-10 text-center py-10 sm:py-16 md:py-20 px-4">
+    <div className="relative z-10 text-center py-8 sm:py-12 md:py-20 px-4">
       <div className="max-w-4xl mx-auto">
         {/* Main headline */}
-        <h1 className="text-5xl md:text-7xl font-bold text-white mb-6 tracking-tight">
+        <h1 className="text-5xl md:text-7xl font-bold text-white mb-4 sm:mb-5 md:mb-6 tracking-tight">
           Predictions.{" "}
           <span className="bg-gradient-to-r from-blue-500 via-purple-500 to-cyan-500 bg-clip-text text-transparent">
             Locked forever.
@@ -13,7 +13,7 @@ export default function LandingHero() {
         </h1>
 
         {/* Subheading */}
-        <div className="mx-auto max-w-fit mb-10">
+        <div className="mx-auto max-w-fit mb-6 sm:mb-8 md:mb-10">
           <p className="text-xl sm:text-2xl md:text-3xl text-neutral-300 leading-tight tracking-tight font-medium opacity-85 whitespace-nowrap">
             Say it now. Prove it later.
           </p>
