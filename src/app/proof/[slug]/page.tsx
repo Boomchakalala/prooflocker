@@ -138,15 +138,15 @@ export default async function ProofPage({ params }: Props) {
           {/* Prediction statement - Hero section */}
           {/* Polish: Reduced top padding (8→6) for tighter hierarchy, aligned title+status on same row */}
           <div className="p-4 md:p-8 border-b border-white/10 bg-gradient-to-br from-white/5 to-transparent">
-            <div className="flex items-start justify-between gap-3 md:gap-4 mb-3 md:mb-4">
-              <div className="flex-1 min-w-0">
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between mb-3 md:mb-4">
+              <div className="min-w-0 flex-1">
                 <div className="text-xs text-neutral-500 mb-2 md:mb-3 uppercase tracking-wide">Prediction</div>
                 <h1 className="text-xl md:text-3xl leading-relaxed text-white font-medium break-words">
                   {prediction.text}
                 </h1>
               </div>
               {/* Polish: Status badge right-aligned, reduced visual weight */}
-              <div className="flex-shrink-0">
+              <div className="shrink-0 self-start sm:self-auto">
                 <OutcomeBadge outcome={prediction.outcome} size="sm" showLabel="long" />
               </div>
             </div>

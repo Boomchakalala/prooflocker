@@ -38,7 +38,7 @@ export default function ProofCardPreview() {
           <h2 className="text-3xl md:text-5xl font-bold text-white mb-4">
             See how it looks
           </h2>
-          <p className="text-base md:text-lg text-neutral-400 max-w-2xl mx-auto">
+          <p className="text-base sm:text-lg text-neutral-400 max-w-[32ch] sm:max-w-3xl mx-auto text-center leading-relaxed opacity-80 lg:whitespace-nowrap">
             Here's what your proof card will look like once locked
           </p>
         </div>
