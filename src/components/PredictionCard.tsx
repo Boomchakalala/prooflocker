@@ -135,7 +135,7 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
       </div>
 
       {/* 3. TITLE - Prediction text */}
-      <p className="text-white text-base mb-3 font-normal line-clamp-3 w-full min-w-0 leading-snug">
+      <p className="text-white text-base mb-3 font-normal w-full min-w-0 line-clamp-2 leading-snug">
         {prediction.textPreview}
       </p>
 
