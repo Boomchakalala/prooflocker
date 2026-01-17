@@ -4,16 +4,31 @@ export default function HowItWorks() {
       number: "1",
       title: "Write a prediction",
       description: "Make a claim about the future. Keep it private or share it later.",
+      icon: (
+        <svg className="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+        </svg>
+      ),
     },
     {
       number: "2",
       title: "Lock it on-chain",
       description: "Get a cryptographic fingerprint + timestamp. Immutable & tamper-proof.",
+      icon: (
+        <svg className="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+        </svg>
+      ),
     },
     {
       number: "3",
       title: "Prove it later",
       description: "Resolve the outcome. Share your proof card. Show you called it.",
+      icon: (
+        <svg className="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+      ),
     },
   ];
 
@@ -48,7 +63,8 @@ export default function HowItWorks() {
               </div>
 
               {/* Content */}
-              <h3 className="text-xl sm:text-2xl font-bold text-white mb-3">
+              <h3 className="text-xl sm:text-2xl font-bold text-white mb-3 flex items-center gap-2">
+                {step.icon}
                 {step.title}
               </h3>
               <p className="text-sm sm:text-base text-neutral-400 leading-relaxed">
