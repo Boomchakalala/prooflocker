@@ -26,10 +26,10 @@ export default function LandingHeader() {
       <header className="glass sticky top-0 z-50 border-b border-white/5 bg-[#0a0a0a]/80 backdrop-blur-xl">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 flex h-14 md:h-16 items-center justify-between">
           <BrandLogo />
-          <div className="flex items-center gap-6 md:gap-8">
+          <div className="flex items-center gap-3 md:gap-4">
             <Link
               href="/app"
-              className="hidden sm:block text-sm md:text-base text-neutral-300 hover:text-white transition-colors"
+              className="hidden sm:block px-4 py-2 text-sm md:text-base text-neutral-300 hover:text-white transition-all rounded-md hover:bg-white/5 border border-transparent hover:border-white/10"
             >
               Explore predictions
             </Link>
@@ -38,7 +38,7 @@ export default function LandingHeader() {
             {!user ? (
               <button
                 onClick={() => setShowClaimModal(true)}
-                className="hidden sm:block text-sm md:text-base text-neutral-300 hover:text-white transition-colors"
+                className="hidden sm:block px-4 py-2 text-sm md:text-base text-neutral-300 hover:text-white transition-all rounded-md hover:bg-white/5 border border-transparent hover:border-white/10"
               >
                 Sign in
               </button>
