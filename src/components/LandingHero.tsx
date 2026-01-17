@@ -14,7 +14,7 @@ export default function LandingHero() {
 
         {/* Subheading */}
         <div className="mx-auto max-w-fit mb-10">
-          <p className="text-lg sm:text-xl text-neutral-300 leading-tight tracking-tight font-medium opacity-85 whitespace-nowrap">
+          <p className="text-xl sm:text-2xl md:text-3xl text-neutral-300 leading-tight tracking-tight font-medium opacity-85 whitespace-nowrap">
             Say it now. Prove it later.
           </p>
         </div>
