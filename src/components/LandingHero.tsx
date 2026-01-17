@@ -2,10 +2,10 @@ import Link from "next/link";
 
 export default function LandingHero() {
   return (
-    <div className="relative z-10 text-center py-8 sm:py-12 md:py-20 px-4">
+    <div className="relative z-10 text-center py-8 sm:py-10 md:py-16 px-4">
       <div className="max-w-4xl mx-auto">
         {/* Main headline */}
-        <h1 className="text-5xl md:text-7xl font-bold text-white mb-4 sm:mb-5 md:mb-6 tracking-tight">
+        <h1 className="text-5xl md:text-7xl font-bold text-white mb-3 sm:mb-4 md:mb-5 tracking-tight leading-tight">
           Predictions.{" "}
           <span className="bg-gradient-to-r from-blue-500 via-purple-500 to-cyan-500 bg-clip-text text-transparent">
             Locked forever.
@@ -13,7 +13,7 @@ export default function LandingHero() {
         </h1>
 
         {/* Subheading */}
-        <div className="mx-auto max-w-fit mb-6 sm:mb-8 md:mb-10">
+        <div className="mx-auto max-w-fit mb-5 sm:mb-7 md:mb-9">
           <p className="text-xl sm:text-2xl md:text-3xl text-neutral-300 leading-tight tracking-tight font-medium opacity-85 whitespace-nowrap">
             Say it now. Prove it later.
           </p>
@@ -40,14 +40,14 @@ export default function LandingHero() {
         </div>
 
         {/* Quick reassurance */}
-        <div className="flex justify-center mt-3">
-          <p className="text-xs sm:text-sm text-neutral-400 leading-tight opacity-70 whitespace-nowrap text-center">
+        <div className="flex justify-center mt-2.5">
+          <p className="text-xs sm:text-sm text-neutral-400 leading-snug opacity-70 whitespace-nowrap text-center">
             No signup required · Takes 10 seconds · Free forever
           </p>
         </div>
 
         {/* Trust badges - Premium chips */}
-        <div className="flex flex-wrap items-center justify-center gap-2.5 md:gap-3 text-sm mt-8 sm:mt-10 opacity-80">
+        <div className="flex flex-wrap items-center justify-center gap-2 md:gap-2.5 text-sm mt-6 sm:mt-7 opacity-80">
           <div className="glass border border-white/10 rounded-full px-3 py-1.5 md:px-4 md:py-2 flex items-center gap-2 glow-blue">
             <svg className="w-4 h-4 md:w-5 md:h-5 text-cyan-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
