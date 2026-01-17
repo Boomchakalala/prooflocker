@@ -1,3 +1,5 @@
+import { Fragment } from "react";
+
 export default function HowItWorks() {
   const steps = [
     {
@@ -35,6 +37,7 @@ export default function HowItWorks() {
   return (
     <div className="relative z-10 py-16 px-4">
       <div className="max-w-6xl mx-auto">
+        {/* Header */}
         <div className="text-center mb-12">
           <h2 className="text-3xl md:text-5xl font-bold text-white mb-4 flex items-center justify-center gap-3">
             <svg className="w-8 h-8 md:w-10 md:h-10 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -42,43 +45,49 @@ export default function HowItWorks() {
             </svg>
             How it works
           </h2>
-          <p className="text-lg text-neutral-400 max-w-2xl mx-auto">
-            Three simple steps to create immutable, timestamped proof of your predictions
-          </p>
+          <div className="flex justify-center">
+            <p className="text-lg text-neutral-400 max-w-3xl lg:whitespace-nowrap">
+              Three steps to lock a prediction with immutable, timestamped proof
+            </p>
+          </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        {/* Steps Grid - Desktop: [Card][Arrow][Card][Arrow][Card], Mobile: Stack */}
+        <div className="grid grid-cols-1 lg:grid-cols-[1fr_auto_1fr_auto_1fr] gap-8 lg:gap-0 items-center">
           {steps.map((step, index) => (
-            <div key={index} className="relative">
-              <div className="glass border border-white/10 rounded-2xl p-8 h-full hover:border-purple-500/30 transition-all group">
-                {/* Step number badge */}
+            <Fragment key={index}>
+              {/* Step Card */}
+              <div className="glass border border-white/10 rounded-2xl p-8 hover:border-purple-500/30 transition-all group">
+                {/* Number badge */}
                 <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-gradient-to-r from-blue-600 to-purple-600 text-white font-bold text-lg mb-6 group-hover:scale-110 transition-transform">
                   {step.number}
                 </div>
 
-                {/* Icon */}
-                <div className="text-cyan-500 mb-4">
-                  {step.icon}
+                {/* Icon + Title (same line) */}
+                <div className="flex items-center gap-3 mb-3">
+                  <div className="text-cyan-500 flex-shrink-0">
+                    {step.icon}
+                  </div>
+                  <h3 className="text-xl font-bold text-white">
+                    {step.title}
+                  </h3>
                 </div>
 
-                {/* Content */}
-                <h3 className="text-xl font-bold text-white mb-3">
-                  {step.title}
-                </h3>
-                <p className="text-neutral-400">
+                {/* Description - aligned with title */}
+                <p className="text-neutral-400 ml-11">
                   {step.description}
                 </p>
               </div>
 
-              {/* Connector arrow (desktop only) */}
+              {/* Arrow between cards (desktop only, separate grid element) */}
               {index < steps.length - 1 && (
-                <div className="hidden md:block absolute top-1/2 -right-4 transform -translate-y-1/2 z-10">
-                  <svg className="w-8 h-8 text-purple-500/30" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div className="hidden lg:flex items-center justify-center px-4">
+                  <svg className="w-8 h-8 text-purple-500/30 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                   </svg>
                 </div>
               )}
-            </div>
+            </Fragment>
           ))}
         </div>
       </div>
