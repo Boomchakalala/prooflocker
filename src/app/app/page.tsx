@@ -215,12 +215,12 @@ function AppFeedContent() {
       </header>
 
       {/* Main content */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-5 md:py-5 relative z-10">
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-5 pb-5 md:py-5 relative z-10">
         {/* Page header */}
-        <div className="flex items-center justify-between mb-6">
+        <div className="flex items-center justify-between mb-5">
           <div>
-            <h1 className="text-2xl md:text-3xl font-bold text-white mb-1">Explore predictions</h1>
-            <p className="text-sm text-neutral-400">Browse public predictions locked on-chain</p>
+            <h1 className="text-2xl md:text-3xl font-bold text-white mb-0.5 leading-tight">Explore predictions</h1>
+            <p className="text-sm text-neutral-400 leading-snug">Browse public predictions locked on-chain</p>
           </div>
           {/* Refresh button - Mobile only, icon-only */}
           {activeTab === "all" && (
@@ -248,7 +248,7 @@ function AppFeedContent() {
         </div>
 
         {/* Tabs */}
-        <div className="flex flex-col gap-3 mb-4">
+        <div className="flex flex-col gap-2.5 mb-4">
           {/* Tab buttons row */}
           <div className="flex items-center gap-1 p-1 glass rounded-lg w-fit">
             <button
@@ -275,7 +275,7 @@ function AppFeedContent() {
 
           {/* Category Pills + Refresh row */}
           {activeTab === "all" && (
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2.5">
               {/* Category pills */}
               <div className="flex items-center gap-2 overflow-x-auto no-scrollbar flex-1">
                 {categories.map((cat) => (
@@ -445,7 +445,7 @@ function AppFeedContent() {
             </Link>
           </div>
         ) : (
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-2.5 sm:gap-3">
             {filteredPredictions.map((prediction, index) => (
               <div
                 key={prediction.id}
