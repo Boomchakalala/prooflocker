@@ -135,9 +135,11 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
       </div>
 
       {/* 3. TITLE - Prediction text */}
-      <p className="text-white text-base mb-3 font-normal w-full min-w-0 line-clamp-2 leading-snug">
-        {prediction.textPreview}
-      </p>
+      <div className="w-full min-w-0">
+        <p className="text-white text-base mb-3 font-normal w-full min-w-0 line-clamp-2 leading-snug">
+          {prediction.textPreview}
+        </p>
+      </div>
 
       {/* 4. OUTCOME ROW */}
       <div className="flex items-center gap-2 mb-3">
