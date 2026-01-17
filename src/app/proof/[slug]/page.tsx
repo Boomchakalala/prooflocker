@@ -112,16 +112,16 @@ export default async function ProofPage({ params }: Props) {
     : null;
 
   return (
-    <div className="min-h-screen gradient-bg text-white relative">
+    <div className="min-h-screen gradient-bg text-white relative pb-20 md:pb-0">
       {/* Decorative gradient orbs */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-20 -left-40 w-80 h-80 bg-blue-500/10 rounded-full blur-3xl" />
         <div className="absolute top-40 -right-40 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl" />
       </div>
 
-      <div className="relative z-10 max-w-4xl mx-auto px-4 py-8 md:py-12">
+      <div className="relative z-10 max-w-4xl mx-auto px-4 py-6 md:py-12">
         {/* Header with back button */}
-        <div className="mb-8">
+        <div className="mb-6 md:mb-8">
           <Link
             href="/app"
             className="inline-flex items-center gap-2 text-neutral-400 hover:text-white transition-colors text-sm group"
@@ -137,11 +137,11 @@ export default async function ProofPage({ params }: Props) {
         <div className="glass border border-white/10 rounded-2xl overflow-hidden">
           {/* Prediction statement - Hero section */}
           {/* Polish: Reduced top padding (8→6) for tighter hierarchy, aligned title+status on same row */}
-          <div className="p-6 md:p-8 border-b border-white/10 bg-gradient-to-br from-white/5 to-transparent">
-            <div className="flex items-start justify-between gap-4 mb-4">
-              <div className="flex-1">
-                <div className="text-xs text-neutral-500 mb-3 uppercase tracking-wide">Prediction</div>
-                <h1 className="text-2xl md:text-3xl leading-relaxed text-white font-medium">
+          <div className="p-4 md:p-8 border-b border-white/10 bg-gradient-to-br from-white/5 to-transparent">
+            <div className="flex items-start justify-between gap-3 md:gap-4 mb-3 md:mb-4">
+              <div className="flex-1 min-w-0">
+                <div className="text-xs text-neutral-500 mb-2 md:mb-3 uppercase tracking-wide">Prediction</div>
+                <h1 className="text-xl md:text-3xl leading-relaxed text-white font-medium break-words">
                   {prediction.text}
                 </h1>
               </div>
