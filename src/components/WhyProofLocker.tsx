@@ -57,25 +57,26 @@ export default function WhyProofLocker() {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid md:grid-cols-2 md:gap-6 md:items-stretch lg:grid-cols-4 lg:gap-8 gap-4 sm:gap-6">
+        <div className="grid grid-cols-1 gap-4 sm:gap-6 md:grid md:grid-cols-2 lg:grid-cols-4 md:gap-6 lg:gap-8 md:items-stretch">
           {features.map((feature, index) => (
             <div
               key={index}
-              className="glass border border-white/10 rounded-2xl sm:rounded-3xl p-5 sm:p-8 md:p-8 hover:border-white/20 transition-all group md:h-full md:flex md:flex-col"
+              className="glass border border-white/10 rounded-2xl sm:rounded-3xl p-5 sm:p-8 hover:border-white/20 transition-all group md:h-full md:flex md:flex-col md:justify-start"
             >
-              {/* Mobile: flex layout (icon left, text right), Desktop: stacked */}
-              <div className="flex gap-4 items-start md:flex-col md:items-start md:gap-4 md:justify-start">
-                {/* Icon container */}
-                <div className={`inline-flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 rounded-xl bg-gradient-to-r ${feature.gradient} text-white shrink-0 group-hover:scale-110 transition-transform md:mb-4`}>
-                  {feature.icon}
+              <div className="md:flex md:items-start md:gap-4">
+                {/* Icon container - left on desktop */}
+                <div className="md:shrink-0 md:mt-1">
+                  <div className={`inline-flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 rounded-xl bg-gradient-to-r ${feature.gradient} text-white shrink-0 group-hover:scale-110 transition-transform mb-4 md:mb-0`}>
+                    {feature.icon}
+                  </div>
                 </div>
 
-                {/* Text content */}
-                <div className="min-w-0 flex-1 md:mt-0">
-                  <h3 className="text-lg sm:text-xl font-semibold text-white mb-2 md:mt-0">
+                {/* Text content - right on desktop */}
+                <div className="md:min-w-0">
+                  <h3 className="text-lg sm:text-xl font-semibold text-white mb-2">
                     {feature.title}
                   </h3>
-                  <p className="text-sm sm:text-base text-neutral-400 leading-relaxed opacity-80 md:mt-1">
+                  <p className="text-sm sm:text-base text-neutral-400 leading-relaxed opacity-80">
                     {feature.description}
                   </p>
                 </div>

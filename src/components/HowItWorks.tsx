@@ -1,5 +1,3 @@
-import { Fragment } from "react";
-
 export default function HowItWorks() {
   const steps = [
     {
@@ -52,48 +50,37 @@ export default function HowItWorks() {
           </div>
         </div>
 
-        {/* Steps Grid - Mobile: Stack, Web: 5-col grid with arrows */}
-        <div className="grid grid-cols-1 md:grid md:grid-cols-[1fr,auto,1fr,auto,1fr] gap-4 sm:gap-6 md:gap-8 md:items-stretch">
+        {/* Steps Grid - Mobile: Stack, Web: 3-col grid */}
+        <div className="grid grid-cols-1 gap-4 sm:gap-6 md:grid md:grid-cols-3 md:gap-8 md:items-stretch">
           {steps.map((step, index) => (
-            <Fragment key={index}>
-              {/* Step Card */}
-              <div className="glass border border-white/10 rounded-2xl sm:rounded-3xl p-5 sm:p-8 md:h-full md:flex md:flex-col hover:border-purple-500/30 transition-all group">
-                {/* Mobile: 2-column layout, Desktop: stacked */}
-                <div className="flex gap-4 items-start md:flex-col md:items-start md:justify-between md:min-h-[220px]">
-                  {/* Number badge */}
-                  <div className="inline-flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-gradient-to-r from-blue-600 to-purple-600 text-white font-bold text-lg shrink-0 group-hover:scale-110 transition-transform md:mb-6 md:self-start">
+            <div key={index} className="glass border border-white/10 rounded-2xl sm:rounded-3xl p-5 sm:p-8 md:h-full md:flex md:flex-col md:justify-start hover:border-purple-500/30 transition-all group">
+              <div className="md:flex md:items-start md:gap-4">
+                {/* Number badge - left on desktop */}
+                <div className="md:shrink-0 md:mt-1">
+                  <div className="inline-flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-gradient-to-r from-blue-600 to-purple-600 text-white font-bold text-lg shrink-0 group-hover:scale-110 transition-transform mb-4 md:mb-0">
                     {step.number}
                   </div>
+                </div>
 
-                  {/* Content column */}
-                  <div className="min-w-0 flex-1 md:mt-0">
-                    {/* Icon + Title */}
-                    <div className="flex items-center gap-3 mb-2 sm:mb-3">
-                      <div className="text-cyan-500 flex-shrink-0">
-                        {step.icon}
-                      </div>
-                      <h3 className="text-lg sm:text-xl font-bold text-white">
-                        {step.title}
-                      </h3>
+                {/* Content column - right on desktop */}
+                <div className="md:min-w-0">
+                  {/* Icon + Title */}
+                  <div className="flex items-center gap-3 mb-2 sm:mb-3">
+                    <div className="text-cyan-500 flex-shrink-0">
+                      {step.icon}
                     </div>
-
-                    {/* Description */}
-                    <p className="text-sm sm:text-base text-neutral-400 leading-relaxed opacity-80">
-                      {step.description}
-                    </p>
+                    <h3 className="text-lg sm:text-xl font-bold text-white">
+                      {step.title}
+                    </h3>
                   </div>
+
+                  {/* Description */}
+                  <p className="text-sm sm:text-base text-neutral-400 leading-relaxed opacity-80">
+                    {step.description}
+                  </p>
                 </div>
               </div>
-
-              {/* Arrow between cards (desktop only, separate grid element) */}
-              {index < steps.length - 1 && (
-                <div className="hidden md:flex md:items-center md:justify-center md:opacity-70">
-                  <svg className="w-8 h-8 text-purple-500/50 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                  </svg>
-                </div>
-              )}
-            </Fragment>
+            </div>
           ))}
         </div>
       </div>
