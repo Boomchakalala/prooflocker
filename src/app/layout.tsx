@@ -64,6 +64,9 @@ export default function RootLayout({
 
   return (
     <html lang="en" className="dark">
+      <head>
+        <link rel="manifest" href="/manifest.json" />
+      </head>
       <body
         className={`${inter.variable} ${jetbrainsMono.variable} antialiased bg-[#0a0a0a] text-white`}
       >
