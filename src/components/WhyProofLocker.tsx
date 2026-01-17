@@ -65,9 +65,7 @@ export default function WhyProofLocker() {
               <div className="flex gap-4 items-start">
                 {/* Icon container */}
                 <div className={`inline-flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 rounded-xl bg-gradient-to-r ${feature.gradient} text-white shrink-0 group-hover:scale-110 transition-transform`}>
-                  <svg className="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    {feature.icon.props.children}
-                  </svg>
+                  {feature.icon}
                 </div>
 
                 {/* Text content */}
