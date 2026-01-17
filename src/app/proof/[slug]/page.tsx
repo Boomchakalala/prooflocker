@@ -284,7 +284,7 @@ export default async function ProofPage({ params }: Props) {
               <p className="text-xs text-neutral-400 mb-5">This prediction was permanently locked on the blockchain</p>
 
               {/* Trust badges - Polish: Unified icon system, consistent size/stroke */}
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-5">
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-3">
                 <div className="glass border border-purple-500/20 rounded-lg p-3 text-center">
                   <svg className="w-5 h-5 text-purple-400 mx-auto mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
@@ -310,6 +310,11 @@ export default async function ProofPage({ params }: Props) {
                   <div className="text-[10px] text-neutral-300 font-medium">Verifiable</div>
                 </div>
               </div>
+
+              {/* SHA-256 explanation - UX polish: explains the cryptographic guarantee without cluttering the UI with raw hashes */}
+              <p className="text-[10px] text-neutral-500 mb-5 leading-relaxed">
+                Prediction content was hashed using SHA-256 before being locked on-chain.
+              </p>
 
               {/* Lock transaction details */}
               <div className="space-y-3">
@@ -347,17 +352,6 @@ export default async function ProofPage({ params }: Props) {
                       </div>
                     )}
                     <CopyButton text={prediction.deReference || ""} iconSize="sm" />
-                  </div>
-                </div>
-
-                {/* Content hash */}
-                <div className="glass border border-white/10 rounded-lg p-4">
-                  <div className="text-[10px] text-neutral-500 uppercase tracking-wider mb-2">Content Hash (SHA-256)</div>
-                  <div className="flex items-start gap-2">
-                    <code className="text-xs text-neutral-300 font-mono break-all flex-1">
-                      {prediction.hash}
-                    </code>
-                    <CopyButton text={prediction.hash} iconSize="sm" />
                   </div>
                 </div>
               </div>
