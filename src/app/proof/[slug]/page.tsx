@@ -145,9 +145,9 @@ export default async function ProofPage({ params }: Props) {
                   {prediction.text}
                 </h1>
               </div>
-              {/* Polish: Status badge right-aligned, softer background */}
+              {/* Polish: Status badge right-aligned, reduced visual weight */}
               <div className="flex-shrink-0">
-                <OutcomeBadge outcome={prediction.outcome} size="lg" showLabel="long" />
+                <OutcomeBadge outcome={prediction.outcome} size="sm" showLabel="long" />
               </div>
             </div>
           </div>
@@ -220,8 +220,8 @@ export default async function ProofPage({ params }: Props) {
               <div className="glass border border-white/10 rounded-lg p-4">
                 <div className="text-[10px] text-neutral-500 uppercase tracking-wider mb-2">Author</div>
                 <div className="flex items-center gap-2">
-                  <div className="w-6 h-6 rounded-full bg-gradient-to-r from-cyan-500 to-blue-500 flex items-center justify-center text-white text-[10px] font-bold flex-shrink-0">
-                    #{prediction.authorNumber}
+                  <div className="w-6 h-6 rounded-full bg-gradient-to-r from-cyan-500 to-blue-500 flex items-center justify-center text-white text-xs font-bold flex-shrink-0">
+                    A
                   </div>
                   <div className="flex items-center gap-2 flex-wrap">
                     <span className="text-white font-medium text-sm">Anon #{prediction.authorNumber}</span>
