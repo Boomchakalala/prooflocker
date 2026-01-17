@@ -55,7 +55,7 @@ export default function HowItWorks() {
           {steps.map((step, index) => (
             <div
               key={index}
-              className="glass border border-white/10 rounded-2xl sm:rounded-3xl p-4 sm:p-6 md:p-8 hover:border-purple-500/30 transition-all group"
+              className="h-full flex flex-col glass border border-white/10 rounded-2xl sm:rounded-3xl p-4 sm:p-6 md:p-8 hover:border-purple-500/30 transition-all group"
             >
               {/* Number Badge and Title Row */}
               <div className="flex items-center gap-2 sm:gap-2.5 mb-2 sm:mb-2.5 md:mb-3">
@@ -69,7 +69,7 @@ export default function HowItWorks() {
               </div>
 
               {/* Description */}
-              <p className="text-sm sm:text-base text-neutral-400 leading-relaxed">
+              <p className="text-sm sm:text-base text-neutral-400 leading-relaxed flex-1">
                 {step.description}
               </p>
             </div>
