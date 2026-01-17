@@ -36,13 +36,13 @@ export default function LandingPage() {
         <WhyProofLocker />
 
         {/* Final CTA Section */}
-        <div className="relative z-10 py-20 px-4">
+        <div className="relative z-10 py-10 sm:py-16 px-4">
           <div className="max-w-4xl mx-auto text-center">
-            <div className="glass border border-white/10 rounded-3xl p-12 md:p-16 glow-purple">
-              <h2 className="text-3xl md:text-5xl font-bold text-white mb-6">
+            <div className="glass border border-white/10 rounded-3xl p-6 sm:p-10 md:p-12 glow-purple">
+              <h2 className="text-3xl md:text-5xl font-bold text-white mb-4 sm:mb-6">
                 Ready to lock your prediction?
               </h2>
-              <p className="text-lg md:text-xl text-neutral-300 mb-8 max-w-2xl mx-auto">
+              <p className="text-base sm:text-lg md:text-xl text-neutral-300 mb-6 sm:mb-8 max-w-2xl mx-auto">
                 Create your first prediction in 10 seconds.
               </p>
               <Link
