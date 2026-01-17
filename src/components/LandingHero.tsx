@@ -13,9 +13,11 @@ export default function LandingHero() {
         </h1>
 
         {/* Subheading */}
-        <p className="text-base sm:text-lg md:text-2xl text-neutral-300 mb-10 max-w-[24ch] mx-auto leading-snug tracking-tight opacity-80">
-          Say it now. Prove it later.
-        </p>
+        <div className="mx-auto max-w-fit mb-10">
+          <p className="text-lg sm:text-xl text-neutral-300 leading-tight tracking-tight font-medium opacity-85 whitespace-nowrap">
+            Say it now. Prove it later.
+          </p>
+        </div>
 
         {/* CTA Buttons */}
         <div className="relative flex flex-col sm:flex-row items-center justify-center gap-4 mb-4">
@@ -38,9 +40,11 @@ export default function LandingHero() {
         </div>
 
         {/* Quick reassurance */}
-        <p className="text-sm text-neutral-400 mt-4 text-center mx-auto max-w-[30ch] leading-relaxed opacity-70">
-          No signup required · Takes 10 seconds · Free forever
-        </p>
+        <div className="mx-auto max-w-fit text-center mt-3">
+          <p className="text-xs sm:text-sm text-neutral-400 leading-tight opacity-70 whitespace-nowrap">
+            No signup required · Takes 10 seconds · Free forever
+          </p>
+        </div>
 
         {/* Trust badges - Premium chips */}
         <div className="flex flex-wrap items-center justify-center gap-2.5 md:gap-3 text-sm mt-8 sm:mt-10 opacity-80">
