@@ -44,32 +44,42 @@ export default function WhyProofLocker() {
   ];
 
   return (
-    <div className="relative z-10 py-20 px-4">
+    <div className="relative z-10 py-10 sm:py-16 px-4">
       <div className="max-w-6xl mx-auto">
-        <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-5xl font-bold text-white mb-4">
+        <div className="text-center mb-10 sm:mb-16">
+          <h2 className="text-3xl sm:text-5xl font-bold text-white mb-3 sm:mb-4 leading-tight">
             Why ProofLocker?
           </h2>
-          <p className="text-lg text-neutral-400 max-w-2xl mx-auto">
+          <p className="text-base sm:text-lg text-neutral-400 max-w-[28ch] sm:max-w-2xl mx-auto leading-relaxed opacity-80">
             The simplest way to prove you called it first — and stand by it
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
           {features.map((feature, index) => (
             <div
               key={index}
-              className="glass border border-white/10 rounded-xl p-6 hover:border-white/20 transition-all group"
+              className="glass border border-white/10 rounded-2xl sm:rounded-3xl p-5 sm:p-8 hover:border-white/20 transition-all group"
             >
-              <div className={`inline-flex items-center justify-center w-10 h-10 rounded-lg bg-gradient-to-r ${feature.gradient} text-white mb-4 group-hover:scale-110 transition-transform`}>
-                {feature.icon}
+              {/* Mobile: flex layout (icon left, text right), Desktop: stacked */}
+              <div className="flex gap-4 items-start">
+                {/* Icon container */}
+                <div className={`inline-flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 rounded-xl bg-gradient-to-r ${feature.gradient} text-white shrink-0 group-hover:scale-110 transition-transform`}>
+                  <svg className="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    {feature.icon.props.children}
+                  </svg>
+                </div>
+
+                {/* Text content */}
+                <div className="min-w-0 flex-1">
+                  <h3 className="text-lg sm:text-xl font-semibold text-white mb-2">
+                    {feature.title}
+                  </h3>
+                  <p className="text-sm sm:text-base text-neutral-400 leading-relaxed opacity-80">
+                    {feature.description}
+                  </p>
+                </div>
               </div>
-              <h3 className="text-lg font-bold text-white mb-2">
-                {feature.title}
-              </h3>
-              <p className="text-sm text-neutral-400">
-                {feature.description}
-              </p>
             </div>
           ))}
         </div>

@@ -35,48 +35,56 @@ export default function HowItWorks() {
   ];
 
   return (
-    <div className="relative z-10 py-16 px-4">
+    <div className="relative z-10 py-10 sm:py-16 px-4">
       <div className="max-w-6xl mx-auto">
         {/* Header */}
-        <div className="text-center mb-12">
-          <h2 className="text-3xl md:text-5xl font-bold text-white mb-4 flex items-center justify-center gap-3">
-            <svg className="w-8 h-8 md:w-10 md:h-10 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <div className="text-center mb-8 sm:mb-12">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-3 sm:mb-4 flex items-center justify-center gap-3">
+            <svg className="w-7 h-7 sm:w-8 sm:h-8 md:w-10 md:h-10 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
             </svg>
             How it works
           </h2>
           <div className="flex justify-center">
-            <p className="text-lg text-neutral-400 max-w-3xl lg:whitespace-nowrap">
+            <p className="text-base sm:text-lg text-neutral-400 max-w-[26ch] sm:max-w-3xl mx-auto leading-relaxed opacity-80 lg:whitespace-nowrap">
               Three steps to lock a prediction with immutable, timestamped proof
             </p>
           </div>
         </div>
 
         {/* Steps Grid - Desktop: [Card][Arrow][Card][Arrow][Card], Mobile: Stack */}
-        <div className="grid grid-cols-1 lg:grid-cols-[1fr_auto_1fr_auto_1fr] gap-6 lg:gap-8 items-stretch">
+        <div className="grid grid-cols-1 lg:grid-cols-[1fr_auto_1fr_auto_1fr] gap-4 sm:gap-6 lg:gap-8 items-stretch">
           {steps.map((step, index) => (
             <Fragment key={index}>
               {/* Step Card */}
-              <div className="glass border border-white/10 rounded-2xl p-8 h-full hover:border-purple-500/30 transition-all group">
-                {/* Number badge */}
-                <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-gradient-to-r from-blue-600 to-purple-600 text-white font-bold text-lg mb-6 group-hover:scale-110 transition-transform">
-                  {step.number}
-                </div>
-
-                {/* Icon + Title (same line) */}
-                <div className="flex items-center gap-3 mb-3">
-                  <div className="text-cyan-500 flex-shrink-0">
-                    {step.icon}
+              <div className="glass border border-white/10 rounded-2xl sm:rounded-3xl p-5 sm:p-8 h-full hover:border-purple-500/30 transition-all group">
+                {/* Mobile: 2-column layout, Desktop: stacked */}
+                <div className="flex gap-4 items-start">
+                  {/* Number badge */}
+                  <div className="inline-flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-gradient-to-r from-blue-600 to-purple-600 text-white font-bold text-lg shrink-0 group-hover:scale-110 transition-transform">
+                    {step.number}
                   </div>
-                  <h3 className="text-xl font-bold text-white">
-                    {step.title}
-                  </h3>
-                </div>
 
-                {/* Description - aligned with title */}
-                <p className="text-neutral-400 ml-11">
-                  {step.description}
-                </p>
+                  {/* Content column */}
+                  <div className="min-w-0 flex-1">
+                    {/* Icon + Title */}
+                    <div className="flex items-center gap-3 mb-2 sm:mb-3">
+                      <div className="text-cyan-500 flex-shrink-0">
+                        <svg className="w-6 h-6 sm:w-8 sm:h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          {step.icon.props.children}
+                        </svg>
+                      </div>
+                      <h3 className="text-lg sm:text-xl font-bold text-white">
+                        {step.title}
+                      </h3>
+                    </div>
+
+                    {/* Description */}
+                    <p className="text-sm sm:text-base text-neutral-400 leading-relaxed opacity-80">
+                      {step.description}
+                    </p>
+                  </div>
+                </div>
               </div>
 
               {/* Arrow between cards (desktop only, separate grid element) */}
