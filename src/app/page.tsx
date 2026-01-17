@@ -22,7 +22,7 @@ export default function LandingPage() {
       <LandingHeader />
 
       {/* Main content */}
-      <main>
+      <main className="space-y-12 sm:space-y-16">
         {/* Hero Section */}
         <LandingHero />
 
