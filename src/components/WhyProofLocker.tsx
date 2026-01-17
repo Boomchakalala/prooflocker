@@ -46,12 +46,12 @@ export default function WhyProofLocker() {
   return (
     <div className="relative z-10 py-8 sm:py-10 md:py-16 px-4">
       <div className="max-w-6xl mx-auto md:px-6">
-        <div className="text-center mb-6 sm:mb-10 md:mb-16">
-          <h2 className="text-3xl sm:text-5xl font-bold text-white mb-2 sm:mb-3 md:mb-4 leading-tight">
+        <div className="text-center mb-5 sm:mb-8 md:mb-12">
+          <h2 className="text-3xl sm:text-5xl font-bold text-white mb-1.5 sm:mb-2 md:mb-3 leading-tight">
             Why ProofLocker?
           </h2>
           <div className="mx-auto max-w-fit overflow-hidden">
-            <p className="text-sm sm:text-base text-neutral-400 text-center leading-tight opacity-75 whitespace-nowrap">
+            <p className="text-sm sm:text-base text-neutral-400 text-center leading-snug opacity-75 whitespace-nowrap">
               The simplest way to prove you called it.
             </p>
           </div>
@@ -64,11 +64,11 @@ export default function WhyProofLocker() {
               className="glass border border-white/10 rounded-2xl sm:rounded-3xl p-4 sm:p-6 md:p-8 hover:border-white/20 transition-all group"
             >
               {/* Icon and Title Row */}
-              <div className="flex items-center gap-2 sm:gap-3 mb-2 sm:mb-3 md:mb-4">
-                <div className={`inline-flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-gradient-to-br ${feature.gradient} text-white group-hover:scale-110 transition-transform shadow-lg flex-shrink-0`}>
+              <div className="flex items-center gap-2 sm:gap-2.5 mb-2 sm:mb-2.5 md:mb-3">
+                <div className={`inline-flex items-center justify-center w-9 h-9 sm:w-11 sm:h-11 rounded-xl bg-gradient-to-br ${feature.gradient} text-white group-hover:scale-110 transition-transform shadow-lg flex-shrink-0`}>
                   {feature.icon}
                 </div>
-                <h3 className="text-lg sm:text-xl font-bold text-white">
+                <h3 className="text-base sm:text-lg font-bold text-white leading-tight">
                   {feature.title}
                 </h3>
               </div>
