@@ -161,7 +161,7 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
       </div>
 
       {/* Resolution URL */}
-      {prediction.resolutionUrl && (
+      {isResolved && prediction.resolutionUrl && (
         <div className="mb-3">
           <a
             href={prediction.resolutionUrl}
@@ -313,13 +313,6 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
             </button>
           </div>
         </div>
-
-        {/* Helper text when Resolve is disabled */}
-        {isPending && !canResolve && (
-          <p className="text-[10px] text-neutral-500 text-center">
-            Only the creator can resolve
-          </p>
-        )}
       </div>
 
       {/* Resolve Modal */}
