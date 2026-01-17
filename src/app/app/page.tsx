@@ -7,6 +7,7 @@ import PredictionCard from "@/components/PredictionCard";
 import BrandLogo from "@/components/BrandLogo";
 import DEStatusBanner from "@/components/DEStatusBanner";
 import ClaimModal from "@/components/ClaimModal";
+import Footer from "@/components/Footer";
 import { Prediction } from "@/lib/storage";
 import { getOrCreateUserId } from "@/lib/user";
 import { useAuth } from "@/contexts/AuthContext";
@@ -439,19 +440,7 @@ function AppFeedContent() {
       </main>
 
       {/* Footer */}
-      <footer className="border-t border-white/5 mt-20 glass relative z-10">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-          <div className="flex items-center justify-between gap-4">
-            <p className="text-xs md:text-sm text-neutral-500 hidden md:block">
-              <span className="text-white/70">Powered by Digital Evidence (DAG)</span>
-            </p>
-            <p className="flex-1 text-center text-xs md:text-sm text-neutral-500">
-              Anonymous • Public • Immutable
-            </p>
-            <div className="hidden md:block w-[200px]"></div>
-          </div>
-        </div>
-      </footer>
+      <Footer />
 
       {/* Development status banner */}
       <DEStatusBanner />
