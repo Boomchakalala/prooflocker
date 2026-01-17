@@ -32,13 +32,13 @@ export default function ProofCardPreview() {
   };
 
   return (
-    <div className="relative z-10 py-12 px-4">
+    <div className="relative z-10 py-12 px-4 pb-16 md:pb-12">
       <div className="max-w-6xl mx-auto">
-        <div className="text-center mb-12">
+        <div className="text-center mb-8 md:mb-12">
           <h2 className="text-3xl md:text-5xl font-bold text-white mb-4">
             See how it looks
           </h2>
-          <p className="text-lg text-neutral-400 max-w-2xl mx-auto">
+          <p className="text-base md:text-lg text-neutral-400 max-w-2xl mx-auto">
             Here's what your proof card will look like once locked
           </p>
         </div>
