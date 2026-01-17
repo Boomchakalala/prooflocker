@@ -2,7 +2,7 @@ import Link from "next/link";
 
 export default function LandingHero() {
   return (
-    <div className="relative z-10 text-center py-12 md:py-20 px-4">
+    <div className="relative z-10 text-center py-10 sm:py-16 md:py-20 px-4">
       <div className="max-w-4xl mx-auto">
         {/* Main headline */}
         <h1 className="text-5xl md:text-7xl font-bold text-white mb-6 tracking-tight">
@@ -43,7 +43,7 @@ export default function LandingHero() {
         </p>
 
         {/* Trust badges - Premium chips */}
-        <div className="flex flex-wrap items-center justify-center gap-2.5 md:gap-3 text-sm mt-12 opacity-80 pb-4 md:pb-0">
+        <div className="flex flex-wrap items-center justify-center gap-2.5 md:gap-3 text-sm mt-8 sm:mt-10 opacity-80">
           <div className="glass border border-white/10 rounded-full px-3 py-1.5 md:px-4 md:py-2 flex items-center gap-2 glow-blue">
             <svg className="w-4 h-4 md:w-5 md:h-5 text-cyan-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
