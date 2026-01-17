@@ -44,10 +44,10 @@ export default function WhyProofLocker() {
   ];
 
   return (
-    <div className="relative z-10 py-10 sm:py-16 px-4">
+    <div className="relative z-10 py-8 sm:py-10 md:py-16 px-4">
       <div className="max-w-6xl mx-auto md:px-6">
-        <div className="text-center mb-10 sm:mb-16">
-          <h2 className="text-3xl sm:text-5xl font-bold text-white mb-3 sm:mb-4 leading-tight">
+        <div className="text-center mb-6 sm:mb-10 md:mb-16">
+          <h2 className="text-3xl sm:text-5xl font-bold text-white mb-2 sm:mb-3 md:mb-4 leading-tight">
             Why ProofLocker?
           </h2>
           <div className="mx-auto max-w-fit overflow-hidden">
@@ -57,14 +57,14 @@ export default function WhyProofLocker() {
           </div>
         </div>
 
-        <div className="space-y-4 sm:space-y-6 md:grid md:grid-cols-2 lg:grid-cols-4 md:gap-6 lg:gap-8 md:space-y-0">
+        <div className="space-y-3 sm:space-y-4 md:space-y-6 md:grid md:grid-cols-2 lg:grid-cols-4 md:gap-6 lg:gap-8 md:space-y-0">
           {features.map((feature, index) => (
             <div
               key={index}
-              className="glass border border-white/10 rounded-2xl sm:rounded-3xl p-6 sm:p-8 hover:border-white/20 transition-all group"
+              className="glass border border-white/10 rounded-2xl sm:rounded-3xl p-4 sm:p-6 md:p-8 hover:border-white/20 transition-all group"
             >
               {/* Icon and Title Row */}
-              <div className="flex items-center gap-3 mb-3 sm:mb-4">
+              <div className="flex items-center gap-2 sm:gap-3 mb-2 sm:mb-3 md:mb-4">
                 <div className={`inline-flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-gradient-to-br ${feature.gradient} text-white group-hover:scale-110 transition-transform shadow-lg flex-shrink-0`}>
                   {feature.icon}
                 </div>

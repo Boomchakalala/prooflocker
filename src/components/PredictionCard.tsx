@@ -99,24 +99,25 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
     <div className="glass rounded-lg p-3 md:p-4 hover:border-white/10 transition-all flex flex-col h-full shadow-lg shadow-purple-500/5">
       {/* 1. HEADER ROW - Author info + badges */}
       <div className="flex items-start justify-between mb-2 gap-2">
-        {/* Left: Author info + category (mobile: stacked, web: inline) */}
-        <div className="flex flex-col md:flex-row md:items-center md:gap-2 md:flex-wrap min-w-0 flex-1">
-          <div className="flex items-center gap-2 min-w-0">
-            <div className="w-7 h-7 rounded-full bg-blue-500/20 flex items-center justify-center text-xs font-semibold text-blue-400 border border-blue-500/30 flex-shrink-0">
-              {authorNumber.toString().slice(-2)}
-            </div>
-            <div className="flex items-center gap-1.5 text-[11px] md:text-xs text-neutral-400 min-w-0 truncate">
-              <span className="whitespace-nowrap flex-shrink-0">Anon #{authorNumber}</span>
-              <span className="text-neutral-600 flex-shrink-0">•</span>
-              <span className="whitespace-nowrap truncate">{formatRelativeTime(prediction.timestamp)}</span>
-            </div>
+        {/* Left: Author info + category inline */}
+        <div className="flex items-center gap-2 min-w-0 flex-1 flex-wrap">
+          <div className="w-7 h-7 rounded-full bg-blue-500/20 flex items-center justify-center text-xs font-semibold text-blue-400 border border-blue-500/30 flex-shrink-0">
+            {authorNumber.toString().slice(-2)}
           </div>
-          {/* Category badge - mobile: separate row, web: inline */}
-          {prediction.category && (
-            <span className="px-2 py-0.5 text-[10px] font-medium rounded bg-white/5 border border-white/10 text-neutral-400 whitespace-nowrap mt-2 md:mt-0 md:ml-1">
-              {prediction.category}
-            </span>
-          )}
+          <div className="flex items-center gap-1.5 text-[11px] md:text-xs text-neutral-400 min-w-0">
+            <span className="whitespace-nowrap flex-shrink-0">Anon #{authorNumber}</span>
+            <span className="text-neutral-600 flex-shrink-0">•</span>
+            <span className="whitespace-nowrap">{formatRelativeTime(prediction.timestamp)}</span>
+            {/* Category badge - inline, auto-width pill */}
+            {prediction.category && (
+              <>
+                <span className="text-neutral-600 flex-shrink-0">•</span>
+                <span className="px-1.5 py-0.5 text-[10px] font-medium rounded bg-white/5 border border-white/10 text-neutral-400 whitespace-nowrap">
+                  {prediction.category}
+                </span>
+              </>
+            )}
+          </div>
         </div>
 
         {/* Right: Status badges */}
