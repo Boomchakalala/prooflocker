@@ -212,15 +212,13 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
       {/* Bottom CTA row - Consistent layout for all states */}
       <div className="flex flex-col gap-2">
         <div className="flex gap-2">
-          {/* Primary action - View prediction or View evidence */}
+          {/* Primary action - View proof */}
           <Link
-            href={isResolved && prediction.resolutionUrl ? prediction.resolutionUrl : `/proof/${prediction.publicSlug}`}
+            href={`/proof/${prediction.publicSlug}`}
             className="flex-1 text-center px-4 py-2.5 text-sm font-semibold text-white bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 rounded-lg transition-all shadow-lg shadow-blue-500/20 hover:shadow-blue-500/30"
-            title={isResolved ? "View evidence" : "View full prediction details"}
-            target={isResolved && prediction.resolutionUrl ? "_blank" : undefined}
-            rel={isResolved && prediction.resolutionUrl ? "noopener noreferrer" : undefined}
+            title="View proof details"
           >
-            {isResolved ? "View evidence" : "Open prediction"}
+            View proof
           </Link>
 
           {/* Secondary actions row */}
