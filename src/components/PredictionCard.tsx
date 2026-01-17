@@ -91,47 +91,49 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
 
   return (
     <div className="glass rounded-lg p-3 md:p-4 hover:border-white/10 transition-all flex flex-col h-full shadow-lg shadow-purple-500/5">
-      {/* 1. HEADER ROW - Author info on single line */}
-      <div className="flex items-center gap-2 mb-2 min-w-0">
-        <div className="w-7 h-7 rounded-full bg-blue-500/20 flex items-center justify-center text-xs font-semibold text-blue-400 border border-blue-500/30 flex-shrink-0">
-          {authorNumber.toString().slice(-2)}
+      {/* 1. HEADER ROW - Author info + badges */}
+      <div className="flex items-start justify-between mb-2 gap-2">
+        {/* Left: Author info */}
+        <div className="flex items-center gap-2 min-w-0 flex-1">
+          <div className="w-7 h-7 rounded-full bg-blue-500/20 flex items-center justify-center text-xs font-semibold text-blue-400 border border-blue-500/30 flex-shrink-0">
+            {authorNumber.toString().slice(-2)}
+          </div>
+          <div className="flex items-center gap-1.5 text-[11px] md:text-xs text-neutral-400 min-w-0 truncate">
+            <span className="whitespace-nowrap flex-shrink-0">Anon #{authorNumber}</span>
+            <span className="text-neutral-600 flex-shrink-0">•</span>
+            <span className="whitespace-nowrap truncate">{formatRelativeTime(prediction.timestamp)}</span>
+          </div>
         </div>
-        <div className="flex items-center gap-1.5 text-[11px] md:text-xs text-neutral-400 min-w-0 truncate">
-          <span className="whitespace-nowrap flex-shrink-0">Anon #{authorNumber}</span>
-          <span className="text-neutral-600 flex-shrink-0">•</span>
-          <span className="whitespace-nowrap truncate">{formatRelativeTime(prediction.timestamp)}</span>
+
+        {/* Right: Status badges */}
+        <div className="flex items-center gap-1 flex-shrink-0">
+          {isOnChain() && (
+            <span className="px-2 py-0.5 text-[10px] font-medium rounded bg-purple-500/10 border border-purple-500/30 text-purple-400 flex items-center gap-1 whitespace-nowrap">
+              <svg className="w-2.5 h-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+              </svg>
+              Locked
+            </span>
+          )}
+          {isResolutionOnChain() && (
+            <span className="px-2 py-0.5 text-[10px] font-medium rounded bg-green-500/10 border border-green-500/30 text-green-400 flex items-center gap-1 whitespace-nowrap">
+              <svg className="w-2.5 h-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              Resolved
+            </span>
+          )}
         </div>
       </div>
 
-      {/* 2. BADGES ROW - All pills in one scrollable row */}
-      <div className="flex items-center gap-1.5 mb-3 overflow-x-auto no-scrollbar">
-        {/* Category badge */}
-        {prediction.category && (
-          <span className="px-2 py-0.5 text-[10px] font-medium rounded bg-white/5 border border-white/10 text-neutral-400 whitespace-nowrap flex-shrink-0">
+      {/* 2. Category badge row (if exists) */}
+      {prediction.category && (
+        <div className="flex items-center gap-1.5 mb-2">
+          <span className="px-2 py-0.5 text-[10px] font-medium rounded bg-white/5 border border-white/10 text-neutral-400 whitespace-nowrap">
             {prediction.category}
           </span>
-        )}
-
-        {/* Locked badge - short label */}
-        {isOnChain() && (
-          <span className="px-2 py-0.5 text-[10px] font-medium rounded bg-purple-500/10 border border-purple-500/30 text-purple-400 flex items-center gap-1 whitespace-nowrap flex-shrink-0">
-            <svg className="w-2.5 h-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-            </svg>
-            Locked
-          </span>
-        )}
-
-        {/* Resolved badge - short label */}
-        {isResolutionOnChain() && (
-          <span className="px-2 py-0.5 text-[10px] font-medium rounded bg-green-500/10 border border-green-500/30 text-green-400 flex items-center gap-1 whitespace-nowrap flex-shrink-0">
-            <svg className="w-2.5 h-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-            </svg>
-            Resolved
-          </span>
-        )}
-      </div>
+        </div>
+      )}
 
       {/* 3. TITLE - Prediction text */}
       <p className="text-white text-lg leading-snug mb-3 font-normal flex-grow line-clamp-2">
