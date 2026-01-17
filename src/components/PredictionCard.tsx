@@ -160,23 +160,6 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
         )}
       </div>
 
-      {/* Resolution URL */}
-      {isResolved && prediction.resolutionUrl && (
-        <div className="mb-3">
-          <a
-            href={prediction.resolutionUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-xs text-blue-400 hover:text-blue-300 underline flex items-center gap-1.5 font-medium"
-          >
-            <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-            </svg>
-            View evidence
-          </a>
-        </div>
-      )}
-
       {/* Fingerprint */}
       <div className="bg-black/30 border border-white/5 rounded-lg p-2 mb-3">
         <div className="flex items-center justify-between gap-2">
@@ -229,13 +212,15 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
       {/* Bottom CTA row - Consistent layout for all states */}
       <div className="flex flex-col gap-2">
         <div className="flex gap-2">
-          {/* Primary action - View prediction */}
+          {/* Primary action - View prediction or View evidence */}
           <Link
-            href={`/proof/${prediction.publicSlug}`}
+            href={isResolved && prediction.resolutionUrl ? prediction.resolutionUrl : `/proof/${prediction.publicSlug}`}
             className="flex-1 text-center px-4 py-2.5 text-sm font-semibold text-white bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 rounded-lg transition-all shadow-lg shadow-blue-500/20 hover:shadow-blue-500/30"
-            title="View full prediction details"
+            title={isResolved ? "View evidence" : "View full prediction details"}
+            target={isResolved && prediction.resolutionUrl ? "_blank" : undefined}
+            rel={isResolved && prediction.resolutionUrl ? "noopener noreferrer" : undefined}
           >
-            Open prediction
+            {isResolved ? "View evidence" : "Open prediction"}
           </Link>
 
           {/* Secondary actions row */}
@@ -261,16 +246,25 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
                 Resolve
               </button>
             ) : (
-              // Resolved: Show Resolved button (green for correct, red for incorrect)
+              // Resolved: Show Resolved button with status icon (green for correct, red for incorrect)
               <button
                 disabled
-                className={`px-3 py-2.5 text-sm font-medium rounded-lg border whitespace-nowrap cursor-not-allowed ${
+                className={`px-3 py-2.5 text-sm font-medium rounded-lg border whitespace-nowrap cursor-not-allowed flex items-center gap-1.5 ${
                   prediction.outcome === "correct"
                     ? "text-green-400 bg-green-500/10 border-green-500/30"
                     : "text-red-400 bg-red-500/10 border-red-500/30"
                 }`}
                 title={`Resolved as ${prediction.outcome}`}
               >
+                {prediction.outcome === "correct" ? (
+                  <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                  </svg>
+                ) : (
+                  <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                )}
                 Resolved
               </button>
             )}
