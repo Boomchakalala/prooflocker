@@ -34,12 +34,12 @@ export default function ProofCardPreview() {
   return (
     <div className="relative z-10 py-8 sm:py-10 md:py-16 px-4">
       <div className="max-w-6xl mx-auto">
-        <div className="text-center mb-6 sm:mb-10 md:mb-12">
-          <h2 className="text-3xl md:text-5xl font-bold text-white mb-2 sm:mb-3 md:mb-4">
+        <div className="text-center mb-5 sm:mb-8 md:mb-12">
+          <h2 className="text-3xl md:text-5xl font-bold text-white mb-1.5 sm:mb-2 md:mb-3">
             See how it looks
           </h2>
           <div className="mx-auto max-w-fit overflow-hidden">
-            <p className="text-sm sm:text-base text-neutral-400 text-center leading-tight opacity-75 whitespace-nowrap">
+            <p className="text-sm sm:text-base text-neutral-400 text-center leading-snug opacity-75 whitespace-nowrap">
               Here's what your proof card will look like once locked
             </p>
           </div>

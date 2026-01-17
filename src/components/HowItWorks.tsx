@@ -36,15 +36,15 @@ export default function HowItWorks() {
     <div className="relative z-10 py-8 sm:py-10 md:py-16 px-4">
       <div className="max-w-6xl mx-auto md:px-6">
         {/* Header */}
-        <div className="text-center mb-6 sm:mb-10 md:mb-12">
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-2 sm:mb-3 md:mb-4 flex items-center justify-center gap-3">
-            <svg className="w-7 h-7 sm:w-8 sm:h-8 md:w-10 md:h-10 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <div className="text-center mb-5 sm:mb-8 md:mb-12">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-1.5 sm:mb-2 md:mb-3 flex items-center justify-center gap-2.5 sm:gap-3">
+            <svg className="w-6 h-6 sm:w-7 sm:h-7 md:w-9 md:h-9 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
             </svg>
             How it works
           </h2>
           <div className="flex justify-center">
-            <p className="text-base sm:text-lg text-neutral-400 max-w-[32ch] sm:max-w-3xl mx-auto text-center leading-relaxed opacity-80 lg:whitespace-nowrap">
+            <p className="text-sm sm:text-base text-neutral-400 max-w-[32ch] sm:max-w-3xl mx-auto text-center leading-snug opacity-80 lg:whitespace-nowrap">
               Three steps to lock a prediction with immutable, timestamped proof
             </p>
           </div>
@@ -58,11 +58,11 @@ export default function HowItWorks() {
               className="glass border border-white/10 rounded-2xl sm:rounded-3xl p-4 sm:p-6 md:p-8 hover:border-purple-500/30 transition-all group"
             >
               {/* Number Badge and Title Row */}
-              <div className="flex items-center gap-2 sm:gap-3 mb-2 sm:mb-3 md:mb-4">
-                <div className="inline-flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 text-white font-bold text-lg sm:text-xl group-hover:scale-110 transition-transform shadow-lg shadow-purple-500/20 flex-shrink-0">
+              <div className="flex items-center gap-2 sm:gap-2.5 mb-2 sm:mb-2.5 md:mb-3">
+                <div className="inline-flex items-center justify-center w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 text-white font-bold text-base sm:text-lg group-hover:scale-110 transition-transform shadow-lg shadow-purple-500/20 flex-shrink-0">
                   {step.number}
                 </div>
-                <h3 className="text-lg sm:text-xl font-bold text-white flex items-center gap-2">
+                <h3 className="text-base sm:text-lg font-bold text-white flex items-center gap-1.5 sm:gap-2 leading-tight">
                   {step.icon}
                   {step.title}
                 </h3>
