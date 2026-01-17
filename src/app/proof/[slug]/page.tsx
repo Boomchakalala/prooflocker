@@ -154,11 +154,11 @@ export default async function ProofPage({ params }: Props) {
 
           {/* Key details section */}
           {/* Polish: Consistent 16px spacing unit (p-6), metadata hierarchy */}
-          <div className="p-6 md:p-8 border-b border-white/10">
-            <h2 className="text-base font-semibold text-white mb-4">Proof Details</h2>
-            <div className="grid md:grid-cols-2 gap-4">
+          <div className="p-4 md:p-8 border-b border-white/10">
+            <h2 className="text-base font-semibold text-white mb-3 md:mb-4">Proof Details</h2>
+            <div className="grid md:grid-cols-2 gap-3 md:gap-4">
               {/* Locked timestamp */}
-              <div className="glass border border-white/10 rounded-lg p-4">
+              <div className="glass border border-white/10 rounded-lg p-3 md:p-4">
                 <div className="text-[10px] text-neutral-500 uppercase tracking-wider mb-2">Locked On</div>
                 <div className="text-white font-medium text-sm">
                   {lockedDate.toLocaleDateString("en-US", {
@@ -179,7 +179,7 @@ export default async function ProofPage({ params }: Props) {
 
               {/* Resolved timestamp */}
               {isResolved && prediction.resolvedAt && (
-                <div className="glass border border-white/10 rounded-lg p-4">
+                <div className="glass border border-white/10 rounded-lg p-3 md:p-4">
                   <div className="text-[10px] text-neutral-500 uppercase tracking-wider mb-2">Resolved On</div>
                   <div className="text-white font-medium text-sm">
                     {new Date(prediction.resolvedAt).toLocaleDateString("en-US", {
@@ -200,7 +200,7 @@ export default async function ProofPage({ params }: Props) {
               )}
 
               {/* Network status */}
-              <div className="glass border border-white/10 rounded-lg p-4">
+              <div className="glass border border-white/10 rounded-lg p-3 md:p-4">
                 <div className="text-[10px] text-neutral-500 uppercase tracking-wider mb-2">Network</div>
                 <div className="flex items-center gap-2">
                   <div
@@ -217,17 +217,17 @@ export default async function ProofPage({ params }: Props) {
               </div>
 
               {/* Author - Polish: Reduced visual weight, smaller avatar, inline with metadata */}
-              <div className="glass border border-white/10 rounded-lg p-4">
+              <div className="glass border border-white/10 rounded-lg p-3 md:p-4">
                 <div className="text-[10px] text-neutral-500 uppercase tracking-wider mb-2">Author</div>
                 <div className="flex items-center gap-2">
                   <div className="w-6 h-6 rounded-full bg-gradient-to-r from-cyan-500 to-blue-500 flex items-center justify-center text-white text-xs font-bold flex-shrink-0">
                     A
                   </div>
                   <div className="flex items-center gap-2 flex-wrap">
-                    <span className="text-white font-medium text-sm">Anon #{prediction.authorNumber}</span>
+                    <span className="text-white font-medium text-sm break-all">Anon #{prediction.authorNumber}</span>
                     {/* Polish: Claimed badge now outline style, subtle */}
                     {prediction.userId && (
-                      <span className="px-2 py-0.5 border border-cyan-500/30 rounded text-[10px] text-cyan-400 font-medium">
+                      <span className="px-2 py-0.5 border border-cyan-500/30 rounded text-[10px] text-cyan-400 font-medium whitespace-nowrap">
                         Claimed
                       </span>
                     )}
@@ -240,20 +240,20 @@ export default async function ProofPage({ params }: Props) {
           {/* Resolution notes */}
           {/* Polish: Added verdict authority with icon accent, improved copy clarity */}
           {isResolved && prediction.resolutionNote && (
-            <div className="p-6 md:p-8 border-b border-white/10 bg-white/[0.02]">
-              <h2 className="text-base font-semibold text-white mb-4">Resolution Summary</h2>
-              <div className="glass border border-white/10 rounded-lg p-5">
-                <div className="flex gap-3">
+            <div className="p-4 md:p-8 border-b border-white/10 bg-white/[0.02]">
+              <h2 className="text-base font-semibold text-white mb-3 md:mb-4">Resolution Summary</h2>
+              <div className="glass border border-white/10 rounded-lg p-4 md:p-5">
+                <div className="flex gap-2 md:gap-3">
                   {/* Verdict icon anchor */}
-                  <div className={`flex-shrink-0 w-5 h-5 mt-0.5 ${
+                  <div className={`flex-shrink-0 w-4 h-4 md:w-5 md:h-5 mt-0.5 ${
                     prediction.outcome === "correct" ? "text-green-400" : "text-neutral-300"
                   }`}>
                     <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
                       <path strokeLinecap="round" strokeLinejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                     </svg>
                   </div>
-                  <div className="flex-1">
-                    <p className="text-neutral-200 leading-relaxed mb-3">
+                  <div className="flex-1 min-w-0">
+                    <p className="text-neutral-200 text-sm md:text-base leading-relaxed mb-3 break-words">
                       {prediction.resolutionNote}
                     </p>
                     {prediction.resolutionUrl && (
@@ -261,10 +261,10 @@ export default async function ProofPage({ params }: Props) {
                         href={prediction.resolutionUrl}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="inline-flex items-center gap-1.5 text-xs text-cyan-400 hover:text-cyan-300 underline font-medium"
+                        className="inline-flex items-center gap-1.5 text-xs text-cyan-400 hover:text-cyan-300 underline font-medium break-all"
                       >
-                        View evidence
-                        <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+                        <span className="flex-shrink-0">View evidence</span>
+                        <svg className="w-3.5 h-3.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
                           <path strokeLinecap="round" strokeLinejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
                         </svg>
                       </a>
