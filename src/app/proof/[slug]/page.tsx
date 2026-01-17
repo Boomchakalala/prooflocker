@@ -107,6 +107,9 @@ export default async function ProofPage({ params }: Props) {
   const explorerUrl = prediction.deReference
     ? getDigitalEvidenceFingerprintUrl(prediction.deReference)
     : null;
+  const resolutionExplorerUrl = prediction.resolutionDeReference
+    ? getDigitalEvidenceFingerprintUrl(prediction.resolutionDeReference)
+    : null;
 
   return (
     <div className="min-h-screen gradient-bg text-white relative">
@@ -423,9 +426,20 @@ export default async function ProofPage({ params }: Props) {
                   <div className="glass border border-white/10 rounded-lg p-4">
                     <div className="text-[10px] text-neutral-500 uppercase tracking-wider mb-2">Resolution Transaction Hash</div>
                     <div className="flex items-start gap-2">
-                      <div className="text-xs text-neutral-300 font-mono break-all flex-1">
-                        {prediction.resolutionDeReference}
-                      </div>
+                      {resolutionExplorerUrl ? (
+                        <a
+                          href={resolutionExplorerUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-xs text-cyan-400 hover:text-cyan-300 font-mono break-all underline flex-1"
+                        >
+                          {prediction.resolutionDeReference}
+                        </a>
+                      ) : (
+                        <div className="text-xs text-neutral-300 font-mono break-all flex-1">
+                          {prediction.resolutionDeReference}
+                        </div>
+                      )}
                       <CopyButton text={prediction.resolutionDeReference} iconSize="sm" />
                     </div>
                   </div>
