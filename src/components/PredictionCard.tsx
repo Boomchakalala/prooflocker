@@ -89,8 +89,8 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
   const canResolve = isOwner && prediction.outcome === "pending";
   const isPending = prediction.outcome === "pending";
 
-  // Truncate title to max 100 characters
-  const MAX_TITLE_LENGTH = 100;
+  // Truncate title to max 150 characters
+  const MAX_TITLE_LENGTH = 150;
   const displayTitle = prediction.textPreview.length > MAX_TITLE_LENGTH
     ? prediction.textPreview.slice(0, MAX_TITLE_LENGTH) + "…"
     : prediction.textPreview;
