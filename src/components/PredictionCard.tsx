@@ -96,7 +96,7 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
     : prediction.textPreview;
 
   return (
-    <div className="glass rounded-lg p-3 md:p-4 hover:border-white/10 transition-all flex flex-col h-full shadow-lg shadow-purple-500/5">
+    <div className="glass rounded-lg p-4 md:p-4 hover:border-white/10 transition-all flex flex-col h-full shadow-lg shadow-purple-500/5">
       {/* 1. HEADER ROW - Author info + badges */}
       <div className="flex items-start justify-between mb-2 gap-2">
         {/* Left: Author info + category inline */}
@@ -142,12 +142,12 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
       </div>
 
       {/* 3. TITLE - Prediction text */}
-      <h3 className="text-white text-base mb-3 font-normal w-full min-w-0 line-clamp-2 leading-snug min-h-[2.75em]">
+      <h3 className="text-white text-base mb-2.5 md:mb-3 font-normal w-full min-w-0 line-clamp-2 leading-snug min-h-[2.75em]">
         {displayTitle}
       </h3>
 
       {/* 4. OUTCOME ROW */}
-      <div className="flex items-center gap-2 mb-3">
+      <div className="flex items-center gap-2 mb-2.5 md:mb-3">
         <span className="text-[10px] uppercase tracking-wide text-white/40">Outcome</span>
         <OutcomeBadge
           outcome={prediction.outcome || "pending"}
@@ -168,7 +168,7 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
       </div>
 
       {/* 5. FINGERPRINT BLOCK */}
-      <div className="bg-black/30 border border-white/5 rounded-lg p-2 mb-3">
+      <div className="bg-black/30 border border-white/5 rounded-lg p-2 mb-2.5 md:mb-3">
         <div className="flex items-center justify-between gap-2">
           <div className="flex-1 min-w-0">
             <label className="block text-[9px] font-medium text-neutral-700 mb-0.5 uppercase tracking-wider">
