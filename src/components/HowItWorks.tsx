@@ -70,9 +70,7 @@ export default function HowItWorks() {
                     {/* Icon + Title */}
                     <div className="flex items-center gap-3 mb-2 sm:mb-3">
                       <div className="text-cyan-500 flex-shrink-0">
-                        <svg className="w-6 h-6 sm:w-8 sm:h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          {step.icon.props.children}
-                        </svg>
+                        {step.icon}
                       </div>
                       <h3 className="text-lg sm:text-xl font-bold text-white">
                         {step.title}
