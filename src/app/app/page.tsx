@@ -443,7 +443,7 @@ function AppFeedContent() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="flex items-center justify-between gap-4">
             <p className="text-xs md:text-sm text-neutral-500 hidden md:block">
-              <span className="text-white/70">Secured by on-chain timestamps</span>
+              <span className="text-white/70">Powered by Digital Evidence (DAG)</span>
             </p>
             <p className="flex-1 text-center text-xs md:text-sm text-neutral-500">
               Anonymous • Public • Immutable
