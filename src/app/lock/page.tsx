@@ -173,7 +173,7 @@ export default function LockPage() {
                 >
                   Category <span className="text-blue-400 font-normal">(recommended)</span>
                 </label>
-                <div className="grid grid-cols-4 gap-2">
+                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2">
                   {categories.map((cat) => (
                     <button
                       key={cat}
