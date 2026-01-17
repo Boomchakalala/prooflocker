@@ -13,7 +13,7 @@ export default function LandingHero() {
         </h1>
 
         {/* Subheading */}
-        <p className="text-xl md:text-2xl text-neutral-300 mb-12 max-w-2xl mx-auto">
+        <p className="text-base sm:text-lg md:text-2xl text-neutral-300 mb-10 max-w-[24ch] mx-auto leading-snug tracking-tight opacity-80">
           Say it now. Prove it later.
         </p>
 
