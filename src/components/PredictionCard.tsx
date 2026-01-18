@@ -243,7 +243,7 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
       </div>
 
       {/* 6. ACTIONS ROW - Grid layout with emphasis on View proof */}
-      <div className="grid grid-cols-[1.6fr_1fr_44px] gap-3 items-stretch">
+      <div className="grid grid-cols-[1.6fr_1fr_38px] gap-3 items-stretch">
         {/* View proof button - PRIMARY ACTION */}
         <Link
           href={`/proof/${prediction.publicSlug}`}
@@ -260,7 +260,7 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
             disabled={!canResolve}
             className={`px-3 py-2 text-sm font-semibold rounded-lg transition-all border whitespace-nowrap flex items-center justify-center gap-1.5 ${
               canResolve
-                ? "text-white bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 border-amber-500/40 hover:border-amber-600/50 cursor-pointer shadow-md shadow-amber-500/15 hover:shadow-lg hover:shadow-amber-500/25"
+                ? "text-white bg-gradient-to-r from-yellow-500 to-amber-500 hover:from-yellow-600 hover:to-amber-600 border-yellow-500/30 hover:border-yellow-600/40 cursor-pointer shadow-sm shadow-yellow-500/10 hover:shadow-md hover:shadow-yellow-500/20"
                 : "text-neutral-500 bg-neutral-800/50 border-neutral-700/30 cursor-not-allowed opacity-60"
             }`}
             title={canResolve ? "Resolve this prediction" : "Only the creator can resolve"}
