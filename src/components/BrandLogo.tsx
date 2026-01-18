@@ -8,7 +8,7 @@ export default function BrandLogo() {
   return (
     <Link href="/" className="flex items-center focus:outline-none focus:ring-0 outline-none">
       <img
-        src="/logos/prooflocker-logo-light.svg"
+        src="/logos/prooflocker-logo-dark.svg"
         alt="ProofLocker"
         className="h-8 w-auto md:h-9 select-none"
       />
