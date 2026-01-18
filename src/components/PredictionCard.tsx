@@ -242,12 +242,12 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
         </div>
       </div>
 
-      {/* 6. ACTIONS ROW - Grid layout */}
-      <div className="grid grid-cols-[1fr_1fr_44px] gap-3 items-stretch">
-        {/* View proof button */}
+      {/* 6. ACTIONS ROW - Grid layout with emphasis on View proof */}
+      <div className="grid grid-cols-[1.4fr_1fr_44px] gap-3 items-stretch">
+        {/* View proof button - PRIMARY ACTION */}
         <Link
           href={`/proof/${prediction.publicSlug}`}
-          className="text-center px-4 py-2.5 text-sm font-semibold text-white bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 rounded-lg transition-all shadow-lg shadow-blue-500/20 hover:shadow-blue-500/30 flex items-center justify-center"
+          className="text-center px-4 py-3 text-sm font-bold text-white bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 rounded-lg transition-all shadow-lg shadow-blue-500/20 hover:shadow-xl hover:shadow-blue-500/30 flex items-center justify-center"
           title="View proof details"
         >
           View proof
