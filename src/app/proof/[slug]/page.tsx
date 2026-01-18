@@ -201,45 +201,49 @@ export default async function ProofPage({ params }: Props) {
 
               {/* Network status */}
               <div className="glass border border-white/10 rounded-lg p-3 md:p-4">
-                <div className="text-[10px] text-neutral-500 uppercase tracking-wider mb-2">Network</div>
-                <div className="text-white font-medium text-sm mb-1.5">
-                  Constellation DAG
-                </div>
-                <div className="flex items-center gap-1.5">
-                  <div
-                    className={`w-1.5 h-1.5 rounded-full ${
+                <div className="flex items-center justify-between mb-2">
+                  <div className="text-[10px] text-neutral-500 uppercase tracking-wider">Network</div>
+                  <div className="flex items-center gap-1.5">
+                    <div
+                      className={`w-1.5 h-1.5 rounded-full ${
+                        prediction.onChainStatus === "confirmed"
+                          ? "bg-green-400"
+                          : "bg-yellow-400 animate-pulse"
+                      }`}
+                    />
+                    <span className={`text-[10px] font-medium uppercase tracking-wide ${
                       prediction.onChainStatus === "confirmed"
-                        ? "bg-green-400"
-                        : "bg-yellow-400 animate-pulse"
-                    }`}
-                  />
-                  <span className={`text-xs font-medium ${
-                    prediction.onChainStatus === "confirmed"
-                      ? "text-green-400"
-                      : "text-yellow-400"
-                  }`}>
-                    {prediction.onChainStatus === "confirmed" ? "Confirmed" : "Pending"}
-                  </span>
+                        ? "text-green-400"
+                        : "text-yellow-400"
+                    }`}>
+                      {prediction.onChainStatus === "confirmed" ? "Confirmed" : "Pending"}
+                    </span>
+                  </div>
+                </div>
+                <div className="text-white font-medium text-sm">
+                  Constellation DAG
                 </div>
               </div>
 
               {/* Author */}
               <div className="glass border border-white/10 rounded-lg p-3 md:p-4">
-                <div className="text-[10px] text-neutral-500 uppercase tracking-wider mb-2">Author</div>
-                <div className="flex items-center gap-2 mb-1.5">
+                <div className="flex items-center justify-between mb-2">
+                  <div className="text-[10px] text-neutral-500 uppercase tracking-wider">Author</div>
+                  {prediction.userId && (
+                    <div className="flex items-center gap-1">
+                      <svg className="w-2.5 h-2.5 text-cyan-400" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                      </svg>
+                      <span className="text-[10px] text-cyan-400 font-medium uppercase tracking-wide">Claimed</span>
+                    </div>
+                  )}
+                </div>
+                <div className="flex items-center gap-2">
                   <div className="w-7 h-7 rounded-full bg-gradient-to-br from-cyan-500 to-blue-600 flex items-center justify-center text-white text-xs font-bold flex-shrink-0">
                     {prediction.authorNumber.toString().slice(-2)}
                   </div>
                   <span className="text-white font-medium text-sm">Anon #{prediction.authorNumber}</span>
                 </div>
-                {prediction.userId && (
-                  <div className="flex items-center gap-1.5 ml-9">
-                    <svg className="w-3 h-3 text-cyan-400" fill="currentColor" viewBox="0 0 20 20">
-                      <path fillRule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                    </svg>
-                    <span className="text-xs text-cyan-400 font-medium">Claimed</span>
-                  </div>
-                )}
               </div>
             </div>
           </div>
