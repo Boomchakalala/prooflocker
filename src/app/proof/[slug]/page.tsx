@@ -51,8 +51,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     title,
     description,
     openGraph: {
-      title: previewText,
-      description: `Locked on ${dateStr} • Proof ${shortProofId}`,
+      title: "ProofLocker - Immutable Prediction Proof",
+      description: `Locked ${dateStr} • Proof ${shortProofId}`,
       url: pageUrl,
       type: "website",
       siteName: "ProofLocker",
@@ -67,8 +67,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     },
     twitter: {
       card: "summary_large_image",
-      title: previewText,
-      description: `Locked on ${dateStr} • Proof ${shortProofId}`,
+      title: "ProofLocker - Immutable Prediction Proof",
+      description: `Locked ${dateStr} • Proof ${shortProofId}`,
       images: [ogImageUrl],
     },
   };
