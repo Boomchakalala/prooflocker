@@ -76,8 +76,8 @@ export default function ContestModal({
       className="fixed inset-0 z-[9999] overflow-y-auto"
       onClick={onClose}
     >
-      {/* Backdrop - Fully opaque on mobile to hide everything behind */}
-      <div className="fixed inset-0 bg-black/95 md:bg-black/70 backdrop-blur-md" />
+      {/* Backdrop - COMPLETELY opaque on mobile to hide everything behind */}
+      <div className="fixed inset-0 bg-black md:bg-black/70 backdrop-blur-md" />
 
       {/* Centering wrapper */}
       <div className="min-h-full flex items-start justify-center p-4 md:p-6 pt-8 md:pt-20">
