@@ -31,26 +31,26 @@ export async function GET(
 
     // State logic
     let statusBadges = [];
-    let subtitle = '';
+    let tagline = '';
 
     if (!isResolved) {
       // State 1: Locked + Pending
       statusBadges = [{ text: '🔒 Locked', type: 'locked' }];
-      subtitle = 'Prediction locked. Immutable.';
+      tagline = 'Locked forever. Waiting to prove it.';
     } else if (isCorrect) {
       // State 2: Resolved + Correct
       statusBadges = [
         { text: '✓ Resolved', type: 'resolved' },
         { text: 'Outcome: Correct', type: 'correct' },
       ];
-      subtitle = 'Prediction correct. Still immutable.';
+      tagline = 'Called it. Proved it. Timestamped forever.';
     } else {
       // State 3: Resolved + Incorrect
       statusBadges = [
         { text: '✓ Resolved', type: 'resolved' },
         { text: 'Outcome: Incorrect', type: 'incorrect' },
       ];
-      subtitle = 'Prediction incorrect. Still immutable.';
+      tagline = 'Wrong call. Owned it. Accountability matters.';
     }
 
     return new ImageResponse(
@@ -99,16 +99,17 @@ export async function GET(
             ))}
           </div>
 
-          {/* ProofLocker Logo - top right */}
+          {/* ProofLocker Logo - top right, lower position */}
           <img
             src={logoDataUrl}
             alt="ProofLocker"
-            width="240"
-            height="60"
+            width="220"
+            height="55"
             style={{
               position: 'absolute',
-              top: '60px',
-              right: '80px',
+              top: '50px',
+              right: '70px',
+              opacity: 0.9,
             }}
           />
 
@@ -117,8 +118,8 @@ export async function GET(
             style={{
               display: 'flex',
               flexDirection: 'column',
-              gap: '32px',
-              maxWidth: '1000px',
+              gap: '28px',
+              maxWidth: '950px',
               position: 'relative',
               zIndex: 1,
             }}
@@ -126,12 +127,13 @@ export async function GET(
             {/* Prediction text */}
             <div
               style={{
-                fontSize: '60px',
+                fontSize: '56px',
                 fontWeight: '700',
                 color: 'white',
-                lineHeight: '1.2',
-                letterSpacing: '-0.02em',
-                textShadow: '0 2px 20px rgba(0, 0, 0, 0.3)',
+                lineHeight: '1.15',
+                letterSpacing: '-0.025em',
+                textShadow: '0 2px 20px rgba(0, 0, 0, 0.4)',
+                marginTop: '40px',
               }}
             >
               {prediction.text}
@@ -141,8 +143,9 @@ export async function GET(
             <div
               style={{
                 display: 'flex',
-                gap: '16px',
+                gap: '14px',
                 flexWrap: 'wrap',
+                marginTop: '8px',
               }}
             >
               {statusBadges.map((badge, i) => {
@@ -151,25 +154,25 @@ export async function GET(
                 let border = '';
 
                 if (badge.type === 'locked' || badge.type === 'resolved') {
-                  bg = 'rgba(34, 197, 94, 0.2)';
+                  bg = 'rgba(34, 197, 94, 0.15)';
                   color = '#4ade80';
                 } else if (badge.type === 'correct') {
-                  bg = 'rgba(34, 197, 94, 0.2)';
+                  bg = 'rgba(34, 197, 94, 0.15)';
                   color = '#4ade80';
-                  border = '3px solid #4ade80';
+                  border = '2px solid #4ade80';
                 } else if (badge.type === 'incorrect') {
-                  bg = 'rgba(239, 68, 68, 0.2)';
+                  bg = 'rgba(239, 68, 68, 0.15)';
                   color = '#f87171';
-                  border = '3px solid #f87171';
+                  border = '2px solid #f87171';
                 }
 
                 return (
                   <div
                     key={i}
                     style={{
-                      padding: '14px 28px',
-                      borderRadius: '28px',
-                      fontSize: '22px',
+                      padding: '10px 24px',
+                      borderRadius: '24px',
+                      fontSize: '19px',
                       fontWeight: '600',
                       display: 'flex',
                       alignItems: 'center',
@@ -177,7 +180,7 @@ export async function GET(
                       color: color,
                       border: border || 'none',
                       boxShadow: badge.type === 'correct' || badge.type === 'incorrect'
-                        ? `0 0 30px ${badge.type === 'correct' ? 'rgba(34, 197, 94, 0.3)' : 'rgba(239, 68, 68, 0.3)'}`
+                        ? `0 0 25px ${badge.type === 'correct' ? 'rgba(34, 197, 94, 0.25)' : 'rgba(239, 68, 68, 0.25)'}`
                         : 'none',
                     }}
                   >
@@ -187,16 +190,18 @@ export async function GET(
               })}
             </div>
 
-            {/* Subtitle */}
+            {/* Tagline - "I called it" vibe */}
             <div
               style={{
-                fontSize: '26px',
-                color: 'rgba(255, 255, 255, 0.75)',
-                fontWeight: '400',
-                letterSpacing: '-0.01em',
+                fontSize: '23px',
+                color: 'rgba(255, 255, 255, 0.85)',
+                fontWeight: '500',
+                letterSpacing: '-0.015em',
+                marginTop: '4px',
+                textShadow: '0 1px 10px rgba(0, 0, 0, 0.3)',
               }}
             >
-              {subtitle}
+              {tagline}
             </div>
           </div>
         </div>
