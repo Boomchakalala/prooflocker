@@ -202,37 +202,44 @@ export default async function ProofPage({ params }: Props) {
               {/* Network status */}
               <div className="glass border border-white/10 rounded-lg p-3 md:p-4">
                 <div className="text-[10px] text-neutral-500 uppercase tracking-wider mb-2">Network</div>
-                <div className="flex items-center gap-2">
-                  <div
-                    className={`px-2.5 py-1 border rounded-full text-[10px] font-medium uppercase tracking-wide ${
-                      prediction.onChainStatus === "confirmed"
-                        ? "bg-green-500/10 text-green-400 border-green-500/30"
-                        : "bg-yellow-500/10 text-yellow-400 border-yellow-500/30"
-                    }`}
-                  >
-                    {prediction.onChainStatus === "confirmed" ? "Confirmed" : "Pending"}
-                  </div>
+                <div className="text-white font-medium text-sm mb-1.5">
+                  Constellation DAG
                 </div>
-                <div className="text-xs text-neutral-400 mt-2">Constellation Network</div>
+                <div className="flex items-center gap-1.5">
+                  <div
+                    className={`w-1.5 h-1.5 rounded-full ${
+                      prediction.onChainStatus === "confirmed"
+                        ? "bg-green-400"
+                        : "bg-yellow-400 animate-pulse"
+                    }`}
+                  />
+                  <span className={`text-xs font-medium ${
+                    prediction.onChainStatus === "confirmed"
+                      ? "text-green-400"
+                      : "text-yellow-400"
+                  }`}>
+                    {prediction.onChainStatus === "confirmed" ? "Confirmed" : "Pending"}
+                  </span>
+                </div>
               </div>
 
-              {/* Author - Polish: Reduced visual weight, smaller avatar, inline with metadata */}
+              {/* Author */}
               <div className="glass border border-white/10 rounded-lg p-3 md:p-4">
                 <div className="text-[10px] text-neutral-500 uppercase tracking-wider mb-2">Author</div>
-                <div className="flex items-center gap-2">
-                  <div className="w-6 h-6 rounded-full bg-gradient-to-r from-cyan-500 to-blue-500 flex items-center justify-center text-white text-xs font-bold flex-shrink-0">
-                    A
+                <div className="flex items-center gap-2 mb-1.5">
+                  <div className="w-7 h-7 rounded-full bg-gradient-to-br from-cyan-500 to-blue-600 flex items-center justify-center text-white text-xs font-bold flex-shrink-0">
+                    {prediction.authorNumber.toString().slice(-2)}
                   </div>
-                  <div className="flex items-center gap-2 flex-wrap">
-                    <span className="text-white font-medium text-sm break-all">Anon #{prediction.authorNumber}</span>
-                    {/* Polish: Claimed badge now outline style, subtle */}
-                    {prediction.userId && (
-                      <span className="px-2 py-0.5 border border-cyan-500/30 rounded text-[10px] text-cyan-400 font-medium whitespace-nowrap">
-                        Claimed
-                      </span>
-                    )}
-                  </div>
+                  <span className="text-white font-medium text-sm">Anon #{prediction.authorNumber}</span>
                 </div>
+                {prediction.userId && (
+                  <div className="flex items-center gap-1.5 ml-9">
+                    <svg className="w-3 h-3 text-cyan-400" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                    </svg>
+                    <span className="text-xs text-cyan-400 font-medium">Claimed</span>
+                  </div>
+                )}
               </div>
             </div>
           </div>
