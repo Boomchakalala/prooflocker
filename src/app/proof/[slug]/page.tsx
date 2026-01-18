@@ -161,7 +161,7 @@ export default async function ProofPage({ params }: Props) {
               {/* Locked timestamp */}
               <div className="glass border border-white/10 rounded-xl p-4 md:p-5 bg-gradient-to-br from-white/[0.03] to-transparent hover:border-white/20 transition-all">
                 <div className="flex items-start gap-3">
-                  <div className="flex-shrink-0 w-10 h-10 rounded-lg bg-blue-500/10 border border-blue-500/20 flex items-center justify-center">
+                  <div className="flex-shrink-0 w-10 h-10 rounded-lg bg-blue-500/10 flex items-center justify-center">
                     <svg className="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
                     </svg>
@@ -250,8 +250,8 @@ export default async function ProofPage({ params }: Props) {
                       <div className="text-xs text-neutral-400 uppercase tracking-wider">Network</div>
                       <div className={`flex items-center gap-1.5 px-2 py-0.5 rounded-full ${
                         prediction.onChainStatus === "confirmed"
-                          ? "bg-green-500/10 border border-green-500/20"
-                          : "bg-yellow-500/10 border border-yellow-500/20"
+                          ? "bg-green-500/15"
+                          : "bg-yellow-500/15"
                       }`}>
                         <div className={`w-1.5 h-1.5 rounded-full ${
                           prediction.onChainStatus === "confirmed"
@@ -284,7 +284,7 @@ export default async function ProofPage({ params }: Props) {
                     <div className="flex items-center justify-between mb-1.5">
                       <div className="text-xs text-neutral-400 uppercase tracking-wider">Author</div>
                       {prediction.userId && (
-                        <div className="flex items-center gap-1 px-2 py-0.5 rounded-full bg-cyan-500/10 border border-cyan-500/20">
+                        <div className="flex items-center gap-1 px-2 py-0.5 rounded-full bg-cyan-500/15">
                           <svg className="w-3 h-3 text-cyan-400" fill="currentColor" viewBox="0 0 20 20">
                             <path fillRule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                           </svg>
