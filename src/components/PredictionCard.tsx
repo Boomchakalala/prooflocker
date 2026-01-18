@@ -140,18 +140,18 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
           <div className="flex items-center gap-1 flex-shrink-0">
             {isOnChain() && (
               <span className="px-2 py-0.5 text-[10px] font-medium rounded bg-purple-500/10 border border-purple-500/30 text-purple-400 flex items-center gap-1 whitespace-nowrap">
+                Locked
                 <svg className="w-2.5 h-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
                 </svg>
-                Locked
               </span>
             )}
             {isResolutionOnChain() && (
               <span className="px-2 py-0.5 text-[10px] font-medium rounded bg-green-500/10 border border-green-500/30 text-green-400 flex items-center gap-1 whitespace-nowrap">
+                Resolved
                 <svg className="w-2.5 h-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
-                Resolved
               </span>
             )}
           </div>
@@ -287,6 +287,8 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
             }`}
             title={`Resolved as ${prediction.outcome}`}
           >
+            <span className="hidden sm:inline">Resolved</span>
+            <span className="sm:hidden text-xs">Resolved</span>
             {prediction.outcome === "correct" ? (
               <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
@@ -296,8 +298,6 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
               </svg>
             )}
-            <span className="hidden sm:inline">Resolved</span>
-            <span className="sm:hidden text-xs">Resolved</span>
           </button>
         )}
 
