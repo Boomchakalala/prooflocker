@@ -62,9 +62,9 @@ export default function HowItWorks() {
                 <div className="inline-flex items-center justify-center w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 text-white font-bold text-base sm:text-lg group-hover:scale-110 transition-transform shadow-lg shadow-purple-500/20 flex-shrink-0">
                   {step.number}
                 </div>
-                <h3 className="text-base sm:text-lg font-bold text-white flex items-center gap-1.5 sm:gap-2 leading-tight flex-1">
+                <h3 className="text-base sm:text-lg font-bold text-white flex items-center gap-1.5 sm:gap-2 leading-tight">
                   {step.title}
-                  <span className="ml-auto">{step.icon}</span>
+                  {step.icon}
                 </h3>
               </div>
 
