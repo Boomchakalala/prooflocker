@@ -216,6 +216,7 @@ export default function ContestModal({
           </p>
         </div>
       </div>
+      </div>
     </div>
   );
 }
