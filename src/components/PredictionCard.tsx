@@ -260,11 +260,13 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
             disabled={!canResolve}
             className={`px-3 py-2 text-sm font-semibold rounded-lg transition-all border whitespace-nowrap flex items-center justify-center gap-1.5 ${
               canResolve
-                ? "text-white bg-gradient-to-r from-yellow-500 to-amber-500 hover:from-yellow-600 hover:to-amber-600 border-yellow-500/30 hover:border-yellow-600/40 cursor-pointer shadow-sm shadow-yellow-500/10 hover:shadow-md hover:shadow-yellow-500/20"
+                ? "text-amber-400 bg-amber-500/5 hover:bg-amber-500/10 border-amber-500/20 hover:border-amber-500/30 cursor-pointer"
                 : "text-neutral-500 bg-neutral-800/50 border-neutral-700/30 cursor-not-allowed opacity-60"
             }`}
             title={canResolve ? "Resolve this prediction" : "Only the creator can resolve"}
           >
+            <span className="hidden sm:inline">Resolve</span>
+            <span className="sm:hidden text-xs">Resolve</span>
             {canResolve ? (
               <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -274,8 +276,6 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
               </svg>
             )}
-            <span className="hidden sm:inline">Resolve</span>
-            <span className="sm:hidden text-xs">Resolve</span>
           </button>
         ) : (
           <button
