@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 interface ContestModalProps {
   predictionId: string;
@@ -18,6 +18,14 @@ export default function ContestModal({
   const [reason, setReason] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+
+  // Lock body scroll when modal is open
+  useEffect(() => {
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, []);
 
   const isValid = reason.trim().length >= 10 && reason.trim().length <= 1000;
 
@@ -64,8 +72,18 @@ export default function ContestModal({
   const isOverMax = charCount > 1000;
 
   return (
-    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-      <div className="bg-gradient-to-br from-[#1a1a1a] to-[#0a0a0a] rounded-xl p-6 max-w-md w-full border border-orange-500/20 shadow-2xl">
+    <div
+      className="fixed inset-0 z-[100] flex items-center justify-center p-4 md:p-6"
+      onClick={onClose}
+    >
+      {/* Backdrop - More opaque on mobile */}
+      <div className="absolute inset-0 bg-black/85 md:bg-black/70 backdrop-blur-sm" />
+
+      {/* Modal Container */}
+      <div
+        className="relative bg-gradient-to-br from-[#1a1a1a] to-[#0a0a0a] rounded-xl p-6 max-w-md w-full border border-orange-500/20 shadow-2xl"
+        onClick={(e) => e.stopPropagation()}
+      >
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
           <h3 className="text-xl font-bold text-white flex items-center gap-2">
