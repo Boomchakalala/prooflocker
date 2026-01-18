@@ -81,17 +81,19 @@ export default function ResolveModal({
 
   return (
     <div
-      className="fixed inset-0 z-[100] flex items-start md:items-center justify-center p-4 md:p-6 pt-8 md:pt-6"
+      className="fixed inset-0 z-[9999] overflow-y-auto"
       onClick={onClose}
     >
       {/* Backdrop - More opaque on mobile */}
-      <div className="absolute inset-0 bg-black/85 md:bg-black/70 backdrop-blur-sm" />
+      <div className="fixed inset-0 bg-black/85 md:bg-black/70 backdrop-blur-sm" />
 
-      {/* Modal Container */}
-      <div
-        className="relative w-full max-w-2xl max-h-[calc(100vh-4rem)] md:max-h-[calc(100vh-4rem)] overflow-hidden rounded-2xl bg-gradient-to-br from-[#1a1a1a] to-[#0a0a0a] border border-white/10 shadow-2xl mt-safe"
-        onClick={(e) => e.stopPropagation()}
-      >
+      {/* Centering container */}
+      <div className="min-h-full flex items-start md:items-center justify-center p-4 md:p-6 pt-8 md:pt-6">
+        {/* Modal Container */}
+        <div
+          className="relative w-full max-w-2xl bg-gradient-to-br from-[#1a1a1a] to-[#0a0a0a] rounded-2xl border border-white/10 shadow-2xl my-4 flex flex-col max-h-[calc(100vh-2rem)]"
+          onClick={(e) => e.stopPropagation()}
+        >
         {/* Single Scroll Container */}
         <div className="h-full overflow-y-auto overscroll-contain">
           {/* Header */}
