@@ -260,7 +260,7 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
             disabled={!canResolve}
             className={`px-3 py-2.5 text-sm font-semibold rounded-lg transition-all border whitespace-nowrap flex items-center justify-center gap-1.5 ${
               canResolve
-                ? "text-white bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 border-orange-500/50 hover:border-orange-600/50 cursor-pointer shadow-lg shadow-orange-500/20 hover:shadow-orange-500/30"
+                ? "text-white bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 border-amber-500/40 hover:border-amber-600/50 cursor-pointer shadow-md shadow-amber-500/15 hover:shadow-lg hover:shadow-amber-500/25"
                 : "text-neutral-500 bg-neutral-800/50 border-neutral-700/30 cursor-not-allowed opacity-60"
             }`}
             title={canResolve ? "Resolve this prediction" : "Only the creator can resolve"}
