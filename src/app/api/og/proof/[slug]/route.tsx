@@ -25,32 +25,26 @@ export async function GET(
     const logoBase64 = Buffer.from(logoArrayBuffer).toString('base64');
     const logoDataUrl = `data:image/png;base64,${logoBase64}`;
 
-    // Determine state
+    // Determine state (matching in-app card logic)
     const isResolved = prediction.outcome !== null && prediction.outcome !== 'pending';
     const isCorrect = prediction.outcome === 'correct';
 
-    // State logic
-    let statusBadges = [];
-    let tagline = '';
+    // Status badge and text - single badge design matching in-app
+    let statusBadge: { text: string; type: string };
+    let statusText: string;
 
     if (!isResolved) {
-      // State 1: Locked + Pending
-      statusBadges = [{ text: '🔒 Locked', type: 'locked' }];
-      tagline = 'Locked forever. Waiting to prove it.';
+      // UNRESOLVED: Locked badge
+      statusBadge = { text: '🔒 Locked', type: 'locked' };
+      statusText = 'Prediction locked on-chain.';
     } else if (isCorrect) {
-      // State 2: Resolved + Correct
-      statusBadges = [
-        { text: '✓ Resolved', type: 'resolved' },
-        { text: 'Outcome: Correct', type: 'correct' },
-      ];
-      tagline = 'Called it. Proved it. Timestamped forever.';
+      // RESOLVED - CORRECT
+      statusBadge = { text: '✅ Correct', type: 'correct' };
+      statusText = 'Prediction verified on-chain.';
     } else {
-      // State 3: Resolved + Incorrect
-      statusBadges = [
-        { text: '✓ Resolved', type: 'resolved' },
-        { text: 'Outcome: Incorrect', type: 'incorrect' },
-      ];
-      tagline = 'Wrong call. Owned it. Accountability matters.';
+      // RESOLVED - INCORRECT
+      statusBadge = { text: '❌ Incorrect', type: 'incorrect' };
+      statusText = 'Prediction resolved on-chain.';
     }
 
     return new ImageResponse(
@@ -99,17 +93,17 @@ export async function GET(
             ))}
           </div>
 
-          {/* ProofLocker Logo - top right, lower position */}
+          {/* ProofLocker Logo - top left (document header style) */}
           <img
             src={logoDataUrl}
             alt="ProofLocker"
-            width="220"
-            height="55"
+            width="180"
+            height="45"
             style={{
               position: 'absolute',
-              top: '50px',
-              right: '70px',
-              opacity: 0.9,
+              top: '60px',
+              left: '80px',
+              opacity: 0.7,
             }}
           />
 
