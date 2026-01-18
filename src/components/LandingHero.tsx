@@ -40,7 +40,7 @@ export default function LandingHero() {
         </div>
 
         {/* Quick reassurance */}
-        <div className="flex justify-center mt-2.5">
+        <div className="flex justify-center mt-4">
           <p className="text-xs sm:text-sm text-neutral-400 leading-snug opacity-70 whitespace-nowrap text-center">
             No signup required · Takes 10 seconds
           </p>

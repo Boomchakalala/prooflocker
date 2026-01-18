@@ -180,7 +180,7 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
       </div>
 
       {/* 5. FINGERPRINT BLOCK */}
-      <div className="bg-black/30 border border-white/5 rounded-lg p-2 mb-2.5 md:mb-3">
+      <div className="bg-black/30 border border-white/5 rounded-lg p-2 mb-2.5 md:mb-3 opacity-60 md:opacity-100 scale-95 md:scale-100 origin-left">
         <div className="flex items-center justify-between gap-2">
           <div className="flex-1 min-w-0">
             <label className="block text-[9px] font-medium text-neutral-700 mb-0.5 uppercase tracking-wider">
