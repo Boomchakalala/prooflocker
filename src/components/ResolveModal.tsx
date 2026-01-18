@@ -84,8 +84,8 @@ export default function ResolveModal({
       className="fixed inset-0 z-[9999] overflow-y-auto"
       onClick={onClose}
     >
-      {/* Backdrop - More opaque on mobile */}
-      <div className="fixed inset-0 bg-black/85 md:bg-black/70 backdrop-blur-sm" />
+      {/* Backdrop - Fully opaque on mobile to hide everything behind */}
+      <div className="fixed inset-0 bg-black/95 md:bg-black/70 backdrop-blur-md" />
 
       {/* Centering container */}
       <div className="min-h-full flex items-start md:items-center justify-center p-4 md:p-6 pt-8 md:pt-6">
