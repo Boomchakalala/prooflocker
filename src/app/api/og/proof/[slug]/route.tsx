@@ -112,22 +112,22 @@ export async function GET(
             style={{
               display: 'flex',
               flexDirection: 'column',
-              gap: '28px',
+              gap: '24px',
               maxWidth: '950px',
               position: 'relative',
               zIndex: 1,
+              marginTop: '60px', // Space for logo at top
             }}
           >
-            {/* Prediction text */}
+            {/* Prediction text - Hero */}
             <div
               style={{
-                fontSize: '56px',
+                fontSize: '52px',
                 fontWeight: '700',
                 color: 'white',
-                lineHeight: '1.15',
-                letterSpacing: '-0.025em',
+                lineHeight: '1.2',
+                letterSpacing: '-0.02em',
                 textShadow: '0 2px 20px rgba(0, 0, 0, 0.4)',
-                marginTop: '40px',
               }}
             >
               {prediction.text}
