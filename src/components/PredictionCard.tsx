@@ -258,14 +258,18 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
           <button
             onClick={canResolve ? handleResolveClick : undefined}
             disabled={!canResolve}
-            className={`px-3 py-2.5 text-sm font-medium rounded-lg transition-all border whitespace-nowrap flex items-center justify-center gap-1.5 ${
+            className={`px-3 py-2.5 text-sm font-semibold rounded-lg transition-all border whitespace-nowrap flex items-center justify-center gap-1.5 ${
               canResolve
-                ? "text-amber-300 bg-amber-500/10 hover:bg-amber-500/20 border-amber-500/30 hover:border-amber-500/50 cursor-pointer"
+                ? "text-white bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 border-orange-500/50 hover:border-orange-600/50 cursor-pointer shadow-lg shadow-orange-500/20 hover:shadow-orange-500/30"
                 : "text-neutral-500 bg-neutral-800/50 border-neutral-700/30 cursor-not-allowed opacity-60"
             }`}
             title={canResolve ? "Resolve this prediction" : "Only the creator can resolve"}
           >
-            {!canResolve && (
+            {canResolve ? (
+              <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            ) : (
               <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
               </svg>
