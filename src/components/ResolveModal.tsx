@@ -80,7 +80,7 @@ export default function ResolveModal({
   };
 
   return (
-    <div className="fixed inset-0 z-[10000] flex items-start justify-center overflow-y-auto bg-black/90 backdrop-blur-md" onClick={onClose}>
+    <div className="fixed inset-0 z-[10000] flex items-start justify-center overflow-y-auto bg-black md:bg-black/90 md:backdrop-blur-md" onClick={onClose}>
       <div className="w-full max-w-2xl p-4 md:p-6 pt-8 md:pt-20">
         <div
           className="relative w-full bg-gradient-to-br from-[#1a1a1a] to-[#0a0a0a] rounded-2xl border border-white/10 shadow-2xl my-4 md:my-8"
