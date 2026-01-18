@@ -93,7 +93,7 @@ export async function GET(
             ))}
           </div>
 
-          {/* ProofLocker Logo - top left (document header style) */}
+          {/* ProofLocker Logo - top left (WHITE, sharp, document header style) */}
           <img
             src={logoDataUrl}
             alt="ProofLocker"
@@ -103,7 +103,7 @@ export async function GET(
               position: 'absolute',
               top: '60px',
               left: '80px',
-              opacity: 0.7,
+              opacity: 1,
             }}
           />
 
@@ -153,20 +153,20 @@ export async function GET(
                   fontSize: '20px',
                   fontWeight: '600',
                   background: statusBadge.type === 'locked'
-                    ? 'rgba(168, 85, 247, 0.1)'
+                    ? 'rgba(147, 51, 234, 0.15)'
                     : statusBadge.type === 'correct'
-                    ? 'rgba(34, 197, 94, 0.1)'
-                    : 'rgba(239, 68, 68, 0.1)',
+                    ? 'rgba(34, 197, 94, 0.15)'
+                    : 'rgba(239, 68, 68, 0.15)',
                   color: statusBadge.type === 'locked'
-                    ? '#c084fc'
+                    ? '#d8b4fe'
                     : statusBadge.type === 'correct'
-                    ? '#4ade80'
-                    : '#f87171',
+                    ? '#86efac'
+                    : '#fca5a5',
                   border: statusBadge.type === 'locked'
-                    ? '2px solid rgba(168, 85, 247, 0.3)'
+                    ? '2px solid rgba(168, 85, 247, 0.4)'
                     : statusBadge.type === 'correct'
-                    ? '2px solid rgba(34, 197, 94, 0.3)'
-                    : '2px solid rgba(239, 68, 68, 0.3)',
+                    ? '2px solid rgba(34, 197, 94, 0.4)'
+                    : '2px solid rgba(239, 68, 68, 0.4)',
                   maxWidth: 'fit-content',
                 }}
               >
