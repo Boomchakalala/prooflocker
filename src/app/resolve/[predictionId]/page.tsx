@@ -133,9 +133,9 @@ export default function ResolvePage({ params }: Props) {
         <div className="absolute top-40 -right-40 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl" />
       </div>
 
-      <div className="relative z-10 max-w-2xl mx-auto px-4 py-6">
+      <div className="relative z-10 max-w-xl mx-auto px-4 py-4 md:py-8">
         {/* Header with back button */}
-        <div className="mb-6">
+        <div className="mb-4 md:mb-6">
           <button
             onClick={() => router.back()}
             className="inline-flex items-center gap-2 text-neutral-400 hover:text-white transition-colors text-sm group"
@@ -148,10 +148,10 @@ export default function ResolvePage({ params }: Props) {
         </div>
 
         {/* Main resolve card */}
-        <div className="glass border border-white/10 rounded-2xl overflow-hidden">
+        <div className="glass border border-white/10 rounded-xl md:rounded-2xl overflow-hidden shadow-2xl">
           {/* Header */}
-          <div className="flex items-center justify-between p-5 border-b border-white/10">
-            <h3 className="text-xl font-bold text-white flex items-center gap-2">
+          <div className="p-4 md:p-5 border-b border-white/10 bg-gradient-to-br from-white/5 to-transparent">
+            <h3 className="text-lg md:text-xl font-bold text-white flex items-center gap-2">
               <svg className="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
@@ -161,9 +161,9 @@ export default function ResolvePage({ params }: Props) {
 
           {/* Prediction Preview */}
           {prediction && (
-            <div className="p-5 border-b border-white/10 bg-white/[0.02]">
-              <p className="text-xs text-white/50 mb-2">Resolving prediction:</p>
-              <p className="text-sm text-white/90 font-medium">{prediction.textPreview || prediction.text}</p>
+            <div className="p-4 md:p-5 border-b border-white/10 bg-white/[0.02]">
+              <p className="text-[10px] md:text-xs text-white/50 mb-2 uppercase tracking-wide">Resolving</p>
+              <p className="text-sm md:text-base text-white/90 leading-relaxed">{prediction.textPreview || prediction.text}</p>
             </div>
           )}
 
