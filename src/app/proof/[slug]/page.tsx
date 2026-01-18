@@ -361,7 +361,7 @@ export default async function ProofPage({ params }: Props) {
           {/* On-Chain Proof Section 2: Prediction Resolved (only if resolved) */}
           {/* Polish: Added step label, unified icon system matching Step 1, reduced gap from previous section */}
           {isResolved && prediction.resolvedAt && (
-            <div className="p-4 md:p-8">
+            <div className="p-4 md:p-6">
               <div className="text-[10px] text-green-400 font-medium uppercase tracking-wider mb-1">Step 2</div>
               <h2 className="text-base font-semibold text-white mb-1">Prediction Resolved</h2>
               <p className="text-xs text-neutral-400 mb-4 md:mb-5">This prediction outcome was permanently recorded on the blockchain</p>
