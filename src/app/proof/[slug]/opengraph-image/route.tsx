@@ -13,191 +13,175 @@ export async function GET(
     const prediction = await getPredictionBySlug(slug);
 
     if (!prediction || prediction.moderationStatus === "hidden") {
-      // Return default OG image if not found
       return new Response("Not found", { status: 404 });
     }
 
-    // Determine outcome status
-    const outcome = prediction.outcome || "pending";
-    const isOnChain =
-      prediction.deStatus?.toUpperCase() === "CONFIRMED" ||
-      prediction.onChainStatus === "confirmed";
+    // Fetch the ProofLocker logo
+    const logoUrl = new URL('/logos/prooflocker-logo-dark.png', request.url).toString();
+    const logoResponse = await fetch(logoUrl);
+    const logoArrayBuffer = await logoResponse.arrayBuffer();
+    const logoBase64 = Buffer.from(logoArrayBuffer).toString('base64');
+    const logoDataUrl = `data:image/png;base64,${logoBase64}`;
 
-    // Outcome badge colors
-    const getOutcomeBadgeStyle = () => {
-      if (outcome === "correct") {
-        return {
-          bg: "rgba(34, 197, 94, 0.1)",
-          border: "rgba(34, 197, 94, 0.3)",
-          text: "rgb(74, 222, 128)",
-          label: "Outcome: Correct",
-        };
-      } else if (outcome === "incorrect") {
-        return {
-          bg: "rgba(239, 68, 68, 0.1)",
-          border: "rgba(239, 68, 68, 0.3)",
-          text: "rgb(248, 113, 113)",
-          label: "Outcome: Incorrect",
-        };
-      } else {
-        return {
-          bg: "rgba(234, 179, 8, 0.1)",
-          border: "rgba(234, 179, 8, 0.3)",
-          text: "rgb(250, 204, 21)",
-          label: "Outcome: Pending",
-        };
-      }
-    };
+    // Determine state (matching in-app card logic)
+    const isResolved = prediction.outcome !== null && prediction.outcome !== 'pending';
+    const isCorrect = prediction.outcome === 'correct';
 
-    const outcomeBadge = getOutcomeBadgeStyle();
+    // Status badge and text - single badge design matching in-app
+    let statusBadge: { text: string; type: string };
+    let statusText: string;
 
-    // Truncate text if too long
-    const displayText =
-      prediction.text.length > 120
-        ? prediction.text.substring(0, 117) + "..."
-        : prediction.text;
+    if (!isResolved) {
+      // UNRESOLVED: Locked badge
+      statusBadge = { text: '🔒 Locked', type: 'locked' };
+      statusText = 'Prediction locked on-chain.';
+    } else if (isCorrect) {
+      // RESOLVED - CORRECT
+      statusBadge = { text: '✅ Correct', type: 'correct' };
+      statusText = 'Prediction verified on-chain.';
+    } else {
+      // RESOLVED - INCORRECT
+      statusBadge = { text: '❌ Incorrect', type: 'incorrect' };
+      statusText = 'Prediction resolved on-chain.';
+    }
 
     return new ImageResponse(
       (
         <div
           style={{
-            height: "100%",
-            width: "100%",
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            justifyContent: "center",
-            background: "linear-gradient(135deg, #1e1b4b 0%, #312e81 50%, #4c1d95 100%)",
-            position: "relative",
+            height: '100%',
+            width: '100%',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'flex-start',
+            justifyContent: 'center',
+            padding: '80px',
+            background: '#0a0515',
+            backgroundImage: 'radial-gradient(circle at 25% 25%, rgba(88, 28, 135, 0.4) 0%, transparent 50%), radial-gradient(circle at 75% 75%, rgba(49, 46, 129, 0.3) 0%, transparent 50%), radial-gradient(circle at 50% 100%, rgba(30, 27, 75, 0.5) 0%, transparent 50%)',
+            position: 'relative',
           }}
         >
-          {/* Star particles background */}
+          {/* Stars pattern */}
           <div
             style={{
-              position: "absolute",
-              inset: 0,
-              backgroundImage:
-                "radial-gradient(circle at 20% 30%, rgba(255,255,255,0.05) 0%, transparent 50%), " +
-                "radial-gradient(circle at 80% 70%, rgba(147,51,234,0.08) 0%, transparent 50%), " +
-                "radial-gradient(circle at 40% 80%, rgba(59,130,246,0.06) 0%, transparent 50%)",
+              position: 'absolute',
+              width: '100%',
+              height: '100%',
+              top: 0,
+              left: 0,
+              opacity: 0.4,
+              display: 'flex',
+            }}
+          >
+            {/* Create star dots */}
+            {[...Array(30)].map((_, i) => (
+              <div
+                key={i}
+                style={{
+                  position: 'absolute',
+                  left: `${(i * 37 + 10) % 95}%`,
+                  top: `${(i * 43 + 5) % 95}%`,
+                  width: `${i % 3 === 0 ? '3px' : '2px'}`,
+                  height: `${i % 3 === 0 ? '3px' : '2px'}`,
+                  borderRadius: '50%',
+                  background: 'white',
+                  display: 'flex',
+                }}
+              />
+            ))}
+          </div>
+
+          {/* ProofLocker Logo - top left (document header style) */}
+          <img
+            src={logoDataUrl}
+            alt="ProofLocker"
+            width="180"
+            height="45"
+            style={{
+              position: 'absolute',
+              top: '60px',
+              left: '80px',
+              opacity: 0.7,
             }}
           />
 
-          {/* Main card */}
+          {/* Main container */}
           <div
             style={{
-              display: "flex",
-              flexDirection: "column",
-              width: "1040px",
-              height: "520px",
-              padding: "60px",
-              background: "rgba(30, 27, 75, 0.6)",
-              border: "1px solid rgba(139, 92, 246, 0.2)",
-              borderRadius: "32px",
-              backdropFilter: "blur(10px)",
-              position: "relative",
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '24px',
+              maxWidth: '950px',
+              position: 'relative',
+              zIndex: 1,
+              marginTop: '60px', // Space for logo at top
             }}
           >
-            {/* Prediction text */}
+            {/* Prediction text - Hero */}
             <div
               style={{
-                fontSize: 68,
-                fontWeight: 700,
-                color: "white",
-                lineHeight: 1.2,
-                marginBottom: 40,
-                flex: 1,
-                display: "flex",
-                alignItems: "center",
+                fontSize: '52px',
+                fontWeight: '700',
+                color: 'white',
+                lineHeight: '1.2',
+                letterSpacing: '-0.02em',
+                textShadow: '0 2px 20px rgba(0, 0, 0, 0.4)',
               }}
             >
-              {displayText}
+              {prediction.text}
             </div>
 
-            {/* Locked badge */}
-            {isOnChain && (
-              <div
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: 12,
-                  fontSize: 28,
-                  color: "rgba(255,255,255,0.9)",
-                  marginBottom: 40,
-                }}
-              >
-                <svg
-                  width="28"
-                  height="28"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                >
-                  <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
-                  <path d="M7 11V7a5 5 0 0 1 10 0v4" />
-                </svg>
-                Locked on-chain
-              </div>
-            )}
-
-            {/* Bottom row: Logo and Outcome badge */}
+            {/* Status badge - single badge matching in-app design */}
             <div
               style={{
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '16px',
+                marginTop: '12px',
               }}
             >
-              {/* ProofLocker logo */}
+              {/* Badge */}
               <div
                 style={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: 12,
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '8px',
+                  padding: '12px 28px',
+                  borderRadius: '8px',
+                  fontSize: '20px',
+                  fontWeight: '600',
+                  background: statusBadge.type === 'locked'
+                    ? 'rgba(168, 85, 247, 0.1)'
+                    : statusBadge.type === 'correct'
+                    ? 'rgba(34, 197, 94, 0.1)'
+                    : 'rgba(239, 68, 68, 0.1)',
+                  color: statusBadge.type === 'locked'
+                    ? '#c084fc'
+                    : statusBadge.type === 'correct'
+                    ? '#4ade80'
+                    : '#f87171',
+                  border: statusBadge.type === 'locked'
+                    ? '2px solid rgba(168, 85, 247, 0.3)'
+                    : statusBadge.type === 'correct'
+                    ? '2px solid rgba(34, 197, 94, 0.3)'
+                    : '2px solid rgba(239, 68, 68, 0.3)',
+                  maxWidth: 'fit-content',
                 }}
               >
-                {/* Simple lock icon as logo placeholder */}
-                <svg
-                  width="40"
-                  height="40"
-                  viewBox="0 0 24 24"
-                  fill="white"
-                >
-                  <rect x="5" y="11" width="14" height="10" rx="2" />
-                  <path
-                    d="M7 11V7a5 5 0 0 1 10 0v4"
-                    stroke="white"
-                    strokeWidth="2"
-                    fill="none"
-                  />
-                </svg>
-                <span
-                  style={{
-                    fontSize: 32,
-                    fontWeight: 600,
-                    color: "white",
-                  }}
-                >
-                  ProofLocker
-                </span>
+                {statusBadge.text}
               </div>
 
-              {/* Outcome badge */}
+              {/* Status text under badge */}
               <div
                 style={{
-                  display: "flex",
-                  alignItems: "center",
-                  padding: "16px 32px",
-                  background: outcomeBadge.bg,
-                  border: `2px solid ${outcomeBadge.border}`,
-                  borderRadius: 12,
-                  fontSize: 28,
-                  fontWeight: 600,
-                  color: outcomeBadge.text,
+                  fontSize: '22px',
+                  color: 'rgba(255, 255, 255, 0.8)',
+                  fontWeight: '500',
+                  letterSpacing: '-0.01em',
+                  textShadow: '0 1px 10px rgba(0, 0, 0, 0.3)',
                 }}
               >
-                {outcomeBadge.label}
+                {statusText}
               </div>
             </div>
           </div>
@@ -210,6 +194,31 @@ export async function GET(
     );
   } catch (error) {
     console.error("OG image generation error:", error);
-    return new Response("Failed to generate image", { status: 500 });
+
+    // Fallback image with proper styling
+    return new ImageResponse(
+      (
+        <div
+          style={{
+            height: '100%',
+            width: '100%',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            background: '#0a0515',
+            backgroundImage: 'radial-gradient(circle at 25% 25%, rgba(88, 28, 135, 0.4) 0%, transparent 50%), radial-gradient(circle at 75% 75%, rgba(49, 46, 129, 0.3) 0%, transparent 50%)',
+            color: 'white',
+            fontSize: '48px',
+            fontWeight: '700',
+          }}
+        >
+          ProofLocker
+        </div>
+      ),
+      {
+        width: 1200,
+        height: 630,
+      }
+    );
   }
 }
