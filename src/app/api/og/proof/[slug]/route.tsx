@@ -59,7 +59,7 @@ export async function GET(
             justifyContent: 'center',
             padding: '80px',
             background: '#0a0a0a',
-            backgroundImage: 'radial-gradient(circle at 20% 30%, rgba(139, 92, 246, 0.35) 0%, transparent 50%), radial-gradient(circle at 80% 70%, rgba(59, 130, 246, 0.3) 0%, transparent 50%), radial-gradient(circle at 50% 50%, rgba(126, 34, 206, 0.25) 0%, transparent 60%)',
+            backgroundImage: 'radial-gradient(circle at 20% 30%, rgba(147, 51, 234, 0.25) 0%, transparent 50%), radial-gradient(circle at 80% 70%, rgba(37, 99, 235, 0.2) 0%, transparent 50%), radial-gradient(circle at 50% 50%, rgba(126, 34, 206, 0.2) 0%, transparent 60%)',
             position: 'relative',
           }}
         >
@@ -208,7 +208,7 @@ export async function GET(
             alignItems: 'center',
             justifyContent: 'center',
             background: '#0a0a0a',
-            backgroundImage: 'radial-gradient(circle at 20% 30%, rgba(139, 92, 246, 0.35) 0%, transparent 50%), radial-gradient(circle at 80% 70%, rgba(59, 130, 246, 0.3) 0%, transparent 50%)',
+            backgroundImage: 'radial-gradient(circle at 20% 30%, rgba(147, 51, 234, 0.25) 0%, transparent 50%), radial-gradient(circle at 80% 70%, rgba(37, 99, 235, 0.2) 0%, transparent 50%)',
             color: 'white',
             fontSize: '48px',
             fontWeight: '700',
