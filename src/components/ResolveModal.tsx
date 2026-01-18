@@ -81,7 +81,7 @@ export default function ResolveModal({
 
   return (
     <div
-      className="fixed inset-0 z-[100] flex items-center justify-center p-4 md:p-6"
+      className="fixed inset-0 z-[100] flex items-start md:items-center justify-center p-4 md:p-6 pt-8 md:pt-6"
       onClick={onClose}
     >
       {/* Backdrop - More opaque on mobile */}
@@ -89,7 +89,7 @@ export default function ResolveModal({
 
       {/* Modal Container */}
       <div
-        className="relative w-full max-w-2xl max-h-[calc(100vh-2rem)] md:max-h-[calc(100vh-4rem)] overflow-hidden rounded-2xl bg-gradient-to-br from-[#1a1a1a] to-[#0a0a0a] border border-white/10 shadow-2xl"
+        className="relative w-full max-w-2xl max-h-[calc(100vh-4rem)] md:max-h-[calc(100vh-4rem)] overflow-hidden rounded-2xl bg-gradient-to-br from-[#1a1a1a] to-[#0a0a0a] border border-white/10 shadow-2xl mt-safe"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Single Scroll Container */}
