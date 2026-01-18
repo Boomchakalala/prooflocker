@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { Prediction, type PredictionOutcome } from "@/lib/storage";
 import { formatRelativeTime } from "@/lib/utils";
 import { getSiteUrl } from "@/lib/config";
@@ -23,6 +24,7 @@ interface PredictionCardProps {
 }
 
 export default function PredictionCard({ prediction, currentUserId, onOutcomeUpdate }: PredictionCardProps) {
+  const router = useRouter();
   const [copied, setCopied] = useState(false);
   const [linkCopied, setLinkCopied] = useState(false);
   const [showResolveModal, setShowResolveModal] = useState(false);
@@ -65,6 +67,18 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
     await navigator.clipboard.writeText(url);
     setLinkCopied(true);
     setTimeout(() => setLinkCopied(false), 2000);
+  };
+
+  const handleResolveClick = () => {
+    // On mobile (< 768px), navigate to resolve page
+    // On desktop, show modal
+    const isMobile = window.innerWidth < 768;
+
+    if (isMobile) {
+      router.push(`/resolve/${prediction.id}`);
+    } else {
+      setShowResolveModal(true);
+    }
   };
 
   // Determine on-chain status
