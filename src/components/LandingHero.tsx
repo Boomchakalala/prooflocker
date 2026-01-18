@@ -5,7 +5,7 @@ export default function LandingHero() {
     <div className="relative z-10 text-center py-12 md:py-16 px-4">
       <div className="max-w-4xl mx-auto">
         {/* Main headline */}
-        <h1 className="text-5xl md:text-7xl font-bold text-white mb-3 sm:mb-4 md:mb-5 tracking-tight leading-tight">
+        <h1 className="text-5xl md:text-7xl font-bold text-white mb-4 sm:mb-5 md:mb-6 tracking-tight leading-tight">
           Predictions.{" "}
           <span className="bg-gradient-to-r from-blue-500 via-purple-500 to-cyan-500 bg-clip-text text-transparent">
             Locked forever.
@@ -13,14 +13,14 @@ export default function LandingHero() {
         </h1>
 
         {/* Subheading */}
-        <div className="mx-auto max-w-fit mb-5 sm:mb-7 md:mb-9">
+        <div className="mx-auto max-w-fit mb-6 sm:mb-8 md:mb-10">
           <p className="text-xl sm:text-2xl md:text-3xl text-neutral-300 leading-tight tracking-tight font-medium opacity-85 whitespace-nowrap">
             Say it now. Prove it later.
           </p>
         </div>
 
         {/* CTA Buttons */}
-        <div className="relative flex flex-col sm:flex-row items-center justify-center gap-4 mb-4 md:w-[min(520px,100%)] md:mx-auto">
+        <div className="relative flex flex-col sm:flex-row items-center justify-center gap-5 mb-5 md:w-[min(520px,100%)] md:mx-auto">
           {/* Radial glow behind primary CTA */}
           <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
             <div className="w-64 h-64 bg-gradient-to-r from-blue-500/20 to-purple-500/20 rounded-full blur-3xl"></div>
@@ -42,7 +42,7 @@ export default function LandingHero() {
         {/* Quick reassurance */}
         <div className="flex justify-center mt-2.5">
           <p className="text-xs sm:text-sm text-neutral-400 leading-snug opacity-70 whitespace-nowrap text-center">
-            No signup required · Takes 10 seconds · Free forever
+            No signup required · Takes 10 seconds
           </p>
         </div>
 
