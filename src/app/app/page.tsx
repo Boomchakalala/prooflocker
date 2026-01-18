@@ -145,8 +145,15 @@ function AppFeedContent() {
             <BrandLogo />
           </Link>
           <div className="flex items-center gap-3 md:gap-4">
-            {/* Desktop: Show user info inline */}
-            {user && (
+            {/* Desktop: Show Sign In button or user menu */}
+            {!user ? (
+              <button
+                onClick={() => setShowClaimModal(true)}
+                className="hidden sm:block px-4 py-2 text-sm md:text-base text-neutral-300 hover:text-white transition-all rounded-md hover:bg-white/5 border border-transparent hover:border-white/10"
+              >
+                Sign in
+              </button>
+            ) : (
               <div className="hidden md:flex flex-col items-end leading-tight">
                 <div className="text-sm text-white font-medium">{getPublicHandle(user)}</div>
                 <button
@@ -173,7 +180,7 @@ function AppFeedContent() {
             {user && (
               <button
                 onClick={() => setShowUserMenu(!showUserMenu)}
-                className="md:hidden p-1.5 hover:bg-white/5 rounded transition-all"
+                className="sm:hidden p-1.5 hover:bg-white/5 rounded transition-all"
                 aria-label="User menu"
               >
                 <svg className="w-5 h-5 text-neutral-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -182,14 +189,14 @@ function AppFeedContent() {
               </button>
             )}
 
-            {/* Mobile user menu dropdown */}
+            {/* Mobile user menu dropdown - shared */}
             {user && showUserMenu && (
               <>
                 <div
-                  className="fixed inset-0 z-40 md:hidden"
+                  className="fixed inset-0 z-40 sm:hidden"
                   onClick={() => setShowUserMenu(false)}
                 />
-                <div className="fixed top-16 right-4 w-64 bg-[#0a0a0a] border border-white/20 rounded-lg shadow-2xl z-50 py-2 md:hidden">
+                <div className="fixed top-16 right-4 w-64 bg-[#0a0a0a] border border-white/20 rounded-lg shadow-2xl z-50 py-2 sm:hidden">
                   <div className="px-4 py-3 border-b border-white/10">
                     <p className="text-xs text-neutral-400 mb-1">Signed in as</p>
                     <p className="text-sm text-white font-medium">{getPublicHandle(user)}</p>
