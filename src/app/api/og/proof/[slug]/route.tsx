@@ -153,17 +153,26 @@ export async function GET(
                 let color = '';
                 let border = '';
 
-                if (badge.type === 'locked' || badge.type === 'resolved') {
-                  bg = 'rgba(34, 197, 94, 0.15)';
+                if (badge.type === 'locked') {
+                  // Purple theme like site
+                  bg = 'rgba(168, 85, 247, 0.1)';
+                  color = '#c084fc';
+                  border = '2px solid rgba(168, 85, 247, 0.3)';
+                } else if (badge.type === 'resolved') {
+                  // Green theme like site
+                  bg = 'rgba(34, 197, 94, 0.1)';
                   color = '#4ade80';
+                  border = '2px solid rgba(34, 197, 94, 0.3)';
                 } else if (badge.type === 'correct') {
-                  bg = 'rgba(34, 197, 94, 0.15)';
+                  // Green with stronger border
+                  bg = 'rgba(34, 197, 94, 0.1)';
                   color = '#4ade80';
-                  border = '2px solid #4ade80';
+                  border = '2px solid rgba(34, 197, 94, 0.5)';
                 } else if (badge.type === 'incorrect') {
-                  bg = 'rgba(239, 68, 68, 0.15)';
+                  // Red like site
+                  bg = 'rgba(239, 68, 68, 0.1)';
                   color = '#f87171';
-                  border = '2px solid #f87171';
+                  border = '2px solid rgba(239, 68, 68, 0.5)';
                 }
 
                 return (
@@ -178,9 +187,9 @@ export async function GET(
                       alignItems: 'center',
                       background: bg,
                       color: color,
-                      border: border || 'none',
+                      border: border,
                       boxShadow: badge.type === 'correct' || badge.type === 'incorrect'
-                        ? `0 0 25px ${badge.type === 'correct' ? 'rgba(34, 197, 94, 0.25)' : 'rgba(239, 68, 68, 0.25)'}`
+                        ? `0 0 20px ${badge.type === 'correct' ? 'rgba(34, 197, 94, 0.2)' : 'rgba(239, 68, 68, 0.2)'}`
                         : 'none',
                     }}
                   >
