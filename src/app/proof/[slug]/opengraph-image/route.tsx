@@ -16,35 +16,6 @@ export async function GET(
       return new Response("Not found", { status: 404 });
     }
 
-    // Fetch the ProofLocker logo
-    const logoUrl = new URL('/logos/prooflocker-logo-dark.png', request.url).toString();
-    const logoResponse = await fetch(logoUrl);
-    const logoArrayBuffer = await logoResponse.arrayBuffer();
-    const logoBase64 = Buffer.from(logoArrayBuffer).toString('base64');
-    const logoDataUrl = `data:image/png;base64,${logoBase64}`;
-
-    // Determine state (matching in-app card logic)
-    const isResolved = prediction.outcome !== null && prediction.outcome !== 'pending';
-    const isCorrect = prediction.outcome === 'correct';
-
-    // Status badge and text - single badge design matching in-app
-    let statusBadge: { text: string; type: string };
-    let statusText: string;
-
-    if (!isResolved) {
-      // UNRESOLVED: Locked badge
-      statusBadge = { text: '🔒 Locked', type: 'locked' };
-      statusText = 'Prediction locked on-chain.';
-    } else if (isCorrect) {
-      // RESOLVED - CORRECT
-      statusBadge = { text: '✅ Correct', type: 'correct' };
-      statusText = 'Prediction verified on-chain.';
-    } else {
-      // RESOLVED - INCORRECT
-      statusBadge = { text: '❌ Incorrect', type: 'incorrect' };
-      statusText = 'Prediction resolved on-chain.';
-    }
-
     return new ImageResponse(
       (
         <div
@@ -53,7 +24,7 @@ export async function GET(
             width: '100%',
             display: 'flex',
             flexDirection: 'column',
-            alignItems: 'flex-start',
+            alignItems: 'center',
             justifyContent: 'center',
             padding: '80px',
             background: '#0a0515',
@@ -91,99 +62,117 @@ export async function GET(
             ))}
           </div>
 
-          {/* ProofLocker Logo - top left (document header style) */}
-          <img
-            src={logoDataUrl}
-            alt="ProofLocker"
-            width="180"
-            height="45"
-            style={{
-              position: 'absolute',
-              top: '60px',
-              left: '80px',
-              opacity: 0.7,
-            }}
-          />
-
-          {/* Main container */}
+          {/* Main content centered */}
           <div
             style={{
               display: 'flex',
               flexDirection: 'column',
-              gap: '24px',
-              maxWidth: '950px',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '48px',
               position: 'relative',
               zIndex: 1,
-              marginTop: '60px', // Space for logo at top
             }}
           >
-            {/* Prediction text - Hero */}
-            <div
-              style={{
-                fontSize: '52px',
-                fontWeight: '700',
-                color: 'white',
-                lineHeight: '1.2',
-                letterSpacing: '-0.02em',
-                textShadow: '0 2px 20px rgba(0, 0, 0, 0.4)',
-              }}
-            >
-              {prediction.text}
-            </div>
-
-            {/* Status badge - single badge matching in-app design */}
+            {/* Logo with lock icon */}
             <div
               style={{
                 display: 'flex',
-                flexDirection: 'column',
-                gap: '16px',
-                marginTop: '12px',
+                alignItems: 'center',
+                gap: '20px',
               }}
             >
-              {/* Badge */}
-              <div
+              {/* Lock icon */}
+              <svg
+                width="80"
+                height="80"
+                viewBox="0 0 24 24"
+                fill="none"
                 style={{
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: '8px',
-                  padding: '12px 28px',
-                  borderRadius: '8px',
-                  fontSize: '20px',
-                  fontWeight: '600',
-                  background: statusBadge.type === 'locked'
-                    ? 'rgba(168, 85, 247, 0.1)'
-                    : statusBadge.type === 'correct'
-                    ? 'rgba(34, 197, 94, 0.1)'
-                    : 'rgba(239, 68, 68, 0.1)',
-                  color: statusBadge.type === 'locked'
-                    ? '#c084fc'
-                    : statusBadge.type === 'correct'
-                    ? '#4ade80'
-                    : '#f87171',
-                  border: statusBadge.type === 'locked'
-                    ? '2px solid rgba(168, 85, 247, 0.3)'
-                    : statusBadge.type === 'correct'
-                    ? '2px solid rgba(34, 197, 94, 0.3)'
-                    : '2px solid rgba(239, 68, 68, 0.3)',
-                  maxWidth: 'fit-content',
+                  filter: 'drop-shadow(0 4px 20px rgba(168, 85, 247, 0.4))',
                 }}
               >
-                {statusBadge.text}
-              </div>
+                <rect
+                  x="5"
+                  y="11"
+                  width="14"
+                  height="10"
+                  rx="2"
+                  fill="url(#grad1)"
+                />
+                <path
+                  d="M7 11V7a5 5 0 0 1 10 0v4"
+                  stroke="url(#grad2)"
+                  strokeWidth="2.5"
+                  strokeLinecap="round"
+                />
+                <defs>
+                  <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stopColor="#a855f7" />
+                    <stop offset="100%" stopColor="#6366f1" />
+                  </linearGradient>
+                  <linearGradient id="grad2" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stopColor="#c084fc" />
+                    <stop offset="100%" stopColor="#818cf8" />
+                  </linearGradient>
+                </defs>
+              </svg>
 
-              {/* Status text under badge */}
+              {/* ProofLocker text logo */}
               <div
                 style={{
-                  fontSize: '22px',
-                  color: 'rgba(255, 255, 255, 0.8)',
-                  fontWeight: '500',
-                  letterSpacing: '-0.01em',
-                  textShadow: '0 1px 10px rgba(0, 0, 0, 0.3)',
+                  fontSize: '72px',
+                  fontWeight: '800',
+                  background: 'linear-gradient(135deg, #c084fc 0%, #818cf8 100%)',
+                  backgroundClip: 'text',
+                  WebkitBackgroundClip: 'text',
+                  color: 'transparent',
+                  letterSpacing: '-0.03em',
+                  textShadow: '0 4px 30px rgba(168, 85, 247, 0.3)',
                 }}
               >
-                {statusText}
+                ProofLocker
               </div>
             </div>
+
+            {/* Main tagline */}
+            <div
+              style={{
+                fontSize: '48px',
+                fontWeight: '700',
+                color: 'white',
+                textAlign: 'center',
+                letterSpacing: '-0.02em',
+                lineHeight: 1.2,
+                textShadow: '0 2px 20px rgba(0, 0, 0, 0.4)',
+              }}
+            >
+              Predictions. Locked forever.
+            </div>
+
+            {/* Secondary tagline */}
+            <div
+              style={{
+                fontSize: '36px',
+                fontWeight: '500',
+                color: 'rgba(255, 255, 255, 0.7)',
+                textAlign: 'center',
+                letterSpacing: '-0.01em',
+                textShadow: '0 2px 15px rgba(0, 0, 0, 0.3)',
+              }}
+            >
+              Say it now. Prove it later.
+            </div>
+
+            {/* Subtle separator line */}
+            <div
+              style={{
+                width: '200px',
+                height: '2px',
+                background: 'linear-gradient(90deg, transparent, rgba(168, 85, 247, 0.5), transparent)',
+                marginTop: '20px',
+              }}
+            />
           </div>
         </div>
       ),
@@ -203,16 +192,25 @@ export async function GET(
             height: '100%',
             width: '100%',
             display: 'flex',
+            flexDirection: 'column',
             alignItems: 'center',
             justifyContent: 'center',
             background: '#0a0515',
             backgroundImage: 'radial-gradient(circle at 25% 25%, rgba(88, 28, 135, 0.4) 0%, transparent 50%), radial-gradient(circle at 75% 75%, rgba(49, 46, 129, 0.3) 0%, transparent 50%)',
-            color: 'white',
-            fontSize: '48px',
-            fontWeight: '700',
           }}
         >
-          ProofLocker
+          <div
+            style={{
+              fontSize: '72px',
+              fontWeight: '800',
+              background: 'linear-gradient(135deg, #c084fc 0%, #818cf8 100%)',
+              backgroundClip: 'text',
+              WebkitBackgroundClip: 'text',
+              color: 'transparent',
+            }}
+          >
+            ProofLocker
+          </div>
         </div>
       ),
       {
