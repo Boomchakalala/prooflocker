@@ -205,7 +205,7 @@ export default function AdminModerationPage() {
                     </div>
 
                     {/* Text preview */}
-                    <p className="text-white mb-2">{pred.textPreview}</p>
+                    <p className="text-white mb-2 line-clamp-3 w-full min-w-0 leading-snug">{pred.textPreview}</p>
 
                     {/* Hidden reason */}
                     {pred.moderationStatus === "hidden" &&

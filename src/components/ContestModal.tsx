@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { createPortal } from "react-dom";
 
 interface ContestModalProps {
   predictionId: string;
@@ -18,6 +19,20 @@ export default function ContestModal({
   const [reason, setReason] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [mounted, setMounted] = useState(false);
+
+  // Wait for client-side mount before rendering portal
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  // Lock body scroll when modal is open
+  useEffect(() => {
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, []);
 
   const isValid = reason.trim().length >= 10 && reason.trim().length <= 1000;
 
@@ -63,9 +78,18 @@ export default function ContestModal({
   const isUnderMin = charCount < 10;
   const isOverMax = charCount > 1000;
 
-  return (
-    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-      <div className="bg-gradient-to-br from-[#1a1a1a] to-[#0a0a0a] rounded-xl p-6 max-w-md w-full border border-orange-500/20 shadow-2xl">
+  if (!mounted) return null;
+
+  const modalContent = (
+    <div
+      className="fixed inset-0 z-[99999] bg-black/90 md:bg-black/60 flex items-center justify-center p-4 pb-[calc(16px+env(safe-area-inset-bottom))] overflow-y-auto"
+      onClick={onClose}
+    >
+      <div className="w-full max-w-[560px] max-h-[85dvh] overflow-y-auto my-auto">
+        <div
+          className="relative w-full bg-gradient-to-br from-[#1a1a1a] to-[#0a0a0a] rounded-2xl p-6 border border-orange-500/20 shadow-2xl"
+          onClick={(e) => e.stopPropagation()}
+        >
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
           <h3 className="text-xl font-bold text-white flex items-center gap-2">
@@ -196,6 +220,9 @@ export default function ContestModal({
           </p>
         </div>
       </div>
+      </div>
     </div>
   );
+
+  return createPortal(modalContent, document.body);
 }

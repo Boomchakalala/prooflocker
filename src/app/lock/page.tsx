@@ -17,8 +17,6 @@ export default function LockPage() {
   const [isAnonymous, setIsAnonymous] = useState(true);
   const [locked, setLocked] = useState(false);
   const [proofId, setProofId] = useState<string>("");
-  const [fingerprint, setFingerprint] = useState<string>("");
-  const [timestamp, setTimestamp] = useState<string>("");
   const [howItWorksExpanded, setHowItWorksExpanded] = useState(false);
 
   const categories = ["Crypto", "Politics", "Markets", "Tech", "Sports", "Culture", "Personal", "Other"];
@@ -54,10 +52,8 @@ export default function LockPage() {
 
       if (response.ok) {
         const data = await response.json();
-        setProofId(data.proofId);
-        setFingerprint(data.fingerprint || "");
-        setTimestamp(new Date().toISOString());
-        setLocked(true);
+        // Redirect to proof page instead of showing success screen
+        router.push(`/proof/${data.publicSlug || data.proofId}`);
       } else {
         const errorData = await response.json();
 
@@ -81,18 +77,6 @@ export default function LockPage() {
     const shareText = `I locked this prediction on-chain with ProofLocker. No edits. No excuses. Verify it yourself: ${getSiteUrl()}/verify?proofId=${proofId}`;
     navigator.clipboard.writeText(shareText);
     alert("Share message copied to clipboard!");
-  };
-
-  const copyFingerprint = () => {
-    if (fingerprint) {
-      navigator.clipboard.writeText(fingerprint);
-      alert("Fingerprint copied!");
-    }
-  };
-
-  const truncateFingerprint = (fp: string) => {
-    if (fp.length <= 16) return fp;
-    return `${fp.slice(0, 8)}...${fp.slice(-8)}`;
   };
 
   return (
@@ -124,7 +108,7 @@ export default function LockPage() {
                   d="M10 19l-7-7m0 0l7-7m-7 7h18"
                 />
               </svg>
-              Back to ProofLocker
+              Back
             </Link>
             <BrandLogo />
           </div>
@@ -170,12 +154,12 @@ export default function LockPage() {
                     </span>
                   )}
                   {text.length === 0 && <span></span>}
-                  {text.length > 140 && (
+                  {text.length > 80 && (
                     <span className="text-xs text-yellow-500 flex items-center gap-1">
                       <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
                         <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
                       </svg>
-                      Preview in feed will be truncated to ~140 characters
+                      Preview in feed will be truncated to 80 characters
                     </span>
                   )}
                 </div>
@@ -189,7 +173,7 @@ export default function LockPage() {
                 >
                   Category <span className="text-blue-400 font-normal">(recommended)</span>
                 </label>
-                <div className="grid grid-cols-4 gap-2">
+                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2">
                   {categories.map((cat) => (
                     <button
                       key={cat}
@@ -268,7 +252,7 @@ export default function LockPage() {
                 )}
               </div>
 
-              {/* Privacy notice */}
+              {/* Privacy notice - Moved above CTA */}
               <div className="glass rounded-lg p-4 border border-white/5 mb-6">
                 <div className="flex items-start gap-3">
                   <svg
@@ -298,7 +282,7 @@ export default function LockPage() {
                 </div>
               </div>
 
-              {/* Primary CTA */}
+              {/* Primary CTA - Enhanced */}
               <button
                 onClick={handleLock}
                 disabled={!text.trim() || loading}
@@ -328,13 +312,13 @@ export default function LockPage() {
                     Locking...
                   </span>
                 ) : (
-                  "Lock my prediction"
+                  "Lock on-chain"
                 )}
               </button>
 
-              {/* Permanence notice */}
-              <p className="text-xs text-neutral-400 text-center mt-3 font-medium">
-                Once submitted, your prediction becomes immutable
+              {/* Microcopy */}
+              <p className="text-xs text-neutral-400 text-center mt-3">
+                Fingerprint + timestamp. Immutable proof.
               </p>
 
               {/* Content policy notice */}
@@ -344,151 +328,60 @@ export default function LockPage() {
             </div>
           </>
         ) : (
-          <div className="fade-in space-y-6">
-            {/* Compact status banner */}
-            <div className="glass rounded-lg p-4 border border-green-500/20 bg-green-500/5">
-              <div className="flex items-center gap-3">
-                <div className="flex-shrink-0 w-10 h-10 rounded-full bg-green-500/20 flex items-center justify-center">
-                  <svg className="w-5 h-5 text-green-400" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clipRule="evenodd" />
-                  </svg>
-                </div>
-                <div className="flex-1">
-                  <h2 className="text-lg font-semibold text-white">Prediction locked on-chain</h2>
-                  <p className="text-sm text-neutral-400">Timestamp permanently recorded via Digital Evidence</p>
-                </div>
-              </div>
-            </div>
-
-            {/* Prediction text - THE HERO */}
-            <div className="glass rounded-xl p-8 border border-white/10 glow-purple text-center">
-              <label className="block text-xs font-semibold text-neutral-500 mb-4 uppercase tracking-wider">
-                Your Prediction
-              </label>
-              <p className="text-2xl text-white leading-relaxed font-normal">
-                {text}
-              </p>
-            </div>
-
-            {/* Expandable proof details */}
-            <div className="glass rounded-lg border border-white/5">
-              <button
-                onClick={() => setHowItWorksExpanded(!howItWorksExpanded)}
-                className="w-full flex items-center justify-between p-4 text-left group"
-              >
-                <div className="flex items-center gap-2">
-                  <svg className="w-4 h-4 text-blue-500" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                  </svg>
-                  <span className="text-sm font-medium text-white">View on-chain proof</span>
-                </div>
-                <svg
-                  className={`w-4 h-4 text-neutral-500 transition-transform ${
-                    howItWorksExpanded ? "rotate-180" : ""
-                  }`}
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+          <div className="fade-in">
+            {/* Confirmation screen */}
+            <div className="glass rounded-xl p-8 text-center glow-purple mb-6">
+              <div className="inline-flex items-center justify-center w-24 h-24 rounded-full mb-6 bg-blue-500/20 border-4 border-blue-500/40 shadow-2xl shadow-blue-500/30">
+                <svg className="w-12 h-12 text-blue-400" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clipRule="evenodd" />
                 </svg>
-              </button>
+              </div>
 
-              {howItWorksExpanded && (fingerprint || timestamp) && (
-                <div className="px-4 pb-4 pt-2 border-t border-white/5 space-y-3">
-                  {timestamp && (
-                    <div>
-                      <label className="block text-[10px] font-semibold text-neutral-600 mb-1.5 uppercase tracking-wider">
-                        Timestamp (UTC)
-                      </label>
-                      <p className="text-xs text-neutral-300 font-mono bg-white/[0.02] rounded p-2.5">
-                        {new Date(timestamp).toUTCString()}
-                      </p>
-                    </div>
-                  )}
+              <h1 className="text-4xl font-bold text-white mb-4">
+                Prediction locked.
+              </h1>
+              <h2 className="text-2xl font-bold text-neutral-200 mb-6">
+                Timestamp recorded.
+              </h2>
 
-                  {fingerprint && (
-                    <div>
-                      <label className="block text-[10px] font-semibold text-neutral-600 mb-1.5 uppercase tracking-wider">
-                        Fingerprint (SHA-256)
-                      </label>
-                      <div className="flex items-center gap-2 bg-white/[0.02] rounded p-2.5">
-                        <code className="text-xs text-neutral-400 flex-1 font-mono break-all">
-                          {truncateFingerprint(fingerprint)}
-                        </code>
-                        <button
-                          onClick={copyFingerprint}
-                          className="flex-shrink-0 p-1.5 hover:bg-white/10 rounded transition-colors"
-                          title="Copy fingerprint"
-                        >
-                          <svg className="w-3.5 h-3.5 text-neutral-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
-                          </svg>
-                        </button>
-                      </div>
-                    </div>
-                  )}
+              <p className="text-neutral-400 text-lg leading-relaxed max-w-xl mx-auto mb-8">
+                Your prediction is now on-chain with a cryptographic fingerprint. It's public, permanent, and cannot be edited.
+              </p>
 
-                  <div>
-                    <label className="block text-[10px] font-semibold text-neutral-600 mb-1.5 uppercase tracking-wider">
-                      Network
-                    </label>
-                    <div className="inline-flex items-center gap-1.5 px-2.5 py-1.5 bg-blue-500/10 border border-blue-500/20 rounded-full">
-                      <div className="w-1.5 h-1.5 rounded-full bg-blue-500"></div>
-                      <span className="text-xs text-blue-400 font-medium">Constellation (DAG)</span>
-                    </div>
-                  </div>
-                </div>
-              )}
-            </div>
-
-            {/* CTA section with auth-aware sharing */}
-            <div className="space-y-3 max-w-md mx-auto">
-              {/* Primary CTA - Auth-aware */}
-              {isAnonymous ? (
-                  <Link
-                    href="/auth"
-                    className="block w-full px-6 py-4 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white font-semibold text-base rounded-lg transition-all shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40 flex items-center justify-center gap-2"
-                  >
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
-                    </svg>
-                    Sign in to share
-                  </Link>
-                ) : (
-                  <button
-                    onClick={handleShare}
-                    className="w-full px-6 py-4 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white font-semibold text-base rounded-lg transition-all shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40 flex items-center justify-center gap-2"
-                  >
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
-                    </svg>
-                    Share proof
-                  </button>
-                )}
-
-                {/* Explanatory micro-copy */}
-                <p className="text-[11px] text-neutral-500 text-center leading-tight">
-                  Only the creator of this prediction can share the proof
+              <div className="glass border border-white/5 rounded-lg p-4 mb-6 max-w-xl mx-auto">
+                <label className="block text-[10px] font-semibold text-neutral-500 mb-2 uppercase tracking-wider">
+                  Your Prediction
+                </label>
+                <p className="text-neutral-100 text-sm leading-relaxed">
+                  {text}
                 </p>
+              </div>
 
-                {/* Secondary CTAs */}
-                <div className="flex gap-2">
-                  <Link
-                    href="/"
-                    className="flex-1 px-4 py-3 bg-neutral-800 hover:bg-neutral-700 text-white font-medium text-sm rounded-lg transition-all border border-neutral-700 text-center"
-                  >
-                    Back to feed
-                  </Link>
-                  <Link
-                    href={`/verify?proofId=${proofId}`}
-                    className="flex-1 px-4 py-3 bg-white/5 hover:bg-white/10 text-white font-medium text-sm rounded-lg transition-all border border-white/10 text-center"
-                  >
-                    Verify on-chain
-                  </Link>
-                </div>
+              <div className="flex flex-col sm:flex-row gap-3 max-w-xl mx-auto">
+                <button
+                  onClick={handleShare}
+                  className="flex-1 px-6 py-3 bg-neutral-800 hover:bg-neutral-700 text-white font-medium rounded-md transition-all border border-neutral-700 flex items-center justify-center gap-2"
+                >
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
+                  </svg>
+                  Share proof
+                </button>
+                <Link
+                  href={`/verify?proofId=${proofId}`}
+                  className="flex-1 px-6 py-3 bg-white/5 hover:bg-white/10 text-white font-medium rounded-md transition-all border border-white/10 text-center"
+                >
+                  Verify now
+                </Link>
+                <Link
+                  href="/"
+                  className="flex-1 px-6 py-3 bg-white/5 hover:bg-white/10 text-white font-medium rounded-md transition-all border border-white/10 text-center"
+                >
+                  Back to feed
+                </Link>
               </div>
             </div>
+          </div>
         )}
       </main>
     </div>

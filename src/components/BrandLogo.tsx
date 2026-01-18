@@ -1,29 +1,17 @@
 import Link from "next/link";
 
 /**
- * BrandLogo component - ProofLocker mark + wordmark with tagline
- * Uses separate SVG assets for better scaling
+ * BrandLogo component - Official ProofLocker logo
+ * Clean header - logo only, no tagline
  */
 export default function BrandLogo() {
   return (
-    <Link href="/" className="flex items-center gap-2">
-      {/* Mark/Icon */}
+    <Link href="/" className="flex items-center focus:outline-none focus:ring-0 outline-none">
       <img
-        src="/brand/prooflocker-mark.svg"
-        alt="ProofLocker mark"
-        className="h-7 w-7 md:h-8 md:w-8"
+        src="/logos/prooflocker-logo-dark.svg"
+        alt="ProofLocker"
+        className="h-8 w-auto md:h-9 select-none"
       />
-      {/* Wordmark + Tagline */}
-      <div className="flex flex-col justify-center -space-y-0.5 md:space-y-[1px]">
-        <img
-          src="/brand/prooflocker-wordmark.svg"
-          alt="ProofLocker"
-          className="h-7 w-auto md:h-8"
-        />
-        <p className="text-xs text-white/50 leading-none">
-          Predictions. Locked forever.
-        </p>
-      </div>
     </Link>
   );
 }

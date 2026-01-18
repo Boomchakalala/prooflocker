@@ -7,7 +7,6 @@ import { supabase } from "@/lib/supabase";
 
 interface ResolveModalProps {
   predictionId: string;
-  predictionText: string;
   currentOutcome: PredictionOutcome;
   currentNote?: string;
   currentUrl?: string;
@@ -15,9 +14,8 @@ interface ResolveModalProps {
   onSuccess: () => void;
 }
 
-function ResolveModalContent({
+export default function ResolveModal({
   predictionId,
-  predictionText,
   currentOutcome,
   currentNote,
   currentUrl,
@@ -29,43 +27,18 @@ function ResolveModalContent({
   const [resolutionUrl, setResolutionUrl] = useState(currentUrl || "");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [mounted, setMounted] = useState(false);
 
-  // iOS Safari scroll lock with position restoration
+  // Wait for client-side mount before rendering portal
   useEffect(() => {
-    // Store the original scroll position
-    const scrollY = window.scrollY;
-    const body = document.body;
-    const scrollBarWidth = window.innerWidth - document.documentElement.clientWidth;
+    setMounted(true);
+  }, []);
 
-    // Lock scroll for all browsers
-    body.style.overflow = 'hidden';
-
-    // Add padding to prevent layout shift from scrollbar removal
-    if (scrollBarWidth > 0) {
-      body.style.paddingRight = `${scrollBarWidth}px`;
-    }
-
-    // iOS Safari specific: freeze position
-    body.style.position = 'fixed';
-    body.style.top = `-${scrollY}px`;
-    body.style.left = '0';
-    body.style.right = '0';
-    body.style.width = '100%';
-
+  // Lock body scroll when modal is open
+  useEffect(() => {
+    document.body.style.overflow = 'hidden';
     return () => {
-      // Restore scroll for all browsers
-      body.style.overflow = '';
-      body.style.paddingRight = '';
-
-      // iOS Safari specific: restore position and scroll
-      body.style.position = '';
-      body.style.top = '';
-      body.style.left = '';
-      body.style.right = '';
-      body.style.width = '';
-
-      // Restore scroll position
-      window.scrollTo(0, scrollY);
+      document.body.style.overflow = 'unset';
     };
   }, []);
 
@@ -113,90 +86,59 @@ function ResolveModalContent({
     }
   };
 
-  // Truncate prediction text for preview (max 120 chars)
-  const truncatedText = predictionText.length > 120
-    ? predictionText.slice(0, 120) + '...'
-    : predictionText;
+  if (!mounted) return null;
 
-  return (
+  const modalContent = (
     <div
-      className="fixed inset-0 z-[10000] flex items-center justify-center p-4"
+      className="fixed inset-0 z-[99999] bg-black/90 md:bg-black/60 flex items-center justify-center p-4 pb-[calc(16px+env(safe-area-inset-bottom))] overflow-y-auto"
       onClick={onClose}
-      style={{
-        WebkitOverflowScrolling: 'touch',
-      }}
     >
-      {/* Backdrop */}
-      <div className="absolute inset-0 bg-black/70 backdrop-blur-sm" />
-
-      {/* Modal Container - Single scroll container with better mobile support */}
-      <div
-        className="relative z-10 w-full max-w-2xl rounded-2xl bg-gradient-to-br from-[#1a1a1a] to-[#0a0a0a] border border-white/10 shadow-2xl overflow-y-auto"
-        style={{
-          maxHeight: '90dvh',
-          WebkitOverflowScrolling: 'touch',
-        }}
-        onClick={(e) => e.stopPropagation()}
-      >
-        {/* Panel Header (not sticky - scrolls with content) */}
-        <div className="px-4 sm:px-5 pt-4 sm:pt-5 pb-3 sm:pb-4 border-b border-white/10">
-          {/* Top bar with title and close */}
-          <div className="flex items-center justify-between mb-2 sm:mb-3">
-            <h3 className="text-lg sm:text-xl font-bold text-white flex items-center gap-2">
-              <svg className="w-4 h-4 sm:w-5 sm:h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-              Resolve prediction
-            </h3>
-            <button
-              onClick={onClose}
-              className="text-white/50 hover:text-white transition-colors p-1"
-              type="button"
-            >
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-              </svg>
-            </button>
-          </div>
-
-          {/* Helper text */}
-          <p className="text-xs sm:text-sm text-white/60 mb-2 sm:mb-3">
-            Choose the outcome and optionally add a note or proof.
-          </p>
-
-          {/* Prediction preview */}
-          <div className="glass rounded-lg p-2.5 sm:p-3 border border-white/5">
-            <p className="text-[10px] sm:text-xs text-white/40 mb-1 uppercase tracking-wider font-medium">
-              Prediction
-            </p>
-            <p className="text-xs sm:text-sm text-white/90 leading-relaxed line-clamp-2">
-              {truncatedText}
-            </p>
-          </div>
+      <div className="w-full max-w-[560px] max-h-[85dvh] overflow-y-auto my-auto">
+        <div
+          className="relative w-full bg-gradient-to-br from-[#1a1a1a] to-[#0a0a0a] rounded-2xl border border-white/10 shadow-2xl"
+          onClick={(e) => e.stopPropagation()}
+        >
+          {/* Header - Not sticky, scrolls away */}
+          <div className="flex items-center justify-between p-5 border-b border-white/10">
+          <h3 className="text-xl font-bold text-white flex items-center gap-2">
+            <svg className="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            Resolve Prediction
+          </h3>
+          <button
+            onClick={onClose}
+            className="text-white/50 hover:text-white transition-colors"
+            type="button"
+          >
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
         </div>
 
-        {/* Form Content (scrolls naturally) */}
+        {/* Form Content - No special scroll, let outer container handle it */}
         <form onSubmit={handleSubmit}>
-          <div className="px-4 sm:px-5 py-4 space-y-4">
+          <div className="p-5 space-y-4">
             {/* Outcome Selection */}
             <div>
               <label className="block text-sm font-medium text-white/90 mb-2">
                 What's the outcome?
               </label>
 
-              {/* All outcomes in consistent grid - Better mobile layout */}
-              <div className="grid grid-cols-2 gap-2">
+              {/* All outcomes in consistent grid */}
+              <div className="grid grid-cols-2 gap-2.5">
                 {/* Correct */}
                 <button
                   type="button"
                   onClick={() => setOutcome("correct")}
-                  className={`w-full h-11 sm:h-12 rounded-lg border font-semibold text-xs sm:text-sm transition-all flex items-center justify-center gap-1.5 sm:gap-2 ${
+                  className={`w-full h-12 rounded-lg border font-semibold text-sm transition-all flex items-center justify-center gap-2 ${
                     outcome === "correct"
                       ? "bg-green-500/15 border-green-500/50 text-green-300 ring-1 ring-green-500/30 shadow-md shadow-green-500/10"
                       : "bg-white/[0.03] border-white/[0.08] text-white/60 hover:bg-white/[0.06] hover:text-white hover:border-white/15"
                   }`}
                 >
-                  <svg className="w-3.5 h-3.5 sm:w-4 sm:h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                   </svg>
                   Correct
@@ -206,13 +148,13 @@ function ResolveModalContent({
                 <button
                   type="button"
                   onClick={() => setOutcome("incorrect")}
-                  className={`w-full h-11 sm:h-12 rounded-lg border font-semibold text-xs sm:text-sm transition-all flex items-center justify-center gap-1.5 sm:gap-2 ${
+                  className={`w-full h-12 rounded-lg border font-semibold text-sm transition-all flex items-center justify-center gap-2 ${
                     outcome === "incorrect"
                       ? "bg-red-500/15 border-red-500/50 text-red-300 ring-1 ring-red-500/30 shadow-md shadow-red-500/10"
                       : "bg-white/[0.03] border-white/[0.08] text-white/60 hover:bg-white/[0.06] hover:text-white hover:border-white/15"
                   }`}
                 >
-                  <svg className="w-3.5 h-3.5 sm:w-4 sm:h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                   </svg>
                   Incorrect
@@ -222,13 +164,13 @@ function ResolveModalContent({
                 <button
                   type="button"
                   onClick={() => setOutcome("invalid")}
-                  className={`w-full h-11 sm:h-12 rounded-lg border font-semibold text-xs sm:text-sm transition-all flex items-center justify-center gap-1.5 sm:gap-2 ${
+                  className={`w-full h-12 rounded-lg border font-semibold text-sm transition-all flex items-center justify-center gap-2 ${
                     outcome === "invalid"
                       ? "bg-gray-500/15 border-gray-500/50 text-gray-300 ring-1 ring-gray-500/30 shadow-md shadow-gray-500/10"
                       : "bg-white/[0.03] border-white/[0.08] text-white/60 hover:bg-white/[0.06] hover:text-white hover:border-white/15"
                   }`}
                 >
-                  <svg className="w-3.5 h-3.5 sm:w-4 sm:h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" />
                   </svg>
                   Invalid
@@ -238,13 +180,13 @@ function ResolveModalContent({
                 <button
                   type="button"
                   onClick={() => setOutcome("pending")}
-                  className={`w-full h-11 sm:h-12 rounded-lg border font-semibold text-xs sm:text-sm transition-all flex items-center justify-center gap-1.5 sm:gap-2 ${
+                  className={`w-full h-12 rounded-lg border font-semibold text-sm transition-all flex items-center justify-center gap-2 ${
                     outcome === "pending"
                       ? "bg-yellow-500/15 border-yellow-500/50 text-yellow-300 ring-1 ring-yellow-500/30 shadow-md shadow-yellow-500/10"
                       : "bg-white/[0.03] border-white/[0.08] text-white/60 hover:bg-white/[0.06] hover:text-white hover:border-white/15"
                   }`}
                 >
-                  <svg className="w-3.5 h-3.5 sm:w-4 sm:h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                   </svg>
                   Pending
@@ -296,64 +238,51 @@ function ResolveModalContent({
                 <p className="text-sm text-red-400">{error}</p>
               </div>
             )}
-          </div>
-
-          {/* Footer with Actions (not sticky - scrolls with content) */}
-          <div className="px-4 sm:px-5 py-4 border-t border-white/10 bg-[#0a0a0a]/50">
-            <div className="flex flex-col gap-1.5">
-              <button
-                type="submit"
-                disabled={loading}
-                className="w-full px-5 sm:px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white font-semibold text-sm sm:text-base rounded-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40 disabled:shadow-none"
-              >
-                {loading ? (
-                  <>
-                    <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                    Confirming...
-                  </>
-                ) : (
-                  <>
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                    </svg>
-                    Confirm resolution
-                  </>
-                )}
-              </button>
-
-              {/* Permanence notice */}
-              <p className="text-[10px] sm:text-[11px] text-neutral-500 text-center font-medium px-2 leading-tight">
-                This resolution is public and permanent
-              </p>
-
-              <button
-                type="button"
-                onClick={onClose}
-                className="w-full px-4 py-2 bg-white/5 hover:bg-white/10 text-white/70 hover:text-white text-sm rounded-lg transition-all border border-white/10"
-                disabled={loading}
-              >
-                Go back
-              </button>
             </div>
-          </div>
-        </form>
+
+            {/* Footer with Action Buttons */}
+            <div className="p-5 border-t border-white/10 bg-[#0a0a0a]/50 backdrop-blur-sm">
+              <div className="flex flex-col gap-1.5">
+                <button
+                  type="submit"
+                  disabled={loading}
+                  className="w-full px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white font-semibold text-base rounded-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40 disabled:shadow-none"
+                >
+                  {loading ? (
+                    <>
+                      <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                      Confirming...
+                    </>
+                  ) : (
+                    <>
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                      </svg>
+                      Confirm resolution
+                    </>
+                  )}
+                </button>
+
+                {/* Permanence warning */}
+                <p className="text-[11px] text-neutral-500 text-center font-medium px-2 leading-tight">
+                  This resolution is public and permanent
+                </p>
+
+                <button
+                  type="button"
+                  onClick={onClose}
+                  className="w-full px-4 py-2 bg-white/5 hover:bg-white/10 text-white/70 hover:text-white text-sm rounded-lg transition-all border border-white/10"
+                  disabled={loading}
+                >
+                  Go back
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
       </div>
     </div>
   );
-}
 
-export default function ResolveModal(props: ResolveModalProps) {
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-    return () => setMounted(false);
-  }, []);
-
-  if (!mounted) return null;
-
-  return createPortal(
-    <ResolveModalContent {...props} />,
-    document.body
-  );
+  return createPortal(modalContent, document.body);
 }

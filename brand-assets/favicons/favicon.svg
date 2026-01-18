@@ -1,0 +1,15 @@
+<svg width="256" height="256" viewBox="0 0 256 256" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Favicon - High contrast, readable at small sizes -->
+  <rect width="256" height="256" fill="#0B0B12"/>
+
+  <!-- Simplified LD Mark for small sizes -->
+  <rect x="48" y="48" width="160" height="160" rx="24" fill="#FFFFFF"/>
+
+  <!-- L -->
+  <rect x="80" y="80" width="24" height="96" fill="#0B0B12"/>
+  <rect x="80" y="152" width="48" height="24" fill="#0B0B12"/>
+
+  <!-- D -->
+  <path d="M144 80H168C185.673 80 200 94.3269 200 112V144C200 161.673 185.673 176 168 176H144V80Z" fill="#0B0B12"/>
+  <rect x="168" y="96" width="16" height="64" fill="#FFFFFF"/>
+</svg>

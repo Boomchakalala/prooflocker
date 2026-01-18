@@ -1,8 +1,10 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { Prediction, type PredictionOutcome } from "@/lib/storage";
 import { formatRelativeTime } from "@/lib/utils";
+import { getSiteUrl } from "@/lib/config";
 import Link from "next/link";
 import ResolveModal from "./ResolveModal";
 import ContestModal from "./ContestModal";
@@ -22,7 +24,9 @@ interface PredictionCardProps {
 }
 
 export default function PredictionCard({ prediction, currentUserId, onOutcomeUpdate }: PredictionCardProps) {
+  const router = useRouter();
   const [copied, setCopied] = useState(false);
+  const [linkCopied, setLinkCopied] = useState(false);
   const [showResolveModal, setShowResolveModal] = useState(false);
   const [showContestModal, setShowContestModal] = useState(false);
 
@@ -31,11 +35,50 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
   const onChainStatus = prediction.onChainStatus || "pending";
   const isClaimed = !!prediction.userId;
   const isOwner = currentUserId && prediction.userId === currentUserId;
+  const isResolved = prediction.outcome === "correct" || prediction.outcome === "incorrect";
 
   const copyHash = async () => {
     await navigator.clipboard.writeText(prediction.hash);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
+  };
+
+  const copyLink = async () => {
+    const url = `${getSiteUrl()}/proof/${prediction.publicSlug}`;
+
+    // Try native share on mobile devices
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: 'ProofLocker Prediction',
+          text: prediction.textPreview,
+          url: url
+        });
+        return; // Success, don't show copied state
+      } catch (err) {
+        // User cancelled or share failed, fall back to copy
+        if ((err as Error).name === 'AbortError') {
+          return; // User cancelled, don't copy
+        }
+      }
+    }
+
+    // Fallback to clipboard copy
+    await navigator.clipboard.writeText(url);
+    setLinkCopied(true);
+    setTimeout(() => setLinkCopied(false), 2000);
+  };
+
+  const handleResolveClick = () => {
+    // On mobile (< 768px), navigate to resolve page
+    // On desktop, show modal
+    const isMobile = window.innerWidth < 768;
+
+    if (isMobile) {
+      router.push(`/resolve/${prediction.id}`);
+    } else {
+      setShowResolveModal(true);
+    }
   };
 
   // Determine on-chain status
@@ -46,121 +89,92 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
 
   // Determine if resolution is on-chain
   const isResolutionOnChain = () => {
+    // Show "Resolved on-chain" if prediction is resolved (has resolvedAt timestamp or resolutionDeStatus confirmed)
+    if (!isResolved) return false;
+
     const resolutionDeStatus = prediction.resolutionDeStatus?.toUpperCase();
-    return resolutionDeStatus === "CONFIRMED" && prediction.outcome !== "pending";
+    const hasResolvedTimestamp = !!prediction.resolvedAt;
+    const hasResolvedTx = resolutionDeStatus === "CONFIRMED";
+
+    return hasResolvedTimestamp || hasResolvedTx;
   };
 
-  // Compute resolution state
-  const isResolved = prediction.outcome !== "pending";
-  const canResolve = isOwner && !isResolved;
+  // Determine if user can resolve (owner and still pending)
+  const canResolve = isOwner && prediction.outcome === "pending";
+  const isPending = prediction.outcome === "pending";
 
-  // Determine helper text (ALWAYS shown)
-  const getHelperText = () => {
-    if (isResolved) {
-      return isResolutionOnChain() ? "Resolved on-chain" : "Resolved";
-    }
-    if (canResolve) {
-      return "Ready to resolve";
-    }
-    if (!isOwner) {
-      return "Only the creator can resolve";
-    }
-    return "Not ready to resolve yet";
-  };
-
-  // Get badge color for resolved state
-  const getResolvedBadgeColor = () => {
-    const outcome = prediction.outcome;
-    if (outcome === "correct") {
-      return "bg-green-500/15 border-green-500/40 text-green-300";
-    }
-    if (outcome === "incorrect") {
-      return "bg-red-500/15 border-red-500/40 text-red-300";
-    }
-    if (outcome === "invalid") {
-      return "bg-neutral-500/15 border-neutral-500/40 text-neutral-300";
-    }
-    return "bg-yellow-500/15 border-yellow-500/40 text-yellow-300";
-  };
-
-  // Build ordered badges array for overflow handling
-  const allBadges = [
-    {
-      id: 'claimed',
-      show: isClaimed,
-      content: (
-        <span className="px-1.5 sm:px-2 py-0.5 text-[9px] sm:text-[10px] font-medium rounded bg-blue-500/10 border border-blue-500/30 text-blue-400 whitespace-nowrap leading-tight flex-shrink-0">
-          Claimed
-        </span>
-      )
-    },
-    {
-      id: 'locked',
-      show: isOnChain(),
-      content: (
-        <span className="px-1.5 sm:px-2 py-0.5 text-[9px] sm:text-[10px] font-medium rounded bg-green-500/10 border border-green-500/30 text-green-400 whitespace-nowrap leading-tight flex-shrink-0">
-          Locked on-chain
-        </span>
-      )
-    },
-    {
-      id: 'resolved',
-      show: isResolutionOnChain(),
-      content: (
-        <span className="px-1.5 sm:px-2 py-0.5 text-[9px] sm:text-[10px] font-medium rounded bg-purple-500/10 border border-purple-500/30 text-purple-400 whitespace-nowrap leading-tight flex-shrink-0">
-          Resolved on-chain
-        </span>
-      )
-    }
-  ].filter(badge => badge.show);
+  // Truncate title to max 150 characters
+  const MAX_TITLE_LENGTH = 150;
+  const displayTitle = prediction.textPreview.length > MAX_TITLE_LENGTH
+    ? prediction.textPreview.slice(0, MAX_TITLE_LENGTH) + "…"
+    : prediction.textPreview;
 
   return (
-    <div className="glass rounded-lg p-3 md:p-4 hover:border-white/10 transition-all flex flex-col h-full shadow-lg shadow-purple-500/5">
-      {/* Header: Stacked on mobile, single row on desktop */}
-      <div className="mb-2 md:mb-3">
-        {/* Row 1: Avatar + Anon + Time (always visible, single line) */}
-        <div className="flex items-center gap-2 mb-1.5">
-          {/* Avatar */}
-          <div className="w-7 h-7 flex-shrink-0 rounded-full bg-blue-500/20 flex items-center justify-center text-xs font-semibold text-blue-400 border border-blue-500/30">
-            {authorNumber.toString().slice(-2)}
+    <div className="glass rounded-lg p-4 md:p-4 hover:border-white/10 transition-all flex flex-col h-full shadow-lg shadow-purple-500/5">
+      {/* 1. HEADER ROW - Author info + badges */}
+      <div className="mb-2">
+        {/* Top row: Author info (left) + Status badges (right) - Mobile layout */}
+        <div className="flex items-center justify-between gap-2 flex-nowrap mb-1">
+          {/* Left: Avatar + Author info */}
+          <div className="flex items-center gap-2 min-w-0 flex-1">
+            <div className="w-7 h-7 rounded-full bg-blue-500/20 flex items-center justify-center text-xs font-semibold text-blue-400 border border-blue-500/30 flex-shrink-0">
+              {authorNumber.toString().slice(-2)}
+            </div>
+            <div className="flex items-center gap-1.5 text-[11px] md:text-xs text-neutral-400 min-w-0">
+              <span className="whitespace-nowrap flex-shrink-0">Anon #{authorNumber}</span>
+              <span className="text-neutral-600 flex-shrink-0">•</span>
+              <span className="whitespace-nowrap truncate">{formatRelativeTime(prediction.timestamp)}</span>
+              {/* Category badge - inline on desktop only */}
+              {prediction.category && (
+                <>
+                  <span className="text-neutral-600 flex-shrink-0 hidden md:inline">•</span>
+                  <span className="px-1.5 py-0.5 text-[10px] font-medium rounded bg-white/5 border border-white/10 text-neutral-400 whitespace-nowrap hidden md:inline-block">
+                    {prediction.category}
+                  </span>
+                </>
+              )}
+            </div>
           </div>
 
-          {/* Anon + Time */}
-          <div className="flex items-center gap-1.5 min-w-0 flex-1">
-            <span className="text-xs text-neutral-400 whitespace-nowrap">Anon #{authorNumber}</span>
-            <span className="text-xs text-neutral-600">•</span>
-            <span className="text-xs text-neutral-500 whitespace-nowrap">{formatRelativeTime(prediction.timestamp)}</span>
-          </div>
-        </div>
-
-        {/* Row 2: Category + All status badges (no overflow) */}
-        <div className="flex items-center justify-between gap-2 pl-2">
-          {/* Category pill (left side, less indent) */}
-          <div className="flex items-center min-w-0">
-            {prediction.category && (
-              <span className="px-2 py-0.5 text-[10px] font-semibold rounded-full bg-gradient-to-r from-blue-500/15 to-purple-500/15 border border-blue-500/30 text-blue-300 leading-tight whitespace-nowrap">
-                {prediction.category}
+          {/* Right: Status badges */}
+          <div className="flex items-center gap-1 flex-shrink-0">
+            {isOnChain() && (
+              <span className="px-2 py-0.5 text-[10px] font-medium rounded bg-purple-500/10 border border-purple-500/30 text-purple-400 flex items-center gap-1 whitespace-nowrap">
+                Locked
+                <svg className="w-2.5 h-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                </svg>
+              </span>
+            )}
+            {isResolutionOnChain() && (
+              <span className="px-2 py-0.5 text-[10px] font-medium rounded bg-green-500/10 border border-green-500/30 text-green-400 flex items-center gap-1 whitespace-nowrap">
+                Resolved
+                <svg className="w-2.5 h-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
               </span>
             )}
           </div>
-
-          {/* All status badges (right side) - Single line, no wrapping */}
-          <div className="flex items-center gap-1 justify-end flex-shrink-0">
-            {allBadges.map((badge) => (
-              <span key={badge.id}>{badge.content}</span>
-            ))}
-          </div>
         </div>
+
+        {/* Category row - Mobile only, separate line below */}
+        {prediction.category && (
+          <div className="md:hidden">
+            <span className="inline-block px-1.5 py-0.5 text-[10px] font-medium rounded bg-white/5 border border-white/10 text-neutral-400 whitespace-nowrap">
+              {prediction.category}
+            </span>
+          </div>
+        )}
       </div>
 
-      {/* Main content: Prediction text - VISUAL FOCUS */}
-      <p className="text-white text-lg leading-relaxed mb-2 md:mb-3 font-normal flex-grow line-clamp-2 min-w-0">
-        {prediction.text}
-      </p>
+      {/* 3. TITLE - Prediction text */}
+      <h3 className="text-white text-base mb-2.5 md:mb-3 font-normal w-full min-w-0 line-clamp-2 leading-snug min-h-[2.75em]">
+        {displayTitle}
+      </h3>
 
-      {/* Status line: Outcome - More prominent */}
-      <div className="flex items-center gap-2 mb-2 md:mb-3">
-        <span className="text-[10px] uppercase tracking-wide text-white/40">Outcome</span>
+      {/* 4. OUTCOME ROW */}
+      <div className="flex items-center gap-2 mb-2.5 md:mb-3">
+        <span className="text-[11px] md:text-xs tracking-normal text-white/40 font-normal">Outcome</span>
         <OutcomeBadge
           outcome={prediction.outcome || "pending"}
           size="sm"
@@ -179,25 +193,8 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
         )}
       </div>
 
-      {/* Resolution URL */}
-      {prediction.resolutionUrl && (
-        <div className="mb-2 md:mb-3">
-          <a
-            href={prediction.resolutionUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-xs text-blue-400 hover:text-blue-300 underline flex items-center gap-1.5 font-medium"
-          >
-            <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-            </svg>
-            View evidence
-          </a>
-        </div>
-      )}
-
-      {/* Metadata: FINGERPRINT - Reduced visual noise */}
-      <div className="bg-black/30 border border-white/5 rounded-lg p-2 mb-2 md:mb-3">
+      {/* 5. FINGERPRINT BLOCK */}
+      <div className="bg-black/30 border border-white/5 rounded-lg p-2 mb-2.5 md:mb-3 opacity-60 md:opacity-100 scale-95 md:scale-100 origin-left">
         <div className="flex items-center justify-between gap-2">
           <div className="flex-1 min-w-0">
             <label className="block text-[9px] font-medium text-neutral-700 mb-0.5 uppercase tracking-wider">
@@ -245,64 +242,107 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
         </div>
       </div>
 
-      {/* FIXED FOOTER - Always identical structure */}
-      <div className="flex flex-col gap-2 min-h-[76px]">
-        {/* Row: [View Proof] + [Action Slot] - Both flex-1, h-12 */}
-        <div className="flex gap-2">
-          {/* Left: View Proof button */}
-          <Link
-            href={`/proof/${prediction.publicSlug}`}
-            className="flex-1 h-12 flex items-center justify-center text-sm font-semibold text-white bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 rounded-lg transition-all shadow-lg shadow-blue-500/20 hover:shadow-blue-500/30 whitespace-nowrap"
-            title="View permanent proof page"
+      {/* 6. ACTIONS ROW - Grid layout with emphasis on View proof */}
+      <div className="grid grid-cols-[1.6fr_1fr_38px] gap-3 items-stretch">
+        {/* View proof button - PRIMARY ACTION */}
+        <Link
+          href={`/proof/${prediction.publicSlug}`}
+          className="text-center px-4 py-2 text-sm font-bold text-white bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 rounded-lg transition-all shadow-lg shadow-blue-500/20 hover:shadow-xl hover:shadow-blue-500/30 flex items-center justify-center"
+          title="View proof details"
+        >
+          View proof
+        </Link>
+
+        {/* Resolve or Resolved button */}
+        {isPending ? (
+          <button
+            onClick={canResolve ? handleResolveClick : undefined}
+            disabled={!canResolve}
+            className={`px-3 py-2 text-sm font-semibold rounded-lg transition-all border whitespace-nowrap flex items-center justify-center gap-1.5 ${
+              canResolve
+                ? "text-amber-400 bg-amber-500/5 hover:bg-amber-500/10 border-amber-500/20 hover:border-amber-500/30 cursor-pointer"
+                : "text-neutral-500 bg-neutral-800/50 border-neutral-700/30 cursor-not-allowed opacity-60"
+            }`}
+            title={canResolve ? "Resolve this prediction" : "Only the creator can resolve"}
           >
-            View Proof
-          </Link>
-
-          {/* Right: Action Slot - Fixed h-12 */}
-          <div className="flex-1 h-12 flex items-center justify-center">
-            {isResolved ? (
-              /* Resolved: Non-clickable badge with consistent height */
-              <div className={`w-full h-full flex items-center justify-center gap-1.5 px-3 rounded-lg border text-sm font-medium whitespace-nowrap ${getResolvedBadgeColor()}`}>
-                <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                </svg>
-                <span className="truncate">Resolved</span>
-              </div>
+            <span className="hidden sm:inline">Resolve</span>
+            <span className="sm:hidden text-xs">Resolve</span>
+            {canResolve ? (
+              <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
             ) : (
-              /* Pending: Resolve button (enabled or disabled) - Fixed h-12 */
-              <button
-                onClick={() => canResolve && setShowResolveModal(true)}
-                disabled={!canResolve}
-                className={`w-full h-full flex items-center justify-center gap-1.5 px-3 rounded-lg border text-sm font-medium transition-all whitespace-nowrap ${
-                  canResolve
-                    ? "text-white bg-green-500/20 hover:bg-green-500/30 border-green-500/40 cursor-pointer"
-                    : "text-neutral-400 bg-white/5 border-white/10 cursor-not-allowed"
-                }`}
-              >
-                {!isOwner && (
-                  <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-                  </svg>
-                )}
-                Resolve
-              </button>
+              <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+              </svg>
             )}
-          </div>
-        </div>
+          </button>
+        ) : (
+          <button
+            disabled
+            className={`px-3 py-2 text-sm font-medium rounded-lg border whitespace-nowrap cursor-not-allowed flex items-center justify-center gap-1.5 ${
+              prediction.outcome === "correct"
+                ? "text-green-400 bg-green-500/10 border-green-500/30"
+                : "text-red-400 bg-red-500/10 border-red-500/30"
+            }`}
+            title={`Resolved as ${prediction.outcome}`}
+          >
+            <span className="hidden sm:inline">Resolved</span>
+            <span className="sm:hidden text-xs">Resolved</span>
+            {prediction.outcome === "correct" ? (
+              <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+              </svg>
+            ) : (
+              <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            )}
+          </button>
+        )}
 
-        {/* Helper/status line - ALWAYS rendered */}
-        <div className="min-h-[20px] flex items-center justify-center px-2">
-          <p className="text-[10px] text-neutral-500 text-center leading-tight">
-            {getHelperText()}
-          </p>
-        </div>
+        {/* Share button - Square */}
+        <button
+          onClick={copyLink}
+          className="w-11 h-full text-sm font-medium text-white glass hover:bg-white/10 rounded-lg transition-all border border-white/10 flex items-center justify-center"
+          title="Share this prediction"
+        >
+          {linkCopied ? (
+            <svg
+              className="w-4 h-4 text-green-500"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M5 13l4 4L19 7"
+              />
+            </svg>
+          ) : (
+            <svg
+              className="w-4 h-4"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"
+              />
+            </svg>
+          )}
+        </button>
       </div>
 
       {/* Resolve Modal */}
       {showResolveModal && (
         <ResolveModal
           predictionId={prediction.id}
-          predictionText={prediction.text}
           currentOutcome={prediction.outcome}
           currentNote={prediction.resolutionNote}
           currentUrl={prediction.resolutionUrl}
@@ -318,7 +358,7 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
       {showContestModal && (
         <ContestModal
           predictionId={prediction.id}
-          predictionText={prediction.text}
+          predictionText={prediction.textPreview}
           onClose={() => setShowContestModal(false)}
           onSuccess={() => {
             setShowContestModal(false);

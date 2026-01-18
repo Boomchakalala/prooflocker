@@ -22,14 +22,19 @@ const siteUrl = getSiteUrl();
 
 export const metadata: Metadata = {
   title: "ProofLocker",
-  description: "Time-stamped prediction proofs. Claim later. Share receipts.",
+  description: "Prediction locked forever. Claim now. Prove later.",
   metadataBase: new URL(siteUrl),
   icons: {
-    icon: "/icon.png",
+    icon: [
+      { url: "/favicons/favicon-16x16.png", sizes: "16x16", type: "image/png" },
+      { url: "/favicons/favicon-32x32.png", sizes: "32x32", type: "image/png" },
+      { url: "/favicons/favicon.ico" },
+    ],
+    apple: "/favicons/apple-touch-icon.png",
   },
   openGraph: {
     title: "ProofLocker",
-    description: "Time-stamped prediction proofs. Claim later. Share receipts.",
+    description: "Prediction locked forever. Claim now. Prove later.",
     url: siteUrl,
     type: "website",
     siteName: "ProofLocker",
@@ -38,14 +43,14 @@ export const metadata: Metadata = {
         url: getAbsoluteUrl("/og.png"),
         width: 1200,
         height: 630,
-        alt: "ProofLocker - Time-stamped prediction proofs",
+        alt: "ProofLocker - Prediction locked forever",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
     title: "ProofLocker",
-    description: "Time-stamped prediction proofs. Claim later. Share receipts.",
+    description: "Prediction locked forever. Claim now. Prove later.",
     images: [getAbsoluteUrl("/og.png")],
   },
 };
@@ -59,6 +64,9 @@ export default function RootLayout({
 
   return (
     <html lang="en" className="dark">
+      <head>
+        <link rel="manifest" href="/manifest.json" />
+      </head>
       <body
         className={`${inter.variable} ${jetbrainsMono.variable} antialiased bg-[#0a0a0a] text-white`}
       >

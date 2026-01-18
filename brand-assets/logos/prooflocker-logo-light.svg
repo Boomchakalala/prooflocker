@@ -1,0 +1,11 @@
+<svg width="800" height="200" viewBox="0 0 800 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Full logo - Black text on transparent (for light backgrounds) -->
+
+  <!-- LD Mark -->
+  <rect x="20" y="35" width="130" height="130" rx="20" fill="#000000"/>
+  <path d="M55 70V150H85V138H67V70H55Z" fill="#FFFFFF"/>
+  <path d="M100 70V150H112V83H135V70H100Z" fill="#FFFFFF"/>
+
+  <!-- ProofLocker Text -->
+  <text x="170" y="125" font-family="system-ui, -apple-system, sans-serif" font-size="72" font-weight="700" fill="#000000" letter-spacing="-0.02em">ProofLocker</text>
+</svg>
