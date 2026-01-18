@@ -3,46 +3,43 @@ import Link from "next/link";
 export default function Footer() {
   return (
     <footer className="border-t border-white/5 glass relative z-10">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-10">
-        <div className="flex flex-col gap-5 md:gap-4">
-          {/* Mobile layout - Stacked centered content */}
-          <div className="flex flex-col gap-4 items-center md:hidden">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-10">
+        <div className="flex flex-col gap-3 md:gap-4">
+          {/* Mobile layout - Compact centered content */}
+          <div className="flex flex-col gap-3 items-center md:hidden">
             {/* Tagline */}
-            <p className="text-sm text-white/70 font-medium tracking-wide">
+            <p className="text-xs text-white/60 tracking-wide">
               Anonymous • Public • Immutable
             </p>
 
-            {/* Powered by - Mobile */}
-            <p className="text-xs text-neutral-500">
-              Powered by <span className="text-neutral-400">Digital Evidence (DAG)</span>
-            </p>
-
-            {/* Divider */}
-            <div className="w-16 h-px bg-white/10"></div>
-
             {/* Legal links - Mobile */}
-            <div className="flex items-center gap-3 text-xs text-neutral-500">
+            <div className="flex items-center gap-2.5 text-[11px] text-neutral-600">
               <Link
                 href="/legal/terms"
-                className="hover:text-neutral-300 transition-colors"
+                className="hover:text-neutral-400 transition-colors"
               >
                 Terms
               </Link>
               <span className="text-neutral-700">•</span>
               <Link
                 href="/legal/privacy"
-                className="hover:text-neutral-300 transition-colors"
+                className="hover:text-neutral-400 transition-colors"
               >
                 Privacy
               </Link>
               <span className="text-neutral-700">•</span>
               <Link
                 href="/legal/disclaimer"
-                className="hover:text-neutral-300 transition-colors"
+                className="hover:text-neutral-400 transition-colors"
               >
                 Disclaimer
               </Link>
             </div>
+
+            {/* Powered by - Mobile */}
+            <p className="text-[10px] text-neutral-600">
+              Powered by <span className="text-neutral-500">Digital Evidence</span>
+            </p>
           </div>
 
           {/* Desktop layout - 3-column */}
