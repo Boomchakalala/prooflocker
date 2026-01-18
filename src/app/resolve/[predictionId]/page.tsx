@@ -169,21 +169,21 @@ export default function ResolvePage({ params }: Props) {
 
           {/* Form Content */}
           <form onSubmit={handleSubmit}>
-            <div className="p-5 space-y-4">
+            <div className="p-4 md:p-5 space-y-4">
               {/* Outcome Selection */}
               <div>
-                <label className="block text-sm font-medium text-white/90 mb-2">
+                <label className="block text-sm font-medium text-white/90 mb-2.5">
                   What's the outcome?
                 </label>
 
-                <div className="grid grid-cols-2 gap-2.5">
+                <div className="grid grid-cols-2 gap-2">
                   {/* Correct */}
                   <button
                     type="button"
                     onClick={() => setOutcome("correct")}
-                    className={`w-full h-12 rounded-lg border font-semibold text-sm transition-all flex items-center justify-center gap-2 ${
+                    className={`w-full h-11 md:h-12 rounded-lg border font-semibold text-sm transition-all flex items-center justify-center gap-2 ${
                       outcome === "correct"
-                        ? "bg-green-500/15 border-green-500/50 text-green-300 ring-1 ring-green-500/30 shadow-md shadow-green-500/10"
+                        ? "bg-green-500/15 border-green-500/50 text-green-300 ring-1 ring-green-500/30"
                         : "bg-white/[0.03] border-white/[0.08] text-white/60 hover:bg-white/[0.06] hover:text-white hover:border-white/15"
                     }`}
                   >
@@ -197,9 +197,9 @@ export default function ResolvePage({ params }: Props) {
                   <button
                     type="button"
                     onClick={() => setOutcome("incorrect")}
-                    className={`w-full h-12 rounded-lg border font-semibold text-sm transition-all flex items-center justify-center gap-2 ${
+                    className={`w-full h-11 md:h-12 rounded-lg border font-semibold text-sm transition-all flex items-center justify-center gap-2 ${
                       outcome === "incorrect"
-                        ? "bg-red-500/15 border-red-500/50 text-red-300 ring-1 ring-red-500/30 shadow-md shadow-red-500/10"
+                        ? "bg-red-500/15 border-red-500/50 text-red-300 ring-1 ring-red-500/30"
                         : "bg-white/[0.03] border-white/[0.08] text-white/60 hover:bg-white/[0.06] hover:text-white hover:border-white/15"
                     }`}
                   >
@@ -213,9 +213,9 @@ export default function ResolvePage({ params }: Props) {
                   <button
                     type="button"
                     onClick={() => setOutcome("invalid")}
-                    className={`w-full h-12 rounded-lg border font-semibold text-sm transition-all flex items-center justify-center gap-2 ${
+                    className={`w-full h-11 md:h-12 rounded-lg border font-semibold text-sm transition-all flex items-center justify-center gap-2 ${
                       outcome === "invalid"
-                        ? "bg-gray-500/15 border-gray-500/50 text-gray-300 ring-1 ring-gray-500/30 shadow-md shadow-gray-500/10"
+                        ? "bg-gray-500/15 border-gray-500/50 text-gray-300 ring-1 ring-gray-500/30"
                         : "bg-white/[0.03] border-white/[0.08] text-white/60 hover:bg-white/[0.06] hover:text-white hover:border-white/15"
                     }`}
                   >
@@ -229,9 +229,9 @@ export default function ResolvePage({ params }: Props) {
                   <button
                     type="button"
                     onClick={() => setOutcome("pending")}
-                    className={`w-full h-12 rounded-lg border font-semibold text-sm transition-all flex items-center justify-center gap-2 ${
+                    className={`w-full h-11 md:h-12 rounded-lg border font-semibold text-sm transition-all flex items-center justify-center gap-2 ${
                       outcome === "pending"
-                        ? "bg-yellow-500/15 border-yellow-500/50 text-yellow-300 ring-1 ring-yellow-500/30 shadow-md shadow-yellow-500/10"
+                        ? "bg-yellow-500/15 border-yellow-500/50 text-yellow-300 ring-1 ring-yellow-500/30"
                         : "bg-white/[0.03] border-white/[0.08] text-white/60 hover:bg-white/[0.06] hover:text-white hover:border-white/15"
                     }`}
                   >
@@ -242,14 +242,14 @@ export default function ResolvePage({ params }: Props) {
                   </button>
                 </div>
 
-                <p className="text-[11px] text-white/40 mt-1.5 leading-tight">
+                <p className="text-[10px] md:text-[11px] text-white/40 mt-2 leading-tight">
                   Use "Invalid" if the prediction can't be verified
                 </p>
               </div>
 
               {/* Resolution Note (Optional) */}
               <div>
-                <label htmlFor="note" className="block text-sm font-medium text-white/90 mb-1.5">
+                <label htmlFor="note" className="block text-sm font-medium text-white/90 mb-2">
                   Why? <span className="text-white/50 font-normal">(optional)</span>
                 </label>
                 <textarea
@@ -259,16 +259,16 @@ export default function ResolvePage({ params }: Props) {
                   placeholder="Brief explanation of the outcome"
                   maxLength={280}
                   rows={3}
-                  className="w-full px-3.5 py-2.5 bg-white/5 border border-white/10 rounded-lg text-white text-sm placeholder-white/30 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-transparent resize-none transition-all"
+                  className="w-full px-3 py-2.5 bg-white/5 border border-white/10 rounded-lg text-white text-sm placeholder-white/30 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-transparent resize-none transition-all"
                 />
                 <div className="flex items-center justify-end mt-1">
-                  <p className="text-[11px] text-white/40">{resolutionNote.length}/280</p>
+                  <p className="text-[10px] md:text-[11px] text-white/40">{resolutionNote.length}/280</p>
                 </div>
               </div>
 
               {/* Evidence URL (Optional) */}
               <div>
-                <label htmlFor="url" className="block text-sm font-medium text-white/90 mb-1.5">
+                <label htmlFor="url" className="block text-sm font-medium text-white/90 mb-2">
                   Proof or reference <span className="text-white/50 font-normal">(optional)</span>
                 </label>
                 <input
@@ -277,55 +277,53 @@ export default function ResolvePage({ params }: Props) {
                   value={resolutionUrl}
                   onChange={(e) => setResolutionUrl(e.target.value)}
                   placeholder="https://example.com/proof"
-                  className="w-full px-3.5 py-2.5 bg-white/5 border border-white/10 rounded-lg text-white text-sm placeholder-white/30 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-transparent transition-all"
+                  className="w-full px-3 py-2.5 bg-white/5 border border-white/10 rounded-lg text-white text-sm placeholder-white/30 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-transparent transition-all"
                 />
               </div>
 
               {/* Error Message */}
               {error && (
-                <div className="bg-red-500/10 border border-red-500/30 rounded-lg p-2.5">
+                <div className="bg-red-500/10 border border-red-500/30 rounded-lg p-3">
                   <p className="text-sm text-red-400">{error}</p>
                 </div>
               )}
             </div>
 
             {/* Footer with Action Buttons */}
-            <div className="p-5 border-t border-white/10 bg-[#0a0a0a]/50 backdrop-blur-sm">
-              <div className="flex flex-col gap-1.5">
-                <button
-                  type="submit"
-                  disabled={submitting}
-                  className="w-full px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white font-semibold text-base rounded-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40 disabled:shadow-none"
-                >
-                  {submitting ? (
-                    <>
-                      <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                      Confirming...
-                    </>
-                  ) : (
-                    <>
-                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                      </svg>
-                      Confirm resolution
-                    </>
-                  )}
-                </button>
+            <div className="p-4 md:p-5 border-t border-white/10 bg-[#0a0a0a]/50">
+              <button
+                type="submit"
+                disabled={submitting}
+                className="w-full px-5 py-3 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white font-semibold text-sm md:text-base rounded-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40 disabled:shadow-none mb-2"
+              >
+                {submitting ? (
+                  <>
+                    <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                    Confirming...
+                  </>
+                ) : (
+                  <>
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                    </svg>
+                    Confirm resolution
+                  </>
+                )}
+              </button>
 
-                {/* Permanence warning */}
-                <p className="text-[11px] text-neutral-500 text-center font-medium px-2 leading-tight">
-                  This resolution is public and permanent
-                </p>
+              {/* Permanence warning */}
+              <p className="text-[10px] md:text-[11px] text-neutral-500 text-center font-medium mb-2">
+                This resolution is public and permanent
+              </p>
 
-                <button
-                  type="button"
-                  onClick={() => router.back()}
-                  className="w-full px-4 py-2 bg-white/5 hover:bg-white/10 text-white/70 hover:text-white text-sm rounded-lg transition-all border border-white/10"
-                  disabled={submitting}
-                >
-                  Go back
-                </button>
-              </div>
+              <button
+                type="button"
+                onClick={() => router.back()}
+                className="w-full px-4 py-2 bg-white/5 hover:bg-white/10 text-white/70 hover:text-white text-sm rounded-lg transition-all border border-white/10"
+                disabled={submitting}
+              >
+                Cancel
+              </button>
             </div>
           </form>
         </div>
