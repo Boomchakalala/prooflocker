@@ -174,7 +174,7 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
 
       {/* 4. OUTCOME ROW */}
       <div className="flex items-center gap-2 mb-2.5 md:mb-3">
-        <span className="text-xs md:text-sm uppercase tracking-wide text-white/50 font-medium">Outcome</span>
+        <span className="text-[11px] md:text-xs tracking-normal text-white/40 font-normal">Outcome</span>
         <OutcomeBadge
           outcome={prediction.outcome || "pending"}
           size="sm"
