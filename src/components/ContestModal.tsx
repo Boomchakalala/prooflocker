@@ -72,20 +72,15 @@ export default function ContestModal({
   const isOverMax = charCount > 1000;
 
   return (
-    <>
-      {/* Backdrop - Separate layer */}
-      <div
-        className="fixed inset-0 z-[9998] bg-black md:bg-black/70 backdrop-blur-md"
-        onClick={onClose}
-      />
+    <div className="fixed inset-0 z-[9999] bg-black md:bg-transparent">
+      {/* Desktop backdrop */}
+      <div className="hidden md:block fixed inset-0 bg-black/70 backdrop-blur-md" onClick={onClose} />
 
-      {/* Modal - Above backdrop */}
-      <div
-        className="fixed inset-0 z-[9999] overflow-y-auto pointer-events-none"
-      >
+      {/* Scrollable container */}
+      <div className="relative h-full overflow-y-auto" onClick={onClose}>
         <div className="min-h-full flex items-start justify-center p-4 md:p-6 pt-8 md:pt-20">
           <div
-            className="relative bg-gradient-to-br from-[#1a1a1a] to-[#0a0a0a] rounded-xl p-6 max-w-md w-full border border-orange-500/20 shadow-2xl my-4 md:my-8 pointer-events-auto"
+            className="relative bg-gradient-to-br from-[#1a1a1a] to-[#0a0a0a] rounded-xl p-6 max-w-md w-full border border-orange-500/20 shadow-2xl my-4 md:my-8"
             onClick={(e) => e.stopPropagation()}
           >
         {/* Header */}
@@ -220,6 +215,6 @@ export default function ContestModal({
       </div>
       </div>
       </div>
-    </>
+    </div>
   );
 }
