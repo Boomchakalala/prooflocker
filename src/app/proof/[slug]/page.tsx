@@ -162,28 +162,7 @@ export default async function ProofPage({ params }: Props) {
                 <div className="text-[10px] text-neutral-500 uppercase tracking-wider mb-2">Locked On</div>
                 <div className="flex-1 flex flex-col justify-center">
                   <div className="text-white font-medium text-sm">
-                  {lockedDate.toLocaleDateString("en-US", {
-                    month: "long",
-                    day: "numeric",
-                    year: "numeric",
-                    timeZone: "UTC",
-                  })}
-                </div>
-                <div className="text-xs text-neutral-400 font-mono mt-1">
-                  {lockedDate.toLocaleTimeString("en-US", {
-                    hour: "2-digit",
-                    minute: "2-digit",
-                    timeZone: "UTC",
-                  })} UTC
-                </div>
-              </div>
-
-              {/* Resolved timestamp */}
-              {isResolved && prediction.resolvedAt && (
-                <div className="glass border border-white/10 rounded-lg p-3 md:p-4">
-                  <div className="text-[10px] text-neutral-500 uppercase tracking-wider mb-2">Resolved On</div>
-                  <div className="text-white font-medium text-sm">
-                    {new Date(prediction.resolvedAt).toLocaleDateString("en-US", {
+                    {lockedDate.toLocaleDateString("en-US", {
                       month: "long",
                       day: "numeric",
                       year: "numeric",
@@ -191,17 +170,48 @@ export default async function ProofPage({ params }: Props) {
                     })}
                   </div>
                   <div className="text-xs text-neutral-400 font-mono mt-1">
-                    {new Date(prediction.resolvedAt).toLocaleTimeString("en-US", {
+                    {lockedDate.toLocaleTimeString("en-US", {
                       hour: "2-digit",
                       minute: "2-digit",
                       timeZone: "UTC",
                     })} UTC
                   </div>
                 </div>
+              </div>
+
+              {/* Resolved timestamp */}
+              {isResolved && prediction.resolvedAt ? (
+                <div className="glass border border-white/10 rounded-lg p-3 md:p-4 flex flex-col">
+                  <div className="text-[10px] text-neutral-500 uppercase tracking-wider mb-2">Resolved On</div>
+                  <div className="flex-1 flex flex-col justify-center">
+                    <div className="text-white font-medium text-sm">
+                      {new Date(prediction.resolvedAt).toLocaleDateString("en-US", {
+                        month: "long",
+                        day: "numeric",
+                        year: "numeric",
+                        timeZone: "UTC",
+                      })}
+                    </div>
+                    <div className="text-xs text-neutral-400 font-mono mt-1">
+                      {new Date(prediction.resolvedAt).toLocaleTimeString("en-US", {
+                        hour: "2-digit",
+                        minute: "2-digit",
+                        timeZone: "UTC",
+                      })} UTC
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <div className="glass border border-white/10 rounded-lg p-3 md:p-4 flex flex-col opacity-40">
+                  <div className="text-[10px] text-neutral-500 uppercase tracking-wider mb-2">Resolved On</div>
+                  <div className="flex-1 flex flex-col justify-center">
+                    <div className="text-neutral-500 text-sm italic">Not resolved yet</div>
+                  </div>
+                </div>
               )}
 
               {/* Network status */}
-              <div className="glass border border-white/10 rounded-lg p-3 md:p-4">
+              <div className="glass border border-white/10 rounded-lg p-3 md:p-4 flex flex-col">
                 <div className="flex items-center justify-between mb-2">
                   <div className="text-[10px] text-neutral-500 uppercase tracking-wider">Network</div>
                   <div className="flex items-center gap-1.5">
@@ -221,13 +231,15 @@ export default async function ProofPage({ params }: Props) {
                     </span>
                   </div>
                 </div>
-                <div className="text-white font-medium text-sm">
-                  Constellation DAG
+                <div className="flex-1 flex items-center">
+                  <div className="text-white font-medium text-sm">
+                    Constellation DAG
+                  </div>
                 </div>
               </div>
 
               {/* Author */}
-              <div className="glass border border-white/10 rounded-lg p-3 md:p-4">
+              <div className="glass border border-white/10 rounded-lg p-3 md:p-4 flex flex-col">
                 <div className="flex items-center justify-between mb-2">
                   <div className="text-[10px] text-neutral-500 uppercase tracking-wider">Author</div>
                   {prediction.userId && (
@@ -239,11 +251,13 @@ export default async function ProofPage({ params }: Props) {
                     </div>
                   )}
                 </div>
-                <div className="flex items-center gap-2">
-                  <div className="w-7 h-7 rounded-full bg-gradient-to-br from-cyan-500 to-blue-600 flex items-center justify-center text-white text-xs font-bold flex-shrink-0">
-                    {prediction.authorNumber.toString().slice(-2)}
+                <div className="flex-1 flex items-center">
+                  <div className="flex items-center gap-2">
+                    <div className="w-7 h-7 rounded-full bg-gradient-to-br from-cyan-500 to-blue-600 flex items-center justify-center text-white text-xs font-bold flex-shrink-0">
+                      {prediction.authorNumber.toString().slice(-2)}
+                    </div>
+                    <span className="text-white font-medium text-sm">Anon #{prediction.authorNumber}</span>
                   </div>
-                  <span className="text-white font-medium text-sm">Anon #{prediction.authorNumber}</span>
                 </div>
               </div>
             </div>
