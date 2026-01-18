@@ -156,11 +156,12 @@ export default async function ProofPage({ params }: Props) {
           {/* Polish: Consistent 16px spacing unit (p-6), metadata hierarchy */}
           <div className="p-4 md:p-6 border-b border-white/10">
             <h2 className="text-base font-semibold text-white mb-3 md:mb-4">Proof Details</h2>
-            <div className="grid grid-cols-2 gap-2.5 md:gap-4">
+            <div className="grid grid-cols-2 gap-2.5 md:gap-4 items-stretch">
               {/* Locked timestamp */}
-              <div className="glass border border-white/10 rounded-lg p-3 md:p-4">
+              <div className="glass border border-white/10 rounded-lg p-3 md:p-4 flex flex-col">
                 <div className="text-[10px] text-neutral-500 uppercase tracking-wider mb-2">Locked On</div>
-                <div className="text-white font-medium text-sm">
+                <div className="flex-1 flex flex-col justify-center">
+                  <div className="text-white font-medium text-sm">
                   {lockedDate.toLocaleDateString("en-US", {
                     month: "long",
                     day: "numeric",
