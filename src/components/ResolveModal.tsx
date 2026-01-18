@@ -87,13 +87,13 @@ export default function ResolveModal({
       {/* Backdrop - Fully opaque on mobile to hide everything behind */}
       <div className="fixed inset-0 bg-black/95 md:bg-black/70 backdrop-blur-md -z-10" />
 
-      {/* Modal Container */}
+      {/* Modal Container - No max-height, let it scroll naturally */}
       <div
-        className="relative w-full max-w-2xl bg-gradient-to-br from-[#1a1a1a] to-[#0a0a0a] rounded-2xl border border-white/10 shadow-2xl my-4 md:my-8 flex flex-col max-h-[calc(100vh-2rem)] md:max-h-[85vh]"
+        className="relative w-full max-w-2xl bg-gradient-to-br from-[#1a1a1a] to-[#0a0a0a] rounded-2xl border border-white/10 shadow-2xl my-4 md:my-8"
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Header - Fixed */}
-        <div className="flex items-center justify-between p-5 border-b border-white/10 flex-shrink-0">
+        {/* Header */}
+        <div className="flex items-center justify-between p-5 border-b border-white/10">
           <h3 className="text-xl font-bold text-white flex items-center gap-2">
             <svg className="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -111,9 +111,9 @@ export default function ResolveModal({
           </button>
         </div>
 
-        {/* Form Content - Scrollable */}
-        <form onSubmit={handleSubmit} className="flex flex-col flex-1 min-h-0">
-          <div className="p-5 space-y-4 overflow-y-auto flex-1">
+        {/* Form Content */}
+        <form onSubmit={handleSubmit}>
+          <div className="p-5 space-y-4">
             {/* Outcome Selection */}
             <div>
               <label className="block text-sm font-medium text-white/90 mb-2">
@@ -234,8 +234,8 @@ export default function ResolveModal({
             )}
             </div>
 
-            {/* Footer with Action Buttons - Sticky at bottom */}
-            <div className="p-5 border-t border-white/10 bg-[#0a0a0a]/50 backdrop-blur-sm flex-shrink-0">
+            {/* Footer with Action Buttons */}
+            <div className="p-5 border-t border-white/10 bg-[#0a0a0a]/50 backdrop-blur-sm">
               <div className="flex flex-col gap-1.5">
                 <button
                   type="submit"
