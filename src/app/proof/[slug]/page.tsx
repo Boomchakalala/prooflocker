@@ -45,7 +45,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const title = `${previewText} | ProofLocker`;
   const description = `Locked on ${dateStr} • Proof ${shortProofId} • Immutable timestamp proof on Constellation Network`;
   const pageUrl = getAbsoluteUrl(`/proof/${slug}`);
-  const ogImageUrl = getAbsoluteUrl(`/proof/${slug}/opengraph-image`);
+  const ogImageUrl = getAbsoluteUrl(`/api/og/proof/${slug}`);
 
   return {
     title,
