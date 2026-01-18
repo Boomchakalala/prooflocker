@@ -80,15 +80,18 @@ export default function ResolveModal({
   };
 
   return (
-    <div className="fixed inset-0 z-[9999] bg-black md:bg-transparent">
-      {/* Desktop backdrop */}
-      <div className="hidden md:block fixed inset-0 bg-black/70 backdrop-blur-md" onClick={onClose} />
+    <div className="fixed inset-0 z-[9999]">
+      {/* Full screen black background on mobile, semi-transparent on desktop */}
+      <div
+        className="fixed inset-0 bg-black md:bg-black/70 md:backdrop-blur-md"
+        onClick={onClose}
+      />
 
-      {/* Scrollable container */}
-      <div className="relative h-full overflow-y-auto" onClick={onClose}>
-        <div className="min-h-full flex items-start justify-center p-4 md:p-6 pt-8 md:pt-20">
+      {/* Scrollable container - ABOVE backdrop, transparent */}
+      <div className="fixed inset-0 overflow-y-auto pointer-events-none">
+        <div className="min-h-full flex items-start justify-center p-4 md:p-6 pt-8 md:pt-20 pointer-events-none">
           <div
-            className="relative w-full max-w-2xl bg-gradient-to-br from-[#1a1a1a] to-[#0a0a0a] rounded-2xl border border-white/10 shadow-2xl my-4 md:my-8"
+            className="relative w-full max-w-2xl bg-gradient-to-br from-[#1a1a1a] to-[#0a0a0a] rounded-2xl border border-white/10 shadow-2xl my-4 md:my-8 z-10 pointer-events-auto"
             onClick={(e) => e.stopPropagation()}
           >
           {/* Header - Not sticky, scrolls away */}
