@@ -168,20 +168,20 @@ export default async function ProofPage({ params }: Props) {
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="text-xs text-neutral-400 uppercase tracking-wider mb-1.5">Locked On</div>
-                    <div className="text-white font-semibold text-base md:text-lg">
+                    <div className="text-white font-semibold text-sm md:text-base">
                       {lockedDate.toLocaleDateString("en-US", {
                         month: "short",
                         day: "numeric",
                         year: "numeric",
                         timeZone: "UTC",
-                      })}
-                    </div>
-                    <div className="text-xs text-neutral-400 font-mono mt-1">
-                      {lockedDate.toLocaleTimeString("en-US", {
-                        hour: "2-digit",
-                        minute: "2-digit",
-                        timeZone: "UTC",
-                      })} UTC
+                      })}{" "}
+                      <span className="text-neutral-400 font-normal font-mono text-xs md:text-sm">
+                        {lockedDate.toLocaleTimeString("en-US", {
+                          hour: "2-digit",
+                          minute: "2-digit",
+                          timeZone: "UTC",
+                        })} UTC
+                      </span>
                     </div>
                   </div>
                 </div>
@@ -198,20 +198,20 @@ export default async function ProofPage({ params }: Props) {
                     </div>
                     <div className="flex-1 min-w-0">
                       <div className="text-xs text-neutral-400 uppercase tracking-wider mb-1.5">Resolved On</div>
-                      <div className="text-white font-semibold text-base md:text-lg">
+                      <div className="text-white font-semibold text-sm md:text-base">
                         {new Date(prediction.resolvedAt).toLocaleDateString("en-US", {
                           month: "short",
                           day: "numeric",
                           year: "numeric",
                           timeZone: "UTC",
-                        })}
-                      </div>
-                      <div className="text-xs text-neutral-400 font-mono mt-1">
-                        {new Date(prediction.resolvedAt).toLocaleTimeString("en-US", {
-                          hour: "2-digit",
-                          minute: "2-digit",
-                          timeZone: "UTC",
-                        })} UTC
+                        })}{" "}
+                        <span className="text-neutral-400 font-normal font-mono text-xs md:text-sm">
+                          {new Date(prediction.resolvedAt).toLocaleTimeString("en-US", {
+                            hour: "2-digit",
+                            minute: "2-digit",
+                            timeZone: "UTC",
+                          })} UTC
+                        </span>
                       </div>
                     </div>
                   </div>
