@@ -81,19 +81,21 @@ export default function ResolveModal({
 
   return (
     <div
-      className="fixed inset-0 z-[9999] flex items-start justify-center p-4 md:p-6 pt-8 md:pt-20 overflow-y-auto"
+      className="fixed inset-0 z-[9999] overflow-y-auto"
       onClick={onClose}
     >
       {/* Backdrop - Fully opaque on mobile to hide everything behind */}
-      <div className="fixed inset-0 bg-black/95 md:bg-black/70 backdrop-blur-md -z-10" />
+      <div className="fixed inset-0 bg-black/95 md:bg-black/70 backdrop-blur-md" />
 
-      {/* Modal Container - No max-height, let it scroll naturally */}
-      <div
-        className="relative w-full max-w-2xl bg-gradient-to-br from-[#1a1a1a] to-[#0a0a0a] rounded-2xl border border-white/10 shadow-2xl my-4 md:my-8 flex flex-col max-h-[90vh]"
-        onClick={(e) => e.stopPropagation()}
-      >
-        {/* Header - Sticky at top */}
-        <div className="sticky top-0 z-10 flex items-center justify-between p-5 border-b border-white/10 bg-gradient-to-br from-[#1a1a1a] to-[#0a0a0a] rounded-t-2xl">
+      {/* Centering wrapper */}
+      <div className="min-h-full flex items-start justify-center p-4 md:p-6 pt-8 md:pt-20">
+        {/* Modal Container */}
+        <div
+          className="relative w-full max-w-2xl bg-gradient-to-br from-[#1a1a1a] to-[#0a0a0a] rounded-2xl border border-white/10 shadow-2xl my-4 md:my-8"
+          onClick={(e) => e.stopPropagation()}
+        >
+          {/* Header - Not sticky, scrolls away */}
+          <div className="flex items-center justify-between p-5 border-b border-white/10">
           <h3 className="text-xl font-bold text-white flex items-center gap-2">
             <svg className="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -111,8 +113,8 @@ export default function ResolveModal({
           </button>
         </div>
 
-        {/* Form Content - Scrollable area */}
-        <form onSubmit={handleSubmit} className="overflow-y-auto flex-1">
+        {/* Form Content - No special scroll, let outer container handle it */}
+        <form onSubmit={handleSubmit}>
           <div className="p-5 space-y-4">
             {/* Outcome Selection */}
             <div>
@@ -273,6 +275,7 @@ export default function ResolveModal({
               </div>
             </div>
           </form>
+        </div>
       </div>
     </div>
   );
