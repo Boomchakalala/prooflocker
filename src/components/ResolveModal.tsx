@@ -81,7 +81,7 @@ export default function ResolveModal({
 
   return (
     <div
-      className="fixed inset-0 z-[9999] flex items-start md:items-center justify-center p-4 md:p-6 pt-8 md:pt-6 overflow-y-auto"
+      className="fixed inset-0 z-[9999] flex items-start justify-center p-4 md:p-6 pt-8 md:pt-20 overflow-y-auto"
       onClick={onClose}
     >
       {/* Backdrop - Fully opaque on mobile to hide everything behind */}
