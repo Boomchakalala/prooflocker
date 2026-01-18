@@ -18,6 +18,13 @@ export async function GET(
       throw new Error('Prediction not found');
     }
 
+    // Fetch the ProofLocker logo
+    const logoUrl = new URL('/logos/prooflocker-logo-dark.png', request.url).toString();
+    const logoResponse = await fetch(logoUrl);
+    const logoArrayBuffer = await logoResponse.arrayBuffer();
+    const logoBase64 = Buffer.from(logoArrayBuffer).toString('base64');
+    const logoDataUrl = `data:image/png;base64,${logoBase64}`;
+
     // Determine state
     const isResolved = prediction.outcome !== null && prediction.outcome !== 'pending';
     const isCorrect = prediction.outcome === 'correct';
@@ -57,12 +64,12 @@ export async function GET(
             alignItems: 'flex-start',
             justifyContent: 'center',
             padding: '80px',
-            background: 'linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%)',
-            backgroundImage: 'radial-gradient(circle at 20% 50%, rgba(120, 40, 200, 0.3) 0%, transparent 50%), radial-gradient(circle at 80% 80%, rgba(30, 60, 150, 0.3) 0%, transparent 50%)',
+            background: '#0a0515',
+            backgroundImage: 'radial-gradient(circle at 25% 25%, rgba(88, 28, 135, 0.4) 0%, transparent 50%), radial-gradient(circle at 75% 75%, rgba(49, 46, 129, 0.3) 0%, transparent 50%), radial-gradient(circle at 50% 100%, rgba(30, 27, 75, 0.5) 0%, transparent 50%)',
             position: 'relative',
           }}
         >
-          {/* Stars effect */}
+          {/* Stars pattern */}
           <div
             style={{
               position: 'absolute',
@@ -70,49 +77,47 @@ export async function GET(
               height: '100%',
               top: 0,
               left: 0,
-              backgroundImage: 'radial-gradient(2px 2px at 20px 30px, white, transparent), radial-gradient(2px 2px at 60px 70px, white, transparent), radial-gradient(1px 1px at 50px 50px, white, transparent), radial-gradient(1px 1px at 130px 80px, white, transparent), radial-gradient(2px 2px at 90px 10px, white, transparent)',
-              backgroundSize: '200px 200px',
-              opacity: 0.3,
+              opacity: 0.4,
+              display: 'flex',
             }}
-          />
+          >
+            {/* Create star dots */}
+            {[...Array(30)].map((_, i) => (
+              <div
+                key={i}
+                style={{
+                  position: 'absolute',
+                  left: `${(i * 37 + 10) % 95}%`,
+                  top: `${(i * 43 + 5) % 95}%`,
+                  width: `${i % 3 === 0 ? '3px' : '2px'}`,
+                  height: `${i % 3 === 0 ? '3px' : '2px'}`,
+                  borderRadius: '50%',
+                  background: 'white',
+                  display: 'flex',
+                }}
+              />
+            ))}
+          </div>
 
-          {/* Logo - top right */}
-          <div
+          {/* ProofLocker Logo - top right */}
+          <img
+            src={logoDataUrl}
+            alt="ProofLocker"
+            width="240"
+            height="60"
             style={{
               position: 'absolute',
               top: '60px',
               right: '80px',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '12px',
-              color: 'white',
-              fontSize: '32px',
-              fontWeight: '600',
             }}
-          >
-            <div
-              style={{
-                width: '40px',
-                height: '40px',
-                borderRadius: '50%',
-                background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                fontSize: '24px',
-              }}
-            >
-              🔒
-            </div>
-            <span>ProofLocker</span>
-          </div>
+          />
 
           {/* Main container */}
           <div
             style={{
               display: 'flex',
               flexDirection: 'column',
-              gap: '30px',
+              gap: '32px',
               maxWidth: '1000px',
               position: 'relative',
               zIndex: 1,
@@ -121,11 +126,12 @@ export async function GET(
             {/* Prediction text */}
             <div
               style={{
-                fontSize: '58px',
+                fontSize: '60px',
                 fontWeight: '700',
                 color: 'white',
                 lineHeight: '1.2',
                 letterSpacing: '-0.02em',
+                textShadow: '0 2px 20px rgba(0, 0, 0, 0.3)',
               }}
             >
               {prediction.text}
@@ -145,31 +151,34 @@ export async function GET(
                 let border = '';
 
                 if (badge.type === 'locked' || badge.type === 'resolved') {
-                  bg = 'rgba(34, 197, 94, 0.15)';
+                  bg = 'rgba(34, 197, 94, 0.2)';
                   color = '#4ade80';
                 } else if (badge.type === 'correct') {
-                  bg = 'rgba(34, 197, 94, 0.15)';
+                  bg = 'rgba(34, 197, 94, 0.2)';
                   color = '#4ade80';
-                  border = '2px solid #4ade80';
+                  border = '3px solid #4ade80';
                 } else if (badge.type === 'incorrect') {
-                  bg = 'rgba(239, 68, 68, 0.15)';
+                  bg = 'rgba(239, 68, 68, 0.2)';
                   color = '#f87171';
-                  border = '2px solid #f87171';
+                  border = '3px solid #f87171';
                 }
 
                 return (
                   <div
                     key={i}
                     style={{
-                      padding: '12px 24px',
-                      borderRadius: '24px',
-                      fontSize: '20px',
+                      padding: '14px 28px',
+                      borderRadius: '28px',
+                      fontSize: '22px',
                       fontWeight: '600',
                       display: 'flex',
                       alignItems: 'center',
                       background: bg,
                       color: color,
                       border: border || 'none',
+                      boxShadow: badge.type === 'correct' || badge.type === 'incorrect'
+                        ? `0 0 30px ${badge.type === 'correct' ? 'rgba(34, 197, 94, 0.3)' : 'rgba(239, 68, 68, 0.3)'}`
+                        : 'none',
                     }}
                   >
                     {badge.text}
@@ -181,9 +190,10 @@ export async function GET(
             {/* Subtitle */}
             <div
               style={{
-                fontSize: '24px',
-                color: 'rgba(255, 255, 255, 0.7)',
+                fontSize: '26px',
+                color: 'rgba(255, 255, 255, 0.75)',
                 fontWeight: '400',
+                letterSpacing: '-0.01em',
               }}
             >
               {subtitle}
@@ -199,7 +209,7 @@ export async function GET(
   } catch (error) {
     console.error('OG Image generation error:', error);
 
-    // Fallback image
+    // Fallback image with proper styling
     return new ImageResponse(
       (
         <div
@@ -209,7 +219,8 @@ export async function GET(
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            background: 'linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%)',
+            background: '#0a0515',
+            backgroundImage: 'radial-gradient(circle at 25% 25%, rgba(88, 28, 135, 0.4) 0%, transparent 50%), radial-gradient(circle at 75% 75%, rgba(49, 46, 129, 0.3) 0%, transparent 50%)',
             color: 'white',
             fontSize: '48px',
             fontWeight: '700',
