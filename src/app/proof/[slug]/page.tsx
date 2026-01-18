@@ -119,7 +119,7 @@ export default async function ProofPage({ params }: Props) {
         <div className="absolute top-40 -right-40 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl" />
       </div>
 
-      <div className="relative z-10 max-w-4xl mx-auto px-4 py-6 md:py-12">
+      <div className="relative z-10 max-w-3xl mx-auto px-4 py-6 md:py-12">
         {/* Header with back button */}
         <div className="mb-6 md:mb-8">
           <Link
@@ -134,14 +134,14 @@ export default async function ProofPage({ params }: Props) {
         </div>
 
         {/* Main card container */}
-        <div className="glass border border-white/10 rounded-2xl overflow-hidden">
+        <div className="glass border border-white/10 rounded-xl md:rounded-2xl overflow-hidden">
           {/* Prediction statement - Hero section */}
           {/* Polish: Reduced top padding (8→6) for tighter hierarchy, aligned title+status on same row */}
-          <div className="p-4 md:p-8 border-b border-white/10 bg-gradient-to-br from-white/5 to-transparent">
+          <div className="p-4 md:p-6 border-b border-white/10 bg-gradient-to-br from-white/5 to-transparent">
             <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between mb-3 md:mb-4">
               <div className="min-w-0 flex-1">
                 <div className="text-xs text-neutral-500 mb-2 md:mb-3 uppercase tracking-wide">Prediction</div>
-                <h1 className="text-xl md:text-3xl leading-relaxed text-white font-medium break-words">
+                <h1 className="text-xl md:text-2xl leading-relaxed text-white font-medium break-words">
                   {prediction.text}
                 </h1>
               </div>
@@ -154,7 +154,7 @@ export default async function ProofPage({ params }: Props) {
 
           {/* Key details section */}
           {/* Polish: Consistent 16px spacing unit (p-6), metadata hierarchy */}
-          <div className="p-4 md:p-8 border-b border-white/10">
+          <div className="p-4 md:p-6 border-b border-white/10">
             <h2 className="text-base font-semibold text-white mb-3 md:mb-4">Proof Details</h2>
             <div className="grid md:grid-cols-2 gap-3 md:gap-4">
               {/* Locked timestamp */}
@@ -240,7 +240,7 @@ export default async function ProofPage({ params }: Props) {
           {/* Resolution notes */}
           {/* Polish: Added verdict authority with icon accent, improved copy clarity */}
           {isResolved && prediction.resolutionNote && (
-            <div className="p-4 md:p-8 border-b border-white/10 bg-white/[0.02]">
+            <div className="p-4 md:p-6 border-b border-white/10 bg-white/[0.02]">
               <h2 className="text-base font-semibold text-white mb-3 md:mb-4">Resolution Summary</h2>
               <div className="glass border border-white/10 rounded-lg p-4 md:p-5">
                 <div className="flex gap-2 md:gap-3">
@@ -278,7 +278,7 @@ export default async function ProofPage({ params }: Props) {
           {/* On-Chain Proof Section 1: Prediction Locked */}
           {/* Polish: Added step label, unified icon system (all outlined), consistent spacing */}
           {prediction.onChainStatus === "confirmed" && prediction.deReference && (
-            <div className="p-4 md:p-8 border-b border-white/10">
+            <div className="p-4 md:p-6 border-b border-white/10">
               <div className="text-[10px] text-purple-400 font-medium uppercase tracking-wider mb-1">Step 1</div>
               <h2 className="text-base font-semibold text-white mb-1">Prediction Locked</h2>
               <p className="text-xs text-neutral-400 mb-4 md:mb-5">This prediction was permanently locked on the blockchain</p>
