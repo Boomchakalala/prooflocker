@@ -280,7 +280,7 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
         ) : (
           <button
             disabled
-            className={`px-3 py-2.5 text-sm font-medium rounded-lg border whitespace-nowrap cursor-not-allowed flex items-center justify-center gap-1.5 ${
+            className={`px-3 py-2 text-sm font-medium rounded-lg border whitespace-nowrap cursor-not-allowed flex items-center justify-center gap-1.5 ${
               prediction.outcome === "correct"
                 ? "text-green-400 bg-green-500/10 border-green-500/30"
                 : "text-red-400 bg-red-500/10 border-red-500/30"
