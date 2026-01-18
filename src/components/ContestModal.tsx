@@ -72,20 +72,22 @@ export default function ContestModal({
   const isOverMax = charCount > 1000;
 
   return (
-    <div
-      className="fixed inset-0 z-[9999] overflow-y-auto"
-      onClick={onClose}
-    >
-      {/* Backdrop - COMPLETELY opaque on mobile to hide everything behind */}
-      <div className="fixed inset-0 bg-black md:bg-black/70 backdrop-blur-md" />
+    <>
+      {/* Backdrop - Separate layer */}
+      <div
+        className="fixed inset-0 z-[9998] bg-black md:bg-black/70 backdrop-blur-md"
+        onClick={onClose}
+      />
 
-      {/* Centering wrapper */}
-      <div className="min-h-full flex items-start justify-center p-4 md:p-6 pt-8 md:pt-20">
-        {/* Modal Container */}
-        <div
-          className="relative bg-gradient-to-br from-[#1a1a1a] to-[#0a0a0a] rounded-xl p-6 max-w-md w-full border border-orange-500/20 shadow-2xl my-4 md:my-8"
-          onClick={(e) => e.stopPropagation()}
-        >
+      {/* Modal - Above backdrop */}
+      <div
+        className="fixed inset-0 z-[9999] overflow-y-auto pointer-events-none"
+      >
+        <div className="min-h-full flex items-start justify-center p-4 md:p-6 pt-8 md:pt-20">
+          <div
+            className="relative bg-gradient-to-br from-[#1a1a1a] to-[#0a0a0a] rounded-xl p-6 max-w-md w-full border border-orange-500/20 shadow-2xl my-4 md:my-8 pointer-events-auto"
+            onClick={(e) => e.stopPropagation()}
+          >
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
           <h3 className="text-xl font-bold text-white flex items-center gap-2">
@@ -217,6 +219,7 @@ export default function ContestModal({
         </div>
       </div>
       </div>
-    </div>
+      </div>
+    </>
   );
 }
