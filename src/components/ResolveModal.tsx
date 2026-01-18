@@ -80,20 +80,12 @@ export default function ResolveModal({
   };
 
   return (
-    <div className="fixed inset-0 z-[9999]">
-      {/* Full screen black background on mobile, semi-transparent on desktop */}
-      <div
-        className="fixed inset-0 bg-black md:bg-black/70 md:backdrop-blur-md"
-        onClick={onClose}
-      />
-
-      {/* Scrollable container - ABOVE backdrop, transparent */}
-      <div className="fixed inset-0 overflow-y-auto pointer-events-none">
-        <div className="min-h-full flex items-start justify-center p-4 md:p-6 pt-8 md:pt-20 pointer-events-none">
-          <div
-            className="relative w-full max-w-2xl bg-gradient-to-br from-[#1a1a1a] to-[#0a0a0a] rounded-2xl border border-white/10 shadow-2xl my-4 md:my-8 z-10 pointer-events-auto"
-            onClick={(e) => e.stopPropagation()}
-          >
+    <div className="fixed inset-0 z-[10000] flex items-start justify-center overflow-y-auto bg-black/90 backdrop-blur-md" onClick={onClose}>
+      <div className="w-full max-w-2xl p-4 md:p-6 pt-8 md:pt-20">
+        <div
+          className="relative w-full bg-gradient-to-br from-[#1a1a1a] to-[#0a0a0a] rounded-2xl border border-white/10 shadow-2xl my-4 md:my-8"
+          onClick={(e) => e.stopPropagation()}
+        >
           {/* Header - Not sticky, scrolls away */}
           <div className="flex items-center justify-between p-5 border-b border-white/10">
           <h3 className="text-xl font-bold text-white flex items-center gap-2">
@@ -276,7 +268,6 @@ export default function ResolveModal({
             </div>
           </form>
         </div>
-      </div>
       </div>
     </div>
   );

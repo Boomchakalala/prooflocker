@@ -72,20 +72,12 @@ export default function ContestModal({
   const isOverMax = charCount > 1000;
 
   return (
-    <div className="fixed inset-0 z-[9999]">
-      {/* Full screen black background on mobile, semi-transparent on desktop */}
-      <div
-        className="fixed inset-0 bg-black md:bg-black/70 md:backdrop-blur-md"
-        onClick={onClose}
-      />
-
-      {/* Scrollable container - ABOVE backdrop, transparent */}
-      <div className="fixed inset-0 overflow-y-auto pointer-events-none">
-        <div className="min-h-full flex items-start justify-center p-4 md:p-6 pt-8 md:pt-20 pointer-events-none">
-          <div
-            className="relative bg-gradient-to-br from-[#1a1a1a] to-[#0a0a0a] rounded-xl p-6 max-w-md w-full border border-orange-500/20 shadow-2xl my-4 md:my-8 z-10 pointer-events-auto"
-            onClick={(e) => e.stopPropagation()}
-          >
+    <div className="fixed inset-0 z-[10000] flex items-start justify-center overflow-y-auto bg-black/90 backdrop-blur-md" onClick={onClose}>
+      <div className="w-full max-w-md p-4 md:p-6 pt-8 md:pt-20">
+        <div
+          className="relative w-full bg-gradient-to-br from-[#1a1a1a] to-[#0a0a0a] rounded-xl p-6 border border-orange-500/20 shadow-2xl my-4 md:my-8"
+          onClick={(e) => e.stopPropagation()}
+        >
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
           <h3 className="text-xl font-bold text-white flex items-center gap-2">
@@ -215,7 +207,6 @@ export default function ContestModal({
             </span>
           </p>
         </div>
-      </div>
       </div>
       </div>
     </div>
