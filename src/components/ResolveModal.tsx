@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { createPortal } from "react-dom";
 import { PredictionOutcome } from "@/lib/storage";
 import { supabase } from "@/lib/supabase";
 
@@ -26,6 +27,12 @@ export default function ResolveModal({
   const [resolutionUrl, setResolutionUrl] = useState(currentUrl || "");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [mounted, setMounted] = useState(false);
+
+  // Wait for client-side mount before rendering portal
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   // Lock body scroll when modal is open
   useEffect(() => {
@@ -79,11 +86,16 @@ export default function ResolveModal({
     }
   };
 
-  return (
-    <div className="fixed inset-0 z-[10000] flex items-start justify-center overflow-y-auto bg-black md:bg-black/90 md:backdrop-blur-md" onClick={onClose}>
-      <div className="w-full max-w-2xl p-4 md:p-6 pt-8 md:pt-20">
+  if (!mounted) return null;
+
+  const modalContent = (
+    <div
+      className="fixed inset-0 z-[99999] bg-black/90 md:bg-black/60 flex items-center justify-center p-4 pb-[calc(16px+env(safe-area-inset-bottom))] overflow-y-auto"
+      onClick={onClose}
+    >
+      <div className="w-full max-w-[560px] max-h-[85dvh] overflow-y-auto my-auto">
         <div
-          className="relative w-full bg-gradient-to-br from-[#1a1a1a] to-[#0a0a0a] rounded-2xl border border-white/10 shadow-2xl my-4 md:my-8"
+          className="relative w-full bg-gradient-to-br from-[#1a1a1a] to-[#0a0a0a] rounded-2xl border border-white/10 shadow-2xl"
           onClick={(e) => e.stopPropagation()}
         >
           {/* Header - Not sticky, scrolls away */}
@@ -271,4 +283,6 @@ export default function ResolveModal({
       </div>
     </div>
   );
+
+  return createPortal(modalContent, document.body);
 }
