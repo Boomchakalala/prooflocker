@@ -18,8 +18,8 @@ export async function GET(
       throw new Error('Prediction not found');
     }
 
-    // Fetch the ProofLocker logo
-    const logoUrl = new URL('/logos/prooflocker-logo-dark.png', request.url).toString();
+    // Fetch the ProofLocker logo (WHITE for OG cards)
+    const logoUrl = new URL('/og/prooflocker-logo-white.png', request.url).toString();
     const logoResponse = await fetch(logoUrl);
     const logoArrayBuffer = await logoResponse.arrayBuffer();
     const logoBase64 = Buffer.from(logoArrayBuffer).toString('base64');
@@ -58,8 +58,8 @@ export async function GET(
             alignItems: 'flex-start',
             justifyContent: 'center',
             padding: '80px',
-            background: '#0a0515',
-            backgroundImage: 'radial-gradient(circle at 25% 25%, rgba(88, 28, 135, 0.4) 0%, transparent 50%), radial-gradient(circle at 75% 75%, rgba(49, 46, 129, 0.3) 0%, transparent 50%), radial-gradient(circle at 50% 100%, rgba(30, 27, 75, 0.5) 0%, transparent 50%)',
+            background: '#0a0a0a',
+            backgroundImage: 'radial-gradient(circle at 20% 30%, rgba(139, 92, 246, 0.35) 0%, transparent 50%), radial-gradient(circle at 80% 70%, rgba(59, 130, 246, 0.3) 0%, transparent 50%), radial-gradient(circle at 50% 50%, rgba(126, 34, 206, 0.25) 0%, transparent 60%)',
             position: 'relative',
           }}
         >
