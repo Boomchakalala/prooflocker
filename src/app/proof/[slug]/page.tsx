@@ -191,7 +191,7 @@ export default async function ProofPage({ params }: Props) {
               {isResolved && prediction.resolvedAt ? (
                 <div className="glass border border-white/10 rounded-xl p-4 md:p-5 bg-gradient-to-br from-white/[0.03] to-transparent hover:border-white/20 transition-all">
                   <div className="flex items-start gap-3">
-                    <div className="flex-shrink-0 w-10 h-10 rounded-lg bg-green-500/10 border border-green-500/20 flex items-center justify-center">
+                    <div className="flex-shrink-0 w-10 h-10 rounded-lg bg-green-500/10 flex items-center justify-center">
                       <svg className="w-5 h-5 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                       </svg>
@@ -219,7 +219,7 @@ export default async function ProofPage({ params }: Props) {
               ) : (
                 <div className="glass border border-white/10 rounded-xl p-4 md:p-5 bg-gradient-to-br from-white/[0.02] to-transparent opacity-50">
                   <div className="flex items-start gap-3">
-                    <div className="flex-shrink-0 w-10 h-10 rounded-lg bg-neutral-500/10 border border-neutral-500/20 flex items-center justify-center">
+                    <div className="flex-shrink-0 w-10 h-10 rounded-lg bg-neutral-500/10 flex items-center justify-center">
                       <svg className="w-5 h-5 text-neutral-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                       </svg>
@@ -240,7 +240,7 @@ export default async function ProofPage({ params }: Props) {
               {/* Network status */}
               <div className="glass border border-white/10 rounded-xl p-4 md:p-5 bg-gradient-to-br from-white/[0.03] to-transparent hover:border-white/20 transition-all">
                 <div className="flex items-start gap-3">
-                  <div className="flex-shrink-0 w-10 h-10 rounded-lg bg-purple-500/10 border border-purple-500/20 flex items-center justify-center">
+                  <div className="flex-shrink-0 w-10 h-10 rounded-lg bg-purple-500/10 flex items-center justify-center">
                     <svg className="w-5 h-5 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" />
                     </svg>
