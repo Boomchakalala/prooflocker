@@ -153,47 +153,31 @@ export default async function ProofPage({ params }: Props) {
           </div>
 
           {/* Key details section */}
-          {/* Polish: Consistent 16px spacing unit (p-6), metadata hierarchy */}
           <div className="p-4 md:p-6 border-b border-white/10">
-            <h2 className="text-base font-semibold text-white mb-3 md:mb-4">Proof Details</h2>
-            <div className="grid grid-cols-2 gap-2.5 md:gap-4 items-stretch">
-              {/* Locked timestamp */}
-              <div className="glass border border-white/10 rounded-lg p-3 md:p-4 flex flex-col">
-                <div className="text-[10px] text-neutral-500 uppercase tracking-wider mb-2">Locked On</div>
-                <div className="flex-1 flex flex-col justify-center">
-                  <div className="text-white font-medium text-sm">
-                    {lockedDate.toLocaleDateString("en-US", {
-                      month: "long",
-                      day: "numeric",
-                      year: "numeric",
-                      timeZone: "UTC",
-                    })}
-                  </div>
-                  <div className="text-xs text-neutral-400 font-mono mt-1">
-                    {lockedDate.toLocaleTimeString("en-US", {
-                      hour: "2-digit",
-                      minute: "2-digit",
-                      timeZone: "UTC",
-                    })} UTC
-                  </div>
-                </div>
-              </div>
+            <h2 className="text-base md:text-lg font-semibold text-white mb-4 md:mb-5">Proof Details</h2>
 
-              {/* Resolved timestamp */}
-              {isResolved && prediction.resolvedAt ? (
-                <div className="glass border border-white/10 rounded-lg p-3 md:p-4 flex flex-col">
-                  <div className="text-[10px] text-neutral-500 uppercase tracking-wider mb-2">Resolved On</div>
-                  <div className="flex-1 flex flex-col justify-center">
-                    <div className="text-white font-medium text-sm">
-                      {new Date(prediction.resolvedAt).toLocaleDateString("en-US", {
-                        month: "long",
+            {/* Timeline - Locked and Resolved dates */}
+            <div className="space-y-3 md:space-y-0 md:grid md:grid-cols-2 md:gap-4 mb-4">
+              {/* Locked timestamp */}
+              <div className="glass border border-white/10 rounded-xl p-4 md:p-5 bg-gradient-to-br from-white/[0.03] to-transparent hover:border-white/20 transition-all">
+                <div className="flex items-start gap-3">
+                  <div className="flex-shrink-0 w-10 h-10 rounded-lg bg-blue-500/10 border border-blue-500/20 flex items-center justify-center">
+                    <svg className="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                    </svg>
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <div className="text-xs text-neutral-400 uppercase tracking-wider mb-1.5">Locked On</div>
+                    <div className="text-white font-semibold text-base md:text-lg">
+                      {lockedDate.toLocaleDateString("en-US", {
+                        month: "short",
                         day: "numeric",
                         year: "numeric",
                         timeZone: "UTC",
                       })}
                     </div>
                     <div className="text-xs text-neutral-400 font-mono mt-1">
-                      {new Date(prediction.resolvedAt).toLocaleTimeString("en-US", {
+                      {lockedDate.toLocaleTimeString("en-US", {
                         hour: "2-digit",
                         minute: "2-digit",
                         timeZone: "UTC",
@@ -201,62 +185,116 @@ export default async function ProofPage({ params }: Props) {
                     </div>
                   </div>
                 </div>
+              </div>
+
+              {/* Resolved timestamp */}
+              {isResolved && prediction.resolvedAt ? (
+                <div className="glass border border-white/10 rounded-xl p-4 md:p-5 bg-gradient-to-br from-white/[0.03] to-transparent hover:border-white/20 transition-all">
+                  <div className="flex items-start gap-3">
+                    <div className="flex-shrink-0 w-10 h-10 rounded-lg bg-green-500/10 border border-green-500/20 flex items-center justify-center">
+                      <svg className="w-5 h-5 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      </svg>
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <div className="text-xs text-neutral-400 uppercase tracking-wider mb-1.5">Resolved On</div>
+                      <div className="text-white font-semibold text-base md:text-lg">
+                        {new Date(prediction.resolvedAt).toLocaleDateString("en-US", {
+                          month: "short",
+                          day: "numeric",
+                          year: "numeric",
+                          timeZone: "UTC",
+                        })}
+                      </div>
+                      <div className="text-xs text-neutral-400 font-mono mt-1">
+                        {new Date(prediction.resolvedAt).toLocaleTimeString("en-US", {
+                          hour: "2-digit",
+                          minute: "2-digit",
+                          timeZone: "UTC",
+                        })} UTC
+                      </div>
+                    </div>
+                  </div>
+                </div>
               ) : (
-                <div className="glass border border-white/10 rounded-lg p-3 md:p-4 flex flex-col opacity-40">
-                  <div className="text-[10px] text-neutral-500 uppercase tracking-wider mb-2">Resolved On</div>
-                  <div className="flex-1 flex flex-col justify-center">
-                    <div className="text-neutral-500 text-sm italic">Not resolved yet</div>
+                <div className="glass border border-white/10 rounded-xl p-4 md:p-5 bg-gradient-to-br from-white/[0.02] to-transparent opacity-50">
+                  <div className="flex items-start gap-3">
+                    <div className="flex-shrink-0 w-10 h-10 rounded-lg bg-neutral-500/10 border border-neutral-500/20 flex items-center justify-center">
+                      <svg className="w-5 h-5 text-neutral-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      </svg>
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <div className="text-xs text-neutral-400 uppercase tracking-wider mb-1.5">Resolved On</div>
+                      <div className="text-neutral-500 font-medium text-base italic">
+                        Not resolved yet
+                      </div>
+                    </div>
                   </div>
                 </div>
               )}
+            </div>
 
+            {/* Network and Author */}
+            <div className="space-y-3 md:space-y-0 md:grid md:grid-cols-2 md:gap-4">
               {/* Network status */}
-              <div className="glass border border-white/10 rounded-lg p-3 md:p-4 flex flex-col">
-                <div className="flex items-center justify-between mb-2">
-                  <div className="text-[10px] text-neutral-500 uppercase tracking-wider">Network</div>
-                  <div className="flex items-center gap-1.5">
-                    <div
-                      className={`w-1.5 h-1.5 rounded-full ${
-                        prediction.onChainStatus === "confirmed"
-                          ? "bg-green-400"
-                          : "bg-yellow-400 animate-pulse"
-                      }`}
-                    />
-                    <span className={`text-[10px] font-medium uppercase tracking-wide ${
-                      prediction.onChainStatus === "confirmed"
-                        ? "text-green-400"
-                        : "text-yellow-400"
-                    }`}>
-                      {prediction.onChainStatus === "confirmed" ? "Confirmed" : "Pending"}
-                    </span>
+              <div className="glass border border-white/10 rounded-xl p-4 md:p-5 bg-gradient-to-br from-white/[0.03] to-transparent hover:border-white/20 transition-all">
+                <div className="flex items-start gap-3">
+                  <div className="flex-shrink-0 w-10 h-10 rounded-lg bg-purple-500/10 border border-purple-500/20 flex items-center justify-center">
+                    <svg className="w-5 h-5 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" />
+                    </svg>
                   </div>
-                </div>
-                <div className="flex-1 flex items-center">
-                  <div className="text-white font-medium text-sm">
-                    Constellation DAG
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center justify-between mb-1.5">
+                      <div className="text-xs text-neutral-400 uppercase tracking-wider">Network</div>
+                      <div className={`flex items-center gap-1.5 px-2 py-0.5 rounded-full ${
+                        prediction.onChainStatus === "confirmed"
+                          ? "bg-green-500/10 border border-green-500/20"
+                          : "bg-yellow-500/10 border border-yellow-500/20"
+                      }`}>
+                        <div className={`w-1.5 h-1.5 rounded-full ${
+                          prediction.onChainStatus === "confirmed"
+                            ? "bg-green-400"
+                            : "bg-yellow-400 animate-pulse"
+                        }`} />
+                        <span className={`text-[10px] font-semibold uppercase tracking-wide ${
+                          prediction.onChainStatus === "confirmed"
+                            ? "text-green-400"
+                            : "text-yellow-400"
+                        }`}>
+                          {prediction.onChainStatus === "confirmed" ? "Confirmed" : "Pending"}
+                        </span>
+                      </div>
+                    </div>
+                    <div className="text-white font-semibold text-base md:text-lg">
+                      Constellation DAG
+                    </div>
                   </div>
                 </div>
               </div>
 
               {/* Author */}
-              <div className="glass border border-white/10 rounded-lg p-3 md:p-4 flex flex-col">
-                <div className="flex items-center justify-between mb-2">
-                  <div className="text-[10px] text-neutral-500 uppercase tracking-wider">Author</div>
-                  {prediction.userId && (
-                    <div className="flex items-center gap-1">
-                      <svg className="w-2.5 h-2.5 text-cyan-400" fill="currentColor" viewBox="0 0 20 20">
-                        <path fillRule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                      </svg>
-                      <span className="text-[10px] text-cyan-400 font-medium uppercase tracking-wide">Claimed</span>
+              <div className="glass border border-white/10 rounded-xl p-4 md:p-5 bg-gradient-to-br from-white/[0.03] to-transparent hover:border-white/20 transition-all">
+                <div className="flex items-start gap-3">
+                  <div className="flex-shrink-0 w-10 h-10 rounded-lg bg-gradient-to-br from-cyan-500 to-blue-600 flex items-center justify-center text-white text-sm font-bold shadow-lg shadow-cyan-500/20">
+                    {prediction.authorNumber.toString().slice(-2)}
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center justify-between mb-1.5">
+                      <div className="text-xs text-neutral-400 uppercase tracking-wider">Author</div>
+                      {prediction.userId && (
+                        <div className="flex items-center gap-1 px-2 py-0.5 rounded-full bg-cyan-500/10 border border-cyan-500/20">
+                          <svg className="w-3 h-3 text-cyan-400" fill="currentColor" viewBox="0 0 20 20">
+                            <path fillRule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                          </svg>
+                          <span className="text-[10px] text-cyan-400 font-semibold uppercase tracking-wide">Claimed</span>
+                        </div>
+                      )}
                     </div>
-                  )}
-                </div>
-                <div className="flex-1 flex items-center">
-                  <div className="flex items-center gap-2">
-                    <div className="w-7 h-7 rounded-full bg-gradient-to-br from-cyan-500 to-blue-600 flex items-center justify-center text-white text-xs font-bold flex-shrink-0">
-                      {prediction.authorNumber.toString().slice(-2)}
+                    <div className="text-white font-semibold text-base md:text-lg">
+                      Anon #{prediction.authorNumber}
                     </div>
-                    <span className="text-white font-medium text-sm">Anon #{prediction.authorNumber}</span>
                   </div>
                 </div>
               </div>
