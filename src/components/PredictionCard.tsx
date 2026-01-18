@@ -110,7 +110,7 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
     : prediction.textPreview;
 
   return (
-    <div className="glass rounded-lg p-4 md:p-4 hover:border-white/10 transition-all flex flex-col h-full shadow-lg shadow-purple-500/5">
+    <div className="relative rounded-lg p-4 md:p-4 transition-all flex flex-col h-full shadow-lg overflow-hidden border border-purple-500/20 hover:border-purple-500/40 bg-gradient-to-br from-purple-600/15 via-blue-600/10 to-purple-700/15 backdrop-blur-xl">
       {/* 1. HEADER ROW - Author info + badges */}
       <div className="mb-2">
         {/* Top row: Author info (left) + Status badges (right) - Mobile layout */}
