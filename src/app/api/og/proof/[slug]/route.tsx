@@ -133,78 +133,58 @@ export async function GET(
               {prediction.text}
             </div>
 
-            {/* Status badges */}
+            {/* Status badge - single badge matching in-app design */}
             <div
               style={{
                 display: 'flex',
-                gap: '14px',
-                flexWrap: 'wrap',
-                marginTop: '8px',
+                flexDirection: 'column',
+                gap: '16px',
+                marginTop: '12px',
               }}
             >
-              {statusBadges.map((badge, i) => {
-                let bg = '';
-                let color = '';
-                let border = '';
+              {/* Badge */}
+              <div
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '8px',
+                  padding: '12px 28px',
+                  borderRadius: '8px',
+                  fontSize: '20px',
+                  fontWeight: '600',
+                  background: statusBadge.type === 'locked'
+                    ? 'rgba(168, 85, 247, 0.1)'
+                    : statusBadge.type === 'correct'
+                    ? 'rgba(34, 197, 94, 0.1)'
+                    : 'rgba(239, 68, 68, 0.1)',
+                  color: statusBadge.type === 'locked'
+                    ? '#c084fc'
+                    : statusBadge.type === 'correct'
+                    ? '#4ade80'
+                    : '#f87171',
+                  border: statusBadge.type === 'locked'
+                    ? '2px solid rgba(168, 85, 247, 0.3)'
+                    : statusBadge.type === 'correct'
+                    ? '2px solid rgba(34, 197, 94, 0.3)'
+                    : '2px solid rgba(239, 68, 68, 0.3)',
+                  maxWidth: 'fit-content',
+                }}
+              >
+                {statusBadge.text}
+              </div>
 
-                if (badge.type === 'locked') {
-                  // Purple theme like site
-                  bg = 'rgba(168, 85, 247, 0.1)';
-                  color = '#c084fc';
-                  border = '2px solid rgba(168, 85, 247, 0.3)';
-                } else if (badge.type === 'resolved') {
-                  // Green theme like site
-                  bg = 'rgba(34, 197, 94, 0.1)';
-                  color = '#4ade80';
-                  border = '2px solid rgba(34, 197, 94, 0.3)';
-                } else if (badge.type === 'correct') {
-                  // Green with stronger border
-                  bg = 'rgba(34, 197, 94, 0.1)';
-                  color = '#4ade80';
-                  border = '2px solid rgba(34, 197, 94, 0.5)';
-                } else if (badge.type === 'incorrect') {
-                  // Red like site
-                  bg = 'rgba(239, 68, 68, 0.1)';
-                  color = '#f87171';
-                  border = '2px solid rgba(239, 68, 68, 0.5)';
-                }
-
-                return (
-                  <div
-                    key={i}
-                    style={{
-                      padding: '10px 24px',
-                      borderRadius: '24px',
-                      fontSize: '19px',
-                      fontWeight: '600',
-                      display: 'flex',
-                      alignItems: 'center',
-                      background: bg,
-                      color: color,
-                      border: border,
-                      boxShadow: badge.type === 'correct' || badge.type === 'incorrect'
-                        ? `0 0 20px ${badge.type === 'correct' ? 'rgba(34, 197, 94, 0.2)' : 'rgba(239, 68, 68, 0.2)'}`
-                        : 'none',
-                    }}
-                  >
-                    {badge.text}
-                  </div>
-                );
-              })}
-            </div>
-
-            {/* Tagline - "I called it" vibe */}
-            <div
-              style={{
-                fontSize: '23px',
-                color: 'rgba(255, 255, 255, 0.85)',
-                fontWeight: '500',
-                letterSpacing: '-0.015em',
-                marginTop: '4px',
-                textShadow: '0 1px 10px rgba(0, 0, 0, 0.3)',
-              }}
-            >
-              {tagline}
+              {/* Status text under badge */}
+              <div
+                style={{
+                  fontSize: '22px',
+                  color: 'rgba(255, 255, 255, 0.8)',
+                  fontWeight: '500',
+                  letterSpacing: '-0.01em',
+                  textShadow: '0 1px 10px rgba(0, 0, 0, 0.3)',
+                }}
+              >
+                {statusText}
+              </div>
             </div>
           </div>
         </div>
