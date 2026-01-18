@@ -73,19 +73,17 @@ export default function ContestModal({
 
   return (
     <div
-      className="fixed inset-0 z-[9999] overflow-y-auto"
+      className="fixed inset-0 z-[9999] flex items-start md:items-center justify-center p-4 md:p-6 pt-8 md:pt-6 overflow-y-auto"
       onClick={onClose}
     >
       {/* Backdrop - Fully opaque on mobile to hide everything behind */}
-      <div className="fixed inset-0 bg-black/95 md:bg-black/70 backdrop-blur-md" />
+      <div className="fixed inset-0 bg-black/95 md:bg-black/70 backdrop-blur-md -z-10" />
 
-      {/* Centering container */}
-      <div className="min-h-full flex items-start md:items-center justify-center p-4 md:p-6 pt-8 md:pt-6">
-        {/* Modal Container */}
-        <div
-          className="relative bg-gradient-to-br from-[#1a1a1a] to-[#0a0a0a] rounded-xl p-6 max-w-md w-full border border-orange-500/20 shadow-2xl my-4"
-          onClick={(e) => e.stopPropagation()}
-        >
+      {/* Modal Container */}
+      <div
+        className="relative bg-gradient-to-br from-[#1a1a1a] to-[#0a0a0a] rounded-xl p-6 max-w-md w-full border border-orange-500/20 shadow-2xl my-4 md:my-8"
+        onClick={(e) => e.stopPropagation()}
+      >
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
           <h3 className="text-xl font-bold text-white flex items-center gap-2">

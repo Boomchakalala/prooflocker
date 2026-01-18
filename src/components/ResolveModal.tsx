@@ -273,8 +273,6 @@ export default function ResolveModal({
               </div>
             </div>
           </form>
-        </div>
-      </div>
       </div>
     </div>
   );
