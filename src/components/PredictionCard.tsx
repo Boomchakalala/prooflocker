@@ -256,7 +256,7 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
         {/* Resolve or Resolved button */}
         {isPending ? (
           <button
-            onClick={canResolve ? () => setShowResolveModal(true) : undefined}
+            onClick={canResolve ? handleResolveClick : undefined}
             disabled={!canResolve}
             className={`px-3 py-2.5 text-sm font-medium rounded-lg transition-all border whitespace-nowrap flex items-center justify-center gap-1.5 ${
               canResolve
