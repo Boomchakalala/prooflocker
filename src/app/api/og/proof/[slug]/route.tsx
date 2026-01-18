@@ -1,5 +1,6 @@
 import { ImageResponse } from '@vercel/og';
 import { NextRequest } from 'next/server';
+import { getPredictionBySlug } from '@/lib/storage';
 
 export const runtime = 'edge';
 
@@ -10,17 +11,12 @@ export async function GET(
   try {
     const { slug } = params;
 
-    // Fetch prediction data
-    const predictionResponse = await fetch(
-      `${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/api/predictions/${slug}`,
-      { cache: 'no-store' }
-    );
+    // Fetch prediction data directly from storage
+    const prediction = await getPredictionBySlug(slug);
 
-    if (!predictionResponse.ok) {
-      throw new Error('Failed to fetch prediction');
+    if (!prediction) {
+      throw new Error('Prediction not found');
     }
-
-    const prediction = await predictionResponse.json();
 
     // Determine state
     const isResolved = prediction.outcome !== null && prediction.outcome !== 'pending';
@@ -32,20 +28,20 @@ export async function GET(
 
     if (!isResolved) {
       // State 1: Locked + Pending
-      statusBadges = [{ text: '🔒 Locked', color: 'bg-green-500/20 text-green-400' }];
+      statusBadges = [{ text: '🔒 Locked', type: 'locked' }];
       subtitle = 'Prediction locked. Immutable.';
     } else if (isCorrect) {
       // State 2: Resolved + Correct
       statusBadges = [
-        { text: '✓ Resolved', color: 'bg-green-500/20 text-green-400' },
-        { text: 'Outcome: Correct', color: 'bg-green-500/20 text-green-400 border-2 border-green-500' },
+        { text: '✓ Resolved', type: 'resolved' },
+        { text: 'Outcome: Correct', type: 'correct' },
       ];
       subtitle = 'Prediction correct. Still immutable.';
     } else {
       // State 3: Resolved + Incorrect
       statusBadges = [
-        { text: '✓ Resolved', color: 'bg-green-500/20 text-green-400' },
-        { text: 'Outcome: Incorrect', color: 'bg-red-500/20 text-red-400 border-2 border-red-500' },
+        { text: '✓ Resolved', type: 'resolved' },
+        { text: 'Outcome: Incorrect', type: 'incorrect' },
       ];
       subtitle = 'Prediction incorrect. Still immutable.';
     }
@@ -132,7 +128,7 @@ export async function GET(
                 letterSpacing: '-0.02em',
               }}
             >
-              {prediction.prediction}
+              {prediction.text}
             </div>
 
             {/* Status badges */}
@@ -143,25 +139,43 @@ export async function GET(
                 flexWrap: 'wrap',
               }}
             >
-              {statusBadges.map((badge, i) => (
-                <div
-                  key={i}
-                  style={{
-                    padding: '12px 24px',
-                    borderRadius: '24px',
-                    fontSize: '20px',
-                    fontWeight: '600',
-                    display: 'flex',
-                    alignItems: 'center',
-                    background: badge.color.includes('green') ? 'rgba(34, 197, 94, 0.15)' : 'rgba(239, 68, 68, 0.15)',
-                    color: badge.color.includes('green') ? '#4ade80' : '#f87171',
-                    border: badge.color.includes('border') ? '2px solid' : 'none',
-                    borderColor: badge.color.includes('green') ? '#4ade80' : '#f87171',
-                  }}
-                >
-                  {badge.text}
-                </div>
-              ))}
+              {statusBadges.map((badge, i) => {
+                let bg = '';
+                let color = '';
+                let border = '';
+
+                if (badge.type === 'locked' || badge.type === 'resolved') {
+                  bg = 'rgba(34, 197, 94, 0.15)';
+                  color = '#4ade80';
+                } else if (badge.type === 'correct') {
+                  bg = 'rgba(34, 197, 94, 0.15)';
+                  color = '#4ade80';
+                  border = '2px solid #4ade80';
+                } else if (badge.type === 'incorrect') {
+                  bg = 'rgba(239, 68, 68, 0.15)';
+                  color = '#f87171';
+                  border = '2px solid #f87171';
+                }
+
+                return (
+                  <div
+                    key={i}
+                    style={{
+                      padding: '12px 24px',
+                      borderRadius: '24px',
+                      fontSize: '20px',
+                      fontWeight: '600',
+                      display: 'flex',
+                      alignItems: 'center',
+                      background: bg,
+                      color: color,
+                      border: border || 'none',
+                    }}
+                  >
+                    {badge.text}
+                  </div>
+                );
+              })}
             </div>
 
             {/* Subtitle */}
