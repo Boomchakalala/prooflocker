@@ -81,15 +81,15 @@ export default function ResolveModal({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-4"
+      className="fixed inset-0 z-[100] flex items-center justify-center p-4 md:p-6"
       onClick={onClose}
     >
-      {/* Backdrop */}
-      <div className="absolute inset-0 bg-black/70 backdrop-blur-sm" />
+      {/* Backdrop - More opaque on mobile */}
+      <div className="absolute inset-0 bg-black/85 md:bg-black/70 backdrop-blur-sm" />
 
       {/* Modal Container */}
       <div
-        className="relative w-full max-w-2xl max-h-[calc(100vh-2rem)] overflow-hidden rounded-2xl bg-gradient-to-br from-[#1a1a1a] to-[#0a0a0a] border border-white/10 shadow-2xl"
+        className="relative w-full max-w-2xl max-h-[calc(100vh-2rem)] md:max-h-[calc(100vh-4rem)] overflow-hidden rounded-2xl bg-gradient-to-br from-[#1a1a1a] to-[#0a0a0a] border border-white/10 shadow-2xl"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Single Scroll Container */}

@@ -246,7 +246,7 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
             disabled={!canResolve}
             className={`px-3 py-2.5 text-sm font-medium rounded-lg transition-all border whitespace-nowrap flex items-center justify-center gap-1.5 ${
               canResolve
-                ? "text-white bg-purple-600/90 hover:bg-purple-600 border-purple-500/30 cursor-pointer"
+                ? "text-amber-300 bg-amber-500/10 hover:bg-amber-500/20 border-amber-500/30 hover:border-amber-500/50 cursor-pointer"
                 : "text-neutral-500 bg-neutral-800/50 border-neutral-700/30 cursor-not-allowed opacity-60"
             }`}
             title={canResolve ? "Resolve this prediction" : "Only the creator can resolve"}
