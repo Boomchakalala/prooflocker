@@ -22,7 +22,7 @@ const siteUrl = getSiteUrl();
 
 export const metadata: Metadata = {
   title: "ProofLocker",
-  description: "Prediction locked forever. Claim now. Prove later.",
+  description: "Say it now. Prove it later.",
   metadataBase: new URL(siteUrl),
   icons: {
     icon: [
@@ -33,25 +33,25 @@ export const metadata: Metadata = {
     apple: "/favicons/apple-touch-icon.png",
   },
   openGraph: {
-    title: "ProofLocker",
-    description: "Prediction locked forever. Claim now. Prove later.",
+    title: "ProofLocker — Predictions locked forever",
+    description: "Say it now. Prove it later.",
     url: siteUrl,
     type: "website",
     siteName: "ProofLocker",
     images: [
       {
-        url: getAbsoluteUrl("/api/og/home"),
-        width: 1200,
-        height: 630,
-        alt: "ProofLocker - Predictions locked forever",
+        url: getAbsoluteUrl("/favicons/icon-512.png"),
+        width: 512,
+        height: 512,
+        alt: "ProofLocker",
       },
     ],
   },
   twitter: {
-    card: "summary_large_image",
-    title: "ProofLocker",
-    description: "Prediction locked forever. Claim now. Prove later.",
-    images: [getAbsoluteUrl("/api/og/home")],
+    card: "summary",
+    title: "ProofLocker — Predictions locked forever",
+    description: "Say it now. Prove it later.",
+    images: [getAbsoluteUrl("/favicons/icon-512.png")],
   },
 };
 
