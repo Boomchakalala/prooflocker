@@ -135,7 +135,7 @@ export async function GET(
               {/* Locked badge - always show */}
               <div
                 style={{
-                  display: 'inline-flex',
+                  display: 'flex',
                   alignItems: 'center',
                   gap: '6px',
                   padding: '8px 20px',
@@ -154,7 +154,7 @@ export async function GET(
               {isResolved && (
                 <div
                   style={{
-                    display: 'inline-flex',
+                    display: 'flex',
                     alignItems: 'center',
                     gap: '6px',
                     padding: '8px 20px',
@@ -174,7 +174,7 @@ export async function GET(
               {isResolved && (
                 <div
                   style={{
-                    display: 'inline-flex',
+                    display: 'flex',
                     alignItems: 'center',
                     gap: '6px',
                     padding: '8px 20px',
