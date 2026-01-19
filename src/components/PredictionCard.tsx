@@ -249,8 +249,8 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
         </div>
       </div>
 
-      {/* 6. ACTIONS ROW - Grid layout with emphasis on View proof */}
-      <div className="grid grid-cols-[1.6fr_1fr_38px] gap-3 items-stretch">
+      {/* 6. ACTIONS ROW - Grid layout adapts based on resolve button presence */}
+      <div className={`grid gap-3 items-stretch ${canResolve ? 'grid-cols-[1.6fr_1fr_38px]' : 'grid-cols-[1fr_38px]'}`}>
         {/* View proof button - Subtle inspect action */}
         <button
           onClick={(e) => {
