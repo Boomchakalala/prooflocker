@@ -20,10 +20,6 @@ export async function GET(
 
     // Fetch the ProofLocker logo (WHITE for OG cards)
     const logoUrl = new URL('/og/prooflocker-logo-white.png', request.url).toString();
-    const logoResponse = await fetch(logoUrl);
-    const logoArrayBuffer = await logoResponse.arrayBuffer();
-    const logoBase64 = Buffer.from(logoArrayBuffer).toString('base64');
-    const logoDataUrl = `data:image/png;base64,${logoBase64}`;
 
     // Determine state (matching in-app card logic)
     const isResolved = prediction.outcome !== null && prediction.outcome !== 'pending';
@@ -87,7 +83,7 @@ export async function GET(
 
           {/* ProofLocker Logo - top right (WHITE, sharp, crisp) */}
           <img
-            src={logoDataUrl}
+            src={logoUrl}
             alt="ProofLocker"
             width="200"
             height="50"
