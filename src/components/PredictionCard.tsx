@@ -251,14 +251,20 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
 
       {/* 6. ACTIONS ROW - Grid layout with emphasis on View proof */}
       <div className="grid grid-cols-[1.6fr_1fr_38px] gap-3 items-stretch">
-        {/* View proof button - PRIMARY ACTION */}
-        <Link
-          href={`/proof/${prediction.publicSlug}`}
-          className="text-center px-4 py-2 text-sm font-bold text-white bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 rounded-lg transition-all shadow-lg shadow-blue-500/20 hover:shadow-xl hover:shadow-blue-500/30 flex items-center justify-center"
+        {/* View proof button - Subtle inspect action */}
+        <button
+          onClick={(e) => {
+            e.preventDefault();
+            // Navigation is handled by parent Link
+          }}
+          className="text-center px-4 py-2 text-sm font-medium text-neutral-300 glass hover:bg-white/10 rounded-lg transition-all border border-white/10 hover:border-white/20 flex items-center justify-center gap-1.5"
           title="View proof details"
         >
+          <svg className="w-3.5 h-3.5 text-neutral-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+          </svg>
           View proof
-        </Link>
+        </button>
 
         {/* Resolve or Resolved button */}
         {isPending ? (
