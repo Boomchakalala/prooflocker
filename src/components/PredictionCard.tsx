@@ -266,55 +266,22 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
           View proof
         </button>
 
-        {/* Resolve or Resolved button */}
-        {isPending ? (
+        {/* Resolve button - only for owner of pending predictions */}
+        {canResolve && (
           <button
             onClick={(e) => {
               e.preventDefault();
               e.stopPropagation();
-              if (canResolve) handleResolveClick();
+              handleResolveClick();
             }}
-            disabled={!canResolve}
-            className={`px-3 py-2 text-sm font-semibold rounded-lg transition-all border whitespace-nowrap flex items-center justify-center gap-1.5 ${
-              canResolve
-                ? "text-amber-400 bg-amber-500/5 hover:bg-amber-500/10 border-amber-500/20 hover:border-amber-500/30 cursor-pointer"
-                : "text-neutral-500 bg-neutral-800/50 border-neutral-700/30 cursor-not-allowed opacity-60"
-            }`}
-            title={canResolve ? "Resolve this prediction" : "Only the creator can resolve"}
+            className="px-3 py-2 text-sm font-medium rounded-lg transition-all border whitespace-nowrap flex items-center justify-center gap-1.5 text-amber-400/90 bg-amber-500/[0.03] hover:bg-amber-500/[0.06] border-amber-500/15 hover:border-amber-500/25 cursor-pointer"
+            title="Resolve this prediction"
           >
             <span className="hidden sm:inline">Resolve</span>
             <span className="sm:hidden text-xs">Resolve</span>
-            {canResolve ? (
-              <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-            ) : (
-              <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-              </svg>
-            )}
-          </button>
-        ) : (
-          <button
-            disabled
-            className={`px-3 py-2 text-sm font-medium rounded-lg border whitespace-nowrap cursor-not-allowed flex items-center justify-center gap-1.5 ${
-              prediction.outcome === "correct"
-                ? "text-green-400 bg-green-500/10 border-green-500/30"
-                : "text-red-400 bg-red-500/10 border-red-500/30"
-            }`}
-            title={`Resolved as ${prediction.outcome}`}
-          >
-            <span className="hidden sm:inline">Resolved</span>
-            <span className="sm:hidden text-xs">Resolved</span>
-            {prediction.outcome === "correct" ? (
-              <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-              </svg>
-            ) : (
-              <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-              </svg>
-            )}
+            <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
           </button>
         )}
 
