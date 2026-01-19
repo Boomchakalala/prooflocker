@@ -40,10 +40,10 @@ export const metadata: Metadata = {
     siteName: "ProofLocker",
     images: [
       {
-        url: getAbsoluteUrl("/og.png"),
+        url: getAbsoluteUrl("/api/og/home"),
         width: 1200,
         height: 630,
-        alt: "ProofLocker - Prediction locked forever",
+        alt: "ProofLocker - Predictions locked forever",
       },
     ],
   },
@@ -51,7 +51,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "ProofLocker",
     description: "Prediction locked forever. Claim now. Prove later.",
-    images: [getAbsoluteUrl("/og.png")],
+    images: [getAbsoluteUrl("/api/og/home")],
   },
 };
 
