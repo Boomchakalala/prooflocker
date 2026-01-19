@@ -29,22 +29,14 @@ export async function GET(
     const isResolved = prediction.outcome !== null && prediction.outcome !== 'pending';
     const isCorrect = prediction.outcome === 'correct';
 
-    // Status badge and text - single badge design matching in-app
-    let statusBadge: { text: string; type: string };
-    let statusText: string;
-
+    // Deterministic bottom phrase based on state
+    let bottomPhrase: string;
     if (!isResolved) {
-      // UNRESOLVED: Locked badge
-      statusBadge = { text: '🔒 Locked', type: 'locked' };
-      statusText = 'Prediction locked on-chain.';
+      bottomPhrase = 'Say it now. Prove it later.';
     } else if (isCorrect) {
-      // RESOLVED - CORRECT
-      statusBadge = { text: '✅ Correct', type: 'correct' };
-      statusText = 'Prediction verified on-chain.';
+      bottomPhrase = 'Said it. Proved it.';
     } else {
-      // RESOLVED - INCORRECT
-      statusBadge = { text: '❌ Incorrect', type: 'incorrect' };
-      statusText = 'Prediction resolved on-chain.';
+      bottomPhrase = "This one didn't age well.";
     }
 
     return new ImageResponse(
@@ -93,16 +85,16 @@ export async function GET(
             ))}
           </div>
 
-          {/* ProofLocker Logo - top left (WHITE, sharp, document header style) */}
+          {/* ProofLocker Logo - top right (WHITE, sharp, crisp) */}
           <img
             src={logoDataUrl}
             alt="ProofLocker"
-            width="180"
-            height="45"
+            width="200"
+            height="50"
             style={{
               position: 'absolute',
-              top: '60px',
-              left: '80px',
+              top: '50px',
+              right: '80px',
               opacity: 1,
             }}
           />
