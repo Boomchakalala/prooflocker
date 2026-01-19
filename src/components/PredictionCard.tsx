@@ -269,7 +269,11 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
         {/* Resolve or Resolved button */}
         {isPending ? (
           <button
-            onClick={canResolve ? handleResolveClick : undefined}
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              if (canResolve) handleResolveClick();
+            }}
             disabled={!canResolve}
             className={`px-3 py-2 text-sm font-semibold rounded-lg transition-all border whitespace-nowrap flex items-center justify-center gap-1.5 ${
               canResolve
@@ -316,7 +320,11 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
 
         {/* Share button - Square */}
         <button
-          onClick={copyLink}
+          onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            copyLink();
+          }}
           className="w-11 h-full text-sm font-medium text-white glass hover:bg-white/10 rounded-lg transition-all border border-white/10 flex items-center justify-center"
           title="Share this prediction"
         >
@@ -379,6 +387,6 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
           }}
         />
       )}
-    </div>
+    </Link>
   );
 }
