@@ -13,48 +13,27 @@ export async function GET(
     const prediction = await getPredictionBySlug(slug);
 
     if (!prediction || prediction.moderationStatus === "hidden") {
-      // Return default OG image if not found
       return new Response("Not found", { status: 404 });
     }
 
-    // Determine outcome status
+    // Determine state
     const outcome = prediction.outcome || "pending";
-    const isOnChain =
+    const isLocked =
       prediction.deStatus?.toUpperCase() === "CONFIRMED" ||
       prediction.onChainStatus === "confirmed";
+    const isResolved = outcome === "correct" || outcome === "incorrect";
 
-    // Outcome badge colors
-    const getOutcomeBadgeStyle = () => {
-      if (outcome === "correct") {
-        return {
-          bg: "rgba(34, 197, 94, 0.1)",
-          border: "rgba(34, 197, 94, 0.3)",
-          text: "rgb(74, 222, 128)",
-          label: "Outcome: Correct",
-        };
-      } else if (outcome === "incorrect") {
-        return {
-          bg: "rgba(239, 68, 68, 0.1)",
-          border: "rgba(239, 68, 68, 0.3)",
-          text: "rgb(248, 113, 113)",
-          label: "Outcome: Incorrect",
-        };
-      } else {
-        return {
-          bg: "rgba(234, 179, 8, 0.1)",
-          border: "rgba(234, 179, 8, 0.3)",
-          text: "rgb(250, 204, 21)",
-          label: "Outcome: Pending",
-        };
-      }
+    // Bottom phrase logic (EXACT - DO NOT MODIFY)
+    const getBottomPhrase = () => {
+      if (outcome === "correct") return "Said it. Proved it.";
+      if (outcome === "incorrect") return "This one didn't age well.";
+      return "Say it now. Prove it later.";
     };
 
-    const outcomeBadge = getOutcomeBadgeStyle();
-
-    // Truncate text if too long
+    // Truncate prediction text to 2 lines max (~140 chars)
     const displayText =
-      prediction.text.length > 120
-        ? prediction.text.substring(0, 117) + "..."
+      prediction.text.length > 140
+        ? prediction.text.substring(0, 137) + "..."
         : prediction.text;
 
     return new ImageResponse(
