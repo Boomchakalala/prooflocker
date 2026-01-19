@@ -125,58 +125,92 @@ export async function GET(
               {prediction.text}
             </div>
 
-            {/* Status badge - single badge matching in-app design */}
+            {/* Status badges - matching web app pill styles */}
             <div
               style={{
                 display: 'flex',
-                flexDirection: 'column',
-                gap: '16px',
-                marginTop: '12px',
+                flexDirection: 'row',
+                gap: '12px',
+                marginTop: '16px',
+                marginBottom: '8px',
+                flexWrap: 'wrap',
               }}
             >
-              {/* Badge */}
+              {/* Locked badge - always show */}
               <div
                 style={{
                   display: 'inline-flex',
                   alignItems: 'center',
-                  gap: '8px',
-                  padding: '12px 28px',
-                  borderRadius: '8px',
-                  fontSize: '20px',
+                  gap: '6px',
+                  padding: '8px 20px',
+                  borderRadius: '6px',
+                  fontSize: '16px',
                   fontWeight: '600',
-                  background: statusBadge.type === 'locked'
-                    ? 'rgba(147, 51, 234, 0.15)'
-                    : statusBadge.type === 'correct'
-                    ? 'rgba(34, 197, 94, 0.15)'
-                    : 'rgba(239, 68, 68, 0.15)',
-                  color: statusBadge.type === 'locked'
-                    ? '#d8b4fe'
-                    : statusBadge.type === 'correct'
-                    ? '#86efac'
-                    : '#fca5a5',
-                  border: statusBadge.type === 'locked'
-                    ? '2px solid rgba(168, 85, 247, 0.4)'
-                    : statusBadge.type === 'correct'
-                    ? '2px solid rgba(34, 197, 94, 0.4)'
-                    : '2px solid rgba(239, 68, 68, 0.4)',
-                  maxWidth: 'fit-content',
+                  background: 'rgba(147, 51, 234, 0.1)',
+                  color: '#c084fc',
+                  border: '2px solid rgba(168, 85, 247, 0.3)',
                 }}
               >
-                {statusBadge.text}
+                Locked
               </div>
 
-              {/* Status text under badge */}
-              <div
-                style={{
-                  fontSize: '22px',
-                  color: 'rgba(255, 255, 255, 0.8)',
-                  fontWeight: '500',
-                  letterSpacing: '-0.01em',
-                  textShadow: '0 1px 10px rgba(0, 0, 0, 0.3)',
-                }}
-              >
-                {statusText}
-              </div>
+              {/* Resolved badge - only if resolved */}
+              {isResolved && (
+                <div
+                  style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '6px',
+                    padding: '8px 20px',
+                    borderRadius: '6px',
+                    fontSize: '16px',
+                    fontWeight: '600',
+                    background: 'rgba(34, 197, 94, 0.1)',
+                    color: '#86efac',
+                    border: '2px solid rgba(34, 197, 94, 0.3)',
+                  }}
+                >
+                  Resolved
+                </div>
+              )}
+
+              {/* Outcome badge - Correct or Incorrect (only if resolved) */}
+              {isResolved && (
+                <div
+                  style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '6px',
+                    padding: '8px 20px',
+                    borderRadius: '6px',
+                    fontSize: '16px',
+                    fontWeight: '600',
+                    background: isCorrect
+                      ? 'rgba(34, 197, 94, 0.1)'
+                      : 'rgba(239, 68, 68, 0.1)',
+                    color: isCorrect ? '#86efac' : '#fca5a5',
+                    border: isCorrect
+                      ? '2px solid rgba(34, 197, 94, 0.3)'
+                      : '2px solid rgba(239, 68, 68, 0.3)',
+                  }}
+                >
+                  {isCorrect ? 'Correct' : 'Incorrect'}
+                </div>
+              )}
+            </div>
+
+            {/* Bottom phrase - deterministic based on state */}
+            <div
+              style={{
+                fontSize: '22px',
+                color: 'rgba(255, 255, 255, 0.75)',
+                fontWeight: '500',
+                letterSpacing: '-0.01em',
+                textShadow: '0 1px 10px rgba(0, 0, 0, 0.3)',
+                marginTop: '4px',
+              }}
+            >
+              {bottomPhrase}
             </div>
           </div>
         </div>
