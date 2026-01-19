@@ -110,7 +110,10 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
     : prediction.textPreview;
 
   return (
-    <div className="relative rounded-lg p-4 md:p-4 transition-all flex flex-col h-full shadow-lg overflow-hidden border border-purple-500/20 hover:border-purple-500/40 bg-gradient-to-br from-purple-600/15 via-blue-600/10 to-purple-700/15 backdrop-blur-xl">
+    <Link
+      href={`/proof/${prediction.publicSlug}`}
+      className="relative rounded-lg p-4 md:p-4 transition-all flex flex-col h-full shadow-lg overflow-hidden border border-purple-500/20 hover:border-purple-500/40 bg-gradient-to-br from-purple-600/15 via-blue-600/10 to-purple-700/15 backdrop-blur-xl cursor-pointer"
+    >
       {/* 1. HEADER ROW - Author info + badges */}
       <div className="mb-2">
         {/* Top row: Author info (left) + Status badges (right) - Mobile layout */}
@@ -205,7 +208,11 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
             </code>
           </div>
           <button
-            onClick={copyHash}
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              copyHash();
+            }}
             className="flex-shrink-0 p-1 hover:bg-white/10 rounded transition-colors"
             title="Copy fingerprint"
           >
