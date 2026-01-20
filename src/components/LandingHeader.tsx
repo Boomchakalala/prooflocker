@@ -81,7 +81,7 @@ export default function LandingHeader() {
 
             <Link
               href="/lock"
-              className="flex px-3 py-2 md:px-5 md:py-2.5 bg-gradient-to-r from-blue-600/80 to-purple-600/80 hover:from-blue-600 hover:to-purple-600 text-white text-sm md:text-base font-medium rounded-md transition-all whitespace-nowrap"
+              className="flex px-3 py-2.5 md:px-5 md:py-3 bg-gradient-to-r from-blue-600/80 to-purple-600/80 hover:from-blue-600 hover:to-purple-600 active:from-blue-700 active:to-purple-700 text-white text-sm md:text-base font-medium rounded-md transition-all whitespace-nowrap shadow-md shadow-blue-500/20 hover:shadow-lg hover:shadow-blue-500/30"
             >
               Lock my prediction
             </Link>
