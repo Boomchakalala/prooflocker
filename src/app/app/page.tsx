@@ -183,10 +183,9 @@ function AppFeedContent() {
             {/* Lock CTA */}
             <Link
               href="/lock"
-              className="flex items-center justify-center px-3 py-2 md:px-5 md:py-3 bg-gradient-to-r from-blue-600/80 to-purple-600/80 hover:from-blue-600 hover:to-purple-600 active:from-blue-700 active:to-purple-700 text-white text-sm md:text-base font-medium rounded-md transition-all whitespace-nowrap shadow-md shadow-blue-500/20 hover:shadow-lg hover:shadow-blue-500/30"
+              className="flex items-center justify-center px-2.5 py-2 md:px-5 md:py-3 bg-gradient-to-r from-blue-600/80 to-purple-600/80 hover:from-blue-600 hover:to-purple-600 active:from-blue-700 active:to-purple-700 text-white text-xs md:text-base font-medium rounded-md transition-all whitespace-nowrap shadow-md shadow-blue-500/20 hover:shadow-lg hover:shadow-blue-500/30"
             >
-              <span className="hidden sm:inline">Lock my prediction</span>
-              <span className="sm:hidden">Lock</span>
+              Lock my prediction
             </Link>
 
             {/* Mobile: Show user icon without container */}
