@@ -85,8 +85,8 @@ export async function GET(
           <img
             src={logoUrl}
             alt="ProofLocker"
-            width="200"
-            height="50"
+            width="250"
+            height="62"
             style={{
               position: 'absolute',
               top: '50px',
