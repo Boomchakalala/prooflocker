@@ -122,8 +122,8 @@ export default function DisclaimerPage() {
                 <h2 className="text-xl font-semibold text-white mb-3">9. Contact</h2>
                 <p>
                   Questions? Contact us at{" "}
-                  <a href="mailto:contact@prooflocker.com" className="text-cyan-400 hover:text-cyan-300">
-                    contact@prooflocker.com
+                  <a href="mailto:contact@prooflocker.io" className="text-cyan-400 hover:text-cyan-300">
+                    contact@prooflocker.io
                   </a>
                 </p>
               </section>
