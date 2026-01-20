@@ -182,10 +182,10 @@ export default function LockPage() {
                       key={cat}
                       type="button"
                       onClick={() => setCategory(cat)}
-                      className={`px-3 py-2 text-sm font-medium rounded-lg transition-all ${
+                      className={`px-3 py-2.5 text-sm font-medium rounded-lg transition-all shadow-sm hover:shadow-md ${
                         category === cat
-                          ? "bg-gradient-to-r from-blue-600/80 to-purple-600/80 text-white border border-blue-500/50"
-                          : "glass text-neutral-400 hover:text-white hover:bg-white/5 border border-white/10"
+                          ? "bg-gradient-to-r from-blue-600/80 to-purple-600/80 hover:from-blue-600 hover:to-purple-600 active:from-blue-700 active:to-purple-700 text-white border border-blue-500/50 shadow-blue-500/20 hover:shadow-blue-500/30"
+                          : "glass text-neutral-400 hover:text-white hover:bg-white/5 border border-white/10 shadow-transparent"
                       }`}
                       disabled={loading}
                     >
@@ -289,7 +289,7 @@ export default function LockPage() {
               <button
                 onClick={handleLock}
                 disabled={!text.trim() || loading}
-                className="relative w-full px-6 py-5 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 disabled:bg-neutral-900 disabled:text-neutral-600 disabled:cursor-not-allowed text-white font-semibold text-base rounded-lg transition-all disabled:from-neutral-900 disabled:to-neutral-900 shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40 disabled:shadow-none"
+                className="relative w-full px-6 py-5 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 active:from-blue-700 active:to-purple-700 disabled:bg-neutral-900 disabled:text-neutral-600 disabled:cursor-not-allowed text-white font-semibold text-base rounded-lg transition-all disabled:from-neutral-900 disabled:to-neutral-900 shadow-lg shadow-blue-500/25 hover:shadow-xl hover:shadow-blue-500/40 disabled:shadow-none"
               >
                 {loading ? (
                   <span className="flex items-center justify-center gap-2">
