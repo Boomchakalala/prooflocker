@@ -140,7 +140,7 @@ export async function GET(
                   gap: '6px',
                   padding: '8px 20px',
                   borderRadius: '6px',
-                  fontSize: '16px',
+                  fontSize: '18px',
                   fontWeight: '600',
                   background: 'rgba(147, 51, 234, 0.1)',
                   color: '#c084fc',
@@ -150,8 +150,8 @@ export async function GET(
                 Locked
               </div>
 
-              {/* Resolved badge - only if resolved */}
-              {isResolved && (
+              {/* If NOT resolved: show Pending */}
+              {!isResolved && (
                 <div
                   style={{
                     display: 'flex',
@@ -159,18 +159,18 @@ export async function GET(
                     gap: '6px',
                     padding: '8px 20px',
                     borderRadius: '6px',
-                    fontSize: '16px',
+                    fontSize: '18px',
                     fontWeight: '600',
-                    background: 'rgba(34, 197, 94, 0.1)',
-                    color: '#86efac',
-                    border: '2px solid rgba(34, 197, 94, 0.3)',
+                    background: 'rgba(251, 191, 36, 0.1)',
+                    color: '#fbbf24',
+                    border: '2px solid rgba(251, 191, 36, 0.3)',
                   }}
                 >
-                  Resolved
+                  Pending
                 </div>
               )}
 
-              {/* Outcome badge - Correct or Incorrect (only if resolved) */}
+              {/* If resolved: show combined "Resolved — Correct" or "Resolved — Incorrect" */}
               {isResolved && (
                 <div
                   style={{
@@ -179,18 +179,18 @@ export async function GET(
                     gap: '6px',
                     padding: '8px 20px',
                     borderRadius: '6px',
-                    fontSize: '16px',
+                    fontSize: '18px',
                     fontWeight: '600',
                     background: isCorrect
                       ? 'rgba(34, 197, 94, 0.1)'
                       : 'rgba(239, 68, 68, 0.1)',
-                    color: isCorrect ? '#86efac' : '#fca5a5',
+                    color: isCorrect ? '#4ade80' : '#fca5a5',
                     border: isCorrect
                       ? '2px solid rgba(34, 197, 94, 0.3)'
                       : '2px solid rgba(239, 68, 68, 0.3)',
                   }}
                 >
-                  {isCorrect ? 'Correct' : 'Incorrect'}
+                  {isCorrect ? 'Resolved — Correct' : 'Resolved — Incorrect'}
                 </div>
               )}
             </div>
@@ -198,7 +198,7 @@ export async function GET(
             {/* Bottom phrase - deterministic based on state */}
             <div
               style={{
-                fontSize: '22px',
+                fontSize: '28px',
                 color: 'rgba(255, 255, 255, 0.75)',
                 fontWeight: '500',
                 letterSpacing: '-0.01em',
