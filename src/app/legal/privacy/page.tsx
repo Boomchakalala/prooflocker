@@ -197,11 +197,10 @@ export default function PrivacyPage() {
               <section>
                 <h2 className="text-xl font-semibold text-white mb-3">12. Contact Us</h2>
                 <p>
-                  If you have questions or concerns about this Privacy Policy or our data practices, please
-                  contact us at:
-                </p>
-                <p className="mt-2 text-cyan-400">
-                  privacy@prooflocker.example.com
+                  Questions? Contact us at{" "}
+                  <a href="mailto:contact@prooflocker.com" className="text-cyan-400 hover:text-cyan-300">
+                    contact@prooflocker.com
+                  </a>
                 </p>
               </section>
             </div>
