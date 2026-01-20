@@ -137,13 +137,13 @@ export default function ResolvePage({ params }: Props) {
         {/* Header with back button */}
         <div className="mb-4 md:mb-6">
           <button
-            onClick={() => router.back()}
-            className="inline-flex items-center gap-2 text-neutral-400 hover:text-white transition-colors text-sm group"
+            onClick={() => router.push("/")}
+            className="text-neutral-400 hover:text-white transition-colors"
+            aria-label="Back to home"
           >
-            <svg className="w-4 h-4 group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
             </svg>
-            Back to feed
           </button>
         </div>
 
