@@ -41,6 +41,11 @@ function AppFeedContent() {
     }
   }, [activeTab, anonId, user, authLoading]);
 
+  // Reset category filter when switching tabs
+  useEffect(() => {
+    setSelectedCategory("all");
+  }, [activeTab]);
+
   const fetchPredictions = async () => {
     setLoading(true);
     try {
@@ -287,26 +292,26 @@ function AppFeedContent() {
           </div>
 
           {/* Category Pills + Refresh row */}
-          {activeTab === "all" && (
-            <div className="flex items-center gap-2.5">
-              {/* Category pills */}
-              <div className="flex items-center gap-2 overflow-x-auto no-scrollbar flex-1">
-                {categories.map((cat) => (
-                  <button
-                    key={cat}
-                    onClick={() => setSelectedCategory(cat)}
-                    className={`px-3 py-1.5 text-xs font-medium rounded-full transition-all whitespace-nowrap flex-shrink-0 shadow-sm hover:shadow-md ${
-                      selectedCategory === cat
-                        ? "bg-gradient-to-r from-blue-600/80 to-purple-600/80 hover:from-blue-600 hover:to-purple-600 active:from-blue-700 active:to-purple-700 text-white border border-blue-500/30 shadow-blue-500/20 hover:shadow-blue-500/30"
-                        : "glass border border-white/10 text-neutral-400 hover:text-white hover:bg-white/5 shadow-transparent"
-                    }`}
-                  >
-                    {cat === "all" ? "All" : cat}
-                  </button>
-                ))}
-              </div>
+          <div className="flex items-center gap-2.5">
+            {/* Category pills */}
+            <div className="flex items-center gap-2 overflow-x-auto no-scrollbar flex-1">
+              {categories.map((cat) => (
+                <button
+                  key={cat}
+                  onClick={() => setSelectedCategory(cat)}
+                  className={`px-3 py-1.5 text-xs font-medium rounded-full transition-all whitespace-nowrap flex-shrink-0 shadow-sm hover:shadow-md ${
+                    selectedCategory === cat
+                      ? "bg-gradient-to-r from-blue-600/80 to-purple-600/80 hover:from-blue-600 hover:to-purple-600 active:from-blue-700 active:to-purple-700 text-white border border-blue-500/30 shadow-blue-500/20 hover:shadow-blue-500/30"
+                      : "glass border border-white/10 text-neutral-400 hover:text-white hover:bg-white/5 shadow-transparent"
+                  }`}
+                >
+                  {cat === "all" ? "All" : cat}
+                </button>
+              ))}
+            </div>
 
-              {/* Refresh button - Desktop only */}
+            {/* Refresh button - Desktop only, only on "all" tab */}
+            {activeTab === "all" && (
               <button
                 onClick={syncDEStatus}
                 disabled={syncing}
@@ -328,8 +333,8 @@ function AppFeedContent() {
                 </svg>
                 <span>{syncing ? "Checking..." : "Refresh"}</span>
               </button>
-            </div>
-          )}
+            )}
+          </div>
         </div>
 
         {/* Toast Notification */}
