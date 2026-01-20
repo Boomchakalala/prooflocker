@@ -410,7 +410,7 @@ function VerifyContent() {
               </button>
               <Link
                 href="/"
-                className="flex-1 px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold rounded-lg transition-all text-center btn-glow"
+                className="flex-1 px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 active:from-blue-800 active:to-purple-800 text-white font-semibold rounded-lg transition-all text-center btn-glow shadow-md shadow-blue-500/20 hover:shadow-lg hover:shadow-blue-500/30"
               >
                 Back to feed
               </Link>
