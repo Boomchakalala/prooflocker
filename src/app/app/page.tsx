@@ -145,18 +145,18 @@ function AppFeedContent() {
 
       {/* Header */}
       <header className="glass sticky top-0 z-50 border-b border-white/5 bg-[#0a0a0a]/80 backdrop-blur-xl">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 flex h-14 md:h-16 items-center justify-between">
-          <div className="flex items-center gap-3">
-            <Link href="/" className="text-neutral-400 hover:text-white transition-colors" aria-label="Back to home">
+        <div className="mx-auto max-w-7xl px-3 sm:px-6 lg:px-8 flex h-14 md:h-16 items-center justify-between">
+          <div className="flex items-center gap-2 md:gap-3 min-w-0 flex-1">
+            <Link href="/" className="text-neutral-400 hover:text-white transition-colors flex-shrink-0" aria-label="Back to home">
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
               </svg>
             </Link>
-            <Link href="/">
+            <Link href="/" className="flex-shrink-0">
               <BrandLogo />
             </Link>
           </div>
-          <div className="flex items-center gap-3 md:gap-4">
+          <div className="flex items-center gap-2 md:gap-4 flex-shrink-0">
             {/* Desktop: Show Sign In button or user menu */}
             {!user ? (
               <button
@@ -183,16 +183,17 @@ function AppFeedContent() {
             {/* Lock CTA */}
             <Link
               href="/lock"
-              className="flex px-3 py-3 md:px-5 md:py-3.5 bg-gradient-to-r from-blue-600/80 to-purple-600/80 hover:from-blue-600 hover:to-purple-600 active:from-blue-700 active:to-purple-700 text-white text-sm md:text-base font-medium rounded-md transition-all whitespace-nowrap shadow-md shadow-blue-500/20 hover:shadow-lg hover:shadow-blue-500/30"
+              className="flex items-center justify-center px-3 py-2 md:px-5 md:py-3 bg-gradient-to-r from-blue-600/80 to-purple-600/80 hover:from-blue-600 hover:to-purple-600 active:from-blue-700 active:to-purple-700 text-white text-sm md:text-base font-medium rounded-md transition-all whitespace-nowrap shadow-md shadow-blue-500/20 hover:shadow-lg hover:shadow-blue-500/30"
             >
-              Lock my prediction
+              <span className="hidden sm:inline">Lock my prediction</span>
+              <span className="sm:hidden">Lock</span>
             </Link>
 
             {/* Mobile: Show user icon without container */}
             {user && (
               <button
                 onClick={() => setShowUserMenu(!showUserMenu)}
-                className="sm:hidden p-1.5 hover:bg-white/5 rounded transition-all"
+                className="sm:hidden p-1.5 hover:bg-white/5 rounded transition-all flex-shrink-0"
                 aria-label="User menu"
               >
                 <svg className="w-5 h-5 text-neutral-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
