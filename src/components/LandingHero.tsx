@@ -27,7 +27,7 @@ export default function LandingHero() {
           </div>
           <Link
             href="/lock"
-            className="relative w-full sm:w-auto px-8 py-4 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white text-lg font-semibold rounded-lg transition-all shadow-lg hover:shadow-purple-500/50"
+            className="relative w-full sm:w-auto px-8 py-4 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 active:from-blue-700 active:to-purple-700 text-white text-lg font-semibold rounded-lg transition-all shadow-lg shadow-blue-500/25 hover:shadow-purple-500/50"
           >
             Lock my prediction
           </Link>

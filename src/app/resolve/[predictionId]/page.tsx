@@ -115,8 +115,8 @@ export default function ResolvePage({ params }: Props) {
           <h2 className="text-xl font-semibold text-white mb-2">Error</h2>
           <p className="text-neutral-400 mb-6 text-sm">{error}</p>
           <button
-            onClick={() => router.push("/app")}
-            className="inline-block px-5 py-2 bg-gradient-to-r from-blue-600/80 to-purple-600/80 hover:from-blue-600 hover:to-purple-600 text-white font-medium rounded-lg transition-all"
+            onClick={() => router.push("/")}
+            className="inline-block px-5 py-2.5 bg-gradient-to-r from-blue-600/80 to-purple-600/80 hover:from-blue-600 hover:to-purple-600 active:from-blue-700 active:to-purple-700 text-white font-medium rounded-lg transition-all shadow-md shadow-blue-500/20 hover:shadow-lg hover:shadow-blue-500/30"
           >
             Back to feed
           </button>
@@ -294,7 +294,7 @@ export default function ResolvePage({ params }: Props) {
               <button
                 type="submit"
                 disabled={submitting}
-                className="w-full px-5 py-3 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white font-semibold text-sm md:text-base rounded-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40 disabled:shadow-none mb-2"
+                className="w-full px-5 py-3.5 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 active:from-blue-700 active:to-purple-700 text-white font-semibold text-sm md:text-base rounded-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 shadow-lg shadow-blue-500/25 hover:shadow-xl hover:shadow-blue-500/40 disabled:shadow-none mb-2"
               >
                 {submitting ? (
                   <>

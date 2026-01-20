@@ -93,7 +93,7 @@ export default async function ProofPage({ params }: Props) {
           </p>
           <Link
             href="/"
-            className="inline-block px-5 py-2 bg-gradient-to-r from-blue-600/80 to-purple-600/80 hover:from-blue-600 hover:to-purple-600 text-white font-medium rounded-lg transition-all"
+            className="inline-block px-5 py-2.5 bg-gradient-to-r from-blue-600/80 to-purple-600/80 hover:from-blue-600 hover:to-purple-600 active:from-blue-700 active:to-purple-700 text-white font-medium rounded-lg transition-all shadow-md shadow-blue-500/20 hover:shadow-lg hover:shadow-blue-500/30"
           >
             Return to ProofLocker
           </Link>
@@ -527,7 +527,7 @@ export default async function ProofPage({ params }: Props) {
           </p>
           <Link
             href="/app"
-            className="inline-flex items-center gap-2 px-5 md:px-6 py-2.5 md:py-3 bg-gradient-to-r from-blue-600/80 to-purple-600/80 hover:from-blue-600 hover:to-purple-600 text-white font-medium rounded-lg transition-all text-sm"
+            className="inline-flex items-center gap-2 px-5 md:px-6 py-3 md:py-3.5 bg-gradient-to-r from-blue-600/80 to-purple-600/80 hover:from-blue-600 hover:to-purple-600 active:from-blue-700 active:to-purple-700 text-white font-medium rounded-lg transition-all text-sm shadow-md shadow-blue-500/20 hover:shadow-lg hover:shadow-blue-500/30"
           >
             Explore more predictions
           </Link>
