@@ -1,8 +1,16 @@
 export default function AccountabilityScore() {
   return (
     <div className="relative z-10 py-16 md:py-24 px-6 bg-[#0a0a0a]">
-      {/* Subtle green gradient background */}
-      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-emerald-950/5 to-transparent opacity-50" />
+      {/* Enhanced green gradient background for trust and credibility */}
+      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-emerald-950/8 to-transparent opacity-60" />
+      <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-20">
+        <div
+          className="w-[800px] h-[600px] rounded-full blur-3xl"
+          style={{
+            background: 'radial-gradient(circle, rgba(16, 185, 129, 0.12) 0%, transparent 70%)'
+          }}
+        />
+      </div>
 
       <div className="max-w-5xl mx-auto relative z-10">
         {/* Heading */}
