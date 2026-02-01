@@ -1,21 +1,25 @@
 @import "tailwindcss";
 
 :root {
-  /* Unified Design System */
-  --bg: #0a0a0a;
-  --surface: #111111;
+  /* Unified Design System - Purple Gradient Theme */
+  --bg: #1A0033;
+  --bg-light: #0a0a0a;
+  --surface: #2D0052;
   --border: rgba(255, 255, 255, 0.1);
-  --text: #ffffff;
+  --text: #F5F5F5;
   --muted: #9ca3af;
-  --accent-start: #00bfff;
-  --accent-end: #9370db;
+  --accent-cyan: #00D4FF;
+  --accent-start: #00D4FF;
+  --accent-end: #A78BFA;
+  --purple-deep: #4B0082;
+  --purple-light: #A78BFA;
 
   /* Legacy (kept for compatibility) */
-  --background: #0a0a0a;
-  --foreground: #ffffff;
-  --card-bg: #111111;
-  --primary: #00bfff;
-  --secondary: #9370db;
+  --background: #1A0033;
+  --foreground: #F5F5F5;
+  --card-bg: #2D0052;
+  --primary: #00D4FF;
+  --secondary: #A78BFA;
   --purple-dark: #1a0033;
 }
 
@@ -33,16 +37,30 @@ body {
   font-family: var(--font-inter), system-ui, -apple-system, sans-serif;
 }
 
-/* Animated gradient background - cleaner, more subtle */
+/* Animated gradient background - purple gradient theme */
 .gradient-bg {
-  background: radial-gradient(
-    ellipse at center,
-    rgba(26, 0, 51, 0.18) 0%,
-    #0a0a0a 60%,
+  background: linear-gradient(
+    135deg,
+    #4B0082 0%,
+    #2D0052 30%,
+    #1A0033 60%,
     #0a0a0a 100%
   );
   background-size: 200% 200%;
   animation: gradientShift 20s ease infinite;
+  position: relative;
+}
+
+.gradient-bg::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    ellipse at 50% 30%,
+    rgba(167, 139, 250, 0.15) 0%,
+    transparent 50%
+  );
+  pointer-events: none;
 }
 
 @keyframes gradientShift {
@@ -62,32 +80,35 @@ body {
   border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
-/* Unified Glow Effects */
-.glow-blue {
-  box-shadow: 0 8px 32px rgba(0, 191, 255, 0.12),
-              0 4px 16px rgba(0, 191, 255, 0.08);
+/* Unified Glow Effects - Cyan theme */
+.glow-cyan {
+  box-shadow: 0 8px 32px rgba(0, 212, 255, 0.2),
+              0 4px 16px rgba(0, 212, 255, 0.15);
 }
 
 .glow-purple {
-  box-shadow: 0 8px 32px rgba(147, 112, 219, 0.12),
-              0 4px 16px rgba(147, 112, 219, 0.08);
+  box-shadow: 0 8px 32px rgba(167, 139, 250, 0.2),
+              0 4px 16px rgba(167, 139, 250, 0.15);
 }
 
 .glow-gradient {
-  box-shadow: 0 8px 32px rgba(0, 191, 255, 0.1),
-              0 8px 32px rgba(147, 112, 219, 0.1);
+  box-shadow: 0 8px 32px rgba(0, 212, 255, 0.15),
+              0 8px 32px rgba(167, 139, 250, 0.15),
+              0 0 60px rgba(167, 139, 250, 0.08);
 }
 
-/* Unified Card Hover - consistent across all sections */
+/* Unified Card Hover - enhanced with purple glow */
 .card-hover {
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 1px solid rgba(167, 139, 250, 0.15);
 }
 
 .card-hover:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4),
-              0 0 0 1px var(--border);
-  border-color: var(--accent-start);
+  transform: translateY(-6px) scale(1.01);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5),
+              0 0 40px rgba(167, 139, 250, 0.25),
+              0 0 0 1px rgba(0, 212, 255, 0.3);
+  border-color: rgba(0, 212, 255, 0.5);
 }
 
 /* Shimmer effect for loading states */
@@ -139,12 +160,13 @@ body {
   animation: float 3s ease-in-out infinite;
 }
 
-/* Gradient text - unified blue to purple */
+/* Gradient text - cyan to purple with subtle glow */
 .gradient-text {
-  background: linear-gradient(135deg, var(--accent-start) 0%, var(--accent-end) 100%);
+  background: linear-gradient(135deg, var(--accent-cyan) 0%, var(--purple-light) 100%);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
+  text-shadow: 0 0 30px rgba(0, 212, 255, 0.3);
 }
 
 /* Animated border gradient */
@@ -192,7 +214,7 @@ body {
   background: linear-gradient(135deg, #00a8e6, #7d5fc7);
 }
 
-/* Button glow on hover */
+/* Button glow on hover - cyan theme */
 .btn-glow {
   position: relative;
   transition: all 0.3s ease;
@@ -203,15 +225,15 @@ body {
   position: absolute;
   inset: -2px;
   border-radius: inherit;
-  background: linear-gradient(135deg, #00bfff, #9370db);
+  background: linear-gradient(135deg, #00D4FF, #A78BFA);
   opacity: 0;
   transition: opacity 0.3s ease;
   z-index: -1;
-  filter: blur(10px);
+  filter: blur(15px);
 }
 
 .btn-glow:hover::before {
-  opacity: 0.6;
+  opacity: 0.8;
 }
 
 /* Fade in animation */
@@ -321,10 +343,11 @@ body {
   color: #9370db;
 }
 
-/* Text shadow for hero - subtle blue glow */
-.text-shadow-blue {
-  text-shadow: 0 4px 24px rgba(0, 191, 255, 0.3),
-               0 2px 12px rgba(0, 191, 255, 0.2);
+/* Text shadow for hero - cyan glow */
+.text-shadow-cyan {
+  text-shadow: 0 4px 30px rgba(0, 212, 255, 0.4),
+               0 2px 15px rgba(0, 212, 255, 0.3),
+               0 0 50px rgba(167, 139, 250, 0.2);
 }
 
 /* Fade in from left animation for hero badges */
