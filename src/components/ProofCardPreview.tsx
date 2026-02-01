@@ -193,23 +193,23 @@ export default function ProofCardPreview() {
   };
 
   return (
-    <div className="relative z-10 py-16 md:py-24 px-8 bg-gradient-to-b from-[#0a0a0a] via-[#0f0522] to-[#0a0a0a]">
-      {/* Subtle radial glow for depth */}
-      <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-20">
+    <div className="relative z-10 py-16 md:py-24 px-8 bg-gradient-to-b from-[#0a0a0a] via-[#1A0033]/20 to-[#0a0a0a]">
+      {/* Enhanced cyber radial glow */}
+      <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-25">
         <div
-          className="w-[800px] h-[800px] rounded-full blur-3xl"
+          className="w-[900px] h-[900px] rounded-full blur-3xl"
           style={{
-            background: 'radial-gradient(circle, rgba(147, 112, 219, 0.2) 0%, transparent 70%)'
+            background: 'radial-gradient(circle, rgba(167, 139, 250, 0.3) 0%, rgba(0, 224, 255, 0.15) 50%, transparent 70%)'
           }}
         />
       </div>
 
       <div className="max-w-6xl mx-auto relative z-10">
         <div className="text-center mb-12 fade-in-up">
-          <h2 className="text-3xl md:text-5xl font-bold text-white mb-3" style={{ fontFamily: 'var(--font-montserrat)' }}>
+          <h2 className="text-3xl md:text-5xl font-extrabold mb-3 bg-gradient-to-r from-[#00E0FF] via-[#A78BFA] to-[#00FFE5] bg-clip-text text-transparent" style={{ fontFamily: 'var(--font-montserrat)', filter: 'drop-shadow(0 0 25px rgba(0, 224, 255, 0.3))' }}>
             Real Proof
           </h2>
-          <p className="text-base md:text-lg text-white/70 font-medium">
+          <p className="text-base md:text-lg text-white/75 font-semibold">
             Wins, misses, and permanent accountability
           </p>
         </div>
