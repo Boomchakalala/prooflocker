@@ -244,7 +244,7 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
       </h3>
 
       {/* 4. OUTCOME ROW with Accountability */}
-      <div className="flex items-center justify-between gap-2 mb-3 md:mb-4">
+      <div className="flex items-center justify-between gap-2 mb-3">
         <div className="flex items-center gap-2.5">
           <span className="text-xs tracking-normal text-white/40 font-normal">Outcome</span>
           {/* Enhanced Outcome Badge */}
@@ -295,7 +295,7 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
       </div>
 
       {/* 5. FINGERPRINT BLOCK */}
-      <div className="bg-black/30 border border-white/5 rounded-lg p-2.5 mb-3 md:mb-4 group/fingerprint hover:bg-black/40 hover:border-white/10 transition-all">
+      <div className="bg-black/30 border border-white/5 rounded-lg p-2.5 mb-3 group/fingerprint hover:bg-black/40 hover:border-white/10 transition-all">
         <div className="flex items-center justify-between gap-2">
           <div className="flex-1 min-w-0">
             <label className="block text-[9px] font-medium text-neutral-600 mb-1 uppercase tracking-wider">
