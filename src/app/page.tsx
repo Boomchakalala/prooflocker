@@ -12,7 +12,7 @@ import Footer from "@/components/Footer";
 
 export default function LandingPage() {
   return (
-    <div className="min-h-screen bg-[#0a0a0a] relative">
+    <div className="min-h-screen bg-gradient-to-b from-[#0F001A] via-[#1A0033] to-[#0a0a0a] relative">
       {/* Header */}
       <LandingHeader />
 
@@ -34,13 +34,13 @@ export default function LandingPage() {
         <WhyProofLocker />
 
         {/* Final CTA Section */}
-        <div className="relative z-10 py-20 md:py-28 px-6 bg-gradient-to-b from-[#0a0a0a] to-[#0a0a0a]">
-          {/* Subtle radial glow for consistency */}
-          <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-30">
+        <div className="relative z-10 py-20 md:py-28 px-6 bg-gradient-to-b from-[#0a0a0a] via-[#1A0033]/30 to-[#0a0a0a]">
+          {/* Enhanced holographic glow */}
+          <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-40">
             <div
-              className="w-[600px] h-[600px] rounded-full blur-3xl"
+              className="w-[800px] h-[800px] rounded-full blur-3xl"
               style={{
-                background: 'radial-gradient(circle, rgba(147, 112, 219, 0.15) 0%, transparent 70%)'
+                background: 'radial-gradient(circle, rgba(167, 139, 250, 0.25) 0%, rgba(0, 224, 255, 0.15) 50%, transparent 70%)'
               }}
             />
           </div>
