@@ -19,7 +19,7 @@ export default function WhyProofLocker() {
             </div>
             <h3 className="text-lg font-bold text-white mb-3">Anonymous by Default</h3>
             <p className="text-gray-400 text-sm leading-relaxed flex-grow">
-              Lock without identity exposure.
+              Lock predictions without identity exposure, but build a verifiable accountability score over time. True privacy meets public credibility.
             </p>
           </div>
 
@@ -33,7 +33,7 @@ export default function WhyProofLocker() {
             </div>
             <h3 className="text-lg font-bold text-white mb-3">Public or Private Control</h3>
             <p className="text-gray-400 text-sm leading-relaxed flex-grow">
-              Share now or reveal later.
+              Share now or reveal later—full control over your hashed, on-chain commitments. You decide when the world sees your proof.
             </p>
           </div>
 
@@ -46,7 +46,7 @@ export default function WhyProofLocker() {
             </div>
             <h3 className="text-lg font-bold text-white mb-3">Immutable On-Chain Proof</h3>
             <p className="text-gray-400 text-sm leading-relaxed flex-grow">
-              Constellation DAG — uneditable, eternal timestamp.
+              Constellation DAG ensures uneditable, eternal timestamps for true accountability and digital evidence. No backdating, no manipulation.
             </p>
           </div>
 

@@ -5,9 +5,19 @@ export default function TechFoundation() {
         <h2 className="text-3xl md:text-5xl font-bold text-center text-white mb-6" style={{ fontFamily: 'var(--font-montserrat)' }}>
           Foundation: Constellation DAG
         </h2>
-        <p className="text-base text-gray-400 text-center leading-relaxed mb-16 max-w-3xl mx-auto">
+        <p className="text-xl bg-gradient-to-r from-[#00bfff] to-[#9370db] bg-clip-text text-transparent text-center font-semibold mb-8">
           Scalable, secure, built for real accountability.
         </p>
+
+        {/* Digital Evidence Logo */}
+        <div className="flex justify-center mb-12">
+          <div className="w-20 h-20 flex items-center justify-center bg-gradient-to-br from-[#00bfff]/30 to-[#9370db]/30 rounded-2xl border-2 border-[#00bfff]/40 p-4">
+            <svg className="w-12 h-12 text-[#00bfff]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 11c0 3.517-1.009 6.799-2.753 9.571m-3.44-2.04l.054-.09A13.916 13.916 0 008 11a4 4 0 118 0c0 1.017-.07 2.019-.203 3m-2.118 6.844A21.88 21.88 0 0015.171 17m3.839 1.132c.645-2.266.99-4.659.99-7.132A8 8 0 008 4.07M3 15.364c.64-1.319 1-2.8 1-4.364 0-1.457.39-2.823 1.07-4" />
+              <circle cx="12" cy="11" r="2"/>
+            </svg>
+          </div>
+        </div>
 
         {/* 3 Tiles */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 max-w-4xl mx-auto">
@@ -19,7 +29,7 @@ export default function TechFoundation() {
               </svg>
             </div>
             <h3 className="text-xl font-bold text-white mb-3">Speed</h3>
-            <p className="text-gray-400 text-sm leading-relaxed">Near-instant finality</p>
+            <p className="text-gray-400 text-sm leading-relaxed">Near-instant finality for hashing predictions on-chain. Lock your claims in seconds with cryptographic certainty.</p>
           </div>
 
           {/* Scalability */}
@@ -30,7 +40,7 @@ export default function TechFoundation() {
               </svg>
             </div>
             <h3 className="text-xl font-bold text-white mb-3">Scalability</h3>
-            <p className="text-gray-400 text-sm leading-relaxed">No congestion, unlimited throughput</p>
+            <p className="text-gray-400 text-sm leading-relaxed">No congestion, unlimited throughput—perfect for global accountability. Scale to millions of predictions without slowdown.</p>
           </div>
 
           {/* Security */}
@@ -41,7 +51,7 @@ export default function TechFoundation() {
               </svg>
             </div>
             <h3 className="text-xl font-bold text-white mb-3">Security</h3>
-            <p className="text-gray-400 text-sm leading-relaxed">Cryptographically guaranteed</p>
+            <p className="text-gray-400 text-sm leading-relaxed">Cryptographically guaranteed, powering immutable digital evidence via Constellation DAG. Military-grade protection for your predictions.</p>
           </div>
         </div>
       </div>

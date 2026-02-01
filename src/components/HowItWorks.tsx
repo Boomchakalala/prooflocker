@@ -20,7 +20,7 @@ export default function HowItWorks() {
             </svg>
             <h3 className="text-xl font-bold text-white mb-4">Declare Your Position</h3>
             <p className="text-gray-400 text-base leading-relaxed">
-              State a prediction, personal goal, or business milestone. Private or public tease.
+              State a prediction, goal, or milestone. Private or public—hash it anonymously for future proof. Build your reputation through accountability.
             </p>
           </div>
 
@@ -34,7 +34,7 @@ export default function HowItWorks() {
             </svg>
             <h3 className="text-xl font-bold text-white mb-4">Lock On-Chain</h3>
             <p className="text-gray-400 text-base leading-relaxed">
-              Cryptographic hash + timestamp on Constellation DAG. Low cost, permanent, no congestion.
+              Cryptographic hash + timestamp on Constellation DAG. Low cost, permanent, no congestion—ensuring accountability from day one.
             </p>
           </div>
 
@@ -50,7 +50,7 @@ export default function HowItWorks() {
             </svg>
             <h3 className="text-xl font-bold text-white mb-4">Prove & Resolve</h3>
             <p className="text-gray-400 text-base leading-relaxed">
-              Confirm outcome later. Generate shareable card. Undeniable evidence — for yourself or stakeholders.
+              Confirm outcomes later. Generate shareable cards with on-chain evidence and update your accountability score for stakeholders.
             </p>
           </div>
         </div>
