@@ -7,6 +7,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { signOut } from "@/lib/auth";
 import { getPublicHandle } from "@/lib/public-handle";
 import ClaimModal from "@/components/ClaimModal";
+import InsightScorePill from "@/components/InsightScorePill";
 
 export default function LandingHeader() {
   const { user } = useAuth();
@@ -36,6 +37,9 @@ export default function LandingHeader() {
             >
               Explore Predictions
             </Link>
+
+            {/* Insight Score Pill */}
+            <InsightScorePill />
 
             {/* Desktop: Show Sign In button or user menu */}
             {!user ? (
