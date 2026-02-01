@@ -12,25 +12,25 @@ export function getOutcomeConfig(outcome: PredictionOutcome) {
       return {
         label: "Correct",
         longLabel: "Resolved: Correct",
-        class: "bg-green-500/10 text-green-400 border-green-500/30",
+        class: "bg-green-600 text-white shadow-lg shadow-green-500/40",
       };
     case "incorrect":
       return {
-        label: "Incorrect",
-        longLabel: "Resolved: Incorrect",
-        class: "bg-red-500/10 text-red-400 border-red-500/30",
+        label: "Wrong",
+        longLabel: "Resolved: Wrong",
+        class: "bg-red-600 text-white shadow-lg",
       };
     case "invalid":
       return {
         label: "Invalid",
         longLabel: "Invalid",
-        class: "bg-neutral-500/10 text-neutral-400 border-neutral-500/30",
+        class: "bg-gray-600 text-white shadow-lg",
       };
     default:
       return {
         label: "Pending",
         longLabel: "Pending",
-        class: "bg-yellow-500/10 text-yellow-400 border-yellow-500/30",
+        class: "bg-yellow-600 text-white shadow-lg",
       };
   }
 }
@@ -51,7 +51,7 @@ export default function OutcomeBadge({
 
   return (
     <span
-      className={`inline-flex items-center gap-1.5 border rounded font-medium ${config.class} ${sizeClasses[size]}`}
+      className={`inline-flex items-center gap-1.5 rounded-full font-bold ${config.class} ${sizeClasses[size]}`}
     >
       {label}
     </span>
