@@ -25,7 +25,7 @@ export default function LandingHeader() {
   return (
     <>
       <header className="sticky top-0 z-50 backdrop-blur-xl border-b border-gray-800 transition-colors duration-300" style={{ background: 'rgba(10, 10, 10, 0.75)' }}>
-        <div className="mx-auto max-w-[1280px] px-6 md:px-12 lg:px-16 flex h-14 items-center justify-between">
+        <div className="mx-auto max-w-[1280px] px-6 md:px-12 lg:px-16 flex h-12 items-center justify-between">
           <Link href="/" className="text-[32px] font-bold text-white hover:text-[#00bfff] transition-all duration-300" style={{ fontFamily: 'var(--font-montserrat)', textShadow: '0 0 20px rgba(0, 191, 255, 0.2)' }}>
             ProofLocker
           </Link>
