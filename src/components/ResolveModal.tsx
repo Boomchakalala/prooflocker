@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { createPortal } from "react-dom";
 import { PredictionOutcome } from "@/lib/storage";
 import { supabase } from "@/lib/supabase";
+import { useToast } from "@/contexts/ToastContext";
 
 interface ResolveModalProps {
   predictionId: string;
@@ -22,6 +23,7 @@ export default function ResolveModal({
   onClose,
   onSuccess,
 }: ResolveModalProps) {
+  const { showScoreToast } = useToast();
   const [outcome, setOutcome] = useState<PredictionOutcome>(currentOutcome || "pending");
   const [resolutionNote, setResolutionNote] = useState(currentNote || "");
   const [resolutionUrl, setResolutionUrl] = useState(currentUrl || "");
@@ -76,6 +78,30 @@ export default function ResolveModal({
       }
 
       console.log("[ResolveModal] Success:", data);
+
+      // Show toast notification for Insight Score
+      if (data.insightPoints !== undefined) {
+        const breakdown = data.insightBreakdown
+          ? Object.entries(data.insightBreakdown)
+              .filter(([_, points]) => (points as number) !== 0)
+              .map(([key, points]) => {
+                const label = key === 'base' ? 'Base points' :
+                             key === 'risk' ? 'High-risk bonus' :
+                             key === 'streak' ? `Streak bonus (${data.newStreak || 0}x)` :
+                             key === 'mastery' ? 'Category mastery' : key;
+                return `${label}: ${points > 0 ? '+' : ''}${points} pts`;
+              })
+          : [];
+
+        const message = outcome === "correct"
+          ? "Prediction resolved as correct!"
+          : outcome === "incorrect"
+          ? "Prediction resolved as incorrect"
+          : "Prediction resolution updated";
+
+        showScoreToast(data.insightPoints, message, breakdown);
+      }
+
       onSuccess();
       onClose();
     } catch (err) {
