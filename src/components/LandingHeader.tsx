@@ -25,17 +25,18 @@ export default function LandingHeader() {
   return (
     <>
       <header className="sticky top-0 z-50 backdrop-blur-xl border-b border-gray-800 transition-colors duration-300" style={{ background: 'rgba(10, 10, 10, 0.75)' }}>
-        <div className="mx-auto max-w-[1280px] px-6 md:px-12 lg:px-16 flex h-16 items-center justify-between">
+        <div className="mx-auto max-w-[1280px] px-6 md:px-12 lg:px-16 flex h-14 items-center justify-between">
           <Link href="/" className="text-[32px] font-bold text-white hover:text-[#00bfff] transition-all duration-300" style={{ fontFamily: 'var(--font-montserrat)', textShadow: '0 0 20px rgba(0, 191, 255, 0.2)' }}>
             ProofLocker
           </Link>
           <div className="flex items-center gap-6 md:gap-8">
             <Link
               href="/app"
-              className="text-white hover:text-[#00bfff] font-medium transition-colors text-base md:text-[17px]"
+              className="text-white hover:text-[#10b981] font-medium transition-all duration-200 text-base md:text-[17px] relative group"
               style={{ fontFamily: 'var(--font-inter)' }}
             >
               Explore Predictions
+              <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-[#10b981] transition-all duration-200 group-hover:w-full" />
             </Link>
 
             {/* Insight Score Pill */}
@@ -45,10 +46,11 @@ export default function LandingHeader() {
             {!user ? (
               <button
                 onClick={() => setShowClaimModal(true)}
-                className="text-white hover:text-[#00bfff] font-medium transition-colors text-base md:text-[17px] hidden sm:block"
+                className="text-white hover:text-[#10b981] font-medium transition-all duration-200 text-base md:text-[17px] hidden sm:block relative group"
                 style={{ fontFamily: 'var(--font-inter)' }}
               >
-                Sign In
+                Log In
+                <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-[#10b981] transition-all duration-200 group-hover:w-full" />
               </button>
             ) : (
               <div className="relative hidden sm:block">
@@ -89,7 +91,7 @@ export default function LandingHeader() {
 
             <Link
               href="/lock"
-              className="px-6 md:px-8 py-3 md:py-4 bg-[#00bfff] hover:bg-[#00a8e6] text-white font-semibold rounded-lg md:rounded-full transition-all shadow-lg hover:shadow-xl hover:scale-105 flex items-center gap-2 btn-glow"
+              className="px-6 md:px-8 py-2.5 md:py-3 bg-gradient-to-r from-[#10b981] to-[#34d399] hover:from-[#059669] hover:to-[#10b981] text-white font-bold rounded-lg md:rounded-full transition-all shadow-lg hover:shadow-[0_0_20px_rgba(16,185,129,0.5)] hover:scale-105 flex items-center gap-2"
             >
               Lock Prediction
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
