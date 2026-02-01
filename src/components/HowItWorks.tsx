@@ -14,7 +14,7 @@ export default function HowItWorks() {
               backgroundClip: 'text'
             }}
           >
-            How It Works — Straightforward & Secure
+            How It Works
           </h2>
           <p className="text-base md:text-lg text-white/60 font-medium">
             Three steps. No friction. Permanent proof.
