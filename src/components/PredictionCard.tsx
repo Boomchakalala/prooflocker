@@ -243,36 +243,69 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
         {displayTitle}
       </h3>
 
-      {/* 4. OUTCOME ROW */}
-      <div className="flex items-center gap-2 mb-2.5 md:mb-3">
-        <span className="text-[11px] md:text-xs tracking-normal text-white/40 font-normal">Outcome</span>
-        <OutcomeBadge
-          outcome={prediction.outcome || "pending"}
-          size="sm"
-          showLabel="short"
-        />
-        {/* Has note indicator */}
-        {prediction.resolutionNote && (
-          <span
-            className="inline-flex items-center gap-1 px-1.5 py-0.5 bg-white/5 border border-white/10 rounded text-[10px] text-white/50"
-            title="Has resolution note"
-          >
-            <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z" />
+      {/* 4. OUTCOME ROW with Accountability */}
+      <div className="flex items-center justify-between gap-2 mb-3 md:mb-4">
+        <div className="flex items-center gap-2.5">
+          <span className="text-xs tracking-normal text-white/40 font-normal">Outcome</span>
+          {/* Enhanced Outcome Badge */}
+          {prediction.outcome === 'correct' ? (
+            <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#22C55E] text-white text-sm font-bold shadow-lg shadow-green-500/20">
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7"/>
+              </svg>
+              Correct
+            </span>
+          ) : prediction.outcome === 'incorrect' ? (
+            <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-red-500 text-white text-sm font-bold shadow-lg shadow-red-500/20">
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12"/>
+              </svg>
+              Incorrect
+            </span>
+          ) : (
+            <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#F59E0B] text-white text-sm font-bold shadow-lg shadow-amber-500/20">
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                <circle cx="12" cy="12" r="10"/>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6l4 2"/>
+              </svg>
+              Pending
+            </span>
+          )}
+          {/* Has note indicator */}
+          {prediction.resolutionNote && (
+            <span
+              className="inline-flex items-center gap-1 px-1.5 py-0.5 bg-white/5 border border-white/10 rounded text-[10px] text-white/50"
+              title="Has resolution note"
+            >
+              <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z" />
+              </svg>
+            </span>
+          )}
+        </div>
+        {/* Accountability Score - Right aligned */}
+        {accountabilityScore && (
+          <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-[#22C55E]/10 border border-[#22C55E]/30 text-[#22C55E] text-xs font-semibold whitespace-nowrap">
+            <svg className="w-3 h-3" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
             </svg>
+            {accountabilityScore}%
           </span>
         )}
       </div>
 
       {/* 5. FINGERPRINT BLOCK */}
-      <div className="bg-black/30 border border-white/5 rounded-lg p-2 mb-2.5 md:mb-3 opacity-60 md:opacity-100 scale-95 md:scale-100 origin-left">
+      <div className="bg-black/30 border border-white/5 rounded-lg p-2.5 mb-3 md:mb-4 group/fingerprint hover:bg-black/40 hover:border-white/10 transition-all">
         <div className="flex items-center justify-between gap-2">
           <div className="flex-1 min-w-0">
-            <label className="block text-[9px] font-medium text-neutral-700 mb-0.5 uppercase tracking-wider">
-              Fingerprint
+            <label className="block text-[9px] font-medium text-neutral-600 mb-1 uppercase tracking-wider">
+              On-chain Hash
             </label>
-            <code className="font-mono text-[10px] text-neutral-500 truncate block leading-tight">
-              {prediction.hash.slice(0, 20)}...{prediction.hash.slice(-12)}
+            <code
+              className="font-mono text-[11px] text-neutral-400 truncate block leading-tight group-hover/fingerprint:text-neutral-300 transition-colors"
+              title="Immutable proof - cryptographic hash on Constellation DAG"
+            >
+              {prediction.hash.slice(0, 16)}...{prediction.hash.slice(-10)}
             </code>
           </div>
           <button
@@ -281,12 +314,12 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
               e.stopPropagation();
               copyHash();
             }}
-            className="flex-shrink-0 p-1 hover:bg-white/10 rounded transition-colors"
-            title="Copy fingerprint"
+            className="flex-shrink-0 p-1.5 hover:bg-white/10 rounded transition-colors group/copy"
+            title="Copy full hash"
           >
             {copied ? (
               <svg
-                className="w-3.5 h-3.5 text-green-500"
+                className="w-4 h-4 text-green-500"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -300,7 +333,7 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
               </svg>
             ) : (
               <svg
-                className="w-3.5 h-3.5 text-neutral-600"
+                className="w-4 h-4 text-neutral-500 group-hover/copy:text-neutral-300"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
