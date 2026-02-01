@@ -1,66 +1,91 @@
 export default function WhyProofLocker() {
   return (
-    <div className="relative z-10 py-16 px-6 bg-[#0f172a]">
-      <div className="max-w-6xl mx-auto">
-        <h2 className="text-4xl md:text-5xl font-bold text-center text-white mb-4">
-          Why ProofLocker?
+    <div className="relative z-10 py-20 px-6 bg-[#0a0a0a]">
+      <div className="max-w-7xl mx-auto">
+        <h2 className="text-4xl md:text-5xl font-bold text-center text-white mb-4" style={{ fontFamily: 'var(--font-montserrat)' }}>
+          Why It Matters — Accountability Without Compromise
         </h2>
         <p className="text-lg text-gray-400 text-center mb-16">
-          The simplest way to prove you called it.
+          Built for individuals, teams, and organizations that value truth.
         </p>
 
-        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {/* Anonymous by default */}
-          <div className="bg-[#1e293b] border border-gray-700 rounded-xl shadow-lg hover:shadow-xl hover:scale-105 transition-all p-6">
-            <div className="w-12 h-12 rounded-xl flex items-center justify-center mb-4">
-              <svg className="w-8 h-8 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
+          {/* Anonymous by Default */}
+          <div className="bg-[#1e1e1e] border border-gray-800 hover:border-[#9370db]/50 rounded-xl shadow-lg hover:shadow-2xl transition-all p-8 card-hover">
+            <div className="w-16 h-16 rounded-xl flex items-center justify-center mb-6 bg-[#9370db]/10">
+              <svg className="w-12 h-12 text-[#9370db]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                <line x1="2" y1="2" x2="22" y2="22" strokeLinecap="round" strokeWidth="2" />
               </svg>
             </div>
-            <h3 className="text-xl font-bold text-white mb-2">Anonymous by default</h3>
+            <h3 className="text-xl font-bold text-white mb-3">Anonymous by Default</h3>
             <p className="text-gray-400 leading-relaxed">
-              No signup, no identity reveal. Lock predictions without revealing who you are.
+              Lock without identity exposure.
             </p>
           </div>
 
-          {/* Public or private */}
-          <div className="bg-[#1e293b] border border-gray-700 rounded-xl shadow-lg hover:shadow-xl hover:scale-105 transition-all p-6">
-            <div className="w-12 h-12 rounded-xl flex items-center justify-center mb-4">
-              <svg className="w-8 h-8 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          {/* Your Control — Public or Private */}
+          <div className="bg-[#1e1e1e] border border-gray-800 hover:border-[#9370db]/50 rounded-xl shadow-lg hover:shadow-2xl transition-all p-8 card-hover">
+            <div className="w-16 h-16 rounded-xl flex items-center justify-center mb-6 bg-[#9370db]/10">
+              <svg className="w-12 h-12 text-[#9370db]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
               </svg>
             </div>
-            <h3 className="text-xl font-bold text-white mb-2">Public or private</h3>
+            <h3 className="text-xl font-bold text-white mb-3">Your Control — Public or Private</h3>
             <p className="text-gray-400 leading-relaxed">
-              Share now or wait to drop proof. You control when the world sees your call.
+              Share now or reveal later.
             </p>
           </div>
 
-          {/* Immutable proof with GREEN icon */}
-          <div className="bg-[#1e293b] border border-gray-700 rounded-xl shadow-lg hover:shadow-xl hover:scale-105 transition-all p-6">
-            <div className="w-12 h-12 rounded-xl flex items-center justify-center mb-4">
-              <svg className="w-8 h-8 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+          {/* Immutable On-Chain Proof */}
+          <div className="bg-[#1e1e1e] border border-gray-800 hover:border-[#9370db]/50 rounded-xl shadow-lg hover:shadow-2xl transition-all p-8 card-hover">
+            <div className="w-16 h-16 rounded-xl flex items-center justify-center mb-6 bg-[#9370db]/10">
+              <svg className="w-12 h-12 text-[#9370db]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
               </svg>
             </div>
-            <h3 className="text-xl font-bold text-white mb-2">Immutable proof</h3>
+            <h3 className="text-xl font-bold text-white mb-3">Immutable On-Chain Proof</h3>
             <p className="text-gray-400 leading-relaxed">
-              On-chain forever, can't be changed. Timestamped proof that lasts eternally.
+              Constellation DAG — uneditable, eternal timestamp.
             </p>
           </div>
 
-          {/* Shareable cards */}
-          <div className="bg-[#1e293b] border border-gray-700 rounded-xl shadow-lg hover:shadow-xl hover:scale-105 transition-all p-6">
-            <div className="w-12 h-12 rounded-xl flex items-center justify-center mb-4">
-              <svg className="w-8 h-8 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
+          {/* Shareable Proof Cards */}
+          <div className="bg-[#1e1e1e] border border-gray-800 hover:border-[#9370db]/50 rounded-xl shadow-lg hover:shadow-2xl transition-all p-8 card-hover">
+            <div className="w-16 h-16 rounded-xl flex items-center justify-center mb-6 bg-[#9370db]/10">
+              <svg className="w-12 h-12 text-[#9370db]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
               </svg>
             </div>
-            <h3 className="text-xl font-bold text-white mb-2">Shareable cards</h3>
+            <h3 className="text-xl font-bold text-white mb-3">Shareable Proof Cards</h3>
             <p className="text-gray-400 leading-relaxed">
-              Beautiful receipts to prove you called it. Share your wins, build credibility.
+              Clean, embeddable receipts to demonstrate accuracy.
+            </p>
+          </div>
+
+          {/* Business & Shareholder Accountability */}
+          <div className="bg-[#1e1e1e] border border-gray-800 hover:border-[#9370db]/50 rounded-xl shadow-lg hover:shadow-2xl transition-all p-8 card-hover">
+            <div className="w-16 h-16 rounded-xl flex items-center justify-center mb-6 bg-[#9370db]/10">
+              <svg className="w-12 h-12 text-[#9370db]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+              </svg>
+            </div>
+            <h3 className="text-xl font-bold text-white mb-3">Business & Shareholder Accountability</h3>
+            <p className="text-gray-400 leading-relaxed">
+              Lock strategic plans on-chain. Verify delivery. Real consequences when promises break.
+            </p>
+          </div>
+
+          {/* Personal Challenges */}
+          <div className="bg-[#1e1e1e] border border-gray-800 hover:border-[#9370db]/50 rounded-xl shadow-lg hover:shadow-2xl transition-all p-8 card-hover">
+            <div className="w-16 h-16 rounded-xl flex items-center justify-center mb-6 bg-[#9370db]/10">
+              <svg className="w-12 h-12 text-[#9370db]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            </div>
+            <h3 className="text-xl font-bold text-white mb-3">Personal Challenges</h3>
+            <p className="text-gray-400 leading-relaxed">
+              Hold yourself to goals. Prove growth with verifiable timestamps.
             </p>
           </div>
         </div>
