@@ -109,10 +109,76 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
     ? prediction.textPreview.slice(0, MAX_TITLE_LENGTH) + "…"
     : prediction.textPreview;
 
+  // Helper to get category icon
+  const getCategoryIcon = (category: string) => {
+    switch (category.toLowerCase()) {
+      case 'crypto':
+        return (
+          <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm.31-8.86c-1.77-.45-2.34-.94-2.34-1.67 0-.84.79-1.43 2.1-1.43 1.38 0 1.89.66 1.96 1.64h1.71c-.08-1.49-1.13-2.79-2.67-3.15V5h-2v1.5c-1.52.37-2.67 1.41-2.67 2.95 0 1.88 1.55 2.81 3.81 3.39 2.02.53 2.41 1.3 2.41 2.14 0 .68-.42 1.43-2.1 1.43-1.69 0-2.31-.72-2.4-1.64H8.41c.1 1.7 1.36 2.66 2.92 3.01V19h2v-1.5c1.52-.37 2.68-1.33 2.68-2.97 0-2.32-1.81-3.13-3.7-3.39z"/>
+          </svg>
+        );
+      case 'sports':
+        return (
+          <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="10"/>
+            <path d="M12 2a10 10 0 0 0 0 20M12 2a10 10 0 0 1 0 20M2 12h20"/>
+          </svg>
+        );
+      case 'tech':
+        return (
+          <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+            <rect x="2" y="3" width="20" height="14" rx="2"/>
+            <path d="M8 21h8M12 17v4"/>
+          </svg>
+        );
+      case 'politics':
+        return (
+          <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+            <path d="M3 21h18M5 21V7l8-4v18M21 21V10l-8-3"/>
+          </svg>
+        );
+      case 'markets':
+        return (
+          <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+            <path d="M3 3v18h18M7 16l4-4 4 4 6-6"/>
+          </svg>
+        );
+      case 'personal':
+        return (
+          <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2M12 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8z"/>
+          </svg>
+        );
+      default:
+        return (
+          <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+          </svg>
+        );
+    }
+  };
+
+  // Mock accountability score based on outcome (for landing page examples)
+  const getAccountabilityScore = () => {
+    if (prediction.outcome === 'correct') {
+      // Use hash to generate consistent score between 85-100
+      const hashNum = parseInt(prediction.hash.slice(0, 8), 16);
+      return 85 + (hashNum % 16);
+    }
+    return null;
+  };
+
+  const accountabilityScore = getAccountabilityScore();
+
   return (
     <Link
       href={`/proof/${prediction.publicSlug}`}
-      className="relative rounded-lg p-4 md:p-4 transition-all flex flex-col h-full shadow-lg overflow-hidden border border-purple-500/20 hover:border-purple-500/40 bg-gradient-to-br from-purple-600/15 via-blue-600/10 to-purple-700/15 backdrop-blur-xl cursor-pointer"
+      className={`group relative rounded-2xl p-5 md:p-6 transition-all duration-300 flex flex-col h-full shadow-xl overflow-hidden border cursor-pointer ${
+        prediction.outcome === 'correct'
+          ? 'border-[#22C55E]/20 hover:border-[#22C55E]/40 bg-gradient-to-br from-purple-600/15 via-blue-600/10 to-[#22C55E]/10'
+          : 'border-purple-500/20 hover:border-purple-500/40 bg-gradient-to-br from-purple-600/15 via-blue-600/10 to-purple-700/15'
+      } backdrop-blur-xl hover:-translate-y-1 hover:scale-[1.02] hover:shadow-[0_0_40px_rgba(147,112,219,0.2),0_0_20px_rgba(0,255,0,0.1)]`}
     >
       {/* 1. HEADER ROW - Author info + badges */}
       <div className="mb-2">
@@ -131,7 +197,8 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
               {prediction.category && (
                 <>
                   <span className="text-neutral-600 flex-shrink-0 hidden md:inline">•</span>
-                  <span className="px-1.5 py-0.5 text-[10px] font-medium rounded bg-white/5 border border-white/10 text-neutral-400 whitespace-nowrap hidden md:inline-block">
+                  <span className="px-2 py-1 text-[10px] font-medium rounded bg-white/5 border border-white/10 text-neutral-400 whitespace-nowrap hidden md:inline-flex items-center gap-1">
+                    {getCategoryIcon(prediction.category)}
                     {prediction.category}
                   </span>
                 </>
@@ -163,7 +230,8 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
         {/* Category row - Mobile only, separate line below */}
         {prediction.category && (
           <div className="md:hidden">
-            <span className="inline-block px-1.5 py-0.5 text-[10px] font-medium rounded bg-white/5 border border-white/10 text-neutral-400 whitespace-nowrap">
+            <span className="inline-flex items-center gap-1 px-2 py-1 text-[10px] font-medium rounded bg-white/5 border border-white/10 text-neutral-400 whitespace-nowrap">
+              {getCategoryIcon(prediction.category)}
               {prediction.category}
             </span>
           </div>
@@ -171,7 +239,7 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
       </div>
 
       {/* 3. TITLE - Prediction text */}
-      <h3 className="text-white text-base mb-2.5 md:mb-3 font-normal w-full min-w-0 line-clamp-2 leading-snug min-h-[2.75em]">
+      <h3 className="text-white text-lg md:text-xl mb-3 md:mb-4 font-medium w-full min-w-0 line-clamp-2 leading-snug min-h-[3em]">
         {displayTitle}
       </h3>
 
