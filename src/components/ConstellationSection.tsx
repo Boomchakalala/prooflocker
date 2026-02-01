@@ -1,11 +1,11 @@
 export default function ConstellationSection() {
   return (
-    <div className="relative z-10 py-12 md:py-16 px-6 bg-[#0a0a0a]">
+    <div className="relative z-10 py-10 md:py-12 px-6 bg-[#0a0a0a]">
       <div className="max-w-5xl mx-auto">
-        <div className="bg-gradient-to-br from-purple-600/5 via-blue-600/5 to-purple-700/5 border border-white/10 rounded-2xl p-8 md:p-12">
+        <div className="border-t border-white/5 pt-10 md:pt-12">
           {/* DAG Diagram */}
-          <div className="flex justify-center mb-6">
-            <svg className="w-full max-w-[400px] md:max-w-[500px] h-20 md:h-24" viewBox="0 0 500 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <div className="flex justify-center mb-5">
+            <svg className="w-full max-w-[320px] md:max-w-[400px] h-16 md:h-20 opacity-40" viewBox="0 0 500 120" fill="none" xmlns="http://www.w3.org/2000/svg">
               {/* Nodes */}
               <circle cx="60" cy="60" r="8" fill="#00bfff" opacity="0.9" />
               <circle cx="140" cy="35" r="8" fill="#9370db" opacity="0.9" />
@@ -29,13 +29,13 @@ export default function ConstellationSection() {
           </div>
 
           {/* Heading */}
-          <h2 className="text-2xl md:text-4xl font-bold text-center text-white mb-4" style={{ fontFamily: 'var(--font-montserrat)' }}>
+          <h3 className="text-lg md:text-xl font-semibold text-center text-white/80 mb-2" style={{ fontFamily: 'var(--font-montserrat)' }}>
             Built on Constellation DAG
-          </h2>
+          </h3>
 
           {/* Description */}
-          <p className="text-base md:text-lg text-white/70 text-center max-w-3xl mx-auto leading-relaxed">
-            Every prediction is blockchain-backed digital evidence—timestamped, tamper-proof, and immutable. Constellation DAG provides the infrastructure for real accountability at scale.
+          <p className="text-sm md:text-base text-white/50 text-center max-w-2xl mx-auto">
+            Timestamped, tamper-proof infrastructure for real accountability.
           </p>
         </div>
       </div>
