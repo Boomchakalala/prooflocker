@@ -184,10 +184,10 @@ export default function ProofCardPreview() {
   };
 
   return (
-    <div className="relative z-10 py-20 px-6 bg-[#0a0a0a]">
-      <div className="max-w-7xl mx-auto">
-        <div className="text-center mb-12">
-          <h2 className="text-4xl md:text-5xl font-bold text-white mb-4" style={{ fontFamily: 'var(--font-montserrat)' }}>
+    <div className="relative z-10 py-24 px-6 bg-[#0a0a0a]">
+      <div className="max-w-[1280px] mx-auto px-6 md:px-12 lg:px-16">
+        <div className="text-center mb-16">
+          <h2 className="text-4xl md:text-5xl font-bold text-white mb-6" style={{ fontFamily: 'var(--font-montserrat)' }}>
             Real Proof — Wins, Misses, Accountability
           </h2>
           <p className="text-lg text-gray-400">
@@ -200,7 +200,7 @@ export default function ProofCardPreview() {
           {/* Left Arrow */}
           <button
             onClick={() => scroll("left")}
-            className="hidden md:flex absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 z-10 w-14 h-14 items-center justify-center bg-[#1e1e1e] border border-[#00bfff]/30 rounded-full shadow-2xl hover:bg-[#2a2a2a] hover:scale-110 hover:border-[#00bfff] transition-all"
+            className="hidden md:flex absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 z-10 w-14 h-14 items-center justify-center bg-[#111111] border border-[#00bfff]/30 rounded-full shadow-2xl hover:bg-[#2a2a2a] hover:scale-110 hover:border-[#00bfff] transition-all"
             aria-label="Scroll left"
           >
             <svg
@@ -245,7 +245,7 @@ export default function ProofCardPreview() {
           {/* Right Arrow */}
           <button
             onClick={() => scroll("right")}
-            className="hidden md:flex absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 z-10 w-14 h-14 items-center justify-center bg-[#1e1e1e] border border-[#00bfff]/30 rounded-full shadow-2xl hover:bg-[#2a2a2a] hover:scale-110 hover:border-[#00bfff] transition-all"
+            className="hidden md:flex absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 z-10 w-14 h-14 items-center justify-center bg-[#111111] border border-[#00bfff]/30 rounded-full shadow-2xl hover:bg-[#2a2a2a] hover:scale-110 hover:border-[#00bfff] transition-all"
             aria-label="Scroll right"
           >
             <svg
@@ -265,7 +265,7 @@ export default function ProofCardPreview() {
         </div>
 
         {/* Scroll Hint for Mobile */}
-        <p className="text-center text-sm text-gray-500 mt-6 md:hidden">
+        <p className="text-center text-sm text-gray-500 mt-8 md:hidden">
           Swipe to see more examples →
         </p>
       </div>
