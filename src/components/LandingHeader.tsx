@@ -23,13 +23,13 @@ export default function LandingHeader() {
 
   return (
     <>
-      <header className="sticky top-0 z-50 bg-slate-950/80 backdrop-blur-lg border-b border-gray-800">
+      <header className="sticky top-0 z-50 bg-[#0f172a]/80 backdrop-blur-lg border-b border-gray-800">
         <div className="mx-auto max-w-7xl px-6 lg:px-8 flex h-16 items-center justify-between">
           <Link href="/" className="text-xl font-bold text-white"># ProofLocker</Link>
           <div className="flex items-center gap-3 md:gap-4">
             <Link
               href="/app"
-              className="text-white hover:text-gray-300 font-medium transition-colors"
+              className="text-white hover:text-blue-400 font-medium transition-colors"
             >
               Explore predictions
             </Link>
@@ -38,7 +38,7 @@ export default function LandingHeader() {
             {!user ? (
               <button
                 onClick={() => setShowClaimModal(true)}
-                className="text-white hover:text-gray-300 font-medium transition-colors"
+                className="text-white hover:text-blue-400 font-medium transition-colors"
               >
                 Sign in
               </button>
