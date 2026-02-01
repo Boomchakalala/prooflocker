@@ -5,6 +5,7 @@ import { generateAuthorNumber } from "@/lib/utils";
 import { submitToDigitalEvidence, isDigitalEvidenceEnabled } from "@/lib/digitalEvidence";
 import { validatePredictionContent } from "@/lib/contentFilter";
 import { createClient } from "@supabase/supabase-js";
+import { awardLockPoints } from "@/lib/insight-db";
 
 export const runtime = "nodejs";
 
@@ -139,6 +140,23 @@ export async function POST(request: NextRequest) {
     // Save prediction to storage (Supabase)
     await savePrediction(prediction);
 
+    // Award Insight Score points for locking (+10 pts)
+    let insightPoints = 0;
+    try {
+      const identifier = authenticatedUserId
+        ? { userId: authenticatedUserId }
+        : { anonId };
+
+      const scoreResult = await awardLockPoints(identifier, predictionId);
+      if (scoreResult) {
+        insightPoints = scoreResult.points;
+        console.log(`[Lock Proof API] Awarded ${insightPoints} Insight Score points`);
+      }
+    } catch (scoreError) {
+      console.error("[Lock Proof API] Failed to award Insight Score:", scoreError);
+      // Don't fail the request if scoring fails
+    }
+
     // Simulate network delay for better UX
     await new Promise((resolve) => setTimeout(resolve, 1500));
 
@@ -153,6 +171,7 @@ export async function POST(request: NextRequest) {
       onChainStatus,
       deReference,
       deEventId,
+      insightPoints, // Include insight points in response
     });
   } catch (error) {
     console.error("[Lock Proof API] ========== ERROR ==========");
