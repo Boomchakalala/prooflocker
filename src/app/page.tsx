@@ -4,6 +4,7 @@ import LandingHeader from "@/components/LandingHeader";
 import LandingHero from "@/components/LandingHero";
 import HowItWorks from "@/components/HowItWorks";
 import WhyProofLocker from "@/components/WhyProofLocker";
+import TechFoundation from "@/components/TechFoundation";
 import ProofCardPreview from "@/components/ProofCardPreview";
 import DEStatusBanner from "@/components/DEStatusBanner";
 import Footer from "@/components/Footer";
