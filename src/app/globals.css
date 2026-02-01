@@ -1,10 +1,19 @@
 @import "tailwindcss";
 
 :root {
+  /* Unified Design System */
+  --bg: #0a0a0a;
+  --surface: #111111;
+  --border: rgba(255, 255, 255, 0.1);
+  --text: #ffffff;
+  --muted: #9ca3af;
+  --accent-start: #00bfff;
+  --accent-end: #9370db;
+
+  /* Legacy (kept for compatibility) */
   --background: #0a0a0a;
   --foreground: #ffffff;
-  --border: #1f1f1f;
-  --card-bg: #1e1e1e;
+  --card-bg: #111111;
   --primary: #00bfff;
   --secondary: #9370db;
   --purple-dark: #1a0033;
@@ -53,26 +62,32 @@ body {
   border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
-/* Glow effects - softer and more subtle */
+/* Unified Glow Effects */
 .glow-blue {
-  box-shadow: 0 8px 32px rgba(0, 191, 255, 0.15),
-              0 4px 16px rgba(0, 191, 255, 0.1);
+  box-shadow: 0 8px 32px rgba(0, 191, 255, 0.12),
+              0 4px 16px rgba(0, 191, 255, 0.08);
 }
 
 .glow-purple {
-  box-shadow: 0 8px 32px rgba(147, 112, 219, 0.15),
-              0 4px 16px rgba(147, 112, 219, 0.1);
+  box-shadow: 0 8px 32px rgba(147, 112, 219, 0.12),
+              0 4px 16px rgba(147, 112, 219, 0.08);
 }
 
-/* Card hover effects - subtle lift */
+.glow-gradient {
+  box-shadow: 0 8px 32px rgba(0, 191, 255, 0.1),
+              0 8px 32px rgba(147, 112, 219, 0.1);
+}
+
+/* Unified Card Hover - consistent across all sections */
 .card-hover {
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .card-hover:hover {
   transform: translateY(-4px);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
-  border-color: rgba(0, 191, 255, 0.5);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4),
+              0 0 0 1px var(--border);
+  border-color: var(--accent-start);
 }
 
 /* Shimmer effect for loading states */
@@ -124,9 +139,9 @@ body {
   animation: float 3s ease-in-out infinite;
 }
 
-/* Gradient text */
+/* Gradient text - unified blue to purple */
 .gradient-text {
-  background: linear-gradient(135deg, #00bfff 0%, #9370db 50%, #00bfff 100%);
+  background: linear-gradient(135deg, var(--accent-start) 0%, var(--accent-end) 100%);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
