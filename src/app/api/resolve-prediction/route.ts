@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 import crypto from "crypto";
 import { submitToDigitalEvidence, isDigitalEvidenceEnabled } from "@/lib/digitalEvidence";
+import { awardResolvePoints } from "@/lib/insight-db";
 
 export const dynamic = 'force-dynamic';
 export const maxDuration = 10;
@@ -155,6 +156,37 @@ export async function POST(request: NextRequest) {
 
     console.log("[Resolve API] Success - Resolution recorded on-chain");
 
+    // Award Insight Score points for resolving
+    let insightPoints = 0;
+    let insightBreakdown = null;
+    let newStreak = 0;
+
+    // Only award points for correct/incorrect outcomes (not "invalid" or "pending")
+    if (outcome === "correct" || outcome === "incorrect") {
+      try {
+        const identifier = user.id
+          ? { userId: user.id }
+          : { anonId: prediction.anon_id };
+
+        const scoreResult = await awardResolvePoints({
+          identifier,
+          predictionId,
+          isCorrect: outcome === "correct",
+          category: prediction.category,
+        });
+
+        if (scoreResult) {
+          insightPoints = scoreResult.points;
+          insightBreakdown = scoreResult.breakdown;
+          newStreak = scoreResult.newStreak;
+          console.log(`[Resolve API] Awarded ${insightPoints} Insight Score points (streak: ${newStreak})`);
+        }
+      } catch (scoreError) {
+        console.error("[Resolve API] Failed to award Insight Score:", scoreError);
+        // Don't fail the request if scoring fails
+      }
+    }
+
     return NextResponse.json({
       success: true,
       outcome,
@@ -162,6 +194,9 @@ export async function POST(request: NextRequest) {
       resolutionHash,
       resolutionDeStatus: updateData.resolution_de_status || null,
       resolutionDeEventId: updateData.resolution_de_event_id || null,
+      insightPoints,
+      insightBreakdown,
+      newStreak,
     });
   } catch (error) {
     console.error("[Resolve API] Error:", error);
