@@ -24,12 +24,12 @@ body {
   font-family: var(--font-inter), system-ui, -apple-system, sans-serif;
 }
 
-/* Animated gradient background */
+/* Animated gradient background - cleaner, more subtle */
 .gradient-bg {
   background: radial-gradient(
     ellipse at center,
-    #1a0033 0%,
-    #0a0a0a 50%,
+    rgba(26, 0, 51, 0.18) 0%,
+    #0a0a0a 60%,
     #0a0a0a 100%
   );
   background-size: 200% 200%;
@@ -53,25 +53,26 @@ body {
   border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
-/* Glow effects */
+/* Glow effects - softer and more subtle */
 .glow-blue {
-  box-shadow: 0 0 20px rgba(0, 191, 255, 0.2),
-              0 0 40px rgba(0, 191, 255, 0.15);
+  box-shadow: 0 8px 32px rgba(0, 191, 255, 0.15),
+              0 4px 16px rgba(0, 191, 255, 0.1);
 }
 
 .glow-purple {
-  box-shadow: 0 0 20px rgba(147, 112, 219, 0.2),
-              0 0 40px rgba(147, 112, 219, 0.15);
+  box-shadow: 0 8px 32px rgba(147, 112, 219, 0.15),
+              0 4px 16px rgba(147, 112, 219, 0.1);
 }
 
-/* Card hover effects */
+/* Card hover effects - subtle lift */
 .card-hover {
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .card-hover:hover {
-  transform: translateY(-2px) scale(1.03);
-  box-shadow: 0 8px 30px rgba(0, 191, 255, 0.15);
+  transform: translateY(-4px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+  border-color: rgba(0, 191, 255, 0.5);
 }
 
 /* Shimmer effect for loading states */
@@ -257,23 +258,23 @@ body {
   display: none;  /* Chrome, Safari and Opera */
 }
 
-/* DAG particle animation */
+/* DAG particle animation - reduced opacity for cleaner look */
 @keyframes particleFloat {
   0%, 100% {
     transform: translate(0, 0);
-    opacity: 0.3;
+    opacity: 0.08;
   }
   25% {
     transform: translate(10px, -10px);
-    opacity: 0.6;
+    opacity: 0.15;
   }
   50% {
     transform: translate(-5px, 10px);
-    opacity: 0.4;
+    opacity: 0.1;
   }
   75% {
     transform: translate(15px, 5px);
-    opacity: 0.5;
+    opacity: 0.12;
   }
 }
 
@@ -305,7 +306,8 @@ body {
   color: #9370db;
 }
 
-/* Text shadow for hero */
+/* Text shadow for hero - subtle blue glow */
 .text-shadow-blue {
-  text-shadow: 0 0 30px rgba(0, 191, 255, 0.5);
+  text-shadow: 0 4px 24px rgba(0, 191, 255, 0.3),
+               0 2px 12px rgba(0, 191, 255, 0.2);
 }
