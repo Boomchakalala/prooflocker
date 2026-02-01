@@ -134,7 +134,7 @@ function AppFeedContent() {
       {/* Decorative gradient orbs */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-20 -left-40 w-80 h-80 bg-blue-500/10 rounded-full blur-3xl" />
-        <div className="absolute top-40 -right-40 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl" />
+        <div className="absolute top-40 -right-40 w-96 h-96 bg-[#5B21B6]/10 rounded-full blur-3xl" />
         <div className="absolute bottom-20 left-1/2 w-80 h-80 bg-cyan-500/10 rounded-full blur-3xl" />
       </div>
 
@@ -290,7 +290,7 @@ function AppFeedContent() {
                     onClick={() => setSelectedCategory(cat)}
                     className={`px-3 py-1.5 text-xs font-medium rounded-full transition-all whitespace-nowrap flex-shrink-0 ${
                       selectedCategory === cat
-                        ? "bg-gradient-to-r from-blue-600/80 to-purple-600/80 hover:from-blue-600 hover:to-purple-600 text-white border border-blue-500/30"
+                        ? "bg-gradient-to-r from-blue-600/80 to-purple-600/80 hover:from-blue-600 hover:to-purple-600 text-white border border-[#2E5CFF]/30"
                         : "glass border border-white/10 text-neutral-400 hover:text-white hover:bg-white/5"
                     }`}
                   >
@@ -337,7 +337,7 @@ function AppFeedContent() {
           <div className="flex items-center justify-center py-20">
             <div className="relative">
               <div className="animate-spin rounded-full h-12 w-12 border-2 border-blue-500 border-t-transparent"></div>
-              <div className="absolute inset-0 rounded-full bg-blue-500/20 blur-xl"></div>
+              <div className="absolute inset-0 rounded-full bg-[#2E5CFF]/20 blur-xl"></div>
             </div>
           </div>
         ) : activeTab === "my" && !user ? (

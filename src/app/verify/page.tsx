@@ -58,7 +58,7 @@ function VerifyContent() {
       {/* Decorative gradient orbs */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-20 -left-40 w-80 h-80 bg-cyan-500/10 rounded-full blur-3xl" />
-        <div className="absolute top-40 -right-40 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl" />
+        <div className="absolute top-40 -right-40 w-96 h-96 bg-[#5B21B6]/10 rounded-full blur-3xl" />
       </div>
 
       {/* Header */}
@@ -270,7 +270,7 @@ function VerifyContent() {
                       minute: "2-digit"
                     })}</strong>. This record is immutable and cannot be altered.
                   </p>
-                  <div className="inline-flex items-center gap-2 px-4 py-2 bg-blue-500/10 border border-blue-500/30 rounded-lg text-blue-400 text-sm font-medium">
+                  <div className="inline-flex items-center gap-2 px-4 py-2 bg-[#2E5CFF]/10 border border-[#2E5CFF]/30 rounded-lg text-[#2E5CFF] text-sm font-medium">
                     <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
                       <path fillRule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clipRule="evenodd" />
                     </svg>
