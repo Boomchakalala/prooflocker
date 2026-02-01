@@ -1,17 +1,17 @@
 export default function WhyProofLocker() {
   return (
-    <div className="relative z-10 py-20 px-6 bg-[#0a0a0a]">
-      <div className="max-w-7xl mx-auto">
+    <div className="relative z-10 py-24 px-6 bg-[#0a0a0a]">
+      <div className="max-w-[1280px] mx-auto px-6 md:px-12 lg:px-16">
         <h2 className="text-4xl md:text-5xl font-bold text-center text-white mb-4" style={{ fontFamily: 'var(--font-montserrat)' }}>
           Why It Matters — Accountability Without Compromise
         </h2>
-        <p className="text-lg text-gray-400 text-center mb-16">
+        <p className="text-lg text-gray-400 text-center mb-20">
           Built for individuals, teams, and organizations that value truth.
         </p>
 
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
           {/* Anonymous by Default */}
-          <div className="bg-[#1e1e1e] border border-gray-800 hover:border-[#9370db]/50 rounded-xl shadow-lg hover:shadow-2xl transition-all p-8 card-hover">
+          <div className="bg-[#111111] border border-gray-800/50 hover:border-[#9370db]/50 rounded-[18px] shadow-lg hover:shadow-2xl transition-all p-8 card-hover">
             <div className="w-16 h-16 rounded-xl flex items-center justify-center mb-6 bg-[#9370db]/10">
               <svg className="w-12 h-12 text-[#9370db]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
@@ -24,7 +24,7 @@ export default function WhyProofLocker() {
           </div>
 
           {/* Your Control — Public or Private */}
-          <div className="bg-[#1e1e1e] border border-gray-800 hover:border-[#9370db]/50 rounded-xl shadow-lg hover:shadow-2xl transition-all p-8 card-hover">
+          <div className="bg-[#111111] border border-gray-800/50 hover:border-[#9370db]/50 rounded-[18px] shadow-lg hover:shadow-2xl transition-all p-8 card-hover">
             <div className="w-16 h-16 rounded-xl flex items-center justify-center mb-6 bg-[#9370db]/10">
               <svg className="w-12 h-12 text-[#9370db]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -38,7 +38,7 @@ export default function WhyProofLocker() {
           </div>
 
           {/* Immutable On-Chain Proof */}
-          <div className="bg-[#1e1e1e] border border-gray-800 hover:border-[#9370db]/50 rounded-xl shadow-lg hover:shadow-2xl transition-all p-8 card-hover">
+          <div className="bg-[#111111] border border-gray-800/50 hover:border-[#9370db]/50 rounded-[18px] shadow-lg hover:shadow-2xl transition-all p-8 card-hover">
             <div className="w-16 h-16 rounded-xl flex items-center justify-center mb-6 bg-[#9370db]/10">
               <svg className="w-12 h-12 text-[#9370db]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
@@ -51,7 +51,7 @@ export default function WhyProofLocker() {
           </div>
 
           {/* Shareable Proof Cards */}
-          <div className="bg-[#1e1e1e] border border-gray-800 hover:border-[#9370db]/50 rounded-xl shadow-lg hover:shadow-2xl transition-all p-8 card-hover">
+          <div className="bg-[#111111] border border-gray-800/50 hover:border-[#9370db]/50 rounded-[18px] shadow-lg hover:shadow-2xl transition-all p-8 card-hover">
             <div className="w-16 h-16 rounded-xl flex items-center justify-center mb-6 bg-[#9370db]/10">
               <svg className="w-12 h-12 text-[#9370db]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
@@ -64,7 +64,7 @@ export default function WhyProofLocker() {
           </div>
 
           {/* Business & Shareholder Accountability */}
-          <div className="bg-[#1e1e1e] border border-gray-800 hover:border-[#9370db]/50 rounded-xl shadow-lg hover:shadow-2xl transition-all p-8 card-hover">
+          <div className="bg-[#111111] border border-gray-800/50 hover:border-[#9370db]/50 rounded-[18px] shadow-lg hover:shadow-2xl transition-all p-8 card-hover">
             <div className="w-16 h-16 rounded-xl flex items-center justify-center mb-6 bg-[#9370db]/10">
               <svg className="w-12 h-12 text-[#9370db]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
@@ -77,7 +77,7 @@ export default function WhyProofLocker() {
           </div>
 
           {/* Personal Challenges */}
-          <div className="bg-[#1e1e1e] border border-gray-800 hover:border-[#9370db]/50 rounded-xl shadow-lg hover:shadow-2xl transition-all p-8 card-hover">
+          <div className="bg-[#111111] border border-gray-800/50 hover:border-[#9370db]/50 rounded-[18px] shadow-lg hover:shadow-2xl transition-all p-8 card-hover">
             <div className="w-16 h-16 rounded-xl flex items-center justify-center mb-6 bg-[#9370db]/10">
               <svg className="w-12 h-12 text-[#9370db]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
