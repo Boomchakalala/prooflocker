@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter, JetBrains_Mono, Montserrat } from "next/font/google";
+import { Inter_Tight, JetBrains_Mono, Montserrat } from "next/font/google";
 import Script from "next/script";
 import "./globals.css";
 import { AuthProvider } from "@/contexts/AuthContext";
@@ -9,15 +9,16 @@ import AuthDebugPanel from "@/components/AuthDebugPanel";
 import EnvIndicator from "@/components/EnvIndicator";
 import { getSiteUrl, getAbsoluteUrl } from "@/lib/config";
 
-const inter = Inter({
+const interTight = Inter_Tight({
   variable: "--font-inter",
   subsets: ["latin"],
+  weight: ["400", "500", "600", "700", "800"],
 });
 
 const montserrat = Montserrat({
   variable: "--font-montserrat",
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700", "800"],
+  weight: ["400", "500", "600", "700", "800", "900"],
 });
 
 const jetbrainsMono = JetBrains_Mono({
@@ -75,7 +76,7 @@ export default function RootLayout({
         <link rel="manifest" href="/manifest.json" />
       </head>
       <body
-        className={`${inter.variable} ${montserrat.variable} ${jetbrainsMono.variable} antialiased bg-[#0a0a0a] text-white`}
+        className={`${interTight.variable} ${montserrat.variable} ${jetbrainsMono.variable} antialiased bg-[#1A0033] text-[#F5F5F5]`}
       >
         {/* Google Analytics 4 - Load gtag.js */}
         {GA_ID && (

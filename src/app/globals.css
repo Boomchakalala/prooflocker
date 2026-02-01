@@ -365,3 +365,79 @@ body {
 .animate-fade-in-left {
   animation: fadeInLeft 0.6s ease-out both;
 }
+
+/* Fade in on scroll animation */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-in-up {
+  animation: fadeInUp 0.7s ease-out both;
+}
+
+/* Category badge styles */
+.category-badge-crypto {
+  background: linear-gradient(135deg, rgba(0, 212, 255, 0.15) 0%, rgba(0, 212, 255, 0.05) 100%);
+  border: 1px solid rgba(0, 212, 255, 0.3);
+  color: #00D4FF;
+}
+
+.category-badge-sports {
+  background: linear-gradient(135deg, rgba(167, 139, 250, 0.15) 0%, rgba(167, 139, 250, 0.05) 100%);
+  border: 1px solid rgba(167, 139, 250, 0.3);
+  color: #A78BFA;
+}
+
+.category-badge-tech {
+  background: linear-gradient(135deg, rgba(0, 212, 255, 0.15) 0%, rgba(0, 212, 255, 0.05) 100%);
+  border: 1px solid rgba(0, 212, 255, 0.3);
+  color: #00D4FF;
+}
+
+.category-badge-personal {
+  background: linear-gradient(135deg, rgba(167, 139, 250, 0.15) 0%, rgba(167, 139, 250, 0.05) 100%);
+  border: 1px solid rgba(167, 139, 250, 0.3);
+  color: #A78BFA;
+}
+
+.category-badge-politics,
+.category-badge-markets,
+.category-badge-other {
+  background: linear-gradient(135deg, rgba(147, 112, 219, 0.15) 0%, rgba(147, 112, 219, 0.05) 100%);
+  border: 1px solid rgba(147, 112, 219, 0.3);
+  color: #9370db;
+}
+
+/* Enhanced particle constellation overlay */
+.constellation-overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.12;
+  background-image: 
+    radial-gradient(2px 2px at 20% 30%, rgba(0, 212, 255, 0.4), transparent),
+    radial-gradient(2px 2px at 60% 70%, rgba(167, 139, 250, 0.4), transparent),
+    radial-gradient(1px 1px at 50% 50%, rgba(0, 212, 255, 0.3), transparent),
+    radial-gradient(1px 1px at 80% 10%, rgba(167, 139, 250, 0.3), transparent),
+    radial-gradient(2px 2px at 90% 60%, rgba(0, 212, 255, 0.3), transparent),
+    radial-gradient(1px 1px at 30% 80%, rgba(167, 139, 250, 0.3), transparent);
+  background-size: 200% 200%, 180% 180%, 220% 220%, 190% 190%, 210% 210%, 230% 230%;
+  background-position: 0% 0%, 100% 100%, 50% 50%, 80% 20%, 20% 80%, 60% 40%;
+  animation: constellationMove 60s ease-in-out infinite;
+}
+
+@keyframes constellationMove {
+  0%, 100% {
+    background-position: 0% 0%, 100% 100%, 50% 50%, 80% 20%, 20% 80%, 60% 40%;
+  }
+  50% {
+    background-position: 100% 100%, 0% 0%, 80% 20%, 20% 80%, 60% 40%, 90% 90%;
+  }
+}
