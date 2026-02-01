@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter, JetBrains_Mono } from "next/font/google";
+import { Inter, JetBrains_Mono, Montserrat } from "next/font/google";
 import Script from "next/script";
 import "./globals.css";
 import { AuthProvider } from "@/contexts/AuthContext";
@@ -13,6 +13,12 @@ const inter = Inter({
   subsets: ["latin"],
 });
 
+const montserrat = Montserrat({
+  variable: "--font-montserrat",
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700", "800"],
+});
+
 const jetbrainsMono = JetBrains_Mono({
   variable: "--font-mono",
   subsets: ["latin"],
@@ -21,8 +27,8 @@ const jetbrainsMono = JetBrains_Mono({
 const siteUrl = getSiteUrl();
 
 export const metadata: Metadata = {
-  title: "ProofLocker",
-  description: "Say it now. Prove it later.",
+  title: "ProofLocker — Lock Predictions & Commitments On-Chain Forever",
+  description: "Declare it now. Prove it later — immutable on Constellation DAG. Anonymous predictions, personal goals, and business commitments locked forever.",
   metadataBase: new URL(siteUrl),
   icons: {
     icon: [
@@ -33,8 +39,8 @@ export const metadata: Metadata = {
     apple: "/favicons/apple-touch-icon.png",
   },
   openGraph: {
-    title: "ProofLocker — Predictions locked forever",
-    description: "Say it now. Prove it later.",
+    title: "ProofLocker — Lock Predictions & Commitments On-Chain Forever",
+    description: "Declare it now. Prove it later — immutable on Constellation DAG.",
     url: siteUrl,
     type: "website",
     siteName: "ProofLocker",
@@ -49,8 +55,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary",
-    title: "ProofLocker — Predictions locked forever",
-    description: "Say it now. Prove it later.",
+    title: "ProofLocker — Lock Predictions & Commitments On-Chain Forever",
+    description: "Declare it now. Prove it later — immutable on Constellation DAG.",
     images: [getAbsoluteUrl("/favicons/icon-512.png")],
   },
 };
@@ -68,7 +74,7 @@ export default function RootLayout({
         <link rel="manifest" href="/manifest.json" />
       </head>
       <body
-        className={`${inter.variable} ${jetbrainsMono.variable} antialiased bg-[#0a0a0a] text-white`}
+        className={`${inter.variable} ${montserrat.variable} ${jetbrainsMono.variable} antialiased bg-[#0a0a0a] text-white`}
       >
         {/* Google Analytics 4 - Load gtag.js */}
         {GA_ID && (
