@@ -3,6 +3,7 @@ import { Inter, JetBrains_Mono, Montserrat } from "next/font/google";
 import Script from "next/script";
 import "./globals.css";
 import { AuthProvider } from "@/contexts/AuthContext";
+import { ToastProvider } from "@/contexts/ToastContext";
 import AnalyticsTracker from "@/components/AnalyticsTracker";
 import AuthDebugPanel from "@/components/AuthDebugPanel";
 import EnvIndicator from "@/components/EnvIndicator";
