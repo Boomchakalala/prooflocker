@@ -25,35 +25,47 @@ export default function LandingHeader() {
   return (
     <>
       <header className="sticky top-0 z-50 backdrop-blur-xl border-b border-gray-800 transition-colors duration-300" style={{ background: 'rgba(10, 10, 10, 0.75)' }}>
-        <div className="mx-auto max-w-[1280px] px-6 md:px-12 lg:px-16 flex h-12 items-center justify-between">
+        <div className="mx-auto max-w-[1280px] px-6 md:px-12 lg:px-16 flex h-14 items-center justify-between">
           <Link href="/" className="text-[32px] font-bold text-white hover:text-[#00bfff] transition-all duration-300" style={{ fontFamily: 'var(--font-montserrat)', textShadow: '0 0 20px rgba(0, 191, 255, 0.2)' }}>
             ProofLocker
           </Link>
-          <div className="flex items-center gap-6 md:gap-8">
+          <div className="flex items-center gap-4 md:gap-6">
+            <Link
+              href="/lock"
+              className="px-5 md:px-7 py-2 md:py-2.5 bg-gradient-to-r from-[#00bfff] to-[#9370db] hover:from-[#00a8e6] hover:to-[#7d5fc7] text-white text-sm md:text-base font-bold rounded-lg transition-all shadow-lg hover:shadow-[0_0_20px_rgba(0,191,255,0.5)] hover:scale-105 flex items-center gap-2 order-1"
+            >
+              Lock Prediction
+              <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+              </svg>
+            </Link>
+
             <Link
               href="/app"
-              className="text-white hover:text-[#00bfff] font-medium transition-all duration-200 text-base md:text-[17px] relative group"
+              className="text-white/80 hover:text-[#00bfff] font-medium transition-all duration-200 text-sm md:text-base relative group order-2 hidden sm:block"
               style={{ fontFamily: 'var(--font-inter)' }}
             >
-              Explore Predictions
+              Explore
               <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-[#00bfff] transition-all duration-200 group-hover:w-full" />
             </Link>
 
             {/* Insight Score Pill */}
-            <InsightScorePill />
+            <div className="order-3">
+              <InsightScorePill />
+            </div>
 
             {/* Desktop: Show Sign In button or user menu */}
             {!user ? (
               <button
                 onClick={() => setShowClaimModal(true)}
-                className="text-white hover:text-[#00bfff] font-medium transition-all duration-200 text-base md:text-[17px] hidden sm:block relative group"
+                className="text-white/80 hover:text-[#00bfff] font-medium transition-all duration-200 text-sm md:text-base hidden sm:block relative group order-4"
                 style={{ fontFamily: 'var(--font-inter)' }}
               >
                 Log In
                 <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-[#00bfff] transition-all duration-200 group-hover:w-full" />
               </button>
             ) : (
-              <div className="relative hidden sm:block">
+              <div className="relative hidden sm:block order-4">
                 <button
                   onClick={() => setShowUserMenu(!showUserMenu)}
                   className="flex items-center gap-2 px-3 py-1.5 bg-white/5 border border-white/10 rounded-full text-sm text-white/60 hover:text-white hover:bg-white/10 transition-all"
@@ -88,16 +100,6 @@ export default function LandingHeader() {
                 )}
               </div>
             )}
-
-            <Link
-              href="/lock"
-              className="px-6 md:px-8 py-2.5 md:py-3 bg-gradient-to-r from-[#00bfff] to-[#9370db] hover:from-[#00a8e6] hover:to-[#7d5fc7] text-white font-bold rounded-lg md:rounded-full transition-all shadow-lg hover:shadow-[0_0_20px_rgba(0,191,255,0.5)] hover:scale-105 flex items-center gap-2"
-            >
-              Lock Prediction
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-              </svg>
-            </Link>
 
             {/* Mobile: Show user icon without container */}
             {user && (
