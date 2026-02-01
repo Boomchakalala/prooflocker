@@ -351,17 +351,17 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
       </div>
 
       {/* 6. ACTIONS ROW - Grid layout adapts based on resolve button presence */}
-      <div className={`grid gap-3 items-stretch ${canResolve ? 'grid-cols-[1.6fr_1fr_38px]' : 'grid-cols-[1fr_38px]'}`}>
-        {/* View proof button - Subtle inspect action */}
+      <div className={`grid gap-3 items-stretch ${canResolve ? 'grid-cols-[1.6fr_1fr_40px]' : 'grid-cols-[1fr_40px]'}`}>
+        {/* View proof button - Enhanced with gradient hover */}
         <button
           onClick={(e) => {
             e.preventDefault();
             // Navigation is handled by parent Link
           }}
-          className="text-center px-4 py-2 text-sm font-medium text-neutral-300 glass hover:bg-white/10 rounded-lg transition-all border border-white/10 hover:border-white/20 flex items-center justify-center gap-1.5"
-          title="View proof details"
+          className="text-center px-4 py-2.5 text-sm font-semibold text-white glass rounded-lg transition-all border border-white/10 hover:border-purple-500/50 hover:bg-gradient-to-r hover:from-purple-600/20 hover:to-blue-600/20 hover:shadow-[0_0_20px_rgba(147,112,219,0.3)] flex items-center justify-center gap-2"
+          title="View immutable proof"
         >
-          <svg className="w-3.5 h-3.5 text-neutral-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
           </svg>
           View proof
@@ -375,26 +375,26 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
               e.stopPropagation();
               handleResolveClick();
             }}
-            className="px-3 py-2 text-sm font-medium rounded-lg transition-all border whitespace-nowrap flex items-center justify-center gap-1.5 text-amber-400/90 bg-amber-500/[0.03] hover:bg-amber-500/[0.06] border-amber-500/15 hover:border-amber-500/25 cursor-pointer"
+            className="px-3 py-2.5 text-sm font-semibold rounded-lg transition-all border whitespace-nowrap flex items-center justify-center gap-1.5 text-amber-400 bg-amber-500/[0.05] hover:bg-amber-500/[0.1] border-amber-500/20 hover:border-amber-500/40 hover:shadow-[0_0_20px_rgba(245,158,11,0.2)] cursor-pointer"
             title="Resolve this prediction"
           >
             <span className="hidden sm:inline">Resolve</span>
             <span className="sm:hidden text-xs">Resolve</span>
-            <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
           </button>
         )}
 
-        {/* Share button - Square */}
+        {/* Share button - Square with tooltip */}
         <button
           onClick={(e) => {
             e.preventDefault();
             e.stopPropagation();
             copyLink();
           }}
-          className="w-11 h-full text-sm font-medium text-white glass hover:bg-white/10 rounded-lg transition-all border border-white/10 flex items-center justify-center"
-          title="Share this prediction"
+          className="w-11 h-full text-sm font-semibold text-white glass rounded-lg transition-all border border-white/10 hover:border-[#00ff00]/50 flex items-center justify-center hover:bg-white/10 hover:shadow-[0_0_20px_rgba(0,255,0,0.2)]"
+          title="Share immutable card"
         >
           {linkCopied ? (
             <svg
