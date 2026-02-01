@@ -1,19 +1,19 @@
 export default function WhyProofLocker() {
   return (
-    <div className="relative z-10 py-12 md:py-16 px-8 bg-[#0a0a0a]">
+    <div className="relative z-10 py-12 md:py-16 px-8 bg-gradient-to-b from-[#0a0a0a] via-[#0F001A] to-[#0a0a0a]">
       <div className="max-w-6xl mx-auto">
-        <h2 className="text-3xl md:text-5xl font-bold text-center text-white mb-3" style={{ fontFamily: 'var(--font-montserrat)' }}>
+        <h2 className="text-3xl md:text-5xl font-extrabold text-center mb-3 bg-gradient-to-r from-[#00E0FF] via-[#A78BFA] to-[#C084FC] bg-clip-text text-transparent" style={{ fontFamily: 'var(--font-montserrat)', filter: 'drop-shadow(0 0 25px rgba(0, 224, 255, 0.3))' }}>
           Why It Matters
         </h2>
-        <p className="text-base md:text-lg text-white/70 text-center mb-12 font-medium">
+        <p className="text-base md:text-lg text-white/70 text-center mb-12 font-semibold">
           Accountability without compromise
         </p>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
           {/* Anonymous by Default */}
-          <div className="bg-gradient-to-br from-purple-600/5 via-blue-600/5 to-purple-700/5 border border-white/10 hover:border-white/20 rounded-2xl shadow-lg transition-all duration-300 p-5 flex flex-col h-full min-h-[200px] hover:shadow-[0_0_30px_rgba(147,112,219,0.12)]">
-            <div className="w-12 h-12 rounded-xl flex items-center justify-center mb-3 bg-gradient-to-br from-[#00bfff]/10 to-[#9370db]/10 flex-shrink-0">
-              <svg className="w-7 h-7 text-[#9370db]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <div className="bg-gradient-to-br from-purple-600/8 via-blue-600/8 to-purple-700/8 border border-[#A78BFA]/25 hover:border-[#00E0FF]/50 rounded-2xl shadow-lg transition-all duration-300 p-5 flex flex-col h-full min-h-[200px] hover:shadow-[0_0_35px_rgba(167,139,250,0.25)] hover:-translate-y-1">
+            <div className="w-12 h-12 rounded-xl flex items-center justify-center mb-3 bg-gradient-to-br from-[#00E0FF]/15 to-[#C084FC]/15 flex-shrink-0 shadow-[0_0_15px_rgba(0,224,255,0.2)]">
+              <svg className="w-7 h-7 text-[#C084FC]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
               </svg>
             </div>
@@ -24,9 +24,9 @@ export default function WhyProofLocker() {
           </div>
 
           {/* Your Control — Public or Private */}
-          <div className="bg-gradient-to-br from-purple-600/5 via-blue-600/5 to-purple-700/5 border border-white/10 hover:border-white/20 rounded-2xl shadow-lg transition-all duration-300 p-5 flex flex-col h-full min-h-[200px] hover:shadow-[0_0_30px_rgba(147,112,219,0.12)]">
-            <div className="w-12 h-12 rounded-xl flex items-center justify-center mb-3 bg-gradient-to-br from-[#00bfff]/10 to-[#9370db]/10 flex-shrink-0">
-              <svg className="w-7 h-7 text-[#9370db]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <div className="bg-gradient-to-br from-purple-600/8 via-blue-600/8 to-purple-700/8 border border-[#A78BFA]/25 hover:border-[#00E0FF]/50 rounded-2xl shadow-lg transition-all duration-300 p-5 flex flex-col h-full min-h-[200px] hover:shadow-[0_0_35px_rgba(167,139,250,0.25)] hover:-translate-y-1">
+            <div className="w-12 h-12 rounded-xl flex items-center justify-center mb-3 bg-gradient-to-br from-[#00E0FF]/15 to-[#C084FC]/15 flex-shrink-0 shadow-[0_0_15px_rgba(0,224,255,0.2)]">
+              <svg className="w-7 h-7 text-[#C084FC]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
               </svg>
@@ -38,9 +38,9 @@ export default function WhyProofLocker() {
           </div>
 
           {/* Immutable On-Chain Proof */}
-          <div className="bg-gradient-to-br from-purple-600/5 via-blue-600/5 to-purple-700/5 border border-white/10 hover:border-white/20 rounded-2xl shadow-lg transition-all duration-300 p-5 flex flex-col h-full min-h-[200px] hover:shadow-[0_0_30px_rgba(147,112,219,0.12)]">
-            <div className="w-12 h-12 rounded-xl flex items-center justify-center mb-3 bg-gradient-to-br from-[#00bfff]/10 to-[#9370db]/10 flex-shrink-0">
-              <svg className="w-7 h-7 text-[#9370db]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <div className="bg-gradient-to-br from-purple-600/8 via-blue-600/8 to-purple-700/8 border border-[#A78BFA]/25 hover:border-[#00E0FF]/50 rounded-2xl shadow-lg transition-all duration-300 p-5 flex flex-col h-full min-h-[200px] hover:shadow-[0_0_35px_rgba(167,139,250,0.25)] hover:-translate-y-1">
+            <div className="w-12 h-12 rounded-xl flex items-center justify-center mb-3 bg-gradient-to-br from-[#00E0FF]/15 to-[#C084FC]/15 flex-shrink-0 shadow-[0_0_15px_rgba(0,224,255,0.2)]">
+              <svg className="w-7 h-7 text-[#C084FC]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
               </svg>
             </div>
@@ -51,9 +51,9 @@ export default function WhyProofLocker() {
           </div>
 
           {/* Shareable Proof Cards */}
-          <div className="bg-gradient-to-br from-purple-600/5 via-blue-600/5 to-purple-700/5 border border-white/10 hover:border-white/20 rounded-2xl shadow-lg transition-all duration-300 p-5 flex flex-col h-full min-h-[200px] hover:shadow-[0_0_30px_rgba(147,112,219,0.12)]">
-            <div className="w-12 h-12 rounded-xl flex items-center justify-center mb-3 bg-gradient-to-br from-[#00bfff]/10 to-[#9370db]/10 flex-shrink-0">
-              <svg className="w-7 h-7 text-[#9370db]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <div className="bg-gradient-to-br from-purple-600/8 via-blue-600/8 to-purple-700/8 border border-[#A78BFA]/25 hover:border-[#00E0FF]/50 rounded-2xl shadow-lg transition-all duration-300 p-5 flex flex-col h-full min-h-[200px] hover:shadow-[0_0_35px_rgba(167,139,250,0.25)] hover:-translate-y-1">
+            <div className="w-12 h-12 rounded-xl flex items-center justify-center mb-3 bg-gradient-to-br from-[#00E0FF]/15 to-[#C084FC]/15 flex-shrink-0 shadow-[0_0_15px_rgba(0,224,255,0.2)]">
+              <svg className="w-7 h-7 text-[#C084FC]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
               </svg>
             </div>
@@ -64,9 +64,9 @@ export default function WhyProofLocker() {
           </div>
 
           {/* Business & Shareholder Accountability */}
-          <div className="bg-gradient-to-br from-purple-600/5 via-blue-600/5 to-purple-700/5 border border-white/10 hover:border-white/20 rounded-2xl shadow-lg transition-all duration-300 p-5 flex flex-col h-full min-h-[200px] hover:shadow-[0_0_30px_rgba(147,112,219,0.12)]">
-            <div className="w-12 h-12 rounded-xl flex items-center justify-center mb-3 bg-gradient-to-br from-[#00bfff]/10 to-[#9370db]/10 flex-shrink-0">
-              <svg className="w-7 h-7 text-[#9370db]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <div className="bg-gradient-to-br from-purple-600/8 via-blue-600/8 to-purple-700/8 border border-[#A78BFA]/25 hover:border-[#00E0FF]/50 rounded-2xl shadow-lg transition-all duration-300 p-5 flex flex-col h-full min-h-[200px] hover:shadow-[0_0_35px_rgba(167,139,250,0.25)] hover:-translate-y-1">
+            <div className="w-12 h-12 rounded-xl flex items-center justify-center mb-3 bg-gradient-to-br from-[#00E0FF]/15 to-[#C084FC]/15 flex-shrink-0 shadow-[0_0_15px_rgba(0,224,255,0.2)]">
+              <svg className="w-7 h-7 text-[#C084FC]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
               </svg>
             </div>
@@ -77,9 +77,9 @@ export default function WhyProofLocker() {
           </div>
 
           {/* Personal Challenges */}
-          <div className="bg-gradient-to-br from-purple-600/5 via-blue-600/5 to-purple-700/5 border border-white/10 hover:border-white/20 rounded-2xl shadow-lg transition-all duration-300 p-5 flex flex-col h-full min-h-[200px] hover:shadow-[0_0_30px_rgba(147,112,219,0.12)]">
-            <div className="w-12 h-12 rounded-xl flex items-center justify-center mb-3 bg-gradient-to-br from-[#00bfff]/10 to-[#9370db]/10 flex-shrink-0">
-              <svg className="w-7 h-7 text-[#9370db]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <div className="bg-gradient-to-br from-purple-600/8 via-blue-600/8 to-purple-700/8 border border-[#A78BFA]/25 hover:border-[#00E0FF]/50 rounded-2xl shadow-lg transition-all duration-300 p-5 flex flex-col h-full min-h-[200px] hover:shadow-[0_0_35px_rgba(167,139,250,0.25)] hover:-translate-y-1">
+            <div className="w-12 h-12 rounded-xl flex items-center justify-center mb-3 bg-gradient-to-br from-[#00E0FF]/15 to-[#C084FC]/15 flex-shrink-0 shadow-[0_0_15px_rgba(0,224,255,0.2)]">
+              <svg className="w-7 h-7 text-[#C084FC]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
             </div>
