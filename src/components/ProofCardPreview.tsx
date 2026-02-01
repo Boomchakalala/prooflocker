@@ -171,14 +171,14 @@ export default function ProofCardPreview() {
   };
 
   return (
-    <div className="relative z-10 py-16 md:py-20 px-4 bg-slate-900">
+    <div className="relative z-10 py-20 px-6 bg-slate-950">
       <div className="max-w-7xl mx-auto">
-        <div className="text-center mb-10 md:mb-14">
-          <h2 className="text-4xl md:text-6xl font-bold text-white mb-4">
-            Real Predictions. Real Proofs. Locked Forever.
+        <div className="text-center mb-12">
+          <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">
+            See how it looks
           </h2>
-          <p className="text-base md:text-lg text-gray-400">
-            Swipe through real locked examples
+          <p className="text-lg text-gray-400">
+            Swipe through real proof cards
           </p>
         </div>
 
