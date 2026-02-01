@@ -153,7 +153,7 @@ export function rowToInsightScore(row: InsightScoreRow): InsightScore {
     createdAt: row.created_at,
     updatedAt: row.updated_at,
     categoryStats: row.category_stats || {},
-    badges: row.badges || [],
+    badges: (row.badges as BadgeId[]) || [],
     locksCount: row.locks_count,
     claimsCount: row.claims_count,
   };
