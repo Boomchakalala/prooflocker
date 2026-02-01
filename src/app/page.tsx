@@ -11,7 +11,6 @@ import Footer from "@/components/Footer";
 export default function LandingPage() {
   return (
     <div className="min-h-screen bg-white relative">
-
       {/* Header */}
       <LandingHeader />
 
