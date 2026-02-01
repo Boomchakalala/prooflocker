@@ -4,16 +4,7 @@ export default function HowItWorks() {
       <div className="max-w-6xl mx-auto">
         {/* Heading */}
         <div className="text-center mb-16">
-          <h2
-            className="text-3xl md:text-5xl font-bold mb-3"
-            style={{
-              fontFamily: 'var(--font-montserrat)',
-              background: 'linear-gradient(to right, #00d4ff, #7c3aed)',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-              backgroundClip: 'text'
-            }}
-          >
+          <h2 className="text-3xl md:text-5xl font-bold text-white mb-3" style={{ fontFamily: 'var(--font-montserrat)' }}>
             How It Works
           </h2>
           <p className="text-base md:text-lg text-white/60 font-medium">

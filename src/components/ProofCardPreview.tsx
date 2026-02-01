@@ -196,16 +196,7 @@ export default function ProofCardPreview() {
     <div className="relative z-10 py-16 md:py-24 px-6 bg-[#0a0a0a]">
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-12">
-          <h2
-            className="text-3xl md:text-5xl font-bold mb-3"
-            style={{
-              fontFamily: 'var(--font-montserrat)',
-              background: 'linear-gradient(to right, #00d4ff, #7c3aed)',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-              backgroundClip: 'text'
-            }}
-          >
+          <h2 className="text-3xl md:text-5xl font-bold text-white mb-3" style={{ fontFamily: 'var(--font-montserrat)' }}>
             Real Proof
           </h2>
           <p className="text-base md:text-lg text-white/60 font-medium">
