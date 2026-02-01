@@ -186,7 +186,7 @@ body {
   position: absolute;
   inset: -2px;
   border-radius: inherit;
-  background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+  background: linear-gradient(135deg, #00bfff, #9370db);
   opacity: 0;
   transition: opacity 0.3s ease;
   z-index: -1;
@@ -194,7 +194,7 @@ body {
 }
 
 .btn-glow:hover::before {
-  opacity: 0.5;
+  opacity: 0.6;
 }
 
 /* Fade in animation */
@@ -254,4 +254,57 @@ body {
 
 .scrollbar-hide::-webkit-scrollbar {
   display: none;  /* Chrome, Safari and Opera */
+}
+
+/* DAG particle animation */
+@keyframes particleFloat {
+  0%, 100% {
+    transform: translate(0, 0);
+    opacity: 0.3;
+  }
+  25% {
+    transform: translate(10px, -10px);
+    opacity: 0.6;
+  }
+  50% {
+    transform: translate(-5px, 10px);
+    opacity: 0.4;
+  }
+  75% {
+    transform: translate(15px, 5px);
+    opacity: 0.5;
+  }
+}
+
+.dag-particle {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  animation: particleFloat 8s ease-in-out infinite;
+}
+
+.dag-particle::after {
+  content: '';
+  position: absolute;
+  width: 30px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, currentColor, transparent);
+  top: 50%;
+  left: 100%;
+  opacity: 0.3;
+}
+
+/* Icon styles */
+.icon-blue {
+  color: #00bfff;
+}
+
+.icon-purple {
+  color: #9370db;
+}
+
+/* Text shadow for hero */
+.text-shadow-blue {
+  text-shadow: 0 0 30px rgba(0, 191, 255, 0.5);
 }
