@@ -102,10 +102,8 @@ export default function RootLayout({
           <ToastProvider>
             <AnalyticsTracker />
             {children}
-            <AuthDebugPanel />
           </ToastProvider>
         </AuthProvider>
-        <EnvIndicator />
       </body>
     </html>
   );
