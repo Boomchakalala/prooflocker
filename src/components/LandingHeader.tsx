@@ -24,15 +24,15 @@ export default function LandingHeader() {
 
   return (
     <>
-      <header className="sticky top-0 z-50 bg-[#000000]/70 backdrop-blur-lg border-b border-gray-800 transition-colors duration-300">
-        <div className="mx-auto max-w-7xl px-6 lg:px-8 flex h-16 items-center justify-between">
-          <Link href="/" className="text-2xl font-bold text-white hover:text-[#00bfff] transition-all duration-300" style={{ fontFamily: 'var(--font-montserrat)' }}>
+      <header className="sticky top-0 z-50 backdrop-blur-xl border-b border-gray-800 transition-colors duration-300" style={{ background: 'rgba(10, 10, 10, 0.75)' }}>
+        <div className="mx-auto max-w-[1280px] px-6 md:px-12 lg:px-16 flex h-16 items-center justify-between">
+          <Link href="/" className="text-[32px] font-bold text-white hover:text-[#00bfff] transition-all duration-300" style={{ fontFamily: 'var(--font-montserrat)', textShadow: '0 0 20px rgba(0, 191, 255, 0.2)' }}>
             ProofLocker
           </Link>
-          <div className="flex items-center gap-3 md:gap-6">
+          <div className="flex items-center gap-6 md:gap-8">
             <Link
               href="/app"
-              className="text-white hover:text-[#00bfff] font-medium transition-colors text-base"
+              className="text-white hover:text-[#00bfff] font-medium transition-colors text-base md:text-[17px]"
               style={{ fontFamily: 'var(--font-inter)' }}
             >
               Explore Predictions
@@ -45,7 +45,7 @@ export default function LandingHeader() {
             {!user ? (
               <button
                 onClick={() => setShowClaimModal(true)}
-                className="text-white hover:text-[#00bfff] font-medium transition-colors text-base hidden sm:block"
+                className="text-white hover:text-[#00bfff] font-medium transition-colors text-base md:text-[17px] hidden sm:block"
                 style={{ fontFamily: 'var(--font-inter)' }}
               >
                 Sign In
@@ -89,7 +89,7 @@ export default function LandingHeader() {
 
             <Link
               href="/lock"
-              className="px-5 py-2.5 bg-[#00bfff] hover:bg-[#00a8e6] text-white font-semibold rounded-md transition-all shadow-lg hover:shadow-xl hover:scale-105 flex items-center gap-2 btn-glow"
+              className="px-6 md:px-8 py-3 md:py-4 bg-[#00bfff] hover:bg-[#00a8e6] text-white font-semibold rounded-lg md:rounded-full transition-all shadow-lg hover:shadow-xl hover:scale-105 flex items-center gap-2 btn-glow"
             >
               Lock Prediction
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
