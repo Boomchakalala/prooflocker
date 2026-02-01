@@ -2,10 +2,12 @@
 
 import PredictionCard from "./PredictionCard";
 import { Prediction } from "@/lib/storage";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 
 export default function ProofCardPreview() {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const [showLeftArrow, setShowLeftArrow] = useState(false);
+  const [showRightArrow, setShowRightArrow] = useState(true);
 
   // Diverse sample predictions showcasing different outcomes and categories
   const samplePredictions: Prediction[] = [
@@ -183,44 +185,54 @@ export default function ProofCardPreview() {
     });
   };
 
+  const handleScroll = () => {
+    if (!scrollContainerRef.current) return;
+    const { scrollLeft, scrollWidth, clientWidth } = scrollContainerRef.current;
+    setShowLeftArrow(scrollLeft > 20);
+    setShowRightArrow(scrollLeft < scrollWidth - clientWidth - 20);
+  };
+
   return (
-    <div className="relative z-10 py-24 px-6 bg-[#0a0a0a]">
-      <div className="max-w-[1280px] mx-auto px-6 md:px-12 lg:px-16">
-        <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-bold text-white mb-6" style={{ fontFamily: 'var(--font-montserrat)' }}>
-            Real Proof — Wins, Misses, Accountability
+    <div className="relative z-10 py-20 md:py-28 px-6 bg-[#0a0a0a]">
+      <div className="max-w-6xl mx-auto">
+        <div className="text-center mb-12">
+          <h2 className="text-3xl md:text-5xl font-bold text-white mb-4" style={{ fontFamily: 'var(--font-montserrat)' }}>
+            Real Proof
           </h2>
           <p className="text-lg text-gray-400">
-            Swipe through verified examples across categories
+            Wins, misses, accountability
           </p>
         </div>
 
         {/* Carousel Container */}
-        <div className="relative">
-          {/* Left Arrow */}
-          <button
-            onClick={() => scroll("left")}
-            className="hidden md:flex absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 z-10 w-14 h-14 items-center justify-center bg-[#111111] border border-[#00bfff]/30 rounded-full shadow-2xl hover:bg-[#2a2a2a] hover:scale-110 hover:border-[#00bfff] transition-all"
-            aria-label="Scroll left"
-          >
-            <svg
-              className="w-7 h-7 text-[#00bfff]"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
+        <div className="relative group">
+          {/* Left Arrow - show on hover (desktop) */}
+          {showLeftArrow && (
+            <button
+              onClick={() => scroll("left")}
+              className="hidden md:flex absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 z-10 w-12 h-12 items-center justify-center bg-[#111111]/80 border border-white/10 rounded-full shadow-xl hover:bg-[#1a1a1a] hover:border-[#00bfff] transition-all opacity-0 group-hover:opacity-100"
+              aria-label="Scroll left"
             >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M15 19l-7-7 7-7"
-              />
-            </svg>
-          </button>
+              <svg
+                className="w-6 h-6 text-gray-400 hover:text-[#00bfff]"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M15 19l-7-7 7-7"
+                />
+              </svg>
+            </button>
+          )}
 
           {/* Scrollable Cards Container */}
           <div
             ref={scrollContainerRef}
+            onScroll={handleScroll}
             className="overflow-x-auto scrollbar-hide snap-x snap-mandatory flex gap-6 pb-4 px-2"
             style={{
               scrollbarWidth: "none",
@@ -230,9 +242,7 @@ export default function ProofCardPreview() {
             {samplePredictions.map((prediction) => (
               <div
                 key={prediction.id}
-                className={`flex-shrink-0 w-[85vw] sm:w-[450px] md:w-[520px] snap-center card-hover ${
-                  prediction.outcome === "correct" ? "ring-2 ring-green-500/50 rounded-2xl shadow-2xl shadow-green-500/20" : ""
-                }`}
+                className="flex-shrink-0 w-[85vw] sm:w-[450px] md:w-[480px] snap-center"
               >
                 <PredictionCard
                   prediction={prediction}
@@ -242,32 +252,39 @@ export default function ProofCardPreview() {
             ))}
           </div>
 
-          {/* Right Arrow */}
-          <button
-            onClick={() => scroll("right")}
-            className="hidden md:flex absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 z-10 w-14 h-14 items-center justify-center bg-[#111111] border border-[#00bfff]/30 rounded-full shadow-2xl hover:bg-[#2a2a2a] hover:scale-110 hover:border-[#00bfff] transition-all"
-            aria-label="Scroll right"
-          >
-            <svg
-              className="w-7 h-7 text-[#00bfff]"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
+          {/* Right Arrow - show on hover (desktop) */}
+          {showRightArrow && (
+            <button
+              onClick={() => scroll("right")}
+              className="hidden md:flex absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 z-10 w-12 h-12 items-center justify-center bg-[#111111]/80 border border-white/10 rounded-full shadow-xl hover:bg-[#1a1a1a] hover:border-[#00bfff] transition-all opacity-0 group-hover:opacity-100"
+              aria-label="Scroll right"
             >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M9 5l7 7-7 7"
-              />
-            </svg>
-          </button>
+              <svg
+                className="w-6 h-6 text-gray-400 hover:text-[#00bfff]"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M9 5l7 7-7 7"
+                />
+              </svg>
+            </button>
+          )}
         </div>
 
-        {/* Scroll Hint for Mobile */}
-        <p className="text-center text-sm text-gray-500 mt-8 md:hidden">
-          Swipe to see more examples →
-        </p>
+        {/* Pagination Dots for Mobile */}
+        <div className="flex justify-center gap-2 mt-6 md:hidden">
+          {samplePredictions.slice(0, 5).map((_, index) => (
+            <div
+              key={index}
+              className="w-2 h-2 rounded-full bg-white/20"
+            />
+          ))}
+        </div>
       </div>
 
       <style jsx>{`
