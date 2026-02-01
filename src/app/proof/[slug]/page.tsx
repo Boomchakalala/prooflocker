@@ -161,8 +161,8 @@ export default async function ProofPage({ params }: Props) {
               {/* Locked timestamp */}
               <div className="glass border border-white/10 rounded-xl p-4 md:p-5 bg-gradient-to-br from-white/[0.03] to-transparent hover:border-white/20 transition-all">
                 <div className="flex items-start gap-3">
-                  <div className="flex-shrink-0 w-10 h-10 rounded-lg bg-blue-500/10 flex items-center justify-center">
-                    <svg className="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <div className="flex-shrink-0 w-10 h-10 rounded-lg bg-[#2E5CFF]/10 flex items-center justify-center">
+                    <svg className="w-5 h-5 text-[#2E5CFF]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
                     </svg>
                   </div>
@@ -240,8 +240,8 @@ export default async function ProofPage({ params }: Props) {
               {/* Network status */}
               <div className="glass border border-white/10 rounded-xl p-4 md:p-5 bg-gradient-to-br from-white/[0.03] to-transparent hover:border-white/20 transition-all">
                 <div className="flex items-start gap-3">
-                  <div className="flex-shrink-0 w-10 h-10 rounded-lg bg-purple-500/10 flex items-center justify-center">
-                    <svg className="w-5 h-5 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <div className="flex-shrink-0 w-10 h-10 rounded-lg bg-[#5B21B6]/10 flex items-center justify-center">
+                    <svg className="w-5 h-5 text-[#5B21B6]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" />
                     </svg>
                   </div>
@@ -343,32 +343,32 @@ export default async function ProofPage({ params }: Props) {
           {/* Polish: Added step label, unified icon system (all outlined), consistent spacing */}
           {prediction.onChainStatus === "confirmed" && prediction.deReference && (
             <div className="p-4 md:p-6 border-b border-white/10">
-              <div className="text-[10px] text-purple-400 font-medium uppercase tracking-wider mb-1">Step 1</div>
+              <div className="text-[10px] text-[#5B21B6] font-medium uppercase tracking-wider mb-1">Step 1</div>
               <h2 className="text-base font-semibold text-white mb-1">Prediction Locked</h2>
               <p className="text-xs text-neutral-400 mb-4 md:mb-5">This prediction was permanently locked on the blockchain</p>
 
               {/* Trust badges - Polish: Unified icon system, consistent size/stroke */}
               <div className="grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-3 mb-3">
                 <div className="glass border border-purple-500/20 rounded-lg p-2.5 md:p-3 text-center">
-                  <svg className="w-4 h-4 md:w-5 md:h-5 text-purple-400 mx-auto mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+                  <svg className="w-4 h-4 md:w-5 md:h-5 text-[#5B21B6] mx-auto mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
                   </svg>
                   <div className="text-[10px] text-neutral-300 font-medium">Immutable</div>
                 </div>
                 <div className="glass border border-purple-500/20 rounded-lg p-2.5 md:p-3 text-center">
-                  <svg className="w-4 h-4 md:w-5 md:h-5 text-purple-400 mx-auto mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+                  <svg className="w-4 h-4 md:w-5 md:h-5 text-[#5B21B6] mx-auto mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                   </svg>
                   <div className="text-[10px] text-neutral-300 font-medium">Timestamped</div>
                 </div>
                 <div className="glass border border-purple-500/20 rounded-lg p-2.5 md:p-3 text-center">
-                  <svg className="w-4 h-4 md:w-5 md:h-5 text-purple-400 mx-auto mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+                  <svg className="w-4 h-4 md:w-5 md:h-5 text-[#5B21B6] mx-auto mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
                   </svg>
                   <div className="text-[10px] text-neutral-300 font-medium">SHA-256</div>
                 </div>
                 <div className="glass border border-purple-500/20 rounded-lg p-2.5 md:p-3 text-center">
-                  <svg className="w-4 h-4 md:w-5 md:h-5 text-purple-400 mx-auto mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+                  <svg className="w-4 h-4 md:w-5 md:h-5 text-[#5B21B6] mx-auto mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                   </svg>
                   <div className="text-[10px] text-neutral-300 font-medium">Verifiable</div>

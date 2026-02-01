@@ -183,7 +183,7 @@ export default function LockPage() {
                   htmlFor="category-select"
                   className="block text-sm font-medium text-[#e0e0e0] mb-3"
                 >
-                  Category <span className="text-blue-400 font-normal">(recommended)</span>
+                  Category <span className="text-[#2E5CFF] font-normal">(recommended)</span>
                 </label>
                 <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2">
                   {categories.map((cat) => (
@@ -343,8 +343,8 @@ export default function LockPage() {
           <div className="fade-in">
             {/* Confirmation screen */}
             <div className="glass rounded-xl p-8 text-center glow-purple mb-6">
-              <div className="inline-flex items-center justify-center w-24 h-24 rounded-full mb-6 bg-blue-500/20 border-4 border-blue-500/40 shadow-2xl shadow-blue-500/30">
-                <svg className="w-12 h-12 text-blue-400" fill="currentColor" viewBox="0 0 20 20">
+              <div className="inline-flex items-center justify-center w-24 h-24 rounded-full mb-6 bg-[#2E5CFF]/20 border-4 border-[#2E5CFF]/40 shadow-2xl shadow-[#2E5CFF]/30">
+                <svg className="w-12 h-12 text-[#2E5CFF]" fill="currentColor" viewBox="0 0 20 20">
                   <path fillRule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clipRule="evenodd" />
                 </svg>
               </div>
