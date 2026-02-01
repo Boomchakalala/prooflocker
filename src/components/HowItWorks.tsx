@@ -4,8 +4,17 @@ export default function HowItWorks() {
       <div className="max-w-6xl mx-auto">
         {/* Heading */}
         <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-5xl font-bold text-white mb-3" style={{ fontFamily: 'var(--font-montserrat)' }}>
-            How It Works
+          <h2
+            className="text-3xl md:text-5xl font-bold mb-3"
+            style={{
+              fontFamily: 'var(--font-montserrat)',
+              background: 'linear-gradient(to right, #00d4ff, #7c3aed)',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              backgroundClip: 'text'
+            }}
+          >
+            How It Works — Straightforward & Secure
           </h2>
           <p className="text-base md:text-lg text-white/60 font-medium">
             Three steps. No friction. Permanent proof.
@@ -23,9 +32,9 @@ export default function HowItWorks() {
                 </svg>
               </div>
             </div>
-            <h3 className="text-xl md:text-2xl font-bold text-white text-center mb-4">Write a Prediction</h3>
+            <h3 className="text-xl md:text-2xl font-bold text-white text-center mb-4">Write Your Prediction</h3>
             <p className="text-sm md:text-base text-white/70 leading-relaxed">
-              Create your claim, goal, or commitment. Public or private. No signup required.
+              Write your prediction, goal, bet, or commitment — bold and clear. Public flex or private stake. No signup. Just hit lock.
             </p>
           </div>
 
@@ -40,7 +49,7 @@ export default function HowItWorks() {
             </div>
             <h3 className="text-xl md:text-2xl font-bold text-white text-center mb-4">Lock It On-Chain</h3>
             <p className="text-sm md:text-base text-white/70 leading-relaxed">
-              Hashed and timestamped on Constellation DAG. Immutable. Tamper-proof. Cannot be edited—ever.
+              Hashed and timestamped on Constellation DAG in ~10 seconds. Immutable. Tamper-proof. Your word, frozen forever — no edits, no excuses.
             </p>
           </div>
 
@@ -53,9 +62,9 @@ export default function HowItWorks() {
                 </svg>
               </div>
             </div>
-            <h3 className="text-xl md:text-2xl font-bold text-white text-center mb-4">Resolve & Share</h3>
+            <h3 className="text-xl md:text-2xl font-bold text-white text-center mb-4">Resolve & Own It</h3>
             <p className="text-sm md:text-base text-white/70 leading-relaxed">
-              Mark outcomes as correct, missed, or pending. Share proof cards showcasing your track record. Build verifiable credibility.
+              Come back when it's time. Mark it hit, miss, or pending. Claim the outcome honestly. Generate shareable proof cards to flex your track record or keep score.
             </p>
           </div>
         </div>
