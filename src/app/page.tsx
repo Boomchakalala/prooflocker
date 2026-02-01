@@ -29,23 +29,26 @@ export default function LandingPage() {
         <WhyProofLocker />
 
         {/* Final CTA Section */}
-        <div className="relative z-10 py-12 md:py-16 px-4">
+        <div className="relative z-10 py-16 md:py-20 px-4 bg-gradient-to-b from-white via-blue-50/30 to-white">
           <div className="max-w-4xl mx-auto text-center">
-            <div className="glass border border-white/10 rounded-3xl p-5 sm:p-7 md:p-10 glow-purple">
-              <h2 className="text-3xl md:text-5xl font-bold text-white mb-2.5 sm:mb-3 md:mb-5">
-                Ready to lock your prediction?
-              </h2>
-              <p className="text-base sm:text-lg md:text-xl text-neutral-300 mb-4 sm:mb-5 md:mb-7 max-w-2xl mx-auto leading-snug">
-                Create your first prediction in 10 seconds.
-              </p>
+            <h2 className="text-4xl md:text-6xl font-bold text-gray-900 mb-4 md:mb-6">
+              Ready to make your mark?
+            </h2>
+            <p className="text-lg md:text-xl text-gray-700 mb-8 md:mb-10 max-w-2xl mx-auto">
+              Create your first prediction in 10 seconds.
+            </p>
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 md:gap-6">
               <Link
                 href="/lock"
-                className="inline-flex items-center px-8 py-4 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white text-lg font-semibold rounded-lg transition-all shadow-lg hover:shadow-purple-500/50"
+                className="w-full sm:w-auto px-10 py-5 bg-gradient-to-r from-blue-600 to-indigo-700 hover:from-blue-500 hover:to-indigo-600 text-white text-xl font-bold rounded-xl transition-all shadow-xl hover:shadow-2xl hover:scale-105"
               >
-                Lock my prediction
-                <svg className="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-                </svg>
+                Lock My Prediction Now
+              </Link>
+              <Link
+                href="/app"
+                className="w-full sm:w-auto px-10 py-5 text-blue-600 hover:text-blue-700 text-lg font-semibold underline decoration-2 underline-offset-4 hover:decoration-4 transition-all"
+              >
+                Browse existing predictions
               </Link>
             </div>
           </div>
