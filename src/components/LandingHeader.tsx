@@ -26,13 +26,13 @@ export default function LandingHeader() {
     <>
       <header className="sticky top-0 z-50 backdrop-blur-xl border-b border-gray-800 transition-colors duration-300" style={{ background: 'rgba(10, 10, 10, 0.75)' }}>
         <div className="mx-auto max-w-[1280px] px-6 md:px-12 lg:px-16 flex h-14 items-center justify-between">
-          <Link href="/" className="text-[32px] font-bold text-white hover:text-[#00bfff] transition-all duration-300" style={{ fontFamily: 'var(--font-montserrat)', textShadow: '0 0 20px rgba(0, 191, 255, 0.2)' }}>
+          <Link href="/" className="text-[32px] font-bold text-white hover:text-[#2E5CFF] transition-all duration-300" style={{ fontFamily: 'var(--font-montserrat)', textShadow: '0 0 20px rgba(46, 92, 255, 0.3)' }}>
             ProofLocker
           </Link>
           <div className="flex items-center gap-4 md:gap-6">
             <Link
               href="/lock"
-              className="px-5 md:px-7 py-2 md:py-2.5 bg-gradient-to-r from-[#00bfff] to-[#9370db] hover:from-[#00a8e6] hover:to-[#7d5fc7] text-white text-sm md:text-base font-bold rounded-lg transition-all shadow-lg hover:shadow-[0_0_20px_rgba(0,191,255,0.5)] hover:scale-105 flex items-center gap-2 order-1"
+              className="px-5 md:px-7 py-2 md:py-2.5 bg-gradient-to-r from-[#2E5CFF] to-[#5B21B6] hover:from-[#3D6CFF] hover:to-[#6B31C6] text-white text-sm md:text-base font-bold rounded-lg transition-all shadow-lg hover:shadow-[0_0_20px_rgba(46,92,255,0.5)] hover:scale-105 flex items-center gap-2 order-1"
             >
               Lock Prediction
               <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -42,11 +42,11 @@ export default function LandingHeader() {
 
             <Link
               href="/app"
-              className="text-white/80 hover:text-[#00bfff] font-medium transition-all duration-200 text-sm md:text-base relative group order-2 hidden sm:block"
+              className="text-white/80 hover:text-[#2E5CFF] font-medium transition-all duration-200 text-sm md:text-base relative group order-2 hidden sm:block"
               style={{ fontFamily: 'var(--font-inter)' }}
             >
               Explore
-              <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-[#00bfff] transition-all duration-200 group-hover:w-full" />
+              <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-[#2E5CFF] transition-all duration-200 group-hover:w-full" />
             </Link>
 
             {/* Insight Score Pill */}
@@ -58,11 +58,11 @@ export default function LandingHeader() {
             {!user ? (
               <button
                 onClick={() => setShowClaimModal(true)}
-                className="text-white/80 hover:text-[#00bfff] font-medium transition-all duration-200 text-sm md:text-base hidden sm:block relative group order-4"
+                className="text-white/80 hover:text-[#2E5CFF] font-medium transition-all duration-200 text-sm md:text-base hidden sm:block relative group order-4"
                 style={{ fontFamily: 'var(--font-inter)' }}
               >
                 Log In
-                <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-[#00bfff] transition-all duration-200 group-hover:w-full" />
+                <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-[#2E5CFF] transition-all duration-200 group-hover:w-full" />
               </button>
             ) : (
               <div className="relative hidden sm:block order-4">
