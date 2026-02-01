@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { claimPredictions } from "@/lib/storage";
 import { createClient } from "@supabase/supabase-js";
 import { ensurePublicHandle } from "@/lib/public-handle";
+import { awardClaimPoints, migrateAnonScoreToUser } from "@/lib/insight-db";
 
 export const runtime = "nodejs";
 
@@ -54,10 +55,38 @@ export async function POST(request: NextRequest) {
     // Claim all predictions with this anonId
     const claimedCount = await claimPredictions(anonId, user.id);
 
+    // Migrate anonymous Insight Score to authenticated user
+    let insightPointsAwarded = 0;
+    try {
+      // First, migrate any existing anon score to the user
+      await migrateAnonScoreToUser(anonId, user.id);
+      console.log(`[Claim Predictions API] Migrated Insight Score from anon to user`);
+
+      // Award claim bonus points for each claimed prediction (+50 pts each)
+      // Note: We could fetch the prediction IDs to award individually, but for simplicity
+      // we'll award in bulk based on claimedCount
+      if (claimedCount > 0) {
+        // For now, award once per claim action rather than per prediction
+        // to avoid double-counting (predictions already got +10 on lock)
+        const scoreResult = await awardClaimPoints(
+          { userId: user.id },
+          `bulk-claim-${Date.now()}`
+        );
+        if (scoreResult) {
+          insightPointsAwarded = scoreResult.points;
+          console.log(`[Claim Predictions API] Awarded ${insightPointsAwarded} Insight Score points for claim`);
+        }
+      }
+    } catch (scoreError) {
+      console.error("[Claim Predictions API] Failed to process Insight Score:", scoreError);
+      // Don't fail the request if scoring fails
+    }
+
     return NextResponse.json({
       success: true,
       claimedCount,
       userId: user.id,
+      insightPoints: insightPointsAwarded,
       message: `Successfully claimed ${claimedCount} prediction${claimedCount !== 1 ? 's' : ''}`,
     });
   } catch (error) {
