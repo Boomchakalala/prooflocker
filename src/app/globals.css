@@ -380,42 +380,17 @@ body {
   animation: fadeInUp 0.7s ease-out both;
 }
 
-/* Category badge styles - enhanced neon cyber aesthetic */
-.category-badge-crypto {
-  background: linear-gradient(135deg, rgba(0, 224, 255, 0.2) 0%, rgba(0, 224, 255, 0.08) 100%);
-  border: 1px solid rgba(0, 224, 255, 0.4);
-  color: #00E0FF;
-  box-shadow: 0 0 15px rgba(0, 224, 255, 0.2), inset 0 0 10px rgba(0, 224, 255, 0.05);
+/* 2026 Category badge styles - blue and purple */
+.category-badge-crypto, .category-badge-tech {
+  background: rgba(46, 92, 255, 0.1);
+  border: 1px solid rgba(46, 92, 255, 0.3);
+  color: #2E5CFF;
 }
 
-.category-badge-sports {
-  background: linear-gradient(135deg, rgba(167, 139, 250, 0.2) 0%, rgba(167, 139, 250, 0.08) 100%);
-  border: 1px solid rgba(167, 139, 250, 0.4);
-  color: #A78BFA;
-  box-shadow: 0 0 15px rgba(167, 139, 250, 0.2), inset 0 0 10px rgba(167, 139, 250, 0.05);
-}
-
-.category-badge-tech {
-  background: linear-gradient(135deg, rgba(0, 224, 255, 0.2) 0%, rgba(0, 224, 255, 0.08) 100%);
-  border: 1px solid rgba(0, 224, 255, 0.4);
-  color: #00E0FF;
-  box-shadow: 0 0 15px rgba(0, 224, 255, 0.2), inset 0 0 10px rgba(0, 224, 255, 0.05);
-}
-
-.category-badge-personal {
-  background: linear-gradient(135deg, rgba(167, 139, 250, 0.2) 0%, rgba(167, 139, 250, 0.08) 100%);
-  border: 1px solid rgba(167, 139, 250, 0.4);
-  color: #A78BFA;
-  box-shadow: 0 0 15px rgba(167, 139, 250, 0.2), inset 0 0 10px rgba(167, 139, 250, 0.05);
-}
-
-.category-badge-politics,
-.category-badge-markets,
-.category-badge-other {
-  background: linear-gradient(135deg, rgba(192, 132, 252, 0.2) 0%, rgba(147, 112, 219, 0.08) 100%);
-  border: 1px solid rgba(192, 132, 252, 0.4);
-  color: #C084FC;
-  box-shadow: 0 0 15px rgba(192, 132, 252, 0.2), inset 0 0 10px rgba(192, 132, 252, 0.05);
+.category-badge-sports, .category-badge-personal, .category-badge-politics, .category-badge-markets, .category-badge-other {
+  background: rgba(91, 33, 182, 0.1);
+  border: 1px solid rgba(91, 33, 182, 0.3);
+  color: #5B21B6;
 }
 
 /* Enhanced particle constellation overlay with cyber aesthetic */
