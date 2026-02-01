@@ -109,6 +109,25 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
     ? prediction.textPreview.slice(0, MAX_TITLE_LENGTH) + "…"
     : prediction.textPreview;
 
+  // Helper to get category styling
+  const getCategoryStyle = (category: string) => {
+    switch (category.toLowerCase()) {
+      case 'crypto':
+        return 'bg-[#00D4FF]/10 border-[#00D4FF]/30 text-[#00D4FF]';
+      case 'sports':
+        return 'bg-[#A78BFA]/10 border-[#A78BFA]/30 text-[#A78BFA]';
+      case 'tech':
+        return 'bg-[#00D4FF]/10 border-[#00D4FF]/30 text-[#00D4FF]';
+      case 'personal':
+        return 'bg-[#A78BFA]/10 border-[#A78BFA]/30 text-[#A78BFA]';
+      case 'politics':
+      case 'markets':
+      case 'other':
+      default:
+        return 'bg-[#9370db]/10 border-[#9370db]/30 text-[#9370db]';
+    }
+  };
+
   // Helper to get category icon
   const getCategoryIcon = (category: string) => {
     switch (category.toLowerCase()) {
@@ -197,7 +216,7 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
               {prediction.category && (
                 <>
                   <span className="text-neutral-600 flex-shrink-0 hidden md:inline">•</span>
-                  <span className="px-2 py-1 text-[10px] font-medium rounded bg-white/5 border border-white/10 text-neutral-400 whitespace-nowrap hidden md:inline-flex items-center gap-1">
+                  <span className={`px-2.5 py-1 text-[10px] font-semibold rounded-full border whitespace-nowrap hidden md:inline-flex items-center gap-1 ${getCategoryStyle(prediction.category)}`}>
                     {getCategoryIcon(prediction.category)}
                     {prediction.category}
                   </span>
@@ -230,7 +249,7 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
         {/* Category row - Mobile only, separate line below */}
         {prediction.category && (
           <div className="md:hidden">
-            <span className="inline-flex items-center gap-1 px-2 py-1 text-[10px] font-medium rounded bg-white/5 border border-white/10 text-neutral-400 whitespace-nowrap">
+            <span className={`inline-flex items-center gap-1 px-2.5 py-1 text-[10px] font-semibold rounded-full border whitespace-nowrap ${getCategoryStyle(prediction.category)}`}>
               {getCategoryIcon(prediction.category)}
               {prediction.category}
             </span>
