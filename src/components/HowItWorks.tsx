@@ -25,7 +25,7 @@ export default function HowItWorks() {
             </div>
             <h3 className="text-xl md:text-2xl font-bold text-white text-center mb-4">Write a Prediction</h3>
             <p className="text-sm md:text-base text-white/70 leading-relaxed">
-              Create a clear claim, goal, or commitment in plain language. Public or private—your choice. No signup required. Write predictions designed to be resolved later with complete transparency.
+              Create your claim, goal, or commitment. Public or private. No signup required.
             </p>
           </div>
 
@@ -40,7 +40,7 @@ export default function HowItWorks() {
             </div>
             <h3 className="text-xl md:text-2xl font-bold text-white text-center mb-4">Lock It On-Chain</h3>
             <p className="text-sm md:text-base text-white/70 leading-relaxed">
-              Your prediction is instantly hashed and timestamped on Constellation DAG. Immutable. Tamper-proof. Takes only seconds. Once locked, it cannot be edited—ever. Blockchain-backed permanence.
+              Hashed and timestamped on Constellation DAG. Immutable. Tamper-proof. Cannot be edited—ever.
             </p>
           </div>
 
@@ -55,7 +55,7 @@ export default function HowItWorks() {
             </div>
             <h3 className="text-xl md:text-2xl font-bold text-white text-center mb-4">Resolve & Share</h3>
             <p className="text-sm md:text-base text-white/70 leading-relaxed">
-              Return anytime to mark outcomes as correct, missed, or pending. Generate shareable proof cards showcasing your track record. Each resolution builds long-term credibility and verifiable accountability.
+              Mark outcomes as correct, missed, or pending. Share proof cards showcasing your track record. Build verifiable credibility.
             </p>
           </div>
         </div>
