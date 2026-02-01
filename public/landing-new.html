@@ -23,381 +23,342 @@
         }
 
         .glow-green {
-            box-shadow: 0 0 20px rgba(16, 185, 129, 0.3);
+            box-shadow: 0 0 24px rgba(34, 197, 94, 0.4);
         }
 
         .glow-blue {
-            box-shadow: 0 0 30px rgba(59, 130, 246, 0.4);
+            box-shadow: 0 0 32px rgba(96, 165, 250, 0.5);
         }
 
         .hash-font {
             font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace;
         }
+
+        .scrollbar-hide::-webkit-scrollbar {
+            display: none;
+        }
+
+        .scrollbar-hide {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
     </style>
 </head>
-<body class="bg-white text-gray-900 antialiased">
+<body class="bg-slate-950 text-gray-200 antialiased">
 
-    <!-- Header - PRESERVED EXACTLY -->
-    <header class="sticky top-0 z-50 bg-white border-b border-gray-200 shadow-sm">
+    <!-- Header -->
+    <header class="sticky top-0 z-50 bg-slate-950/80 backdrop-blur-lg border-b border-gray-800">
         <div class="max-w-7xl mx-auto px-6 lg:px-8 flex h-16 items-center justify-between">
-            <a href="/" class="text-xl font-bold text-gray-900"># ProofLocker</a>
+            <a href="/" class="text-xl font-bold text-white"># ProofLocker</a>
             <nav class="flex items-center gap-6">
-                <a href="/app" class="text-gray-700 hover:text-gray-900 font-medium transition-colors">Explore predictions</a>
-                <button class="text-gray-700 hover:text-gray-900 font-medium transition-colors">Sign in</button>
-                <a href="/lock" class="px-5 py-2.5 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-500 hover:to-blue-600 text-white font-semibold rounded-lg transition-all shadow-md hover:shadow-lg hover:scale-105">Lock my prediction</a>
+                <a href="/app" class="text-white hover:text-gray-300 font-medium transition-colors">Explore predictions</a>
+                <button class="text-white hover:text-gray-300 font-medium transition-colors">Sign in</button>
+                <a href="/lock" class="px-5 py-2.5 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white font-semibold rounded-lg transition-all shadow-lg hover:shadow-xl hover:scale-105">Lock my prediction</a>
             </nav>
         </div>
     </header>
 
     <!-- Hero Section -->
-    <section class="relative min-h-[80vh] flex items-center justify-center px-6 py-20 lg:py-32">
+    <section class="relative min-h-[60vh] flex items-center justify-center px-6 py-16 bg-slate-950">
         <div class="max-w-6xl mx-auto text-center">
-            <h1 class="text-6xl md:text-8xl lg:text-9xl font-extrabold tracking-tight mb-6 leading-none">
+            <h1 class="text-5xl md:text-7xl font-bold tracking-tight mb-6 leading-tight">
                 Predictions.<br>
-                <span class="bg-gradient-to-r from-blue-600 to-indigo-700 bg-clip-text text-transparent">Locked forever.</span>
+                <span class="bg-gradient-to-r from-blue-500 to-purple-600 bg-clip-text text-transparent">Locked</span> <span class="bg-gradient-to-r from-blue-500 to-purple-600 bg-clip-text text-transparent">forever.</span>
             </h1>
 
-            <p class="text-3xl md:text-4xl lg:text-5xl italic text-gray-700 font-medium mb-12">
+            <p class="text-xl md:text-2xl text-gray-300 mb-10">
                 Say it now. Prove it later.
             </p>
 
-            <div class="flex flex-wrap items-center justify-center gap-4 mb-12 text-base lg:text-lg text-gray-700 font-medium">
-                <div class="flex items-center gap-2">
-                    <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636"/>
+            <div class="flex flex-wrap items-center justify-center gap-6 mb-12 text-sm md:text-base text-gray-300">
+                <div class="flex items-center gap-2 bg-gray-800 px-4 py-2 rounded-lg border border-gray-700">
+                    <svg class="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                        <line x1="2" y1="2" x2="22" y2="22" stroke-linecap="round" stroke-width="2"/>
                     </svg>
-                    <span>Anonymous — no signup required</span>
+                    <span>Anonymous</span>
                 </div>
-                <div class="flex items-center gap-2">
-                    <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                <div class="flex items-center gap-2 bg-gray-800 px-4 py-2 rounded-lg border border-gray-700">
+                    <svg class="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
                     </svg>
-                    <span>~10 seconds to lock</span>
+                    <span>~10 seconds</span>
                 </div>
-                <div class="flex items-center gap-2">
-                    <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"/>
+                <div class="flex items-center gap-2 bg-gray-800 px-4 py-2 rounded-lg border border-gray-700">
+                    <svg class="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/>
                     </svg>
-                    <span>On-chain via Constellation Network</span>
+                    <span>On-chain</span>
                 </div>
-                <div class="flex items-center gap-2">
-                    <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div class="flex items-center gap-2 bg-gray-800 px-4 py-2 rounded-lg border border-gray-700">
+                    <svg class="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
                     </svg>
-                    <span>Immutable cryptographic proof</span>
+                    <span>Immutable</span>
                 </div>
-                <div class="flex items-center gap-2">
-                    <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div class="flex items-center gap-2 bg-gray-800 px-4 py-2 rounded-lg border border-gray-700">
+                    <svg class="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"/>
                     </svg>
-                    <span>Shareable proof cards to flex your wins</span>
+                    <span>Shareable cards</span>
                 </div>
             </div>
 
             <div class="flex flex-col sm:flex-row items-center justify-center gap-6 mb-8">
-                <a href="/lock" class="px-10 py-5 bg-gradient-to-r from-blue-600 to-indigo-700 hover:from-blue-500 hover:to-indigo-600 text-white text-xl font-bold rounded-xl transition-all shadow-xl hover:shadow-2xl hover:scale-105 glow-blue">
+                <a href="/lock" class="px-10 py-4 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white text-lg font-bold rounded-xl transition-all shadow-xl hover:shadow-2xl hover:scale-105 glow-blue">
                     Lock My First Prediction →
                 </a>
             </div>
 
-            <a href="/app" class="text-blue-600 hover:text-blue-700 text-lg font-semibold underline hover:no-underline transition-all">
+            <a href="/app" class="text-blue-400 hover:text-blue-300 text-base font-semibold underline hover:no-underline transition-all">
                 Explore locked predictions →
             </a>
         </div>
     </section>
 
     <!-- See How It Looks - Carousel -->
-    <section class="py-20 px-6 bg-gray-50">
+    <section class="py-20 px-6 bg-slate-950">
         <div class="max-w-7xl mx-auto">
-            <h2 class="text-5xl lg:text-6xl font-extrabold text-center mb-4">See how it looks</h2>
-            <p class="text-xl text-gray-600 text-center mb-12">Horizontal swipe to explore diverse proof cards</p>
+            <h2 class="text-4xl md:text-5xl font-bold text-center text-white mb-4">See how it looks</h2>
+            <p class="text-lg text-gray-400 text-center mb-12">Swipe through real proof cards</p>
 
-            <div class="carousel flex gap-6 overflow-x-auto pb-6 snap-x snap-mandatory">
+            <div class="relative">
+                <!-- Left Arrow -->
+                <button onclick="scrollCarousel(-1)" class="hidden md:flex absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 z-10 w-12 h-12 items-center justify-center bg-gray-800/80 border border-blue-500/30 rounded-full shadow-xl hover:bg-gray-700 hover:scale-110 hover:border-blue-400 transition-all">
+                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+                    </svg>
+                </button>
 
-                <!-- Card 1: BTC Correct -->
-                <div class="flex-shrink-0 w-full sm:w-[500px] bg-white border-2 border-green-200 rounded-xl shadow-lg hover:shadow-xl transition-all p-6 glow-green">
-                    <div class="flex items-center justify-between mb-3">
-                        <div class="flex items-center gap-2 text-sm text-gray-600">
-                            <span class="font-semibold">Anon #8492</span>
+                <!-- Carousel Container -->
+                <div id="carousel" class="carousel flex gap-6 overflow-x-auto pb-6 snap-x snap-mandatory scrollbar-hide">
+
+                    <!-- Card 1: BTC Correct -->
+                    <div class="flex-shrink-0 w-[85vw] sm:w-[450px] md:w-[500px] bg-slate-800 border border-gray-700 rounded-xl shadow-md hover:shadow-xl transition-all p-6 snap-center glow-green">
+                        <div class="flex items-center gap-2 text-sm text-gray-400 mb-3">
+                            <span class="font-semibold text-gray-300">Anon #8492</span>
                             <span>•</span>
                             <span>42 days ago</span>
                             <span>•</span>
-                            <span class="px-3 py-1 bg-blue-100 text-blue-700 rounded-full font-semibold text-xs">Crypto</span>
+                            <span class="px-2 py-1 bg-blue-900/40 text-blue-300 rounded-md font-semibold text-xs">Crypto</span>
                         </div>
-                    </div>
 
-                    <h3 class="text-xl font-bold text-gray-900 mb-4 leading-snug">
-                        Bitcoin will hit $100K before the end of 2024
-                    </h3>
+                        <h3 class="text-xl font-bold text-white mb-4 leading-snug">
+                            Bitcoin will hit $100K before the end of 2024
+                        </h3>
 
-                    <div class="flex items-center gap-2 mb-4">
-                        <span class="px-4 py-1 bg-green-500 text-white rounded-full font-bold text-sm shadow-md">✓ Correct</span>
-                    </div>
-
-                    <div class="bg-gray-50 border border-gray-200 rounded-lg p-3 mb-4">
-                        <div class="flex items-center justify-between">
-                            <div class="flex-1 min-w-0">
-                                <div class="text-xs text-gray-500 font-semibold uppercase tracking-wide mb-1">Fingerprint</div>
-                                <code class="hash-font text-xs text-blue-600 truncate block">481d8d02351695940e44...aeba445f1be3</code>
-                            </div>
-                            <a href="#" class="ml-3 text-blue-600 hover:text-blue-700">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
-                                </svg>
-                            </a>
+                        <div class="mb-4">
+                            <span class="inline-block px-4 py-1.5 bg-green-600 text-white rounded-full font-bold text-sm shadow-lg shadow-green-500/40">Correct</span>
                         </div>
+
+                        <div class="bg-slate-900 border border-gray-700 rounded-lg p-3 mb-4">
+                            <div class="text-xs text-gray-500 font-semibold uppercase tracking-wide mb-1">Fingerprint</div>
+                            <code class="hash-font text-xs text-gray-400 truncate block">481d8d02351695940e44...aeba445f1be3</code>
+                        </div>
+
+                        <button class="w-full py-3 border-2 border-blue-500 text-blue-400 hover:bg-blue-600 hover:text-white hover:border-blue-600 font-semibold rounded-lg transition-all">
+                            View proof
+                        </button>
                     </div>
 
-                    <button class="w-full py-3 border-2 border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white font-semibold rounded-lg transition-all">
-                        View proof
-                    </button>
-                </div>
-
-                <!-- Card 2: Sports Pending -->
-                <div class="flex-shrink-0 w-full sm:w-[500px] bg-white border border-gray-200 rounded-xl shadow-lg hover:shadow-xl transition-all p-6">
-                    <div class="flex items-center justify-between mb-3">
-                        <div class="flex items-center gap-2 text-sm text-gray-600">
-                            <span class="font-semibold">Anon #3421</span>
+                    <!-- Card 2: Sports Pending -->
+                    <div class="flex-shrink-0 w-[85vw] sm:w-[450px] md:w-[500px] bg-slate-800 border border-gray-700 rounded-xl shadow-md hover:shadow-xl transition-all p-6 snap-center">
+                        <div class="flex items-center gap-2 text-sm text-gray-400 mb-3">
+                            <span class="font-semibold text-gray-300">Anon #3421</span>
                             <span>•</span>
                             <span>8 days ago</span>
                             <span>•</span>
-                            <span class="px-3 py-1 bg-blue-100 text-blue-700 rounded-full font-semibold text-xs">Sports</span>
+                            <span class="px-2 py-1 bg-blue-900/40 text-blue-300 rounded-md font-semibold text-xs">Sports</span>
                         </div>
-                    </div>
 
-                    <h3 class="text-xl font-bold text-gray-900 mb-4 leading-snug">
-                        The Chiefs will win Super Bowl LIX
-                    </h3>
+                        <h3 class="text-xl font-bold text-white mb-4 leading-snug">
+                            The Chiefs will win Super Bowl LIX
+                        </h3>
 
-                    <div class="flex items-center gap-2 mb-4">
-                        <span class="px-4 py-1 bg-yellow-500 text-white rounded-full font-bold text-sm shadow-md">⏳ Pending</span>
-                    </div>
-
-                    <div class="bg-gray-50 border border-gray-200 rounded-lg p-3 mb-4">
-                        <div class="flex items-center justify-between">
-                            <div class="flex-1 min-w-0">
-                                <div class="text-xs text-gray-500 font-semibold uppercase tracking-wide mb-1">Fingerprint</div>
-                                <code class="hash-font text-xs text-blue-600 truncate block">7a2e9c41f6d8b3e0a592...1cd4e8f97b6a</code>
-                            </div>
-                            <a href="#" class="ml-3 text-blue-600 hover:text-blue-700">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
-                                </svg>
-                            </a>
+                        <div class="mb-4">
+                            <span class="inline-block px-4 py-1.5 bg-yellow-600 text-white rounded-full font-bold text-sm shadow-lg">Pending</span>
                         </div>
+
+                        <div class="bg-slate-900 border border-gray-700 rounded-lg p-3 mb-4">
+                            <div class="text-xs text-gray-500 font-semibold uppercase tracking-wide mb-1">Fingerprint</div>
+                            <code class="hash-font text-xs text-gray-400 truncate block">7a2e9c41f6d8b3e0a592...1cd4e8f97b6a</code>
+                        </div>
+
+                        <button class="w-full py-3 border-2 border-blue-500 text-blue-400 hover:bg-blue-600 hover:text-white hover:border-blue-600 font-semibold rounded-lg transition-all">
+                            View proof
+                        </button>
                     </div>
 
-                    <button class="w-full py-3 border-2 border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white font-semibold rounded-lg transition-all">
-                        View proof
-                    </button>
-                </div>
-
-                <!-- Card 3: Politics Wrong -->
-                <div class="flex-shrink-0 w-full sm:w-[500px] bg-white border border-gray-200 rounded-xl shadow-lg hover:shadow-xl transition-all p-6">
-                    <div class="flex items-center justify-between mb-3">
-                        <div class="flex items-center gap-2 text-sm text-gray-600">
-                            <span class="font-semibold">Anon #1829</span>
+                    <!-- Card 3: Politics Wrong -->
+                    <div class="flex-shrink-0 w-[85vw] sm:w-[450px] md:w-[500px] bg-slate-800 border border-gray-700 rounded-xl shadow-md hover:shadow-xl transition-all p-6 snap-center">
+                        <div class="flex items-center gap-2 text-sm text-gray-400 mb-3">
+                            <span class="font-semibold text-gray-300">Anon #1829</span>
                             <span>•</span>
                             <span>120 days ago</span>
                             <span>•</span>
-                            <span class="px-3 py-1 bg-blue-100 text-blue-700 rounded-full font-semibold text-xs">Politics</span>
+                            <span class="px-2 py-1 bg-blue-900/40 text-blue-300 rounded-md font-semibold text-xs">Politics</span>
                         </div>
-                    </div>
 
-                    <h3 class="text-xl font-bold text-gray-900 mb-4 leading-snug">
-                        No way Trump wins in 2024, betting my reputation on it
-                    </h3>
+                        <h3 class="text-xl font-bold text-white mb-4 leading-snug">
+                            No way Trump wins in 2024, betting my reputation on it
+                        </h3>
 
-                    <div class="flex items-center gap-2 mb-4">
-                        <span class="px-4 py-1 bg-red-500 text-white rounded-full font-bold text-sm shadow-md">✗ Wrong</span>
-                    </div>
-
-                    <div class="bg-gray-50 border border-gray-200 rounded-lg p-3 mb-4">
-                        <div class="flex items-center justify-between">
-                            <div class="flex-1 min-w-0">
-                                <div class="text-xs text-gray-500 font-semibold uppercase tracking-wide mb-1">Fingerprint</div>
-                                <code class="hash-font text-xs text-blue-600 truncate block">9f3b1e2d8a4c7f6e5b0a...3d2c1e9f8a7b</code>
-                            </div>
-                            <a href="#" class="ml-3 text-blue-600 hover:text-blue-700">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
-                                </svg>
-                            </a>
+                        <div class="mb-4">
+                            <span class="inline-block px-4 py-1.5 bg-red-600 text-white rounded-full font-bold text-sm shadow-lg">Wrong</span>
                         </div>
+
+                        <div class="bg-slate-900 border border-gray-700 rounded-lg p-3 mb-4">
+                            <div class="text-xs text-gray-500 font-semibold uppercase tracking-wide mb-1">Fingerprint</div>
+                            <code class="hash-font text-xs text-gray-400 truncate block">9f3b1e2d8a4c7f6e5b0a...3d2c1e9f8a7b</code>
+                        </div>
+
+                        <button class="w-full py-3 border-2 border-blue-500 text-blue-400 hover:bg-blue-600 hover:text-white hover:border-blue-600 font-semibold rounded-lg transition-all">
+                            View proof
+                        </button>
                     </div>
 
-                    <button class="w-full py-3 border-2 border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white font-semibold rounded-lg transition-all">
-                        View proof
-                    </button>
-                </div>
-
-                <!-- Card 4: Tech Correct -->
-                <div class="flex-shrink-0 w-full sm:w-[500px] bg-white border-2 border-green-200 rounded-xl shadow-lg hover:shadow-xl transition-all p-6 glow-green">
-                    <div class="flex items-center justify-between mb-3">
-                        <div class="flex items-center gap-2 text-sm text-gray-600">
-                            <span class="font-semibold">Anon #5673</span>
+                    <!-- Card 4: Tech Correct -->
+                    <div class="flex-shrink-0 w-[85vw] sm:w-[450px] md:w-[500px] bg-slate-800 border border-gray-700 rounded-xl shadow-md hover:shadow-xl transition-all p-6 snap-center glow-green">
+                        <div class="flex items-center gap-2 text-sm text-gray-400 mb-3">
+                            <span class="font-semibold text-gray-300">Anon #5673</span>
                             <span>•</span>
                             <span>15 days ago</span>
                             <span>•</span>
-                            <span class="px-3 py-1 bg-blue-100 text-blue-700 rounded-full font-semibold text-xs">Tech</span>
+                            <span class="px-2 py-1 bg-blue-900/40 text-blue-300 rounded-md font-semibold text-xs">Tech</span>
                         </div>
-                    </div>
 
-                    <h3 class="text-xl font-bold text-gray-900 mb-4 leading-snug">
-                        xAI will release Grok-3 in Q4 2025 with reasoning capabilities surpassing o1
-                    </h3>
+                        <h3 class="text-xl font-bold text-white mb-4 leading-snug">
+                            xAI will release Grok-3 in Q4 2025 with reasoning capabilities surpassing o1
+                        </h3>
 
-                    <div class="flex items-center gap-2 mb-4">
-                        <span class="px-4 py-1 bg-green-500 text-white rounded-full font-bold text-sm shadow-md">✓ Correct</span>
-                    </div>
-
-                    <div class="bg-gray-50 border border-gray-200 rounded-lg p-3 mb-4">
-                        <div class="flex items-center justify-between">
-                            <div class="flex-1 min-w-0">
-                                <div class="text-xs text-gray-500 font-semibold uppercase tracking-wide mb-1">Fingerprint</div>
-                                <code class="hash-font text-xs text-blue-600 truncate block">2c8f4a9e1b7d3c6a5e8f...4b2d9c8e1a7f</code>
-                            </div>
-                            <a href="#" class="ml-3 text-blue-600 hover:text-blue-700">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
-                                </svg>
-                            </a>
+                        <div class="mb-4">
+                            <span class="inline-block px-4 py-1.5 bg-green-600 text-white rounded-full font-bold text-sm shadow-lg shadow-green-500/40">Correct</span>
                         </div>
+
+                        <div class="bg-slate-900 border border-gray-700 rounded-lg p-3 mb-4">
+                            <div class="text-xs text-gray-500 font-semibold uppercase tracking-wide mb-1">Fingerprint</div>
+                            <code class="hash-font text-xs text-gray-400 truncate block">2c8f4a9e1b7d3c6a5e8f...4b2d9c8e1a7f</code>
+                        </div>
+
+                        <button class="w-full py-3 border-2 border-blue-500 text-blue-400 hover:bg-blue-600 hover:text-white hover:border-blue-600 font-semibold rounded-lg transition-all">
+                            View proof
+                        </button>
                     </div>
 
-                    <button class="w-full py-3 border-2 border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white font-semibold rounded-lg transition-all">
-                        View proof
-                    </button>
-                </div>
-
-                <!-- Card 5: Personal Correct -->
-                <div class="flex-shrink-0 w-full sm:w-[500px] bg-white border-2 border-green-200 rounded-xl shadow-lg hover:shadow-xl transition-all p-6 glow-green">
-                    <div class="flex items-center justify-between mb-3">
-                        <div class="flex items-center gap-2 text-sm text-gray-600">
-                            <span class="font-semibold">Anon #9204</span>
+                    <!-- Card 5: Personal Correct -->
+                    <div class="flex-shrink-0 w-[85vw] sm:w-[450px] md:w-[500px] bg-slate-800 border border-gray-700 rounded-xl shadow-md hover:shadow-xl transition-all p-6 snap-center glow-green">
+                        <div class="flex items-center gap-2 text-sm text-gray-400 mb-3">
+                            <span class="font-semibold text-gray-300">Anon #9204</span>
                             <span>•</span>
                             <span>90 days ago</span>
                             <span>•</span>
-                            <span class="px-3 py-1 bg-blue-100 text-blue-700 rounded-full font-semibold text-xs">Personal</span>
+                            <span class="px-2 py-1 bg-blue-900/40 text-blue-300 rounded-md font-semibold text-xs">Personal</span>
                         </div>
-                    </div>
 
-                    <h3 class="text-xl font-bold text-gray-900 mb-4 leading-snug">
-                        I will launch my SaaS and hit $10k MRR within 6 months
-                    </h3>
+                        <h3 class="text-xl font-bold text-white mb-4 leading-snug">
+                            I will launch my SaaS and hit $10k MRR within 6 months
+                        </h3>
 
-                    <div class="flex items-center gap-2 mb-4">
-                        <span class="px-4 py-1 bg-green-500 text-white rounded-full font-bold text-sm shadow-md">✓ Correct</span>
-                    </div>
-
-                    <div class="bg-gray-50 border border-gray-200 rounded-lg p-3 mb-4">
-                        <div class="flex items-center justify-between">
-                            <div class="flex-1 min-w-0">
-                                <div class="text-xs text-gray-500 font-semibold uppercase tracking-wide mb-1">Fingerprint</div>
-                                <code class="hash-font text-xs text-blue-600 truncate block">6e1f3a8d2b9c4e7a5f1d...8c6e3f1a9b2d</code>
-                            </div>
-                            <a href="#" class="ml-3 text-blue-600 hover:text-blue-700">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
-                                </svg>
-                            </a>
+                        <div class="mb-4">
+                            <span class="inline-block px-4 py-1.5 bg-green-600 text-white rounded-full font-bold text-sm shadow-lg shadow-green-500/40">Correct</span>
                         </div>
+
+                        <div class="bg-slate-900 border border-gray-700 rounded-lg p-3 mb-4">
+                            <div class="text-xs text-gray-500 font-semibold uppercase tracking-wide mb-1">Fingerprint</div>
+                            <code class="hash-font text-xs text-gray-400 truncate block">6e1f3a8d2b9c4e7a5f1d...8c6e3f1a9b2d</code>
+                        </div>
+
+                        <button class="w-full py-3 border-2 border-blue-500 text-blue-400 hover:bg-blue-600 hover:text-white hover:border-blue-600 font-semibold rounded-lg transition-all">
+                            View proof
+                        </button>
                     </div>
 
-                    <button class="w-full py-3 border-2 border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white font-semibold rounded-lg transition-all">
-                        View proof
-                    </button>
-                </div>
-
-                <!-- Card 6: Markets Pending -->
-                <div class="flex-shrink-0 w-full sm:w-[500px] bg-white border border-gray-200 rounded-xl shadow-lg hover:shadow-xl transition-all p-6">
-                    <div class="flex items-center justify-between mb-3">
-                        <div class="flex items-center gap-2 text-sm text-gray-600">
-                            <span class="font-semibold">Anon #7156</span>
+                    <!-- Card 6: Markets Pending -->
+                    <div class="flex-shrink-0 w-[85vw] sm:w-[450px] md:w-[500px] bg-slate-800 border border-gray-700 rounded-xl shadow-md hover:shadow-xl transition-all p-6 snap-center">
+                        <div class="flex items-center gap-2 text-sm text-gray-400 mb-3">
+                            <span class="font-semibold text-gray-300">Anon #7156</span>
                             <span>•</span>
                             <span>3 days ago</span>
                             <span>•</span>
-                            <span class="px-3 py-1 bg-blue-100 text-blue-700 rounded-full font-semibold text-xs">Markets</span>
+                            <span class="px-2 py-1 bg-blue-900/40 text-blue-300 rounded-md font-semibold text-xs">Markets</span>
                         </div>
-                    </div>
 
-                    <h3 class="text-xl font-bold text-gray-900 mb-4 leading-snug">
-                        S&P 500 will breach 7000 before March 2026
-                    </h3>
+                        <h3 class="text-xl font-bold text-white mb-4 leading-snug">
+                            S&P 500 will breach 7000 before March 2026
+                        </h3>
 
-                    <div class="flex items-center gap-2 mb-4">
-                        <span class="px-4 py-1 bg-yellow-500 text-white rounded-full font-bold text-sm shadow-md">⏳ Pending</span>
-                    </div>
-
-                    <div class="bg-gray-50 border border-gray-200 rounded-lg p-3 mb-4">
-                        <div class="flex items-center justify-between">
-                            <div class="flex-1 min-w-0">
-                                <div class="text-xs text-gray-500 font-semibold uppercase tracking-wide mb-1">Fingerprint</div>
-                                <code class="hash-font text-xs text-blue-600 truncate block">4d7e2c9f8a1b6e3d5c7a...9e2f4d8c1b6a</code>
-                            </div>
-                            <a href="#" class="ml-3 text-blue-600 hover:text-blue-700">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
-                                </svg>
-                            </a>
+                        <div class="mb-4">
+                            <span class="inline-block px-4 py-1.5 bg-yellow-600 text-white rounded-full font-bold text-sm shadow-lg">Pending</span>
                         </div>
+
+                        <div class="bg-slate-900 border border-gray-700 rounded-lg p-3 mb-4">
+                            <div class="text-xs text-gray-500 font-semibold uppercase tracking-wide mb-1">Fingerprint</div>
+                            <code class="hash-font text-xs text-gray-400 truncate block">4d7e2c9f8a1b6e3d5c7a...9e2f4d8c1b6a</code>
+                        </div>
+
+                        <button class="w-full py-3 border-2 border-blue-500 text-blue-400 hover:bg-blue-600 hover:text-white hover:border-blue-600 font-semibold rounded-lg transition-all">
+                            View proof
+                        </button>
                     </div>
 
-                    <button class="w-full py-3 border-2 border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white font-semibold rounded-lg transition-all">
-                        View proof
-                    </button>
                 </div>
 
+                <!-- Right Arrow -->
+                <button onclick="scrollCarousel(1)" class="hidden md:flex absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 z-10 w-12 h-12 items-center justify-center bg-gray-800/80 border border-blue-500/30 rounded-full shadow-xl hover:bg-gray-700 hover:scale-110 hover:border-blue-400 transition-all">
+                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                    </svg>
+                </button>
             </div>
+
+            <p class="text-center text-sm text-gray-500 mt-6 md:hidden">
+                Swipe to see more examples →
+            </p>
         </div>
     </section>
 
     <!-- How It Works -->
-    <section class="py-20 px-6">
+    <section class="py-20 px-6 bg-slate-950">
         <div class="max-w-6xl mx-auto">
-            <h2 class="text-5xl lg:text-6xl font-extrabold text-center mb-16">How it works</h2>
+            <h2 class="text-4xl md:text-5xl font-bold text-center text-white mb-16">How it works</h2>
 
             <div class="grid md:grid-cols-3 gap-8">
 
-                <div class="bg-white border border-gray-200 rounded-xl shadow-lg hover:shadow-xl transition-all p-8">
+                <div class="bg-slate-800 border border-gray-700 rounded-xl shadow-lg hover:shadow-xl hover:scale-105 transition-all p-8">
                     <div class="flex items-center gap-3 mb-4">
-                        <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center text-white shadow-md">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/>
-                            </svg>
+                        <div class="w-12 h-12 bg-blue-600 rounded-full flex items-center justify-center text-white text-xl font-bold shadow-md">
+                            1
                         </div>
-                        <h3 class="text-2xl font-bold">Write</h3>
+                        <h3 class="text-2xl font-bold text-white">Write your prediction</h3>
                     </div>
-                    <p class="text-gray-700 text-lg leading-relaxed">
-                        Make a bold prediction about anything. The future, markets, sports, tech, or your personal goals.
+                    <p class="text-gray-300 text-base leading-relaxed">
+                        Bold claim, keep it secret or tease. Markets, sports, tech, personal goals—anything.
                     </p>
                 </div>
 
-                <div class="bg-white border border-gray-200 rounded-xl shadow-lg hover:shadow-xl transition-all p-8">
+                <div class="bg-slate-800 border border-gray-700 rounded-xl shadow-lg hover:shadow-xl hover:scale-105 transition-all p-8">
                     <div class="flex items-center gap-3 mb-4">
-                        <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center text-white shadow-md">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
-                            </svg>
+                        <div class="w-12 h-12 bg-blue-600 rounded-full flex items-center justify-center text-white text-xl font-bold shadow-md">
+                            2
                         </div>
-                        <h3 class="text-2xl font-bold">Lock</h3>
+                        <h3 class="text-2xl font-bold text-white">Lock on-chain</h3>
                     </div>
-                    <p class="text-gray-700 text-lg leading-relaxed">
-                        Get a cryptographic hash + timestamp on Constellation Network ($DAG). Immutable and tamper-proof. Costs pennies.
+                    <p class="text-gray-300 text-base leading-relaxed">
+                        Fingerprint + timestamp on Constellation. Cheap & permanent. Immutable cryptographic proof.
                     </p>
                 </div>
 
-                <div class="bg-white border border-gray-200 rounded-xl shadow-lg hover:shadow-xl transition-all p-8">
+                <div class="bg-slate-800 border border-gray-700 rounded-xl shadow-lg hover:shadow-xl hover:scale-105 transition-all p-8">
                     <div class="flex items-center gap-3 mb-4">
-                        <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center text-white shadow-md">
+                        <div class="w-12 h-12 bg-green-600 rounded-full flex items-center justify-center text-white shadow-md">
                             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"/>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/>
                             </svg>
                         </div>
-                        <h3 class="text-2xl font-bold">Prove</h3>
+                        <h3 class="text-2xl font-bold text-white">Prove later</h3>
                     </div>
-                    <p class="text-gray-700 text-lg leading-relaxed">
-                        Resolve the outcome when it happens. Share your beautiful proof card. Show the world you called it.
+                    <p class="text-gray-300 text-base leading-relaxed">
+                        Resolve, generate card, flex your win. Show the world you called it first.
                     </p>
                 </div>
 
@@ -406,52 +367,53 @@
     </section>
 
     <!-- Why ProofLocker -->
-    <section class="py-20 px-6 bg-gray-50">
+    <section class="py-20 px-6 bg-slate-950">
         <div class="max-w-6xl mx-auto">
-            <h2 class="text-5xl lg:text-6xl font-extrabold text-center mb-4">Why ProofLocker?</h2>
-            <p class="text-xl text-gray-600 text-center mb-16">The simplest way to prove you called it.</p>
+            <h2 class="text-4xl md:text-5xl font-bold text-center text-white mb-4">Why ProofLocker?</h2>
+            <p class="text-lg text-gray-400 text-center mb-16">The simplest way to prove you called it.</p>
 
-            <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
+            <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
 
-                <div class="bg-white border border-gray-200 rounded-xl shadow-lg hover:shadow-xl transition-all p-6">
-                    <div class="w-12 h-12 bg-gradient-to-br from-cyan-500 to-blue-500 rounded-xl flex items-center justify-center text-white shadow-md mb-4">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636"/>
+                <div class="bg-slate-800 border border-gray-700 rounded-xl shadow-lg hover:shadow-xl hover:scale-105 transition-all p-6">
+                    <div class="w-12 h-12 rounded-xl flex items-center justify-center mb-4">
+                        <svg class="w-8 h-8 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                            <line x1="2" y1="2" x2="22" y2="22" stroke-linecap="round" stroke-width="2"/>
                         </svg>
                     </div>
-                    <h3 class="text-xl font-bold mb-2">Anonymous by default</h3>
-                    <p class="text-gray-600 leading-relaxed">No signup required. Post predictions without revealing your identity.</p>
+                    <h3 class="text-xl font-bold text-white mb-2">Anonymous by default</h3>
+                    <p class="text-gray-400 leading-relaxed">No signup, no identity reveal. Lock predictions without revealing who you are.</p>
                 </div>
 
-                <div class="bg-white border border-gray-200 rounded-xl shadow-lg hover:shadow-xl transition-all p-6">
-                    <div class="w-12 h-12 bg-gradient-to-br from-purple-500 to-pink-500 rounded-xl flex items-center justify-center text-white shadow-md mb-4">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div class="bg-slate-800 border border-gray-700 rounded-xl shadow-lg hover:shadow-xl hover:scale-105 transition-all p-6">
+                    <div class="w-12 h-12 rounded-xl flex items-center justify-center mb-4">
+                        <svg class="w-8 h-8 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
                         </svg>
                     </div>
-                    <h3 class="text-xl font-bold mb-2">Public or private</h3>
-                    <p class="text-gray-600 leading-relaxed">Share your proof immediately or keep it secret until the right moment.</p>
+                    <h3 class="text-xl font-bold text-white mb-2">Public or private</h3>
+                    <p class="text-gray-400 leading-relaxed">Share now or wait to drop proof. You control when the world sees your call.</p>
                 </div>
 
-                <div class="bg-white border border-gray-200 rounded-xl shadow-lg hover:shadow-xl transition-all p-6">
-                    <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl flex items-center justify-center text-white shadow-md mb-4">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/>
+                <div class="bg-slate-800 border border-gray-700 rounded-xl shadow-lg hover:shadow-xl hover:scale-105 transition-all p-6">
+                    <div class="w-12 h-12 rounded-xl flex items-center justify-center mb-4">
+                        <svg class="w-8 h-8 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
                         </svg>
                     </div>
-                    <h3 class="text-xl font-bold mb-2">Immutable proof</h3>
-                    <p class="text-gray-600 leading-relaxed">Timestamped on-chain. Can't be changed, deleted — or denied.</p>
+                    <h3 class="text-xl font-bold text-white mb-2">Immutable proof</h3>
+                    <p class="text-gray-400 leading-relaxed">On-chain forever, can't be changed. Timestamped proof that lasts eternally.</p>
                 </div>
 
-                <div class="bg-white border border-gray-200 rounded-xl shadow-lg hover:shadow-xl transition-all p-6">
-                    <div class="w-12 h-12 bg-gradient-to-br from-pink-500 to-orange-500 rounded-xl flex items-center justify-center text-white shadow-md mb-4">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div class="bg-slate-800 border border-gray-700 rounded-xl shadow-lg hover:shadow-xl hover:scale-105 transition-all p-6">
+                    <div class="w-12 h-12 rounded-xl flex items-center justify-center mb-4">
+                        <svg class="w-8 h-8 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"/>
                         </svg>
                     </div>
-                    <h3 class="text-xl font-bold mb-2">Shareable proof cards</h3>
-                    <p class="text-gray-600 leading-relaxed">Generate beautiful cards to share your wins and build credibility.</p>
+                    <h3 class="text-xl font-bold text-white mb-2">Shareable cards</h3>
+                    <p class="text-gray-400 leading-relaxed">Beautiful receipts to prove you called it. Share your wins, build credibility.</p>
                 </div>
 
             </div>
@@ -459,43 +421,54 @@
     </section>
 
     <!-- Final CTA -->
-    <section class="py-32 px-6 bg-gradient-to-b from-white to-gray-50">
+    <section class="py-24 px-6 bg-slate-950">
         <div class="max-w-4xl mx-auto text-center">
-            <h2 class="text-5xl lg:text-7xl font-extrabold mb-6">Ready to make your mark?</h2>
-            <p class="text-xl lg:text-2xl text-gray-700 mb-12 leading-relaxed">
+            <h2 class="text-4xl md:text-6xl font-bold text-white mb-6">Ready to make your mark?</h2>
+            <p class="text-lg md:text-xl text-gray-300 mb-12 leading-relaxed">
                 Lock your first prediction in 10 seconds. Anonymous, immutable, shareable.
             </p>
 
             <div class="flex flex-col sm:flex-row items-center justify-center gap-6">
-                <a href="/lock" class="px-12 py-6 bg-gradient-to-r from-blue-600 to-indigo-700 hover:from-blue-500 hover:to-indigo-600 text-white text-2xl font-bold rounded-xl transition-all shadow-2xl hover:shadow-3xl hover:scale-105 glow-blue">
+                <a href="/lock" class="px-12 py-5 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white text-xl font-bold rounded-xl transition-all shadow-2xl hover:shadow-3xl hover:scale-105 glow-blue">
                     Lock My Prediction Now
                 </a>
             </div>
 
-            <a href="/app" class="inline-block mt-8 text-blue-600 hover:text-blue-700 text-lg font-semibold underline hover:no-underline transition-all">
+            <a href="/app" class="inline-block mt-8 text-blue-400 hover:text-blue-300 text-base font-semibold underline hover:no-underline transition-all">
                 Browse existing predictions →
             </a>
         </div>
     </section>
 
     <!-- Footer -->
-    <footer class="border-t border-gray-200 bg-white py-12 px-6">
+    <footer class="border-t border-gray-800 bg-slate-950 py-12 px-6">
         <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
-            <p class="text-gray-600 text-sm">
-                Powered by <span class="font-semibold text-gray-900">Constellation Network (DAG)</span>
+            <p class="text-gray-400 text-sm">
+                Powered by <span class="font-semibold text-gray-200">Constellation Network (DAG)</span>
             </p>
 
             <p class="text-gray-500 text-sm">Anonymous • Public • Immutable</p>
 
-            <div class="flex items-center gap-6 text-sm text-gray-600">
-                <a href="/legal/terms" class="hover:text-gray-900 transition-colors">Terms</a>
-                <span class="text-gray-400">•</span>
-                <a href="/legal/privacy" class="hover:text-gray-900 transition-colors">Privacy</a>
-                <span class="text-gray-400">•</span>
-                <a href="/legal/disclaimer" class="hover:text-gray-900 transition-colors">Disclaimer</a>
+            <div class="flex items-center gap-6 text-sm text-gray-400">
+                <a href="/legal/terms" class="hover:text-gray-200 transition-colors">Terms</a>
+                <span class="text-gray-600">•</span>
+                <a href="/legal/privacy" class="hover:text-gray-200 transition-colors">Privacy</a>
+                <span class="text-gray-600">•</span>
+                <a href="/legal/disclaimer" class="hover:text-gray-200 transition-colors">Disclaimer</a>
             </div>
         </div>
     </footer>
+
+    <script>
+        function scrollCarousel(direction) {
+            const carousel = document.getElementById('carousel');
+            const scrollAmount = 520;
+            carousel.scrollBy({
+                left: direction * scrollAmount,
+                behavior: 'smooth'
+            });
+        }
+    </script>
 
 </body>
 </html>
