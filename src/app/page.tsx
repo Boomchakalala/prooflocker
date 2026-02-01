@@ -31,7 +31,12 @@ export default function LandingPage() {
         <div className="relative z-10 py-20 md:py-28 px-6 bg-gradient-to-b from-[#0a0a0a] to-[#0a0a0a]">
           {/* Subtle radial glow for consistency */}
           <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-30">
-            <div className="w-[600px] h-[600px] rounded-full bg-gradient-radial from-[#9370db]/15 via-transparent to-transparent blur-3xl" />
+            <div
+              className="w-[600px] h-[600px] rounded-full blur-3xl"
+              style={{
+                background: 'radial-gradient(circle, rgba(147, 112, 219, 0.15) 0%, transparent 70%)'
+              }}
+            />
           </div>
 
           <div className="max-w-6xl mx-auto text-center relative z-10">
