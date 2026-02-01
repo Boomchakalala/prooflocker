@@ -95,7 +95,7 @@ export default function ProofCardPreview() {
       publicSlug: "sample-proof-slug-4",
       onChainStatus: "confirmed",
       outcome: "pending",
-      category: "Business",
+      category: "Other",
       deReference: "sample-de-ref-4",
       deEventId: "sample-event-4",
       deStatus: "CONFIRMED",
