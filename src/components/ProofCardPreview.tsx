@@ -199,11 +199,12 @@ export default function ProofCardPreview() {
           <h2 className="text-3xl md:text-5xl font-bold text-white mb-4" style={{ fontFamily: 'var(--font-montserrat)' }}>
             Real Proof
           </h2>
-          <p className="text-xl bg-gradient-to-r from-[#00bfff] to-[#9370db] bg-clip-text text-transparent font-semibold mb-4">
-            Wins, Misses, and True Accountability
+          <p className="text-xl font-semibold mb-4">
+            <span className="text-white">Wins. Misses. </span>
+            <span className="bg-gradient-to-r from-[#00bfff] to-[#9370db] bg-clip-text text-transparent">Real Accountability.</span>
           </p>
-          <p className="text-base text-gray-400 max-w-4xl mx-auto leading-relaxed">
-            See real predictions hashed on-chain, resolved with immutable evidence, and scored for accountability—no edits, no excuses.
+          <p className="text-sm md:text-base text-gray-400 max-w-3xl mx-auto leading-relaxed">
+            Real predictions locked on-chain, resolved immutably, and scored for accountability—no edits, no excuses.
           </p>
         </div>
 
