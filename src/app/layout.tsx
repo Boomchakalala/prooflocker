@@ -98,9 +98,11 @@ export default function RootLayout({
         )}
 
         <AuthProvider>
-          <AnalyticsTracker />
-          {children}
-          <AuthDebugPanel />
+          <ToastProvider>
+            <AnalyticsTracker />
+            {children}
+            <AuthDebugPanel />
+          </ToastProvider>
         </AuthProvider>
         <EnvIndicator />
       </body>
