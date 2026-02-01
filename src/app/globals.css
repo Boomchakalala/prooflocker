@@ -97,18 +97,18 @@ body {
               0 0 60px rgba(167, 139, 250, 0.08);
 }
 
-/* Unified Card Hover - enhanced with purple glow */
+/* Unified Card Hover - enhanced with stronger purple glow */
 .card-hover {
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  border: 1px solid rgba(167, 139, 250, 0.15);
+  border: 1px solid rgba(167, 139, 250, 0.2);
 }
 
 .card-hover:hover {
   transform: translateY(-6px) scale(1.01);
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5),
-              0 0 40px rgba(167, 139, 250, 0.25),
-              0 0 0 1px rgba(0, 212, 255, 0.3);
-  border-color: rgba(0, 212, 255, 0.5);
+              0 0 40px rgba(167, 139, 250, 0.35),
+              0 0 0 1px rgba(0, 212, 255, 0.4);
+  border-color: rgba(0, 212, 255, 0.6);
 }
 
 /* Shimmer effect for loading states */
@@ -437,9 +437,9 @@ body {
 
 @keyframes constellationMove {
   0%, 100% {
-    background-position: 0% 0%, 100% 100%, 50% 50%, 80% 20%, 20% 80%, 60% 40%;
+    background-position: 0% 0%, 100% 100%, 50% 50%, 80% 20%, 20% 80%, 60% 40%, 40% 65%, 85% 45%;
   }
   50% {
-    background-position: 100% 100%, 0% 0%, 80% 20%, 20% 80%, 60% 40%, 90% 90%;
+    background-position: 100% 100%, 0% 0%, 80% 20%, 20% 80%, 60% 40%, 90% 90%, 70% 25%, 35% 75%;
   }
 }
