@@ -10,13 +10,12 @@ import Footer from "@/components/Footer";
 
 export default function LandingPage() {
   return (
-    <div className="min-h-screen bg-white relative">
+    <div className="min-h-screen bg-gradient-to-b from-slate-900 via-slate-900 to-gray-900 relative">
       {/* Header */}
       <LandingHeader />
 
       {/* Main content */}
-      <main className="space-y-12 md:space-y-16">
-        {/* Hero Section */}
+      <main className="space-y-0">{/* Hero Section */}
         <LandingHero />
 
         {/* Proof Card Preview */}
@@ -56,9 +55,6 @@ export default function LandingPage() {
       </main>
 
       <Footer />
-
-      {/* Development status banner */}
-      <DEStatusBanner />
     </div>
   );
 }
