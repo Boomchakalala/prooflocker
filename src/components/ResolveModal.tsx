@@ -85,11 +85,12 @@ export default function ResolveModal({
           ? Object.entries(data.insightBreakdown)
               .filter(([_, points]) => (points as number) !== 0)
               .map(([key, points]) => {
+                const pointsValue = points as number;
                 const label = key === 'base' ? 'Base points' :
                              key === 'risk' ? 'High-risk bonus' :
                              key === 'streak' ? `Streak bonus (${data.newStreak || 0}x)` :
                              key === 'mastery' ? 'Category mastery' : key;
-                return `${label}: ${points > 0 ? '+' : ''}${points} pts`;
+                return `${label}: ${pointsValue > 0 ? '+' : ''}${pointsValue} pts`;
               })
           : [];
 
