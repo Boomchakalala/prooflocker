@@ -104,36 +104,17 @@ body {
   box-shadow: 0 0 15px rgba(6, 182, 212, 0.3);
 }
 
-/* Cyber-Premium Card Hover - sexy depth and neon glow */
+/* 2026 Card Hover - clean blue glow */
 .card-hover {
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  border: 1px solid rgba(167, 139, 250, 0.25);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 1px solid rgba(76, 29, 149, 0.3);
   position: relative;
 }
 
-.card-hover::before {
-  content: '';
-  position: absolute;
-  inset: -2px;
-  background: linear-gradient(135deg, rgba(0, 224, 255, 0.3), rgba(167, 139, 250, 0.3));
-  border-radius: inherit;
-  opacity: 0;
-  transition: opacity 0.4s ease;
-  z-index: -1;
-  filter: blur(20px);
-}
-
 .card-hover:hover {
-  transform: translateY(-8px) scale(1.02);
-  box-shadow: 0 25px 70px rgba(0, 0, 0, 0.6),
-              0 0 50px rgba(167, 139, 250, 0.4),
-              0 0 30px rgba(0, 224, 255, 0.3),
-              0 0 0 1px rgba(0, 224, 255, 0.5);
-  border-color: rgba(0, 224, 255, 0.7);
-}
-
-.card-hover:hover::before {
-  opacity: 1;
+  transform: translateY(-4px);
+  box-shadow: 0 0 15px rgba(46, 92, 255, 0.3);
+  border-color: rgba(46, 92, 255, 0.5);
 }
 
 /* Shimmer effect for loading states */
@@ -185,25 +166,13 @@ body {
   animation: float 3s ease-in-out infinite;
 }
 
-/* Holographic gradient text - bold cyber aesthetic */
+/* 2026 gradient text - purple to blue */
 .gradient-text {
-  background: linear-gradient(135deg, var(--accent-cyan) 0%, var(--purple-vibrant) 50%, var(--accent-cyan-bright) 100%);
-  background-size: 200% 200%;
+  background: linear-gradient(135deg, #5B21B6 0%, #2E5CFF 100%);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
-  animation: gradientTextShift 6s ease infinite;
   position: relative;
-  filter: drop-shadow(0 0 25px rgba(0, 224, 255, 0.4)) drop-shadow(0 0 50px rgba(167, 139, 250, 0.3));
-}
-
-@keyframes gradientTextShift {
-  0%, 100% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
 }
 
 /* Animated border gradient */
