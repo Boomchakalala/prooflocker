@@ -7,9 +7,11 @@ import BrandLogo from "@/components/BrandLogo";
 import { getOrCreateUserId, isAnonymousUser } from "@/lib/user";
 import { getSiteUrl } from "@/lib/config";
 import { supabase } from "@/lib/supabase";
+import { useToast } from "@/contexts/ToastContext";
 
 export default function LockPage() {
   const router = useRouter();
+  const { showScoreToast } = useToast();
   const [text, setText] = useState("");
   const [category, setCategory] = useState<string>("Other");
   const [loading, setLoading] = useState(false);
@@ -52,6 +54,16 @@ export default function LockPage() {
 
       if (response.ok) {
         const data = await response.json();
+
+        // Show toast notification for Insight Score
+        if (data.insightPoints) {
+          showScoreToast(
+            data.insightPoints,
+            "Prediction locked successfully!",
+            ["Earned points for locking prediction"]
+          );
+        }
+
         // Redirect to proof page instead of showing success screen
         router.push(`/proof/${data.publicSlug || data.proofId}`);
       } else {
