@@ -23,19 +23,19 @@ export default function LandingHero() {
   }, []);
 
   return (
-    <div className="relative z-10 min-h-[85vh] flex items-center justify-center py-20 md:py-24 px-6 overflow-hidden gradient-bg">
+    <div className="relative z-10 min-h-[85vh] flex items-center justify-center py-24 md:py-28 px-8 overflow-hidden gradient-bg">
       {/* Enhanced Constellation Overlay */}
       <div className="constellation-overlay" />
 
       {/* DAG Particle Background */}
-      <div ref={particlesRef} className="absolute inset-0 opacity-[0.15] pointer-events-none" />
+      <div ref={particlesRef} className="absolute inset-0 opacity-[0.18] pointer-events-none" />
 
       {/* Enhanced Radial Glow Behind Hero Content */}
       <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
         <div
-          className="w-[1000px] h-[1000px] rounded-full blur-3xl"
+          className="w-[1200px] h-[1200px] rounded-full blur-3xl"
           style={{
-            background: 'radial-gradient(circle, rgba(167, 139, 250, 0.2) 0%, rgba(0, 212, 255, 0.1) 40%, transparent 70%)'
+            background: 'radial-gradient(circle, rgba(167, 139, 250, 0.25) 0%, rgba(0, 212, 255, 0.15) 40%, transparent 70%)'
           }}
         />
       </div>
@@ -61,13 +61,13 @@ export default function LandingHero() {
             href="/lock"
             className="w-full sm:w-auto px-12 py-4 bg-gradient-to-r from-[#00D4FF] to-[#A78BFA] hover:from-[#00bfff] hover:to-[#9370db] text-white text-lg font-bold rounded-xl transition-all shadow-xl hover:shadow-2xl hover:scale-[1.03] btn-glow"
           >
-            Lock my prediction
+            Lock a Prediction
           </Link>
           <Link
             href="/app"
             className="w-full sm:w-auto px-12 py-4 border-2 border-[#A78BFA]/30 hover:border-[#00D4FF] hover:bg-[#00D4FF]/10 text-white text-lg font-bold rounded-xl transition-all backdrop-blur-sm"
           >
-            Explore predictions
+            Explore Proofs
           </Link>
         </div>
 
