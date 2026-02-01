@@ -220,50 +220,16 @@ body {
   background: linear-gradient(135deg, #00a8e6, #7d5fc7);
 }
 
-/* Neon button glow - irresistible cyber effect */
+/* 2026 button glow - Polymarket blue */
 .btn-glow {
   position: relative;
   transition: all 0.3s ease;
   overflow: hidden;
 }
 
-.btn-glow::before {
-  content: '';
-  position: absolute;
-  inset: -3px;
-  border-radius: inherit;
-  background: linear-gradient(135deg, #00E0FF, #C084FC, #00FFE5);
-  opacity: 0;
-  transition: opacity 0.3s ease;
-  z-index: -1;
-  filter: blur(20px);
-}
-
-.btn-glow::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(45deg, transparent 30%, rgba(255, 255, 255, 0.1) 50%, transparent 70%);
-  transform: translateX(-100%);
-  transition: transform 0.6s ease;
-}
-
-.btn-glow:hover::before {
-  opacity: 1;
-  animation: btnGlowPulse 2s ease infinite;
-}
-
-.btn-glow:hover::after {
-  transform: translateX(100%);
-}
-
-@keyframes btnGlowPulse {
-  0%, 100% {
-    filter: blur(20px);
-  }
-  50% {
-    filter: blur(25px);
-  }
+.btn-glow:hover {
+  box-shadow: 0 0 20px rgba(46, 92, 255, 0.5);
+  transform: scale(1.02);
 }
 
 /* Fade in animation */
@@ -373,19 +339,13 @@ body {
   color: #9370db;
 }
 
-/* Premium text shadow - holographic cyber glow */
+/* 2026 text shadows - clean blue and purple */
 .text-shadow-cyan {
-  text-shadow: 0 0 20px rgba(0, 224, 255, 0.5),
-               0 0 40px rgba(0, 224, 255, 0.3),
-               0 0 60px rgba(167, 139, 250, 0.3),
-               0 0 80px rgba(167, 139, 250, 0.2),
-               0 4px 30px rgba(0, 0, 0, 0.5);
+  text-shadow: 0 0 20px rgba(46, 92, 255, 0.5);
 }
 
 .text-shadow-purple-glow {
-  text-shadow: 0 0 25px rgba(167, 139, 250, 0.6),
-               0 0 50px rgba(167, 139, 250, 0.4),
-               0 0 75px rgba(0, 224, 255, 0.2);
+  text-shadow: 0 0 25px rgba(91, 33, 182, 0.6);
 }
 
 /* Fade in from left animation for hero badges */
