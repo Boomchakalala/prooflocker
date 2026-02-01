@@ -220,11 +220,11 @@ export default function ProofCardPreview() {
           {showLeftArrow && (
             <button
               onClick={() => scroll("left")}
-              className="hidden md:flex absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 z-10 w-10 h-10 items-center justify-center bg-[#111111]/60 border border-white/5 rounded-full hover:bg-[#1a1a1a] hover:border-[#00bfff]/30 transition-all opacity-40 hover:opacity-100"
+              className="hidden md:flex absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 z-10 w-10 h-10 items-center justify-center bg-[#111111]/60 border border-white/5 rounded-full hover:bg-[#1a1a1a] hover:border-[#2E5CFF]/30 transition-all opacity-40 hover:opacity-100"
               aria-label="Scroll left"
             >
               <svg
-                className="w-4 h-4 text-gray-400 hover:text-[#00bfff]"
+                className="w-4 h-4 text-gray-400 hover:text-[#2E5CFF]"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -266,11 +266,11 @@ export default function ProofCardPreview() {
           {showRightArrow && (
             <button
               onClick={() => scroll("right")}
-              className="hidden md:flex absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 z-10 w-10 h-10 items-center justify-center bg-[#111111]/60 border border-white/5 rounded-full hover:bg-[#1a1a1a] hover:border-[#00bfff]/30 transition-all opacity-40 hover:opacity-100"
+              className="hidden md:flex absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 z-10 w-10 h-10 items-center justify-center bg-[#111111]/60 border border-white/5 rounded-full hover:bg-[#1a1a1a] hover:border-[#2E5CFF]/30 transition-all opacity-40 hover:opacity-100"
               aria-label="Scroll right"
             >
               <svg
-                className="w-4 h-4 text-gray-400 hover:text-[#00bfff]"
+                className="w-4 h-4 text-gray-400 hover:text-[#2E5CFF]"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
