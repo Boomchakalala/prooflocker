@@ -1,42 +1,50 @@
 export default function Footer() {
   return (
-    <footer className="relative bg-gradient-to-b from-[#0a0a0a] via-[#0f0522] to-[#1A0033] py-10 px-8 border-t border-[#A78BFA]/10">
-      {/* Subtle glow at top */}
-      <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#A78BFA]/30 to-transparent" />
+    <footer className="relative bg-gradient-to-b from-[#0a0a0a] via-[#1A0033]/40 to-[#0F001A] py-10 px-8 border-t border-[#A78BFA]/20">
+      {/* Premium holographic glow at top */}
+      <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#00E0FF]/50 to-transparent" />
 
-      <div className="max-w-6xl mx-auto">
+      {/* Ambient background glow */}
+      <div className="absolute inset-0 pointer-events-none opacity-10">
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[200px] rounded-full blur-3xl bg-gradient-to-r from-[#A78BFA]/30 to-[#00E0FF]/30" />
+      </div>
+
+      <div className="max-w-6xl mx-auto relative z-10">
         {/* Main content grid */}
         <div className="flex flex-col md:flex-row items-center justify-between gap-6 mb-6">
-          {/* Left: Brand tagline */}
+          {/* Left: Brand tagline with gradient */}
           <div className="text-center md:text-left">
-            <p className="text-base md:text-lg font-semibold text-white/90 mb-1">
+            <p className="text-base md:text-lg font-bold mb-1 bg-gradient-to-r from-[#00E0FF] to-[#C084FC] bg-clip-text text-transparent">
               ProofLocker
             </p>
-            <p className="text-xs md:text-sm text-white/50">
-              Powered by <span className="text-[#A78BFA]">Constellation DAG</span>
+            <p className="text-xs md:text-sm text-white/60 flex items-center justify-center md:justify-start gap-2">
+              <svg className="w-3.5 h-3.5 text-[#00E0FF]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/>
+              </svg>
+              <span>Powered by <span className="text-[#A78BFA] font-semibold">Constellation DAG</span></span>
             </p>
           </div>
 
-          {/* Center: Links */}
+          {/* Center: Links with cyber hover */}
           <div className="flex flex-wrap items-center justify-center gap-4 md:gap-6 text-xs md:text-sm">
-            <a href="/legal/privacy" className="text-white/60 hover:text-[#00D4FF] transition-colors">
+            <a href="/legal/privacy" className="text-white/60 hover:text-[#00E0FF] transition-all hover:drop-shadow-[0_0_6px_rgba(0,224,255,0.6)]">
               Privacy
             </a>
-            <a href="/legal/terms" className="text-white/60 hover:text-[#00D4FF] transition-colors">
+            <a href="/legal/terms" className="text-white/60 hover:text-[#00E0FF] transition-all hover:drop-shadow-[0_0_6px_rgba(0,224,255,0.6)]">
               Terms
             </a>
-            <a href="/legal/disclaimer" className="text-white/60 hover:text-[#00D4FF] transition-colors">
+            <a href="/legal/disclaimer" className="text-white/60 hover:text-[#00E0FF] transition-all hover:drop-shadow-[0_0_6px_rgba(0,224,255,0.6)]">
               Disclaimer
             </a>
           </div>
 
-          {/* Right: Social icons */}
+          {/* Right: Social icons with neon hover glow */}
           <div className="flex items-center gap-5">
             <a
               href="https://twitter.com/prooflocker"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-white/50 hover:text-[#00D4FF] transition-all hover:scale-110"
+              className="text-white/50 hover:text-[#00E0FF] transition-all hover:scale-110 hover:drop-shadow-[0_0_8px_rgba(0,224,255,0.8)]"
               aria-label="X (Twitter)"
             >
               <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
@@ -47,7 +55,7 @@ export default function Footer() {
               href="https://discord.gg/prooflocker"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-white/50 hover:text-[#A78BFA] transition-all hover:scale-110"
+              className="text-white/50 hover:text-[#A78BFA] transition-all hover:scale-110 hover:drop-shadow-[0_0_8px_rgba(167,139,250,0.8)]"
               aria-label="Discord"
             >
               <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
@@ -58,7 +66,7 @@ export default function Footer() {
               href="https://t.me/prooflocker"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-white/50 hover:text-[#00D4FF] transition-all hover:scale-110"
+              className="text-white/50 hover:text-[#00E0FF] transition-all hover:scale-110 hover:drop-shadow-[0_0_8px_rgba(0,224,255,0.8)]"
               aria-label="Telegram"
             >
               <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
@@ -68,8 +76,8 @@ export default function Footer() {
           </div>
         </div>
 
-        {/* Copyright bar */}
-        <div className="pt-6 border-t border-white/5 text-center">
+        {/* Copyright bar with subtle gradient border */}
+        <div className="pt-6 border-t border-[#A78BFA]/10 text-center">
           <p className="text-xs text-white/40">
             © 2026 ProofLocker — Immutable accountability for the future
           </p>
