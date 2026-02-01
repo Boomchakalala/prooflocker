@@ -23,13 +23,13 @@ export default function LandingHeader() {
 
   return (
     <>
-      <header className="glass sticky top-0 z-50 border-b border-white/5 bg-[#0a0a0a]/80 backdrop-blur-xl">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 flex h-14 md:h-16 items-center justify-between">
-          <BrandLogo />
+      <header className="sticky top-0 z-50 bg-white border-b border-gray-200 shadow-sm">
+        <div className="mx-auto max-w-7xl px-6 lg:px-8 flex h-16 items-center justify-between">
+          <Link href="/" className="text-xl font-bold text-gray-900"># ProofLocker</Link>
           <div className="flex items-center gap-3 md:gap-4">
             <Link
               href="/app"
-              className="hidden sm:block px-4 py-2 text-sm md:text-base text-neutral-300 hover:text-white transition-all rounded-md hover:bg-white/5 border border-transparent hover:border-white/10"
+              className="text-gray-700 hover:text-gray-900 font-medium transition-colors"
             >
               Explore predictions
             </Link>
@@ -38,7 +38,7 @@ export default function LandingHeader() {
             {!user ? (
               <button
                 onClick={() => setShowClaimModal(true)}
-                className="hidden sm:block px-4 py-2 text-sm md:text-base text-neutral-300 hover:text-white transition-all rounded-md hover:bg-white/5 border border-transparent hover:border-white/10"
+                className="text-gray-700 hover:text-gray-900 font-medium transition-colors"
               >
                 Sign in
               </button>
@@ -81,7 +81,7 @@ export default function LandingHeader() {
 
             <Link
               href="/lock"
-              className="flex px-3 py-2 md:px-5 md:py-2.5 bg-gradient-to-r from-blue-600/80 to-purple-600/80 hover:from-blue-600 hover:to-purple-600 text-white text-sm md:text-base font-medium rounded-md transition-all whitespace-nowrap"
+              className="px-5 py-2.5 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-500 hover:to-blue-600 text-white font-semibold rounded-lg transition-all shadow-md hover:shadow-lg hover:scale-105"
             >
               Lock my prediction
             </Link>
