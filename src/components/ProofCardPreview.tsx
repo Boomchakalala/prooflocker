@@ -288,7 +288,7 @@ export default function ProofCardPreview() {
         </div>
 
         {/* Explanatory text - after cards */}
-        <p className="text-base md:text-lg text-white/70 text-center max-w-4xl mx-auto leading-relaxed mt-10 tracking-wide">
+        <p className="text-base md:text-lg text-white/70 text-center max-w-3xl mx-auto leading-relaxed mt-10 tracking-normal">
           Real predictions locked on-chain, resolved immutably, and scored for accountability—no edits, no excuses.
         </p>
       </div>
