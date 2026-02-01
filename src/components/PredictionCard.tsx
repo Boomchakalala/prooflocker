@@ -113,18 +113,18 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
   const getCategoryStyle = (category: string) => {
     switch (category.toLowerCase()) {
       case 'crypto':
-        return 'bg-[#00D4FF]/10 border-[#00D4FF]/30 text-[#00D4FF]';
+        return 'bg-[#2E5CFF]/10 border-[#2E5CFF]/30 text-[#2E5CFF]';
       case 'sports':
-        return 'bg-[#A78BFA]/10 border-[#A78BFA]/30 text-[#A78BFA]';
+        return 'bg-[#5B21B6]/10 border-[#5B21B6]/30 text-[#5B21B6]';
       case 'tech':
-        return 'bg-[#00D4FF]/10 border-[#00D4FF]/30 text-[#00D4FF]';
+        return 'bg-[#2E5CFF]/10 border-[#2E5CFF]/30 text-[#2E5CFF]';
       case 'personal':
-        return 'bg-[#A78BFA]/10 border-[#A78BFA]/30 text-[#A78BFA]';
+        return 'bg-[#5B21B6]/10 border-[#5B21B6]/30 text-[#5B21B6]';
       case 'politics':
       case 'markets':
       case 'other':
       default:
-        return 'bg-[#9370db]/10 border-[#9370db]/30 text-[#9370db]';
+        return 'bg-[#5B21B6]/10 border-[#5B21B6]/30 text-[#5B21B6]';
     }
   };
 
@@ -197,7 +197,7 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
         prediction.outcome === 'correct'
           ? 'border-[#22C55E]/20 hover:border-[#22C55E]/40 bg-gradient-to-br from-purple-600/10 via-blue-600/8 to-[#22C55E]/10'
           : 'border-purple-500/20 hover:border-purple-500/40 bg-gradient-to-br from-purple-600/10 via-blue-600/8 to-purple-700/10'
-      } backdrop-blur-xl hover:-translate-y-2 hover:scale-[1.02] hover:shadow-[0_20px_60px_rgba(0,0,0,0.6),0_0_50px_rgba(167,139,250,0.3),0_0_20px_rgba(0,212,255,0.2)]`}
+      } backdrop-blur-xl hover:-translate-y-2 hover:scale-[1.02] hover:shadow-[0_20px_60px_rgba(0,0,0,0.6),0_0_50px_rgba(167,139,250,0.3),0_0_20px_rgba(46,92,255,0.2)]`}
     >
       {/* 1. HEADER ROW - Author info + badges */}
       <div className="mb-2">
@@ -205,7 +205,7 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
         <div className="flex items-center justify-between gap-2 flex-nowrap mb-1">
           {/* Left: Avatar + Author info */}
           <div className="flex items-center gap-2 min-w-0 flex-1">
-            <div className="w-7 h-7 rounded-full bg-blue-500/20 flex items-center justify-center text-xs font-semibold text-blue-400 border border-blue-500/30 flex-shrink-0">
+            <div className="w-7 h-7 rounded-full bg-[#2E5CFF]/20 flex items-center justify-center text-xs font-semibold text-[#2E5CFF] border border-[#2E5CFF]/30 flex-shrink-0">
               {authorNumber.toString().slice(-2)}
             </div>
             <div className="flex items-center gap-1.5 text-[11px] md:text-xs text-neutral-400 min-w-0">
@@ -228,7 +228,7 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
           {/* Right: Status badges */}
           <div className="flex items-center gap-1 flex-shrink-0">
             {isOnChain() && (
-              <span className="px-2 py-0.5 text-[10px] font-medium rounded bg-purple-500/10 border border-purple-500/30 text-purple-400 flex items-center gap-1 whitespace-nowrap">
+              <span className="px-2 py-0.5 text-[10px] font-medium rounded bg-[#5B21B6]/10 border border-[#5B21B6]/30 text-[#5B21B6] flex items-center gap-1 whitespace-nowrap">
                 Locked
                 <svg className="w-2.5 h-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
@@ -236,7 +236,7 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
               </span>
             )}
             {isResolutionOnChain() && (
-              <span className="px-2 py-0.5 text-[10px] font-medium rounded bg-green-500/10 border border-green-500/30 text-green-400 flex items-center gap-1 whitespace-nowrap">
+              <span className="px-2 py-0.5 text-[10px] font-medium rounded bg-[#06B6D4]/10 border border-[#06B6D4]/30 text-[#06B6D4] flex items-center gap-1 whitespace-nowrap">
                 Resolved
                 <svg className="w-2.5 h-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
