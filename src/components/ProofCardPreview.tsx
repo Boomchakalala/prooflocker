@@ -193,17 +193,17 @@ export default function ProofCardPreview() {
   };
 
   return (
-    <div className="relative z-10 py-20 md:py-28 px-6 bg-[#0a0a0a]">
+    <div className="relative z-10 py-16 md:py-24 px-6 bg-[#0a0a0a]">
       <div className="max-w-6xl mx-auto">
-        <div className="text-center mb-12">
-          <h2 className="text-3xl md:text-5xl font-bold text-white mb-4" style={{ fontFamily: 'var(--font-montserrat)' }}>
+        <div className="text-center mb-8">
+          <h2 className="text-3xl md:text-5xl font-bold text-white mb-3" style={{ fontFamily: 'var(--font-montserrat)' }}>
             Real Proof
           </h2>
-          <p className="text-xl font-semibold mb-4">
+          <p className="text-xl font-semibold mb-2">
             <span className="text-white">Wins. Misses. </span>
             <span className="bg-gradient-to-r from-[#00bfff] to-[#9370db] bg-clip-text text-transparent">Real Accountability.</span>
           </p>
-          <p className="text-sm md:text-base text-gray-400 max-w-3xl mx-auto leading-relaxed">
+          <p className="text-xs md:text-sm text-white/60 max-w-3xl mx-auto leading-relaxed">
             Real predictions locked on-chain, resolved immutably, and scored for accountability—no edits, no excuses.
           </p>
         </div>
@@ -214,11 +214,11 @@ export default function ProofCardPreview() {
           {showLeftArrow && (
             <button
               onClick={() => scroll("left")}
-              className="hidden md:flex absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 z-10 w-12 h-12 items-center justify-center bg-[#111111]/80 border border-white/10 rounded-full shadow-xl hover:bg-[#1a1a1a] hover:border-[#00bfff] transition-all opacity-0 group-hover:opacity-100"
+              className="hidden md:flex absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 z-10 w-10 h-10 items-center justify-center bg-[#111111]/60 border border-white/5 rounded-full hover:bg-[#1a1a1a] hover:border-[#00bfff]/30 transition-all opacity-40 hover:opacity-100"
               aria-label="Scroll left"
             >
               <svg
-                className="w-6 h-6 text-gray-400 hover:text-[#00bfff]"
+                className="w-4 h-4 text-gray-400 hover:text-[#00bfff]"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -260,11 +260,11 @@ export default function ProofCardPreview() {
           {showRightArrow && (
             <button
               onClick={() => scroll("right")}
-              className="hidden md:flex absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 z-10 w-12 h-12 items-center justify-center bg-[#111111]/80 border border-white/10 rounded-full shadow-xl hover:bg-[#1a1a1a] hover:border-[#00bfff] transition-all opacity-0 group-hover:opacity-100"
+              className="hidden md:flex absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 z-10 w-10 h-10 items-center justify-center bg-[#111111]/60 border border-white/5 rounded-full hover:bg-[#1a1a1a] hover:border-[#00bfff]/30 transition-all opacity-40 hover:opacity-100"
               aria-label="Scroll right"
             >
               <svg
-                className="w-6 h-6 text-gray-400 hover:text-[#00bfff]"
+                className="w-4 h-4 text-gray-400 hover:text-[#00bfff]"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
