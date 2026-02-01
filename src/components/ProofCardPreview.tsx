@@ -171,14 +171,14 @@ export default function ProofCardPreview() {
   };
 
   return (
-    <div className="relative z-10 py-12 md:py-16 px-4">
+    <div className="relative z-10 py-16 md:py-20 px-4 bg-slate-900">
       <div className="max-w-7xl mx-auto">
-        <div className="text-center mb-8 md:mb-12">
-          <h2 className="text-3xl md:text-5xl font-bold text-gray-900 mb-3">
-            See how it looks
+        <div className="text-center mb-10 md:mb-14">
+          <h2 className="text-4xl md:text-6xl font-bold text-white mb-4">
+            Real Predictions. Real Proofs. Locked Forever.
           </h2>
-          <p className="text-base md:text-lg text-gray-600">
-            Here's what your proof card will look like once locked
+          <p className="text-base md:text-lg text-gray-400">
+            Swipe through real locked examples
           </p>
         </div>
 
@@ -187,11 +187,11 @@ export default function ProofCardPreview() {
           {/* Left Arrow */}
           <button
             onClick={() => scroll("left")}
-            className="hidden md:flex absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 z-10 w-12 h-12 items-center justify-center bg-white border border-gray-300 rounded-full shadow-lg hover:bg-gray-50 hover:scale-110 transition-all"
+            className="hidden md:flex absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 z-10 w-14 h-14 items-center justify-center bg-slate-800 border border-blue-500/30 rounded-full shadow-2xl hover:bg-slate-700 hover:scale-110 hover:border-blue-400 transition-all"
             aria-label="Scroll left"
           >
             <svg
-              className="w-6 h-6 text-gray-700"
+              className="w-7 h-7 text-blue-400"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -217,7 +217,9 @@ export default function ProofCardPreview() {
             {samplePredictions.map((prediction) => (
               <div
                 key={prediction.id}
-                className="flex-shrink-0 w-[85vw] sm:w-[450px] md:w-[500px] snap-center"
+                className={`flex-shrink-0 w-[85vw] sm:w-[450px] md:w-[520px] snap-center ${
+                  prediction.outcome === "correct" ? "ring-2 ring-green-500/50 rounded-2xl shadow-2xl shadow-green-500/20" : ""
+                }`}
               >
                 <PredictionCard
                   prediction={prediction}
@@ -230,11 +232,11 @@ export default function ProofCardPreview() {
           {/* Right Arrow */}
           <button
             onClick={() => scroll("right")}
-            className="hidden md:flex absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 z-10 w-12 h-12 items-center justify-center bg-white border border-gray-300 rounded-full shadow-lg hover:bg-gray-50 hover:scale-110 transition-all"
+            className="hidden md:flex absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 z-10 w-14 h-14 items-center justify-center bg-slate-800 border border-blue-500/30 rounded-full shadow-2xl hover:bg-slate-700 hover:scale-110 hover:border-blue-400 transition-all"
             aria-label="Scroll right"
           >
             <svg
-              className="w-6 h-6 text-gray-700"
+              className="w-7 h-7 text-blue-400"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -250,7 +252,7 @@ export default function ProofCardPreview() {
         </div>
 
         {/* Scroll Hint for Mobile */}
-        <p className="text-center text-sm text-gray-500 mt-4 md:hidden">
+        <p className="text-center text-sm text-gray-500 mt-6 md:hidden">
           Swipe to see more examples →
         </p>
       </div>
