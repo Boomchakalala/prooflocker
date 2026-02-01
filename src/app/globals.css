@@ -1,33 +1,25 @@
 @import "tailwindcss";
 
 :root {
-  /* Cyber-Premium Design System - Enhanced Purple-Cyan Theme */
-  --bg: #0F001A;
-  --bg-light: #0a0a0a;
-  --bg-darker: #05000D;
-  --surface: #1A0033;
-  --border: rgba(255, 255, 255, 0.08);
-  --text: #F5F5F5;
-  --text-off-white: #E0E0FF;
-  --muted: #9ca3af;
-  --accent-cyan: #00E0FF;
-  --accent-cyan-bright: #00F5FF;
-  --accent-start: #00D4FF;
-  --accent-end: #A78BFA;
-  --purple-deep: #4B0082;
-  --purple-royal: #5D009E;
-  --purple-light: #A78BFA;
-  --purple-vibrant: #C084FC;
-  --neon-cyan: #00FFE5;
-  --neon-purple: #D946EF;
+  /* 2026 Crypto Design System - Polymarket-inspired with purple signature */
+  --bg-top: #0A0A0F;
+  --bg-bottom: #111118;
+  --bg-card: #1F2937;
+  --border-purple: #4C1D95;
+  --text-primary: #F8F9FA;
+  --text-secondary: #9CA3AF;
+  --purple-royal: #5B21B6;
+  --blue-poly: #2E5CFF;
+  --teal-positive: #06B6D4;
 
   /* Legacy (kept for compatibility) */
-  --background: #0F001A;
-  --foreground: #F5F5F5;
-  --card-bg: #1A0033;
-  --primary: #00E0FF;
-  --secondary: #A78BFA;
-  --purple-dark: #0F001A;
+  --background: #0A0A0F;
+  --foreground: #F8F9FA;
+  --card-bg: #1F2937;
+  --primary: #2E5CFF;
+  --secondary: #5B21B6;
+  --accent-cyan: #2E5CFF;
+  --purple-vibrant: #5B21B6;
 }
 
 @theme inline {
@@ -44,18 +36,13 @@ body {
   font-family: var(--font-inter), system-ui, -apple-system, sans-serif;
 }
 
-/* Cyber-Premium gradient background - deep purple with holographic hints */
+/* 2026 Crypto gradient background - deep charcoal with purple-blue radial */
 .gradient-bg {
   background: linear-gradient(
-    135deg,
-    #4B0082 0%,
-    #3A0066 20%,
-    #1A0033 50%,
-    #0F001A 80%,
-    #0a0a0a 100%
+    180deg,
+    #0A0A0F 0%,
+    #111118 100%
   );
-  background-size: 200% 200%;
-  animation: gradientShift 25s ease infinite;
   position: relative;
 }
 
@@ -64,10 +51,10 @@ body {
   position: absolute;
   inset: 0;
   background: radial-gradient(
-    ellipse at 50% 30%,
-    rgba(167, 139, 250, 0.2) 0%,
-    rgba(0, 224, 255, 0.08) 40%,
-    transparent 60%
+    circle at 50% 30%,
+    rgba(91, 33, 182, 0.15) 0%,
+    rgba(46, 92, 255, 0.1) 40%,
+    transparent 70%
   );
   pointer-events: none;
   animation: breathe 8s ease-in-out infinite;
@@ -99,30 +86,22 @@ body {
   border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
-/* Enhanced Cyber-Premium Glow Effects */
+/* 2026 Blue Glow Effects - Polymarket-inspired */
 .glow-cyan {
-  box-shadow: 0 0 30px rgba(0, 224, 255, 0.3),
-              0 0 60px rgba(0, 224, 255, 0.15),
-              0 0 90px rgba(0, 224, 255, 0.08);
+  box-shadow: 0 0 15px rgba(46, 92, 255, 0.3);
 }
 
 .glow-purple {
-  box-shadow: 0 0 30px rgba(167, 139, 250, 0.35),
-              0 0 60px rgba(167, 139, 250, 0.2),
-              0 0 90px rgba(167, 139, 250, 0.1);
+  box-shadow: 0 0 15px rgba(91, 33, 182, 0.3);
 }
 
 .glow-gradient {
-  box-shadow: 0 0 40px rgba(0, 224, 255, 0.25),
-              0 0 60px rgba(167, 139, 250, 0.25),
-              0 0 100px rgba(167, 139, 250, 0.15);
+  box-shadow: 0 0 20px rgba(46, 92, 255, 0.25),
+              0 0 40px rgba(91, 33, 182, 0.15);
 }
 
-.glow-neon-cyan {
-  box-shadow: 0 0 20px rgba(0, 255, 229, 0.6),
-              0 0 40px rgba(0, 255, 229, 0.4),
-              0 0 60px rgba(0, 255, 229, 0.2),
-              inset 0 0 10px rgba(0, 255, 229, 0.1);
+.glow-teal {
+  box-shadow: 0 0 15px rgba(6, 182, 212, 0.3);
 }
 
 /* Cyber-Premium Card Hover - sexy depth and neon glow */
