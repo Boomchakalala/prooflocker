@@ -195,9 +195,9 @@ export default function ProofCardPreview() {
   return (
     <div className="relative z-10 py-16 md:py-24 px-6 bg-[#0a0a0a]">
       <div className="max-w-6xl mx-auto">
-        <div className="text-center mb-8">
+        <div className="text-center mb-12">
           <h2
-            className="text-3xl md:text-5xl font-bold mb-4"
+            className="text-3xl md:text-5xl font-bold mb-3"
             style={{
               fontFamily: 'var(--font-montserrat)',
               background: 'linear-gradient(to right, #00d4ff, #7c3aed)',
@@ -206,10 +206,10 @@ export default function ProofCardPreview() {
               backgroundClip: 'text'
             }}
           >
-            Real Proof — Wins, Misses, Accountability
+            Real Proof
           </h2>
-          <p className="text-base md:text-lg text-white/70 max-w-2xl mx-auto font-medium mb-12">
-            Swipe through real predictions locked on-chain and resolved without edits.
+          <p className="text-base md:text-lg text-white/60 font-medium">
+            Wins, misses, and permanent accountability.
           </p>
         </div>
 
@@ -293,13 +293,6 @@ export default function ProofCardPreview() {
               className="w-2 h-2 rounded-full bg-white/20"
             />
           ))}
-        </div>
-
-        {/* Body / Closing Paragraph */}
-        <div className="mt-12 md:mt-16 max-w-4xl mx-auto">
-          <p className="text-sm md:text-base text-white/70 leading-relaxed text-center">
-            These are live, immutable records — hashed on Constellation DAG the moment they're locked. No retroactive changes. No excuses. You come back, claim the outcome (correct, missed, pending), and it sticks forever. Wins build your score and credibility. Misses keep you honest. Every entry is brutal, verifiable proof of what you said — and whether you owned it.
-          </p>
         </div>
       </div>
 
