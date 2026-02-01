@@ -43,7 +43,7 @@ export default function LandingHero() {
         </h1>
 
         {/* Exact Subheadline */}
-        <p className="text-xl md:text-2xl text-gray-300 mb-12 max-w-2xl mx-auto" style={{ fontFamily: 'var(--font-inter)' }}>
+        <p className="text-2xl md:text-3xl font-semibold text-white/85 mb-14 max-w-2xl mx-auto" style={{ fontFamily: 'var(--font-inter)' }}>
           Say it now. Prove it later.
         </p>
 
@@ -64,17 +64,10 @@ export default function LandingHero() {
         </div>
 
         {/* Enhanced Hero Bottom Section */}
-        <div className="mt-16 relative max-w-6xl mx-auto">
-          {/* Timing/Benefit Line - Larger & Emphasized */}
-          <p className="text-base md:text-lg text-white/90 mb-3 font-semibold tracking-wide" style={{
-            textShadow: '0 0 20px rgba(0, 191, 255, 0.3)'
-          }}>
-            No signup required • Lock your prediction in ~10 seconds
-          </p>
-
-          {/* Connective Sentence */}
-          <p className="text-sm md:text-base text-gray-400 mb-10 max-w-2xl mx-auto leading-relaxed">
-            Lock bold predictions instantly – no barriers, no regrets, full accountability.
+        <div className="mt-12 relative max-w-6xl mx-auto">
+          {/* Timing/Benefit Line */}
+          <p className="text-base md:text-lg text-white/75 mb-12 font-medium tracking-wide max-w-3xl mx-auto">
+            No signup required · Lock your prediction in ~10 seconds · Full accountability.
           </p>
 
           {/* Clean Open Row of Pill Badges with Icons */}
