@@ -4,7 +4,6 @@ import LandingHeader from "@/components/LandingHeader";
 import LandingHero from "@/components/LandingHero";
 import HowItWorks from "@/components/HowItWorks";
 import WhyProofLocker from "@/components/WhyProofLocker";
-import TechFoundation from "@/components/TechFoundation";
 import ProofCardPreview from "@/components/ProofCardPreview";
 import DEStatusBanner from "@/components/DEStatusBanner";
 import Footer from "@/components/Footer";
@@ -28,11 +27,8 @@ export default function LandingPage() {
         {/* Why ProofLocker Section */}
         <WhyProofLocker />
 
-        {/* Tech Foundation Section */}
-        <TechFoundation />
-
         {/* Final CTA Section */}
-        <div className="relative z-10 py-20 md:py-28 px-6 bg-gradient-to-b from-[#0a0a0a] to-[#1a0033]">
+        <div className="relative z-10 py-20 md:py-28 px-6 bg-gradient-to-b from-[#0a0a0a] to-[#0a0a0a]">
           <div className="max-w-6xl mx-auto text-center">
             <h2 className="text-4xl md:text-6xl font-bold text-white mb-6" style={{ fontFamily: 'var(--font-montserrat)' }}>
               Ready to Lock In?
