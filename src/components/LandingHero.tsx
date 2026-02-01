@@ -75,7 +75,7 @@ export default function LandingHero() {
         <div className="mt-10 relative max-w-6xl mx-auto">
           {/* Timing/Benefit Line - refined wording */}
           <p className="text-base md:text-lg text-white/80 mb-10 font-medium tracking-wide max-w-3xl mx-auto">
-            No signup required · Lock in ~10 seconds · Full accountability
+            No signup required · Lock your prediction in ~10 seconds · Full accountability
           </p>
 
           {/* Clean Open Row of Pill Badges with Icons - enhanced colors */}
