@@ -195,12 +195,12 @@ export default function ProofCardPreview() {
   return (
     <div className="relative z-10 py-16 md:py-24 px-6 bg-[#0a0a0a]">
       <div className="max-w-6xl mx-auto">
-        <div className="text-center mb-3">
-          <h2 className="text-3xl md:text-5xl font-bold text-white mb-3" style={{ fontFamily: 'var(--font-montserrat)' }}>
+        <div className="text-center mb-8">
+          <h2 className="text-3xl md:text-5xl font-bold text-white mb-4" style={{ fontFamily: 'var(--font-montserrat)' }}>
             Real Proof
           </h2>
-          <p className="text-base md:text-lg text-white/60 max-w-3xl mx-auto leading-relaxed mb-8">
-            Real predictions locked on-chain, resolved immutably, and scored for accountability—no edits, no excuses.
+          <p className="text-base md:text-lg text-white/70 max-w-2xl mx-auto font-medium mb-12">
+            Locked on-chain. Resolved forever.
           </p>
         </div>
 

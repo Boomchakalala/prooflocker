@@ -3,9 +3,14 @@ export default function HowItWorks() {
     <div className="relative z-10 py-16 md:py-24 px-6 bg-[#0a0a0a]">
       <div className="max-w-6xl mx-auto">
         {/* Heading */}
-        <h2 className="text-3xl md:text-5xl font-bold text-center text-white mb-16" style={{ fontFamily: 'var(--font-montserrat)' }}>
-          How It Works
-        </h2>
+        <div className="text-center mb-16">
+          <h2 className="text-3xl md:text-5xl font-bold text-white mb-3" style={{ fontFamily: 'var(--font-montserrat)' }}>
+            How It Works
+          </h2>
+          <p className="text-base md:text-lg text-white/60 font-medium">
+            Three steps. No friction. Permanent proof.
+          </p>
+        </div>
 
         {/* Three Horizontal Boxes */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
