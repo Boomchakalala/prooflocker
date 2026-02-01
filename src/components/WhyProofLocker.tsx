@@ -1,12 +1,12 @@
 export default function WhyProofLocker() {
   return (
-    <div className="relative z-10 py-12 md:py-16 px-6 bg-[#0a0a0a]">
+    <div className="relative z-10 py-12 md:py-16 px-8 bg-[#0a0a0a]">
       <div className="max-w-6xl mx-auto">
         <h2 className="text-3xl md:text-5xl font-bold text-center text-white mb-3" style={{ fontFamily: 'var(--font-montserrat)' }}>
           Why It Matters
         </h2>
-        <p className="text-base md:text-lg text-white/60 text-center mb-12 font-medium">
-          Accountability without compromise.
+        <p className="text-base md:text-lg text-white/70 text-center mb-12 font-medium">
+          Accountability without compromise
         </p>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
@@ -19,7 +19,7 @@ export default function WhyProofLocker() {
             </div>
             <h3 className="text-base md:text-lg font-bold text-white mb-2">Anonymous by Default</h3>
             <p className="text-gray-400 text-sm leading-relaxed flex-grow">
-              Lock predictions without identity exposure, but build a verifiable accountability score over time. True privacy meets public credibility.
+              Lock predictions without exposing your identity, yet build a verifiable accountability score over time. Privacy meets credibility.
             </p>
           </div>
 
@@ -33,7 +33,7 @@ export default function WhyProofLocker() {
             </div>
             <h3 className="text-base md:text-lg font-bold text-white mb-2">Public or Private Control</h3>
             <p className="text-gray-400 text-sm leading-relaxed flex-grow">
-              Share now or reveal later—full control over your hashed, on-chain commitments. You decide when the world sees your proof.
+              Share now or reveal later—full control over your on-chain commitments. You decide when the world sees your proof.
             </p>
           </div>
 
@@ -46,7 +46,7 @@ export default function WhyProofLocker() {
             </div>
             <h3 className="text-base md:text-lg font-bold text-white mb-2">Immutable On-Chain Proof</h3>
             <p className="text-gray-400 text-sm leading-relaxed flex-grow">
-              Constellation DAG ensures uneditable, eternal timestamps for true accountability and digital evidence. No backdating, no manipulation.
+              Constellation DAG ensures uneditable, eternal timestamps for true accountability. No backdating, no tampering.
             </p>
           </div>
 
@@ -59,7 +59,7 @@ export default function WhyProofLocker() {
             </div>
             <h3 className="text-base md:text-lg font-bold text-white mb-2">Shareable Proof Cards</h3>
             <p className="text-gray-400 text-sm leading-relaxed flex-grow">
-              Clean, embeddable receipts to demonstrate accuracy.
+              Clean, embeddable receipts to showcase accuracy.
             </p>
           </div>
 
@@ -72,7 +72,7 @@ export default function WhyProofLocker() {
             </div>
             <h3 className="text-base md:text-lg font-bold text-white mb-2">Business Accountability</h3>
             <p className="text-gray-400 text-sm leading-relaxed flex-grow">
-              Lock strategic plans on-chain. Verify delivery.
+              Lock strategic plans on-chain. Demonstrate delivery.
             </p>
           </div>
 
