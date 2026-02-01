@@ -27,9 +27,6 @@ export default function LandingPage() {
         {/* How It Works Section */}
         <HowItWorks />
 
-        {/* Constellation DAG Section */}
-        <ConstellationSection />
-
         {/* Accountability Score Section */}
         <AccountabilityScore />
 
@@ -90,6 +87,9 @@ export default function LandingPage() {
             </div>
           </div>
         </div>
+
+        {/* Constellation DAG Section - Final Trust Anchor */}
+        <ConstellationSection />
       </main>
 
       <Footer />
