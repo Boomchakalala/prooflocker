@@ -3,6 +3,8 @@ import BrandLogo from "@/components/BrandLogo";
 import LandingHeader from "@/components/LandingHeader";
 import LandingHero from "@/components/LandingHero";
 import HowItWorks from "@/components/HowItWorks";
+import ConstellationSection from "@/components/ConstellationSection";
+import AccountabilityScore from "@/components/AccountabilityScore";
 import WhyProofLocker from "@/components/WhyProofLocker";
 import ProofCardPreview from "@/components/ProofCardPreview";
 import DEStatusBanner from "@/components/DEStatusBanner";
@@ -15,14 +17,21 @@ export default function LandingPage() {
       <LandingHeader />
 
       {/* Main content */}
-      <main className="space-y-0">{/* Hero Section */}
+      <main className="space-y-0">
+        {/* Hero Section */}
         <LandingHero />
 
-        {/* Proof Card Preview */}
+        {/* Real Proof Section */}
         <ProofCardPreview />
 
         {/* How It Works Section */}
         <HowItWorks />
+
+        {/* Constellation DAG Section */}
+        <ConstellationSection />
+
+        {/* Accountability Score Section */}
+        <AccountabilityScore />
 
         {/* Why ProofLocker Section */}
         <WhyProofLocker />
