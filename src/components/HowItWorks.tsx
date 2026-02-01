@@ -1,63 +1,58 @@
 export default function HowItWorks() {
   return (
-    <div className="relative z-10 py-20 md:py-28 px-6 bg-[#0a0a0a]">
+    <div className="relative z-10 py-16 md:py-24 px-6 bg-[#0a0a0a]">
       <div className="max-w-6xl mx-auto">
-        <h2 className="text-3xl md:text-5xl font-bold text-center text-white mb-16" style={{ fontFamily: 'var(--font-montserrat)' }}>
+        <h2 className="text-3xl md:text-5xl font-bold text-center text-white mb-10" style={{ fontFamily: 'var(--font-montserrat)' }}>
           How It Works
         </h2>
 
-        <div className="grid md:grid-cols-3 gap-8 relative">
-          {/* Connecting line (desktop only) */}
-          <div className="hidden md:block absolute top-16 left-[16.67%] right-[16.67%] h-0.5 border-t border-dashed border-white/10 -z-10" />
-
+        <div className="grid md:grid-cols-3 gap-6 md:gap-8">
           {/* Step 1 */}
-          <div className="bg-[var(--surface)] border border-[var(--border)] hover:border-[#00bfff]/50 rounded-2xl shadow-lg transition-all p-8 flex flex-col items-center text-center card-hover">
-            <div className="w-16 h-16 bg-gradient-to-br from-[#00bfff] to-[#9370db] rounded-2xl flex items-center justify-center text-white text-2xl font-bold shadow-lg mb-6 glow-gradient">
-              1
+          <div className="bg-gradient-to-br from-purple-600/5 via-blue-600/5 to-purple-700/5 border border-white/10 hover:border-white/20 rounded-2xl shadow-lg transition-all duration-300 p-6 flex flex-col items-center text-center hover:shadow-[0_0_30px_rgba(147,112,219,0.12)]">
+            <div className="w-14 h-14 bg-gradient-to-br from-[#00bfff] to-[#9370db] rounded-xl flex items-center justify-center shadow-lg mb-4">
+              <svg className="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+              </svg>
             </div>
-            <svg className="w-12 h-12 text-[#00bfff] mb-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
-            </svg>
-            <h3 className="text-xl font-bold text-white mb-4">Declare Your Position</h3>
-            <p className="text-gray-400 text-base leading-relaxed">
-              State a prediction, goal, or milestone. Private or public—hash it anonymously for future proof. Build your reputation through accountability.
+            <span className="text-[10px] uppercase tracking-wider text-white/40 font-semibold mb-2">Step 1</span>
+            <h3 className="text-lg md:text-xl font-bold text-white mb-2.5">Write your prediction</h3>
+            <p className="text-sm text-white/65 leading-relaxed">
+              Make a claim or commitment. Public or private.
             </p>
           </div>
 
           {/* Step 2 */}
-          <div className="bg-[var(--surface)] border border-[var(--border)] hover:border-[#00bfff]/50 rounded-2xl shadow-lg transition-all p-8 flex flex-col items-center text-center card-hover">
-            <div className="w-16 h-16 bg-gradient-to-br from-[#00bfff] to-[#9370db] rounded-2xl flex items-center justify-center text-white text-2xl font-bold shadow-lg mb-6 glow-gradient">
-              2
+          <div className="bg-gradient-to-br from-purple-600/5 via-blue-600/5 to-purple-700/5 border border-white/10 hover:border-white/20 rounded-2xl shadow-lg transition-all duration-300 p-6 flex flex-col items-center text-center hover:shadow-[0_0_30px_rgba(147,112,219,0.12)]">
+            <div className="w-14 h-14 bg-gradient-to-br from-[#00bfff] to-[#9370db] rounded-xl flex items-center justify-center shadow-lg mb-4">
+              <svg className="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+              </svg>
             </div>
-            <svg className="w-12 h-12 text-[#9370db] mb-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-            </svg>
-            <h3 className="text-xl font-bold text-white mb-4">Lock On-Chain</h3>
-            <p className="text-gray-400 text-base leading-relaxed">
-              Cryptographic hash + timestamp on Constellation DAG. Low cost, permanent, no congestion—ensuring accountability from day one.
+            <span className="text-[10px] uppercase tracking-wider text-white/40 font-semibold mb-2">Step 2</span>
+            <h3 className="text-lg md:text-xl font-bold text-white mb-2.5">Lock it on-chain</h3>
+            <p className="text-sm text-white/65 leading-relaxed">
+              We hash + timestamp it on Constellation DAG.
             </p>
           </div>
 
           {/* Step 3 */}
-          <div className="bg-[var(--surface)] border border-[var(--border)] hover:border-[#00bfff]/50 rounded-2xl shadow-lg transition-all p-8 flex flex-col items-center text-center card-hover">
-            <div className="w-16 h-16 bg-gradient-to-br from-[#00bfff] to-[#9370db] rounded-2xl flex items-center justify-center text-white shadow-lg mb-6 glow-gradient">
-              <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+          <div className="bg-gradient-to-br from-purple-600/5 via-blue-600/5 to-purple-700/5 border border-white/10 hover:border-white/20 rounded-2xl shadow-lg transition-all duration-300 p-6 flex flex-col items-center text-center hover:shadow-[0_0_30px_rgba(147,112,219,0.12)]">
+            <div className="w-14 h-14 bg-gradient-to-br from-[#00bfff] to-[#9370db] rounded-xl flex items-center justify-center shadow-lg mb-4">
+              <svg className="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
             </div>
-            <svg className="w-12 h-12 text-[#00bfff] mb-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-            </svg>
-            <h3 className="text-xl font-bold text-white mb-4">Prove & Resolve</h3>
-            <p className="text-gray-400 text-base leading-relaxed">
-              Confirm outcomes later. Generate shareable cards with on-chain evidence and update your accountability score for stakeholders.
+            <span className="text-[10px] uppercase tracking-wider text-white/40 font-semibold mb-2">Step 3</span>
+            <h3 className="text-lg md:text-xl font-bold text-white mb-2.5">Resolve later</h3>
+            <p className="text-sm text-white/65 leading-relaxed">
+              Come back to mark the outcome and share the receipt.
             </p>
           </div>
         </div>
 
         {/* DAG Diagram + Text */}
-        <div className="mt-16 flex flex-col items-center">
-          <svg className="w-full max-w-[500px] h-24 mb-4" viewBox="0 0 500 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <div className="mt-10 flex flex-col items-center">
+          <svg className="w-full max-w-[400px] md:max-w-[500px] h-20 md:h-24 mb-3" viewBox="0 0 500 120" fill="none" xmlns="http://www.w3.org/2000/svg">
             {/* Nodes */}
             <circle cx="60" cy="60" r="8" fill="#00bfff" opacity="0.9" />
             <circle cx="140" cy="35" r="8" fill="#9370db" opacity="0.9" />
@@ -78,7 +73,7 @@ export default function HowItWorks() {
             <path d="M 320 60 L 410 40" stroke="#00bfff" strokeWidth="2" opacity="0.4" />
             <path d="M 320 60 L 410 80" stroke="#9370db" strokeWidth="2" opacity="0.4" />
           </svg>
-          <p className="text-sm text-gray-500 text-center max-w-xl leading-relaxed">
+          <p className="text-xs md:text-sm text-white/50 text-center max-w-xl leading-relaxed">
             Powered by <span className="text-[#9370db] font-semibold">Constellation DAG</span> — scalable, secure, built for real accountability.
           </p>
         </div>
