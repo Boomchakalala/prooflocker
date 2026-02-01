@@ -1,17 +1,17 @@
 export default function WhyProofLocker() {
   return (
-    <div className="relative z-10 py-20 md:py-28 px-6 bg-[#0a0a0a]">
+    <div className="relative z-10 py-16 md:py-24 px-6 bg-[#0a0a0a]">
       <div className="max-w-6xl mx-auto">
-        <h2 className="text-3xl md:text-5xl font-bold text-center text-white mb-4" style={{ fontFamily: 'var(--font-montserrat)' }}>
+        <h2 className="text-3xl md:text-5xl font-bold text-center text-white mb-3" style={{ fontFamily: 'var(--font-montserrat)' }}>
           Why It Matters
         </h2>
-        <p className="text-lg text-gray-400 text-center mb-16">
+        <p className="text-base md:text-lg text-gray-400 text-center mb-10">
           Accountability without compromise
         </p>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 auto-rows-fr">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {/* Anonymous by Default */}
-          <div className="bg-[var(--surface)] border border-[var(--border)] hover:border-[#9370db]/50 rounded-2xl shadow-lg transition-all p-8 flex flex-col card-hover">
+          <div className="bg-gradient-to-br from-purple-600/5 via-blue-600/5 to-purple-700/5 border border-white/10 hover:border-white/20 rounded-2xl shadow-lg transition-all duration-300 p-6 flex flex-col h-full hover:shadow-[0_0_30px_rgba(147,112,219,0.12)]">
             <div className="w-14 h-14 rounded-xl flex items-center justify-center mb-6 bg-gradient-to-br from-[#00bfff]/10 to-[#9370db]/10">
               <svg className="w-10 h-10 text-[#9370db]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />

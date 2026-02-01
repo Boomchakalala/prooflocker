@@ -17,7 +17,7 @@ export default function HowItWorks() {
             <span className="text-[10px] uppercase tracking-wider text-white/40 font-semibold mb-2">Step 1</span>
             <h3 className="text-lg md:text-xl font-bold text-white mb-2.5">Write your prediction</h3>
             <p className="text-sm text-white/65 leading-relaxed">
-              Make a claim or commitment. Public or private.
+              Make a claim or commitment. Public or private. No signup.
             </p>
           </div>
 
@@ -31,7 +31,7 @@ export default function HowItWorks() {
             <span className="text-[10px] uppercase tracking-wider text-white/40 font-semibold mb-2">Step 2</span>
             <h3 className="text-lg md:text-xl font-bold text-white mb-2.5">Lock it on-chain</h3>
             <p className="text-sm text-white/65 leading-relaxed">
-              We hash + timestamp it on Constellation DAG.
+              We hash + timestamp it on Constellation DAG in ~10 seconds.
             </p>
           </div>
 
