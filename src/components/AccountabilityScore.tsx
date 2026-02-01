@@ -25,8 +25,8 @@ export default function AccountabilityScore() {
 
         {/* Three Compact Pillars */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
-          {/* Pillar 1 */}
-          <div className="bg-gradient-to-br from-emerald-600/5 via-green-600/5 to-emerald-700/5 border border-emerald-500/10 hover:border-emerald-400/20 rounded-2xl p-6 lg:p-8 transition-all duration-300 hover:shadow-lg text-center">
+          {/* Pillar 1 - Primary Card (Most Important) */}
+          <div className="bg-gradient-to-br from-emerald-600/5 via-green-600/5 to-emerald-700/5 border border-emerald-500/15 hover:border-emerald-400/25 rounded-2xl p-6 lg:p-8 transition-all duration-300 hover:shadow-lg text-center ring-1 ring-emerald-500/5">
             <div className="flex justify-center mb-4">
               <div className="w-12 h-12 rounded-full bg-gradient-to-br from-emerald-500/20 to-green-500/20 flex items-center justify-center">
                 <svg className="w-6 h-6 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -36,7 +36,7 @@ export default function AccountabilityScore() {
             </div>
             <h3 className="text-lg md:text-xl font-bold text-white mb-3">Accuracy Rewarded</h3>
             <p className="text-sm md:text-base text-white/70">
-              Points for correct predictions. Penalties for misses. Your score reflects reality.
+              Win points for correct predictions. Lose points for misses. Your score reflects reality.
             </p>
           </div>
 
@@ -51,7 +51,7 @@ export default function AccountabilityScore() {
             </div>
             <h3 className="text-lg md:text-xl font-bold text-white mb-3">Reputation Built</h3>
             <p className="text-sm md:text-base text-white/70">
-              Long-term reliability visible to everyone. No identity needed—just results.
+              Long-term reliability visible to everyone. No identity needed — just results.
             </p>
           </div>
 
