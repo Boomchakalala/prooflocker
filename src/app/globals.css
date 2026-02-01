@@ -2,10 +2,12 @@
 
 :root {
   --background: #0a0a0a;
-  --foreground: #ededed;
+  --foreground: #ffffff;
   --border: #1f1f1f;
-  --card-bg: #141414;
-  --primary: #3b82f6;
+  --card-bg: #1e1e1e;
+  --primary: #00bfff;
+  --secondary: #9370db;
+  --purple-dark: #1a0033;
 }
 
 @theme inline {
@@ -23,15 +25,13 @@ body {
 
 /* Animated gradient background */
 .gradient-bg {
-  background: linear-gradient(
-    135deg,
-    #0a0a0a 0%,
-    #0f0f1e 25%,
-    #1a0f2e 50%,
-    #0f0f1e 75%,
+  background: radial-gradient(
+    ellipse at center,
+    #1a0033 0%,
+    #0a0a0a 50%,
     #0a0a0a 100%
   );
-  background-size: 400% 400%;
+  background-size: 200% 200%;
   animation: gradientShift 20s ease infinite;
 }
 
@@ -54,13 +54,13 @@ body {
 
 /* Glow effects */
 .glow-blue {
-  box-shadow: 0 0 20px rgba(59, 130, 246, 0.15),
-              0 0 40px rgba(59, 130, 246, 0.1);
+  box-shadow: 0 0 20px rgba(0, 191, 255, 0.2),
+              0 0 40px rgba(0, 191, 255, 0.15);
 }
 
 .glow-purple {
-  box-shadow: 0 0 20px rgba(139, 92, 246, 0.15),
-              0 0 40px rgba(139, 92, 246, 0.1);
+  box-shadow: 0 0 20px rgba(147, 112, 219, 0.2),
+              0 0 40px rgba(147, 112, 219, 0.15);
 }
 
 /* Card hover effects */
@@ -69,8 +69,8 @@ body {
 }
 
 .card-hover:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 30px rgba(59, 130, 246, 0.12);
+  transform: translateY(-2px) scale(1.03);
+  box-shadow: 0 8px 30px rgba(0, 191, 255, 0.15);
 }
 
 /* Shimmer effect for loading states */
@@ -124,7 +124,7 @@ body {
 
 /* Gradient text */
 .gradient-text {
-  background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 50%, #06b6d4 100%);
+  background: linear-gradient(135deg, #00bfff 0%, #9370db 50%, #00bfff 100%);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
