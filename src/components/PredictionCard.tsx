@@ -174,11 +174,11 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
   return (
     <Link
       href={`/proof/${prediction.publicSlug}`}
-      className={`group relative rounded-2xl p-4 md:p-5 transition-all duration-300 flex flex-col h-full shadow-lg overflow-hidden border cursor-pointer ${
+      className={`group relative rounded-2xl p-5 md:p-6 transition-all duration-300 flex flex-col h-full shadow-xl overflow-hidden border cursor-pointer ${
         prediction.outcome === 'correct'
-          ? 'border-[#22C55E]/15 hover:border-[#22C55E]/30 bg-gradient-to-br from-purple-600/10 via-blue-600/8 to-[#22C55E]/8'
-          : 'border-purple-500/15 hover:border-purple-500/30 bg-gradient-to-br from-purple-600/10 via-blue-600/8 to-purple-700/10'
-      } backdrop-blur-xl hover:-translate-y-1 hover:scale-[1.02] hover:shadow-[0_0_30px_rgba(147,112,219,0.15),0_0_15px_rgba(0,255,0,0.08)]`}
+          ? 'border-[#22C55E]/20 hover:border-[#22C55E]/40 bg-gradient-to-br from-purple-600/10 via-blue-600/8 to-[#22C55E]/10'
+          : 'border-purple-500/20 hover:border-purple-500/40 bg-gradient-to-br from-purple-600/10 via-blue-600/8 to-purple-700/10'
+      } backdrop-blur-xl hover:-translate-y-2 hover:scale-[1.02] hover:shadow-[0_20px_60px_rgba(0,0,0,0.6),0_0_50px_rgba(167,139,250,0.3),0_0_20px_rgba(0,212,255,0.2)]`}
     >
       {/* 1. HEADER ROW - Author info + badges */}
       <div className="mb-2">

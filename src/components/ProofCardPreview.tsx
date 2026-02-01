@@ -193,14 +193,24 @@ export default function ProofCardPreview() {
   };
 
   return (
-    <div className="relative z-10 py-16 md:py-24 px-6 bg-[#0a0a0a]">
-      <div className="max-w-6xl mx-auto">
-        <div className="text-center mb-12">
+    <div className="relative z-10 py-16 md:py-24 px-8 bg-gradient-to-b from-[#0a0a0a] via-[#0f0522] to-[#0a0a0a]">
+      {/* Subtle radial glow for depth */}
+      <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-20">
+        <div
+          className="w-[800px] h-[800px] rounded-full blur-3xl"
+          style={{
+            background: 'radial-gradient(circle, rgba(147, 112, 219, 0.2) 0%, transparent 70%)'
+          }}
+        />
+      </div>
+
+      <div className="max-w-6xl mx-auto relative z-10">
+        <div className="text-center mb-12 fade-in-up">
           <h2 className="text-3xl md:text-5xl font-bold text-white mb-3" style={{ fontFamily: 'var(--font-montserrat)' }}>
             Real Proof
           </h2>
-          <p className="text-base md:text-lg text-white/60 font-medium">
-            Wins, misses, and permanent accountability.
+          <p className="text-base md:text-lg text-white/70 font-medium">
+            Wins, misses, and permanent accountability
           </p>
         </div>
 
