@@ -23,96 +23,65 @@ export default function LandingHero() {
   }, []);
 
   return (
-    <div className="relative z-10 min-h-[85vh] flex items-center justify-center py-24 px-6 overflow-hidden gradient-bg">
-      {/* DAG Particle Background - reduced opacity */}
+    <div className="relative z-10 min-h-[85vh] flex items-center justify-center py-20 md:py-28 px-6 overflow-hidden gradient-bg">
+      {/* DAG Particle Background */}
       <div ref={particlesRef} className="absolute inset-0 opacity-[0.12] pointer-events-none" />
 
-      <div className="max-w-[1280px] mx-auto relative z-10 px-6 md:px-12 lg:px-16">
-        {/* Main headline */}
+      {/* Radial Glow Behind Hero Content */}
+      <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+        <div className="w-[800px] h-[800px] rounded-full bg-gradient-radial from-[#9370db]/10 via-transparent to-transparent blur-3xl" />
+      </div>
+
+      <div className="max-w-6xl mx-auto relative z-10 text-center">
+        {/* EXACT Brand Headline */}
         <h1
-          className="text-5xl md:text-7xl lg:text-[80px] font-bold text-white mb-8 tracking-tight leading-[1.1] text-shadow-blue"
+          className="text-5xl md:text-7xl lg:text-8xl font-bold mb-6 tracking-tight leading-[1.1]"
           style={{ fontFamily: 'var(--font-montserrat)' }}
         >
-          Predictions & Commitments.<br />
-          <span className="gradient-text">
-            Locked Forever.
-          </span>
+          <span className="block text-white">Predictions.</span>
+          <span className="block gradient-text">Locked forever.</span>
         </h1>
 
-        {/* Subheading */}
-        <p className="text-xl md:text-2xl text-[#E0E0E0] mb-14 max-w-3xl leading-[1.6]" style={{ fontFamily: 'var(--font-inter)' }}>
-          Declare it now. Prove it later — immutable on Constellation DAG.
+        {/* Exact Subheadline */}
+        <p className="text-xl md:text-2xl text-gray-300 mb-12 max-w-2xl mx-auto" style={{ fontFamily: 'var(--font-inter)' }}>
+          Say it now. Prove it later.
         </p>
 
-        {/* Key benefits with left-aligned bullets - tighter spacing */}
-        <div className="max-w-3xl mb-16 space-y-5">
-          <div className="flex items-start gap-4">
-            <svg className="w-7 h-7 text-[#00bfff] flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-              <line x1="2" y1="2" x2="22" y2="22" strokeLinecap="round" strokeWidth="2" />
-            </svg>
-            <p className="text-[17px] md:text-[18px] text-white leading-[1.5]">
-              <span className="font-semibold">Anonymous by default</span> — no signup, no KYC.
-            </p>
-          </div>
-
-          <div className="flex items-start gap-4">
-            <svg className="w-7 h-7 text-[#00bfff] flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-            </svg>
-            <p className="text-[17px] md:text-[18px] text-white leading-[1.5]">
-              <span className="font-semibold">Lock in ~10 seconds</span> — fast and seamless.
-            </p>
-          </div>
-
-          <div className="flex items-start gap-4">
-            <svg className="w-7 h-7 text-[#00bfff] flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
-            </svg>
-            <p className="text-[17px] md:text-[18px] text-white leading-[1.5]">
-              <span className="font-semibold">Fully on-chain</span> — DAG-powered speed & scalability.
-            </p>
-          </div>
-
-          <div className="flex items-start gap-4">
-            <svg className="w-7 h-7 text-[#00bfff] flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-            </svg>
-            <p className="text-[17px] md:text-[18px] text-white leading-[1.5]">
-              <span className="font-semibold">Immutable proof</span> — timestamped, tamper-proof, permanent.
-            </p>
-          </div>
-
-          <div className="flex items-start gap-4">
-            <svg className="w-7 h-7 text-[#00bfff] flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
-            </svg>
-            <p className="text-[17px] md:text-[18px] text-white leading-[1.5]">
-              <span className="font-semibold">Shareable cards</span> — verifiable evidence of your calls.
-            </p>
-          </div>
-        </div>
-
-        {/* CTA Buttons - cleaner spacing */}
-        <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6">
+        {/* CTA Buttons */}
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-8">
           <Link
             href="/lock"
-            className="px-10 py-5 bg-[#9370db] hover:bg-[#7d5fc7] text-white text-[18px] font-bold rounded-lg transition-all shadow-xl hover:shadow-2xl hover:scale-[1.02] flex items-center gap-3 btn-glow"
+            className="w-full sm:w-auto px-10 py-4 bg-gradient-to-r from-[#00bfff] to-[#9370db] hover:from-[#00a8e6] hover:to-[#7d5fc7] text-white text-lg font-bold rounded-xl transition-all shadow-xl hover:shadow-2xl hover:scale-[1.02] btn-glow"
           >
-            Lock My First Prediction
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-            </svg>
+            Lock my prediction
           </Link>
           <Link
             href="/app"
-            className="px-10 py-5 border-2 border-[#00bfff] hover:bg-[#00bfff]/10 text-white text-[18px] font-bold rounded-lg transition-all flex items-center gap-3"
+            className="w-full sm:w-auto px-10 py-4 border-2 border-white/20 hover:border-[#00bfff] hover:bg-white/5 text-white text-lg font-bold rounded-xl transition-all"
           >
-            Explore Locked Proofs
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-            </svg>
+            Explore predictions
           </Link>
+        </div>
+
+        {/* Small Muted Line */}
+        <p className="text-sm text-gray-500 mb-6">
+          No signup required • Takes ~10 seconds
+        </p>
+
+        {/* 4 Pill Badges */}
+        <div className="flex flex-wrap items-center justify-center gap-3 max-w-2xl mx-auto">
+          <div className="px-4 py-2 rounded-full bg-white/5 border border-white/10 text-sm text-gray-300 backdrop-blur-sm">
+            Anonymous by default
+          </div>
+          <div className="px-4 py-2 rounded-full bg-white/5 border border-white/10 text-sm text-gray-300 backdrop-blur-sm">
+            Locked on-chain
+          </div>
+          <div className="px-4 py-2 rounded-full bg-white/5 border border-white/10 text-sm text-gray-300 backdrop-blur-sm">
+            Immutable proof
+          </div>
+          <div className="px-4 py-2 rounded-full bg-white/5 border border-white/10 text-sm text-gray-300 backdrop-blur-sm">
+            Shareable cards
+          </div>
         </div>
       </div>
     </div>
