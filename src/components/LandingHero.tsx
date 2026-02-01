@@ -23,7 +23,7 @@ export default function LandingHero() {
   }, []);
 
   return (
-    <div className="relative z-10 min-h-[85vh] flex items-center justify-center py-20 md:py-28 px-6 overflow-hidden gradient-bg">
+    <div className="relative z-10 min-h-[80vh] flex items-center justify-center py-16 md:py-20 px-6 overflow-hidden gradient-bg">
       {/* DAG Particle Background */}
       <div ref={particlesRef} className="absolute inset-0 opacity-[0.12] pointer-events-none" />
 
@@ -35,7 +35,7 @@ export default function LandingHero() {
       <div className="max-w-6xl mx-auto relative z-10 text-center">
         {/* EXACT Brand Headline */}
         <h1
-          className="text-5xl md:text-7xl lg:text-8xl font-bold mb-6 tracking-tight leading-[1.1]"
+          className="text-5xl md:text-7xl lg:text-8xl font-bold mb-5 tracking-tight leading-[1.1]"
           style={{ fontFamily: 'var(--font-montserrat)' }}
         >
           <span className="block text-white">Predictions.</span>
@@ -43,12 +43,12 @@ export default function LandingHero() {
         </h1>
 
         {/* Exact Subheadline */}
-        <p className="text-2xl md:text-3xl font-semibold text-white/85 mb-14 max-w-2xl mx-auto" style={{ fontFamily: 'var(--font-inter)' }}>
+        <p className="text-2xl md:text-3xl font-semibold text-white/85 mb-10 max-w-2xl mx-auto" style={{ fontFamily: 'var(--font-inter)' }}>
           Say it now. Prove it later.
         </p>
 
         {/* CTA Buttons */}
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-8">
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-6">
           <Link
             href="/lock"
             className="w-full sm:w-auto px-10 py-4 bg-gradient-to-r from-[#00bfff] to-[#9370db] hover:from-[#00a8e6] hover:to-[#7d5fc7] text-white text-lg font-bold rounded-xl transition-all shadow-xl hover:shadow-2xl hover:scale-[1.02] btn-glow"
@@ -64,9 +64,9 @@ export default function LandingHero() {
         </div>
 
         {/* Enhanced Hero Bottom Section */}
-        <div className="mt-12 relative max-w-6xl mx-auto">
+        <div className="mt-8 relative max-w-6xl mx-auto">
           {/* Timing/Benefit Line */}
-          <p className="text-base md:text-lg text-white/75 mb-12 font-medium tracking-wide max-w-3xl mx-auto">
+          <p className="text-base md:text-lg text-white/75 mb-8 font-medium tracking-wide max-w-3xl mx-auto">
             No signup required · Lock your prediction in ~10 seconds · Full accountability.
           </p>
 

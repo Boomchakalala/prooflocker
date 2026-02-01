@@ -195,13 +195,12 @@ export default function ProofCardPreview() {
   return (
     <div className="relative z-10 py-16 md:py-24 px-6 bg-[#0a0a0a]">
       <div className="max-w-6xl mx-auto">
-        <div className="text-center mb-8">
-          <h2 className="text-3xl md:text-5xl font-bold text-white mb-4" style={{ fontFamily: 'var(--font-montserrat)' }}>
+        <div className="text-center mb-3">
+          <h2 className="text-3xl md:text-5xl font-bold text-white mb-3" style={{ fontFamily: 'var(--font-montserrat)' }}>
             Real Proof
           </h2>
-          <p className="text-xl md:text-2xl font-semibold text-white/90">
-            <span className="text-white">Wins. Misses. </span>
-            <span className="bg-gradient-to-r from-[#00bfff] to-[#9370db] bg-clip-text text-transparent">Real Accountability.</span>
+          <p className="text-base md:text-lg text-white/60 max-w-3xl mx-auto leading-relaxed mb-8">
+            Real predictions locked on-chain, resolved immutably, and scored for accountability—no edits, no excuses.
           </p>
         </div>
 
@@ -286,11 +285,6 @@ export default function ProofCardPreview() {
             />
           ))}
         </div>
-
-        {/* Explanatory text - after cards */}
-        <p className="text-base md:text-lg text-white/70 text-center max-w-3xl mx-auto leading-relaxed mt-10 tracking-normal">
-          Real predictions locked on-chain, resolved immutably, and scored for accountability—no edits, no excuses.
-        </p>
       </div>
 
       <style jsx>{`
