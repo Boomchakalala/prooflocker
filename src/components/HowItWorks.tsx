@@ -1,6 +1,6 @@
 export default function HowItWorks() {
   return (
-    <div className="relative z-10 py-20 px-6 bg-slate-950">
+    <div className="relative z-10 py-16 px-6 bg-[#0f172a]">
       <div className="max-w-6xl mx-auto">
         <h2 className="text-4xl md:text-5xl font-bold text-center text-white mb-16">
           How it works
@@ -8,7 +8,7 @@ export default function HowItWorks() {
 
         <div className="grid md:grid-cols-3 gap-8">
           {/* Step 1 */}
-          <div className="bg-slate-800 border border-gray-700 rounded-xl shadow-lg hover:shadow-xl hover:scale-105 transition-all p-8">
+          <div className="bg-[#1e293b] border border-gray-700 rounded-xl shadow-lg hover:shadow-xl hover:scale-105 transition-all p-8">
             <div className="flex items-center gap-3 mb-4">
               <div className="w-12 h-12 bg-blue-600 rounded-full flex items-center justify-center text-white text-xl font-bold shadow-md">
                 1
@@ -21,7 +21,7 @@ export default function HowItWorks() {
           </div>
 
           {/* Step 2 */}
-          <div className="bg-slate-800 border border-gray-700 rounded-xl shadow-lg hover:shadow-xl hover:scale-105 transition-all p-8">
+          <div className="bg-[#1e293b] border border-gray-700 rounded-xl shadow-lg hover:shadow-xl hover:scale-105 transition-all p-8">
             <div className="flex items-center gap-3 mb-4">
               <div className="w-12 h-12 bg-blue-600 rounded-full flex items-center justify-center text-white text-xl font-bold shadow-md">
                 2
@@ -34,7 +34,7 @@ export default function HowItWorks() {
           </div>
 
           {/* Step 3 with green checkmark */}
-          <div className="bg-slate-800 border border-gray-700 rounded-xl shadow-lg hover:shadow-xl hover:scale-105 transition-all p-8">
+          <div className="bg-[#1e293b] border border-gray-700 rounded-xl shadow-lg hover:shadow-xl hover:scale-105 transition-all p-8">
             <div className="flex items-center gap-3 mb-4">
               <div className="w-12 h-12 bg-green-600 rounded-full flex items-center justify-center text-white shadow-md">
                 <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
