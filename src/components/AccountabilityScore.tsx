@@ -6,12 +6,12 @@ export default function AccountabilityScore() {
 
       <div className="max-w-5xl mx-auto relative z-10">
         {/* Heading */}
-        <h2 className="text-3xl md:text-5xl font-bold text-center text-white mb-4" style={{ fontFamily: 'var(--font-montserrat)' }}>
+        <h2 className="text-3xl md:text-5xl font-bold text-center text-white mb-3" style={{ fontFamily: 'var(--font-montserrat)' }}>
           Track Record Over Hype
         </h2>
 
         {/* Subheading */}
-        <p className="text-base md:text-lg text-white/60 text-center max-w-2xl mx-auto mb-14">
+        <p className="text-base md:text-lg text-white/60 text-center max-w-2xl mx-auto mb-14 font-medium">
           Build verifiable credibility through consistent accuracy.
         </p>
 

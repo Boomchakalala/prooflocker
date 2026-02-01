@@ -1,11 +1,11 @@
 export default function ConstellationSection() {
   return (
-    <div className="relative z-10 py-10 md:py-12 px-6 bg-[#0a0a0a]">
+    <div className="relative z-10 py-8 md:py-10 px-6 bg-[#0a0a0a]">
       <div className="max-w-5xl mx-auto">
-        <div className="border-t border-white/5 pt-10 md:pt-12">
+        <div className="pt-0">
           {/* DAG Diagram */}
-          <div className="flex justify-center mb-5">
-            <svg className="w-full max-w-[320px] md:max-w-[400px] h-16 md:h-20 opacity-40" viewBox="0 0 500 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <div className="flex justify-center mb-4">
+            <svg className="w-full max-w-[280px] md:max-w-[360px] h-14 md:h-16 opacity-25" viewBox="0 0 500 120" fill="none" xmlns="http://www.w3.org/2000/svg">
               {/* Nodes */}
               <circle cx="60" cy="60" r="8" fill="#00bfff" opacity="0.9" />
               <circle cx="140" cy="35" r="8" fill="#9370db" opacity="0.9" />
@@ -29,13 +29,13 @@ export default function ConstellationSection() {
           </div>
 
           {/* Heading */}
-          <h3 className="text-lg md:text-xl font-semibold text-center text-white/80 mb-2" style={{ fontFamily: 'var(--font-montserrat)' }}>
+          <h3 className="text-base md:text-lg font-medium text-center text-white/50 mb-1" style={{ fontFamily: 'var(--font-montserrat)' }}>
             Built on Constellation DAG
           </h3>
 
           {/* Description */}
-          <p className="text-sm md:text-base text-white/50 text-center max-w-2xl mx-auto">
-            Timestamped, tamper-proof infrastructure for real accountability.
+          <p className="text-xs md:text-sm text-white/40 text-center max-w-2xl mx-auto">
+            Timestamped, tamper-proof infrastructure.
           </p>
         </div>
       </div>

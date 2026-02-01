@@ -2,11 +2,11 @@ export default function WhyProofLocker() {
   return (
     <div className="relative z-10 py-12 md:py-16 px-6 bg-[#0a0a0a]">
       <div className="max-w-6xl mx-auto">
-        <h2 className="text-3xl md:text-4xl font-bold text-center text-white mb-2" style={{ fontFamily: 'var(--font-montserrat)' }}>
+        <h2 className="text-3xl md:text-5xl font-bold text-center text-white mb-3" style={{ fontFamily: 'var(--font-montserrat)' }}>
           Why It Matters
         </h2>
-        <p className="text-sm md:text-base text-gray-400 text-center mb-8">
-          Accountability without compromise
+        <p className="text-base md:text-lg text-white/60 text-center mb-12 font-medium">
+          Accountability without compromise.
         </p>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
