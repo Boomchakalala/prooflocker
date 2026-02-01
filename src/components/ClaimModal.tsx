@@ -4,6 +4,7 @@ import { useState } from "react";
 import { signUpWithPassword, signInWithPassword, resendConfirmationEmail } from "@/lib/auth";
 import { getOrCreateUserId } from "@/lib/user";
 import { supabase } from "@/lib/supabase";
+import { useToast } from "@/contexts/ToastContext";
 
 interface ClaimModalProps {
   onClose: () => void;
@@ -11,6 +12,7 @@ interface ClaimModalProps {
 }
 
 export default function ClaimModal({ onClose, onSuccess }: ClaimModalProps) {
+  const { showScoreToast } = useToast();
   const [mode, setMode] = useState<"signup" | "signin">("signup");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -105,6 +107,19 @@ export default function ClaimModal({ onClose, onSuccess }: ClaimModalProps) {
         const data = await response.json();
         setClaimedCount(data.claimedCount);
         setSuccess(true);
+
+        // Show toast notification for Insight Score
+        if (data.insightPoints) {
+          const breakdown = [
+            `Migrated anonymous score to account`,
+            `Claimed ${data.claimedCount} prediction${data.claimedCount !== 1 ? 's' : ''}`
+          ];
+          showScoreToast(
+            data.insightPoints,
+            "Predictions claimed successfully!",
+            breakdown
+          );
+        }
 
         // Close modal and refresh after 2 seconds
         setTimeout(() => {
