@@ -1,4 +1,5 @@
 import { supabase } from "./supabase";
+import type { EvidenceGrade } from "./evidence-types";
 
 /**
  * Prediction data structure
@@ -32,6 +33,11 @@ export interface Prediction {
   resolutionNote?: string; // Optional note added when resolving (max 280 chars)
   resolutionUrl?: string; // Optional reference URL added when resolving
   resolvedAt?: string; // ISO timestamp when resolved by user
+  resolvedBy?: string; // User ID who resolved
+  // Evidence fields:
+  evidenceGrade?: EvidenceGrade; // Evidence quality grade (A/B/C/D)
+  evidenceSummary?: string; // Short explanation of evidence (max 280 chars)
+  resolutionFingerprint?: string; // SHA-256 hash of resolution + evidence
   // Digital Evidence metadata (when prediction locked on-chain):
   deReference?: string; // Constellation Digital Evidence reference/transaction ID
   deEventId?: string; // Digital Evidence event ID
