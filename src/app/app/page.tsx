@@ -329,15 +329,15 @@ function AppFeedContent() {
         {/* Page header */}
         <div className="flex items-center justify-between mb-5">
           <div>
-            <h1 className="text-2xl md:text-3xl font-bold text-slate-900 mb-0.5 leading-tight">Explore predictions</h1>
-            <p className="text-sm text-slate-600 leading-snug">Browse public predictions locked on-chain</p>
+            <h1 className="text-2xl md:text-3xl font-bold text-white mb-0.5 leading-tight">Explore predictions</h1>
+            <p className="text-sm text-gray-400 leading-snug">Browse public predictions locked on-chain</p>
           </div>
           {/* Refresh button - Mobile only, icon-only */}
           {activeTab === "all" && (
             <button
               onClick={syncDEStatus}
               disabled={syncing}
-              className="md:hidden h-9 w-9 glass text-slate-600 hover:text-slate-900 rounded-lg transition-all hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center flex-shrink-0"
+              className="md:hidden h-9 w-9 glass text-gray-400 hover:text-white rounded-lg transition-all hover:bg-white/10 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center flex-shrink-0"
               title="Recheck on-chain status for pending proofs"
             >
               <svg
@@ -359,14 +359,14 @@ function AppFeedContent() {
 
         {/* Tabs */}
         <div className="flex flex-col gap-2.5 mb-4">
-          {/* Tab buttons row - Premium blue style */}
+          {/* Tab buttons row - Purple theme */}
           <div className="flex items-center gap-1 p-1 glass rounded-lg w-fit">
             <button
               onClick={() => setActiveTab("all")}
               className={`px-6 py-2 text-sm font-medium rounded-md transition-all ${
                 activeTab === "all"
-                  ? "bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white shadow-[0_0_0_1px_rgba(37,99,235,0.1),0_4px_12px_rgba(37,99,235,0.15)]"
-                  : "text-slate-600 hover:text-slate-900 hover:bg-slate-50"
+                  ? "bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-500 hover:to-purple-600 text-white shadow-[0_0_20px_rgba(168,85,247,0.3)]"
+                  : "text-gray-400 hover:text-white hover:bg-white/10"
               }`}
             >
               Explore predictions
@@ -375,8 +375,8 @@ function AppFeedContent() {
               onClick={handleMyProofsClick}
               className={`px-6 py-2 text-sm font-medium rounded-md transition-all ${
                 activeTab === "my"
-                  ? "bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white shadow-[0_0_0_1px_rgba(37,99,235,0.1),0_4px_12px_rgba(37,99,235,0.15)]"
-                  : "text-slate-600 hover:text-slate-900 hover:bg-slate-50"
+                  ? "bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-500 hover:to-purple-600 text-white shadow-[0_0_20px_rgba(168,85,247,0.3)]"
+                  : "text-gray-400 hover:text-white hover:bg-white/10"
               }`}
             >
               My predictions
@@ -386,7 +386,7 @@ function AppFeedContent() {
           {/* Category Pills + Refresh row */}
           {activeTab === "all" && (
             <div className="flex flex-col gap-2.5">
-              {/* Category pills - Premium blue */}
+              {/* Category pills - Purple/Cyan theme */}
               <div className="flex items-center gap-2 overflow-x-auto no-scrollbar">
                 {categories.map((cat) => (
                   <button
@@ -394,8 +394,8 @@ function AppFeedContent() {
                     onClick={() => setSelectedCategory(cat)}
                     className={`px-3 py-1.5 text-xs font-medium rounded-full transition-all whitespace-nowrap flex-shrink-0 ${
                       selectedCategory === cat
-                        ? "bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white border border-blue-500/40 shadow-[0_0_0_1px_rgba(37,99,235,0.1),0_4px_12px_rgba(37,99,235,0.15)]"
-                        : "glass border border-slate-200 text-slate-600 hover:text-slate-900 hover:bg-slate-50 hover:border-blue-200"
+                        ? "bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-500 hover:to-purple-600 text-white border border-purple-500/40 shadow-[0_0_15px_rgba(168,85,247,0.3)]"
+                        : "glass border border-purple-500/20 text-gray-400 hover:text-white hover:bg-purple-500/10 hover:border-purple-500/40"
                     }`}
                   >
                     {cat === "all" ? "All" : cat}
