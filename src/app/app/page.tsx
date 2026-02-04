@@ -235,11 +235,11 @@ function AppFeedContent() {
 
   return (
     <div className="min-h-screen gradient-bg relative">
-      {/* Decorative gradient orbs */}
+      {/* Decorative gradient orbs - Cyberpunk colors */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-20 -left-40 w-80 h-80 bg-[#2E5CFF]/10 rounded-full blur-3xl" />
-        <div className="absolute top-40 -right-40 w-96 h-96 bg-[#5B21B6]/10 rounded-full blur-3xl" />
-        <div className="absolute bottom-20 left-1/2 w-80 h-80 bg-cyan-500/10 rounded-full blur-3xl" />
+        <div className="absolute top-20 -left-40 w-80 h-80 bg-cyan-500/10 rounded-full blur-3xl" />
+        <div className="absolute top-40 -right-40 w-96 h-96 bg-pink-500/10 rounded-full blur-3xl" />
+        <div className="absolute bottom-20 left-1/2 w-80 h-80 bg-purple-500/10 rounded-full blur-3xl" />
       </div>
 
       {/* Header */}
@@ -272,10 +272,10 @@ function AppFeedContent() {
               </div>
             )}
 
-            {/* Lock CTA */}
+            {/* Lock CTA - Cyberpunk gradient */}
             <Link
               href="/lock"
-              className="flex px-3 py-2 md:px-5 md:py-2.5 bg-gradient-to-r from-blue-600/80 to-purple-600/80 hover:from-blue-600 hover:to-purple-600 text-white text-sm md:text-base font-medium rounded-md transition-all whitespace-nowrap"
+              className="flex px-3 py-2 md:px-5 md:py-2.5 bg-gradient-to-r from-cyan-600/80 to-pink-600/80 hover:from-cyan-600 hover:to-pink-600 text-white text-sm md:text-base font-medium rounded-md transition-all whitespace-nowrap shadow-[0_0_20px_rgba(6,182,212,0.3)] hover:shadow-[0_0_30px_rgba(6,182,212,0.5)]"
             >
               Lock my prediction
             </Link>
