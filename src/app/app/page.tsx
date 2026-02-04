@@ -481,13 +481,13 @@ function AppFeedContent() {
                   )}
                 </div>
 
-                {/* Filter toggles */}
+                {/* Filter toggles - Cyberpunk neon */}
                 <button
                   onClick={() => setHighEvidenceOnly(!highEvidenceOnly)}
                   className={`flex items-center gap-1.5 px-3 py-2 text-xs font-medium rounded-lg transition-all border ${
                     highEvidenceOnly
-                      ? "bg-green-500/20 border-green-500/40 text-green-400"
-                      : "glass border-white/10 text-neutral-400 hover:text-white hover:bg-white/5"
+                      ? "bg-cyan-500/20 border-cyan-400/60 text-cyan-400 shadow-[0_0_15px_rgba(6,182,212,0.4)]"
+                      : "glass border-white/10 text-neutral-400 hover:text-white hover:bg-white/5 hover:border-cyan-500/30"
                   }`}
                 >
                   <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -500,8 +500,8 @@ function AppFeedContent() {
                   onClick={() => setResolvedOnly(!resolvedOnly)}
                   className={`flex items-center gap-1.5 px-3 py-2 text-xs font-medium rounded-lg transition-all border ${
                     resolvedOnly
-                      ? "bg-blue-500/20 border-blue-500/40 text-blue-400"
-                      : "glass border-white/10 text-neutral-400 hover:text-white hover:bg-white/5"
+                      ? "bg-pink-500/20 border-pink-400/60 text-pink-400 shadow-[0_0_15px_rgba(236,72,153,0.4)]"
+                      : "glass border-white/10 text-neutral-400 hover:text-white hover:bg-white/5 hover:border-pink-500/30"
                   }`}
                 >
                   <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
