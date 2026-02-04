@@ -8,12 +8,16 @@ interface EvidenceListProps {
   predictionId: string;
   evidenceSummary?: string;
   resolutionFingerprint?: string;
+  legacyResolutionUrl?: string; // Legacy evidence link from before evidence system
+  legacyResolutionNote?: string; // Legacy resolution note
 }
 
 export default function EvidenceList({
   predictionId,
   evidenceSummary,
   resolutionFingerprint,
+  legacyResolutionUrl,
+  legacyResolutionNote,
 }: EvidenceListProps) {
   const [evidenceItems, setEvidenceItems] = useState<EvidenceItem[]>([]);
   const [loading, setLoading] = useState(true);
