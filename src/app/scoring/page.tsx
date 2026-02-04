@@ -208,9 +208,16 @@ export default function ScoringPage() {
               {/* Lock Prediction */}
               <div className="bg-black/40 rounded-lg p-5 border border-neutral-800">
                 <div className="flex items-start justify-between mb-3">
-                  <div>
-                    <div className="text-white font-semibold mb-1">Lock a Prediction</div>
-                    <div className="text-sm text-neutral-400">Claim a prediction publicly</div>
+                  <div className="flex items-start gap-3">
+                    <div className="w-10 h-10 rounded-lg bg-neutral-800 border border-neutral-700 flex items-center justify-center flex-shrink-0">
+                      <svg className="w-5 h-5 text-neutral-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                      </svg>
+                    </div>
+                    <div>
+                      <div className="text-white font-semibold mb-1">Lock a Prediction</div>
+                      <div className="text-sm text-neutral-400">Claim a prediction publicly</div>
+                    </div>
                   </div>
                   <div className="text-right">
                     <div className="text-2xl font-bold text-white">+{POINTS_CONFIG.LOCK_BASE}</div>
@@ -225,9 +232,16 @@ export default function ScoringPage() {
               {/* Resolve Correct */}
               <div className="bg-black/40 rounded-lg p-5 border border-neutral-800">
                 <div className="flex items-start justify-between mb-3">
-                  <div>
-                    <div className="text-white font-semibold mb-1">Resolve Correct</div>
-                    <div className="text-sm text-neutral-400">Prove your prediction was right</div>
+                  <div className="flex items-start gap-3">
+                    <div className="w-10 h-10 rounded-lg bg-neutral-800 border border-neutral-700 flex items-center justify-center flex-shrink-0">
+                      <svg className="w-5 h-5 text-neutral-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      </svg>
+                    </div>
+                    <div>
+                      <div className="text-white font-semibold mb-1">Resolve Correct</div>
+                      <div className="text-sm text-neutral-400">Prove your prediction was right</div>
+                    </div>
                   </div>
                   <div className="text-right">
                     <div className="text-2xl font-bold text-white">25-75</div>
@@ -243,9 +257,16 @@ export default function ScoringPage() {
               {/* Resolve Incorrect */}
               <div className="bg-black/40 rounded-lg p-5 border border-neutral-800">
                 <div className="flex items-start justify-between mb-3">
-                  <div>
-                    <div className="text-white font-semibold mb-1">Resolve Incorrect</div>
-                    <div className="text-sm text-neutral-400">Accept you were wrong</div>
+                  <div className="flex items-start gap-3">
+                    <div className="w-10 h-10 rounded-lg bg-neutral-800 border border-neutral-700 flex items-center justify-center flex-shrink-0">
+                      <svg className="w-5 h-5 text-neutral-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                      </svg>
+                    </div>
+                    <div>
+                      <div className="text-white font-semibold mb-1">Resolve Incorrect</div>
+                      <div className="text-sm text-neutral-400">Accept you were wrong</div>
+                    </div>
                   </div>
                   <div className="text-right">
                     <div className="text-2xl font-bold text-white">{POINTS_CONFIG.RESOLVE_INCORRECT_PENALTY}</div>
@@ -291,19 +312,25 @@ export default function ScoringPage() {
             <h2 className="text-2xl font-bold text-white mb-4">Why This Matters</h2>
             <div className="space-y-3 text-neutral-300">
               <div className="flex items-start gap-3">
-                <div className="text-neutral-500 mt-1">•</div>
+                <svg className="w-5 h-5 text-neutral-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
                 <div>
                   <strong className="text-white">Transparent Reputation:</strong> Your Reliability Score shows others how accurate and rigorous you are
                 </div>
               </div>
               <div className="flex items-start gap-3">
-                <div className="text-neutral-500 mt-1">•</div>
+                <svg className="w-5 h-5 text-neutral-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
                 <div>
                   <strong className="text-white">Quality Incentivized:</strong> Better evidence and accuracy directly earn you more points
                 </div>
               </div>
               <div className="flex items-start gap-3">
-                <div className="text-neutral-500 mt-1">•</div>
+                <svg className="w-5 h-5 text-neutral-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
                 <div>
                   <strong className="text-white">Hard to Game:</strong> Diminishing returns and multi-factor scoring prevent exploitation
                 </div>
