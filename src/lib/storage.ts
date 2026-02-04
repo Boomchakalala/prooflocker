@@ -347,7 +347,9 @@ export async function updatePredictionOutcome(
   resolutionUrl?: string,
   evidenceGrade?: EvidenceGrade,
   evidenceSummary?: string,
-  resolutionFingerprint?: string
+  resolutionFingerprint?: string,
+  evidenceScore?: number,
+  evidenceScoreBreakdown?: any
 ): Promise<void> {
   // First verify the user owns this prediction and it's claimed
   const { data: prediction, error: fetchError } = await supabase
@@ -393,6 +395,12 @@ export async function updatePredictionOutcome(
     if (resolutionFingerprint) {
       updateData.resolution_fingerprint = resolutionFingerprint;
     }
+    if (evidenceScore !== undefined) {
+      updateData.evidence_score = evidenceScore;
+    }
+    if (evidenceScoreBreakdown) {
+      updateData.evidence_score_breakdown = evidenceScoreBreakdown;
+    }
   } else {
     // If setting back to pending, clear resolution data
     updateData.resolved_at = null;
@@ -402,6 +410,8 @@ export async function updatePredictionOutcome(
     updateData.evidence_grade = null;
     updateData.evidence_summary = null;
     updateData.resolution_fingerprint = null;
+    updateData.evidence_score = null;
+    updateData.evidence_score_breakdown = null;
   }
 
   // Update the outcome and resolution data

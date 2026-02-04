@@ -10,6 +10,7 @@ import {
   updateUserStats,
 } from "@/lib/evidence-storage";
 import { computeResolutionFingerprint } from "@/lib/evidence-hashing";
+import { computeEvidenceScore } from "@/lib/evidence-scoring";
 
 export async function POST(
   request: NextRequest,
