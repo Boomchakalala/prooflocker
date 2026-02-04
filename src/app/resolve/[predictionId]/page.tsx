@@ -34,6 +34,11 @@ export default function ResolvePage({ params }: Props) {
   const [newLinkUrl, setNewLinkUrl] = useState("");
   const [newLinkTitle, setNewLinkTitle] = useState("");
 
+  // Compute live evidence score
+  const evidenceScore = useMemo(() => {
+    return computeEvidenceScore(evidenceItems, evidenceSummary, false);
+  }, [evidenceItems, evidenceSummary]);
+
   // Unwrap params
   useEffect(() => {
     params.then(p => setPredictionId(p.predictionId));
@@ -329,6 +334,18 @@ export default function ResolvePage({ params }: Props) {
               </div>
               <p className="text-xs text-neutral-500 mt-2">{EvidenceGradeInfo[evidenceGrade].description}</p>
             </div>
+
+            {/* Live Evidence Score Preview */}
+            {evidenceItems.length > 0 && (
+              <div className="mb-5">
+                <EvidenceScoreMeter
+                  score={evidenceScore.score}
+                  tier={evidenceScore.tier}
+                  breakdown={evidenceScore.breakdown}
+                  variant="detailed"
+                />
+              </div>
+            )}
 
             {/* Add Evidence Buttons */}
             <div className="space-y-3 mb-4">
