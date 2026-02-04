@@ -22,6 +22,9 @@ export default function Footer() {
 
           {/* Center: Links */}
           <div className="flex items-center gap-6 text-sm">
+            <a href="/scoring" className="text-[#9CA3AF] hover:text-[#2E5CFF] transition-all">
+              Scoring
+            </a>
             <a href="/legal/privacy" className="text-[#9CA3AF] hover:text-[#2E5CFF] transition-all">
               Privacy
             </a>
