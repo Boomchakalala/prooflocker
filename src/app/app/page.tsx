@@ -14,6 +14,8 @@ import { useAuth } from "@/contexts/AuthContext";
 import { signOut } from "@/lib/auth";
 import { getPublicHandle } from "@/lib/public-handle";
 
+type SortOption = "new" | "hot" | "top" | "resolved";
+
 function AppFeedContent() {
   const { user, loading: authLoading } = useAuth();
   const searchParams = useSearchParams();
@@ -27,8 +29,26 @@ function AppFeedContent() {
   const [syncMessage, setSyncMessage] = useState<string | null>(null);
   const [showClaimModal, setShowClaimModal] = useState(false);
   const [showUserMenu, setShowUserMenu] = useState(false);
+  const [sortBy, setSortBy] = useState<SortOption>("new");
+  const [showSortMenu, setShowSortMenu] = useState(false);
+  const [highEvidenceOnly, setHighEvidenceOnly] = useState(false);
+  const [resolvedOnly, setResolvedOnly] = useState(false);
+  const [hiddenPredictions, setHiddenPredictions] = useState<Set<string>>(new Set());
+  const [showHidden, setShowHidden] = useState(false);
 
   const categories = ["all", "Crypto", "Politics", "Markets", "Tech", "Sports", "Culture", "Personal", "Other"];
+
+  // Load hidden predictions from localStorage
+  useEffect(() => {
+    try {
+      const hidden = localStorage.getItem("hiddenPredictions");
+      if (hidden) {
+        setHiddenPredictions(new Set(JSON.parse(hidden)));
+      }
+    } catch (error) {
+      console.error("Error loading hidden predictions:", error);
+    }
+  }, []);
 
   useEffect(() => {
     const id = getOrCreateUserId();
