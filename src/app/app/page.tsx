@@ -359,14 +359,14 @@ function AppFeedContent() {
 
         {/* Tabs */}
         <div className="flex flex-col gap-2.5 mb-4">
-          {/* Tab buttons row - Cyberpunk style */}
+          {/* Tab buttons row - Premium blue style */}
           <div className="flex items-center gap-1 p-1 glass rounded-lg w-fit">
             <button
               onClick={() => setActiveTab("all")}
               className={`px-6 py-2 text-sm font-medium rounded-md transition-all ${
                 activeTab === "all"
-                  ? "bg-gradient-to-r from-cyan-600/80 to-pink-600/80 hover:from-cyan-600 hover:to-pink-600 text-white shadow-[0_0_20px_rgba(6,182,212,0.3)]"
-                  : "text-neutral-400 hover:text-white hover:bg-white/5"
+                  ? "bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white shadow-[0_0_0_1px_rgba(37,99,235,0.1),0_4px_12px_rgba(37,99,235,0.15)]"
+                  : "text-slate-600 hover:text-slate-900 hover:bg-slate-50"
               }`}
             >
               Explore predictions
@@ -375,8 +375,8 @@ function AppFeedContent() {
               onClick={handleMyProofsClick}
               className={`px-6 py-2 text-sm font-medium rounded-md transition-all ${
                 activeTab === "my"
-                  ? "bg-gradient-to-r from-cyan-600/80 to-pink-600/80 hover:from-cyan-600 hover:to-pink-600 text-white shadow-[0_0_20px_rgba(6,182,212,0.3)]"
-                  : "text-neutral-400 hover:text-white hover:bg-white/5"
+                  ? "bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white shadow-[0_0_0_1px_rgba(37,99,235,0.1),0_4px_12px_rgba(37,99,235,0.15)]"
+                  : "text-slate-600 hover:text-slate-900 hover:bg-slate-50"
               }`}
             >
               My predictions
@@ -386,7 +386,7 @@ function AppFeedContent() {
           {/* Category Pills + Refresh row */}
           {activeTab === "all" && (
             <div className="flex flex-col gap-2.5">
-              {/* Category pills - Cyberpunk neon */}
+              {/* Category pills - Premium blue */}
               <div className="flex items-center gap-2 overflow-x-auto no-scrollbar">
                 {categories.map((cat) => (
                   <button
@@ -394,8 +394,8 @@ function AppFeedContent() {
                     onClick={() => setSelectedCategory(cat)}
                     className={`px-3 py-1.5 text-xs font-medium rounded-full transition-all whitespace-nowrap flex-shrink-0 ${
                       selectedCategory === cat
-                        ? "bg-gradient-to-r from-cyan-600/80 to-pink-600/80 hover:from-cyan-600 hover:to-pink-600 text-white border border-cyan-400/40 shadow-[0_0_15px_rgba(6,182,212,0.4)]"
-                        : "glass border border-white/10 text-neutral-400 hover:text-white hover:bg-white/5 hover:border-cyan-500/30"
+                        ? "bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white border border-blue-500/40 shadow-[0_0_0_1px_rgba(37,99,235,0.1),0_4px_12px_rgba(37,99,235,0.15)]"
+                        : "glass border border-slate-200 text-slate-600 hover:text-slate-900 hover:bg-slate-50 hover:border-blue-200"
                     }`}
                   >
                     {cat === "all" ? "All" : cat}
