@@ -203,16 +203,16 @@ export default function ResolvePage({ params }: Props) {
   }
 
   return (
-    <div className="min-h-screen gradient-bg text-white">
+    <div className="min-h-screen gradient-bg text-white relative">
       {/* Decorative gradient orbs */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-20 -left-40 w-80 h-80 bg-[#2E5CFF]/10 rounded-full blur-3xl" />
-        <div className="absolute top-40 -right-40 w-96 h-96 bg-[#5B21B6]/10 rounded-full blur-3xl" />
+        <div className="absolute top-20 -left-40 w-80 h-80 bg-blue-500/10 rounded-full blur-3xl" />
+        <div className="absolute top-40 -right-40 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl" />
       </div>
 
-      <div className="relative z-10 max-w-3xl mx-auto px-4 py-6 md:py-12">
+      <div className="relative z-10 max-w-4xl mx-auto px-4 py-8 md:py-12">
         {/* Header with back button */}
-        <div className="mb-6 md:mb-8">
+        <div className="mb-8">
           <button
             onClick={() => router.back()}
             className="inline-flex items-center gap-2 text-neutral-400 hover:text-white transition-colors text-sm group"
@@ -224,57 +224,81 @@ export default function ResolvePage({ params }: Props) {
           </button>
         </div>
 
-        {/* Page Header */}
-        <div className="mb-6 md:mb-8">
-          <h1 className="text-2xl md:text-3xl font-bold text-white mb-2">Resolve Prediction</h1>
-          <p className="text-sm text-neutral-400">
-            Provide evidence and mark the outcome. Your credibility score depends on evidence quality.
-          </p>
-        </div>
-
-        {/* Prediction Preview */}
+        {/* Hero Card - Prediction */}
         {prediction && (
-          <div className="glass border border-white/10 rounded-xl p-4 md:p-5 mb-6 bg-gradient-to-br from-white/5 to-transparent">
-            <p className="text-xs text-white/50 mb-2 uppercase tracking-wide">Prediction</p>
-            <p className="text-base md:text-lg text-white leading-relaxed">{prediction.text_preview || prediction.text}</p>
+          <div className="glass border border-white/10 rounded-2xl overflow-hidden mb-6 shadow-2xl">
+            <div className="p-6 md:p-8 bg-gradient-to-br from-blue-500/5 via-purple-500/5 to-transparent">
+              <div className="flex items-center gap-2 mb-3">
+                <span className="text-xs font-semibold text-blue-400 uppercase tracking-wider">Resolve Prediction</span>
+                <div className="h-px flex-1 bg-gradient-to-r from-blue-500/30 to-transparent"></div>
+              </div>
+              <h1 className="text-2xl md:text-3xl leading-relaxed text-white font-semibold break-words mb-4">
+                {prediction.text_preview || prediction.text}
+              </h1>
+              <p className="text-sm text-neutral-400">
+                Provide evidence and mark the outcome. Your credibility score depends on evidence quality.
+              </p>
+            </div>
           </div>
         )}
 
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* Section 1: Outcome */}
-          <div className="glass border border-white/10 rounded-xl p-5 md:p-6">
-            <h2 className="text-lg font-semibold text-white mb-4">Outcome</h2>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-              {["correct", "incorrect", "invalid", "pending"].map((o) => {
-                const isSelected = outcome === o;
-                const colors = {
-                  correct: "bg-green-500/15 border-green-500/50 text-green-300 ring-green-500/30",
-                  incorrect: "bg-red-500/15 border-red-500/50 text-red-300 ring-red-500/30",
-                  invalid: "bg-gray-500/15 border-gray-500/50 text-gray-300 ring-gray-500/30",
-                  pending: "bg-yellow-500/15 border-yellow-500/50 text-yellow-300 ring-yellow-500/30",
-                };
-                return (
-                  <button
-                    key={o}
-                    type="button"
-                    onClick={() => setOutcome(o as PredictionOutcome)}
-                    className={`h-12 rounded-lg border font-semibold text-sm transition-all ${
-                      isSelected
-                        ? `${colors[o as keyof typeof colors]} ring-1`
-                        : "bg-white/[0.03] border-white/[0.08] text-white/60 hover:bg-white/[0.06] hover:text-white"
-                    }`}
-                  >
-                    {o.charAt(0).toUpperCase() + o.slice(1)}
-                  </button>
-                );
-              })}
+          <div className="glass border border-white/10 rounded-2xl overflow-hidden shadow-xl">
+            <div className="p-6 md:p-8">
+              <div className="flex items-center gap-3 mb-6">
+                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-green-500/20 to-emerald-500/20 flex items-center justify-center">
+                  <svg className="w-5 h-5 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                </div>
+                <div>
+                  <h2 className="text-xl font-bold text-white">Outcome</h2>
+                  <p className="text-xs text-neutral-400">Select how the prediction turned out</p>
+                </div>
+              </div>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                {["correct", "incorrect", "invalid", "pending"].map((o) => {
+                  const isSelected = outcome === o;
+                  const colors = {
+                    correct: "bg-green-500/15 border-green-500/50 text-green-300 ring-green-500/30",
+                    incorrect: "bg-red-500/15 border-red-500/50 text-red-300 ring-red-500/30",
+                    invalid: "bg-gray-500/15 border-gray-500/50 text-gray-300 ring-gray-500/30",
+                    pending: "bg-yellow-500/15 border-yellow-500/50 text-yellow-300 ring-yellow-500/30",
+                  };
+                  return (
+                    <button
+                      key={o}
+                      type="button"
+                      onClick={() => setOutcome(o as PredictionOutcome)}
+                      className={`h-12 rounded-lg border font-semibold text-sm transition-all ${
+                        isSelected
+                          ? `${colors[o as keyof typeof colors]} ring-1`
+                          : "bg-white/[0.03] border-white/[0.08] text-white/60 hover:bg-white/[0.06] hover:text-white"
+                      }`}
+                    >
+                      {o.charAt(0).toUpperCase() + o.slice(1)}
+                    </button>
+                  );
+                })}
+              </div>
             </div>
           </div>
 
           {/* Section 2: Evidence Pack */}
-          <div className="glass border border-white/10 rounded-xl p-5 md:p-6">
-            <h2 className="text-lg font-semibold text-white mb-1">Evidence</h2>
-            <p className="text-xs text-neutral-400 mb-4">Add evidence to increase your credibility score</p>
+          <div className="glass border border-white/10 rounded-2xl overflow-hidden shadow-xl">
+            <div className="p-6 md:p-8">
+              <div className="flex items-center gap-3 mb-6">
+                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500/20 to-purple-500/20 flex items-center justify-center">
+                  <svg className="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                  </svg>
+                </div>
+                <div>
+                  <h2 className="text-xl font-bold text-white">Evidence</h2>
+                  <p className="text-xs text-neutral-400">Add evidence to increase your credibility score</p>
+                </div>
+              </div>
 
             {/* Evidence Grade Selector */}
             <div className="mb-5">
