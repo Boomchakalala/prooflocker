@@ -251,9 +251,9 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
       href={`/proof/${prediction.publicSlug}`}
       className={`group relative glass rounded-xl p-5 transition-all duration-300 flex flex-col h-full overflow-hidden border cursor-pointer hover:-translate-y-1 hover:shadow-2xl ${getCardBorderStyle()}`}
     >
-      {/* Quality indicator bar - top - Premium blue accent */}
+      {/* Quality indicator bar - top - Purple/cyan gradient for high quality */}
       {prediction.evidence_score && prediction.evidence_score >= 76 && isResolved && (
-        <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-blue-400 via-blue-500 to-blue-400" />
+        <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-purple-500 via-cyan-500 to-purple-500" />
       )}
 
       {/* 1. HEADER ROW - Author info + reliability tier + menu */}
@@ -261,14 +261,14 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
         <div className="flex items-center justify-between gap-2 mb-2">
           {/* Left: Avatar + Author info + Reliability Tier */}
           <div className="flex items-center gap-2.5 min-w-0 flex-1">
-            <div className="w-9 h-9 rounded-full bg-blue-50 flex items-center justify-center text-sm font-bold text-blue-700 border-2 border-blue-200 flex-shrink-0">
+            <div className="w-9 h-9 rounded-full bg-gradient-to-br from-purple-500/20 to-cyan-500/20 flex items-center justify-center text-sm font-bold text-purple-300 border-2 border-purple-500/40 shadow-[0_0_12px_rgba(168,85,247,0.3)] flex-shrink-0">
               {authorNumber.toString().slice(-2)}
             </div>
             <div className="flex flex-col min-w-0">
               <Link
                 href={`/user/${prediction.userId || prediction.anonId}`}
                 onClick={(e) => e.stopPropagation()}
-                className="text-sm font-semibold text-slate-900 hover:text-blue-600 transition-colors"
+                className="text-sm font-semibold text-white hover:text-cyan-400 transition-colors"
               >
                 Anon #{authorNumber}
               </Link>
