@@ -7,6 +7,8 @@ import { getDigitalEvidenceFingerprintUrl } from "@/lib/digitalEvidence";
 import { getSiteUrl, getAbsoluteUrl } from "@/lib/config";
 import OutcomeBadge from "@/components/OutcomeBadge";
 import CopyButton from "@/components/CopyButton";
+import EvidenceGradeBadge from "@/components/EvidenceGradeBadge";
+import EvidenceList from "@/components/EvidenceList";
 
 // Cache the prediction fetch to avoid duplicate queries
 const getPredictionBySlug = cache(_getPredictionBySlug);
@@ -146,8 +148,11 @@ export default async function ProofPage({ params }: Props) {
                 </h1>
               </div>
               {/* Polish: Status badge right-aligned, reduced visual weight */}
-              <div className="shrink-0 self-start sm:self-auto">
+              <div className="shrink-0 self-start sm:self-auto flex flex-col gap-2">
                 <OutcomeBadge outcome={prediction.outcome} size="sm" showLabel="long" />
+                {prediction.evidenceGrade && isResolved && (
+                  <EvidenceGradeBadge grade={prediction.evidenceGrade} size="sm" showLabel="long" />
+                )}
               </div>
             </div>
           </div>
