@@ -117,13 +117,13 @@ export default async function ProofPage({ params }: Props) {
     <div className="min-h-screen gradient-bg text-white relative pb-20 md:pb-0">
       {/* Decorative gradient orbs */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-20 -left-40 w-80 h-80 bg-[#2E5CFF]/10 rounded-full blur-3xl" />
-        <div className="absolute top-40 -right-40 w-96 h-96 bg-[#5B21B6]/10 rounded-full blur-3xl" />
+        <div className="absolute top-20 -left-40 w-80 h-80 bg-blue-500/10 rounded-full blur-3xl" />
+        <div className="absolute top-40 -right-40 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl" />
       </div>
 
-      <div className="relative z-10 max-w-3xl mx-auto px-4 py-6 md:py-12">
+      <div className="relative z-10 max-w-4xl mx-auto px-4 py-8 md:py-12">
         {/* Header with back button */}
-        <div className="mb-6 md:mb-8">
+        <div className="mb-8">
           <Link
             href="/app"
             className="inline-flex items-center gap-2 text-neutral-400 hover:text-white transition-colors text-sm group"
@@ -135,187 +135,75 @@ export default async function ProofPage({ params }: Props) {
           </Link>
         </div>
 
-        {/* Main card container */}
-        <div className="glass border border-white/10 rounded-xl md:rounded-2xl overflow-hidden">
-          {/* Prediction statement - Hero section */}
-          {/* Polish: Reduced top padding (8→6) for tighter hierarchy, aligned title+status on same row */}
-          <div className="p-4 md:p-6 border-b border-white/10 bg-gradient-to-br from-white/5 to-transparent">
-            <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between mb-3 md:mb-4">
-              <div className="min-w-0 flex-1">
-                <div className="text-xs text-neutral-500 mb-2 md:mb-3 uppercase tracking-wide">Prediction</div>
-                <h1 className="text-xl md:text-2xl leading-relaxed text-white font-medium break-words">
+        {/* Hero Card - Prediction */}
+        <div className="glass border border-white/10 rounded-2xl overflow-hidden mb-6 shadow-2xl">
+          <div className="p-6 md:p-8 bg-gradient-to-br from-blue-500/5 via-purple-500/5 to-transparent">
+            <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4 mb-4">
+              <div className="flex-1">
+                <div className="flex items-center gap-2 mb-3">
+                  <span className="text-xs font-semibold text-blue-400 uppercase tracking-wider">Prediction</span>
+                  <div className="h-px flex-1 bg-gradient-to-r from-blue-500/30 to-transparent"></div>
+                </div>
+                <h1 className="text-2xl md:text-3xl leading-relaxed text-white font-semibold break-words">
                   {prediction.text}
                 </h1>
               </div>
-              {/* Polish: Status badge right-aligned, reduced visual weight */}
-              <div className="shrink-0 self-start sm:self-auto flex flex-col gap-2">
-                <OutcomeBadge outcome={prediction.outcome} size="sm" showLabel="long" />
+
+              {/* Badges */}
+              <div className="flex md:flex-col gap-2 flex-wrap md:flex-nowrap">
+                <OutcomeBadge outcome={prediction.outcome} size="md" showLabel="long" />
                 {prediction.evidenceGrade && isResolved && (
-                  <EvidenceGradeBadge grade={prediction.evidenceGrade} size="sm" showLabel="long" />
+                  <EvidenceGradeBadge grade={prediction.evidenceGrade} size="md" showLabel="long" />
                 )}
               </div>
             </div>
-          </div>
 
-          {/* Key details section */}
-          <div className="p-4 md:p-6 border-b border-white/10">
-            <h2 className="text-base md:text-lg font-semibold text-white mb-4 md:mb-5">Proof Details</h2>
-
-            {/* Timeline - Locked and Resolved dates */}
-            <div className="space-y-3 md:space-y-0 md:grid md:grid-cols-2 md:gap-4 mb-4">
-              {/* Locked timestamp */}
-              <div className="glass border border-white/10 rounded-xl p-4 md:p-5 bg-gradient-to-br from-white/[0.03] to-transparent hover:border-white/20 transition-all">
-                <div className="flex items-start gap-3">
-                  <div className="flex-shrink-0 w-10 h-10 rounded-lg bg-[#2E5CFF]/10 flex items-center justify-center">
-                    <svg className="w-5 h-5 text-[#2E5CFF]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-                    </svg>
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <div className="text-xs text-neutral-400 uppercase tracking-wider mb-1.5">Locked On</div>
-                    <div className="text-white font-semibold text-sm md:text-base">
-                      {lockedDate.toLocaleDateString("en-US", {
-                        month: "short",
-                        day: "numeric",
-                        year: "numeric",
-                        timeZone: "UTC",
-                      })}{" "}
-                      <span className="text-neutral-400 font-normal font-mono text-xs md:text-sm">
-                        {lockedDate.toLocaleTimeString("en-US", {
-                          hour: "2-digit",
-                          minute: "2-digit",
-                          timeZone: "UTC",
-                        })} UTC
-                      </span>
-                    </div>
-                  </div>
+            {/* Quick Info */}
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mt-6">
+              <div className="p-3 bg-white/5 rounded-lg border border-white/10">
+                <div className="text-xs text-neutral-400 mb-1">Locked</div>
+                <div className="text-sm font-medium text-white">
+                  {lockedDate.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}
                 </div>
               </div>
 
-              {/* Resolved timestamp */}
-              {isResolved && prediction.resolvedAt ? (
-                <div className="glass border border-white/10 rounded-xl p-4 md:p-5 bg-gradient-to-br from-white/[0.03] to-transparent hover:border-white/20 transition-all">
-                  <div className="flex items-start gap-3">
-                    <div className="flex-shrink-0 w-10 h-10 rounded-lg bg-green-500/10 flex items-center justify-center">
-                      <svg className="w-5 h-5 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                      </svg>
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <div className="text-xs text-neutral-400 uppercase tracking-wider mb-1.5">Resolved On</div>
-                      <div className="text-white font-semibold text-sm md:text-base">
-                        {new Date(prediction.resolvedAt).toLocaleDateString("en-US", {
-                          month: "short",
-                          day: "numeric",
-                          year: "numeric",
-                          timeZone: "UTC",
-                        })}{" "}
-                        <span className="text-neutral-400 font-normal font-mono text-xs md:text-sm">
-                          {new Date(prediction.resolvedAt).toLocaleTimeString("en-US", {
-                            hour: "2-digit",
-                            minute: "2-digit",
-                            timeZone: "UTC",
-                          })} UTC
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              ) : (
-                <div className="glass border border-white/10 rounded-xl p-4 md:p-5 bg-gradient-to-br from-white/[0.02] to-transparent opacity-50">
-                  <div className="flex items-start gap-3">
-                    <div className="flex-shrink-0 w-10 h-10 rounded-lg bg-neutral-500/10 flex items-center justify-center">
-                      <svg className="w-5 h-5 text-neutral-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                      </svg>
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <div className="text-xs text-neutral-400 uppercase tracking-wider mb-1.5">Resolved On</div>
-                      <div className="text-neutral-500 font-medium text-base italic">
-                        Not resolved yet
-                      </div>
-                    </div>
+              {isResolved && prediction.resolvedAt && (
+                <div className="p-3 bg-white/5 rounded-lg border border-white/10">
+                  <div className="text-xs text-neutral-400 mb-1">Resolved</div>
+                  <div className="text-sm font-medium text-white">
+                    {new Date(prediction.resolvedAt).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}
                   </div>
                 </div>
               )}
-            </div>
 
-            {/* Network and Author */}
-            <div className="space-y-3 md:space-y-0 md:grid md:grid-cols-2 md:gap-4">
-              {/* Network status */}
-              <div className="glass border border-white/10 rounded-xl p-4 md:p-5 bg-gradient-to-br from-white/[0.03] to-transparent hover:border-white/20 transition-all">
-                <div className="flex items-start gap-3">
-                  <div className="flex-shrink-0 w-10 h-10 rounded-lg bg-[#5B21B6]/10 flex items-center justify-center">
-                    <svg className="w-5 h-5 text-[#5B21B6]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" />
-                    </svg>
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center justify-between mb-1.5">
-                      <div className="text-xs text-neutral-400 uppercase tracking-wider">Network</div>
-                      <div className={`flex items-center gap-1.5 px-2 py-0.5 rounded-full ${
-                        prediction.onChainStatus === "confirmed"
-                          ? "bg-green-500/15"
-                          : "bg-yellow-500/15"
-                      }`}>
-                        <div className={`w-1.5 h-1.5 rounded-full ${
-                          prediction.onChainStatus === "confirmed"
-                            ? "bg-green-400"
-                            : "bg-yellow-400 animate-pulse"
-                        }`} />
-                        <span className={`text-[10px] font-semibold uppercase tracking-wide ${
-                          prediction.onChainStatus === "confirmed"
-                            ? "text-green-400"
-                            : "text-yellow-400"
-                        }`}>
-                          {prediction.onChainStatus === "confirmed" ? "Confirmed" : "Pending"}
-                        </span>
-                      </div>
-                    </div>
-                    <div className="text-white font-semibold text-base md:text-lg">
-                      Constellation DAG
-                    </div>
-                  </div>
-                </div>
+              <div className="p-3 bg-white/5 rounded-lg border border-white/10">
+                <div className="text-xs text-neutral-400 mb-1">Network</div>
+                <div className="text-sm font-medium text-white">Constellation</div>
               </div>
 
-              {/* Author */}
-              <div className="glass border border-white/10 rounded-xl p-4 md:p-5 bg-gradient-to-br from-white/[0.03] to-transparent hover:border-white/20 transition-all">
-                <div className="flex items-start gap-3">
-                  <div className="flex-shrink-0 w-10 h-10 rounded-lg bg-gradient-to-br from-cyan-500 to-blue-600 flex items-center justify-center text-white text-sm font-bold shadow-lg shadow-cyan-500/20">
-                    {prediction.authorNumber.toString().slice(-2)}
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center justify-between mb-1.5">
-                      <div className="text-xs text-neutral-400 uppercase tracking-wider">Author</div>
-                      {prediction.userId && (
-                        <div className="flex items-center gap-1 px-2 py-0.5 rounded-full bg-cyan-500/15">
-                          <svg className="w-3 h-3 text-cyan-400" fill="currentColor" viewBox="0 0 20 20">
-                            <path fillRule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                          </svg>
-                          <span className="text-[10px] text-cyan-400 font-semibold uppercase tracking-wide">Claimed</span>
-                        </div>
-                      )}
-                    </div>
-                    <div className="text-white font-semibold text-base md:text-lg">
-                      Anon #{prediction.authorNumber}
-                    </div>
-                  </div>
-                </div>
+              <div className="p-3 bg-white/5 rounded-lg border border-white/10">
+                <div className="text-xs text-neutral-400 mb-1">Author</div>
+                <div className="text-sm font-medium text-white">Anon #{prediction.authorNumber}</div>
               </div>
             </div>
           </div>
+        </div>
 
-          {/* Resolution & Evidence Section - Unified */}
-          {isResolved && prediction.resolvedAt && (
-            <div className="p-4 md:p-6 border-b border-white/10">
-              <h2 className="text-base md:text-lg font-semibold text-white mb-1 flex items-center gap-2">
-                <svg className="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                </svg>
-                Resolution & Evidence
-              </h2>
-              <p className="text-xs text-neutral-400 mb-4">How this prediction was resolved</p>
+        {/* Resolution & Evidence */}
+        {isResolved && prediction.resolvedAt && (
+          <div className="glass border border-white/10 rounded-2xl overflow-hidden mb-6 shadow-xl">
+            <div className="p-6 md:p-8">
+              <div className="flex items-center gap-3 mb-6">
+                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500/20 to-purple-500/20 flex items-center justify-center">
+                  <svg className="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                  </svg>
+                </div>
+                <div>
+                  <h2 className="text-xl font-bold text-white">Resolution & Evidence</h2>
+                  <p className="text-xs text-neutral-400">How this prediction was verified</p>
+                </div>
+              </div>
 
               <EvidenceList
                 predictionId={prediction.id}
@@ -325,182 +213,188 @@ export default async function ProofPage({ params }: Props) {
                 legacyResolutionNote={prediction.resolutionNote}
               />
             </div>
-          )}
+          </div>
+        )}
 
-          {/* On-Chain Proof Section 1: Prediction Locked */}
-          {/* Polish: Added step label, unified icon system (all outlined), consistent spacing */}
+        {/* On-Chain Proof Timeline */}
+        <div className="space-y-6">
+          {/* Step 1: Prediction Locked */}
           {prediction.onChainStatus === "confirmed" && prediction.deReference && (
-            <div className="p-4 md:p-6 border-b border-white/10">
-              <div className="text-[10px] text-[#5B21B6] font-medium uppercase tracking-wider mb-1">Step 1</div>
-              <h2 className="text-base font-semibold text-white mb-1">Prediction Locked</h2>
-              <p className="text-xs text-neutral-400 mb-4 md:mb-5">This prediction was permanently locked on the blockchain</p>
-
-              {/* Trust badges - Polish: Unified icon system, consistent size/stroke */}
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-3 mb-3">
-                <div className="glass border border-purple-500/20 rounded-lg p-2.5 md:p-3 text-center">
-                  <svg className="w-4 h-4 md:w-5 md:h-5 text-[#5B21B6] mx-auto mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-                  </svg>
-                  <div className="text-[10px] text-neutral-300 font-medium">Immutable</div>
-                </div>
-                <div className="glass border border-purple-500/20 rounded-lg p-2.5 md:p-3 text-center">
-                  <svg className="w-4 h-4 md:w-5 md:h-5 text-[#5B21B6] mx-auto mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
-                  <div className="text-[10px] text-neutral-300 font-medium">Timestamped</div>
-                </div>
-                <div className="glass border border-purple-500/20 rounded-lg p-2.5 md:p-3 text-center">
-                  <svg className="w-4 h-4 md:w-5 md:h-5 text-[#5B21B6] mx-auto mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
-                  </svg>
-                  <div className="text-[10px] text-neutral-300 font-medium">SHA-256</div>
-                </div>
-                <div className="glass border border-purple-500/20 rounded-lg p-2.5 md:p-3 text-center">
-                  <svg className="w-4 h-4 md:w-5 md:h-5 text-[#5B21B6] mx-auto mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
-                  <div className="text-[10px] text-neutral-300 font-medium">Verifiable</div>
-                </div>
-              </div>
-
-              {/* SHA-256 explanation - UX polish: explains the cryptographic guarantee without cluttering the UI with raw hashes */}
-              <p className="text-[10px] text-neutral-500 mb-4 md:mb-5 leading-relaxed">
-                Prediction content was hashed using SHA-256 before being locked on-chain.
-              </p>
-
-              {/* Lock transaction details */}
-              <div className="space-y-2.5 md:space-y-3">
-                {/* Lock timestamp */}
-                <div className="glass border border-white/10 rounded-lg p-3 md:p-4">
-                  <div className="text-[10px] text-neutral-500 uppercase tracking-wider mb-2">Lock Timestamp</div>
-                  <div className="text-xs md:text-sm text-neutral-300">
-                    {lockedDate.toLocaleString("en-US", {
-                      month: "long",
-                      day: "numeric",
-                      year: "numeric",
-                      hour: "2-digit",
-                      minute: "2-digit",
-                      timeZone: "UTC",
-                    })} UTC
+            <div className="glass border border-white/10 rounded-2xl overflow-hidden shadow-xl">
+              <div className="p-6 md:p-8">
+                {/* Step Header */}
+                <div className="flex items-center gap-4 mb-6">
+                  <div className="flex items-center justify-center w-12 h-12 rounded-xl bg-gradient-to-br from-purple-500/20 to-blue-500/20 border border-purple-500/30">
+                    <span className="text-lg font-bold text-purple-400">1</span>
+                  </div>
+                  <div className="flex-1">
+                    <h3 className="text-xl font-bold text-white mb-1">Prediction Locked</h3>
+                    <p className="text-sm text-neutral-400">Permanently timestamped on-chain</p>
+                  </div>
+                  <div className="px-3 py-1 rounded-full bg-purple-500/10 border border-purple-500/30">
+                    <span className="text-xs font-semibold text-purple-400">Verified</span>
                   </div>
                 </div>
 
-                {/* Lock transaction hash */}
-                <div className="glass border border-white/10 rounded-lg p-3 md:p-4">
-                  <div className="text-[10px] text-neutral-500 uppercase tracking-wider mb-2">Lock Transaction Hash</div>
-                  <div className="flex items-start gap-2">
-                    {explorerUrl ? (
-                      <a
-                        href={explorerUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-[11px] md:text-xs text-cyan-400 hover:text-cyan-300 font-mono break-all underline flex-1 min-w-0"
-                      >
-                        {prediction.deReference}
-                      </a>
-                    ) : (
-                      <div className="text-[11px] md:text-xs text-neutral-300 font-mono break-all flex-1 min-w-0">
-                        {prediction.deReference}
-                      </div>
-                    )}
-                    <CopyButton text={prediction.deReference || ""} iconSize="sm" />
+                {/* Trust Features */}
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
+                  <div className="p-4 bg-white/5 rounded-xl border border-white/10 text-center">
+                    <svg className="w-6 h-6 text-purple-400 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                    </svg>
+                    <div className="text-xs font-medium text-white">Immutable</div>
+                  </div>
+                  <div className="p-4 bg-white/5 rounded-xl border border-white/10 text-center">
+                    <svg className="w-6 h-6 text-purple-400 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    <div className="text-xs font-medium text-white">Timestamped</div>
+                  </div>
+                  <div className="p-4 bg-white/5 rounded-xl border border-white/10 text-center">
+                    <svg className="w-6 h-6 text-purple-400 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                    </svg>
+                    <div className="text-xs font-medium text-white">SHA-256</div>
+                  </div>
+                  <div className="p-4 bg-white/5 rounded-xl border border-white/10 text-center">
+                    <svg className="w-6 h-6 text-purple-400 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    <div className="text-xs font-medium text-white">Verifiable</div>
+                  </div>
+                </div>
+
+                {/* Transaction Details */}
+                <div className="space-y-3">
+                  <div className="p-4 bg-white/5 rounded-xl border border-white/10">
+                    <div className="text-xs text-neutral-400 mb-2">Timestamp</div>
+                    <div className="text-sm text-white font-medium">
+                      {lockedDate.toLocaleString("en-US", {
+                        month: "long",
+                        day: "numeric",
+                        year: "numeric",
+                        hour: "2-digit",
+                        minute: "2-digit",
+                        timeZone: "UTC",
+                      })} UTC
+                    </div>
+                  </div>
+
+                  <div className="p-4 bg-white/5 rounded-xl border border-white/10">
+                    <div className="text-xs text-neutral-400 mb-2">Transaction Hash</div>
+                    <div className="flex items-center gap-2">
+                      {explorerUrl ? (
+                        <a
+                          href={explorerUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-xs text-blue-400 hover:text-blue-300 font-mono break-all underline flex-1"
+                        >
+                          {prediction.deReference}
+                        </a>
+                      ) : (
+                        <div className="text-xs text-neutral-300 font-mono break-all flex-1">
+                          {prediction.deReference}
+                        </div>
+                      )}
+                      <CopyButton text={prediction.deReference || ""} iconSize="sm" />
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
           )}
 
-          {/* On-Chain Proof Section 2: Prediction Resolved (only if resolved) */}
-          {/* Polish: Added step label, unified icon system matching Step 1, reduced gap from previous section */}
+          {/* Step 2: Prediction Resolved */}
           {isResolved && prediction.resolvedAt && (
-            <div className="p-4 md:p-6">
-              <div className="text-[10px] text-green-400 font-medium uppercase tracking-wider mb-1">Step 2</div>
-              <h2 className="text-base font-semibold text-white mb-1">Prediction Resolved</h2>
-              <p className="text-xs text-neutral-400 mb-4 md:mb-5">This prediction outcome was permanently recorded on the blockchain</p>
-
-              {/* Resolved trust badges - Polish: Unified with Step 1 layout */}
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-2 md:gap-3 mb-4 md:mb-5">
-                <div className={`glass rounded-lg p-2.5 md:p-3 text-center ${
-                  prediction.outcome === "correct"
-                    ? "border border-green-500/20"
-                    : "border border-red-500/20"
-                }`}>
-                  <svg className={`w-4 h-4 md:w-5 md:h-5 mx-auto mb-1 ${
-                    prediction.outcome === "correct" ? "text-green-400" : "text-red-400"
-                  }`} fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
-                    {prediction.outcome === "correct" ? (
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    ) : (
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    )}
-                  </svg>
-                  <div className="text-[10px] text-neutral-300 font-medium">{prediction.outcome === "correct" ? "Correct" : "Incorrect"}</div>
-                </div>
-                <div className="glass border border-green-500/20 rounded-lg p-2.5 md:p-3 text-center">
-                  <svg className="w-4 h-4 md:w-5 md:h-5 text-green-400 mx-auto mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
-                  <div className="text-[10px] text-neutral-300 font-medium">Timestamped</div>
-                </div>
-                <div className="glass border border-green-500/20 rounded-lg p-2.5 md:p-3 text-center">
-                  <svg className="w-4 h-4 md:w-5 md:h-5 text-green-400 mx-auto mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
-                  <div className="text-[10px] text-neutral-300 font-medium">Immutable</div>
-                </div>
-              </div>
-
-              {/* Resolution details */}
-              <div className="space-y-2.5 md:space-y-3">
-                {/* Resolved timestamp */}
-                <div className="glass border border-white/10 rounded-lg p-3 md:p-4">
-                  <div className="text-[10px] text-neutral-500 uppercase tracking-wider mb-2">Resolution Timestamp</div>
-                  <div className="text-xs md:text-sm text-neutral-300">
-                    {new Date(prediction.resolvedAt).toLocaleString("en-US", {
-                      month: "long",
-                      day: "numeric",
-                      year: "numeric",
-                      hour: "2-digit",
-                      minute: "2-digit",
-                      timeZone: "UTC",
-                    })} UTC
+            <div className="glass border border-white/10 rounded-2xl overflow-hidden shadow-xl">
+              <div className="p-6 md:p-8">
+                {/* Step Header */}
+                <div className="flex items-center gap-4 mb-6">
+                  <div className="flex items-center justify-center w-12 h-12 rounded-xl bg-gradient-to-br from-green-500/20 to-emerald-500/20 border border-green-500/30">
+                    <span className="text-lg font-bold text-green-400">2</span>
+                  </div>
+                  <div className="flex-1">
+                    <h3 className="text-xl font-bold text-white mb-1">Prediction Resolved</h3>
+                    <p className="text-sm text-neutral-400">Outcome recorded on-chain</p>
+                  </div>
+                  <div className="px-3 py-1 rounded-full bg-green-500/10 border border-green-500/30">
+                    <span className="text-xs font-semibold text-green-400">Verified</span>
                   </div>
                 </div>
 
-                {/* Resolution transaction hash (if available) */}
-                {prediction.resolutionDeReference && (
-                  <div className="glass border border-white/10 rounded-lg p-3 md:p-4">
-                    <div className="text-[10px] text-neutral-500 uppercase tracking-wider mb-2">Resolution Transaction Hash</div>
-                    <div className="flex items-start gap-2">
-                      {resolutionExplorerUrl ? (
-                        <a
-                          href={resolutionExplorerUrl}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-[11px] md:text-xs text-cyan-400 hover:text-cyan-300 font-mono break-all underline flex-1 min-w-0"
-                        >
-                          {prediction.resolutionDeReference}
-                        </a>
+                {/* Resolution Features */}
+                <div className="grid grid-cols-3 gap-3 mb-6">
+                  <div className={`p-4 bg-white/5 rounded-xl border text-center ${
+                    prediction.outcome === "correct"
+                      ? "border-green-500/30 bg-green-500/5"
+                      : "border-red-500/30 bg-red-500/5"
+                  }`}>
+                    <svg className={`w-6 h-6 mx-auto mb-2 ${
+                      prediction.outcome === "correct" ? "text-green-400" : "text-red-400"
+                    }`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      {prediction.outcome === "correct" ? (
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                       ) : (
-                        <div className="text-[11px] md:text-xs text-neutral-300 font-mono break-all flex-1 min-w-0">
-                          {prediction.resolutionDeReference}
-                        </div>
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
                       )}
-                      <CopyButton text={prediction.resolutionDeReference} iconSize="sm" />
+                    </svg>
+                    <div className="text-xs font-medium text-white">
+                      {prediction.outcome === "correct" ? "Correct" : "Incorrect"}
                     </div>
                   </div>
-                )}
-
-                {/* Outcome */}
-                <div className="glass border border-white/10 rounded-lg p-3 md:p-4">
-                  <div className="text-[10px] text-neutral-500 uppercase tracking-wider mb-2">Final Outcome</div>
-                  <div className={`inline-flex items-center gap-2 px-2.5 py-1 rounded-lg font-medium text-xs ${
-                    prediction.outcome === "correct"
-                      ? "bg-green-500/10 text-green-400 border border-green-500/30"
-                      : "bg-red-500/10 text-red-400 border border-red-500/30"
-                  }`}>
-                    {prediction.outcome === "correct" ? "Correct" : "Incorrect"}
+                  <div className="p-4 bg-white/5 rounded-xl border border-white/10 text-center">
+                    <svg className="w-6 h-6 text-green-400 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    <div className="text-xs font-medium text-white">Timestamped</div>
                   </div>
+                  <div className="p-4 bg-white/5 rounded-xl border border-white/10 text-center">
+                    <svg className="w-6 h-6 text-green-400 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    <div className="text-xs font-medium text-white">Immutable</div>
+                  </div>
+                </div>
+
+                {/* Transaction Details */}
+                <div className="space-y-3">
+                  <div className="p-4 bg-white/5 rounded-xl border border-white/10">
+                    <div className="text-xs text-neutral-400 mb-2">Resolution Timestamp</div>
+                    <div className="text-sm text-white font-medium">
+                      {new Date(prediction.resolvedAt).toLocaleString("en-US", {
+                        month: "long",
+                        day: "numeric",
+                        year: "numeric",
+                        hour: "2-digit",
+                        minute: "2-digit",
+                        timeZone: "UTC",
+                      })} UTC
+                    </div>
+                  </div>
+
+                  {prediction.resolutionDeReference && (
+                    <div className="p-4 bg-white/5 rounded-xl border border-white/10">
+                      <div className="text-xs text-neutral-400 mb-2">Resolution Transaction Hash</div>
+                      <div className="flex items-center gap-2">
+                        {resolutionExplorerUrl ? (
+                          <a
+                            href={resolutionExplorerUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-xs text-blue-400 hover:text-blue-300 font-mono break-all underline flex-1"
+                          >
+                            {prediction.resolutionDeReference}
+                          </a>
+                        ) : (
+                          <div className="text-xs text-neutral-300 font-mono break-all flex-1">
+                            {prediction.resolutionDeReference}
+                          </div>
+                        )}
+                        <CopyButton text={prediction.resolutionDeReference} iconSize="sm" />
+                      </div>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
@@ -508,14 +402,13 @@ export default async function ProofPage({ params }: Props) {
         </div>
 
         {/* Footer */}
-        {/* Polish: Consistent spacing (mt-8 matches 16px unit system) */}
-        <div className="mt-6 md:mt-8 text-center pb-safe">
-          <p className="text-xs text-neutral-500 mb-3 md:mb-4">
+        <div className="mt-12 text-center">
+          <p className="text-xs text-neutral-500 mb-4">
             This prediction is immutable and cannot be edited
           </p>
           <Link
             href="/app"
-            className="inline-flex items-center gap-2 px-5 md:px-6 py-2.5 md:py-3 bg-gradient-to-r from-blue-600/80 to-purple-600/80 hover:from-blue-600 hover:to-purple-600 text-white font-medium rounded-lg transition-all text-sm"
+            className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white font-semibold rounded-xl transition-all shadow-lg hover:shadow-xl"
           >
             Explore more predictions
           </Link>
