@@ -385,9 +385,9 @@ function AppFeedContent() {
 
           {/* Category Pills + Refresh row */}
           {activeTab === "all" && (
-            <div className="flex items-center gap-2.5">
+            <div className="flex flex-col gap-2.5">
               {/* Category pills */}
-              <div className="flex items-center gap-2 overflow-x-auto no-scrollbar flex-1">
+              <div className="flex items-center gap-2 overflow-x-auto no-scrollbar">
                 {categories.map((cat) => (
                   <button
                     key={cat}
@@ -403,28 +403,136 @@ function AppFeedContent() {
                 ))}
               </div>
 
-              {/* Refresh button - Desktop only */}
-              <button
-                onClick={syncDEStatus}
-                disabled={syncing}
-                className="hidden md:flex px-3 py-2 glass text-sm font-medium text-neutral-400 hover:text-white rounded-lg transition-all hover:bg-white/5 disabled:opacity-50 disabled:cursor-not-allowed items-center gap-1.5 flex-shrink-0"
-                title="Recheck on-chain status for pending proofs"
-              >
-                <svg
-                  className={`w-3.5 h-3.5 ${syncing ? "animate-spin" : ""}`}
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
+              {/* Sort and Filter Controls */}
+              <div className="flex items-center gap-2 flex-wrap">
+                {/* Sort by dropdown */}
+                <div className="relative">
+                  <button
+                    onClick={() => setShowSortMenu(!showSortMenu)}
+                    className="flex items-center gap-1.5 px-3 py-2 glass border border-white/10 text-sm font-medium text-neutral-300 hover:text-white rounded-lg transition-all hover:bg-white/5"
+                  >
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4h13M3 8h9m-9 4h6m4 0l4-4m0 0l4 4m-4-4v12" />
+                    </svg>
+                    <span>
+                      {sortBy === "new" && "New"}
+                      {sortBy === "hot" && "Hot"}
+                      {sortBy === "top" && "Top"}
+                      {sortBy === "resolved" && "Resolved"}
+                    </span>
+                    <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                    </svg>
+                  </button>
+
+                  {showSortMenu && (
+                    <>
+                      <div
+                        className="fixed inset-0 z-40"
+                        onClick={() => setShowSortMenu(false)}
+                      />
+                      <div className="absolute left-0 top-full mt-1 w-40 glass border border-white/20 rounded-lg shadow-xl z-50 py-1">
+                        <button
+                          onClick={() => { setSortBy("new"); setShowSortMenu(false); }}
+                          className={`w-full px-3 py-2 text-left text-sm transition-all flex items-center gap-2 ${
+                            sortBy === "new" ? "text-[#2E5CFF] bg-white/5" : "text-neutral-300 hover:text-white hover:bg-white/5"
+                          }`}
+                        >
+                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                          </svg>
+                          New
+                        </button>
+                        <button
+                          onClick={() => { setSortBy("hot"); setShowSortMenu(false); }}
+                          className={`w-full px-3 py-2 text-left text-sm transition-all flex items-center gap-2 ${
+                            sortBy === "hot" ? "text-[#2E5CFF] bg-white/5" : "text-neutral-300 hover:text-white hover:bg-white/5"
+                          }`}
+                        >
+                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.656 7.343A7.975 7.975 0 0120 13a7.975 7.975 0 01-2.343 5.657z" />
+                          </svg>
+                          Hot
+                        </button>
+                        <button
+                          onClick={() => { setSortBy("top"); setShowSortMenu(false); }}
+                          className={`w-full px-3 py-2 text-left text-sm transition-all flex items-center gap-2 ${
+                            sortBy === "top" ? "text-[#2E5CFF] bg-white/5" : "text-neutral-300 hover:text-white hover:bg-white/5"
+                          }`}
+                        >
+                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+                          </svg>
+                          Top
+                        </button>
+                        <button
+                          onClick={() => { setSortBy("resolved"); setShowSortMenu(false); }}
+                          className={`w-full px-3 py-2 text-left text-sm transition-all flex items-center gap-2 ${
+                            sortBy === "resolved" ? "text-[#2E5CFF] bg-white/5" : "text-neutral-300 hover:text-white hover:bg-white/5"
+                          }`}
+                        >
+                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                          </svg>
+                          Resolved
+                        </button>
+                      </div>
+                    </>
+                  )}
+                </div>
+
+                {/* Filter toggles */}
+                <button
+                  onClick={() => setHighEvidenceOnly(!highEvidenceOnly)}
+                  className={`flex items-center gap-1.5 px-3 py-2 text-xs font-medium rounded-lg transition-all border ${
+                    highEvidenceOnly
+                      ? "bg-green-500/20 border-green-500/40 text-green-400"
+                      : "glass border-white/10 text-neutral-400 hover:text-white hover:bg-white/5"
+                  }`}
                 >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
-                  />
-                </svg>
-                <span>{syncing ? "Checking..." : "Refresh"}</span>
-              </button>
+                  <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                  </svg>
+                  High Evidence
+                </button>
+
+                <button
+                  onClick={() => setResolvedOnly(!resolvedOnly)}
+                  className={`flex items-center gap-1.5 px-3 py-2 text-xs font-medium rounded-lg transition-all border ${
+                    resolvedOnly
+                      ? "bg-blue-500/20 border-blue-500/40 text-blue-400"
+                      : "glass border-white/10 text-neutral-400 hover:text-white hover:bg-white/5"
+                  }`}
+                >
+                  <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                  Resolved Only
+                </button>
+
+                {/* Refresh button - Desktop */}
+                <button
+                  onClick={syncDEStatus}
+                  disabled={syncing}
+                  className="hidden md:flex px-3 py-2 glass text-sm font-medium text-neutral-400 hover:text-white rounded-lg transition-all hover:bg-white/5 disabled:opacity-50 disabled:cursor-not-allowed items-center gap-1.5 border border-white/10 ml-auto"
+                  title="Recheck on-chain status for pending proofs"
+                >
+                  <svg
+                    className={`w-3.5 h-3.5 ${syncing ? "animate-spin" : ""}`}
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+                    />
+                  </svg>
+                  <span>{syncing ? "Checking..." : "Refresh"}</span>
+                </button>
+              </div>
             </div>
           )}
         </div>
@@ -433,6 +541,32 @@ function AppFeedContent() {
         {syncMessage && (
           <div className="mb-4 p-3 glass rounded-lg border border-blue-500/20 glow-blue fade-in">
             <p className="text-sm text-white">{syncMessage}</p>
+          </div>
+        )}
+
+        {/* Hidden predictions banner */}
+        {!showHidden && hiddenCount > 0 && activeTab === "all" && (
+          <div className="mb-4 p-3 glass rounded-lg border border-white/10 flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <svg className="w-5 h-5 text-neutral-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21" />
+              </svg>
+              <span className="text-sm text-neutral-300">{hiddenCount} prediction{hiddenCount !== 1 ? "s" : ""} hidden</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <button
+                onClick={handleShowHidden}
+                className="px-3 py-1.5 text-xs font-medium text-[#2E5CFF] hover:text-white transition-all"
+              >
+                Show
+              </button>
+              <button
+                onClick={handleClearHidden}
+                className="px-3 py-1.5 text-xs font-medium text-neutral-400 hover:text-white transition-all"
+              >
+                Clear all
+              </button>
+            </div>
           </div>
         )}
 
