@@ -386,7 +386,7 @@ function AppFeedContent() {
           {/* Category Pills + Refresh row */}
           {activeTab === "all" && (
             <div className="flex flex-col gap-2.5">
-              {/* Category pills */}
+              {/* Category pills - Cyberpunk neon */}
               <div className="flex items-center gap-2 overflow-x-auto no-scrollbar">
                 {categories.map((cat) => (
                   <button
@@ -394,8 +394,8 @@ function AppFeedContent() {
                     onClick={() => setSelectedCategory(cat)}
                     className={`px-3 py-1.5 text-xs font-medium rounded-full transition-all whitespace-nowrap flex-shrink-0 ${
                       selectedCategory === cat
-                        ? "bg-gradient-to-r from-blue-600/80 to-purple-600/80 hover:from-blue-600 hover:to-purple-600 text-white border border-[#2E5CFF]/30"
-                        : "glass border border-white/10 text-neutral-400 hover:text-white hover:bg-white/5"
+                        ? "bg-gradient-to-r from-cyan-600/80 to-pink-600/80 hover:from-cyan-600 hover:to-pink-600 text-white border border-cyan-400/40 shadow-[0_0_15px_rgba(6,182,212,0.4)]"
+                        : "glass border border-white/10 text-neutral-400 hover:text-white hover:bg-white/5 hover:border-cyan-500/30"
                     }`}
                   >
                     {cat === "all" ? "All" : cat}
