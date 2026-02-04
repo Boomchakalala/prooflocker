@@ -689,7 +689,7 @@ function AppFeedContent() {
             </Link>
           </div>
         ) : (
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-2.5 sm:gap-3">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-5">
             {filteredPredictions.map((prediction, index) => (
               <div
                 key={prediction.id}
@@ -699,6 +699,7 @@ function AppFeedContent() {
                   prediction={prediction}
                   currentUserId={user?.id}
                   onOutcomeUpdate={fetchPredictions}
+                  onHide={handleHidePrediction}
                 />
               </div>
             ))}
