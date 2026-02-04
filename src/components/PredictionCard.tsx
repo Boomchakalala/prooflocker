@@ -7,8 +7,10 @@ import { formatRelativeTime } from "@/lib/utils";
 import { getSiteUrl } from "@/lib/config";
 import Link from "next/link";
 import ResolveModal from "./ResolveModal";
+import ResolutionModalWithEvidence from "./ResolutionModalWithEvidence";
 import ContestModal from "./ContestModal";
 import OutcomeBadge from "./OutcomeBadge";
+import EvidenceGradeBadge from "./EvidenceGradeBadge";
 
 interface PredictionCardProps {
   prediction: Prediction & {
@@ -290,6 +292,10 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
               Pending
             </span>
           )}
+          {/* Evidence Grade Badge */}
+          {prediction.evidenceGrade && isResolved && (
+            <EvidenceGradeBadge grade={prediction.evidenceGrade} size="sm" showLabel="short" />
+          )}
           {/* Has note indicator */}
           {prediction.resolutionNote && (
             <span
@@ -449,7 +455,7 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
 
       {/* Resolve Modal */}
       {showResolveModal && (
-        <ResolveModal
+        <ResolutionModalWithEvidence
           predictionId={prediction.id}
           currentOutcome={prediction.outcome}
           currentNote={prediction.resolutionNote}
