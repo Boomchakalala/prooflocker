@@ -291,3 +291,41 @@ export const LEGACY_GRADE_SCORES = {
   'C': 40,
   'D': 10,
 } as const;
+
+/**
+ * Evidence tier definitions with descriptions
+ */
+export const EVIDENCE_TIERS = {
+  strong: {
+    label: 'Strong',
+    range: '76-100',
+    color: 'text-green-400',
+    bgColor: 'bg-green-500/10',
+    borderColor: 'border-green-500/30',
+    description: 'Multiple high-quality sources with strong documentation',
+  },
+  solid: {
+    label: 'Solid',
+    range: '51-75',
+    color: 'text-blue-400',
+    bgColor: 'bg-blue-500/10',
+    borderColor: 'border-blue-500/30',
+    description: 'Good evidence from reputable sources or multiple items',
+  },
+  basic: {
+    label: 'Basic',
+    range: '26-50',
+    color: 'text-yellow-400',
+    bgColor: 'bg-yellow-500/10',
+    borderColor: 'border-yellow-500/30',
+    description: 'Some supporting evidence but limited documentation',
+  },
+  unverified: {
+    label: 'Unverified',
+    range: '0-25',
+    color: 'text-orange-400',
+    bgColor: 'bg-orange-500/10',
+    borderColor: 'border-orange-500/30',
+    description: 'Minimal or no supporting evidence provided',
+  },
+} as const;
