@@ -218,6 +218,11 @@ export default function ProfilePage() {
           </div>
         </div>
 
+        {/* Credibility Score Section */}
+        <div className="mb-8">
+          <CredibilityDisplay />
+        </div>
+
         {/* Stats grid */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
           <div className="bg-[#0d0d0d] border border-neutral-800 rounded-lg p-6">
