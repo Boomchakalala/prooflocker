@@ -310,14 +310,14 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
                       setShowMenu(false);
                     }}
                   />
-                  <div className="absolute right-0 top-full mt-1 w-48 glass border border-white/20 rounded-lg shadow-xl z-50 py-1">
+                  <div className="absolute right-0 top-full mt-1 w-48 bg-white border border-slate-200 rounded-lg shadow-xl z-50 py-1">
                     <button
                       onClick={(e) => {
                         e.preventDefault();
                         e.stopPropagation();
                         handleHide();
                       }}
-                      className="w-full px-4 py-2 text-left text-sm text-neutral-300 hover:text-white hover:bg-white/10 transition-colors flex items-center gap-2"
+                      className="w-full px-4 py-2 text-left text-sm text-slate-700 hover:text-slate-900 hover:bg-slate-50 transition-colors flex items-center gap-2"
                     >
                       <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21" />
@@ -331,7 +331,7 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
                           e.stopPropagation();
                           setShowReportMenu(!showReportMenu);
                         }}
-                        className="w-full px-4 py-2 text-left text-sm text-neutral-300 hover:text-white hover:bg-white/10 transition-colors flex items-center justify-between"
+                        className="w-full px-4 py-2 text-left text-sm text-slate-700 hover:text-slate-900 hover:bg-slate-50 transition-colors flex items-center justify-between"
                       >
                         <div className="flex items-center gap-2">
                           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -344,14 +344,14 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
                         </svg>
                       </button>
                       {showReportMenu && (
-                        <div className="absolute left-full top-0 ml-1 w-40 glass border border-white/20 rounded-lg shadow-xl py-1">
+                        <div className="absolute left-full top-0 ml-1 w-40 bg-white border border-slate-200 rounded-lg shadow-xl py-1">
                           <button
                             onClick={(e) => {
                               e.preventDefault();
                               e.stopPropagation();
                               handleReport('spam');
                             }}
-                            className="w-full px-4 py-2 text-left text-sm text-neutral-300 hover:text-white hover:bg-white/10 transition-colors"
+                            className="w-full px-4 py-2 text-left text-sm text-slate-700 hover:text-slate-900 hover:bg-slate-50 transition-colors"
                           >
                             Spam
                           </button>
@@ -361,7 +361,7 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
                               e.stopPropagation();
                               handleReport('low_quality');
                             }}
-                            className="w-full px-4 py-2 text-left text-sm text-neutral-300 hover:text-white hover:bg-white/10 transition-colors"
+                            className="w-full px-4 py-2 text-left text-sm text-slate-700 hover:text-slate-900 hover:bg-slate-50 transition-colors"
                           >
                             Low Quality
                           </button>
@@ -371,7 +371,7 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
                               e.stopPropagation();
                               handleReport('inappropriate');
                             }}
-                            className="w-full px-4 py-2 text-left text-sm text-neutral-300 hover:text-white hover:bg-white/10 transition-colors"
+                            className="w-full px-4 py-2 text-left text-sm text-slate-700 hover:text-slate-900 hover:bg-slate-50 transition-colors"
                           >
                             Inappropriate
                           </button>
