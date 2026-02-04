@@ -6,6 +6,7 @@ import Link from "next/link";
 import { useAuth } from "@/contexts/AuthContext";
 import { Prediction } from "@/lib/storage";
 import { signOut } from "@/lib/auth";
+import CredibilityDisplay from "@/components/CredibilityDisplay";
 
 export default function ProfilePage() {
   const { user, loading: authLoading } = useAuth();

@@ -344,6 +344,17 @@ export default async function ProofPage({ params }: Props) {
             </div>
           )}
 
+          {/* Evidence Pack Section */}
+          {isResolved && prediction.resolvedAt && (
+            <div className="p-4 md:p-6 border-b border-white/10">
+              <EvidenceList
+                predictionId={prediction.id}
+                evidenceSummary={prediction.evidenceSummary}
+                resolutionFingerprint={prediction.resolutionFingerprint}
+              />
+            </div>
+          )}
+
           {/* On-Chain Proof Section 1: Prediction Locked */}
           {/* Polish: Added step label, unified icon system (all outlined), consistent spacing */}
           {prediction.onChainStatus === "confirmed" && prediction.deReference && (
