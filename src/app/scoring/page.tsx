@@ -77,7 +77,7 @@ export default function ScoringPage() {
 
         {/* Evidence Scoring System */}
         <section className="mb-12">
-          <div className="bg-[#0d0d0d] border border-neutral-800 rounded-lg p-8">
+          <div className="glass border border-white/10 rounded-xl p-8">
             <h2 className="text-2xl font-bold text-white mb-6">Evidence Scoring (0-100)</h2>
 
             <p className="text-neutral-300 mb-6">
@@ -98,7 +98,7 @@ export default function ScoringPage() {
             </div>
 
             {/* How It's Calculated */}
-            <div className="bg-black/40 rounded-lg p-6 border border-neutral-800">
+            <div className="bg-white/5 rounded-lg p-6 border border-white/10">
               <h3 className="text-sm font-semibold text-neutral-500 uppercase tracking-wider mb-4">
                 How It's Calculated
               </h3>
