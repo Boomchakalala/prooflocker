@@ -137,26 +137,26 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
     ? prediction.textPreview.slice(0, MAX_TITLE_LENGTH) + "…"
     : prediction.textPreview;
 
-  // Helper to get category styling - Cyberpunk theme
+  // Helper to get category styling - Premium white/blue theme
   const getCategoryStyle = (category: string) => {
     switch (category.toLowerCase()) {
       case 'crypto':
-        return 'bg-cyan-500/10 border-cyan-500/40 text-cyan-400 shadow-[0_0_10px_rgba(6,182,212,0.3)]';
+        return 'bg-blue-50 border-blue-200 text-blue-700';
       case 'sports':
-        return 'bg-pink-500/10 border-pink-500/40 text-pink-400 shadow-[0_0_10px_rgba(236,72,153,0.3)]';
+        return 'bg-indigo-50 border-indigo-200 text-indigo-700';
       case 'tech':
-        return 'bg-cyan-500/10 border-cyan-500/40 text-cyan-400 shadow-[0_0_10px_rgba(6,182,212,0.3)]';
+        return 'bg-blue-50 border-blue-200 text-blue-700';
       case 'personal':
-        return 'bg-purple-500/10 border-purple-500/40 text-purple-400 shadow-[0_0_10px_rgba(168,85,247,0.3)]';
+        return 'bg-violet-50 border-violet-200 text-violet-700';
       case 'politics':
-        return 'bg-pink-500/10 border-pink-500/40 text-pink-400 shadow-[0_0_10px_rgba(236,72,153,0.3)]';
+        return 'bg-indigo-50 border-indigo-200 text-indigo-700';
       case 'markets':
-        return 'bg-emerald-500/10 border-emerald-500/40 text-emerald-400 shadow-[0_0_10px_rgba(16,185,129,0.3)]';
+        return 'bg-emerald-50 border-emerald-200 text-emerald-700';
       case 'culture':
-        return 'bg-purple-500/10 border-purple-500/40 text-purple-400 shadow-[0_0_10px_rgba(168,85,247,0.3)]';
+        return 'bg-violet-50 border-violet-200 text-violet-700';
       case 'other':
       default:
-        return 'bg-gray-500/10 border-gray-500/40 text-gray-400';
+        return 'bg-slate-50 border-slate-200 text-slate-600';
     }
   };
 
@@ -228,22 +228,22 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
   const authorTierInfo = prediction.author_reliability_tier ?
     getTierInfo(prediction.author_reliability_tier) : null;
 
-  // Determine card border glow based on quality - Cyberpunk neon glows
+  // Determine card border style based on quality - Premium clean shadows
   const getCardBorderStyle = () => {
     if (prediction.outcome === 'correct') {
       if (prediction.evidence_score && prediction.evidence_score >= 76) {
-        // High quality correct: Strong cyan neon glow
-        return 'border-cyan-400/60 hover:border-cyan-400/80 shadow-[0_0_40px_rgba(6,182,212,0.4),0_0_60px_rgba(6,182,212,0.2)] hover:shadow-[0_0_50px_rgba(6,182,212,0.5),0_0_80px_rgba(6,182,212,0.3)]';
+        // High quality correct: Premium blue shadow
+        return 'border-blue-200 hover:border-blue-300 shadow-[0_0_0_1px_rgba(37,99,235,0.1),0_4px_12px_rgba(37,99,235,0.15)] hover:shadow-[0_0_0_1px_rgba(37,99,235,0.2),0_8px_24px_rgba(37,99,235,0.2)]';
       }
-      // Correct: Moderate cyan glow
-      return 'border-cyan-500/40 hover:border-cyan-500/60 shadow-[0_0_25px_rgba(6,182,212,0.3)]';
+      // Correct: Light blue border
+      return 'border-blue-100 hover:border-blue-200 hover:shadow-[0_0_0_1px_rgba(37,99,235,0.1),0_4px_12px_rgba(37,99,235,0.1)]';
     }
     if (prediction.outcome === 'incorrect') {
-      // Incorrect: Pink/red neon glow
-      return 'border-pink-500/40 hover:border-pink-500/60 shadow-[0_0_25px_rgba(236,72,153,0.3)]';
+      // Incorrect: Light red border
+      return 'border-red-100 hover:border-red-200 hover:shadow-[0_0_0_1px_rgba(239,68,68,0.1),0_4px_12px_rgba(239,68,68,0.1)]';
     }
-    // Pending: Subtle white/gray glow
-    return 'border-white/10 hover:border-white/20 hover:shadow-[0_0_20px_rgba(255,255,255,0.1)]';
+    // Pending: Subtle gray border
+    return 'border-slate-200 hover:border-slate-300 hover:shadow-[0_1px_3px_0_rgba(0,0,0,0.1)]';
   };
 
   return (
@@ -251,9 +251,9 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
       href={`/proof/${prediction.publicSlug}`}
       className={`group relative glass rounded-xl p-5 transition-all duration-300 flex flex-col h-full overflow-hidden border cursor-pointer hover:-translate-y-1 hover:shadow-2xl ${getCardBorderStyle()}`}
     >
-      {/* Quality indicator bar - top - Cyberpunk cyan neon */}
+      {/* Quality indicator bar - top - Premium blue accent */}
       {prediction.evidence_score && prediction.evidence_score >= 76 && isResolved && (
-        <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-cyan-500/50 via-cyan-400/70 to-cyan-500/50 shadow-[0_0_15px_rgba(6,182,212,0.6)]" />
+        <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-blue-400 via-blue-500 to-blue-400" />
       )}
 
       {/* 1. HEADER ROW - Author info + reliability tier + menu */}
