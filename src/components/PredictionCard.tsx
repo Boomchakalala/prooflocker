@@ -72,15 +72,8 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
   };
 
   const handleResolveClick = () => {
-    // On mobile (< 768px), navigate to resolve page
-    // On desktop, show modal
-    const isMobile = window.innerWidth < 768;
-
-    if (isMobile) {
-      router.push(`/resolve/${prediction.id}`);
-    } else {
-      setShowResolveModal(true);
-    }
+    // Always navigate to the full resolve page (consistent with proof page behavior)
+    router.push(`/resolve/${prediction.id}`);
   };
 
   // Determine on-chain status
