@@ -100,9 +100,93 @@ function AppFeedContent() {
     }
   };
 
-  const filteredPredictions = selectedCategory === "all"
-    ? predictions
-    : predictions.filter(p => p.category === selectedCategory);
+  const handleHidePrediction = (id: string) => {
+    const newHidden = new Set(hiddenPredictions);
+    newHidden.add(id);
+    setHiddenPredictions(newHidden);
+    // Save to localStorage
+    try {
+      localStorage.setItem("hiddenPredictions", JSON.stringify(Array.from(newHidden)));
+    } catch (error) {
+      console.error("Error saving hidden predictions:", error);
+    }
+  };
+
+  const handleShowHidden = () => {
+    setShowHidden(true);
+  };
+
+  const handleClearHidden = () => {
+    setHiddenPredictions(new Set());
+    setShowHidden(false);
+    try {
+      localStorage.removeItem("hiddenPredictions");
+    } catch (error) {
+      console.error("Error clearing hidden predictions:", error);
+    }
+  };
+
+  // Apply filters and sorting
+  const getFilteredAndSortedPredictions = () => {
+    let filtered = predictions;
+
+    // Category filter
+    if (selectedCategory !== "all") {
+      filtered = filtered.filter(p => p.category === selectedCategory);
+    }
+
+    // High evidence filter
+    if (highEvidenceOnly) {
+      filtered = filtered.filter(p => p.evidence_score && p.evidence_score >= 76);
+    }
+
+    // Resolved only filter
+    if (resolvedOnly) {
+      filtered = filtered.filter(p => p.outcome === "correct" || p.outcome === "incorrect");
+    }
+
+    // Hide filter (unless showing hidden)
+    if (!showHidden) {
+      filtered = filtered.filter(p => !hiddenPredictions.has(p.id));
+    }
+
+    // Sorting
+    const sorted = [...filtered];
+    switch (sortBy) {
+      case "new":
+        sorted.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+        break;
+      case "hot":
+        // Hot = recent + engagement (likes, views, etc.) - for now just recent with slight randomization
+        sorted.sort((a, b) => {
+          const aTime = new Date(a.createdAt).getTime();
+          const bTime = new Date(b.createdAt).getTime();
+          const aScore = aTime + (Math.random() * 86400000); // Add up to 1 day random
+          const bScore = bTime + (Math.random() * 86400000);
+          return bScore - aScore;
+        });
+        break;
+      case "top":
+        // Top = highest evidence score first
+        sorted.sort((a, b) => (b.evidence_score || 0) - (a.evidence_score || 0));
+        break;
+      case "resolved":
+        // Resolved first, then by date
+        sorted.sort((a, b) => {
+          const aResolved = a.outcome === "correct" || a.outcome === "incorrect";
+          const bResolved = b.outcome === "correct" || b.outcome === "incorrect";
+          if (aResolved && !bResolved) return -1;
+          if (!aResolved && bResolved) return 1;
+          return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+        });
+        break;
+    }
+
+    return sorted;
+  };
+
+  const filteredPredictions = getFilteredAndSortedPredictions();
+  const hiddenCount = hiddenPredictions.size;
 
   const syncDEStatus = async () => {
     setSyncing(true);
