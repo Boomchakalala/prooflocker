@@ -419,23 +419,23 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
 
       {/* 3. OUTCOME + EVIDENCE SCORE */}
       <div className="flex items-center gap-2 mb-4 flex-wrap">
-        {/* Outcome Badge */}
+        {/* Outcome Badge - Cyberpunk neon style */}
         {prediction.outcome === 'correct' ? (
-          <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-green-500 text-white text-sm font-bold shadow-lg">
+          <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-cyan-500/20 border-2 border-cyan-400/60 text-cyan-400 text-sm font-bold shadow-[0_0_20px_rgba(6,182,212,0.5)]">
             <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7"/>
             </svg>
             Correct
           </span>
         ) : prediction.outcome === 'incorrect' ? (
-          <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-red-500 text-white text-sm font-bold shadow-lg">
+          <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-pink-500/20 border-2 border-pink-400/60 text-pink-400 text-sm font-bold shadow-[0_0_20px_rgba(236,72,153,0.5)]">
             <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12"/>
             </svg>
             Incorrect
           </span>
         ) : (
-          <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-amber-500 text-white text-sm font-bold shadow-lg">
+          <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-amber-500/20 border-2 border-amber-400/60 text-amber-400 text-sm font-bold shadow-[0_0_20px_rgba(251,191,36,0.5)]">
             <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
               <circle cx="12" cy="12" r="10"/>
               <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6l4 2"/>
