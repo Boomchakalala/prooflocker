@@ -194,7 +194,12 @@ export default async function ProofPage({ params }: Props) {
 
               <div className="p-3 bg-white/5 rounded-lg border border-white/10">
                 <div className="text-xs text-neutral-400 mb-1">Author</div>
-                <div className="text-sm font-medium text-white">Anon #{prediction.authorNumber}</div>
+                <Link
+                  href={`/user/${prediction.userId || prediction.anonId}`}
+                  className="text-sm font-medium text-white hover:text-[#2E5CFF] transition-colors"
+                >
+                  Anon #{prediction.authorNumber}
+                </Link>
               </div>
             </div>
           </div>
