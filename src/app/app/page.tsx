@@ -235,15 +235,15 @@ function AppFeedContent() {
 
   return (
     <div className="min-h-screen gradient-bg relative">
-      {/* Decorative gradient orbs - Cyberpunk colors */}
+      {/* Decorative gradient orbs - Subtle blue accents */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-20 -left-40 w-80 h-80 bg-cyan-500/10 rounded-full blur-3xl" />
-        <div className="absolute top-40 -right-40 w-96 h-96 bg-pink-500/10 rounded-full blur-3xl" />
-        <div className="absolute bottom-20 left-1/2 w-80 h-80 bg-purple-500/10 rounded-full blur-3xl" />
+        <div className="absolute top-20 -left-40 w-80 h-80 bg-blue-500/5 rounded-full blur-3xl" />
+        <div className="absolute top-40 -right-40 w-96 h-96 bg-blue-600/5 rounded-full blur-3xl" />
+        <div className="absolute bottom-20 left-1/2 w-80 h-80 bg-indigo-500/5 rounded-full blur-3xl" />
       </div>
 
       {/* Header */}
-      <header className="glass sticky top-0 z-50 border-b border-white/5 bg-[#0a0a0a]/80 backdrop-blur-xl">
+      <header className="glass sticky top-0 z-50 border-b border-slate-200 bg-white/80 backdrop-blur-xl">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 flex h-14 md:h-16 items-center justify-between">
           <Link href="/">
             <BrandLogo />
