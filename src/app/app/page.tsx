@@ -405,11 +405,11 @@ function AppFeedContent() {
 
               {/* Sort and Filter Controls */}
               <div className="flex items-center gap-2 flex-wrap">
-                {/* Sort by dropdown */}
+                {/* Sort by dropdown - Dark theme */}
                 <div className="relative">
                   <button
                     onClick={() => setShowSortMenu(!showSortMenu)}
-                    className="flex items-center gap-1.5 px-3 py-2 glass border border-slate-200 text-sm font-medium text-slate-700 hover:text-slate-900 rounded-lg transition-all hover:bg-slate-50"
+                    className="flex items-center gap-1.5 px-3 py-2 glass border border-purple-500/20 text-sm font-medium text-gray-300 hover:text-white rounded-lg transition-all hover:bg-white/10"
                   >
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4h13M3 8h9m-9 4h6m4 0l4-4m0 0l4 4m-4-4v12" />
@@ -431,11 +431,11 @@ function AppFeedContent() {
                         className="fixed inset-0 z-40"
                         onClick={() => setShowSortMenu(false)}
                       />
-                      <div className="absolute left-0 top-full mt-1 w-40 bg-white border border-slate-200 rounded-lg shadow-xl z-50 py-1">
+                      <div className="absolute left-0 top-full mt-1 w-40 bg-[#1a1a1a] border border-purple-500/30 rounded-lg shadow-[0_0_20px_rgba(168,85,247,0.3)] z-50 py-1">
                         <button
                           onClick={() => { setSortBy("new"); setShowSortMenu(false); }}
                           className={`w-full px-3 py-2 text-left text-sm transition-all flex items-center gap-2 ${
-                            sortBy === "new" ? "text-blue-600 bg-blue-50" : "text-slate-700 hover:text-slate-900 hover:bg-slate-50"
+                            sortBy === "new" ? "text-purple-300 bg-purple-500/20" : "text-gray-300 hover:text-white hover:bg-white/10"
                           }`}
                         >
                           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -446,7 +446,7 @@ function AppFeedContent() {
                         <button
                           onClick={() => { setSortBy("hot"); setShowSortMenu(false); }}
                           className={`w-full px-3 py-2 text-left text-sm transition-all flex items-center gap-2 ${
-                            sortBy === "hot" ? "text-blue-600 bg-blue-50" : "text-slate-700 hover:text-slate-900 hover:bg-slate-50"
+                            sortBy === "hot" ? "text-purple-300 bg-purple-500/20" : "text-gray-300 hover:text-white hover:bg-white/10"
                           }`}
                         >
                           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -457,7 +457,7 @@ function AppFeedContent() {
                         <button
                           onClick={() => { setSortBy("top"); setShowSortMenu(false); }}
                           className={`w-full px-3 py-2 text-left text-sm transition-all flex items-center gap-2 ${
-                            sortBy === "top" ? "text-blue-600 bg-blue-50" : "text-slate-700 hover:text-slate-900 hover:bg-slate-50"
+                            sortBy === "top" ? "text-purple-300 bg-purple-500/20" : "text-gray-300 hover:text-white hover:bg-white/10"
                           }`}
                         >
                           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -468,7 +468,7 @@ function AppFeedContent() {
                         <button
                           onClick={() => { setSortBy("resolved"); setShowSortMenu(false); }}
                           className={`w-full px-3 py-2 text-left text-sm transition-all flex items-center gap-2 ${
-                            sortBy === "resolved" ? "text-blue-600 bg-blue-50" : "text-slate-700 hover:text-slate-900 hover:bg-slate-50"
+                            sortBy === "resolved" ? "text-purple-300 bg-purple-500/20" : "text-gray-300 hover:text-white hover:bg-white/10"
                           }`}
                         >
                           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -481,13 +481,13 @@ function AppFeedContent() {
                   )}
                 </div>
 
-                {/* Filter toggles - Premium blue */}
+                {/* Filter toggles - Purple/Cyan theme */}
                 <button
                   onClick={() => setHighEvidenceOnly(!highEvidenceOnly)}
                   className={`flex items-center gap-1.5 px-3 py-2 text-xs font-medium rounded-lg transition-all border ${
                     highEvidenceOnly
-                      ? "bg-blue-50 border-blue-200 text-blue-700 shadow-[0_0_0_1px_rgba(37,99,235,0.1),0_2px_8px_rgba(37,99,235,0.1)]"
-                      : "glass border-slate-200 text-slate-600 hover:text-slate-900 hover:bg-slate-50 hover:border-blue-200"
+                      ? "bg-purple-500/20 border-purple-500/40 text-purple-300 shadow-[0_0_15px_rgba(168,85,247,0.2)]"
+                      : "glass border-purple-500/20 text-gray-400 hover:text-white hover:bg-purple-500/10 hover:border-purple-500/40"
                   }`}
                 >
                   <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -500,8 +500,8 @@ function AppFeedContent() {
                   onClick={() => setResolvedOnly(!resolvedOnly)}
                   className={`flex items-center gap-1.5 px-3 py-2 text-xs font-medium rounded-lg transition-all border ${
                     resolvedOnly
-                      ? "bg-indigo-50 border-indigo-200 text-indigo-700 shadow-[0_0_0_1px_rgba(99,102,241,0.1),0_2px_8px_rgba(99,102,241,0.1)]"
-                      : "glass border-slate-200 text-slate-600 hover:text-slate-900 hover:bg-slate-50 hover:border-indigo-200"
+                      ? "bg-cyan-500/20 border-cyan-500/40 text-cyan-300 shadow-[0_0_15px_rgba(6,182,212,0.2)]"
+                      : "glass border-purple-500/20 text-gray-400 hover:text-white hover:bg-cyan-500/10 hover:border-cyan-500/40"
                   }`}
                 >
                   <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -514,7 +514,7 @@ function AppFeedContent() {
                 <button
                   onClick={syncDEStatus}
                   disabled={syncing}
-                  className="hidden md:flex px-3 py-2 glass text-sm font-medium text-slate-600 hover:text-slate-900 rounded-lg transition-all hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed items-center gap-1.5 border border-slate-200 ml-auto"
+                  className="hidden md:flex px-3 py-2 glass text-sm font-medium text-gray-400 hover:text-white rounded-lg transition-all hover:bg-white/10 disabled:opacity-50 disabled:cursor-not-allowed items-center gap-1.5 border border-purple-500/20 ml-auto"
                   title="Recheck on-chain status for pending proofs"
                 >
                   <svg
