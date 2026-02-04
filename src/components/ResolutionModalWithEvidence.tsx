@@ -289,20 +289,20 @@ export default function ResolutionModalWithEvidence({
 
           {/* Evidence Items */}
           <div>
-            <label className="block text-sm font-medium text-black mb-2">
+            <label className="block text-sm font-medium text-white/90 mb-2">
               Evidence Items
-              {evidenceGrade !== "D" && <span className="text-red-600 ml-1">* (min 1)</span>}
+              {evidenceGrade !== "D" && <span className="text-red-400 ml-1">* (min 1)</span>}
             </label>
 
             {/* Evidence items list */}
             {evidenceItems.length > 0 && (
               <div className="space-y-2 mb-3">
                 {evidenceItems.map((item, index) => (
-                  <div key={index} className="flex items-center gap-2 p-2 bg-neutral-50 rounded border border-neutral-200">
+                  <div key={index} className="flex items-center gap-2 p-3 bg-white/5 rounded-lg border border-white/10">
                     <div className="flex-1 min-w-0">
-                      <div className="text-sm text-black truncate">
+                      <div className="text-sm text-white truncate">
                         {item.type === "link" ? (
-                          <a href={item.url} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">
+                          <a href={item.url} target="_blank" rel="noopener noreferrer" className="text-blue-400 hover:text-blue-300 hover:underline">
                             {item.title || item.url}
                           </a>
                         ) : (
@@ -314,7 +314,7 @@ export default function ResolutionModalWithEvidence({
                     <button
                       type="button"
                       onClick={() => handleRemoveEvidence(index)}
-                      className="text-red-600 hover:text-red-700 p-1"
+                      className="text-red-400 hover:text-red-300 p-1.5 hover:bg-white/10 rounded transition-colors"
                     >
                       <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -330,7 +330,7 @@ export default function ResolutionModalWithEvidence({
               <button
                 type="button"
                 onClick={() => setShowAddLink(!showAddLink)}
-                className="flex-1 px-3 py-2 border border-neutral-300 text-neutral-700 hover:bg-neutral-50 rounded text-sm font-medium transition-colors"
+                className="flex-1 px-3 py-2 bg-white/5 hover:bg-white/10 border border-white/10 text-white rounded-lg text-sm font-medium transition-all"
               >
                 + Add Link
               </button>
@@ -342,7 +342,7 @@ export default function ResolutionModalWithEvidence({
                   className="hidden"
                   disabled={uploadingFile}
                 />
-                <div className="px-3 py-2 border border-neutral-300 text-neutral-700 hover:bg-neutral-50 rounded text-sm font-medium transition-colors text-center cursor-pointer">
+                <div className="px-3 py-2 bg-white/5 hover:bg-white/10 border border-white/10 text-white rounded-lg text-sm font-medium transition-all text-center cursor-pointer">
                   {uploadingFile ? "Uploading..." : "+ Add File"}
                 </div>
               </label>
@@ -350,26 +350,26 @@ export default function ResolutionModalWithEvidence({
 
             {/* Add link form */}
             {showAddLink && (
-              <div className="mt-3 p-3 border border-neutral-300 rounded space-y-2">
+              <div className="mt-3 p-3 border border-white/10 bg-white/5 rounded-lg space-y-2">
                 <input
                   type="url"
                   value={linkUrl}
                   onChange={(e) => setLinkUrl(e.target.value)}
                   placeholder="https://..."
-                  className="w-full px-3 py-2 border border-neutral-300 rounded text-sm"
+                  className="w-full px-3 py-2 bg-white/5 border border-white/10 rounded-lg text-white placeholder-white/30 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/50"
                 />
                 <input
                   type="text"
                   value={linkTitle}
                   onChange={(e) => setLinkTitle(e.target.value)}
                   placeholder="Title (optional)"
-                  className="w-full px-3 py-2 border border-neutral-300 rounded text-sm"
+                  className="w-full px-3 py-2 bg-white/5 border border-white/10 rounded-lg text-white placeholder-white/30 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/50"
                 />
                 <div className="flex gap-2">
                   <button
                     type="button"
                     onClick={handleAddLink}
-                    className="flex-1 px-3 py-1.5 bg-black text-white rounded text-sm"
+                    className="flex-1 px-3 py-1.5 bg-blue-600 hover:bg-blue-500 text-white rounded-lg text-sm transition-all"
                   >
                     Add
                   </button>
@@ -380,7 +380,7 @@ export default function ResolutionModalWithEvidence({
                       setLinkUrl("");
                       setLinkTitle("");
                     }}
-                    className="flex-1 px-3 py-1.5 border border-neutral-300 text-neutral-700 rounded text-sm"
+                    className="flex-1 px-3 py-1.5 bg-white/5 hover:bg-white/10 border border-white/10 text-white rounded-lg text-sm transition-all"
                   >
                     Cancel
                   </button>
