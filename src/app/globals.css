@@ -159,16 +159,16 @@ body {
   animation: float 3s ease-in-out infinite;
 }
 
-/* 2026 gradient text - purple to blue */
+/* Premium gradient text - deep vivid blue */
 .gradient-text {
-  background: linear-gradient(135deg, #5B21B6 0%, #2E5CFF 100%);
+  background: linear-gradient(135deg, #1E40AF 0%, #2563EB 100%);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
   position: relative;
 }
 
-/* Animated border gradient */
+/* Animated border gradient - blue theme */
 @keyframes borderRotate {
   0% {
     background-position: 0% 50%;
@@ -183,7 +183,7 @@ body {
 
 .border-gradient {
   position: relative;
-  background: linear-gradient(135deg, #00bfff, #9370db, #00bfff, #9370db);
+  background: linear-gradient(135deg, #3B82F6, #2563EB, #3B82F6, #2563EB);
   background-size: 300% 300%;
   animation: borderRotate 6s ease infinite;
   padding: 1px;
@@ -191,29 +191,29 @@ body {
 }
 
 .border-gradient-inner {
-  background: #1e1e1e;
+  background: #FFFFFF;
   border-radius: 11px;
 }
 
-/* Scrollbar styling */
+/* Scrollbar styling - blue theme */
 ::-webkit-scrollbar {
   width: 8px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #0a0a0a;
+  background: #F1F5F9;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: linear-gradient(135deg, #00bfff, #9370db);
+  background: linear-gradient(135deg, #3B82F6, #2563EB);
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(135deg, #00a8e6, #7d5fc7);
+  background: linear-gradient(135deg, #2563EB, #1E40AF);
 }
 
-/* 2026 button glow - Polymarket blue */
+/* Premium button glow - vivid blue */
 .btn-glow {
   position: relative;
   transition: all 0.3s ease;
@@ -221,8 +221,9 @@ body {
 }
 
 .btn-glow:hover {
-  box-shadow: 0 0 20px rgba(46, 92, 255, 0.5);
-  transform: scale(1.02);
+  box-shadow: 0 0 0 1px rgba(37, 99, 235, 0.2),
+              0 8px 20px rgba(37, 99, 235, 0.25);
+  transform: translateY(-1px);
 }
 
 /* Fade in animation */
