@@ -200,7 +200,7 @@ export default function ScoringPage() {
 
         {/* Points System */}
         <section className="mb-12">
-          <div className="bg-[#0d0d0d] border border-neutral-800 rounded-lg p-8">
+          <div className="glass border border-white/10 rounded-xl p-8">
             <h2 className="text-2xl font-bold text-white mb-6">Total Points System</h2>
 
             <p className="text-neutral-300 mb-6">
@@ -212,7 +212,7 @@ export default function ScoringPage() {
               <h3 className="text-lg font-semibold text-white">How to Earn Points</h3>
 
               {/* Lock Prediction */}
-              <div className="bg-black/40 rounded-lg p-5 border border-neutral-800">
+              <div className="bg-white/5 rounded-lg p-5 border border-white/10">
                 <div className="flex items-start justify-between mb-3">
                   <div className="flex items-start gap-3">
                     <div className="w-10 h-10 rounded-lg bg-neutral-800 border border-neutral-700 flex items-center justify-center flex-shrink-0">
@@ -236,7 +236,7 @@ export default function ScoringPage() {
               </div>
 
               {/* Resolve Correct */}
-              <div className="bg-black/40 rounded-lg p-5 border border-neutral-800">
+              <div className="bg-white/5 rounded-lg p-5 border border-white/10">
                 <div className="flex items-start justify-between mb-3">
                   <div className="flex items-start gap-3">
                     <div className="w-10 h-10 rounded-lg bg-neutral-800 border border-neutral-700 flex items-center justify-center flex-shrink-0">
@@ -261,7 +261,7 @@ export default function ScoringPage() {
               </div>
 
               {/* Resolve Incorrect */}
-              <div className="bg-black/40 rounded-lg p-5 border border-neutral-800">
+              <div className="bg-white/5 rounded-lg p-5 border border-white/10">
                 <div className="flex items-start justify-between mb-3">
                   <div className="flex items-start gap-3">
                     <div className="w-10 h-10 rounded-lg bg-neutral-800 border border-neutral-700 flex items-center justify-center flex-shrink-0">
@@ -286,7 +286,7 @@ export default function ScoringPage() {
             </div>
 
             {/* Example */}
-            <div className="mt-8 bg-black/40 border border-neutral-800 rounded-lg p-6">
+            <div className="mt-8 bg-white/5 border border-white/10 rounded-lg p-6">
               <h3 className="text-sm font-semibold text-neutral-500 uppercase tracking-wider mb-4">
                 Example
               </h3>
@@ -314,7 +314,7 @@ export default function ScoringPage() {
 
         {/* Why This Matters */}
         <section className="mb-12">
-          <div className="bg-[#0d0d0d] border border-neutral-800 rounded-lg p-8">
+          <div className="glass border border-white/10 rounded-xl p-8">
             <h2 className="text-2xl font-bold text-white mb-4">Why This Matters</h2>
             <div className="space-y-3 text-neutral-300">
               <div className="flex items-start gap-3">
