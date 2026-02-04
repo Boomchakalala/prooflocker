@@ -261,14 +261,14 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
         <div className="flex items-center justify-between gap-2 mb-2">
           {/* Left: Avatar + Author info + Reliability Tier */}
           <div className="flex items-center gap-2.5 min-w-0 flex-1">
-            <div className="w-9 h-9 rounded-full bg-cyan-500/20 flex items-center justify-center text-sm font-bold text-cyan-400 border-2 border-cyan-500/40 flex-shrink-0 shadow-[0_0_15px_rgba(6,182,212,0.4)]">
+            <div className="w-9 h-9 rounded-full bg-blue-50 flex items-center justify-center text-sm font-bold text-blue-700 border-2 border-blue-200 flex-shrink-0">
               {authorNumber.toString().slice(-2)}
             </div>
             <div className="flex flex-col min-w-0">
               <Link
                 href={`/user/${prediction.userId || prediction.anonId}`}
                 onClick={(e) => e.stopPropagation()}
-                className="text-sm font-semibold text-white hover:text-cyan-400 transition-colors"
+                className="text-sm font-semibold text-slate-900 hover:text-blue-600 transition-colors"
               >
                 Anon #{authorNumber}
               </Link>
@@ -292,9 +292,9 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
                   e.stopPropagation();
                   setShowMenu(!showMenu);
                 }}
-                className="p-1.5 hover:bg-white/10 rounded-lg transition-colors"
+                className="p-1.5 hover:bg-slate-100 rounded-lg transition-colors"
               >
-                <svg className="w-4 h-4 text-neutral-400 hover:text-white" fill="currentColor" viewBox="0 0 24 24">
+                <svg className="w-4 h-4 text-slate-500 hover:text-slate-700" fill="currentColor" viewBox="0 0 24 24">
                   <path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/>
                 </svg>
               </button>
