@@ -359,13 +359,13 @@ function AppFeedContent() {
 
         {/* Tabs */}
         <div className="flex flex-col gap-2.5 mb-4">
-          {/* Tab buttons row */}
+          {/* Tab buttons row - Cyberpunk style */}
           <div className="flex items-center gap-1 p-1 glass rounded-lg w-fit">
             <button
               onClick={() => setActiveTab("all")}
               className={`px-6 py-2 text-sm font-medium rounded-md transition-all ${
                 activeTab === "all"
-                  ? "bg-gradient-to-r from-blue-600/80 to-purple-600/80 hover:from-blue-600 hover:to-purple-600 text-white"
+                  ? "bg-gradient-to-r from-cyan-600/80 to-pink-600/80 hover:from-cyan-600 hover:to-pink-600 text-white shadow-[0_0_20px_rgba(6,182,212,0.3)]"
                   : "text-neutral-400 hover:text-white hover:bg-white/5"
               }`}
             >
@@ -375,7 +375,7 @@ function AppFeedContent() {
               onClick={handleMyProofsClick}
               className={`px-6 py-2 text-sm font-medium rounded-md transition-all ${
                 activeTab === "my"
-                  ? "bg-gradient-to-r from-blue-600/80 to-purple-600/80 hover:from-blue-600 hover:to-purple-600 text-white"
+                  ? "bg-gradient-to-r from-cyan-600/80 to-pink-600/80 hover:from-cyan-600 hover:to-pink-600 text-white shadow-[0_0_20px_rgba(6,182,212,0.3)]"
                   : "text-neutral-400 hover:text-white hover:bg-white/5"
               }`}
             >
