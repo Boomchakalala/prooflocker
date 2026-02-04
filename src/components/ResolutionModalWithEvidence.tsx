@@ -391,7 +391,7 @@ export default function ResolutionModalWithEvidence({
 
           {/* Resolution note */}
           <div>
-            <label htmlFor="note" className="block text-sm font-medium text-black mb-2">
+            <label htmlFor="note" className="block text-sm font-medium text-white/90 mb-2">
               Resolution Note <span className="text-neutral-400 font-normal">(optional)</span>
             </label>
             <textarea
@@ -401,35 +401,40 @@ export default function ResolutionModalWithEvidence({
               maxLength={maxNoteChars}
               rows={2}
               placeholder="Additional context..."
-              className="w-full px-3 py-2 border border-neutral-300 rounded text-black placeholder-neutral-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+              className="w-full px-3 py-2.5 bg-white/5 border border-white/10 rounded-lg text-white placeholder-white/30 focus:outline-none focus:ring-2 focus:ring-blue-500/50 text-sm resize-none transition-all"
             />
             <div className="flex justify-end mt-1">
-              <span className={`text-xs ${resolutionNote.length > maxNoteChars - 20 ? "text-red-600" : "text-neutral-400"}`}>
+              <span className={`text-xs ${resolutionNote.length > maxNoteChars - 20 ? "text-red-400" : "text-neutral-400"}`}>
                 {resolutionNote.length}/{maxNoteChars}
               </span>
             </div>
           </div>
 
           {error && (
-            <div className="bg-red-50 border border-red-200 rounded p-3 text-sm text-red-700">
-              {error}
+            <div className="p-4 bg-red-500/10 border border-red-500/30 rounded-xl">
+              <div className="flex items-center gap-2">
+                <svg className="w-5 h-5 text-red-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <p className="text-sm text-red-400">{error}</p>
+              </div>
             </div>
           )}
 
           {/* Actions */}
-          <div className="flex gap-3 pt-2 sticky bottom-0 bg-white pb-2">
+          <div className="flex gap-3 pt-2">
             <button
               type="button"
               onClick={onClose}
               disabled={loading}
-              className="flex-1 px-4 py-2 border border-neutral-300 text-neutral-700 hover:bg-neutral-50 rounded transition-colors text-sm font-medium disabled:opacity-50"
+              className="flex-1 px-4 py-3 bg-white/5 hover:bg-white/10 border border-white/10 text-white rounded-xl transition-all text-sm font-medium disabled:opacity-50"
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={loading || uploadingFile}
-              className="flex-1 px-4 py-2 bg-black hover:bg-neutral-800 text-white rounded transition-colors text-sm font-medium disabled:opacity-50"
+              className="flex-1 px-4 py-3 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white rounded-xl transition-all text-sm font-semibold disabled:opacity-50 shadow-lg hover:shadow-xl"
             >
               {loading ? "Saving..." : "Save Resolution"}
             </button>
