@@ -283,7 +283,7 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
 
           {/* Right: Time + Menu */}
           <div className="flex items-center gap-2">
-            <span className="text-xs text-neutral-500">{formatRelativeTime(prediction.timestamp)}</span>
+            <span className="text-xs text-gray-400">{formatRelativeTime(prediction.timestamp)}</span>
             {/* Three-dot menu */}
             <div className="relative">
               <button
@@ -292,9 +292,9 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
                   e.stopPropagation();
                   setShowMenu(!showMenu);
                 }}
-                className="p-1.5 hover:bg-slate-100 rounded-lg transition-colors"
+                className="p-1.5 hover:bg-white/10 rounded-lg transition-colors"
               >
-                <svg className="w-4 h-4 text-slate-500 hover:text-slate-700" fill="currentColor" viewBox="0 0 24 24">
+                <svg className="w-4 h-4 text-gray-400 hover:text-gray-200" fill="currentColor" viewBox="0 0 24 24">
                   <path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/>
                 </svg>
               </button>
@@ -310,14 +310,14 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
                       setShowMenu(false);
                     }}
                   />
-                  <div className="absolute right-0 top-full mt-1 w-48 bg-white border border-slate-200 rounded-lg shadow-xl z-50 py-1">
+                  <div className="absolute right-0 top-full mt-1 w-48 bg-[#1a1a1a] border border-purple-500/30 rounded-lg shadow-[0_0_20px_rgba(168,85,247,0.3)] z-50 py-1">
                     <button
                       onClick={(e) => {
                         e.preventDefault();
                         e.stopPropagation();
                         handleHide();
                       }}
-                      className="w-full px-4 py-2 text-left text-sm text-slate-700 hover:text-slate-900 hover:bg-slate-50 transition-colors flex items-center gap-2"
+                      className="w-full px-4 py-2 text-left text-sm text-gray-300 hover:text-white hover:bg-purple-500/20 transition-colors flex items-center gap-2"
                     >
                       <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21" />
@@ -331,7 +331,7 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
                           e.stopPropagation();
                           setShowReportMenu(!showReportMenu);
                         }}
-                        className="w-full px-4 py-2 text-left text-sm text-slate-700 hover:text-slate-900 hover:bg-slate-50 transition-colors flex items-center justify-between"
+                        className="w-full px-4 py-2 text-left text-sm text-gray-300 hover:text-white hover:bg-purple-500/20 transition-colors flex items-center justify-between"
                       >
                         <div className="flex items-center gap-2">
                           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -344,14 +344,14 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
                         </svg>
                       </button>
                       {showReportMenu && (
-                        <div className="absolute left-full top-0 ml-1 w-40 bg-white border border-slate-200 rounded-lg shadow-xl py-1">
+                        <div className="absolute left-full top-0 ml-1 w-40 bg-[#1a1a1a] border border-purple-500/30 rounded-lg shadow-[0_0_20px_rgba(168,85,247,0.3)] py-1">
                           <button
                             onClick={(e) => {
                               e.preventDefault();
                               e.stopPropagation();
                               handleReport('spam');
                             }}
-                            className="w-full px-4 py-2 text-left text-sm text-slate-700 hover:text-slate-900 hover:bg-slate-50 transition-colors"
+                            className="w-full px-4 py-2 text-left text-sm text-gray-300 hover:text-white hover:bg-purple-500/20 transition-colors"
                           >
                             Spam
                           </button>
@@ -361,7 +361,7 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
                               e.stopPropagation();
                               handleReport('low_quality');
                             }}
-                            className="w-full px-4 py-2 text-left text-sm text-slate-700 hover:text-slate-900 hover:bg-slate-50 transition-colors"
+                            className="w-full px-4 py-2 text-left text-sm text-gray-300 hover:text-white hover:bg-purple-500/20 transition-colors"
                           >
                             Low Quality
                           </button>
@@ -371,7 +371,7 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
                               e.stopPropagation();
                               handleReport('inappropriate');
                             }}
-                            className="w-full px-4 py-2 text-left text-sm text-slate-700 hover:text-slate-900 hover:bg-slate-50 transition-colors"
+                            className="w-full px-4 py-2 text-left text-sm text-gray-300 hover:text-white hover:bg-purple-500/20 transition-colors"
                           >
                             Inappropriate
                           </button>
@@ -394,7 +394,7 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
             </span>
           )}
           {isOnChain() && (
-            <span className="px-2 py-0.5 text-[10px] font-medium rounded bg-violet-50 border border-violet-200 text-violet-700 flex items-center gap-1">
+            <span className="px-2 py-0.5 text-[10px] font-medium rounded bg-purple-500/20 border border-purple-500/40 text-purple-300 flex items-center gap-1">
               Locked
               <svg className="w-2.5 h-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
@@ -402,7 +402,7 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
             </span>
           )}
           {isResolutionOnChain() && (
-            <span className="px-2 py-0.5 text-[10px] font-medium rounded bg-blue-50 border border-blue-200 text-blue-700 flex items-center gap-1">
+            <span className="px-2 py-0.5 text-[10px] font-medium rounded bg-cyan-500/20 border border-cyan-500/40 text-cyan-300 flex items-center gap-1">
               Resolved
               <svg className="w-2.5 h-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -413,7 +413,7 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
       </div>
 
       {/* 2. TITLE - Prediction text */}
-      <h3 className="text-slate-900 text-base font-semibold mb-3 line-clamp-3 leading-snug min-h-[4rem]">
+      <h3 className="text-white text-base font-semibold mb-3 line-clamp-3 leading-snug min-h-[4rem]">
         {displayTitle}
       </h3>
 
