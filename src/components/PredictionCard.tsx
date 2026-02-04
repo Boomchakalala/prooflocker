@@ -251,9 +251,9 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
       href={`/proof/${prediction.publicSlug}`}
       className={`group relative glass rounded-xl p-5 transition-all duration-300 flex flex-col h-full overflow-hidden border cursor-pointer hover:-translate-y-1 hover:shadow-2xl ${getCardBorderStyle()}`}
     >
-      {/* Quality indicator bar - top */}
+      {/* Quality indicator bar - top - Cyberpunk cyan neon */}
       {prediction.evidence_score && prediction.evidence_score >= 76 && isResolved && (
-        <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-green-500/50 via-green-400/50 to-green-500/50" />
+        <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-cyan-500/50 via-cyan-400/70 to-cyan-500/50 shadow-[0_0_15px_rgba(6,182,212,0.6)]" />
       )}
 
       {/* 1. HEADER ROW - Author info + reliability tier + menu */}
@@ -261,14 +261,14 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
         <div className="flex items-center justify-between gap-2 mb-2">
           {/* Left: Avatar + Author info + Reliability Tier */}
           <div className="flex items-center gap-2.5 min-w-0 flex-1">
-            <div className="w-9 h-9 rounded-full bg-[#2E5CFF]/20 flex items-center justify-center text-sm font-bold text-[#2E5CFF] border-2 border-[#2E5CFF]/30 flex-shrink-0">
+            <div className="w-9 h-9 rounded-full bg-cyan-500/20 flex items-center justify-center text-sm font-bold text-cyan-400 border-2 border-cyan-500/40 flex-shrink-0 shadow-[0_0_15px_rgba(6,182,212,0.4)]">
               {authorNumber.toString().slice(-2)}
             </div>
             <div className="flex flex-col min-w-0">
               <Link
                 href={`/user/${prediction.userId || prediction.anonId}`}
                 onClick={(e) => e.stopPropagation()}
-                className="text-sm font-semibold text-white hover:text-[#2E5CFF] transition-colors"
+                className="text-sm font-semibold text-white hover:text-cyan-400 transition-colors"
               >
                 Anon #{authorNumber}
               </Link>
@@ -394,7 +394,7 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
             </span>
           )}
           {isOnChain() && (
-            <span className="px-2 py-0.5 text-[10px] font-medium rounded bg-[#5B21B6]/10 border border-[#5B21B6]/30 text-[#5B21B6] flex items-center gap-1">
+            <span className="px-2 py-0.5 text-[10px] font-medium rounded bg-purple-500/10 border border-purple-500/40 text-purple-400 flex items-center gap-1 shadow-[0_0_8px_rgba(168,85,247,0.3)]">
               Locked
               <svg className="w-2.5 h-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
@@ -402,7 +402,7 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
             </span>
           )}
           {isResolutionOnChain() && (
-            <span className="px-2 py-0.5 text-[10px] font-medium rounded bg-[#06B6D4]/10 border border-[#06B6D4]/30 text-[#06B6D4] flex items-center gap-1">
+            <span className="px-2 py-0.5 text-[10px] font-medium rounded bg-cyan-500/10 border border-cyan-500/40 text-cyan-400 flex items-center gap-1 shadow-[0_0_8px_rgba(6,182,212,0.3)]">
               Resolved
               <svg className="w-2.5 h-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
