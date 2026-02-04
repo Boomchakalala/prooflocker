@@ -1,31 +1,14 @@
 @import "tailwindcss";
 
 :root {
-  /* Premium Modern Design System - White with Deep Vivid Blue */
-  --bg-primary: #FFFFFF;
-  --bg-secondary: #F8FAFC;
-  --bg-tertiary: #F1F5F9;
-  --border-light: #E2E8F0;
-  --border-medium: #CBD5E1;
-  --text-primary: #0F172A;
-  --text-secondary: #475569;
-  --text-tertiary: #94A3B8;
-  --blue-vivid: #2563EB;
-  --blue-deep: #1E40AF;
-  --blue-light: #DBEAFE;
-  --blue-lighter: #EFF6FF;
-  --accent-green: #10B981;
-  --accent-red: #EF4444;
-  --accent-amber: #F59E0B;
-
-  /* Legacy (kept for compatibility) */
-  --background: #FFFFFF;
-  --foreground: #0F172A;
-  --card-bg: #FFFFFF;
-  --primary: #2563EB;
-  --secondary: #1E40AF;
-  --accent-cyan: #2563EB;
-  --purple-vibrant: #2563EB;
+  /* Original ProofLocker Dark Theme with Purple Gradients */
+  --background: #0a0a0a;
+  --foreground: #ffffff;
+  --card-bg: #1a1a1a;
+  --primary: #a855f7;
+  --secondary: #8b5cf6;
+  --accent-cyan: #06b6d4;
+  --purple-vibrant: #a855f7;
 }
 
 @theme inline {
@@ -42,12 +25,13 @@ body {
   font-family: var(--font-inter), system-ui, -apple-system, sans-serif;
 }
 
-/* Premium modern gradient background - white with subtle blue */
+/* Dark gradient background with purple/cyan */
 .gradient-bg {
   background: linear-gradient(
     180deg,
-    #FFFFFF 0%,
-    #F8FAFC 100%
+    #0a0a0a 0%,
+    #1a1a2e 50%,
+    #0a0a0a 100%
   );
   position: relative;
 }
@@ -58,20 +42,20 @@ body {
   inset: 0;
   background: radial-gradient(
     circle at 50% 20%,
-    rgba(37, 99, 235, 0.03) 0%,
-    rgba(37, 99, 235, 0.01) 50%,
+    rgba(168, 85, 247, 0.08) 0%,
+    rgba(6, 182, 212, 0.05) 50%,
     transparent 70%
   );
   pointer-events: none;
 }
 
-/* Glassmorphism effect - light version */
+/* Glassmorphism effect - dark version */
 .glass {
-  background: rgba(255, 255, 255, 0.8);
+  background: rgba(26, 26, 26, 0.6);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(226, 232, 240, 0.8);
-  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
 }
 
 /* Premium blue glow effects */
