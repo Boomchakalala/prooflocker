@@ -1,12 +1,14 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { PredictionOutcome } from "@/lib/storage";
 import { supabase } from "@/lib/supabase";
 import type { EvidenceGrade, EvidenceItemInput } from "@/lib/evidence-types";
 import { EvidenceGradeInfo, validateEvidenceRequirements } from "@/lib/evidence-types";
 import { sha256, sha256File } from "@/lib/evidence-hashing";
+import { computeEvidenceScore } from "@/lib/evidence-scoring";
+import EvidenceScoreMeter from "@/components/EvidenceScoreMeter";
 
 type Props = {
   params: Promise<{ predictionId: string }>;
