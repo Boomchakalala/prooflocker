@@ -6,13 +6,22 @@ import Link from "next/link";
 import { useAuth } from "@/contexts/AuthContext";
 import { Prediction } from "@/lib/storage";
 import { signOut } from "@/lib/auth";
-import CredibilityDisplay from "@/components/CredibilityDisplay";
+import { supabase } from "@/lib/supabase";
+import {
+  getReliabilityTier,
+  getTierInfo,
+  getNextTierMilestone,
+  formatPoints,
+  getScoreBreakdown,
+  type UserStats,
+} from "@/lib/user-scoring";
 
 export default function ProfilePage() {
   const { user, loading: authLoading } = useAuth();
   const router = useRouter();
   const [predictions, setPredictions] = useState<Prediction[]>([]);
   const [loading, setLoading] = useState(true);
+  const [stats, setStats] = useState<UserStats | null>(null);
   const [pseudonym, setPseudonymState] = useState<string>("");
   const [pseudonymInput, setPseudonymInput] = useState<string>("");
   const [pseudonymError, setPseudonymError] = useState<string | null>(null);
@@ -39,6 +48,7 @@ export default function ProfilePage() {
 
     setLoading(true);
     try {
+      // Fetch predictions
       const response = await fetch(`/api/predictions?userId=${user.id}`);
       const data = await response.json();
       const preds = data.predictions || [];
@@ -48,6 +58,35 @@ export default function ProfilePage() {
       if (preds.length > 0 && preds[0].pseudonym) {
         setPseudonymState(preds[0].pseudonym);
       }
+
+      // Fetch user stats
+      const { data: statsData, error: statsError } = await supabase
+        .from("user_stats")
+        .select("*")
+        .eq("user_id", user.id)
+        .single();
+
+      if (statsError && statsError.code !== "PGRST116") {
+        console.error("Error fetching stats:", statsError);
+      }
+
+      // Process stats
+      const userStats: UserStats = {
+        totalPoints: statsData?.total_points || 0,
+        totalPredictions: statsData?.total_predictions || 0,
+        resolvedPredictions: statsData?.resolved_predictions || 0,
+        correctPredictions: statsData?.correct_predictions || 0,
+        incorrectPredictions: statsData?.incorrect_predictions || 0,
+        avgEvidenceScore: statsData?.avg_evidence_score || 0,
+        winRate:
+          statsData?.resolved_predictions > 0
+            ? statsData.correct_predictions / statsData.resolved_predictions
+            : 0,
+        reliabilityScore: statsData?.reliability_score || 0,
+        tier: getReliabilityTier(statsData?.reliability_score || 0),
+      };
+
+      setStats(userStats);
     } catch (error) {
       console.error("Error fetching predictions:", error);
     } finally {
