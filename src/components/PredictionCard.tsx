@@ -419,23 +419,23 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
 
       {/* 3. OUTCOME + EVIDENCE SCORE */}
       <div className="flex items-center gap-2 mb-4 flex-wrap">
-        {/* Outcome Badge - Premium clean style */}
+        {/* Outcome Badge - Creative prominent styling with gradients */}
         {prediction.outcome === 'correct' ? (
-          <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-50 border-2 border-emerald-200 text-emerald-700 text-sm font-bold">
+          <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-gradient-to-br from-teal-500/30 to-emerald-500/30 border-2 border-teal-400/60 text-teal-200 text-sm font-bold shadow-[0_0_15px_rgba(6,182,212,0.4)]">
             <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7"/>
             </svg>
             Correct
           </span>
         ) : prediction.outcome === 'incorrect' ? (
-          <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-red-50 border-2 border-red-200 text-red-700 text-sm font-bold">
+          <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-gradient-to-br from-red-500/30 to-orange-500/30 border-2 border-red-400/60 text-red-200 text-sm font-bold shadow-[0_0_15px_rgba(239,68,68,0.4)]">
             <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12"/>
             </svg>
             Incorrect
           </span>
         ) : (
-          <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-amber-50 border-2 border-amber-200 text-amber-700 text-sm font-bold">
+          <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-gradient-to-br from-purple-500/30 to-pink-500/30 border-2 border-purple-400/60 text-purple-200 text-sm font-bold shadow-[0_0_15px_rgba(168,85,247,0.4)]">
             <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
               <circle cx="12" cy="12" r="10"/>
               <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6l4 2"/>
@@ -457,10 +457,10 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
         )}
       </div>
 
-      {/* 4. HASH - Compact version */}
-      <div className="bg-slate-50 border border-slate-200 rounded-lg p-2.5 mb-3 hover:bg-slate-100 hover:border-slate-300 transition-all">
+      {/* 4. HASH - Compact version with dark theme */}
+      <div className="bg-black/30 border border-purple-500/20 rounded-lg p-2.5 mb-3 hover:bg-purple-500/10 hover:border-purple-500/40 transition-all">
         <div className="flex items-center justify-between gap-2">
-          <code className="font-mono text-[10px] text-slate-600 truncate leading-tight">
+          <code className="font-mono text-[10px] text-gray-300 truncate leading-tight">
             {prediction.hash.slice(0, 12)}...{prediction.hash.slice(-8)}
           </code>
           <button
@@ -469,14 +469,14 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
               e.stopPropagation();
               copyHash();
             }}
-            className="flex-shrink-0 p-1 hover:bg-slate-200 rounded transition-colors"
+            className="flex-shrink-0 p-1 hover:bg-purple-500/20 rounded transition-colors"
           >
             {copied ? (
-              <svg className="w-3.5 h-3.5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-3.5 h-3.5 text-teal-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
               </svg>
             ) : (
-              <svg className="w-3.5 h-3.5 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-3.5 h-3.5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
               </svg>
             )}
