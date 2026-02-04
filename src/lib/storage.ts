@@ -376,17 +376,32 @@ export async function updatePredictionOutcome(
   // If outcome is being set to resolved (correct or incorrect), save resolution data
   if (outcome === "correct" || outcome === "incorrect") {
     updateData.resolved_at = new Date().toISOString();
+    updateData.resolved_by = userId;
     if (resolutionNote) {
       updateData.resolution_note = resolutionNote;
     }
     if (resolutionUrl) {
       updateData.resolution_url = resolutionUrl;
     }
+    // Evidence fields
+    if (evidenceGrade) {
+      updateData.evidence_grade = evidenceGrade;
+    }
+    if (evidenceSummary) {
+      updateData.evidence_summary = evidenceSummary;
+    }
+    if (resolutionFingerprint) {
+      updateData.resolution_fingerprint = resolutionFingerprint;
+    }
   } else {
     // If setting back to pending, clear resolution data
     updateData.resolved_at = null;
+    updateData.resolved_by = null;
     updateData.resolution_note = null;
     updateData.resolution_url = null;
+    updateData.evidence_grade = null;
+    updateData.evidence_summary = null;
+    updateData.resolution_fingerprint = null;
   }
 
   // Update the outcome and resolution data
