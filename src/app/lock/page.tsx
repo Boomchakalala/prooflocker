@@ -140,7 +140,7 @@ export default function LockPage() {
               </p>
             </div>
 
-            <div className="glass rounded-xl p-6 glow-purple">
+            <div className="glass border border-white/10 rounded-xl p-6">
               <div className="mb-6">
                 <label
                   htmlFor="prediction-text"
@@ -153,7 +153,7 @@ export default function LockPage() {
                   value={text}
                   onChange={(e) => setText(e.target.value)}
                   placeholder="e.g., Bitcoin hits $150K by June 2026"
-                  className="w-full h-48 px-4 py-3 glass border border-white/10 rounded-lg text-white placeholder-[#555] focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none transition-all"
+                  className="w-full h-48 px-4 py-3 glass border border-white/10 rounded-lg text-white placeholder-[#555] focus:outline-none focus:ring-2 focus:ring-[#2E5CFF] focus:border-transparent resize-none transition-all"
                   disabled={loading}
                 />
                 <div className="flex items-center justify-between mt-2">
