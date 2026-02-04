@@ -1,25 +1,27 @@
 @import "tailwindcss";
 
 :root {
-  /* 2026 Crypto Design System - Polymarket-inspired with purple signature */
-  --bg-top: #0A0A0F;
-  --bg-bottom: #111118;
+  /* 2026 Cyberpunk Design System - Neon cyan and magenta on deep black */
+  --bg-top: #030712;
+  --bg-bottom: #0a0a0f;
   --bg-card: #1F2937;
-  --border-purple: #4C1D95;
+  --border-cyan: #06B6D4;
+  --border-magenta: #EC4899;
   --text-primary: #F8F9FA;
   --text-secondary: #9CA3AF;
-  --purple-royal: #5B21B6;
-  --blue-poly: #2E5CFF;
-  --teal-positive: #06B6D4;
+  --cyan-neon: #06B6D4;
+  --pink-neon: #EC4899;
+  --purple-neon: #A855F7;
+  --teal-positive: #14B8A6;
 
   /* Legacy (kept for compatibility) */
-  --background: #0A0A0F;
+  --background: #030712;
   --foreground: #F8F9FA;
   --card-bg: #1F2937;
-  --primary: #2E5CFF;
-  --secondary: #5B21B6;
-  --accent-cyan: #2E5CFF;
-  --purple-vibrant: #5B21B6;
+  --primary: #06B6D4;
+  --secondary: #EC4899;
+  --accent-cyan: #06B6D4;
+  --purple-vibrant: #A855F7;
 }
 
 @theme inline {
@@ -36,12 +38,12 @@ body {
   font-family: var(--font-inter), system-ui, -apple-system, sans-serif;
 }
 
-/* 2026 Crypto gradient background - deep charcoal with purple-blue radial */
+/* 2026 Cyberpunk gradient background - deep black with cyan-magenta radial */
 .gradient-bg {
   background: linear-gradient(
     180deg,
-    #0A0A0F 0%,
-    #111118 100%
+    #030712 0%,
+    #0a0a0f 100%
   );
   position: relative;
 }
@@ -52,8 +54,8 @@ body {
   inset: 0;
   background: radial-gradient(
     circle at 50% 30%,
-    rgba(91, 33, 182, 0.15) 0%,
-    rgba(46, 92, 255, 0.1) 40%,
+    rgba(6, 182, 212, 0.12) 0%,
+    rgba(236, 72, 153, 0.08) 40%,
     transparent 70%
   );
   pointer-events: none;
