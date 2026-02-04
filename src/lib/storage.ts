@@ -79,6 +79,10 @@ interface PredictionRow {
   resolution_note: string | null;
   resolution_url: string | null;
   resolved_at: string | null;
+  resolved_by: string | null;
+  evidence_grade: string | null;
+  evidence_summary: string | null;
+  resolution_fingerprint: string | null;
   de_reference: string | null;
   de_event_id: string | null;
   de_status: string | null;
@@ -119,6 +123,10 @@ function rowToPrediction(row: PredictionRow): Prediction {
     resolutionNote: row.resolution_note || undefined,
     resolutionUrl: row.resolution_url || undefined,
     resolvedAt: row.resolved_at || undefined,
+    resolvedBy: row.resolved_by || undefined,
+    evidenceGrade: (row.evidence_grade as EvidenceGrade) || undefined,
+    evidenceSummary: row.evidence_summary || undefined,
+    resolutionFingerprint: row.resolution_fingerprint || undefined,
     deReference: row.de_reference || undefined,
     deEventId: row.de_event_id || undefined,
     deStatus: row.de_status || undefined,
@@ -159,6 +167,10 @@ function predictionToRow(prediction: Prediction): Omit<PredictionRow, "created_a
     resolution_note: prediction.resolutionNote || null,
     resolution_url: prediction.resolutionUrl || null,
     resolved_at: prediction.resolvedAt || null,
+    resolved_by: prediction.resolvedBy || null,
+    evidence_grade: prediction.evidenceGrade || null,
+    evidence_summary: prediction.evidenceSummary || null,
+    resolution_fingerprint: prediction.resolutionFingerprint || null,
     de_reference: prediction.deReference || null,
     de_event_id: prediction.deEventId || null,
     de_status: prediction.deStatus || null,
