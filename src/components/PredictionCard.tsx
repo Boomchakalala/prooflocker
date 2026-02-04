@@ -137,26 +137,26 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
     ? prediction.textPreview.slice(0, MAX_TITLE_LENGTH) + "…"
     : prediction.textPreview;
 
-  // Helper to get category styling - Premium white/blue theme
+  // Helper to get category styling - Original theme with more vibrant colors
   const getCategoryStyle = (category: string) => {
     switch (category.toLowerCase()) {
       case 'crypto':
-        return 'bg-blue-50 border-blue-200 text-blue-700';
+        return 'bg-gradient-to-r from-cyan-500/20 to-cyan-600/20 border-cyan-400/50 text-cyan-300';
       case 'sports':
-        return 'bg-indigo-50 border-indigo-200 text-indigo-700';
+        return 'bg-gradient-to-r from-orange-500/20 to-red-500/20 border-orange-400/50 text-orange-300';
       case 'tech':
-        return 'bg-blue-50 border-blue-200 text-blue-700';
+        return 'bg-gradient-to-r from-blue-500/20 to-cyan-500/20 border-blue-400/50 text-blue-300';
       case 'personal':
-        return 'bg-violet-50 border-violet-200 text-violet-700';
+        return 'bg-gradient-to-r from-purple-500/20 to-pink-500/20 border-purple-400/50 text-purple-300';
       case 'politics':
-        return 'bg-indigo-50 border-indigo-200 text-indigo-700';
+        return 'bg-gradient-to-r from-red-500/20 to-pink-500/20 border-red-400/50 text-red-300';
       case 'markets':
-        return 'bg-emerald-50 border-emerald-200 text-emerald-700';
+        return 'bg-gradient-to-r from-emerald-500/20 to-teal-500/20 border-emerald-400/50 text-emerald-300';
       case 'culture':
-        return 'bg-violet-50 border-violet-200 text-violet-700';
+        return 'bg-gradient-to-r from-pink-500/20 to-purple-500/20 border-pink-400/50 text-pink-300';
       case 'other':
       default:
-        return 'bg-slate-50 border-slate-200 text-slate-600';
+        return 'bg-gradient-to-r from-gray-500/20 to-gray-600/20 border-gray-400/50 text-gray-300';
     }
   };
 
@@ -228,22 +228,22 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
   const authorTierInfo = prediction.author_reliability_tier ?
     getTierInfo(prediction.author_reliability_tier) : null;
 
-  // Determine card border style based on quality - Premium clean shadows
+  // Determine card border style - Creative prominent styling with gradients
   const getCardBorderStyle = () => {
     if (prediction.outcome === 'correct') {
       if (prediction.evidence_score && prediction.evidence_score >= 76) {
-        // High quality correct: Premium blue shadow
-        return 'border-blue-200 hover:border-blue-300 shadow-[0_0_0_1px_rgba(37,99,235,0.1),0_4px_12px_rgba(37,99,235,0.15)] hover:shadow-[0_0_0_1px_rgba(37,99,235,0.2),0_8px_24px_rgba(37,99,235,0.2)]';
+        // High quality correct: Strong purple/teal gradient glow
+        return 'border-transparent bg-gradient-to-br from-purple-500/20 via-teal-500/20 to-purple-500/20 shadow-[0_0_30px_rgba(168,85,247,0.3),0_0_60px_rgba(6,182,212,0.2)] hover:shadow-[0_0_40px_rgba(168,85,247,0.4),0_0_80px_rgba(6,182,212,0.3)]';
       }
-      // Correct: Light blue border
-      return 'border-blue-100 hover:border-blue-200 hover:shadow-[0_0_0_1px_rgba(37,99,235,0.1),0_4px_12px_rgba(37,99,235,0.1)]';
+      // Correct: Moderate teal/green glow
+      return 'border-teal-500/40 bg-gradient-to-br from-teal-500/10 to-emerald-500/10 shadow-[0_0_20px_rgba(6,182,212,0.25)] hover:shadow-[0_0_30px_rgba(6,182,212,0.35)]';
     }
     if (prediction.outcome === 'incorrect') {
-      // Incorrect: Light red border
-      return 'border-red-100 hover:border-red-200 hover:shadow-[0_0_0_1px_rgba(239,68,68,0.1),0_4px_12px_rgba(239,68,68,0.1)]';
+      // Incorrect: Red/orange gradient glow
+      return 'border-red-500/40 bg-gradient-to-br from-red-500/10 to-orange-500/10 shadow-[0_0_20px_rgba(239,68,68,0.25)] hover:shadow-[0_0_30px_rgba(239,68,68,0.35)]';
     }
-    // Pending: Subtle gray border
-    return 'border-slate-200 hover:border-slate-300 hover:shadow-[0_1px_3px_0_rgba(0,0,0,0.1)]';
+    // Pending: Purple gradient glow
+    return 'border-purple-500/30 bg-gradient-to-br from-purple-500/10 to-pink-500/10 shadow-[0_0_15px_rgba(168,85,247,0.2)] hover:shadow-[0_0_25px_rgba(168,85,247,0.3)]';
   };
 
   return (
