@@ -204,7 +204,12 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
               {authorNumber.toString().slice(-2)}
             </div>
             <div className="flex items-center gap-1.5 text-[11px] md:text-xs text-neutral-400 min-w-0">
-              <span className="whitespace-nowrap flex-shrink-0">Anon #{authorNumber}</span>
+              <Link
+                href={`/user/${prediction.userId || prediction.anonId}`}
+                className="whitespace-nowrap flex-shrink-0 hover:text-[#2E5CFF] transition-colors"
+              >
+                Anon #{authorNumber}
+              </Link>
               <span className="text-neutral-600 flex-shrink-0">•</span>
               <span className="whitespace-nowrap truncate">{formatRelativeTime(prediction.timestamp)}</span>
               {/* Category badge - inline on desktop only */}
