@@ -134,6 +134,13 @@ export async function POST(
       evidenceSummary: evidenceSummary || "",
     });
 
+    // Step 2.5: Compute evidence score
+    const evidenceScoreResult = computeEvidenceScore(
+      evidenceItems,
+      evidenceSummary,
+      false // directProofClaim - can add this parameter to body if needed
+    );
+
     // Step 3: Update prediction with resolution data
     await updatePredictionOutcome(
       id,
@@ -143,7 +150,13 @@ export async function POST(
       resolutionUrl,
       evidenceGrade,
       evidenceSummary,
-      resolutionFingerprint
+      resolutionFingerprint,
+      evidenceScoreResult.score,
+      {
+        score: evidenceScoreResult.score,
+        tier: evidenceScoreResult.tier,
+        breakdown: evidenceScoreResult.breakdown,
+      }
     );
 
     // Step 4: Update user stats
