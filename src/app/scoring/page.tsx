@@ -15,7 +15,7 @@ export default function ScoringPage() {
     <div className="min-h-screen bg-[#0a0a0a] text-white">
       <div className="max-w-4xl mx-auto px-4 py-12">
         {/* Header */}
-        <div className="mb-12">
+        <div className="mb-10">
           <Link
             href="/"
             className="inline-flex items-center text-neutral-400 hover:text-white transition-colors mb-8 text-sm"
@@ -25,52 +25,35 @@ export default function ScoringPage() {
             </svg>
             Back to ProofLocker
           </Link>
-          <h1 className="text-4xl md:text-5xl font-bold text-white mb-4 tracking-tight">
+          <h1 className="text-4xl font-bold text-white mb-3 tracking-tight">
             How Scoring Works
           </h1>
-          <p className="text-lg text-neutral-400">
-            Understanding ProofLocker's three-tier scoring system
+          <p className="text-neutral-400">
+            Three metrics track your prediction quality and contribution
           </p>
         </div>
 
         {/* Overview Cards */}
-        <div className="grid md:grid-cols-3 gap-4 mb-16">
+        <div className="grid md:grid-cols-3 gap-4 mb-12">
           {/* Evidence Score */}
-          <div className="bg-gradient-to-br from-green-500/10 via-emerald-500/5 to-transparent border border-green-500/20 rounded-2xl p-6">
-            <div className="w-12 h-12 rounded-xl bg-green-500/20 border border-green-500/30 flex items-center justify-center mb-4">
-              <svg className="w-6 h-6 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-            </div>
-            <h3 className="text-xl font-bold text-white mb-2">Evidence Score</h3>
-            <p className="text-sm text-neutral-400 mb-3">Auto-calculated quality of proof provided</p>
-            <div className="text-3xl font-bold text-green-400">0-100</div>
+          <div className="bg-[#0d0d0d] border border-neutral-800 rounded-lg p-6">
+            <div className="text-xs font-semibold text-neutral-500 uppercase tracking-wider mb-3">Evidence Score</div>
+            <div className="text-3xl font-bold text-white mb-2">0-100</div>
+            <p className="text-sm text-neutral-400">Quality of proof provided when resolving</p>
           </div>
 
           {/* Reliability Score */}
-          <div className="bg-gradient-to-br from-purple-500/10 via-blue-500/5 to-transparent border border-purple-500/20 rounded-2xl p-6">
-            <div className="w-12 h-12 rounded-xl bg-purple-500/20 border border-purple-500/30 flex items-center justify-center mb-4">
-              <svg className="w-6 h-6 text-purple-400" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" />
-              </svg>
-            </div>
-            <h3 className="text-xl font-bold text-white mb-2">Reliability Score</h3>
-            <p className="text-sm text-neutral-400 mb-3">Your reputation as a forecaster</p>
-            <div className="text-3xl font-bold text-purple-400">0-1000</div>
+          <div className="bg-[#0d0d0d] border border-neutral-800 rounded-lg p-6">
+            <div className="text-xs font-semibold text-neutral-500 uppercase tracking-wider mb-3">Reliability Score</div>
+            <div className="text-3xl font-bold text-white mb-2">0-1000</div>
+            <p className="text-sm text-neutral-400">Your reputation as a forecaster</p>
           </div>
 
           {/* Total Points */}
-          <div className="bg-gradient-to-br from-yellow-500/10 via-orange-500/5 to-transparent border border-yellow-500/20 rounded-2xl p-6">
-            <div className="w-12 h-12 rounded-xl bg-yellow-500/20 border border-yellow-500/30 flex items-center justify-center mb-4">
-              <svg className="w-6 h-6 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-            </div>
-            <h3 className="text-xl font-bold text-white mb-2">Total Points</h3>
-            <p className="text-sm text-neutral-400 mb-3">Lifetime earnings, never decrease</p>
-            <div className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-orange-500">
-              Unlimited
-            </div>
+          <div className="bg-[#0d0d0d] border border-neutral-800 rounded-lg p-6">
+            <div className="text-xs font-semibold text-neutral-500 uppercase tracking-wider mb-3">Total Points</div>
+            <div className="text-3xl font-bold text-white mb-2">Lifetime</div>
+            <p className="text-sm text-neutral-400">Cumulative earnings, never decrease</p>
           </div>
         </div>
 
