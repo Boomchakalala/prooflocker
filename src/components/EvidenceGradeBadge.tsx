@@ -31,7 +31,10 @@ export default function EvidenceGradeBadge({
 
   const getLabel = () => {
     if (showLabel === "none") return null;
-    if (showLabel === "short") return `Grade ${grade}`;
+    if (showLabel === "short") {
+      // Return just the first word (Direct, Strong, Basic, None)
+      return info.label.split(" ")[0];
+    }
     return info.label;
   };
 

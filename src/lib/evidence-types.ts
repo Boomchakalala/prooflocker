@@ -81,23 +81,23 @@ export interface UserStats {
 // Evidence grade descriptions (for UI)
 export const EvidenceGradeInfo: Record<EvidenceGrade, { label: string; description: string; color: string }> = {
   A: {
-    label: "Grade A - Primary",
-    description: "Official docs, court records, raw data, verified on-chain transactions",
+    label: "Direct (Primary)",
+    description: "Official sources, authoritative documents, verified primary evidence (on-chain tx for on-chain claims only)",
     color: "emerald",
   },
   B: {
-    label: "Grade B - Secondary",
-    description: "Reputable outlets, multiple confirmations, high-quality secondary sources",
+    label: "Strong (Secondary)",
+    description: "Reputable news outlets, multiple independent sources, high-quality secondary evidence",
     color: "blue",
   },
   C: {
-    label: "Grade C - Weak",
-    description: "Screenshots, single-source, social media posts, indirect evidence",
+    label: "Basic",
+    description: "Screenshots, single sources, social media posts, indirect or weak evidence",
     color: "amber",
   },
   D: {
-    label: "Grade D - None",
-    description: "No evidence provided. Minimal credibility impact.",
+    label: "None",
+    description: "No evidence provided. Claims without proof.",
     color: "gray",
   },
 };
@@ -195,4 +195,29 @@ export function validateEvidenceRequirements(
   }
 
   return { valid: true };
+}
+
+// Compute effective evidence grade considering legacy evidence
+export function computeEffectiveGrade(
+  evidenceGrade: EvidenceGrade | undefined,
+  evidenceItemCount: number,
+  legacyResolutionUrl: string | undefined
+): EvidenceGrade {
+  // If explicit grade is set, use it
+  if (evidenceGrade) {
+    return evidenceGrade;
+  }
+
+  // If evidence items exist, default to C (Basic)
+  if (evidenceItemCount > 0) {
+    return "C";
+  }
+
+  // If legacy evidence URL exists, default to C (Basic)
+  if (legacyResolutionUrl && legacyResolutionUrl.trim().length > 0) {
+    return "C";
+  }
+
+  // No evidence at all
+  return "D";
 }
