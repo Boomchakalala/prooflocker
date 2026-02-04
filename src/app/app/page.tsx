@@ -253,16 +253,16 @@ function AppFeedContent() {
             {!user ? (
               <button
                 onClick={() => setShowClaimModal(true)}
-                className="hidden sm:block px-4 py-2 text-sm md:text-base text-neutral-300 hover:text-white transition-all rounded-md hover:bg-white/5 border border-transparent hover:border-white/10"
+                className="hidden sm:block px-4 py-2 text-sm md:text-base text-slate-700 hover:text-slate-900 transition-all rounded-md hover:bg-slate-50 border border-transparent hover:border-slate-200"
               >
                 Sign in
               </button>
             ) : (
               <div className="hidden md:flex flex-col items-end leading-tight">
-                <div className="text-sm text-white font-medium">{getPublicHandle(user)}</div>
+                <div className="text-sm text-slate-900 font-medium">{getPublicHandle(user)}</div>
                 <button
                   onClick={handleSignOut}
-                  className="text-xs text-white/60 hover:text-white/90 hover:underline transition-all flex items-center gap-1"
+                  className="text-xs text-slate-600 hover:text-slate-900 hover:underline transition-all flex items-center gap-1"
                 >
                   <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
@@ -272,10 +272,10 @@ function AppFeedContent() {
               </div>
             )}
 
-            {/* Lock CTA - Cyberpunk gradient */}
+            {/* Lock CTA - Premium blue gradient */}
             <Link
               href="/lock"
-              className="flex px-3 py-2 md:px-5 md:py-2.5 bg-gradient-to-r from-cyan-600/80 to-pink-600/80 hover:from-cyan-600 hover:to-pink-600 text-white text-sm md:text-base font-medium rounded-md transition-all whitespace-nowrap shadow-[0_0_20px_rgba(6,182,212,0.3)] hover:shadow-[0_0_30px_rgba(6,182,212,0.5)]"
+              className="flex px-3 py-2 md:px-5 md:py-2.5 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white text-sm md:text-base font-medium rounded-md transition-all whitespace-nowrap shadow-[0_0_0_1px_rgba(37,99,235,0.2),0_4px_12px_rgba(37,99,235,0.2)] hover:shadow-[0_0_0_1px_rgba(37,99,235,0.3),0_8px_20px_rgba(37,99,235,0.25)]"
             >
               Lock my prediction
             </Link>
@@ -284,10 +284,10 @@ function AppFeedContent() {
             {user && (
               <button
                 onClick={() => setShowUserMenu(!showUserMenu)}
-                className="sm:hidden p-1.5 hover:bg-white/5 rounded transition-all"
+                className="sm:hidden p-1.5 hover:bg-slate-100 rounded transition-all"
                 aria-label="User menu"
               >
-                <svg className="w-5 h-5 text-neutral-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-5 h-5 text-slate-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                 </svg>
               </button>
@@ -300,17 +300,17 @@ function AppFeedContent() {
                   className="fixed inset-0 z-40 sm:hidden"
                   onClick={() => setShowUserMenu(false)}
                 />
-                <div className="fixed top-16 right-4 w-64 bg-[#0a0a0a] border border-white/20 rounded-lg shadow-2xl z-50 py-2 sm:hidden">
-                  <div className="px-4 py-3 border-b border-white/10">
-                    <p className="text-xs text-neutral-400 mb-1">Signed in as</p>
-                    <p className="text-sm text-white font-medium">{getPublicHandle(user)}</p>
+                <div className="fixed top-16 right-4 w-64 bg-white border border-slate-200 rounded-lg shadow-2xl z-50 py-2 sm:hidden">
+                  <div className="px-4 py-3 border-b border-slate-200">
+                    <p className="text-xs text-slate-600 mb-1">Signed in as</p>
+                    <p className="text-sm text-slate-900 font-medium">{getPublicHandle(user)}</p>
                   </div>
                   <button
                     onClick={() => {
                       setShowUserMenu(false);
                       handleSignOut();
                     }}
-                    className="w-full px-4 py-3 text-left text-sm text-neutral-300 hover:text-white hover:bg-white/5 transition-all flex items-center gap-2"
+                    className="w-full px-4 py-3 text-left text-sm text-slate-700 hover:text-slate-900 hover:bg-slate-50 transition-all flex items-center gap-2"
                   >
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
@@ -329,15 +329,15 @@ function AppFeedContent() {
         {/* Page header */}
         <div className="flex items-center justify-between mb-5">
           <div>
-            <h1 className="text-2xl md:text-3xl font-bold text-white mb-0.5 leading-tight">Explore predictions</h1>
-            <p className="text-sm text-neutral-400 leading-snug">Browse public predictions locked on-chain</p>
+            <h1 className="text-2xl md:text-3xl font-bold text-slate-900 mb-0.5 leading-tight">Explore predictions</h1>
+            <p className="text-sm text-slate-600 leading-snug">Browse public predictions locked on-chain</p>
           </div>
           {/* Refresh button - Mobile only, icon-only */}
           {activeTab === "all" && (
             <button
               onClick={syncDEStatus}
               disabled={syncing}
-              className="md:hidden h-9 w-9 glass text-neutral-400 hover:text-white rounded-lg transition-all hover:bg-white/5 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center flex-shrink-0"
+              className="md:hidden h-9 w-9 glass text-slate-600 hover:text-slate-900 rounded-lg transition-all hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center flex-shrink-0"
               title="Recheck on-chain status for pending proofs"
             >
               <svg
