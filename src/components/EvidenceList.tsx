@@ -151,6 +151,39 @@ export default function EvidenceList({
         </div>
       )}
 
+      {/* Legacy Evidence Link (from before evidence system) */}
+      {legacyResolutionUrl && evidenceItems.length === 0 && (
+        <div>
+          <h4 className="text-xs font-semibold text-neutral-400 uppercase tracking-wide mb-2">
+            Evidence Link
+          </h4>
+          <div className="p-3 bg-white/5 border border-white/10 rounded-lg hover:bg-white/10 transition-colors">
+            <div className="flex items-center gap-2 mb-1">
+              <span className="text-xs px-2 py-0.5 bg-blue-500/20 text-blue-300 rounded capitalize font-medium">
+                Link
+              </span>
+              <span className="text-xs text-neutral-500 bg-amber-500/10 text-amber-400 px-2 py-0.5 rounded">
+                Legacy
+              </span>
+            </div>
+            <a
+              href={legacyResolutionUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-sm text-blue-400 hover:text-blue-300 hover:underline break-all block"
+            >
+              {legacyResolutionUrl}
+            </a>
+            {legacyResolutionNote && (
+              <p className="text-xs text-neutral-400 mt-2">{legacyResolutionNote}</p>
+            )}
+          </div>
+          <p className="text-xs text-neutral-500 mt-2 italic">
+            This evidence was added before the structured evidence system. Consider migrating to the new format for better verification.
+          </p>
+        </div>
+      )}
+
       {/* Resolution Fingerprint */}
       {resolutionFingerprint && (
         <div>
@@ -190,7 +223,7 @@ export default function EvidenceList({
         </div>
       )}
 
-      {evidenceItems.length === 0 && !evidenceSummary && (
+      {evidenceItems.length === 0 && !evidenceSummary && !legacyResolutionUrl && (
         <div className="text-sm text-neutral-500 italic">
           No evidence provided for this resolution
         </div>

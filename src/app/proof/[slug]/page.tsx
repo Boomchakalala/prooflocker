@@ -351,6 +351,8 @@ export default async function ProofPage({ params }: Props) {
                 predictionId={prediction.id}
                 evidenceSummary={prediction.evidenceSummary}
                 resolutionFingerprint={prediction.resolutionFingerprint}
+                legacyResolutionUrl={prediction.resolutionUrl}
+                legacyResolutionNote={prediction.resolutionNote}
               />
             </div>
           )}
