@@ -137,22 +137,26 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
     ? prediction.textPreview.slice(0, MAX_TITLE_LENGTH) + "…"
     : prediction.textPreview;
 
-  // Helper to get category styling
+  // Helper to get category styling - Cyberpunk theme
   const getCategoryStyle = (category: string) => {
     switch (category.toLowerCase()) {
       case 'crypto':
-        return 'bg-[#2E5CFF]/10 border-[#2E5CFF]/30 text-[#2E5CFF]';
+        return 'bg-cyan-500/10 border-cyan-500/40 text-cyan-400 shadow-[0_0_10px_rgba(6,182,212,0.3)]';
       case 'sports':
-        return 'bg-[#5B21B6]/10 border-[#5B21B6]/30 text-[#5B21B6]';
+        return 'bg-pink-500/10 border-pink-500/40 text-pink-400 shadow-[0_0_10px_rgba(236,72,153,0.3)]';
       case 'tech':
-        return 'bg-[#2E5CFF]/10 border-[#2E5CFF]/30 text-[#2E5CFF]';
+        return 'bg-cyan-500/10 border-cyan-500/40 text-cyan-400 shadow-[0_0_10px_rgba(6,182,212,0.3)]';
       case 'personal':
-        return 'bg-[#5B21B6]/10 border-[#5B21B6]/30 text-[#5B21B6]';
+        return 'bg-purple-500/10 border-purple-500/40 text-purple-400 shadow-[0_0_10px_rgba(168,85,247,0.3)]';
       case 'politics':
+        return 'bg-pink-500/10 border-pink-500/40 text-pink-400 shadow-[0_0_10px_rgba(236,72,153,0.3)]';
       case 'markets':
+        return 'bg-emerald-500/10 border-emerald-500/40 text-emerald-400 shadow-[0_0_10px_rgba(16,185,129,0.3)]';
+      case 'culture':
+        return 'bg-purple-500/10 border-purple-500/40 text-purple-400 shadow-[0_0_10px_rgba(168,85,247,0.3)]';
       case 'other':
       default:
-        return 'bg-[#5B21B6]/10 border-[#5B21B6]/30 text-[#5B21B6]';
+        return 'bg-gray-500/10 border-gray-500/40 text-gray-400';
     }
   };
 
@@ -224,18 +228,22 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
   const authorTierInfo = prediction.author_reliability_tier ?
     getTierInfo(prediction.author_reliability_tier) : null;
 
-  // Determine card border glow based on quality
+  // Determine card border glow based on quality - Cyberpunk neon glows
   const getCardBorderStyle = () => {
     if (prediction.outcome === 'correct') {
       if (prediction.evidence_score && prediction.evidence_score >= 76) {
-        return 'border-green-500/40 hover:border-green-500/60 shadow-[0_0_30px_rgba(34,197,94,0.2)]';
+        // High quality correct: Strong cyan neon glow
+        return 'border-cyan-400/60 hover:border-cyan-400/80 shadow-[0_0_40px_rgba(6,182,212,0.4),0_0_60px_rgba(6,182,212,0.2)] hover:shadow-[0_0_50px_rgba(6,182,212,0.5),0_0_80px_rgba(6,182,212,0.3)]';
       }
-      return 'border-green-500/20 hover:border-green-500/40';
+      // Correct: Moderate cyan glow
+      return 'border-cyan-500/40 hover:border-cyan-500/60 shadow-[0_0_25px_rgba(6,182,212,0.3)]';
     }
     if (prediction.outcome === 'incorrect') {
-      return 'border-red-500/20 hover:border-red-500/40';
+      // Incorrect: Pink/red neon glow
+      return 'border-pink-500/40 hover:border-pink-500/60 shadow-[0_0_25px_rgba(236,72,153,0.3)]';
     }
-    return 'border-white/10 hover:border-white/20';
+    // Pending: Subtle white/gray glow
+    return 'border-white/10 hover:border-white/20 hover:shadow-[0_0_20px_rgba(255,255,255,0.1)]';
   };
 
   return (
