@@ -387,20 +387,30 @@ export default function ProfilePage() {
         {/* Stats grid */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
           <div className="bg-[#0d0d0d] border border-neutral-800 rounded-lg p-6">
-            <div className="text-3xl font-bold text-neutral-200 mb-1">{totalPredictions}</div>
+            <div className="text-3xl font-bold text-neutral-200 mb-1">
+              {stats?.totalPredictions || totalPredictions}
+            </div>
             <div className="text-xs text-neutral-500 uppercase tracking-wider">Total</div>
           </div>
           <div className="bg-[#0d0d0d] border border-neutral-800 rounded-lg p-6">
-            <div className="text-3xl font-bold text-green-400 mb-1">{correctCount}</div>
+            <div className="text-3xl font-bold text-green-400 mb-1">
+              {stats?.correctPredictions || correctCount}
+            </div>
             <div className="text-xs text-neutral-500 uppercase tracking-wider">Correct</div>
           </div>
           <div className="bg-[#0d0d0d] border border-neutral-800 rounded-lg p-6">
-            <div className="text-3xl font-bold text-red-400 mb-1">{incorrectCount}</div>
+            <div className="text-3xl font-bold text-red-400 mb-1">
+              {stats?.incorrectPredictions || incorrectCount}
+            </div>
             <div className="text-xs text-neutral-500 uppercase tracking-wider">Incorrect</div>
           </div>
           <div className="bg-[#0d0d0d] border border-neutral-800 rounded-lg p-6">
             <div className="text-3xl font-bold text-neutral-200 mb-1">
-              {resolvedCount > 0 ? `${correctCount}/${resolvedCount}` : "—"}
+              {stats && stats.resolvedPredictions > 0
+                ? `${stats.correctPredictions}/${stats.resolvedPredictions}`
+                : resolvedCount > 0
+                ? `${correctCount}/${resolvedCount}`
+                : "—"}
             </div>
             <div className="text-xs text-neutral-500 uppercase tracking-wider">Accuracy</div>
           </div>
