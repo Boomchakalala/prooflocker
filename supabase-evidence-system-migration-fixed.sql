@@ -1,5 +1,5 @@
 -- ============================================================
--- EVIDENCE SYSTEM MIGRATION
+-- EVIDENCE SYSTEM MIGRATION (FIXED)
 -- Adds evidence grading, evidence items, and credibility scoring
 -- ============================================================
 
@@ -313,9 +313,6 @@ CREATE POLICY "Users can read own stats"
 CREATE POLICY "Public leaderboard readable"
   ON user_stats FOR SELECT
   USING (true);
-
--- Policy: Only system can insert/update stats (via function)
--- (No insert/update policies for users = only service role via function)
 
 -- ============================================================
 -- MIGRATION COMPLETE
