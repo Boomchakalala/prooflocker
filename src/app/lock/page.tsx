@@ -208,14 +208,14 @@ export default function LockPage() {
               </div>
 
               {/* How it works - Collapsible */}
-              <div className="glass border border-white/5 rounded-lg p-4 mb-6">
+              <div className="glass border border-white/10 rounded-lg p-4 mb-6">
                 <button
                   onClick={() => setHowItWorksExpanded(!howItWorksExpanded)}
                   className="w-full flex items-center justify-between text-left group"
                 >
                   <h3 className="text-sm font-semibold text-[#e0e0e0] flex items-center gap-2">
                     <svg
-                      className="w-4 h-4 text-blue-500"
+                      className="w-4 h-4 text-[#2E5CFF]"
                       fill="currentColor"
                       viewBox="0 0 20 20"
                     >
@@ -239,23 +239,23 @@ export default function LockPage() {
                   </svg>
                 </button>
                 {howItWorksExpanded && (
-                  <ol className="space-y-2 text-sm text-[#a0a0a0] mt-3 pt-3 border-t border-white/5">
+                  <ol className="space-y-2 text-sm text-[#a0a0a0] mt-3 pt-3 border-t border-white/10">
                     <li className="flex gap-2">
-                      <span className="text-blue-500 flex-shrink-0 font-semibold">1.</span>
+                      <span className="text-[#2E5CFF] flex-shrink-0 font-semibold">1.</span>
                       <span>Your text is hashed using SHA-256 (cryptographic fingerprint)</span>
                     </li>
                     <li className="flex gap-2">
-                      <span className="text-blue-500 flex-shrink-0 font-semibold">2.</span>
+                      <span className="text-[#2E5CFF] flex-shrink-0 font-semibold">2.</span>
                       <span>
                         Fingerprint is submitted on-chain—permanent and immutable
                       </span>
                     </li>
                     <li className="flex gap-2">
-                      <span className="text-blue-500 flex-shrink-0 font-semibold">3.</span>
+                      <span className="text-[#2E5CFF] flex-shrink-0 font-semibold">3.</span>
                       <span>You get a proof ID to share and verify</span>
                     </li>
                     <li className="flex gap-2">
-                      <span className="text-blue-500 flex-shrink-0 font-semibold">4.</span>
+                      <span className="text-[#2E5CFF] flex-shrink-0 font-semibold">4.</span>
                       <span>
                         Once locked, it cannot be edited. Ever.
                       </span>
@@ -265,10 +265,10 @@ export default function LockPage() {
               </div>
 
               {/* Privacy notice - Moved above CTA */}
-              <div className="glass rounded-lg p-4 border border-white/5 mb-6">
+              <div className="glass rounded-lg p-4 border border-white/10 mb-6">
                 <div className="flex items-start gap-3">
                   <svg
-                    className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5"
+                    className="w-5 h-5 text-green-400 flex-shrink-0 mt-0.5"
                     fill="currentColor"
                     viewBox="0 0 20 20"
                   >
@@ -298,7 +298,7 @@ export default function LockPage() {
               <button
                 onClick={handleLock}
                 disabled={!text.trim() || loading}
-                className="relative w-full px-6 py-5 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 disabled:bg-neutral-900 disabled:text-neutral-600 disabled:cursor-not-allowed text-white font-semibold text-base rounded-lg transition-all disabled:from-neutral-900 disabled:to-neutral-900 shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40 disabled:shadow-none"
+                className="relative w-full px-6 py-5 bg-gradient-to-r from-[#2E5CFF] to-[#5B21B6] hover:from-[#3D6CFF] hover:to-[#6B31C6] disabled:bg-neutral-900 disabled:text-neutral-600 disabled:cursor-not-allowed text-white font-semibold text-base rounded-lg transition-all disabled:from-neutral-900 disabled:to-neutral-900 shadow-lg shadow-[#2E5CFF]/25 hover:shadow-[#2E5CFF]/40 disabled:shadow-none"
               >
                 {loading ? (
                   <span className="flex items-center justify-center gap-2">
@@ -342,7 +342,7 @@ export default function LockPage() {
         ) : (
           <div className="fade-in">
             {/* Confirmation screen */}
-            <div className="glass rounded-xl p-8 text-center glow-purple mb-6">
+            <div className="glass border border-white/10 rounded-xl p-8 text-center mb-6">
               <div className="inline-flex items-center justify-center w-24 h-24 rounded-full mb-6 bg-[#2E5CFF]/20 border-4 border-[#2E5CFF]/40 shadow-2xl shadow-[#2E5CFF]/30">
                 <svg className="w-12 h-12 text-[#2E5CFF]" fill="currentColor" viewBox="0 0 20 20">
                   <path fillRule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clipRule="evenodd" />
@@ -360,7 +360,7 @@ export default function LockPage() {
                 Your prediction is now on-chain with a cryptographic fingerprint. It's public, permanent, and cannot be edited.
               </p>
 
-              <div className="glass border border-white/5 rounded-lg p-4 mb-6 max-w-xl mx-auto">
+              <div className="glass border border-white/10 rounded-lg p-4 mb-6 max-w-xl mx-auto">
                 <label className="block text-[10px] font-semibold text-neutral-500 mb-2 uppercase tracking-wider">
                   Your Prediction
                 </label>
