@@ -337,13 +337,17 @@ export async function updatePrediction(
 
 /**
  * Update prediction outcome (only for claimed predictions)
+ * Now includes evidence grade, summary, and items
  */
 export async function updatePredictionOutcome(
   id: string,
   outcome: PredictionOutcome,
   userId: string,
   resolutionNote?: string,
-  resolutionUrl?: string
+  resolutionUrl?: string,
+  evidenceGrade?: EvidenceGrade,
+  evidenceSummary?: string,
+  resolutionFingerprint?: string
 ): Promise<void> {
   // First verify the user owns this prediction and it's claimed
   const { data: prediction, error: fetchError } = await supabase
