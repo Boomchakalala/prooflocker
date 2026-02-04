@@ -409,7 +409,7 @@ function AppFeedContent() {
                 <div className="relative">
                   <button
                     onClick={() => setShowSortMenu(!showSortMenu)}
-                    className="flex items-center gap-1.5 px-3 py-2 glass border border-white/10 text-sm font-medium text-neutral-300 hover:text-white rounded-lg transition-all hover:bg-white/5"
+                    className="flex items-center gap-1.5 px-3 py-2 glass border border-slate-200 text-sm font-medium text-slate-700 hover:text-slate-900 rounded-lg transition-all hover:bg-slate-50"
                   >
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4h13M3 8h9m-9 4h6m4 0l4-4m0 0l4 4m-4-4v12" />
@@ -431,11 +431,11 @@ function AppFeedContent() {
                         className="fixed inset-0 z-40"
                         onClick={() => setShowSortMenu(false)}
                       />
-                      <div className="absolute left-0 top-full mt-1 w-40 glass border border-white/20 rounded-lg shadow-xl z-50 py-1">
+                      <div className="absolute left-0 top-full mt-1 w-40 bg-white border border-slate-200 rounded-lg shadow-xl z-50 py-1">
                         <button
                           onClick={() => { setSortBy("new"); setShowSortMenu(false); }}
                           className={`w-full px-3 py-2 text-left text-sm transition-all flex items-center gap-2 ${
-                            sortBy === "new" ? "text-[#2E5CFF] bg-white/5" : "text-neutral-300 hover:text-white hover:bg-white/5"
+                            sortBy === "new" ? "text-blue-600 bg-blue-50" : "text-slate-700 hover:text-slate-900 hover:bg-slate-50"
                           }`}
                         >
                           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -446,7 +446,7 @@ function AppFeedContent() {
                         <button
                           onClick={() => { setSortBy("hot"); setShowSortMenu(false); }}
                           className={`w-full px-3 py-2 text-left text-sm transition-all flex items-center gap-2 ${
-                            sortBy === "hot" ? "text-[#2E5CFF] bg-white/5" : "text-neutral-300 hover:text-white hover:bg-white/5"
+                            sortBy === "hot" ? "text-blue-600 bg-blue-50" : "text-slate-700 hover:text-slate-900 hover:bg-slate-50"
                           }`}
                         >
                           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -457,7 +457,7 @@ function AppFeedContent() {
                         <button
                           onClick={() => { setSortBy("top"); setShowSortMenu(false); }}
                           className={`w-full px-3 py-2 text-left text-sm transition-all flex items-center gap-2 ${
-                            sortBy === "top" ? "text-[#2E5CFF] bg-white/5" : "text-neutral-300 hover:text-white hover:bg-white/5"
+                            sortBy === "top" ? "text-blue-600 bg-blue-50" : "text-slate-700 hover:text-slate-900 hover:bg-slate-50"
                           }`}
                         >
                           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -468,7 +468,7 @@ function AppFeedContent() {
                         <button
                           onClick={() => { setSortBy("resolved"); setShowSortMenu(false); }}
                           className={`w-full px-3 py-2 text-left text-sm transition-all flex items-center gap-2 ${
-                            sortBy === "resolved" ? "text-[#2E5CFF] bg-white/5" : "text-neutral-300 hover:text-white hover:bg-white/5"
+                            sortBy === "resolved" ? "text-blue-600 bg-blue-50" : "text-slate-700 hover:text-slate-900 hover:bg-slate-50"
                           }`}
                         >
                           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
