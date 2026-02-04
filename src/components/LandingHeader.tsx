@@ -47,6 +47,15 @@ export default function LandingHeader() {
               <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-[#2E5CFF] transition-all duration-200 group-hover:w-full" />
             </Link>
 
+            <Link
+              href="/scoring"
+              className="text-white/80 hover:text-[#2E5CFF] font-medium transition-all duration-200 text-sm md:text-base relative group order-2 hidden sm:block"
+              style={{ fontFamily: 'var(--font-inter)' }}
+            >
+              Scoring
+              <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-[#2E5CFF] transition-all duration-200 group-hover:w-full" />
+            </Link>
+
             {/* Insight Score Pill */}
             <div className="order-3">
               <InsightScorePill />
