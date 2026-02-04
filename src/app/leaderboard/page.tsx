@@ -155,7 +155,12 @@ export default function LeaderboardPage() {
                             </div>
                           </td>
                           <td className="px-6 py-4">
-                            <div className="font-semibold text-white">{entry.displayName}</div>
+                            <Link
+                              href={`/user/${entry.userId || entry.anonId}`}
+                              className="font-semibold text-white hover:text-[#2E5CFF] transition-colors"
+                            >
+                              {entry.displayName}
+                            </Link>
                           </td>
                           <td className="px-6 py-4 text-right">
                             <span className="text-[#00bfff] font-bold text-lg">
