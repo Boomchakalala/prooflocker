@@ -172,19 +172,19 @@ export default function ResolutionModalWithEvidence({
   const gradeInfo = EvidenceGradeInfo[evidenceGrade];
 
   return (
-    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4 overflow-y-auto">
-      <div className="bg-white rounded-lg max-w-2xl w-full border border-neutral-300 shadow-xl my-8">
-        <div className="p-6 border-b border-neutral-200">
+    <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50 p-4 overflow-y-auto">
+      <div className="glass border border-white/10 rounded-2xl max-w-3xl w-full shadow-2xl my-8 bg-gradient-to-br from-slate-900/95 to-slate-800/95">
+        <div className="p-6 md:p-8 border-b border-white/10">
           <div className="flex justify-between items-start">
             <div>
-              <h2 className="text-xl font-semibold text-black">Resolve Prediction</h2>
-              <p className="text-sm text-neutral-600 mt-1">
+              <h2 className="text-2xl font-bold text-white">Resolve Prediction</h2>
+              <p className="text-sm text-neutral-400 mt-1">
                 Add evidence to boost your credibility score
               </p>
             </div>
             <button
               onClick={onClose}
-              className="text-neutral-400 hover:text-black transition-colors"
+              className="text-neutral-400 hover:text-white transition-colors p-2 hover:bg-white/5 rounded-lg"
             >
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -193,34 +193,34 @@ export default function ResolutionModalWithEvidence({
           </div>
         </div>
 
-        <form onSubmit={handleSubmit} className="p-6 space-y-5 max-h-[70vh] overflow-y-auto">
+        <form onSubmit={handleSubmit} className="p-6 md:p-8 space-y-6 max-h-[70vh] overflow-y-auto">
           {/* Outcome selection */}
           <div>
-            <label className="block text-sm font-medium text-black mb-3">
+            <label className="block text-sm font-medium text-white/90 mb-3">
               Outcome
             </label>
             <div className="flex gap-3">
               <button
                 type="button"
                 onClick={() => setOutcome("correct")}
-                className={`flex-1 px-4 py-3 rounded border transition-all text-sm font-medium ${
+                className={`flex-1 px-4 py-3 rounded-lg border transition-all text-sm font-semibold ${
                   outcome === "correct"
-                    ? "bg-green-50 border-green-500 text-green-700"
-                    : "bg-white border-neutral-300 text-neutral-700 hover:border-neutral-400"
+                    ? "bg-green-500/15 border-green-500/50 text-green-300 ring-1 ring-green-500/30"
+                    : "bg-white/[0.03] border-white/[0.08] text-white/60 hover:bg-white/[0.06] hover:text-white"
                 }`}
               >
-                True
+                Correct
               </button>
               <button
                 type="button"
                 onClick={() => setOutcome("incorrect")}
-                className={`flex-1 px-4 py-3 rounded border transition-all text-sm font-medium ${
+                className={`flex-1 px-4 py-3 rounded-lg border transition-all text-sm font-semibold ${
                   outcome === "incorrect"
-                    ? "bg-red-50 border-red-500 text-red-700"
-                    : "bg-white border-neutral-300 text-neutral-700 hover:border-neutral-400"
+                    ? "bg-red-500/15 border-red-500/50 text-red-300 ring-1 ring-red-500/30"
+                    : "bg-white/[0.03] border-white/[0.08] text-white/60 hover:bg-white/[0.06] hover:text-white"
                 }`}
               >
-                False
+                Incorrect
               </button>
             </div>
           </div>
