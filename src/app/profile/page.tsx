@@ -257,10 +257,132 @@ export default function ProfilePage() {
           </div>
         </div>
 
-        {/* Credibility Score Section */}
-        <div className="mb-8">
-          <CredibilityDisplay />
-        </div>
+        {/* Reliability Score Hero Section */}
+        {stats && (
+          <div className="mb-8">
+            <div className="bg-[#0d0d0d] border border-neutral-800 rounded-lg p-8">
+              <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6 mb-6">
+                {/* Left: Reliability Score */}
+                <div className="flex-1">
+                  <div className="flex items-center gap-3 mb-2">
+                    <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-purple-500/20 to-blue-500/20 border border-purple-500/30 flex items-center justify-center">
+                      <svg
+                        className="w-6 h-6 text-purple-400"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                        />
+                      </svg>
+                    </div>
+                    <div>
+                      <div className="text-xs text-neutral-500 uppercase tracking-wider">
+                        Reliability Score
+                      </div>
+                      <div className="flex items-baseline gap-2">
+                        <div className="text-5xl font-bold text-white">
+                          {stats.reliabilityScore}
+                        </div>
+                        <div className="text-lg text-neutral-500">/1000</div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Tier Badge */}
+                  <div className="flex items-center gap-3 mt-4">
+                    {(() => {
+                      const tierInfo = getTierInfo(stats.tier);
+                      const nextMilestone = getNextTierMilestone(stats.reliabilityScore);
+                      return (
+                        <>
+                          <div
+                            className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg border ${tierInfo.bgColor} ${tierInfo.color} border-current`}
+                          >
+                            <svg
+                              className="w-4 h-4"
+                              fill="currentColor"
+                              viewBox="0 0 24 24"
+                            >
+                              <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" />
+                            </svg>
+                            <span className="font-semibold">{tierInfo.label}</span>
+                          </div>
+
+                          {nextMilestone.nextTier && (
+                            <div className="text-sm text-neutral-400">
+                              {nextMilestone.pointsNeeded} pts to{" "}
+                              {nextMilestone.tierInfo?.label}
+                            </div>
+                          )}
+                        </>
+                      );
+                    })()}
+                  </div>
+                </div>
+
+                {/* Right: Total Points */}
+                <div className="text-center md:text-right">
+                  <div className="text-xs text-neutral-500 uppercase tracking-wider mb-1">
+                    Total Points
+                  </div>
+                  <div className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-orange-500">
+                    {formatPoints(stats.totalPoints)}
+                  </div>
+                  <div className="text-xs text-neutral-500 mt-1">Lifetime earnings</div>
+                </div>
+              </div>
+
+              {/* Progress Bar */}
+              <div className="h-2 bg-neutral-900 rounded-full overflow-hidden">
+                <div
+                  className="h-full bg-gradient-to-r from-blue-500 to-purple-500 transition-all duration-500"
+                  style={{ width: `${(stats.reliabilityScore / 1000) * 100}%` }}
+                />
+              </div>
+
+              {/* Score Breakdown */}
+              {(() => {
+                const breakdown = getScoreBreakdown({
+                  correctPredictions: stats.correctPredictions,
+                  incorrectPredictions: stats.incorrectPredictions,
+                  resolvedPredictions: stats.resolvedPredictions,
+                  avgEvidenceScore: stats.avgEvidenceScore,
+                });
+
+                return breakdown.length > 0 ? (
+                  <div className="mt-6 pt-6 border-t border-neutral-800">
+                    <div className="text-xs text-neutral-500 uppercase tracking-wider mb-3">
+                      Score Breakdown
+                    </div>
+                    <div className="space-y-3">
+                      {breakdown.map((item, idx) => (
+                        <div key={idx}>
+                          <div className="flex items-center justify-between text-sm mb-1">
+                            <span className="text-neutral-300">{item.label}</span>
+                            <span className="text-white font-semibold">
+                              {item.value}/{item.maxValue}
+                            </span>
+                          </div>
+                          <div className="h-1.5 bg-neutral-900 rounded-full overflow-hidden">
+                            <div
+                              className="h-full bg-gradient-to-r from-blue-500 to-purple-500"
+                              style={{ width: `${(item.value / item.maxValue) * 100}%` }}
+                            />
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                ) : null;
+              })()}
+            </div>
+          </div>
+        )}
 
         {/* Stats grid */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
