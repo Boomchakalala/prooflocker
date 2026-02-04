@@ -226,11 +226,11 @@ export default function ResolutionModalWithEvidence({
           </div>
 
           {/* Evidence Grade */}
-          <div className="border border-amber-200 bg-amber-50/50 rounded-lg p-4">
-            <label className="block text-sm font-semibold text-black mb-2">
+          <div className="border border-blue-500/20 bg-blue-500/5 rounded-lg p-4">
+            <label className="block text-sm font-semibold text-white mb-2">
               Evidence Quality Grade
             </label>
-            <p className="text-xs text-neutral-600 mb-3">
+            <p className="text-xs text-neutral-400 mb-3">
               No receipts = no reputation. Evidence boosts credibility.
             </p>
             <div className="grid grid-cols-2 gap-2 mb-3">
@@ -241,19 +241,19 @@ export default function ResolutionModalWithEvidence({
                     key={grade}
                     type="button"
                     onClick={() => setEvidenceGrade(grade)}
-                    className={`p-3 rounded border text-left transition-all ${
+                    className={`p-3 rounded-lg border text-left transition-all ${
                       evidenceGrade === grade
-                        ? `bg-${info.color}-100 border-${info.color}-500 ring-2 ring-${info.color}-500`
-                        : "bg-white border-neutral-300 hover:border-neutral-400"
+                        ? "bg-white/10 border-white/30 ring-1 ring-white/20"
+                        : "bg-white/[0.03] border-white/[0.08] hover:bg-white/[0.06] hover:border-white/15"
                     }`}
                   >
-                    <div className="font-semibold text-sm text-black">{info.label}</div>
-                    <div className="text-xs text-neutral-600 mt-1">{info.description}</div>
+                    <div className="font-bold text-white text-sm mb-0.5">{info.label.split(" ")[0]}</div>
+                    <div className="text-[10px] text-neutral-400 line-clamp-1">{info.label.split(" ").slice(1).join(" ")}</div>
                   </button>
                 );
               })}
             </div>
-            <div className={`text-xs p-2 rounded bg-${gradeInfo.color}-100 text-${gradeInfo.color}-800`}>
+            <div className="text-xs p-2 rounded bg-white/5 text-neutral-300 border border-white/10">
               Selected: {gradeInfo.label}
             </div>
           </div>
@@ -261,8 +261,8 @@ export default function ResolutionModalWithEvidence({
           {/* Evidence Summary */}
           {(evidenceGrade === "A" || evidenceGrade === "B") && (
             <div>
-              <label htmlFor="summary" className="block text-sm font-medium text-black mb-2">
-                Evidence Summary <span className="text-red-600">*</span>
+              <label htmlFor="summary" className="block text-sm font-medium text-white/90 mb-2">
+                Evidence Summary <span className="text-red-400">*</span>
               </label>
               <textarea
                 id="summary"
@@ -272,13 +272,13 @@ export default function ResolutionModalWithEvidence({
                 rows={3}
                 required
                 placeholder="Explain why this evidence proves your claim..."
-                className="w-full px-3 py-2 border border-neutral-300 rounded text-black placeholder-neutral-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+                className="w-full px-3 py-2.5 bg-white/5 border border-white/10 rounded-lg text-white placeholder-white/30 focus:outline-none focus:ring-2 focus:ring-blue-500/50 text-sm resize-none transition-all"
               />
               <div className="flex justify-between mt-1">
                 <span className="text-xs text-neutral-500">Required for Grade A/B</span>
                 <span
                   className={`text-xs ${
-                    evidenceSummary.length > maxSummaryChars - 20 ? "text-red-600" : "text-neutral-400"
+                    evidenceSummary.length > maxSummaryChars - 20 ? "text-red-400" : "text-neutral-400"
                   }`}
                 >
                   {evidenceSummary.length}/{maxSummaryChars}
