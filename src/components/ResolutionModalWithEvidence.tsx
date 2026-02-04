@@ -1,0 +1,441 @@
+"use client";
+
+import { useState } from "react";
+import type { PredictionOutcome } from "@/lib/storage";
+import type { EvidenceGrade, EvidenceItemInput } from "@/lib/evidence-types";
+import { EvidenceGradeInfo, validateEvidenceRequirements } from "@/lib/evidence-types";
+import { sha256Url, sha256File } from "@/lib/evidence-hashing";
+
+interface ResolutionModalWithEvidenceProps {
+  predictionId: string;
+  currentOutcome: PredictionOutcome;
+  currentNote?: string;
+  currentUrl?: string;
+  onClose: () => void;
+  onSuccess: (outcome: PredictionOutcome) => void;
+}
+
+export default function ResolutionModalWithEvidence({
+  predictionId,
+  currentOutcome,
+  currentNote,
+  currentUrl,
+  onClose,
+  onSuccess,
+}: ResolutionModalWithEvidenceProps) {
+  const [outcome, setOutcome] = useState<"correct" | "incorrect">(
+    currentOutcome === "incorrect" ? "incorrect" : "correct"
+  );
+  const [resolutionNote, setResolutionNote] = useState(currentNote || "");
+  const [resolutionUrl, setResolutionUrl] = useState(currentUrl || "");
+
+  // Evidence fields
+  const [evidenceGrade, setEvidenceGrade] = useState<EvidenceGrade>("D");
+  const [evidenceSummary, setEvidenceSummary] = useState("");
+  const [evidenceItems, setEvidenceItems] = useState<EvidenceItemInput[]>([]);
+
+  // UI state
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [uploadingFile, setUploadingFile] = useState(false);
+
+  // Add link evidence
+  const [showAddLink, setShowAddLink] = useState(false);
+  const [linkUrl, setLinkUrl] = useState("");
+  const [linkTitle, setLinkTitle] = useState("");
+
+  const maxNoteChars = 280;
+  const maxSummaryChars = 280;
+
+  const handleAddLink = () => {
+    if (!linkUrl.trim()) {
+      setError("Please enter a valid URL");
+      return;
+    }
+
+    try {
+      new URL(linkUrl); // Validate URL
+    } catch {
+      setError("Invalid URL format");
+      return;
+    }
+
+    setEvidenceItems([...evidenceItems, {
+      type: "link",
+      url: linkUrl.trim(),
+      title: linkTitle.trim() || undefined,
+      sourceKind: "secondary",
+    }]);
+
+    setLinkUrl("");
+    setLinkTitle("");
+    setShowAddLink(false);
+    setError("");
+  };
+
+  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    // Validate file size (10MB max)
+    if (file.size > 10 * 1024 * 1024) {
+      setError("File size must be less than 10MB");
+      return;
+    }
+
+    // Validate file type
+    const allowedTypes = ["image/png", "image/jpeg", "image/jpg", "image/webp", "application/pdf", "text/plain"];
+    if (!allowedTypes.includes(file.type)) {
+      setError("File type not supported. Use PNG, JPG, WEBP, PDF, or TXT");
+      return;
+    }
+
+    setUploadingFile(true);
+    setError("");
+
+    try {
+      setEvidenceItems([...evidenceItems, {
+        type: "file",
+        file,
+        title: file.name,
+        sourceKind: "secondary",
+      }]);
+    } catch (err) {
+      setError("Failed to process file");
+    } finally {
+      setUploadingFile(false);
+    }
+  };
+
+  const handleRemoveEvidence = (index: number) => {
+    setEvidenceItems(evidenceItems.filter((_, i) => i !== index));
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    setError("");
+
+    try {
+      // Validate evidence requirements
+      const validation = validateEvidenceRequirements(
+        evidenceGrade,
+        evidenceSummary,
+        evidenceItems.length
+      );
+
+      if (!validation.valid) {
+        throw new Error(validation.error);
+      }
+
+      // Prepare evidence items with hashes
+      const evidenceItemsWithHashes = await Promise.all(
+        evidenceItems.map(async (item) => {
+          if (item.type === "link" && item.url) {
+            const hash = await sha256Url(item.url);
+            return { ...item, hash };
+          } else if (item.type === "file" && item.file) {
+            const hash = await sha256File(item.file);
+            return { ...item, hash };
+          }
+          return item;
+        })
+      );
+
+      const response = await fetch(`/api/predictions/${predictionId}/resolve`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          outcome,
+          resolutionNote: resolutionNote.trim() || undefined,
+          resolutionUrl: resolutionUrl.trim() || undefined,
+          evidenceGrade,
+          evidenceSummary: evidenceSummary.trim() || undefined,
+          evidenceItems: evidenceItemsWithHashes,
+        }),
+      });
+
+      if (!response.ok) {
+        const data = await response.json();
+        throw new Error(data.error || "Failed to update resolution");
+      }
+
+      onSuccess(outcome);
+      onClose();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Failed to update resolution");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const gradeInfo = EvidenceGradeInfo[evidenceGrade];
+
+  return (
+    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4 overflow-y-auto">
+      <div className="bg-white rounded-lg max-w-2xl w-full border border-neutral-300 shadow-xl my-8">
+        <div className="p-6 border-b border-neutral-200">
+          <div className="flex justify-between items-start">
+            <div>
+              <h2 className="text-xl font-semibold text-black">Resolve Prediction</h2>
+              <p className="text-sm text-neutral-600 mt-1">
+                Add evidence to boost your credibility score
+              </p>
+            </div>
+            <button
+              onClick={onClose}
+              className="text-neutral-400 hover:text-black transition-colors"
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <form onSubmit={handleSubmit} className="p-6 space-y-5 max-h-[70vh] overflow-y-auto">
+          {/* Outcome selection */}
+          <div>
+            <label className="block text-sm font-medium text-black mb-3">
+              Outcome
+            </label>
+            <div className="flex gap-3">
+              <button
+                type="button"
+                onClick={() => setOutcome("correct")}
+                className={`flex-1 px-4 py-3 rounded border transition-all text-sm font-medium ${
+                  outcome === "correct"
+                    ? "bg-green-50 border-green-500 text-green-700"
+                    : "bg-white border-neutral-300 text-neutral-700 hover:border-neutral-400"
+                }`}
+              >
+                True
+              </button>
+              <button
+                type="button"
+                onClick={() => setOutcome("incorrect")}
+                className={`flex-1 px-4 py-3 rounded border transition-all text-sm font-medium ${
+                  outcome === "incorrect"
+                    ? "bg-red-50 border-red-500 text-red-700"
+                    : "bg-white border-neutral-300 text-neutral-700 hover:border-neutral-400"
+                }`}
+              >
+                False
+              </button>
+            </div>
+          </div>
+
+          {/* Evidence Grade */}
+          <div className="border border-amber-200 bg-amber-50/50 rounded-lg p-4">
+            <label className="block text-sm font-semibold text-black mb-2">
+              Evidence Quality Grade
+            </label>
+            <p className="text-xs text-neutral-600 mb-3">
+              No receipts = no reputation. Evidence boosts credibility.
+            </p>
+            <div className="grid grid-cols-2 gap-2 mb-3">
+              {(["A", "B", "C", "D"] as EvidenceGrade[]).map((grade) => {
+                const info = EvidenceGradeInfo[grade];
+                return (
+                  <button
+                    key={grade}
+                    type="button"
+                    onClick={() => setEvidenceGrade(grade)}
+                    className={`p-3 rounded border text-left transition-all ${
+                      evidenceGrade === grade
+                        ? `bg-${info.color}-100 border-${info.color}-500 ring-2 ring-${info.color}-500`
+                        : "bg-white border-neutral-300 hover:border-neutral-400"
+                    }`}
+                  >
+                    <div className="font-semibold text-sm text-black">{info.label}</div>
+                    <div className="text-xs text-neutral-600 mt-1">{info.description}</div>
+                  </button>
+                );
+              })}
+            </div>
+            <div className={`text-xs p-2 rounded bg-${gradeInfo.color}-100 text-${gradeInfo.color}-800`}>
+              Selected: {gradeInfo.label}
+            </div>
+          </div>
+
+          {/* Evidence Summary */}
+          {(evidenceGrade === "A" || evidenceGrade === "B") && (
+            <div>
+              <label htmlFor="summary" className="block text-sm font-medium text-black mb-2">
+                Evidence Summary <span className="text-red-600">*</span>
+              </label>
+              <textarea
+                id="summary"
+                value={evidenceSummary}
+                onChange={(e) => setEvidenceSummary(e.target.value)}
+                maxLength={maxSummaryChars}
+                rows={3}
+                required
+                placeholder="Explain why this evidence proves your claim..."
+                className="w-full px-3 py-2 border border-neutral-300 rounded text-black placeholder-neutral-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+              />
+              <div className="flex justify-between mt-1">
+                <span className="text-xs text-neutral-500">Required for Grade A/B</span>
+                <span
+                  className={`text-xs ${
+                    evidenceSummary.length > maxSummaryChars - 20 ? "text-red-600" : "text-neutral-400"
+                  }`}
+                >
+                  {evidenceSummary.length}/{maxSummaryChars}
+                </span>
+              </div>
+            </div>
+          )}
+
+          {/* Evidence Items */}
+          <div>
+            <label className="block text-sm font-medium text-black mb-2">
+              Evidence Items
+              {evidenceGrade !== "D" && <span className="text-red-600 ml-1">* (min 1)</span>}
+            </label>
+
+            {/* Evidence items list */}
+            {evidenceItems.length > 0 && (
+              <div className="space-y-2 mb-3">
+                {evidenceItems.map((item, index) => (
+                  <div key={index} className="flex items-center gap-2 p-2 bg-neutral-50 rounded border border-neutral-200">
+                    <div className="flex-1 min-w-0">
+                      <div className="text-sm text-black truncate">
+                        {item.type === "link" ? (
+                          <a href={item.url} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">
+                            {item.title || item.url}
+                          </a>
+                        ) : (
+                          <span>{item.title}</span>
+                        )}
+                      </div>
+                      <div className="text-xs text-neutral-500 capitalize">{item.type}</div>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => handleRemoveEvidence(index)}
+                      className="text-red-600 hover:text-red-700 p-1"
+                    >
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                      </svg>
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {/* Add evidence buttons */}
+            <div className="flex gap-2">
+              <button
+                type="button"
+                onClick={() => setShowAddLink(!showAddLink)}
+                className="flex-1 px-3 py-2 border border-neutral-300 text-neutral-700 hover:bg-neutral-50 rounded text-sm font-medium transition-colors"
+              >
+                + Add Link
+              </button>
+              <label className="flex-1">
+                <input
+                  type="file"
+                  onChange={handleFileUpload}
+                  accept="image/*,.pdf,.txt"
+                  className="hidden"
+                  disabled={uploadingFile}
+                />
+                <div className="px-3 py-2 border border-neutral-300 text-neutral-700 hover:bg-neutral-50 rounded text-sm font-medium transition-colors text-center cursor-pointer">
+                  {uploadingFile ? "Uploading..." : "+ Add File"}
+                </div>
+              </label>
+            </div>
+
+            {/* Add link form */}
+            {showAddLink && (
+              <div className="mt-3 p-3 border border-neutral-300 rounded space-y-2">
+                <input
+                  type="url"
+                  value={linkUrl}
+                  onChange={(e) => setLinkUrl(e.target.value)}
+                  placeholder="https://..."
+                  className="w-full px-3 py-2 border border-neutral-300 rounded text-sm"
+                />
+                <input
+                  type="text"
+                  value={linkTitle}
+                  onChange={(e) => setLinkTitle(e.target.value)}
+                  placeholder="Title (optional)"
+                  className="w-full px-3 py-2 border border-neutral-300 rounded text-sm"
+                />
+                <div className="flex gap-2">
+                  <button
+                    type="button"
+                    onClick={handleAddLink}
+                    className="flex-1 px-3 py-1.5 bg-black text-white rounded text-sm"
+                  >
+                    Add
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setShowAddLink(false);
+                      setLinkUrl("");
+                      setLinkTitle("");
+                    }}
+                    className="flex-1 px-3 py-1.5 border border-neutral-300 text-neutral-700 rounded text-sm"
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* Resolution note */}
+          <div>
+            <label htmlFor="note" className="block text-sm font-medium text-black mb-2">
+              Resolution Note <span className="text-neutral-400 font-normal">(optional)</span>
+            </label>
+            <textarea
+              id="note"
+              value={resolutionNote}
+              onChange={(e) => setResolutionNote(e.target.value)}
+              maxLength={maxNoteChars}
+              rows={2}
+              placeholder="Additional context..."
+              className="w-full px-3 py-2 border border-neutral-300 rounded text-black placeholder-neutral-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+            />
+            <div className="flex justify-end mt-1">
+              <span className={`text-xs ${resolutionNote.length > maxNoteChars - 20 ? "text-red-600" : "text-neutral-400"}`}>
+                {resolutionNote.length}/{maxNoteChars}
+              </span>
+            </div>
+          </div>
+
+          {error && (
+            <div className="bg-red-50 border border-red-200 rounded p-3 text-sm text-red-700">
+              {error}
+            </div>
+          )}
+
+          {/* Actions */}
+          <div className="flex gap-3 pt-2 sticky bottom-0 bg-white pb-2">
+            <button
+              type="button"
+              onClick={onClose}
+              disabled={loading}
+              className="flex-1 px-4 py-2 border border-neutral-300 text-neutral-700 hover:bg-neutral-50 rounded transition-colors text-sm font-medium disabled:opacity-50"
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              disabled={loading || uploadingFile}
+              className="flex-1 px-4 py-2 bg-black hover:bg-neutral-800 text-white rounded transition-colors text-sm font-medium disabled:opacity-50"
+            >
+              {loading ? "Saving..." : "Save Resolution"}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  );
+}
