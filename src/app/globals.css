@@ -1,27 +1,31 @@
 @import "tailwindcss";
 
 :root {
-  /* 2026 Cyberpunk Design System - Neon cyan and magenta on deep black */
-  --bg-top: #030712;
-  --bg-bottom: #0a0a0f;
-  --bg-card: #1F2937;
-  --border-cyan: #06B6D4;
-  --border-magenta: #EC4899;
-  --text-primary: #F8F9FA;
-  --text-secondary: #9CA3AF;
-  --cyan-neon: #06B6D4;
-  --pink-neon: #EC4899;
-  --purple-neon: #A855F7;
-  --teal-positive: #14B8A6;
+  /* Premium Modern Design System - White with Deep Vivid Blue */
+  --bg-primary: #FFFFFF;
+  --bg-secondary: #F8FAFC;
+  --bg-tertiary: #F1F5F9;
+  --border-light: #E2E8F0;
+  --border-medium: #CBD5E1;
+  --text-primary: #0F172A;
+  --text-secondary: #475569;
+  --text-tertiary: #94A3B8;
+  --blue-vivid: #2563EB;
+  --blue-deep: #1E40AF;
+  --blue-light: #DBEAFE;
+  --blue-lighter: #EFF6FF;
+  --accent-green: #10B981;
+  --accent-red: #EF4444;
+  --accent-amber: #F59E0B;
 
   /* Legacy (kept for compatibility) */
-  --background: #030712;
-  --foreground: #F8F9FA;
-  --card-bg: #1F2937;
-  --primary: #06B6D4;
-  --secondary: #EC4899;
-  --accent-cyan: #06B6D4;
-  --purple-vibrant: #A855F7;
+  --background: #FFFFFF;
+  --foreground: #0F172A;
+  --card-bg: #FFFFFF;
+  --primary: #2563EB;
+  --secondary: #1E40AF;
+  --accent-cyan: #2563EB;
+  --purple-vibrant: #2563EB;
 }
 
 @theme inline {
@@ -38,12 +42,12 @@ body {
   font-family: var(--font-inter), system-ui, -apple-system, sans-serif;
 }
 
-/* 2026 Cyberpunk gradient background - deep black with cyan-magenta radial */
+/* Premium modern gradient background - white with subtle blue */
 .gradient-bg {
   background: linear-gradient(
     180deg,
-    #030712 0%,
-    #0a0a0f 100%
+    #FFFFFF 0%,
+    #F8FAFC 100%
   );
   position: relative;
 }
@@ -53,48 +57,32 @@ body {
   position: absolute;
   inset: 0;
   background: radial-gradient(
-    circle at 50% 30%,
-    rgba(6, 182, 212, 0.12) 0%,
-    rgba(236, 72, 153, 0.08) 40%,
+    circle at 50% 20%,
+    rgba(37, 99, 235, 0.03) 0%,
+    rgba(37, 99, 235, 0.01) 50%,
     transparent 70%
   );
   pointer-events: none;
-  animation: breathe 8s ease-in-out infinite;
 }
 
-@keyframes breathe {
-  0%, 100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.7;
-  }
-}
-
-@keyframes gradientShift {
-  0%, 100% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-}
-
-/* Glassmorphism effect */
+/* Glassmorphism effect - light version */
 .glass {
-  background: rgba(20, 20, 20, 0.6);
+  background: rgba(255, 255, 255, 0.8);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(226, 232, 240, 0.8);
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05);
 }
 
-/* 2026 Blue Glow Effects - Polymarket-inspired */
-.glow-cyan {
-  box-shadow: 0 0 15px rgba(46, 92, 255, 0.3);
+/* Premium blue glow effects */
+.glow-cyan, .glow-blue {
+  box-shadow: 0 0 0 1px rgba(37, 99, 235, 0.1),
+              0 4px 12px rgba(37, 99, 235, 0.15);
 }
 
 .glow-purple {
-  box-shadow: 0 0 15px rgba(91, 33, 182, 0.3);
+  box-shadow: 0 0 0 1px rgba(37, 99, 235, 0.1),
+              0 4px 12px rgba(37, 99, 235, 0.15);
 }
 
 .glow-gradient {
