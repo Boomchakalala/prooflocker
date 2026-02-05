@@ -108,7 +108,7 @@ export default function ClaimModal({ onClose, onSuccess }: ClaimModalProps) {
         setClaimedCount(data.claimedCount);
         setSuccess(true);
 
-        // Show toast notification for Insight Score
+        // Show toast notification for Reputation Score
         if (data.insightPoints) {
           const breakdown = [
             `Migrated anonymous score to account`,

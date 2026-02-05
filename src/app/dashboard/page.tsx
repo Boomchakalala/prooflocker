@@ -72,7 +72,7 @@ export default function DashboardPage() {
       <div className="min-h-screen bg-[#0a0a0a] text-white flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-[#00bfff] mx-auto mb-4"></div>
-          <p className="text-gray-400">Loading your Insight Score...</p>
+          <p className="text-gray-400">Loading your Reputation Score...</p>
         </div>
       </div>
     );
@@ -82,9 +82,9 @@ export default function DashboardPage() {
     return (
       <div className="min-h-screen bg-[#0a0a0a] text-white flex items-center justify-center p-6">
         <div className="max-w-md text-center">
-          <h2 className="text-2xl font-bold mb-4">No Insight Score Yet</h2>
+          <h2 className="text-2xl font-bold mb-4">No Reputation Score Yet</h2>
           <p className="text-gray-400 mb-6">
-            {error || "Lock your first prediction to start building your Insight Score!"}
+            {error || "Lock your first prediction to start building your Reputation Score!"}
           </p>
           <Link
             href="/lock"
@@ -109,7 +109,7 @@ export default function DashboardPage() {
         {/* Header */}
         <div className="text-center mb-12">
           <h1 className="text-5xl font-bold mb-4" style={{ fontFamily: "var(--font-montserrat)" }}>
-            Your Insight Score
+            Your Reputation Score
           </h1>
           {user && (
             <p className="text-[#00bfff]">

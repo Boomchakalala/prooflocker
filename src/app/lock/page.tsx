@@ -55,7 +55,7 @@ export default function LockPage() {
       if (response.ok) {
         const data = await response.json();
 
-        // Show toast notification for Insight Score
+        // Show toast notification for Reputation Score
         if (data.insightPoints) {
           showScoreToast(
             data.insightPoints,
