@@ -4,6 +4,7 @@ import { useState, useEffect, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import PredictionCard from "@/components/PredictionCard";
+import TopSourcesList from "@/components/TopSourcesList";
 import LandingHeader from "@/components/LandingHeader";
 import DEStatusBanner from "@/components/DEStatusBanner";
 import ClaimModal from "@/components/ClaimModal";
@@ -18,7 +19,9 @@ function AppFeedContent() {
   const { user, loading: authLoading } = useAuth();
   const searchParams = useSearchParams();
   const tabParam = searchParams.get("tab");
-  const [activeTab, setActiveTab] = useState<"all" | "my">(tabParam === "my" ? "my" : "all");
+  const [activeTab, setActiveTab] = useState<"all" | "my" | "leaderboard">(
+    tabParam === "my" ? "my" : tabParam === "leaderboard" ? "leaderboard" : "all"
+  );
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
   const [predictions, setPredictions] = useState<Prediction[]>([]);
   const [loading, setLoading] = useState(true);
@@ -289,6 +292,16 @@ function AppFeedContent() {
               }`}
             >
               My predictions
+            </button>
+            <button
+              onClick={() => setActiveTab("leaderboard")}
+              className={`px-6 py-2 text-sm font-medium rounded-md transition-all ${
+                activeTab === "leaderboard"
+                  ? "bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-500 hover:to-purple-600 text-white shadow-[0_0_20px_rgba(168,85,247,0.3)]"
+                  : "text-gray-400 hover:text-white hover:bg-white/10"
+              }`}
+            >
+              Top Trusted Sources
             </button>
           </div>
 
