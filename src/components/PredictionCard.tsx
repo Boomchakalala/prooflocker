@@ -251,24 +251,24 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
       href={`/proof/${prediction.publicSlug}`}
       className={`group relative glass rounded-xl p-5 transition-all duration-300 flex flex-col h-full overflow-hidden border cursor-pointer hover:-translate-y-1 hover:shadow-2xl ${getCardBorderStyle()}`}
     >
-      {/* Quality indicator bar - top - Purple/cyan gradient for high quality */}
+      {/* Quality indicator bar - top - Emerald for high quality verified predictions */}
       {prediction.evidence_score && prediction.evidence_score >= 76 && isResolved && (
-        <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-purple-500 via-cyan-500 to-purple-500" />
+        <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-emerald-500 via-teal-500 to-emerald-500" />
       )}
 
-      {/* 1. HEADER ROW - Author info + reliability tier + menu */}
-      <div className="mb-3">
-        <div className="flex items-center justify-between gap-2 mb-2">
+      {/* 1. HEADER ROW - Author info + Time + Menu */}
+      <div className="mb-4">
+        <div className="flex items-center justify-between gap-3">
           {/* Left: Avatar + Author info + Reliability Tier */}
-          <div className="flex items-center gap-2.5 min-w-0 flex-1">
-            <div className="w-9 h-9 rounded-full bg-gradient-to-br from-purple-500/20 to-cyan-500/20 flex items-center justify-center text-sm font-bold text-purple-300 border-2 border-purple-500/40 shadow-[0_0_12px_rgba(168,85,247,0.3)] flex-shrink-0">
+          <div className="flex items-center gap-3 min-w-0 flex-1">
+            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-purple-500/15 to-cyan-500/15 flex items-center justify-center text-sm font-bold text-purple-300 border border-purple-500/30 flex-shrink-0">
               {authorNumber.toString().slice(-2)}
             </div>
             <div className="flex flex-col min-w-0">
               <Link
                 href={`/user/${prediction.userId || prediction.anonId}`}
                 onClick={(e) => e.stopPropagation()}
-                className="text-sm font-semibold text-white hover:text-cyan-400 transition-colors"
+                className="text-sm font-semibold text-white hover:text-cyan-400 transition-colors truncate"
               >
                 Anon #{authorNumber}
               </Link>
@@ -282,8 +282,8 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
           </div>
 
           {/* Right: Time + Menu */}
-          <div className="flex items-center gap-2">
-            <span className="text-xs text-gray-400">{formatRelativeTime(prediction.timestamp)}</span>
+          <div className="flex items-center gap-3 flex-shrink-0">
+            <span className="text-xs text-gray-500">{formatRelativeTime(prediction.timestamp)}</span>
             {/* Three-dot menu */}
             <div className="relative">
               <button
