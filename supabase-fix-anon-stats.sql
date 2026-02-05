@@ -193,19 +193,19 @@ DECLARE
   user_record RECORD;
 BEGIN
   FOR user_record IN
-    SELECT DISTINCT user_id
+    SELECT DISTINCT user_id::UUID
     FROM predictions
     WHERE user_id IS NOT NULL
   LOOP
-    PERFORM update_user_stats(p_user_id => user_record.user_id);
+    PERFORM update_user_stats(user_record.user_id);
   END LOOP;
 
   FOR user_record IN
-    SELECT DISTINCT anon_id
+    SELECT DISTINCT anon_id::TEXT
     FROM predictions
     WHERE anon_id IS NOT NULL
   LOOP
-    PERFORM update_user_stats(p_anon_id => user_record.anon_id);
+    PERFORM update_user_stats(NULL, user_record.anon_id);
   END LOOP;
 END $$;
 
