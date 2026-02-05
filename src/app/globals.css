@@ -475,15 +475,15 @@ body {
   }
 }
 
-/* Animated gradient text */
+/* Animated gradient text - matches production colors */
 .gradient-text-animated {
   background: linear-gradient(
     90deg,
-    #5B21B6 0%,
-    #2E5CFF 25%,
-    #00E0FF 50%,
-    #2E5CFF 75%,
-    #5B21B6 100%
+    #3B82F6 0%,
+    #A855F7 25%,
+    #06B6D4 50%,
+    #A855F7 75%,
+    #3B82F6 100%
   );
   background-size: 200% auto;
   -webkit-background-clip: text;
