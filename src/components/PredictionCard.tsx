@@ -397,7 +397,8 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
                   </div>
                 </>
               )}
-            </div>
+              </div>
+            )}
           </div>
         </div>
 
