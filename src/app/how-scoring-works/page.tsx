@@ -218,7 +218,7 @@ export default function HowScoringWorksPage() {
                   <div className="flex-1">
                     <div className="text-white font-medium">Resolve incorrect</div>
                   </div>
-                  <div className="text-red-400 font-bold text-lg">-15</div>
+                  <div className="text-red-400 font-bold text-lg">-30</div>
                 </div>
               </div>
             </div>
