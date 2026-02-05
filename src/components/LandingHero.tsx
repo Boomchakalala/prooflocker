@@ -1,12 +1,10 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 
 export default function LandingHero() {
   const particlesRef = useRef<HTMLDivElement>(null);
-  const heroRef = useRef<HTMLDivElement>(null);
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
 
   useEffect(() => {
     // Generate lightweight particles for constellation effect
@@ -24,37 +22,16 @@ export default function LandingHero() {
     }
   }, []);
 
-  // Mouse parallax effect
-  useEffect(() => {
-    const handleMouseMove = (e: MouseEvent) => {
-      if (heroRef.current) {
-        const rect = heroRef.current.getBoundingClientRect();
-        const x = (e.clientX - rect.left - rect.width / 2) / rect.width;
-        const y = (e.clientY - rect.top - rect.height / 2) / rect.height;
-        setMousePosition({ x, y });
-      }
-    };
-
-    window.addEventListener('mousemove', handleMouseMove);
-    return () => window.removeEventListener('mousemove', handleMouseMove);
-  }, []);
-
   return (
-    <div ref={heroRef} className="relative z-10 min-h-[85vh] flex items-center justify-center py-24 md:py-32 px-6 md:px-8 overflow-hidden gradient-bg">
+    <div className="relative z-10 min-h-[85vh] flex items-center justify-center py-24 md:py-32 px-6 md:px-8 overflow-hidden gradient-bg">
       {/* Constellation overlay */}
       <div className="constellation-overlay" />
 
       {/* Particles */}
       <div ref={particlesRef} className="absolute inset-0 opacity-10 pointer-events-none" />
 
-      {/* Radial glow - purple to blue with parallax */}
-      <div
-        className="absolute inset-0 flex items-center justify-center pointer-events-none"
-        style={{
-          transform: `translate(${mousePosition.x * 20}px, ${mousePosition.y * 20}px)`,
-          transition: 'transform 0.3s ease-out'
-        }}
-      >
+      {/* Radial glow - purple to blue */}
+      <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
         <div
           className="w-[1200px] h-[1200px] rounded-full blur-3xl"
           style={{
@@ -71,7 +48,7 @@ export default function LandingHero() {
           className="text-5xl md:text-7xl lg:text-8xl font-black mb-6 tracking-tight leading-[1.1] animate-fade-in-up"
           style={{ fontFamily: 'var(--font-montserrat)' }}
         >
-          <span className="block text-[#F8F9FA] text-shadow-cyan font-black">Predictions.</span>
+          <span className="block text-[#F8F9FA]/80 font-black">Predictions.</span>
           <span className="block gradient-text-animated font-black">Locked forever.</span>
         </h1>
 
@@ -84,7 +61,7 @@ export default function LandingHero() {
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-8 animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
           <Link
             href="/lock"
-            className="w-full sm:w-auto px-12 py-4 bg-gradient-to-r from-[#2E5CFF] to-[#5B21B6] hover:from-[#3D6CFF] hover:to-[#6B31C6] text-white text-lg font-bold rounded-xl transition-all shadow-lg hover:shadow-[0_0_30px_rgba(46,92,255,0.4)] hover:scale-[1.05] btn-glow animate-pulse-glow"
+            className="w-full sm:w-auto px-12 py-4 bg-gradient-to-r from-[#2E5CFF] to-[#5B21B6] hover:from-[#3D6CFF] hover:to-[#6B31C6] text-white text-lg font-bold rounded-xl transition-all shadow-lg hover:shadow-[0_0_30px_rgba(46,92,255,0.4)] hover:scale-[1.05] btn-glow"
           >
             Lock a Prediction
           </Link>
