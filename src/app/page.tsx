@@ -21,11 +21,11 @@ export default function LandingPage() {
         {/* Hero Section */}
         <LandingHero />
 
-        {/* How It Works Section */}
-        <HowItWorks />
-
         {/* Real Proof Section */}
         <ProofCardPreview />
+
+        {/* How It Works Section */}
+        <HowItWorks />
 
         {/* Accountability Score Section */}
         <AccountabilityScore />
