@@ -28,9 +28,10 @@ interface PredictionCardProps {
   currentUserId?: string | null; // Current authenticated user ID
   onOutcomeUpdate?: () => void; // Callback to refresh predictions
   onHide?: (id: string) => void; // Callback to hide prediction
+  isPreview?: boolean; // If true, renders as non-clickable mockup for landing page
 }
 
-export default function PredictionCard({ prediction, currentUserId, onOutcomeUpdate, onHide }: PredictionCardProps) {
+export default function PredictionCard({ prediction, currentUserId, onOutcomeUpdate, onHide, isPreview = false }: PredictionCardProps) {
   const router = useRouter();
   const [copied, setCopied] = useState(false);
   const [linkCopied, setLinkCopied] = useState(false);
@@ -228,6 +229,16 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
   const authorTierInfo = prediction.author_reliability_tier ?
     getTierInfo(prediction.author_reliability_tier) : null;
 
+  // Handler for view button click
+  const handleViewClick = (e: React.MouseEvent) => {
+    if (isPreview) {
+      e.preventDefault();
+      return;
+    }
+    // Navigate to proof page
+    router.push(`/proof/${prediction.publicSlug}`);
+  };
+
   // Determine card border style - Professional styling with subtle gradients
   const getCardBorderStyle = () => {
     if (prediction.outcome === 'correct') {
@@ -246,11 +257,9 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
     return 'border-purple-500/20 bg-purple-500/5 shadow-[0_0_10px_rgba(168,85,247,0.1)] hover:shadow-[0_0_20px_rgba(168,85,247,0.15)]';
   };
 
-  return (
-    <Link
-      href={`/proof/${prediction.publicSlug}`}
-      className={`group relative glass rounded-xl p-5 transition-all duration-300 flex flex-col h-full overflow-hidden border cursor-pointer hover:-translate-y-1 hover:shadow-2xl ${getCardBorderStyle()}`}
-    >
+  // Card content (shared between Link and div versions)
+  const cardContent = (
+    <>
       {/* Quality indicator bar - top - Emerald for high quality verified predictions */}
       {prediction.evidence_score && prediction.evidence_score >= 76 && isResolved && (
         <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-emerald-500 via-teal-500 to-emerald-500" />
