@@ -1,3 +1,8 @@
+-- Drop any existing update_user_stats functions
+DROP FUNCTION IF EXISTS update_user_stats(UUID);
+DROP FUNCTION IF EXISTS update_user_stats(UUID, TEXT);
+DROP FUNCTION IF EXISTS update_user_stats_v2(UUID);
+
 -- Add anon_id column to user_stats
 ALTER TABLE user_stats
 ADD COLUMN IF NOT EXISTS anon_id TEXT UNIQUE;
@@ -193,19 +198,19 @@ DECLARE
   user_record RECORD;
 BEGIN
   FOR user_record IN
-    SELECT DISTINCT user_id::UUID
+    SELECT DISTINCT user_id
     FROM predictions
     WHERE user_id IS NOT NULL
   LOOP
-    PERFORM update_user_stats(user_record.user_id);
+    PERFORM update_user_stats(p_user_id := user_record.user_id);
   END LOOP;
 
   FOR user_record IN
-    SELECT DISTINCT anon_id::TEXT
+    SELECT DISTINCT anon_id
     FROM predictions
     WHERE anon_id IS NOT NULL
   LOOP
-    PERFORM update_user_stats(NULL, user_record.anon_id);
+    PERFORM update_user_stats(p_anon_id := user_record.anon_id);
   END LOOP;
 END $$;
 
