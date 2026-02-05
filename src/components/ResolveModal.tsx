@@ -79,7 +79,7 @@ export default function ResolveModal({
 
       console.log("[ResolveModal] Success:", data);
 
-      // Show toast notification for Insight Score
+      // Show toast notification for Reputation Score
       if (data.insightPoints !== undefined) {
         const breakdown = data.insightBreakdown
           ? Object.entries(data.insightBreakdown)

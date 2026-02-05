@@ -5,7 +5,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { InsightScoreResponse } from "@/lib/insight-types";
 import Link from "next/link";
 
-export default function InsightScorePill() {
+export default function ReputationScorePill() {
   const { user } = useAuth();
   const [scoreData, setScoreData] = useState<InsightScoreResponse | null>(null);
   const [loading, setLoading] = useState(true);
@@ -71,7 +71,7 @@ export default function InsightScorePill() {
     <Link
       href="/dashboard"
       className="flex items-center gap-2 px-3 py-1.5 bg-gradient-to-r from-[#9370db]/20 to-[#00bfff]/20 border border-[#9370db]/40 rounded-full text-sm font-semibold text-white hover:border-[#00bfff] hover:shadow-lg hover:shadow-[#00bfff]/20 transition-all group"
-      title="View your Insight Score dashboard"
+      title="View your Reputation Score dashboard"
     >
       <svg className="w-4 h-4 text-[#00bfff] group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
