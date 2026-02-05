@@ -195,22 +195,23 @@ $$ LANGUAGE plpgsql;
 -- Backfill stats for ALL users
 DO $$
 DECLARE
-  user_record RECORD;
+  v_user_id UUID;
+  v_anon_id TEXT;
 BEGIN
-  FOR user_record IN
+  FOR v_user_id IN
     SELECT DISTINCT user_id
     FROM predictions
     WHERE user_id IS NOT NULL
   LOOP
-    PERFORM update_user_stats(p_user_id := user_record.user_id);
+    PERFORM update_user_stats(v_user_id, NULL);
   END LOOP;
 
-  FOR user_record IN
+  FOR v_anon_id IN
     SELECT DISTINCT anon_id
     FROM predictions
     WHERE anon_id IS NOT NULL
   LOOP
-    PERFORM update_user_stats(p_anon_id := user_record.anon_id);
+    PERFORM update_user_stats(NULL, v_anon_id);
   END LOOP;
 END $$;
 
