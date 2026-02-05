@@ -9,6 +9,7 @@ import { signOut } from "@/lib/auth";
 import { getPublicHandle } from "@/lib/public-handle";
 import ClaimModal from "@/components/ClaimModal";
 import ReputationScorePill from "@/components/ReputationScorePill";
+import NotificationBell from "@/components/NotificationBell";
 
 export default function LandingHeader() {
   const { user } = useAuth();
