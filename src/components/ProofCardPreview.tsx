@@ -206,7 +206,7 @@ export default function ProofCardPreview() {
 
       <div className="max-w-6xl mx-auto relative z-10">
         <div className="text-center mb-10 fade-in-up">
-          <h2 className="text-2xl md:text-4xl font-extrabold mb-2 bg-gradient-to-r from-[#00E0FF] via-[#A78BFA] to-[#00FFE5] bg-clip-text text-transparent" style={{ fontFamily: 'var(--font-montserrat)', filter: 'drop-shadow(0 0 25px rgba(0, 224, 255, 0.3))' }}>
+          <h2 className="text-3xl md:text-5xl font-extrabold mb-3 bg-gradient-to-r from-[#00E0FF] via-[#A78BFA] to-[#00FFE5] bg-clip-text text-transparent" style={{ fontFamily: 'var(--font-montserrat)', filter: 'drop-shadow(0 0 25px rgba(0, 224, 255, 0.3))' }}>
             Real Calls Real Proof
           </h2>
           <p className="text-sm md:text-base text-white/75 font-semibold">
