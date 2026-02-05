@@ -35,7 +35,7 @@ export const POINTS_CONFIG = {
 
   // Resolve prediction
   RESOLVE_CORRECT_BASE: 50,
-  RESOLVE_INCORRECT_PENALTY: -10,
+  RESOLVE_INCORRECT_PENALTY: -30,
   RESOLVE_ONCHAIN_BONUS: 20,
 
   // Evidence multiplier applied to RESOLVE_CORRECT_BASE

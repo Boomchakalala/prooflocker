@@ -63,6 +63,43 @@ export async function POST(request: NextRequest) {
       }
     }
 
+    // Rate limiting: Max 5 locks per day
+    try {
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      const todayStart = today.toISOString();
+
+      const supabase = createClient(supabaseUrl, supabaseAnonKey);
+
+      // Count predictions locked today by this user (check both userId and anonId)
+      const { count, error: countError } = await supabase
+        .from('predictions')
+        .select('*', { count: 'exact', head: true })
+        .or(authenticatedUserId ? `user_id.eq.${authenticatedUserId},anon_id.eq.${anonId}` : `anon_id.eq.${anonId}`)
+        .gte('timestamp', todayStart);
+
+      if (countError) {
+        console.error('[Lock Proof API] Error checking rate limit:', countError);
+      }
+
+      if (count !== null && count >= 5) {
+        return NextResponse.json(
+          {
+            error: 'RATE_LIMIT_EXCEEDED',
+            message: 'You can only lock 5 predictions per day. Come back tomorrow!',
+            locksUsedToday: count,
+            maxLocksPerDay: 5
+          },
+          { status: 429 }
+        );
+      }
+
+      console.log(`[Lock Proof API] Rate limit check: ${count}/5 locks used today`);
+    } catch (rateLimitError) {
+      console.error('[Lock Proof API] Rate limit check failed:', rateLimitError);
+      // Don't fail the request if rate limit check fails - allow the lock to proceed
+    }
+
     // Hash the text using SHA-256
     const hash = crypto.createHash("sha256").update(text).digest("hex");
 
