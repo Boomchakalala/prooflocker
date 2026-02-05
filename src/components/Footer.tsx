@@ -1,13 +1,21 @@
 export default function Footer() {
   return (
-    <footer className="relative bg-gradient-to-r from-[#0A0A0F] to-[#1E1238] py-8 px-8 border-t border-[#4C1D95]/20">
+    <footer className="relative bg-gradient-to-r from-[#0A0A0F] to-[#1E1238] py-6 px-8 border-t border-[#4C1D95]/20">
       {/* Thin constellation line */}
       <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#2E5CFF]/30 to-transparent" />
 
       <div className="max-w-6xl mx-auto relative z-10">
-        {/* Main footer content - All in one clean section */}
-        <div className="flex flex-col items-center gap-6">
-          {/* Links */}
+        {/* Main footer content - 3 column layout */}
+        <div className="flex flex-col md:flex-row items-center justify-between gap-6 mb-4">
+          {/* Left: Powered by */}
+          <div className="flex items-center gap-2 text-xs text-neutral-500">
+            <svg className="w-3.5 h-3.5 text-[#2E5CFF]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/>
+            </svg>
+            <span>Powered by <a href="https://constellationnetwork.io" target="_blank" rel="noopener noreferrer" className="text-[#5B21B6] font-semibold hover:text-[#2E5CFF] transition-colors">Constellation DAG</a></span>
+          </div>
+
+          {/* Center: Links */}
           <div className="flex items-center gap-6 text-sm">
             <a href="/about" className="text-neutral-400 hover:text-[#2E5CFF] transition-colors">
               About
@@ -26,8 +34,8 @@ export default function Footer() {
             </a>
           </div>
 
-          {/* Social icons */}
-          <div className="flex items-center gap-5">
+          {/* Right: Social icons */}
+          <div className="flex items-center gap-4">
             <a
               href="https://twitter.com/prooflocker"
               target="_blank"
@@ -62,16 +70,10 @@ export default function Footer() {
               </svg>
             </a>
           </div>
+        </div>
 
-          {/* Powered by */}
-          <p className="text-xs text-neutral-500 flex items-center gap-2">
-            <svg className="w-3.5 h-3.5 text-[#2E5CFF]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/>
-            </svg>
-            <span>Powered by <a href="https://constellationnetwork.io" target="_blank" rel="noopener noreferrer" className="text-[#5B21B6] font-semibold hover:text-[#2E5CFF] transition-colors">Constellation DAG</a></span>
-          </p>
-
-          {/* Copyright */}
+        {/* Copyright - centered */}
+        <div className="text-center">
           <p className="text-xs text-neutral-500">
             © 2026 ProofLocker — Immutable accountability for the future
           </p>
