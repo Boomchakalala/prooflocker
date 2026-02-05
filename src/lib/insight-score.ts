@@ -22,7 +22,7 @@ export const INSIGHT_SCORE = {
 } as const;
 
 // High-risk categories that earn bonus points
-export const HIGH_RISK_CATEGORIES = ['Crypto', 'Politics', 'Markets'] as const;
+export const HIGH_RISK_CATEGORIES = ['Crypto', 'Politics', 'Markets', 'OSINT'] as const;
 
 // All valid categories
 export const CATEGORIES = [
@@ -33,6 +33,7 @@ export const CATEGORIES = [
   'Politics',
   'Markets',
   'Tech',
+  'OSINT',
   'Other'
 ] as const;
 

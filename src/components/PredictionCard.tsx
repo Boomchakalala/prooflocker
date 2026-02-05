@@ -153,6 +153,8 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
         return 'bg-gradient-to-r from-red-500/20 to-pink-500/20 border-red-400/50 text-red-300';
       case 'markets':
         return 'bg-gradient-to-r from-emerald-500/20 to-teal-500/20 border-emerald-400/50 text-emerald-300';
+      case 'osint':
+        return 'bg-gradient-to-r from-indigo-500/20 to-violet-500/20 border-indigo-400/50 text-indigo-300';
       case 'culture':
         return 'bg-gradient-to-r from-pink-500/20 to-purple-500/20 border-pink-400/50 text-pink-300';
       case 'other':
