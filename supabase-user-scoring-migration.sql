@@ -38,7 +38,33 @@ DECLARE
   v_incorrect_predictions INTEGER;
   v_avg_evidence_score DECIMAL(5,2);
   v_reliability_score INTEGER;
+  v_old_reliability_score INTEGER;
+  v_old_tier TEXT;
+  v_new_tier TEXT;
 BEGIN
+  -- Get old reliability score and tier
+  SELECT reliability_score INTO v_old_reliability_score
+  FROM user_stats
+  WHERE user_id = user_uuid;
+
+  -- Calculate old tier
+  IF v_old_reliability_score IS NOT NULL THEN
+    IF v_old_reliability_score >= 800 THEN
+      v_old_tier := 'legend';
+    ELSIF v_old_reliability_score >= 650 THEN
+      v_old_tier := 'master';
+    ELSIF v_old_reliability_score >= 500 THEN
+      v_old_tier := 'expert';
+    ELSIF v_old_reliability_score >= 300 THEN
+      v_old_tier := 'trusted';
+    ELSE
+      v_old_tier := 'novice';
+    END IF;
+  ELSE
+    v_old_tier := 'novice';
+    v_old_reliability_score := 0;
+  END IF;
+
   -- Count predictions
   SELECT COUNT(*)
   INTO v_total_predictions
@@ -89,6 +115,19 @@ BEGIN
     v_reliability_score := 0;
   END IF;
 
+  -- Calculate new tier
+  IF v_reliability_score >= 800 THEN
+    v_new_tier := 'legend';
+  ELSIF v_reliability_score >= 650 THEN
+    v_new_tier := 'master';
+  ELSIF v_reliability_score >= 500 THEN
+    v_new_tier := 'expert';
+  ELSIF v_reliability_score >= 300 THEN
+    v_new_tier := 'trusted';
+  ELSE
+    v_new_tier := 'novice';
+  END IF;
+
   -- Upsert user stats (note: total_points maintained separately via triggers)
   INSERT INTO user_stats (
     user_id,
@@ -117,6 +156,30 @@ BEGIN
     incorrect_predictions = EXCLUDED.incorrect_predictions,
     avg_evidence_score = EXCLUDED.avg_evidence_score,
     last_updated_at = NOW();
+
+  -- Check for tier upgrade and create notification
+  IF v_new_tier != v_old_tier AND v_old_tier != 'novice' THEN
+    -- Only notify on upgrades (not downgrades) and not from initial novice state
+    IF (v_new_tier = 'legend' AND v_old_tier IN ('master', 'expert', 'trusted')) OR
+       (v_new_tier = 'master' AND v_old_tier IN ('expert', 'trusted')) OR
+       (v_new_tier = 'expert' AND v_old_tier = 'trusted') OR
+       (v_new_tier = 'trusted' AND v_old_tier = 'novice') THEN
+      PERFORM create_notification(
+        user_uuid,
+        'tier_upgrade',
+        'Tier Upgrade! 🎉',
+        'You''ve reached ' || UPPER(SUBSTRING(v_new_tier FROM 1 FOR 1)) || SUBSTRING(v_new_tier FROM 2) || ' tier! (' || v_reliability_score || '/1000)',
+        '🎉',
+        jsonb_build_object(
+          'old_tier', v_old_tier,
+          'new_tier', v_new_tier,
+          'old_score', v_old_reliability_score,
+          'new_score', v_reliability_score
+        ),
+        '/profile'
+      );
+    END IF;
+  END IF;
 END;
 $$ LANGUAGE plpgsql;
 
