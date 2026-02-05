@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { updatePredictionOutcome, type PredictionOutcome } from "@/lib/storage";
 import { getCurrentUser } from "@/lib/auth";
+import { awardResolvePoints } from "@/lib/insight-db";
+import { createClient } from "@supabase/supabase-js";
 
 export async function PATCH(
   request: NextRequest,
@@ -52,11 +54,58 @@ export async function PATCH(
       resolutionUrl
     );
 
+    // Award Reputation Score points for resolving (if outcome is not pending)
+    let insightPoints = 0;
+    try {
+      if (outcome !== 'pending') {
+        const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+        const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+
+        if (supabaseServiceKey) {
+          const supabase = createClient(supabaseUrl, supabaseServiceKey);
+
+          // Get prediction data
+          const { data: prediction } = await supabase
+            .from('predictions')
+            .select('category, anon_id, user_id')
+            .eq('id', id)
+            .single();
+
+          if (prediction) {
+            const identifier = prediction.user_id
+              ? { userId: prediction.user_id }
+              : { anonId: prediction.anon_id };
+
+            const isCorrect = outcome === 'correct';
+            const category = prediction.category || 'Other';
+
+            const scoreResult = await awardResolvePoints({
+              identifier,
+              predictionId: id,
+              isCorrect,
+              category,
+            });
+
+            if (scoreResult) {
+              insightPoints = scoreResult.points;
+              console.log(`[Outcome API] Awarded ${insightPoints} Reputation Score points`);
+            }
+          }
+        } else {
+          console.warn('[Outcome API] No service role key available for scoring');
+        }
+      }
+    } catch (scoreError) {
+      console.error('[Outcome API] Failed to award Reputation Score:', scoreError);
+      // Non-fatal, continue
+    }
+
     return NextResponse.json({
       success: true,
       outcome,
       resolutionNote,
       resolutionUrl,
+      insightPoints, // Include insight points in response
     });
   } catch (error) {
     console.error("[Update Outcome API] Error:", error);
