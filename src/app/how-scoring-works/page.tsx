@@ -228,27 +228,77 @@ export default function HowScoringWorksPage() {
         {/* Evidence Score Section */}
         <section className="mb-12">
           <div className="glass border border-white/10 rounded-xl p-8">
-            <h2 className="text-2xl font-bold text-white mb-6">Evidence Score (0-100)</h2>
-            <p className="text-neutral-300 mb-6">
-              Quality of proof when resolving predictions
-            </p>
+            <div className="flex items-center gap-3 mb-6">
+              <div className="w-10 h-10 rounded-lg bg-green-500/10 border border-green-500/30 flex items-center justify-center">
+                <svg className="w-5 h-5 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              </div>
+              <div>
+                <h2 className="text-2xl font-bold text-white">Evidence Score (0-100)</h2>
+                <p className="text-sm text-neutral-400">Quality of proof when resolving</p>
+              </div>
+            </div>
 
-            <div className="space-y-3">
-              <div className="flex items-center justify-between">
-                <span className="text-green-400 font-medium">Strong (76-100)</span>
-                <span className="text-neutral-500 text-sm">Multiple sources + screenshots</span>
+            <div className="grid md:grid-cols-2 gap-3">
+              <div className="bg-green-500/5 rounded-lg p-4 border border-green-500/20">
+                <div className="flex items-center gap-3 mb-2">
+                  <div className="w-8 h-8 rounded-full bg-green-500/10 border border-green-500/30 flex items-center justify-center flex-shrink-0">
+                    <svg className="w-4 h-4 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                    </svg>
+                  </div>
+                  <div className="flex-1">
+                    <div className="text-green-400 font-semibold">Strong</div>
+                    <div className="text-xs text-neutral-500">76-100 points</div>
+                  </div>
+                </div>
+                <p className="text-sm text-neutral-400">Multiple sources + screenshots</p>
               </div>
-              <div className="flex items-center justify-between">
-                <span className="text-blue-400 font-medium">Solid (51-75)</span>
-                <span className="text-neutral-500 text-sm">Good sources or multiple items</span>
+
+              <div className="bg-blue-500/5 rounded-lg p-4 border border-blue-500/20">
+                <div className="flex items-center gap-3 mb-2">
+                  <div className="w-8 h-8 rounded-full bg-blue-500/10 border border-blue-500/30 flex items-center justify-center flex-shrink-0">
+                    <svg className="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                  </div>
+                  <div className="flex-1">
+                    <div className="text-blue-400 font-semibold">Solid</div>
+                    <div className="text-xs text-neutral-500">51-75 points</div>
+                  </div>
+                </div>
+                <p className="text-sm text-neutral-400">Good sources or multiple items</p>
               </div>
-              <div className="flex items-center justify-between">
-                <span className="text-yellow-400 font-medium">Basic (26-50)</span>
-                <span className="text-neutral-500 text-sm">Some evidence but limited</span>
+
+              <div className="bg-yellow-500/5 rounded-lg p-4 border border-yellow-500/20">
+                <div className="flex items-center gap-3 mb-2">
+                  <div className="w-8 h-8 rounded-full bg-yellow-500/10 border border-yellow-500/30 flex items-center justify-center flex-shrink-0">
+                    <svg className="w-4 h-4 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                    </svg>
+                  </div>
+                  <div className="flex-1">
+                    <div className="text-yellow-400 font-semibold">Basic</div>
+                    <div className="text-xs text-neutral-500">26-50 points</div>
+                  </div>
+                </div>
+                <p className="text-sm text-neutral-400">Some evidence but limited</p>
               </div>
-              <div className="flex items-center justify-between">
-                <span className="text-orange-400 font-medium">Unverified (0-25)</span>
-                <span className="text-neutral-500 text-sm">Minimal or no evidence</span>
+
+              <div className="bg-orange-500/5 rounded-lg p-4 border border-orange-500/20">
+                <div className="flex items-center gap-3 mb-2">
+                  <div className="w-8 h-8 rounded-full bg-orange-500/10 border border-orange-500/30 flex items-center justify-center flex-shrink-0">
+                    <svg className="w-4 h-4 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                  </div>
+                  <div className="flex-1">
+                    <div className="text-orange-400 font-semibold">Unverified</div>
+                    <div className="text-xs text-neutral-500">0-25 points</div>
+                  </div>
+                </div>
+                <p className="text-sm text-neutral-400">Minimal or no evidence</p>
               </div>
             </div>
           </div>
