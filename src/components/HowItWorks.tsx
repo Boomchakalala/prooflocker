@@ -55,7 +55,7 @@ export default function HowItWorks() {
             </div>
             <h3 className="text-xl md:text-2xl font-bold text-white text-center mb-4">Resolve & Own It</h3>
             <p className="text-sm md:text-base text-white/75 leading-relaxed">
-              Come back when it's time. Mark it hit, miss, or pending. Claim the outcome honestly. Build your accountability score and generate shareable proof cards to flex your track record.
+              Come back when it's time. Mark it hit, miss, or pending. Claim the outcome honestly. Build your reputation score and generate shareable proof cards to flex your track record.
             </p>
           </div>
         </div>

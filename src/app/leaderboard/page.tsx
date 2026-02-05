@@ -59,7 +59,7 @@ export default function LeaderboardPage() {
             Global Leaderboard
           </h1>
           <p className="text-xl text-gray-400 mb-6">
-            Top Insight Scorers
+            Top Reputation Scorers
           </p>
           <p className="text-sm text-gray-500">
             Anonymous ranks only. Claim predictions for sync & bonuses. Scores update real-time.
@@ -123,7 +123,7 @@ export default function LeaderboardPage() {
                     <tr>
                       <th className="px-6 py-4 text-left text-sm font-semibold text-gray-400">Rank</th>
                       <th className="px-6 py-4 text-left text-sm font-semibold text-gray-400">User</th>
-                      <th className="px-6 py-4 text-right text-sm font-semibold text-gray-400">Insight Score</th>
+                      <th className="px-6 py-4 text-right text-sm font-semibold text-gray-400">Reputation Score</th>
                       <th className="px-6 py-4 text-right text-sm font-semibold text-gray-400">Accuracy</th>
                       <th className="px-6 py-4 text-right text-sm font-semibold text-gray-400">Resolves</th>
                       <th className="px-6 py-4 text-right text-sm font-semibold text-gray-400">Streak</th>
