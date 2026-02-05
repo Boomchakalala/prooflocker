@@ -39,6 +39,9 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
   const [showContestModal, setShowContestModal] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
   const [showReportMenu, setShowReportMenu] = useState(false);
+  const [hasVoted, setHasVoted] = useState(false);
+  const [voteCount, setVoteCount] = useState(0);
+  const [isVoting, setIsVoting] = useState(false);
 
   // Fallback for older predictions without authorNumber
   const authorNumber = prediction.authorNumber || 1000;
@@ -46,6 +49,58 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
   const isClaimed = !!prediction.userId;
   const isOwner = currentUserId && prediction.userId === currentUserId;
   const isResolved = prediction.outcome === "correct" || prediction.outcome === "incorrect";
+
+  // Fetch vote status on mount if user is authenticated and prediction is resolved
+  useEffect(() => {
+    if (currentUserId && isResolved && !isPreview) {
+      fetchVoteStatus();
+    }
+  }, [currentUserId, isResolved, isPreview, prediction.id]);
+
+  const fetchVoteStatus = async () => {
+    try {
+      const response = await fetch(`/api/predictions/${prediction.id}/vote`);
+      if (response.ok) {
+        const data = await response.json();
+        setHasVoted(data.voted);
+        setVoteCount(data.voteCount);
+      }
+    } catch (error) {
+      console.error('Error fetching vote status:', error);
+    }
+  };
+
+  const handleVote = async () => {
+    if (!currentUserId || isVoting) return;
+
+    setIsVoting(true);
+    try {
+      const response = await fetch(`/api/predictions/${prediction.id}/vote`, {
+        method: 'POST',
+      });
+
+      if (!response.ok) {
+        const data = await response.json();
+        alert(data.error || 'Failed to vote');
+        return;
+      }
+
+      const data = await response.json();
+      setHasVoted(data.voted);
+
+      // Update vote count locally
+      if (data.voted) {
+        setVoteCount(prev => prev + 1);
+      } else {
+        setVoteCount(prev => Math.max(0, prev - 1));
+      }
+    } catch (error) {
+      console.error('Error voting:', error);
+      alert('Failed to vote. Please try again.');
+    } finally {
+      setIsVoting(false);
+    }
+  };
 
   const copyHash = async () => {
     await navigator.clipboard.writeText(prediction.hash);
