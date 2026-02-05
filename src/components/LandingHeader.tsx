@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useState } from "react";
+import { usePathname } from "next/navigation";
 import BrandLogo from "@/components/BrandLogo";
 import { useAuth } from "@/contexts/AuthContext";
 import { signOut } from "@/lib/auth";
@@ -11,8 +12,10 @@ import InsightScorePill from "@/components/InsightScorePill";
 
 export default function LandingHeader() {
   const { user } = useAuth();
+  const pathname = usePathname();
   const [showClaimModal, setShowClaimModal] = useState(false);
   const [showUserMenu, setShowUserMenu] = useState(false);
+  const [showMobileMenu, setShowMobileMenu] = useState(false);
 
   const handleSignOut = async () => {
     try {
@@ -22,44 +25,83 @@ export default function LandingHeader() {
     }
   };
 
+  const isActive = (path: string) => pathname === path;
+  const isLandingPage = pathname === "/";
+  const isFeedPage = pathname === "/app";
+  const isScoringPage = pathname === "/scoring";
+
   return (
     <>
       <header className="sticky top-0 z-50 backdrop-blur-xl border-b border-gray-800 transition-colors duration-300" style={{ background: 'rgba(10, 10, 10, 0.75)' }}>
-        <div className="mx-auto max-w-[1280px] px-6 md:px-12 lg:px-16 flex h-14 items-center justify-between">
-          <BrandLogo />
-          <div className="flex items-center gap-4 md:gap-6">
-            <Link
-              href="/lock"
-              className="px-5 md:px-7 py-2 md:py-2.5 bg-gradient-to-r from-[#2E5CFF] to-[#5B21B6] hover:from-[#3D6CFF] hover:to-[#6B31C6] text-white text-sm md:text-base font-bold rounded-lg transition-all shadow-lg hover:shadow-[0_0_20px_rgba(46,92,255,0.5)] hover:scale-105 flex items-center gap-2 order-1"
-            >
-              Lock Prediction
-              <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-              </svg>
-            </Link>
+        <div className="mx-auto max-w-[1280px] px-4 md:px-6 lg:px-12 flex h-14 items-center justify-between">
+          <Link href="/" className="flex-shrink-0">
+            <BrandLogo />
+          </Link>
 
-            <Link
-              href="/app"
-              className="text-white/80 hover:text-[#2E5CFF] font-medium transition-all duration-200 text-sm md:text-base relative group order-2 hidden sm:block"
-              style={{ fontFamily: 'var(--font-inter)' }}
-            >
-              Explore
-              <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-[#2E5CFF] transition-all duration-200 group-hover:w-full" />
-            </Link>
+          {/* Desktop Navigation */}
+          <div className="hidden md:flex items-center gap-4 lg:gap-6">
+            {/* Contextual nav links */}
+            {!isLandingPage && (
+              <Link
+                href="/"
+                className="text-white/80 hover:text-[#2E5CFF] font-medium transition-all duration-200 text-sm relative group flex items-center gap-1.5"
+                style={{ fontFamily: 'var(--font-inter)' }}
+              >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                </svg>
+                Home
+                <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-[#2E5CFF] transition-all duration-200 group-hover:w-full" />
+              </Link>
+            )}
+
+            {!isFeedPage && (
+              <Link
+                href="/app"
+                className={`font-medium transition-all duration-200 text-sm relative group flex items-center gap-1.5 ${
+                  isActive("/app") ? "text-[#2E5CFF]" : "text-white/80 hover:text-[#2E5CFF]"
+                }`}
+                style={{ fontFamily: 'var(--font-inter)' }}
+              >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+                Explore
+                <span className={`absolute bottom-0 left-0 h-0.5 bg-[#2E5CFF] transition-all duration-200 ${
+                  isActive("/app") ? "w-full" : "w-0 group-hover:w-full"
+                }`} />
+              </Link>
+            )}
 
             <Link
               href="/scoring"
-              className="text-white/80 hover:text-[#2E5CFF] font-medium transition-all duration-200 text-sm md:text-base relative group order-2 hidden sm:block"
+              className={`font-medium transition-all duration-200 text-sm relative group flex items-center gap-1.5 ${
+                isActive("/scoring") ? "text-[#2E5CFF]" : "text-white/80 hover:text-[#2E5CFF]"
+              }`}
               style={{ fontFamily: 'var(--font-inter)' }}
             >
+              <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" />
+              </svg>
               Scoring
-              <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-[#2E5CFF] transition-all duration-200 group-hover:w-full" />
+              <span className={`absolute bottom-0 left-0 h-0.5 bg-[#2E5CFF] transition-all duration-200 ${
+                isActive("/scoring") ? "w-full" : "w-0 group-hover:w-full"
+              }`} />
+            </Link>
+
+            {/* Lock CTA Button */}
+            <Link
+              href="/lock"
+              className="px-5 py-2 bg-gradient-to-r from-[#2E5CFF] to-[#5B21B6] hover:from-[#3D6CFF] hover:to-[#6B31C6] text-white text-sm font-bold rounded-lg transition-all shadow-lg hover:shadow-[0_0_20px_rgba(46,92,255,0.5)] hover:scale-105 flex items-center gap-2"
+            >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+              </svg>
+              Lock
             </Link>
 
             {/* Insight Score Pill */}
-            <div className="order-3">
-              <InsightScorePill />
-            </div>
+            <InsightScorePill />
 
             {/* Desktop: Show Sign In button or user menu */}
             {!user ? (
