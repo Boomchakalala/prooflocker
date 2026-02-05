@@ -11,6 +11,8 @@ import {
 } from "@/lib/evidence-storage";
 import { computeResolutionFingerprint } from "@/lib/evidence-hashing";
 import { computeEvidenceScore } from "@/lib/evidence-scoring";
+import { awardResolvePoints } from "@/lib/insight-db";
+import { createClient } from "@supabase/supabase-js";
 
 export async function POST(
   request: NextRequest,
@@ -167,12 +169,57 @@ export async function POST(
       // Non-fatal, continue
     }
 
+    // Step 5: Award Reputation Score points for resolving
+    let insightPoints = 0;
+    try {
+      const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+      const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+
+      if (supabaseServiceKey) {
+        const supabase = createClient(supabaseUrl, supabaseServiceKey);
+
+        // Get prediction data to check category and anon_id
+        const { data: prediction } = await supabase
+          .from('predictions')
+          .select('category, anon_id, user_id')
+          .eq('id', id)
+          .single();
+
+        if (prediction) {
+          const identifier = prediction.user_id
+            ? { userId: prediction.user_id }
+            : { anonId: prediction.anon_id };
+
+          const isCorrect = outcome === 'correct';
+          const category = prediction.category || 'Other';
+
+          const scoreResult = await awardResolvePoints({
+            identifier,
+            predictionId: id,
+            isCorrect,
+            category,
+          });
+
+          if (scoreResult) {
+            insightPoints = scoreResult.points;
+            console.log(`[Resolve API] Awarded ${insightPoints} Reputation Score points`);
+          }
+        }
+      } else {
+        console.warn('[Resolve API] No service role key available for scoring');
+      }
+    } catch (scoreError) {
+      console.error('[Resolve API] Failed to award Reputation Score:', scoreError);
+      // Non-fatal, continue
+    }
+
     return NextResponse.json({
       success: true,
       outcome,
       evidenceGrade,
       resolutionFingerprint,
       evidenceItemsCreated: createdEvidenceItems.length,
+      insightPoints, // Include insight points in response
     });
   } catch (error) {
     console.error("[Resolve API] Error:", error);
