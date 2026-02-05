@@ -499,9 +499,10 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
         <button
           onClick={(e) => {
             e.preventDefault();
-            // Navigation is handled by parent Link
+            e.stopPropagation();
+            handleViewClick(e);
           }}
-          className="px-4 py-2.5 text-sm font-semibold text-cyan-300 bg-cyan-500/10 rounded-lg transition-all border border-cyan-500/30 hover:border-cyan-400/50 hover:bg-cyan-500/15 flex items-center justify-center gap-2"
+          className={`px-4 py-2.5 text-sm font-semibold text-cyan-300 bg-cyan-500/10 rounded-lg transition-all border border-cyan-500/30 hover:border-cyan-400/50 hover:bg-cyan-500/15 flex items-center justify-center gap-2 ${isPreview ? 'cursor-default' : 'cursor-pointer'}`}
         >
           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -572,6 +573,25 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
           }}
         />
       )}
+    </>
+  );
+
+  // Render as non-clickable div for preview mode (landing page)
+  if (isPreview) {
+    return (
+      <div className={`group relative glass rounded-xl p-5 transition-all duration-300 flex flex-col h-full overflow-hidden border ${getCardBorderStyle()}`}>
+        {cardContent}
+      </div>
+    );
+  }
+
+  // Render as Link for feed page (clickable)
+  return (
+    <Link
+      href={`/proof/${prediction.publicSlug}`}
+      className={`group relative glass rounded-xl p-5 transition-all duration-300 flex flex-col h-full overflow-hidden border cursor-pointer hover:-translate-y-1 hover:shadow-2xl ${getCardBorderStyle()}`}
+    >
+      {cardContent}
     </Link>
   );
 }

@@ -257,6 +257,7 @@ export default function ProofCardPreview() {
                 <PredictionCard
                   prediction={prediction}
                   currentUserId={null}
+                  isPreview={true}
                 />
               </div>
             ))}
