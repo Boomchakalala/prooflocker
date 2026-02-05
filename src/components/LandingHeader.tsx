@@ -32,7 +32,7 @@ export default function LandingHeader() {
 
   return (
     <>
-      <header className="sticky top-0 z-50 glass border-b border-white/10">
+      <header className="sticky top-0 z-50 bg-gradient-to-r from-[#0A0A0F] to-[#1E1238] border-b border-[#4C1D95]/20">
         <div className="mx-auto max-w-[1280px] px-4 md:px-6 lg:px-12 flex h-16 items-center justify-between">
           <Link href="/" className="flex-shrink-0">
             <BrandLogo />
@@ -80,9 +80,6 @@ export default function LandingHeader() {
               }`}
               style={{ fontFamily: 'var(--font-inter)' }}
             >
-              <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" />
-              </svg>
               Scoring
               <span className={`absolute bottom-0 left-0 h-0.5 bg-[#2E5CFF] transition-all duration-200 ${
                 isActive("/how-scoring-works") ? "w-full" : "w-0 group-hover:w-full"
@@ -92,12 +89,9 @@ export default function LandingHeader() {
             {/* Lock CTA Button */}
             <Link
               href="/lock"
-              className="px-6 py-2.5 bg-gradient-to-r from-[#2E5CFF] to-[#5B21B6] hover:from-[#3D6CFF] hover:to-[#6B31C6] text-white text-sm font-semibold rounded-lg transition-all shadow-lg hover:shadow-[0_0_20px_rgba(46,92,255,0.5)] flex items-center gap-2"
+              className="px-5 py-2 bg-gradient-to-r from-[#2E5CFF] to-[#5B21B6] hover:from-[#3D6CFF] hover:to-[#6B31C6] text-white text-sm font-semibold rounded-lg transition-all shadow-lg hover:shadow-[0_0_20px_rgba(46,92,255,0.5)]"
             >
-              Lock
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-              </svg>
+              Lock Prediction
             </Link>
 
             {/* Reputation Score Pill */}
