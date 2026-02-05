@@ -200,7 +200,7 @@ export default function LandingHeader() {
             {/* Mobile Menu Button */}
             <button
               onClick={() => setShowMobileMenu(!showMobileMenu)}
-              className="p-2 hover:bg-white/5 rounded-lg transition-all"
+              className="p-2 bg-white/5 hover:bg-white/10 border border-white/20 rounded-lg transition-all"
               aria-label="Menu"
             >
               <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
