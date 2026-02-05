@@ -13,7 +13,7 @@ export const INSIGHT_SCORE = {
   // Resolve outcomes
   RESOLVE_CORRECT_BASE: 80,
   RESOLVE_CORRECT_HIGH_RISK_BONUS: 40, // Total: 120 for crypto/politics/markets
-  RESOLVE_INCORRECT: -15,
+  RESOLVE_INCORRECT: -30,
 
   // Bonuses
   STREAK_BONUS_PER: 10, // Per consecutive correct
