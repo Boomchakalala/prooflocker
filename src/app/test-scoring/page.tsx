@@ -1,6 +1,7 @@
 'use client';
 
 import { SimplifiedProfileCard, TierBadge, PredictionCardAuthor } from '@/components/scoring/SimplifiedUX';
+import Link from 'next/link';
 
 export default function TestScoringPage() {
   // Mock data for testing
@@ -18,21 +19,38 @@ export default function TestScoringPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#0A0A0F] p-8">
-      <div className="max-w-4xl mx-auto space-y-12">
+    <div className="min-h-screen gradient-bg text-white relative">
+      {/* Decorative gradient orbs - matching profile page */}
+      <div className="fixed inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute top-20 -left-40 w-80 h-80 bg-blue-500/10 rounded-full blur-3xl" />
+        <div className="absolute top-40 -right-40 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl" />
+      </div>
+
+      <div className="relative z-10 max-w-4xl mx-auto px-4 py-12">
+        {/* Back link - matching profile page */}
+        <Link
+          href="/app"
+          className="inline-flex items-center text-neutral-400 hover:text-white transition-colors mb-8 text-sm"
+        >
+          <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+          </svg>
+          Back to App
+        </Link>
+
         {/* Header */}
-        <div className="text-center space-y-2">
-          <h1 className="text-4xl font-bold text-white">
+        <div className="glass border border-white/10 rounded-xl p-8 mb-6">
+          <h1 className="text-3xl font-bold text-white mb-2">
             🎨 Simplified Scoring UX Test
           </h1>
-          <p className="text-gray-400">
-            Testing new components with mock data
+          <p className="text-neutral-400">
+            Testing new tier badge components with mock data
           </p>
         </div>
 
         {/* Test 1: Tier Badges */}
-        <section className="bg-gray-900/50 border border-gray-800 rounded-xl p-6 space-y-4">
-          <h2 className="text-xl font-bold text-white">1. Tier Badges</h2>
+        <div className="glass border border-white/10 rounded-xl p-6 mb-6">
+          <h2 className="text-xl font-semibold text-white mb-4">1. Tier Badge Examples</h2>
           <div className="flex flex-wrap gap-4">
             <TierBadge reliabilityScore={950} size="lg" />
             <TierBadge reliabilityScore={720} size="lg" />
@@ -40,28 +58,28 @@ export default function TestScoringPage() {
             <TierBadge reliabilityScore={350} size="lg" />
             <TierBadge reliabilityScore={150} size="lg" />
           </div>
-          <div className="text-sm text-green-400">
-            ✓ If you see 5 tier badges above, component works!
-          </div>
-        </section>
+          <p className="text-sm text-green-400 mt-4">
+            ✓ If you see 5 tier badges above with icons, components are working!
+          </p>
+        </div>
 
         {/* Test 2: Profile Card */}
-        <section className="bg-gray-900/50 border border-gray-800 rounded-xl p-6 space-y-4">
-          <h2 className="text-xl font-bold text-white">2. Profile Card</h2>
+        <div className="glass border border-white/10 rounded-xl p-6 mb-6">
+          <h2 className="text-xl font-semibold text-white mb-4">2. Simplified Profile Card</h2>
           <SimplifiedProfileCard
             stats={mockStats}
             anonId="test-user-7291"
           />
-          <div className="text-sm text-green-400">
-            ✓ If you see a profile card with tier badge, stats, and progress bar - it works!
-          </div>
-        </section>
+          <p className="text-sm text-green-400 mt-4">
+            ✓ Profile card with tier badge, progress bar, and stats
+          </p>
+        </div>
 
         {/* Test 3: Prediction Card Author */}
-        <section className="bg-gray-900/50 border border-gray-800 rounded-xl p-6 space-y-4">
-          <h2 className="text-xl font-bold text-white">3. Prediction Card Author Line</h2>
-          <div className="bg-gray-800/50 p-4 rounded-lg space-y-3">
-            <div className="text-lg text-white">
+        <div className="glass border border-white/10 rounded-xl p-6 mb-6">
+          <h2 className="text-xl font-semibold text-white mb-4">3. Prediction Card Author Line</h2>
+          <div className="glass border border-white/10 rounded-lg p-4">
+            <div className="text-lg text-white mb-3">
               Bitcoin will hit $100k by end of 2026
             </div>
             <PredictionCardAuthor
@@ -70,48 +88,54 @@ export default function TestScoringPage() {
               createdAt={new Date('2024-01-15')}
             />
           </div>
-          <div className="text-sm text-green-400">
-            ✓ If you see compact author info with tier badge - it works!
-          </div>
-        </section>
+          <p className="text-sm text-green-400 mt-4">
+            ✓ Compact author info with tier badge
+          </p>
+        </div>
 
-        {/* Test 4: Different Scores */}
-        <section className="bg-gray-900/50 border border-gray-800 rounded-xl p-6 space-y-4">
-          <h2 className="text-xl font-bold text-white">4. Various Reliability Scores</h2>
+        {/* Test 4: Different Tiers Grid */}
+        <div className="glass border border-white/10 rounded-xl p-6 mb-6">
+          <h2 className="text-xl font-semibold text-white mb-4">4. All Reliability Tiers</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {[
-              { score: 950, label: 'Legend' },
-              { score: 720, label: 'Master' },
-              { score: 580, label: 'Expert' },
-              { score: 350, label: 'Trusted' },
-              { score: 150, label: 'Novice' },
+              { score: 950, label: 'Legend', color: 'text-yellow-400' },
+              { score: 720, label: 'Master', color: 'text-purple-400' },
+              { score: 580, label: 'Expert', color: 'text-blue-400' },
+              { score: 350, label: 'Trusted', color: 'text-green-400' },
+              { score: 150, label: 'Novice', color: 'text-gray-400' },
             ].map((tier) => (
-              <div key={tier.score} className="bg-gray-800/50 p-4 rounded-lg text-center space-y-2">
+              <div key={tier.score} className="bg-white/5 border border-white/10 rounded-lg p-4 text-center space-y-2">
                 <TierBadge reliabilityScore={tier.score} size="md" />
-                <div className="text-2xl font-bold text-white">{tier.score}</div>
-                <div className="text-sm text-gray-400">{tier.label}</div>
+                <div className={`text-2xl font-bold ${tier.color}`}>{tier.score}</div>
+                <div className="text-sm text-neutral-400">{tier.label}</div>
               </div>
             ))}
           </div>
-        </section>
+        </div>
 
-        {/* Instructions */}
-        <section className="bg-blue-500/10 border border-blue-500/30 rounded-xl p-6 space-y-3">
-          <h2 className="text-xl font-bold text-blue-400">✅ If Everything Above Looks Good</h2>
-          <div className="text-gray-300 space-y-2">
-            <p>1. Components are working correctly</p>
-            <p>2. You can safely integrate them into your actual pages</p>
-            <p>3. Check <code className="bg-gray-800 px-2 py-1 rounded">IMPLEMENTATION_STEPS.md</code> for next steps</p>
+        {/* Success Message */}
+        <div className="bg-gradient-to-r from-[#2E5CFF]/10 to-[#5B21B6]/10 border border-[#2E5CFF]/30 rounded-xl p-6">
+          <h2 className="text-xl font-bold text-white mb-3">✅ If Everything Above Looks Good</h2>
+          <div className="text-neutral-300 space-y-2">
+            <p>1. ✓ Components are working correctly</p>
+            <p>2. ✓ Styling matches your app's design</p>
+            <p>3. ✓ Tier badges have icons and colors</p>
+            <p>4. ✓ Ready for integration into real pages</p>
           </div>
-        </section>
+          <div className="mt-4 pt-4 border-t border-white/10">
+            <p className="text-sm text-neutral-400">
+              Check <code className="bg-white/10 px-2 py-1 rounded text-xs">SCORING_UX_OPTIONS_BC_COMPLETE.md</code> for what was implemented
+            </p>
+          </div>
+        </div>
 
         {/* Debug Info */}
-        <section className="bg-gray-900/30 border border-gray-700 rounded-xl p-6 space-y-3">
-          <h2 className="text-xl font-bold text-gray-400">🔍 Debug Info</h2>
-          <pre className="text-xs text-gray-500 overflow-auto">
+        <div className="glass border border-white/10 rounded-xl p-6 mt-6">
+          <h2 className="text-lg font-semibold text-neutral-300 mb-3">🔍 Mock Data Used</h2>
+          <pre className="text-xs text-neutral-500 overflow-auto bg-black/20 p-4 rounded">
             {JSON.stringify(mockStats, null, 2)}
           </pre>
-        </section>
+        </div>
       </div>
     </div>
   );
