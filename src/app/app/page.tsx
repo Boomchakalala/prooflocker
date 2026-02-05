@@ -33,7 +33,7 @@ function AppFeedContent() {
   const [hiddenPredictions, setHiddenPredictions] = useState<Set<string>>(new Set());
   const [showHidden, setShowHidden] = useState(false);
 
-  const categories = ["all", "Crypto", "Politics", "Markets", "Tech", "Sports", "Culture", "Personal", "Other"];
+  const categories = ["all", "Crypto", "Politics", "Markets", "Tech", "Sports", "OSINT", "Culture", "Personal", "Other"];
 
   // Load hidden predictions from localStorage
   useEffect(() => {
