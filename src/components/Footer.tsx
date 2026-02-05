@@ -1,24 +1,27 @@
 export default function Footer() {
   return (
-    <footer className="relative gradient-bg border-t border-white/10">
-      <div className="max-w-6xl mx-auto px-8 py-8">
-        {/* Single clean section */}
+    <footer className="relative bg-gradient-to-r from-[#0A0A0F] to-[#1E1238] py-8 px-8 border-t border-[#4C1D95]/20">
+      {/* Thin constellation line */}
+      <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#2E5CFF]/30 to-transparent" />
+
+      <div className="max-w-6xl mx-auto relative z-10">
+        {/* Main footer content - All in one clean section */}
         <div className="flex flex-col items-center gap-6">
           {/* Links */}
           <div className="flex items-center gap-6 text-sm">
-            <a href="/about" className="text-neutral-400 hover:text-white transition-colors">
+            <a href="/about" className="text-neutral-400 hover:text-[#2E5CFF] transition-colors">
               About
             </a>
-            <a href="/how-scoring-works" className="text-neutral-400 hover:text-white transition-colors">
+            <a href="/how-scoring-works" className="text-neutral-400 hover:text-[#2E5CFF] transition-colors">
               Scoring
             </a>
-            <a href="/legal/privacy" className="text-neutral-400 hover:text-white transition-colors">
+            <a href="/legal/privacy" className="text-neutral-400 hover:text-[#2E5CFF] transition-colors">
               Privacy
             </a>
-            <a href="/legal/terms" className="text-neutral-400 hover:text-white transition-colors">
+            <a href="/legal/terms" className="text-neutral-400 hover:text-[#2E5CFF] transition-colors">
               Terms
             </a>
-            <a href="/legal/disclaimer" className="text-neutral-400 hover:text-white transition-colors">
+            <a href="/legal/disclaimer" className="text-neutral-400 hover:text-[#2E5CFF] transition-colors">
               Disclaimer
             </a>
           </div>
@@ -65,7 +68,7 @@ export default function Footer() {
             <svg className="w-3.5 h-3.5 text-[#2E5CFF]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/>
             </svg>
-            <span>Powered by <a href="https://constellationnetwork.io" target="_blank" rel="noopener noreferrer" className="text-[#2E5CFF] hover:text-[#5B21B6] transition-colors font-medium">Constellation DAG</a></span>
+            <span>Powered by <a href="https://constellationnetwork.io" target="_blank" rel="noopener noreferrer" className="text-[#5B21B6] font-semibold hover:text-[#2E5CFF] transition-colors">Constellation DAG</a></span>
           </p>
 
           {/* Copyright */}
