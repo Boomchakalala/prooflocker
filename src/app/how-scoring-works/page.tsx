@@ -306,16 +306,82 @@ export default function HowScoringWorksPage() {
 
         {/* Example */}
         <section className="mb-12">
-          <div className="glass border border-white/10 rounded-xl p-8">
-            <h2 className="text-2xl font-bold text-white mb-6">Example</h2>
-            <div className="space-y-3 text-neutral-300">
-              <p className="text-sm">15 predictions resolved • 12 correct (80%) • Avg evidence: 72/100</p>
-              <div className="bg-white/5 rounded-lg p-4 space-y-2 text-sm">
-                <div>Accuracy: 80% × 500 = <span className="text-blue-400 font-semibold">400 pts</span></div>
-                <div>Evidence: 72/100 × 300 = <span className="text-blue-400 font-semibold">216 pts</span></div>
-                <div>Activity: 15 resolved = <span className="text-blue-400 font-semibold">150 pts</span></div>
-                <div className="pt-2 mt-2 border-t border-white/10">
-                  <span className="text-white font-bold">Total Reliability: <span className="text-2xl text-blue-400">766</span></span>
+          <div className="bg-gradient-to-r from-[#2E5CFF]/10 to-[#5B21B6]/10 border border-[#2E5CFF]/30 rounded-xl p-8">
+            <div className="flex items-center gap-3 mb-6">
+              <div className="w-10 h-10 rounded-lg bg-[#2E5CFF]/20 border border-[#2E5CFF]/40 flex items-center justify-center">
+                <svg className="w-5 h-5 text-[#2E5CFF]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                </svg>
+              </div>
+              <div>
+                <h2 className="text-2xl font-bold text-white">Example Calculation</h2>
+                <p className="text-sm text-neutral-400">See how the score is calculated</p>
+              </div>
+            </div>
+
+            <div className="space-y-4">
+              {/* User Stats */}
+              <div className="bg-black/20 rounded-lg p-4 border border-white/10">
+                <div className="text-xs font-semibold text-neutral-500 uppercase tracking-wider mb-3">User Profile</div>
+                <div className="grid grid-cols-3 gap-4">
+                  <div className="text-center">
+                    <div className="text-2xl font-bold text-white mb-1">15</div>
+                    <div className="text-xs text-neutral-400">Resolved</div>
+                  </div>
+                  <div className="text-center">
+                    <div className="text-2xl font-bold text-green-400 mb-1">80%</div>
+                    <div className="text-xs text-neutral-400">Accuracy</div>
+                  </div>
+                  <div className="text-center">
+                    <div className="text-2xl font-bold text-blue-400 mb-1">72</div>
+                    <div className="text-xs text-neutral-400">Avg Evidence</div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Calculation */}
+              <div className="bg-black/20 rounded-lg p-4 border border-white/10">
+                <div className="text-xs font-semibold text-neutral-500 uppercase tracking-wider mb-3">Score Breakdown</div>
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <div className="w-6 h-6 rounded bg-blue-500/10 border border-blue-500/30 flex items-center justify-center">
+                        <svg className="w-3 h-3 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                      </div>
+                      <span className="text-sm text-neutral-300">Accuracy: 80% × 500</span>
+                    </div>
+                    <span className="text-blue-400 font-bold">400 pts</span>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <div className="w-6 h-6 rounded bg-green-500/10 border border-green-500/30 flex items-center justify-center">
+                        <svg className="w-3 h-3 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
+                        </svg>
+                      </div>
+                      <span className="text-sm text-neutral-300">Evidence: 72/100 × 300</span>
+                    </div>
+                    <span className="text-green-400 font-bold">216 pts</span>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <div className="w-6 h-6 rounded bg-purple-500/10 border border-purple-500/30 flex items-center justify-center">
+                        <svg className="w-3 h-3 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+                        </svg>
+                      </div>
+                      <span className="text-sm text-neutral-300">Activity: 15 resolved</span>
+                    </div>
+                    <span className="text-purple-400 font-bold">150 pts</span>
+                  </div>
+                  <div className="pt-3 mt-3 border-t border-white/10">
+                    <div className="flex items-center justify-between">
+                      <span className="text-white font-bold">Total Reliability Score</span>
+                      <span className="text-3xl font-bold bg-gradient-to-r from-[#2E5CFF] to-[#5B21B6] bg-clip-text text-transparent">766</span>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
