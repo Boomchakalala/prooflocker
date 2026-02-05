@@ -205,7 +205,7 @@ export default function ProfilePage() {
             </div>
             <button
               onClick={handleSignOut}
-              className="px-4 py-2 text-sm font-medium text-neutral-400 hover:text-white border border-neutral-700 hover:border-neutral-600 rounded-md transition-all"
+              className="px-4 py-2 text-sm font-medium text-neutral-400 hover:text-white border border-white/20 hover:border-neutral-600 rounded-md transition-all"
             >
               Sign out
             </button>
@@ -238,13 +238,13 @@ export default function ProfilePage() {
                     onChange={(e) => setPseudonymInput(e.target.value)}
                     placeholder="Enter pseudonym (2-30 chars)"
                     disabled={settingPseudonym}
-                    className="flex-1 px-3 py-2 bg-black/40 border border-neutral-700 rounded-md text-sm text-neutral-200 placeholder-neutral-600 focus:outline-none focus:border-neutral-600 disabled:opacity-50"
+                    className="flex-1 px-3 py-2 bg-black/40 border border-white/20 rounded-md text-sm text-neutral-200 placeholder-neutral-600 focus:outline-none focus:border-neutral-600 disabled:opacity-50"
                     maxLength={30}
                   />
                   <button
                     onClick={handleSetPseudonym}
                     disabled={settingPseudonym || !pseudonymInput.trim()}
-                    className="px-4 py-2 bg-neutral-800 hover:bg-neutral-700 border border-neutral-700 text-neutral-200 font-medium rounded-md transition-colors text-sm disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="px-4 py-2 bg-neutral-800 hover:bg-neutral-700 border border-white/20 text-neutral-200 font-medium rounded-md transition-colors text-sm disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     {settingPseudonym ? "Setting..." : "Set"}
                   </button>
@@ -450,7 +450,7 @@ export default function ProfilePage() {
               <p className="text-neutral-400 mb-4 text-sm">You haven't claimed any predictions yet.</p>
               <Link
                 href="/lock"
-                className="inline-block px-5 py-2 bg-neutral-800 hover:bg-neutral-700 text-white font-medium rounded-md transition-colors border border-neutral-700"
+                className="inline-block px-5 py-2 bg-neutral-800 hover:bg-neutral-700 text-white font-medium rounded-md transition-colors border border-white/20"
               >
                 Lock my first prediction
               </Link>
@@ -461,7 +461,7 @@ export default function ProfilePage() {
                 <Link
                   key={prediction.id}
                   href={`/proof/${prediction.publicSlug}`}
-                  className="block glass border border-white/10 hover:border-neutral-700 rounded-lg p-4 transition-all group"
+                  className="block glass border border-white/10 hover:border-white/20 rounded-lg p-4 transition-all group"
                 >
                   <div className="flex items-start justify-between gap-4">
                     <div className="flex-1 min-w-0">
