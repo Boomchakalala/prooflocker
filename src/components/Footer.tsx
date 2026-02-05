@@ -83,21 +83,6 @@ export default function Footer() {
             </a>
           </div>
         </div>
-
-        {/* Bottom: Powered by (optional subtle mention) */}
-        <div className="mt-6 pt-6 border-t border-white/5">
-          <p className="text-xs text-white/30 text-center">
-            Built on{' '}
-            <a
-              href="https://constellationnetwork.io"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-[#5B21B6]/70 hover:text-[#5B21B6] transition-colors"
-            >
-              Constellation Network
-            </a>
-          </p>
-        </div>
       </div>
     </footer>
   );
