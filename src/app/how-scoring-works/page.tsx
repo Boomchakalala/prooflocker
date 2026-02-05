@@ -70,22 +70,62 @@ export default function HowScoringWorksPage() {
         {/* Reliability Score Section */}
         <section className="mb-12">
           <div className="glass border border-white/10 rounded-xl p-8">
-            <h2 className="text-2xl font-bold text-white mb-6">Reliability Score (0-1000)</h2>
-            <p className="text-neutral-300 mb-6">
-              Your reputation based on accuracy, evidence quality, and activity
-            </p>
-            <div className="space-y-4">
-              <div className="flex items-center justify-between">
-                <span className="text-neutral-300">Accuracy (50%)</span>
-                <span className="text-neutral-500 text-sm">Win rate × 500 pts</span>
+            <div className="flex items-center gap-3 mb-6">
+              <div className="w-10 h-10 rounded-lg bg-[#2E5CFF]/10 border border-[#2E5CFF]/30 flex items-center justify-center">
+                <svg className="w-5 h-5 text-[#2E5CFF]" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" />
+                </svg>
               </div>
-              <div className="flex items-center justify-between">
-                <span className="text-neutral-300">Evidence Quality (30%)</span>
-                <span className="text-neutral-500 text-sm">Avg evidence × 300 pts</span>
+              <div>
+                <h2 className="text-2xl font-bold text-white">Reliability Score (0-1000)</h2>
+                <p className="text-sm text-neutral-400">Your reputation as a forecaster</p>
               </div>
-              <div className="flex items-center justify-between">
-                <span className="text-neutral-300">Activity (20%)</span>
-                <span className="text-neutral-500 text-sm">Up to 200 pts</span>
+            </div>
+
+            <div className="space-y-3">
+              <div className="bg-white/5 rounded-lg p-4 border border-white/10">
+                <div className="flex items-center justify-between mb-2">
+                  <div className="flex items-center gap-3">
+                    <div className="w-8 h-8 rounded-lg bg-blue-500/10 border border-blue-500/30 flex items-center justify-center">
+                      <svg className="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      </svg>
+                    </div>
+                    <span className="text-white font-medium">Accuracy</span>
+                  </div>
+                  <span className="text-blue-400 font-semibold">50%</span>
+                </div>
+                <p className="text-sm text-neutral-400 ml-11">Win rate × 500 points</p>
+              </div>
+
+              <div className="bg-white/5 rounded-lg p-4 border border-white/10">
+                <div className="flex items-center justify-between mb-2">
+                  <div className="flex items-center gap-3">
+                    <div className="w-8 h-8 rounded-lg bg-green-500/10 border border-green-500/30 flex items-center justify-center">
+                      <svg className="w-4 h-4 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
+                      </svg>
+                    </div>
+                    <span className="text-white font-medium">Evidence Quality</span>
+                  </div>
+                  <span className="text-green-400 font-semibold">30%</span>
+                </div>
+                <p className="text-sm text-neutral-400 ml-11">Average evidence score × 300</p>
+              </div>
+
+              <div className="bg-white/5 rounded-lg p-4 border border-white/10">
+                <div className="flex items-center justify-between mb-2">
+                  <div className="flex items-center gap-3">
+                    <div className="w-8 h-8 rounded-lg bg-purple-500/10 border border-purple-500/30 flex items-center justify-center">
+                      <svg className="w-4 h-4 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+                      </svg>
+                    </div>
+                    <span className="text-white font-medium">Activity</span>
+                  </div>
+                  <span className="text-purple-400 font-semibold">20%</span>
+                </div>
+                <p className="text-sm text-neutral-400 ml-11">Up to 200 points for consistency</p>
               </div>
             </div>
           </div>
