@@ -500,6 +500,8 @@ function AppFeedContent() {
               <div className="absolute inset-0 rounded-full bg-purple-500/20 blur-xl"></div>
             </div>
           </div>
+        ) : activeTab === "leaderboard" ? (
+          <TopSourcesList category={selectedCategory} />
         ) : activeTab === "my" && !user ? (
           <div className="text-center py-20 fade-in">
             <div className="max-w-2xl mx-auto">
