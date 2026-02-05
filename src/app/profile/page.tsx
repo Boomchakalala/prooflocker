@@ -179,8 +179,14 @@ export default function ProfilePage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#0a0a0a] text-white">
-      <div className="max-w-4xl mx-auto px-4 py-12">
+    <div className="min-h-screen gradient-bg text-white relative">
+      {/* Decorative gradient orbs */}
+      <div className="fixed inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute top-20 -left-40 w-80 h-80 bg-blue-500/10 rounded-full blur-3xl" />
+        <div className="absolute top-40 -right-40 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl" />
+      </div>
+
+      <div className="relative z-10 max-w-4xl mx-auto px-4 py-12">
         {/* Header */}
         <div className="mb-10">
           <Link
@@ -206,7 +212,7 @@ export default function ProfilePage() {
           </div>
 
           {/* Pseudonym section */}
-          <div className="bg-[#0d0d0d] border border-neutral-800 rounded-lg p-6">
+          <div className="glass border border-white/10 rounded-xl p-6">
             <h3 className="text-xs font-semibold text-neutral-500 uppercase tracking-wider mb-3">Public Identity</h3>
             {pseudonym ? (
               <div>
@@ -260,7 +266,7 @@ export default function ProfilePage() {
         {/* Reliability Score Hero Section */}
         {stats && (
           <div className="mb-8">
-            <div className="bg-[#0d0d0d] border border-neutral-800 rounded-lg p-8">
+            <div className="glass border border-white/10 rounded-xl p-8">
               <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6 mb-6">
                 {/* Left: Reliability Score */}
                 <div className="flex-1">
@@ -386,25 +392,25 @@ export default function ProfilePage() {
 
         {/* Stats grid */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-          <div className="bg-[#0d0d0d] border border-neutral-800 rounded-lg p-6">
+          <div className="glass border border-white/10 rounded-lg p-6">
             <div className="text-3xl font-bold text-neutral-200 mb-1">
               {stats?.totalPredictions || totalPredictions}
             </div>
             <div className="text-xs text-neutral-500 uppercase tracking-wider">Total</div>
           </div>
-          <div className="bg-[#0d0d0d] border border-neutral-800 rounded-lg p-6">
+          <div className="glass border border-white/10 rounded-lg p-6">
             <div className="text-3xl font-bold text-green-400 mb-1">
               {stats?.correctPredictions || correctCount}
             </div>
             <div className="text-xs text-neutral-500 uppercase tracking-wider">Correct</div>
           </div>
-          <div className="bg-[#0d0d0d] border border-neutral-800 rounded-lg p-6">
+          <div className="glass border border-white/10 rounded-lg p-6">
             <div className="text-3xl font-bold text-red-400 mb-1">
               {stats?.incorrectPredictions || incorrectCount}
             </div>
             <div className="text-xs text-neutral-500 uppercase tracking-wider">Incorrect</div>
           </div>
-          <div className="bg-[#0d0d0d] border border-neutral-800 rounded-lg p-6">
+          <div className="glass border border-white/10 rounded-lg p-6">
             <div className="text-3xl font-bold text-neutral-200 mb-1">
               {stats && stats.resolvedPredictions > 0
                 ? `${stats.correctPredictions}/${stats.resolvedPredictions}`
@@ -418,7 +424,7 @@ export default function ProfilePage() {
 
         {/* Additional stats */}
         {(pendingCount > 0 || invalidCount > 0) && (
-          <div className="bg-[#0d0d0d] border border-neutral-800 rounded-lg p-6 mb-8">
+          <div className="glass border border-white/10 rounded-lg p-6 mb-8">
             <div className="grid grid-cols-2 gap-6">
               {pendingCount > 0 && (
                 <div>
@@ -440,7 +446,7 @@ export default function ProfilePage() {
         <div className="mb-8">
           <h2 className="text-xl font-semibold text-white mb-4">Your Predictions</h2>
           {predictions.length === 0 ? (
-            <div className="text-center py-12 bg-[#0d0d0d] border border-neutral-800 rounded-lg">
+            <div className="text-center py-12 glass border border-white/10 rounded-lg">
               <p className="text-neutral-400 mb-4 text-sm">You haven't claimed any predictions yet.</p>
               <Link
                 href="/lock"
@@ -455,7 +461,7 @@ export default function ProfilePage() {
                 <Link
                   key={prediction.id}
                   href={`/proof/${prediction.publicSlug}`}
-                  className="block bg-[#0d0d0d] border border-neutral-800 hover:border-neutral-700 rounded-lg p-4 transition-all group"
+                  className="block glass border border-white/10 hover:border-neutral-700 rounded-lg p-4 transition-all group"
                 >
                   <div className="flex items-start justify-between gap-4">
                     <div className="flex-1 min-w-0">
