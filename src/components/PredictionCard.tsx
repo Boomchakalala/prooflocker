@@ -386,7 +386,7 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
         </div>
 
         {/* Category + Status badges row */}
-        <div className="flex items-center gap-2 flex-wrap">
+        <div className="flex items-center gap-2 flex-wrap mt-3">
           {prediction.category && (
             <span className={`inline-flex items-center gap-1 px-2 py-0.5 text-[10px] font-semibold rounded-full border ${getCategoryStyle(prediction.category)}`}>
               {getCategoryIcon(prediction.category)}
@@ -394,48 +394,48 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
             </span>
           )}
           {isOnChain() && (
-            <span className="px-2 py-0.5 text-[10px] font-medium rounded bg-purple-500/20 border border-purple-500/40 text-purple-300 flex items-center gap-1">
-              Locked
-              <svg className="w-2.5 h-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-              </svg>
-            </span>
-          )}
-          {isResolutionOnChain() && (
-            <span className="px-2 py-0.5 text-[10px] font-medium rounded bg-cyan-500/20 border border-cyan-500/40 text-cyan-300 flex items-center gap-1">
-              Resolved
+            <span className="px-2 py-0.5 text-[10px] font-semibold rounded-full bg-purple-500/15 border border-purple-400/40 text-purple-300 flex items-center gap-1">
               <svg className="w-2.5 h-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
+              On-Chain
+            </span>
+          )}
+          {isResolutionOnChain() && (
+            <span className="px-2 py-0.5 text-[10px] font-semibold rounded-full bg-cyan-500/15 border border-cyan-400/40 text-cyan-300 flex items-center gap-1">
+              <svg className="w-2.5 h-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+              </svg>
+              Verified
             </span>
           )}
         </div>
       </div>
 
       {/* 2. TITLE - Prediction text */}
-      <h3 className="text-white text-base font-semibold mb-3 line-clamp-3 leading-snug min-h-[4rem]">
+      <h3 className="text-white text-base font-semibold mb-4 line-clamp-3 leading-snug">
         {displayTitle}
       </h3>
 
-      {/* 3. OUTCOME + EVIDENCE SCORE */}
-      <div className="flex items-center gap-2 mb-4 flex-wrap">
-        {/* Outcome Badge - Creative prominent styling with gradients */}
+      {/* 3. OUTCOME + EVIDENCE SCORE - Professional styling */}
+      <div className="flex items-center gap-2.5 mb-4 flex-wrap">
+        {/* Outcome Badge - Professional clean colors */}
         {prediction.outcome === 'correct' ? (
-          <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-gradient-to-br from-teal-500/30 to-emerald-500/30 border-2 border-teal-400/60 text-teal-200 text-sm font-bold shadow-[0_0_15px_rgba(6,182,212,0.4)]">
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24">
+          <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-500/10 border border-emerald-500/40 text-emerald-400 text-sm font-bold">
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7"/>
             </svg>
             Correct
           </span>
         ) : prediction.outcome === 'incorrect' ? (
-          <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-gradient-to-br from-red-500/30 to-orange-500/30 border-2 border-red-400/60 text-red-200 text-sm font-bold shadow-[0_0_15px_rgba(239,68,68,0.4)]">
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24">
+          <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-red-500/10 border border-red-500/40 text-red-400 text-sm font-bold">
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12"/>
             </svg>
             Incorrect
           </span>
         ) : (
-          <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-gradient-to-br from-purple-500/30 to-pink-500/30 border-2 border-purple-400/60 text-purple-200 text-sm font-bold shadow-[0_0_15px_rgba(168,85,247,0.4)]">
+          <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-amber-500/10 border border-amber-500/40 text-amber-400 text-sm font-bold">
             <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
               <circle cx="12" cy="12" r="10"/>
               <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6l4 2"/>
