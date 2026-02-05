@@ -401,3 +401,132 @@ body {
     background-position: 100% 100%, 0% 0%, 80% 20%, 20% 80%, 60% 40%, 90% 90%, 70% 25%, 35% 75%;
   }
 }
+
+/* Breathing animation for glows */
+@keyframes breathe {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.8;
+    transform: scale(1.05);
+  }
+}
+
+/* Grid scroll animation */
+@keyframes grid-scroll {
+  0% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(50px);
+  }
+}
+
+/* Floating orbs in background */
+.orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(60px);
+  opacity: 0.15;
+  pointer-events: none;
+  animation: orb-float 20s ease-in-out infinite;
+}
+
+.orb-1 {
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, rgba(91, 33, 182, 0.4), transparent);
+  top: 10%;
+  left: 5%;
+  animation-duration: 25s;
+}
+
+.orb-2 {
+  width: 300px;
+  height: 300px;
+  background: radial-gradient(circle, rgba(46, 92, 255, 0.3), transparent);
+  top: 60%;
+  right: 10%;
+  animation-duration: 30s;
+  animation-delay: 5s;
+}
+
+.orb-3 {
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, rgba(91, 33, 182, 0.25), transparent);
+  bottom: 10%;
+  left: 30%;
+  animation-duration: 35s;
+  animation-delay: 10s;
+}
+
+@keyframes orb-float {
+  0%, 100% {
+    transform: translate(0, 0) scale(1);
+  }
+  33% {
+    transform: translate(30px, -30px) scale(1.1);
+  }
+  66% {
+    transform: translate(-20px, 20px) scale(0.9);
+  }
+}
+
+/* Animated gradient text */
+.gradient-text-animated {
+  background: linear-gradient(
+    90deg,
+    #5B21B6 0%,
+    #2E5CFF 25%,
+    #00E0FF 50%,
+    #2E5CFF 75%,
+    #5B21B6 100%
+  );
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: gradient-shift 3s ease-in-out infinite;
+}
+
+@keyframes gradient-shift {
+  0%, 100% {
+    background-position: 0% center;
+  }
+  50% {
+    background-position: 100% center;
+  }
+}
+
+/* Pulse glow for CTA button */
+@keyframes pulse-glow {
+  0%, 100% {
+    box-shadow: 0 0 20px rgba(46, 92, 255, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 40px rgba(46, 92, 255, 0.6), 0 0 60px rgba(91, 33, 182, 0.4);
+  }
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+/* Fade in up animation */
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fade-in-up 0.8s ease-out backwards;
+}

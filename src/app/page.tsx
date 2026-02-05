@@ -12,12 +12,31 @@ import Footer from "@/components/Footer";
 
 export default function LandingPage() {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-[#0A0A0F] via-[#111118] to-[#0A0A0F] relative">
+    <div className="min-h-screen bg-gradient-to-b from-[#0A0A0F] via-[#111118] to-[#0A0A0F] relative overflow-hidden">
+      {/* Animated grid background */}
+      <div className="absolute inset-0 opacity-[0.03] pointer-events-none">
+        <div className="absolute inset-0" style={{
+          backgroundImage: `
+            linear-gradient(rgba(46, 92, 255, 0.1) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(46, 92, 255, 0.1) 1px, transparent 1px)
+          `,
+          backgroundSize: '50px 50px',
+          animation: 'grid-scroll 20s linear infinite'
+        }} />
+      </div>
+
+      {/* Floating orbs */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="orb orb-1" />
+        <div className="orb orb-2" />
+        <div className="orb orb-3" />
+      </div>
+
       {/* Header */}
       <LandingHeader />
 
       {/* Main content */}
-      <main className="space-y-0">
+      <main className="space-y-0 relative">
         {/* Hero Section */}
         <LandingHero />
 

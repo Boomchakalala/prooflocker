@@ -1,10 +1,12 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 export default function LandingHero() {
   const particlesRef = useRef<HTMLDivElement>(null);
+  const heroRef = useRef<HTMLDivElement>(null);
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
 
   useEffect(() => {
     // Generate lightweight particles for constellation effect
@@ -22,16 +24,37 @@ export default function LandingHero() {
     }
   }, []);
 
+  // Mouse parallax effect
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      if (heroRef.current) {
+        const rect = heroRef.current.getBoundingClientRect();
+        const x = (e.clientX - rect.left - rect.width / 2) / rect.width;
+        const y = (e.clientY - rect.top - rect.height / 2) / rect.height;
+        setMousePosition({ x, y });
+      }
+    };
+
+    window.addEventListener('mousemove', handleMouseMove);
+    return () => window.removeEventListener('mousemove', handleMouseMove);
+  }, []);
+
   return (
-    <div className="relative z-10 min-h-[85vh] flex items-center justify-center py-24 md:py-32 px-6 md:px-8 overflow-hidden gradient-bg">
+    <div ref={heroRef} className="relative z-10 min-h-[85vh] flex items-center justify-center py-24 md:py-32 px-6 md:px-8 overflow-hidden gradient-bg">
       {/* Constellation overlay */}
       <div className="constellation-overlay" />
 
       {/* Particles */}
       <div ref={particlesRef} className="absolute inset-0 opacity-10 pointer-events-none" />
 
-      {/* Radial glow - purple to blue */}
-      <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+      {/* Radial glow - purple to blue with parallax */}
+      <div
+        className="absolute inset-0 flex items-center justify-center pointer-events-none"
+        style={{
+          transform: `translate(${mousePosition.x * 20}px, ${mousePosition.y * 20}px)`,
+          transition: 'transform 0.3s ease-out'
+        }}
+      >
         <div
           className="w-[1200px] h-[1200px] rounded-full blur-3xl"
           style={{
@@ -43,38 +66,38 @@ export default function LandingHero() {
 
       {/* Centered Layout */}
       <div className="max-w-5xl mx-auto relative z-10 w-full text-center">
-        {/* Massive gradient headline */}
+        {/* Massive gradient headline with enhanced animation */}
         <h1
-          className="text-5xl md:text-7xl lg:text-8xl font-black mb-6 tracking-tight leading-[1.1]"
+          className="text-5xl md:text-7xl lg:text-8xl font-black mb-6 tracking-tight leading-[1.1] animate-fade-in-up"
           style={{ fontFamily: 'var(--font-montserrat)' }}
         >
           <span className="block text-[#F8F9FA] text-shadow-cyan font-black">Predictions.</span>
-          <span className="block gradient-text font-black">Locked forever.</span>
+          <span className="block gradient-text-animated font-black">Locked forever.</span>
         </h1>
 
         {/* Subheadline */}
-        <p className="text-2xl md:text-3xl font-bold text-[#F8F9FA] mb-8 leading-relaxed" style={{ fontFamily: 'var(--font-inter)' }}>
+        <p className="text-2xl md:text-3xl font-bold text-[#F8F9FA] mb-8 leading-relaxed animate-fade-in-up" style={{ fontFamily: 'var(--font-inter)', animationDelay: '0.1s' }}>
           Say it now. Prove it later.
         </p>
 
         {/* Two big CTAs side-by-side */}
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-8">
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-8 animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
           <Link
             href="/lock"
-            className="w-full sm:w-auto px-12 py-4 bg-gradient-to-r from-[#2E5CFF] to-[#5B21B6] hover:from-[#3D6CFF] hover:to-[#6B31C6] text-white text-lg font-bold rounded-xl transition-all shadow-lg hover:shadow-[0_0_30px_rgba(46,92,255,0.4)] hover:scale-[1.05] btn-glow"
+            className="w-full sm:w-auto px-12 py-4 bg-gradient-to-r from-[#2E5CFF] to-[#5B21B6] hover:from-[#3D6CFF] hover:to-[#6B31C6] text-white text-lg font-bold rounded-xl transition-all shadow-lg hover:shadow-[0_0_30px_rgba(46,92,255,0.4)] hover:scale-[1.05] btn-glow animate-pulse-glow"
           >
             Lock a Prediction
           </Link>
           <Link
             href="/app"
-            className="w-full sm:w-auto px-12 py-4 border-2 border-[#2E5CFF]/40 hover:border-[#2E5CFF] hover:bg-[#2E5CFF]/10 text-white text-lg font-bold rounded-xl transition-all backdrop-blur-sm"
+            className="w-full sm:w-auto px-12 py-4 border-2 border-[#2E5CFF]/40 hover:border-[#2E5CFF] hover:bg-[#2E5CFF]/10 text-white text-lg font-bold rounded-xl transition-all backdrop-blur-sm hover:scale-[1.05]"
           >
             Explore Proofs
           </Link>
         </div>
 
         {/* Trust line with blue icons */}
-        <p className="text-sm md:text-base text-[#9CA3AF] font-medium flex items-center justify-center gap-2 flex-wrap mb-16">
+        <p className="text-sm md:text-base text-[#9CA3AF] font-medium flex items-center justify-center gap-2 flex-wrap mb-16 animate-fade-in-up" style={{ animationDelay: '0.3s' }}>
           <svg className="w-4 h-4 text-[#2E5CFF]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7"/>
           </svg>
@@ -86,29 +109,29 @@ export default function LandingHero() {
         </p>
 
         {/* Feature badges - redesigned in a single centered row */}
-        <div className="flex items-center justify-center gap-3 flex-wrap">
-          <div className="px-5 py-2.5 rounded-full bg-[#5B21B6]/10 border border-[#5B21B6]/30 text-xs md:text-sm text-[#F8F9FA] backdrop-blur-sm transition-all duration-300 hover:bg-[#5B21B6]/15 hover:scale-105 flex items-center gap-2 animate-fade-in-left" style={{ animationDelay: '0.1s' }}>
+        <div className="flex items-center justify-center gap-3 flex-wrap animate-fade-in-up" style={{ animationDelay: '0.4s' }}>
+          <div className="px-5 py-2.5 rounded-full bg-[#5B21B6]/10 border border-[#5B21B6]/30 text-xs md:text-sm text-[#F8F9FA] backdrop-blur-sm transition-all duration-300 hover:bg-[#5B21B6]/15 hover:scale-105 flex items-center gap-2">
             <svg className="w-4 h-4 text-[#5B21B6]" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
             </svg>
             <span className="font-bold whitespace-nowrap">Anonymous by default</span>
           </div>
 
-          <div className="px-5 py-2.5 rounded-full bg-[#2E5CFF]/10 border border-[#2E5CFF]/30 text-xs md:text-sm text-[#F8F9FA] backdrop-blur-sm transition-all duration-300 hover:bg-[#2E5CFF]/15 hover:scale-105 flex items-center gap-2 animate-fade-in-left" style={{ animationDelay: '0.2s' }}>
+          <div className="px-5 py-2.5 rounded-full bg-[#2E5CFF]/10 border border-[#2E5CFF]/30 text-xs md:text-sm text-[#F8F9FA] backdrop-blur-sm transition-all duration-300 hover:bg-[#2E5CFF]/15 hover:scale-105 flex items-center gap-2">
             <svg className="w-4 h-4 text-[#2E5CFF]" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/>
             </svg>
             <span className="font-bold whitespace-nowrap">Locked on-chain</span>
           </div>
 
-          <div className="px-5 py-2.5 rounded-full bg-[#5B21B6]/10 border border-[#5B21B6]/30 text-xs md:text-sm text-[#F8F9FA] backdrop-blur-sm transition-all duration-300 hover:bg-[#5B21B6]/15 hover:scale-105 flex items-center gap-2 animate-fade-in-left" style={{ animationDelay: '0.3s' }}>
+          <div className="px-5 py-2.5 rounded-full bg-[#5B21B6]/10 border border-[#5B21B6]/30 text-xs md:text-sm text-[#F8F9FA] backdrop-blur-sm transition-all duration-300 hover:bg-[#5B21B6]/15 hover:scale-105 flex items-center gap-2">
             <svg className="w-4 h-4 text-[#5B21B6]" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
             </svg>
             <span className="font-bold whitespace-nowrap">Immutable proof</span>
           </div>
 
-          <div className="px-5 py-2.5 rounded-full bg-[#2E5CFF]/10 border border-[#2E5CFF]/30 text-xs md:text-sm text-[#F8F9FA] backdrop-blur-sm transition-all duration-300 hover:bg-[#2E5CFF]/15 hover:scale-105 flex items-center gap-2 animate-fade-in-left" style={{ animationDelay: '0.4s' }}>
+          <div className="px-5 py-2.5 rounded-full bg-[#2E5CFF]/10 border border-[#2E5CFF]/30 text-xs md:text-sm text-[#F8F9FA] backdrop-blur-sm transition-all duration-300 hover:bg-[#2E5CFF]/15 hover:scale-105 flex items-center gap-2">
             <svg className="w-4 h-4 text-[#2E5CFF]" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"/>
             </svg>
