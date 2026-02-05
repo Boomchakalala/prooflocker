@@ -287,11 +287,20 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
                   Anon #{authorNumber}
                 </Link>
               )}
-              {/* Author Reliability Tier Badge */}
+              {/* Author Reliability Tier Badge with Icon */}
               {authorTierInfo && (
-                <span className={`text-[10px] font-bold uppercase tracking-wide ${authorTierInfo.color}`}>
-                  {authorTierInfo.label}
-                </span>
+                <div className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full ${authorTierInfo.bgColor} border ${authorTierInfo.color.replace('text-', 'border-')}/30`}>
+                  <span className="text-[10px]">
+                    {prediction.author_reliability_tier === 'legend' && '⭐'}
+                    {prediction.author_reliability_tier === 'master' && '👑'}
+                    {prediction.author_reliability_tier === 'expert' && '💎'}
+                    {prediction.author_reliability_tier === 'trusted' && '✓'}
+                    {prediction.author_reliability_tier === 'novice' && '•'}
+                  </span>
+                  <span className={`text-[10px] font-bold uppercase tracking-wide ${authorTierInfo.color}`}>
+                    {authorTierInfo.label}
+                  </span>
+                </div>
               )}
             </div>
           </div>
