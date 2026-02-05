@@ -20,7 +20,7 @@ export default function AccountabilityScore() {
 
         {/* Subheading */}
         <p className="text-base md:text-lg text-white/60 text-center max-w-2xl mx-auto mb-14 font-medium">
-          Earn your Insight Score. Climb from Novice to Oracle. Build verifiable credibility through consistent accuracy.
+          Build verifiable credibility through consistent accuracy.
         </p>
 
         {/* Three Compact Pillars */}
@@ -29,19 +29,15 @@ export default function AccountabilityScore() {
           <div className="bg-gradient-to-br from-emerald-600/5 via-green-600/5 to-emerald-700/5 border border-emerald-500/15 hover:border-emerald-400/25 rounded-2xl p-6 lg:p-8 transition-all duration-300 hover:shadow-lg text-center ring-1 ring-emerald-500/5">
             <div className="flex justify-center mb-4">
               <div className="w-12 h-12 rounded-full bg-gradient-to-br from-emerald-500/20 to-green-500/20 flex items-center justify-center">
-                <svg className="w-6 h-6 text-emerald-400" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" />
+                <svg className="w-6 h-6 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
                 </svg>
               </div>
             </div>
-            <h3 className="text-lg md:text-xl font-bold text-white mb-3">Points Per Prediction</h3>
-            <p className="text-sm md:text-base text-white/70 mb-3">
-              +10 pts to lock. +80-120 pts for correct resolves. High-risk categories (Crypto, Politics, Markets) earn bonus points.
+            <h3 className="text-lg md:text-xl font-bold text-white mb-3">Accuracy Rewarded</h3>
+            <p className="text-sm md:text-base text-white/70">
+              Win points for correct predictions. Lose points for misses. Your score reflects reality.
             </p>
-            <div className="flex items-center justify-center gap-2 text-xs text-emerald-400/80">
-              <span className="px-2 py-1 bg-emerald-500/10 rounded-full border border-emerald-500/20">Lock +10</span>
-              <span className="px-2 py-1 bg-emerald-500/10 rounded-full border border-emerald-500/20">Win +80-120</span>
-            </div>
           </div>
 
           {/* Pillar 2 */}
@@ -49,18 +45,14 @@ export default function AccountabilityScore() {
             <div className="flex justify-center mb-4">
               <div className="w-12 h-12 rounded-full bg-gradient-to-br from-green-500/20 to-emerald-500/20 flex items-center justify-center">
                 <svg className="w-6 h-6 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
                 </svg>
               </div>
             </div>
-            <h3 className="text-lg md:text-xl font-bold text-white mb-3">Streaks & Mastery</h3>
-            <p className="text-sm md:text-base text-white/70 mb-3">
-              Hit 3+ correct in a row? Unlock streak bonuses (+10 pts each). Dominate a category? Earn mastery badges and extra points.
+            <h3 className="text-lg md:text-xl font-bold text-white mb-3">Reputation Built</h3>
+            <p className="text-sm md:text-base text-white/70">
+              Long-term reliability visible to everyone. No identity needed — just results.
             </p>
-            <div className="flex items-center justify-center gap-2 text-xs text-green-400/80">
-              <span className="px-2 py-1 bg-green-500/10 rounded-full border border-green-500/20">Streak +10/ea</span>
-              <span className="px-2 py-1 bg-green-500/10 rounded-full border border-green-500/20">Mastery +20</span>
-            </div>
           </div>
 
           {/* Pillar 3 */}
@@ -68,20 +60,14 @@ export default function AccountabilityScore() {
             <div className="flex justify-center mb-4">
               <div className="w-12 h-12 rounded-full bg-gradient-to-br from-emerald-500/20 to-green-500/20 flex items-center justify-center">
                 <svg className="w-6 h-6 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
               </div>
             </div>
-            <h3 className="text-lg md:text-xl font-bold text-white mb-3">Climb the Ranks</h3>
-            <p className="text-sm md:text-base text-white/70 mb-3">
-              Start as a Novice. Prove yourself as a Forecaster (1K pts). Become a Visionary (5K pts). Reach Oracle status (15K+ pts).
+            <h3 className="text-lg md:text-xl font-bold text-white mb-3">Trust Compounded</h3>
+            <p className="text-sm md:text-base text-white/70">
+              Each resolution strengthens your history. Credibility earned through proof.
             </p>
-            <div className="flex items-center justify-center gap-2 text-xs text-emerald-400/80 flex-wrap">
-              <span className="px-2 py-1 bg-gray-500/10 rounded-full border border-gray-500/20">Novice</span>
-              <span className="px-2 py-1 bg-blue-500/10 rounded-full border border-blue-500/20">Forecaster</span>
-              <span className="px-2 py-1 bg-purple-500/10 rounded-full border border-purple-500/20">Visionary</span>
-              <span className="px-2 py-1 bg-amber-500/10 rounded-full border border-amber-500/20">Oracle</span>
-            </div>
           </div>
         </div>
       </div>
