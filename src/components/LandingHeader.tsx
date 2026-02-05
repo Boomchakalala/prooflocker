@@ -101,6 +101,9 @@ export default function LandingHeader() {
             {/* Reputation Score Pill */}
             <ReputationScorePill />
 
+            {/* Notification Bell - only show when user is logged in */}
+            {user && <NotificationBell />}
+
             {/* Desktop: Show Sign In button or user menu */}
             {!user ? (
               <button

@@ -119,6 +119,8 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
           text: prediction.textPreview,
           url: url
         });
+        // Track share after successful share
+        trackShare(prediction.id);
         return; // Success, don't show copied state
       } catch (err) {
         // User cancelled or share failed, fall back to copy
@@ -132,6 +134,22 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
     await navigator.clipboard.writeText(url);
     setLinkCopied(true);
     setTimeout(() => setLinkCopied(false), 2000);
+
+    // Track share after copy
+    trackShare(prediction.id);
+  };
+
+  const trackShare = async (predictionId: string) => {
+    try {
+      await fetch('/api/analytics/share', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ predictionId }),
+      });
+    } catch (error) {
+      console.error('Error tracking share:', error);
+      // Don't show error to user, just log it
+    }
   };
 
   const handleResolveClick = () => {
