@@ -134,49 +134,91 @@ export default function HowScoringWorksPage() {
         {/* Total Points Section */}
         <section className="mb-12">
           <div className="glass border border-white/10 rounded-xl p-8">
-            <h2 className="text-2xl font-bold text-white mb-6">Total Points System</h2>
-            <p className="text-neutral-300 mb-6">
-              Cumulative points from all activities (never decreases)
-            </p>
+            <div className="flex items-center gap-3 mb-6">
+              <div className="w-10 h-10 rounded-lg bg-[#5B21B6]/10 border border-[#5B21B6]/30 flex items-center justify-center">
+                <svg className="w-5 h-5 text-[#5B21B6]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+                </svg>
+              </div>
+              <div>
+                <h2 className="text-2xl font-bold text-white">Total Points System</h2>
+                <p className="text-sm text-neutral-400">Cumulative, never decreases</p>
+              </div>
+            </div>
 
-            <div className="space-y-4">
+            <div className="grid md:grid-cols-2 gap-3">
               {/* Lock Prediction */}
-              <div className="bg-white/5 rounded-lg p-5 border border-white/10">
-                <div className="flex items-center justify-between">
-                  <span className="text-neutral-300">Lock prediction</span>
-                  <span className="text-purple-400 font-semibold text-lg">+10 pts</span>
+              <div className="bg-white/5 rounded-lg p-4 border border-white/10">
+                <div className="flex items-center gap-3 mb-2">
+                  <div className="w-8 h-8 rounded-lg bg-purple-500/10 border border-purple-500/30 flex items-center justify-center flex-shrink-0">
+                    <svg className="w-4 h-4 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                    </svg>
+                  </div>
+                  <div className="flex-1">
+                    <div className="text-white font-medium">Lock prediction</div>
+                  </div>
+                  <div className="text-purple-400 font-bold text-lg">+10</div>
                 </div>
               </div>
 
               {/* Resolve Correct */}
-              <div className="bg-white/5 rounded-lg p-5 border border-white/10">
-                <div className="flex items-center justify-between">
-                  <span className="text-neutral-300">Resolve correct</span>
-                  <span className="text-green-400 font-semibold text-lg">+80-150 pts</span>
+              <div className="bg-white/5 rounded-lg p-4 border border-white/10">
+                <div className="flex items-center gap-3 mb-2">
+                  <div className="w-8 h-8 rounded-lg bg-green-500/10 border border-green-500/30 flex items-center justify-center flex-shrink-0">
+                    <svg className="w-4 h-4 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                  </div>
+                  <div className="flex-1">
+                    <div className="text-white font-medium">Resolve correct</div>
+                  </div>
+                  <div className="text-green-400 font-bold text-lg">+80-150</div>
                 </div>
               </div>
 
               {/* High-risk bonus */}
-              <div className="bg-white/5 rounded-lg p-5 border border-white/10">
-                <div className="flex items-center justify-between">
-                  <span className="text-neutral-300">High-risk category bonus</span>
-                  <span className="text-blue-400 font-semibold text-lg">+40 pts</span>
+              <div className="bg-white/5 rounded-lg p-4 border border-white/10">
+                <div className="flex items-center gap-3 mb-2">
+                  <div className="w-8 h-8 rounded-lg bg-blue-500/10 border border-blue-500/30 flex items-center justify-center flex-shrink-0">
+                    <svg className="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                    </svg>
+                  </div>
+                  <div className="flex-1">
+                    <div className="text-white font-medium">High-risk category</div>
+                  </div>
+                  <div className="text-blue-400 font-bold text-lg">+40</div>
                 </div>
               </div>
 
               {/* Streak bonus */}
-              <div className="bg-white/5 rounded-lg p-5 border border-white/10">
-                <div className="flex items-center justify-between">
-                  <span className="text-neutral-300">Streak bonus</span>
-                  <span className="text-purple-400 font-semibold text-lg">+10 pts/streak</span>
+              <div className="bg-white/5 rounded-lg p-4 border border-white/10">
+                <div className="flex items-center gap-3 mb-2">
+                  <div className="w-8 h-8 rounded-lg bg-orange-500/10 border border-orange-500/30 flex items-center justify-center flex-shrink-0">
+                    <svg className="w-4 h-4 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.656 7.343A7.975 7.975 0 0120 13a7.975 7.975 0 01-2.343 5.657z" />
+                    </svg>
+                  </div>
+                  <div className="flex-1">
+                    <div className="text-white font-medium">Streak bonus</div>
+                  </div>
+                  <div className="text-orange-400 font-bold text-lg">+10</div>
                 </div>
               </div>
 
               {/* Resolve Incorrect */}
-              <div className="bg-white/5 rounded-lg p-5 border border-white/10">
-                <div className="flex items-center justify-between">
-                  <span className="text-neutral-300">Resolve incorrect</span>
-                  <span className="text-red-400 font-semibold text-lg">-15 pts</span>
+              <div className="bg-white/5 rounded-lg p-4 border border-white/10 md:col-span-2">
+                <div className="flex items-center gap-3 mb-2">
+                  <div className="w-8 h-8 rounded-lg bg-red-500/10 border border-red-500/30 flex items-center justify-center flex-shrink-0">
+                    <svg className="w-4 h-4 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                  </div>
+                  <div className="flex-1">
+                    <div className="text-white font-medium">Resolve incorrect</div>
+                  </div>
+                  <div className="text-red-400 font-bold text-lg">-15</div>
                 </div>
               </div>
             </div>
