@@ -228,22 +228,22 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
   const authorTierInfo = prediction.author_reliability_tier ?
     getTierInfo(prediction.author_reliability_tier) : null;
 
-  // Determine card border style - Creative prominent styling with gradients
+  // Determine card border style - Professional styling with subtle gradients
   const getCardBorderStyle = () => {
     if (prediction.outcome === 'correct') {
       if (prediction.evidence_score && prediction.evidence_score >= 76) {
-        // High quality correct: Strong purple/teal gradient glow
-        return 'border-transparent bg-gradient-to-br from-purple-500/20 via-teal-500/20 to-purple-500/20 shadow-[0_0_30px_rgba(168,85,247,0.3),0_0_60px_rgba(6,182,212,0.2)] hover:shadow-[0_0_40px_rgba(168,85,247,0.4),0_0_80px_rgba(6,182,212,0.3)]';
+        // High quality correct: Premium emerald glow
+        return 'border-emerald-500/40 bg-gradient-to-br from-emerald-500/5 to-teal-500/5 shadow-[0_0_20px_rgba(16,185,129,0.15)] hover:shadow-[0_0_30px_rgba(16,185,129,0.25)]';
       }
-      // Correct: Moderate teal/green glow
-      return 'border-teal-500/40 bg-gradient-to-br from-teal-500/10 to-emerald-500/10 shadow-[0_0_20px_rgba(6,182,212,0.25)] hover:shadow-[0_0_30px_rgba(6,182,212,0.35)]';
+      // Correct: Subtle emerald accent
+      return 'border-emerald-500/30 bg-emerald-500/5 shadow-[0_0_15px_rgba(16,185,129,0.1)] hover:shadow-[0_0_25px_rgba(16,185,129,0.2)]';
     }
     if (prediction.outcome === 'incorrect') {
-      // Incorrect: Red/orange gradient glow
-      return 'border-red-500/40 bg-gradient-to-br from-red-500/10 to-orange-500/10 shadow-[0_0_20px_rgba(239,68,68,0.25)] hover:shadow-[0_0_30px_rgba(239,68,68,0.35)]';
+      // Incorrect: Subtle red accent
+      return 'border-red-500/30 bg-red-500/5 shadow-[0_0_15px_rgba(239,68,68,0.1)] hover:shadow-[0_0_25px_rgba(239,68,68,0.2)]';
     }
-    // Pending: Purple gradient glow
-    return 'border-purple-500/30 bg-gradient-to-br from-purple-500/10 to-pink-500/10 shadow-[0_0_15px_rgba(168,85,247,0.2)] hover:shadow-[0_0_25px_rgba(168,85,247,0.3)]';
+    // Pending: Subtle purple accent
+    return 'border-purple-500/20 bg-purple-500/5 shadow-[0_0_10px_rgba(168,85,247,0.1)] hover:shadow-[0_0_20px_rgba(168,85,247,0.15)]';
   };
 
   return (
