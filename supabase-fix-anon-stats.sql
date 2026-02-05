@@ -26,7 +26,6 @@ DECLARE
   v_incorrect_predictions INTEGER;
   v_avg_evidence_score DECIMAL(5,2);
   v_reliability_score INTEGER;
-  v_total_points INTEGER;
 BEGIN
   IF p_user_id IS NULL AND p_anon_id IS NULL THEN
     RAISE EXCEPTION 'Either user_id or anon_id must be provided';
@@ -110,20 +109,9 @@ BEGIN
   END IF;
 
   IF p_user_id IS NOT NULL THEN
-    SELECT COALESCE(total_points, 0) INTO v_total_points
-    FROM insight_scores WHERE user_id = p_user_id::UUID;
-  ELSE
-    SELECT COALESCE(total_points, 0) INTO v_total_points
-    FROM insight_scores WHERE anon_id = p_anon_id;
-  END IF;
-
-  v_total_points := COALESCE(v_total_points, 0);
-
-  IF p_user_id IS NOT NULL THEN
     INSERT INTO user_stats (
       user_id,
       anon_id,
-      total_points,
       reliability_score,
       total_predictions,
       resolved_predictions,
@@ -134,7 +122,6 @@ BEGIN
     ) VALUES (
       p_user_id,
       NULL,
-      v_total_points,
       v_reliability_score,
       v_total_predictions,
       v_resolved_predictions,
@@ -146,7 +133,6 @@ BEGIN
     ON CONFLICT (user_id)
     WHERE user_id IS NOT NULL
     DO UPDATE SET
-      total_points = EXCLUDED.total_points,
       reliability_score = EXCLUDED.reliability_score,
       total_predictions = EXCLUDED.total_predictions,
       resolved_predictions = EXCLUDED.resolved_predictions,
@@ -158,7 +144,6 @@ BEGIN
     INSERT INTO user_stats (
       user_id,
       anon_id,
-      total_points,
       reliability_score,
       total_predictions,
       resolved_predictions,
@@ -169,7 +154,6 @@ BEGIN
     ) VALUES (
       NULL,
       p_anon_id,
-      v_total_points,
       v_reliability_score,
       v_total_predictions,
       v_resolved_predictions,
@@ -181,7 +165,6 @@ BEGIN
     ON CONFLICT (anon_id)
     WHERE anon_id IS NOT NULL
     DO UPDATE SET
-      total_points = EXCLUDED.total_points,
       reliability_score = EXCLUDED.reliability_score,
       total_predictions = EXCLUDED.total_predictions,
       resolved_predictions = EXCLUDED.resolved_predictions,
@@ -224,7 +207,6 @@ CREATE INDEX IF NOT EXISTS idx_user_stats_reliability ON user_stats(reliability_
 SELECT
   us.anon_id,
   us.reliability_score,
-  us.total_points,
   us.total_predictions,
   us.resolved_predictions,
   us.correct_predictions,
