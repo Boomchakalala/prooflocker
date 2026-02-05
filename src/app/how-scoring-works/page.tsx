@@ -82,6 +82,48 @@ export default function HowScoringWorksPage() {
               </div>
             </div>
 
+            {/* Tier Badges Preview */}
+            <div className="mb-6">
+              <h3 className="text-xs font-semibold text-neutral-500 uppercase tracking-wider mb-3">Reputation Tiers</h3>
+              <div className="flex flex-wrap gap-3">
+                <div className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border bg-yellow-500/10 text-yellow-400 border-yellow-500/30">
+                  <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" />
+                  </svg>
+                  <span className="font-semibold text-sm">Legend</span>
+                  <span className="text-xs opacity-75">800+</span>
+                </div>
+                <div className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border bg-purple-500/10 text-purple-400 border-purple-500/30">
+                  <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" />
+                  </svg>
+                  <span className="font-semibold text-sm">Master</span>
+                  <span className="text-xs opacity-75">650-799</span>
+                </div>
+                <div className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border bg-blue-500/10 text-blue-400 border-blue-500/30">
+                  <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" />
+                  </svg>
+                  <span className="font-semibold text-sm">Expert</span>
+                  <span className="text-xs opacity-75">500-649</span>
+                </div>
+                <div className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border bg-green-500/10 text-green-400 border-green-500/30">
+                  <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" />
+                  </svg>
+                  <span className="font-semibold text-sm">Trusted</span>
+                  <span className="text-xs opacity-75">300-499</span>
+                </div>
+                <div className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border bg-gray-500/10 text-gray-400 border-gray-500/30">
+                  <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" />
+                  </svg>
+                  <span className="font-semibold text-sm">Novice</span>
+                  <span className="text-xs opacity-75">0-299</span>
+                </div>
+              </div>
+            </div>
+
             <div className="space-y-3">
               <div className="bg-white/5 rounded-lg p-4 border border-white/10">
                 <div className="flex items-center justify-between mb-2">
@@ -379,7 +421,15 @@ export default function HowScoringWorksPage() {
                   <div className="pt-3 mt-3 border-t border-white/10">
                     <div className="flex items-center justify-between">
                       <span className="text-white font-bold">Total Reliability Score</span>
-                      <span className="text-3xl font-bold bg-gradient-to-r from-[#2E5CFF] to-[#5B21B6] bg-clip-text text-transparent">766</span>
+                      <div className="flex items-center gap-3">
+                        <span className="text-3xl font-bold bg-gradient-to-r from-[#2E5CFF] to-[#5B21B6] bg-clip-text text-transparent">766</span>
+                        <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg border bg-purple-500/10 text-purple-400 border-purple-500/30">
+                          <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" />
+                          </svg>
+                          <span className="font-semibold text-xs">Master</span>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>

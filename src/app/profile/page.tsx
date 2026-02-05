@@ -168,7 +168,7 @@ export default function ProfilePage() {
 
   if (authLoading || loading) {
     return (
-      <div className="min-h-screen bg-[#0a0a0a] flex items-center justify-center">
+      <div className="min-h-screen gradient-bg flex items-center justify-center">
         <div className="animate-spin rounded-full h-12 w-12 border-2 border-neutral-500 border-t-transparent"></div>
       </div>
     );
