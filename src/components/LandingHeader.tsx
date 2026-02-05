@@ -158,7 +158,7 @@ export default function LandingHeader() {
                         </Link>
                       )}
                       <Link
-                        href="/scoring"
+                        href="/how-scoring-works"
                         onClick={() => setShowUserMenu(false)}
                         className="w-full px-4 py-2 text-left text-sm text-neutral-300 hover:text-white hover:bg-white/5 transition-all flex items-center gap-2"
                       >
