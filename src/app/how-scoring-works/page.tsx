@@ -175,36 +175,15 @@ export default function HowScoringWorksPage() {
         {/* Example */}
         <section className="mb-12">
           <div className="glass border border-white/10 rounded-xl p-8">
-            <h2 className="text-2xl font-bold text-white mb-6">Example Calculation</h2>
-            <div className="space-y-4">
-              <div className="bg-white/5 rounded-lg p-4 border border-white/10">
-                <div className="text-sm text-neutral-400 mb-2">User Profile:</div>
-                <div className="space-y-1 text-sm text-neutral-300">
-                  <div>• 15 predictions resolved</div>
-                  <div>• 12 correct (80% accuracy)</div>
-                  <div>• Average evidence score: 72/100</div>
-                </div>
-              </div>
-
-              <div className="bg-white/5 rounded-lg p-4 border border-white/10">
-                <div className="text-sm text-neutral-400 mb-3">Reliability Score Breakdown:</div>
-                <div className="space-y-2 text-sm">
-                  <div className="flex items-center justify-between">
-                    <span className="text-neutral-300">Accuracy: 80% × 500</span>
-                    <span className="text-blue-400 font-semibold">400 pts</span>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <span className="text-neutral-300">Evidence: 72/100 × 300</span>
-                    <span className="text-blue-400 font-semibold">216 pts</span>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <span className="text-neutral-300">Activity: 15 resolved</span>
-                    <span className="text-blue-400 font-semibold">150 pts</span>
-                  </div>
-                  <div className="pt-3 mt-3 border-t border-white/10 flex items-center justify-between">
-                    <span className="text-white font-bold">Total Reliability:</span>
-                    <span className="text-3xl font-bold text-blue-400">766</span>
-                  </div>
+            <h2 className="text-2xl font-bold text-white mb-6">Example</h2>
+            <div className="space-y-3 text-neutral-300">
+              <p className="text-sm">15 predictions resolved • 12 correct (80%) • Avg evidence: 72/100</p>
+              <div className="bg-white/5 rounded-lg p-4 space-y-2 text-sm">
+                <div>Accuracy: 80% × 500 = <span className="text-blue-400 font-semibold">400 pts</span></div>
+                <div>Evidence: 72/100 × 300 = <span className="text-blue-400 font-semibold">216 pts</span></div>
+                <div>Activity: 15 resolved = <span className="text-blue-400 font-semibold">150 pts</span></div>
+                <div className="pt-2 mt-2 border-t border-white/10">
+                  <span className="text-white font-bold">Total Reliability: <span className="text-2xl text-blue-400">766</span></span>
                 </div>
               </div>
             </div>
