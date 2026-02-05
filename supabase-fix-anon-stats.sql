@@ -1,5 +1,6 @@
 -- Drop any existing update_user_stats functions
 DROP FUNCTION IF EXISTS update_user_stats(UUID);
+DROP FUNCTION IF EXISTS update_user_stats(TEXT, TEXT);
 DROP FUNCTION IF EXISTS update_user_stats(UUID, TEXT);
 DROP FUNCTION IF EXISTS update_user_stats_v2(UUID);
 
@@ -14,7 +15,7 @@ ALTER TABLE user_stats ADD CONSTRAINT user_stats_pk
 
 -- Create unified stats update function that works for both user_id and anon_id
 CREATE OR REPLACE FUNCTION update_user_stats(
-  p_user_id UUID DEFAULT NULL,
+  p_user_id TEXT DEFAULT NULL,
   p_anon_id TEXT DEFAULT NULL
 )
 RETURNS void AS $$
@@ -195,7 +196,7 @@ $$ LANGUAGE plpgsql;
 -- Backfill stats for ALL users
 DO $$
 DECLARE
-  v_user_id UUID;
+  v_user_id TEXT;
   v_anon_id TEXT;
 BEGIN
   FOR v_user_id IN
