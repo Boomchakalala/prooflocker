@@ -274,13 +274,19 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
               {authorNumber.toString().slice(-2)}
             </div>
             <div className="flex flex-col min-w-0">
-              <Link
-                href={`/user/${prediction.userId || prediction.anonId}`}
-                onClick={(e) => e.stopPropagation()}
-                className="text-sm font-semibold text-white hover:text-cyan-400 transition-colors truncate"
-              >
-                Anon #{authorNumber}
-              </Link>
+              {isPreview ? (
+                <span className="text-sm font-semibold text-white truncate">
+                  Anon #{authorNumber}
+                </span>
+              ) : (
+                <Link
+                  href={`/user/${prediction.userId || prediction.anonId}`}
+                  onClick={(e) => e.stopPropagation()}
+                  className="text-sm font-semibold text-white hover:text-cyan-400 transition-colors truncate"
+                >
+                  Anon #{authorNumber}
+                </Link>
+              )}
               {/* Author Reliability Tier Badge */}
               {authorTierInfo && (
                 <span className={`text-[10px] font-bold uppercase tracking-wide ${authorTierInfo.color}`}>
@@ -293,20 +299,21 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
           {/* Right: Time + Menu */}
           <div className="flex items-center gap-3 flex-shrink-0">
             <span className="text-xs text-gray-500">{formatRelativeTime(prediction.timestamp)}</span>
-            {/* Three-dot menu */}
-            <div className="relative">
-              <button
-                onClick={(e) => {
-                  e.preventDefault();
-                  e.stopPropagation();
-                  setShowMenu(!showMenu);
-                }}
-                className="p-1.5 hover:bg-white/10 rounded-lg transition-colors"
-              >
-                <svg className="w-4 h-4 text-gray-400 hover:text-gray-200" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/>
-                </svg>
-              </button>
+            {/* Three-dot menu - hide in preview mode */}
+            {!isPreview && (
+              <div className="relative">
+                <button
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    setShowMenu(!showMenu);
+                  }}
+                  className="p-1.5 hover:bg-white/10 rounded-lg transition-colors"
+                >
+                  <svg className="w-4 h-4 text-gray-400 hover:text-gray-200" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/>
+                  </svg>
+                </button>
 
               {/* Dropdown menu */}
               {showMenu && (
