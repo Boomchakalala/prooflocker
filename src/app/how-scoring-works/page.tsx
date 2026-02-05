@@ -95,7 +95,7 @@ export default function HowScoringWorksPage() {
                   </div>
                   <span className="text-blue-400 font-semibold">50%</span>
                 </div>
-                <p className="text-sm text-neutral-400 ml-11">Win rate × 500 points</p>
+                <p className="text-sm text-neutral-400 ml-11">Get predictions right to boost your reputation</p>
               </div>
 
               <div className="bg-white/5 rounded-lg p-4 border border-white/10">
@@ -110,7 +110,7 @@ export default function HowScoringWorksPage() {
                   </div>
                   <span className="text-green-400 font-semibold">30%</span>
                 </div>
-                <p className="text-sm text-neutral-400 ml-11">Average evidence score × 300</p>
+                <p className="text-sm text-neutral-400 ml-11">Strong proof increases your credibility score</p>
               </div>
 
               <div className="bg-white/5 rounded-lg p-4 border border-white/10">
@@ -125,7 +125,7 @@ export default function HowScoringWorksPage() {
                   </div>
                   <span className="text-purple-400 font-semibold">20%</span>
                 </div>
-                <p className="text-sm text-neutral-400 ml-11">Up to 200 points for consistency</p>
+                <p className="text-sm text-neutral-400 ml-11">Consistent resolving shows you're reliable</p>
               </div>
             </div>
           </div>
