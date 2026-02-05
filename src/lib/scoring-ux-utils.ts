@@ -3,6 +3,8 @@
  * Helper functions for converting complex scores to simple, user-friendly labels
  */
 
+import { getReliabilityTier } from './user-scoring';
+
 // ============================================================================
 // TIER SYSTEM
 // ============================================================================

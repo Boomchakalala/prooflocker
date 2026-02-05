@@ -5,12 +5,14 @@
 
 import React, { useState } from 'react';
 import {
+  getTierFromScore,
   getTierConfig,
   getNextTierInfo,
   getEvidenceQuality,
   getEvidenceQualityConfig,
   getSimplifiedStats,
   formatAuthorLine,
+  formatTimeAgo,
   formatLeaderboardStats,
   type SimplifiedTier,
 } from '@/lib/scoring-ux-utils';
