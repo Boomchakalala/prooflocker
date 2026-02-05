@@ -111,7 +111,7 @@ BEGIN
 
   IF p_user_id IS NOT NULL THEN
     SELECT COALESCE(total_points, 0) INTO v_total_points
-    FROM insight_scores WHERE user_id = p_user_id;
+    FROM insight_scores WHERE user_id = p_user_id::UUID;
   ELSE
     SELECT COALESCE(total_points, 0) INTO v_total_points
     FROM insight_scores WHERE anon_id = p_anon_id;
