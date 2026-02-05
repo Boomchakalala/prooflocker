@@ -504,7 +504,13 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
       </div>
 
       {/* 5. ACTIONS ROW - Professional button styling */}
-      <div className={`grid gap-2.5 items-stretch mt-auto ${canResolve ? 'grid-cols-[1.5fr_1fr_auto]' : 'grid-cols-[1fr_auto]'}`}>
+      <div className={`grid gap-2.5 items-stretch mt-auto ${
+        isPreview
+          ? 'grid-cols-1'
+          : canResolve
+            ? 'grid-cols-[1.5fr_1fr_auto]'
+            : 'grid-cols-[1fr_auto]'
+      }`}>
         {/* View proof button */}
         <button
           onClick={(e) => {
@@ -512,7 +518,7 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
             e.stopPropagation();
             handleViewClick(e);
           }}
-          className={`px-4 py-2.5 text-sm font-semibold text-cyan-300 bg-cyan-500/10 rounded-lg transition-all border border-cyan-500/30 hover:border-cyan-400/50 hover:bg-cyan-500/15 flex items-center justify-center gap-2 ${isPreview ? 'cursor-default' : 'cursor-pointer'}`}
+          className={`px-4 py-2.5 text-sm font-semibold text-cyan-300 bg-cyan-500/10 rounded-lg transition-all border border-cyan-500/30 hover:border-cyan-400/50 hover:bg-cyan-500/15 flex items-center justify-center gap-2 ${isPreview ? 'cursor-default opacity-60' : 'cursor-pointer'}`}
         >
           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -535,25 +541,27 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
           </button>
         )}
 
-        {/* Share button */}
-        <button
-          onClick={(e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            copyLink();
-          }}
-          className="w-11 h-full text-sm font-semibold text-purple-300 bg-purple-500/10 rounded-lg transition-all border border-purple-500/30 hover:border-purple-400/50 flex items-center justify-center hover:bg-purple-500/15"
-        >
-          {linkCopied ? (
-            <svg className="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-            </svg>
-          ) : (
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
-            </svg>
-          )}
-        </button>
+        {/* Share button - hide in preview mode */}
+        {!isPreview && (
+          <button
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              copyLink();
+            }}
+            className="w-11 h-full text-sm font-semibold text-purple-300 bg-purple-500/10 rounded-lg transition-all border border-purple-500/30 hover:border-purple-400/50 flex items-center justify-center hover:bg-purple-500/15"
+          >
+            {linkCopied ? (
+              <svg className="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+              </svg>
+            ) : (
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
+              </svg>
+            )}
+          </button>
+        )}
       </div>
 
       {/* Resolve Modal */}
