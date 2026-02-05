@@ -148,37 +148,25 @@ export default function HowScoringWorksPage() {
           <div className="glass border border-white/10 rounded-xl p-8">
             <h2 className="text-2xl font-bold text-white mb-6">Evidence Score (0-100)</h2>
             <p className="text-neutral-300 mb-6">
-              Quality of proof when resolving predictions. Better evidence earns more points.
+              Quality of proof when resolving predictions
             </p>
 
             <div className="space-y-3">
-              <div className="p-4 rounded-lg border bg-green-500/5 border-green-500/20">
-                <div className="flex items-center justify-between mb-2">
-                  <span className="font-semibold text-green-400">Strong Evidence</span>
-                  <span className="text-sm text-neutral-500">76-100</span>
-                </div>
-                <p className="text-sm text-neutral-400">Multiple reputable sources + screenshots</p>
+              <div className="flex items-center justify-between">
+                <span className="text-green-400 font-medium">Strong (76-100)</span>
+                <span className="text-neutral-500 text-sm">Multiple sources + screenshots</span>
               </div>
-              <div className="p-4 rounded-lg border bg-blue-500/5 border-blue-500/20">
-                <div className="flex items-center justify-between mb-2">
-                  <span className="font-semibold text-blue-400">Solid Evidence</span>
-                  <span className="text-sm text-neutral-500">51-75</span>
-                </div>
-                <p className="text-sm text-neutral-400">Good sources or multiple items</p>
+              <div className="flex items-center justify-between">
+                <span className="text-blue-400 font-medium">Solid (51-75)</span>
+                <span className="text-neutral-500 text-sm">Good sources or multiple items</span>
               </div>
-              <div className="p-4 rounded-lg border bg-yellow-500/5 border-yellow-500/20">
-                <div className="flex items-center justify-between mb-2">
-                  <span className="font-semibold text-yellow-400">Basic Evidence</span>
-                  <span className="text-sm text-neutral-500">26-50</span>
-                </div>
-                <p className="text-sm text-neutral-400">Some evidence but limited</p>
+              <div className="flex items-center justify-between">
+                <span className="text-yellow-400 font-medium">Basic (26-50)</span>
+                <span className="text-neutral-500 text-sm">Some evidence but limited</span>
               </div>
-              <div className="p-4 rounded-lg border bg-orange-500/5 border-orange-500/20">
-                <div className="flex items-center justify-between mb-2">
-                  <span className="font-semibold text-orange-400">Unverified</span>
-                  <span className="text-sm text-neutral-500">0-25</span>
-                </div>
-                <p className="text-sm text-neutral-400">Minimal or no evidence</p>
+              <div className="flex items-center justify-between">
+                <span className="text-orange-400 font-medium">Unverified (0-25)</span>
+                <span className="text-neutral-500 text-sm">Minimal or no evidence</span>
               </div>
             </div>
           </div>
