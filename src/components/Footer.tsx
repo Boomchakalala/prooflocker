@@ -25,7 +25,7 @@ export default function Footer() {
             <a href="/about" className="text-[#9CA3AF] hover:text-[#2E5CFF] transition-all">
               About
             </a>
-            <a href="/scoring" className="text-[#9CA3AF] hover:text-[#2E5CFF] transition-all">
+            <a href="/how-scoring-works" className="text-[#9CA3AF] hover:text-[#2E5CFF] transition-all">
               Scoring
             </a>
             <a href="/legal/privacy" className="text-[#9CA3AF] hover:text-[#2E5CFF] transition-all">

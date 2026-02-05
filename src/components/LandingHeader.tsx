@@ -74,9 +74,9 @@ export default function LandingHeader() {
             )}
 
             <Link
-              href="/scoring"
+              href="/how-scoring-works"
               className={`font-medium transition-all duration-200 text-sm relative group flex items-center gap-1.5 ${
-                isActive("/scoring") ? "text-[#2E5CFF]" : "text-white/80 hover:text-[#2E5CFF]"
+                isActive("/how-scoring-works") ? "text-[#2E5CFF]" : "text-white/80 hover:text-[#2E5CFF]"
               }`}
               style={{ fontFamily: 'var(--font-inter)' }}
             >
@@ -85,7 +85,7 @@ export default function LandingHeader() {
               </svg>
               Scoring
               <span className={`absolute bottom-0 left-0 h-0.5 bg-[#2E5CFF] transition-all duration-200 ${
-                isActive("/scoring") ? "w-full" : "w-0 group-hover:w-full"
+                isActive("/how-scoring-works") ? "w-full" : "w-0 group-hover:w-full"
               }`} />
             </Link>
 
