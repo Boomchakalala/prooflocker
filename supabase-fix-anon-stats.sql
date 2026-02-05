@@ -98,7 +98,7 @@ BEGIN
 
   IF p_user_id IS NOT NULL THEN
     INSERT INTO user_stats (user_id, anon_id, reliability_score, total_predictions, resolved_predictions, correct_predictions, incorrect_predictions, avg_evidence_score, last_updated_at)
-    VALUES (p_user_id, NULL, v_reliability_score, v_total_predictions, v_resolved_predictions, v_correct_predictions, v_incorrect_predictions, v_avg_evidence_score, NOW())
+    VALUES (p_user_id::UUID, NULL, v_reliability_score, v_total_predictions, v_resolved_predictions, v_correct_predictions, v_incorrect_predictions, v_avg_evidence_score, NOW())
     ON CONFLICT (user_id) WHERE user_id IS NOT NULL
     DO UPDATE SET reliability_score = EXCLUDED.reliability_score, total_predictions = EXCLUDED.total_predictions, resolved_predictions = EXCLUDED.resolved_predictions, correct_predictions = EXCLUDED.correct_predictions, incorrect_predictions = EXCLUDED.incorrect_predictions, avg_evidence_score = EXCLUDED.avg_evidence_score, last_updated_at = NOW();
   ELSE
