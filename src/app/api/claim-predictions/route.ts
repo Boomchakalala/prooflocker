@@ -55,12 +55,12 @@ export async function POST(request: NextRequest) {
     // Claim all predictions with this anonId
     const claimedCount = await claimPredictions(anonId, user.id);
 
-    // Migrate anonymous Insight Score to authenticated user
+    // Migrate anonymous Reputation Score to authenticated user
     let insightPointsAwarded = 0;
     try {
       // First, migrate any existing anon score to the user
       await migrateAnonScoreToUser(anonId, user.id);
-      console.log(`[Claim Predictions API] Migrated Insight Score from anon to user`);
+      console.log(`[Claim Predictions API] Migrated Reputation Score from anon to user`);
 
       // Award claim bonus points for each claimed prediction (+50 pts each)
       // Note: We could fetch the prediction IDs to award individually, but for simplicity
@@ -74,11 +74,11 @@ export async function POST(request: NextRequest) {
         );
         if (scoreResult) {
           insightPointsAwarded = scoreResult.points;
-          console.log(`[Claim Predictions API] Awarded ${insightPointsAwarded} Insight Score points for claim`);
+          console.log(`[Claim Predictions API] Awarded ${insightPointsAwarded} Reputation Score points for claim`);
         }
       }
     } catch (scoreError) {
-      console.error("[Claim Predictions API] Failed to process Insight Score:", scoreError);
+      console.error("[Claim Predictions API] Failed to process Reputation Score:", scoreError);
       // Don't fail the request if scoring fails
     }
 

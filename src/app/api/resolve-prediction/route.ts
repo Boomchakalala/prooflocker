@@ -156,7 +156,7 @@ export async function POST(request: NextRequest) {
 
     console.log("[Resolve API] Success - Resolution recorded on-chain");
 
-    // Award Insight Score points for resolving
+    // Award Reputation Score points for resolving
     let insightPoints = 0;
     let insightBreakdown = null;
     let newStreak = 0;
@@ -179,10 +179,10 @@ export async function POST(request: NextRequest) {
           insightPoints = scoreResult.points;
           insightBreakdown = scoreResult.breakdown;
           newStreak = scoreResult.newStreak;
-          console.log(`[Resolve API] Awarded ${insightPoints} Insight Score points (streak: ${newStreak})`);
+          console.log(`[Resolve API] Awarded ${insightPoints} Reputation Score points (streak: ${newStreak})`);
         }
       } catch (scoreError) {
-        console.error("[Resolve API] Failed to award Insight Score:", scoreError);
+        console.error("[Resolve API] Failed to award Reputation Score:", scoreError);
         // Don't fail the request if scoring fails
       }
     }

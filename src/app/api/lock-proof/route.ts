@@ -140,7 +140,7 @@ export async function POST(request: NextRequest) {
     // Save prediction to storage (Supabase)
     await savePrediction(prediction);
 
-    // Award Insight Score points for locking (+10 pts)
+    // Award Reputation Score points for locking (+10 pts)
     let insightPoints = 0;
     try {
       const identifier = authenticatedUserId
@@ -150,10 +150,10 @@ export async function POST(request: NextRequest) {
       const scoreResult = await awardLockPoints(identifier, predictionId);
       if (scoreResult) {
         insightPoints = scoreResult.points;
-        console.log(`[Lock Proof API] Awarded ${insightPoints} Insight Score points`);
+        console.log(`[Lock Proof API] Awarded ${insightPoints} Reputation Score points`);
       }
     } catch (scoreError) {
-      console.error("[Lock Proof API] Failed to award Insight Score:", scoreError);
+      console.error("[Lock Proof API] Failed to award Reputation Score:", scoreError);
       // Don't fail the request if scoring fails
     }
 
