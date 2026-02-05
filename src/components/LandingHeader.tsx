@@ -253,10 +253,10 @@ export default function LandingHeader() {
 
                 {/* Scoring */}
                 <Link
-                  href="/scoring"
+                  href="/how-scoring-works"
                   onClick={() => setShowMobileMenu(false)}
                   className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${
-                    isActive("/scoring") ? "text-[#2E5CFF] bg-white/5" : "text-white/80 hover:text-[#2E5CFF] hover:bg-white/5"
+                    isActive("/how-scoring-works") ? "text-[#2E5CFF] bg-white/5" : "text-white/80 hover:text-[#2E5CFF] hover:bg-white/5"
                   }`}
                 >
                   <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
