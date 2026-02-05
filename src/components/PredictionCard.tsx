@@ -582,7 +582,9 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
           ? 'grid-cols-1'
           : canResolve
             ? 'grid-cols-[1.5fr_1fr_auto]'
-            : 'grid-cols-[1fr_auto]'
+            : isResolved
+              ? 'grid-cols-[1fr_auto_auto]'
+              : 'grid-cols-[1fr_auto]'
       }`}>
         {/* View proof button */}
         <button
@@ -611,6 +613,37 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
             className="px-3 py-2.5 text-sm font-semibold rounded-lg transition-all border text-amber-300 bg-amber-500/10 hover:bg-amber-500/15 border-amber-500/30 hover:border-amber-400/50 flex items-center justify-center gap-1.5"
           >
             Resolve
+          </button>
+        )}
+
+        {/* Upvote button - only for resolved predictions, not in preview mode */}
+        {isResolved && !isPreview && (
+          <button
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              handleVote();
+            }}
+            disabled={!currentUserId || isVoting || isOwner}
+            className={`px-3 py-2.5 text-sm font-semibold rounded-lg transition-all border flex items-center justify-center gap-1.5 min-w-[70px] ${
+              hasVoted
+                ? 'text-purple-300 bg-purple-500/20 border-purple-500/40'
+                : 'text-gray-400 bg-gray-500/10 border-gray-500/30 hover:border-gray-400/50 hover:bg-gray-500/15'
+            } ${(!currentUserId || isOwner) ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}
+            title={
+              !currentUserId
+                ? 'Sign in to vote'
+                : isOwner
+                ? 'Cannot vote on your own prediction'
+                : hasVoted
+                ? 'Remove upvote'
+                : 'Upvote this prediction'
+            }
+          >
+            <svg className="w-4 h-4" fill={hasVoted ? "currentColor" : "none"} stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M5 15l7-7 7 7" />
+            </svg>
+            <span>{voteCount}</span>
           </button>
         )}
 
