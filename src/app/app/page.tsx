@@ -4,15 +4,13 @@ import { useState, useEffect, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import PredictionCard from "@/components/PredictionCard";
-import BrandLogo from "@/components/BrandLogo";
+import LandingHeader from "@/components/LandingHeader";
 import DEStatusBanner from "@/components/DEStatusBanner";
 import ClaimModal from "@/components/ClaimModal";
 import Footer from "@/components/Footer";
 import { Prediction } from "@/lib/storage";
 import { getOrCreateUserId } from "@/lib/user";
 import { useAuth } from "@/contexts/AuthContext";
-import { signOut } from "@/lib/auth";
-import { getPublicHandle } from "@/lib/public-handle";
 
 type SortOption = "new" | "hot" | "top" | "resolved";
 
@@ -28,7 +26,6 @@ function AppFeedContent() {
   const [syncing, setSyncing] = useState(false);
   const [syncMessage, setSyncMessage] = useState<string | null>(null);
   const [showClaimModal, setShowClaimModal] = useState(false);
-  const [showUserMenu, setShowUserMenu] = useState(false);
   const [sortBy, setSortBy] = useState<SortOption>("new");
   const [showSortMenu, setShowSortMenu] = useState(false);
   const [highEvidenceOnly, setHighEvidenceOnly] = useState(false);
@@ -213,15 +210,6 @@ function AppFeedContent() {
     } finally {
       setSyncing(false);
       setTimeout(() => setSyncMessage(null), 3000);
-    }
-  };
-
-  const handleSignOut = async () => {
-    try {
-      await signOut();
-      await fetchPredictions();
-    } catch (error) {
-      console.error("Error signing out:", error);
     }
   };
 
