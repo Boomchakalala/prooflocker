@@ -173,10 +173,27 @@ export default function PublicProfilePage() {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
               </svg>
             </div>
-            <div>
+            <div className="flex-1">
               <h1 className="text-3xl font-bold text-white">{getDisplayName()}</h1>
               <p className="text-neutral-400 text-sm">ProofLocker Member</p>
             </div>
+            <button
+              onClick={() => {
+                const url = `${window.location.origin}/user/${userId}`;
+                if (navigator.share) {
+                  navigator.share({ title: `${getDisplayName()} - ProofLocker`, url });
+                } else {
+                  navigator.clipboard.writeText(url);
+                  alert('Profile link copied!');
+                }
+              }}
+              className="px-4 py-2 bg-white/5 hover:bg-white/10 border border-white/20 rounded-lg text-sm text-white transition-colors flex items-center gap-2"
+            >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
+              </svg>
+              Share
+            </button>
           </div>
 
           {/* Reliability Score Hero Section */}
