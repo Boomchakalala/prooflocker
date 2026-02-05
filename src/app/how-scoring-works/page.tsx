@@ -72,44 +72,20 @@ export default function HowScoringWorksPage() {
           <div className="glass border border-white/10 rounded-xl p-8">
             <h2 className="text-2xl font-bold text-white mb-6">Reliability Score (0-1000)</h2>
             <p className="text-neutral-300 mb-6">
-              Your reputation as a forecaster. Recalculates based on accuracy, evidence quality, and activity.
+              Your reputation based on accuracy, evidence quality, and activity
             </p>
-
-            <div className="bg-white/5 rounded-lg p-6 border border-white/10">
-              <h3 className="text-sm font-semibold text-neutral-500 uppercase tracking-wider mb-4">
-                How It's Calculated
-              </h3>
-              <div className="space-y-4">
-                <div>
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="text-white font-medium">Accuracy</span>
-                    <span className="text-neutral-400 text-sm">50% (0-500 pts)</span>
-                  </div>
-                  <div className="h-1.5 bg-neutral-900 rounded-full overflow-hidden">
-                    <div className="h-full bg-gradient-to-r from-neutral-700 to-neutral-600 w-[50%]" />
-                  </div>
-                  <p className="text-xs text-neutral-500 mt-1">Win rate × 500 points</p>
-                </div>
-                <div>
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="text-white font-medium">Evidence Quality</span>
-                    <span className="text-neutral-400 text-sm">30% (0-300 pts)</span>
-                  </div>
-                  <div className="h-1.5 bg-neutral-900 rounded-full overflow-hidden">
-                    <div className="h-full bg-gradient-to-r from-neutral-700 to-neutral-600 w-[30%]" />
-                  </div>
-                  <p className="text-xs text-neutral-500 mt-1">Average evidence score × 300</p>
-                </div>
-                <div>
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="text-white font-medium">Activity</span>
-                    <span className="text-neutral-400 text-sm">20% (0-200 pts)</span>
-                  </div>
-                  <div className="h-1.5 bg-neutral-900 rounded-full overflow-hidden">
-                    <div className="h-full bg-gradient-to-r from-neutral-700 to-neutral-600 w-[20%]" />
-                  </div>
-                  <p className="text-xs text-neutral-500 mt-1">Resolved predictions show consistency</p>
-                </div>
+            <div className="space-y-4">
+              <div className="flex items-center justify-between">
+                <span className="text-neutral-300">Accuracy (50%)</span>
+                <span className="text-neutral-500 text-sm">Win rate × 500 pts</span>
+              </div>
+              <div className="flex items-center justify-between">
+                <span className="text-neutral-300">Evidence Quality (30%)</span>
+                <span className="text-neutral-500 text-sm">Avg evidence × 300 pts</span>
+              </div>
+              <div className="flex items-center justify-between">
+                <span className="text-neutral-300">Activity (20%)</span>
+                <span className="text-neutral-500 text-sm">Up to 200 pts</span>
               </div>
             </div>
           </div>
@@ -120,70 +96,47 @@ export default function HowScoringWorksPage() {
           <div className="glass border border-white/10 rounded-xl p-8">
             <h2 className="text-2xl font-bold text-white mb-6">Total Points System</h2>
             <p className="text-neutral-300 mb-6">
-              Lifetime cumulative earnings. Points <strong className="text-white">never decrease</strong> and represent your total contribution.
+              Cumulative points from all activities (never decreases)
             </p>
 
             <div className="space-y-4">
               {/* Lock Prediction */}
               <div className="bg-white/5 rounded-lg p-5 border border-white/10">
-                <div className="flex items-start justify-between">
-                  <div className="flex items-start gap-3">
-                    <div className="w-10 h-10 rounded-lg bg-[#5B21B6]/10 border border-[#5B21B6]/30 flex items-center justify-center flex-shrink-0">
-                      <svg className="w-5 h-5 text-[#5B21B6]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-                      </svg>
-                    </div>
-                    <div>
-                      <div className="text-white font-semibold mb-1">Lock a Prediction</div>
-                      <div className="text-sm text-neutral-400">Claim a prediction publicly</div>
-                    </div>
-                  </div>
-                  <div className="text-right">
-                    <div className="text-2xl font-bold text-white">+10</div>
-                    <div className="text-xs text-neutral-500">points</div>
-                  </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-neutral-300">Lock prediction</span>
+                  <span className="text-purple-400 font-semibold text-lg">+10 pts</span>
                 </div>
               </div>
 
               {/* Resolve Correct */}
               <div className="bg-white/5 rounded-lg p-5 border border-white/10">
-                <div className="flex items-start justify-between">
-                  <div className="flex items-start gap-3">
-                    <div className="w-10 h-10 rounded-lg bg-green-500/10 border border-green-500/30 flex items-center justify-center flex-shrink-0">
-                      <svg className="w-5 h-5 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                      </svg>
-                    </div>
-                    <div>
-                      <div className="text-white font-semibold mb-1">Resolve Correct</div>
-                      <div className="text-sm text-neutral-400">Prove your prediction was right</div>
-                    </div>
-                  </div>
-                  <div className="text-right">
-                    <div className="text-2xl font-bold text-white">+80-150</div>
-                    <div className="text-xs text-neutral-500">points</div>
-                  </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-neutral-300">Resolve correct</span>
+                  <span className="text-green-400 font-semibold text-lg">+80-150 pts</span>
+                </div>
+              </div>
+
+              {/* High-risk bonus */}
+              <div className="bg-white/5 rounded-lg p-5 border border-white/10">
+                <div className="flex items-center justify-between">
+                  <span className="text-neutral-300">High-risk category bonus</span>
+                  <span className="text-blue-400 font-semibold text-lg">+40 pts</span>
+                </div>
+              </div>
+
+              {/* Streak bonus */}
+              <div className="bg-white/5 rounded-lg p-5 border border-white/10">
+                <div className="flex items-center justify-between">
+                  <span className="text-neutral-300">Streak bonus</span>
+                  <span className="text-purple-400 font-semibold text-lg">+10 pts/streak</span>
                 </div>
               </div>
 
               {/* Resolve Incorrect */}
               <div className="bg-white/5 rounded-lg p-5 border border-white/10">
-                <div className="flex items-start justify-between">
-                  <div className="flex items-start gap-3">
-                    <div className="w-10 h-10 rounded-lg bg-red-500/10 border border-red-500/30 flex items-center justify-center flex-shrink-0">
-                      <svg className="w-5 h-5 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                      </svg>
-                    </div>
-                    <div>
-                      <div className="text-white font-semibold mb-1">Resolve Incorrect</div>
-                      <div className="text-sm text-neutral-400">Accept you were wrong</div>
-                    </div>
-                  </div>
-                  <div className="text-right">
-                    <div className="text-2xl font-bold text-white">-15</div>
-                    <div className="text-xs text-neutral-500">penalty</div>
-                  </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-neutral-300">Resolve incorrect</span>
+                  <span className="text-red-400 font-semibold text-lg">-15 pts</span>
                 </div>
               </div>
             </div>
