@@ -8,7 +8,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { signOut } from "@/lib/auth";
 import { getPublicHandle } from "@/lib/public-handle";
 import ClaimModal from "@/components/ClaimModal";
-import InsightScorePill from "@/components/InsightScorePill";
+import ReputationScorePill from "@/components/ReputationScorePill";
 
 export default function LandingHeader() {
   const { user } = useAuth();
@@ -100,8 +100,8 @@ export default function LandingHeader() {
               </svg>
             </Link>
 
-            {/* Insight Score Pill */}
-            <InsightScorePill />
+            {/* Reputation Score Pill */}
+            <ReputationScorePill />
 
             {/* Desktop: Show Sign In button or user menu */}
             {!user ? (
