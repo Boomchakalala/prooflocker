@@ -335,9 +335,120 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
     return 'border-slate-700 bg-white/5 shadow-sm hover:shadow-md transition-all';
   };
 
-  // Card content (shared between Link and div versions)
-  const cardContent = (
+  // Card content (varies by variant)
+  const cardContent = variant === "compact" ? (
     <>
+      {/* COMPACT VARIANT - For Globe Feed-lite panel */}
+      <div className="flex items-start gap-2 mb-2">
+        <div className="w-7 h-7 rounded-full bg-gradient-to-br from-slate-700 to-slate-800 flex items-center justify-center text-white text-xs font-semibold flex-shrink-0">
+          {authorNumber.toString().slice(-2)}
+        </div>
+        <div className="flex-1 min-w-0">
+          <div className="flex items-center gap-1.5 flex-wrap">
+            {isPreview ? (
+              <span className="text-white text-xs font-medium">Anon #{authorNumber}</span>
+            ) : (
+              <button
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  router.push(`/user/${prediction.userId || prediction.anonId}`);
+                }}
+                className="text-white text-xs font-medium hover:text-slate-300 transition-colors"
+              >
+                Anon #{authorNumber}
+              </button>
+            )}
+            {authorTierInfo && (
+              <span className={`px-1.5 py-0.5 text-[10px] font-semibold rounded ${authorTierInfo.bgColor} ${authorTierInfo.color}`}>
+                {authorTierInfo.label}
+              </span>
+            )}
+            <span className="text-[10px] text-slate-500">•</span>
+            <span className="text-[10px] text-slate-500">{formatRelativeTime(prediction.timestamp)}</span>
+          </div>
+        </div>
+      </div>
+
+      {/* Compact badges row */}
+      <div className="flex items-center gap-1.5 mb-2 flex-wrap">
+        {prediction.category && (
+          <span className="px-2 py-0.5 bg-slate-800/50 text-slate-300 text-[10px] font-medium rounded">
+            {prediction.category}
+          </span>
+        )}
+        {prediction.outcome === 'correct' ? (
+          <span className="flex items-center gap-1 px-2 py-0.5 bg-emerald-500/10 text-emerald-400 text-[10px] font-semibold rounded">
+            <svg className="w-2.5 h-2.5" fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7"/>
+            </svg>
+            Correct
+          </span>
+        ) : prediction.outcome === 'incorrect' ? (
+          <span className="flex items-center gap-1 px-2 py-0.5 bg-rose-500/10 text-rose-400 text-[10px] font-semibold rounded">
+            <svg className="w-2.5 h-2.5" fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12"/>
+            </svg>
+            Incorrect
+          </span>
+        ) : (
+          <span className="flex items-center gap-1 px-2 py-0.5 bg-amber-500/10 text-amber-400 text-[10px] font-semibold rounded">
+            <svg className="w-2.5 h-2.5" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+              <circle cx="12" cy="12" r="10"/>
+            </svg>
+            Pending
+          </span>
+        )}
+        {evidenceTier && isResolved && (
+          <span className={`px-2 py-0.5 text-[10px] font-semibold rounded ${evidenceTier.bgColor} ${evidenceTier.color}`}>
+            {evidenceTier.label}
+          </span>
+        )}
+      </div>
+
+      {/* Title - clamped to 2 lines */}
+      <h3 className="text-white text-[13px] font-medium leading-snug mb-2 line-clamp-2">
+        {displayTitle}
+      </h3>
+
+      {/* Compact footer */}
+      <div className="flex items-center justify-between gap-2 pt-2 border-t border-slate-800/50">
+        <div className="flex items-center gap-1.5">
+          {/* Upvote - compact */}
+          {isResolved && !isPreview && (
+            <button
+              onClick={(e) => { e.preventDefault(); e.stopPropagation(); handleVote(); }}
+              disabled={!currentUserId || isVoting || isOwner}
+              className={`flex items-center gap-1 px-2 py-1 rounded text-[11px] font-medium transition-colors ${
+                hasVoted ? 'text-indigo-400 bg-indigo-500/10' : 'text-slate-400 hover:text-slate-300 hover:bg-slate-800'
+              } ${(!currentUserId || isOwner) ? 'opacity-50 cursor-not-allowed' : ''}`}
+            >
+              <svg className="w-3 h-3" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M5 15l7-7 7 7" />
+              </svg>
+              {voteCount}
+            </button>
+          )}
+          <button
+            onClick={(e) => { e.preventDefault(); e.stopPropagation(); handleViewClick(e); }}
+            className="px-2 py-1 text-slate-400 hover:text-white hover:bg-slate-800 rounded text-[11px] font-medium transition-colors"
+          >
+            View
+          </button>
+          {onViewOnMap && (
+            <button
+              onClick={(e) => { e.preventDefault(); e.stopPropagation(); onViewOnMap(); }}
+              className="px-2 py-1 text-purple-400 hover:text-purple-300 hover:bg-purple-500/10 rounded text-[11px] font-medium transition-colors"
+            >
+              Map
+            </button>
+          )}
+        </div>
+      </div>
+    </>
+  ) : (
+    <>
+      {/* FULL VARIANT - Original Feed card */}
       {/* Header - V4 format */}
       <div className="flex items-start justify-between mb-3">
         <div className="flex items-center gap-3">
@@ -527,7 +638,7 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
     </>
   );
 
-  // Render as non-clickable div for preview mode (landing page)
+  // Render based on variant and mode
   if (isPreview) {
     return (
       <div className={`group relative glass rounded-xl p-5 transition-all duration-300 flex flex-col h-full overflow-hidden border ${getCardBorderStyle()}`}>
@@ -536,7 +647,19 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
     );
   }
 
-  // Render as Link for feed page (clickable)
+  if (variant === "compact") {
+    // Compact cards (for Globe) - simpler, non-Link wrapper
+    return (
+      <div
+        onClick={!isPreview ? () => router.push(`/proof/${prediction.publicSlug}`) : undefined}
+        className={`group relative glass rounded-lg p-3 transition-all duration-200 flex flex-col overflow-hidden border cursor-pointer hover:border-purple-500/40 hover:shadow-lg ${getCardBorderStyle()}`}
+      >
+        {cardContent}
+      </div>
+    );
+  }
+
+  // Full cards (for Feed) - Link wrapper with hover effects
   return (
     <Link
       href={`/proof/${prediction.publicSlug}`}
