@@ -77,65 +77,67 @@ export default function GlobeMapbox({ claims, osint }: GlobeMapboxProps) {
       // @ts-ignore
       const mapboxgl = window.mapboxgl;
       if (!mapboxgl || !mapContainer.current) {
+        console.log('[Globe] Waiting for Mapbox...');
         setTimeout(initMap, 100);
         return;
       }
 
+      console.log('[Globe] Initializing map...');
       initialized.current = true;
       mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_TOKEN || 'pk.eyJ1IjoicHJvb2Zsb2NrZXIiLCJhIjoiY21sYjBxcTAwMGVoYzNlczI4YWlzampqZyJ9.nY-yqSucTzvNyK1qDCq9rQ';
 
-      map.current = new mapboxgl.Map({
-        container: mapContainer.current,
-        style: 'mapbox://styles/mapbox/dark-v11',
-        projection: 'globe',
-        center: [15, 35],
-        zoom: 1.8,
-        pitch: 0,
-        bearing: 0,
-        antialias: true,
-        attributionControl: false,
-      });
-
-      map.current.on('load', () => {
-        setMapLoaded(true);
-
-        // Configure atmosphere
-        map.current.setFog({
-          range: [0.5, 10],
-          color: '#000000',
-          'horizon-blend': 0.05,
-          'high-color': '#0a0a0a',
-          'space-color': '#000000',
-          'star-intensity': 0.2,
+      try {
+        map.current = new mapboxgl.Map({
+          container: mapContainer.current,
+          style: 'mapbox://styles/mapbox/dark-v11',
+          projection: 'mercator', // Use mercator instead of globe for free tier
+          center: [15, 35],
+          zoom: 1.5,
+          pitch: 0,
+          bearing: 0,
+          attributionControl: false,
         });
 
-        // Add sources
-        map.current.addSource('osint', {
-          type: 'geojson',
-          data: osintGeoJSON,
-          cluster: true,
-          clusterMaxZoom: 5,
-          clusterRadius: 60,
+        map.current.on('load', () => {
+          console.log('[Globe] Map loaded successfully');
+          setMapLoaded(true);
+
+          // Add sources
+          map.current.addSource('osint', {
+            type: 'geojson',
+            data: osintGeoJSON,
+            cluster: true,
+            clusterMaxZoom: 5,
+            clusterRadius: 60,
+          });
+
+          map.current.addSource('claims', {
+            type: 'geojson',
+            data: claimsGeoJSON,
+            cluster: true,
+            clusterMaxZoom: 5,
+            clusterRadius: 50,
+          });
+
+          console.log('[Globe] Adding layers...');
+          addLayers(mapboxgl);
+          console.log('[Globe] Setup complete!');
+
+          // Slow rotation
+          map.current.on('idle', () => {
+            if (map.current && map.current.getZoom() < 2.5 && !map.current.isMoving()) {
+              map.current.rotateTo(map.current.getBearing() + 15, { duration: 120000 });
+            }
+          });
         });
 
-        map.current.addSource('claims', {
-          type: 'geojson',
-          data: claimsGeoJSON,
-          cluster: true,
-          clusterMaxZoom: 5,
-          clusterRadius: 50,
+        map.current.on('error', (e: any) => {
+          console.error('[Globe] Map error:', e);
         });
 
-        // Add layers
-        addLayers(mapboxgl);
-
-        // Rotation
-        map.current.on('idle', () => {
-          if (map.current && map.current.getZoom() < 2.5 && !map.current.isMoving()) {
-            map.current.rotateTo(map.current.getBearing() + 15, { duration: 120000 });
-          }
-        });
-      });
+      } catch (error) {
+        console.error('[Globe] Failed to create map:', error);
+      }
     };
 
     initMap();
@@ -153,6 +155,7 @@ export default function GlobeMapbox({ claims, osint }: GlobeMapboxProps) {
   useEffect(() => {
     if (!mapLoaded || !map.current) return;
 
+    console.log('[Globe] Updating claims data:', claims.length, 'claims');
     const claimsSource = map.current.getSource('claims');
     if (claimsSource) {
       claimsSource.setData(claimsGeoJSON);
@@ -162,6 +165,7 @@ export default function GlobeMapbox({ claims, osint }: GlobeMapboxProps) {
   useEffect(() => {
     if (!mapLoaded || !map.current) return;
 
+    console.log('[Globe] Updating OSINT data:', osint.length, 'items');
     const osintSource = map.current.getSource('osint');
     if (osintSource) {
       osintSource.setData(osintGeoJSON);
