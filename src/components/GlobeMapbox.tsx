@@ -42,6 +42,13 @@ export default function GlobeMapbox({ claims, osint }: GlobeMapboxProps) {
   const [error, setError] = useState<string | null>(null);
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
+  // Show sidebar on desktop by default
+  useEffect(() => {
+    if (typeof window !== 'undefined' && window.innerWidth >= 768) {
+      setSidebarOpen(true);
+    }
+  }, []);
+
   // Create GeoJSON
   const createClaimsGeoJSON = () => ({
     type: 'FeatureCollection' as const,
@@ -829,11 +836,11 @@ export default function GlobeMapbox({ claims, osint }: GlobeMapboxProps) {
         />
       )}
 
-      {/* Sidebar - Desktop: fixed right, Mobile: slide from bottom */}
+      {/* Sidebar - Desktop: always visible right, Mobile: slide from bottom */}
       <aside className={`fixed z-[950] flex flex-col bg-gradient-to-b from-[#0A0A0F]/98 via-[#111118]/98 to-[#0A0A0F]/98 backdrop-blur-[30px] border-purple-500/20 shadow-[-20px_0_40px_rgba(91,33,182,0.15)] transition-transform duration-300
         md:top-14 md:right-0 md:w-[360px] md:h-[calc(100vh-56px)] md:border-l md:translate-x-0
-        ${sidebarOpen ? 'translate-y-0' : 'translate-y-full'}
-        bottom-0 left-0 right-0 h-[70vh] rounded-t-2xl border-t`}>
+        ${sidebarOpen ? 'translate-y-0' : 'translate-y-full md:translate-y-0'}
+        bottom-0 left-0 right-0 h-[70vh] rounded-t-2xl border-t md:rounded-none md:border-t-0`}>
 
         {/* Mobile drag handle */}
         <div className="md:hidden flex justify-center py-2 border-b border-purple-500/20">
