@@ -364,13 +364,16 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
                   Anon #{authorNumber}
                 </span>
               ) : (
-                <Link
-                  href={`/user/${prediction.userId || prediction.anonId}`}
-                  onClick={(e) => e.stopPropagation()}
-                  className="text-sm font-semibold text-white hover:text-slate-300 transition-colors truncate"
+                <button
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    router.push(`/user/${prediction.userId || prediction.anonId}`);
+                  }}
+                  className="text-sm font-semibold text-white hover:text-slate-300 transition-colors truncate text-left"
                 >
                   Anon #{authorNumber}
-                </Link>
+                </button>
               )}
               {/* Author Reliability Tier Badge with Icon - Compact */}
               {authorTierInfo && (
