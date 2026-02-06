@@ -219,6 +219,14 @@ export default function LockPage() {
                 </p>
               </div>
 
+              {/* Location Picker for Globe View */}
+              <div className="mb-6">
+                <LocationPicker
+                  selectedLocation={selectedLocation}
+                  onLocationSelect={setSelectedLocation}
+                />
+              </div>
+
               {/* How it works - Collapsible */}
               <div className="glass border border-white/10 rounded-lg p-4 mb-6">
                 <button
