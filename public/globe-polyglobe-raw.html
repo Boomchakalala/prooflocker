@@ -137,94 +137,33 @@
       { lat: -33.9249, lng: 18.4241, city: 'Cape Town', claims: 31, reliability: 704, status: 'pending', color: '#0066ff' },
     ];
 
-    // Major cities data for labels
-    const majorCities = [
-      { lat: 40.7128, lng: -74.0060, name: 'New York', size: 14 },
-      { lat: 51.5074, lng: -0.1278, name: 'London', size: 14 },
-      { lat: 35.6762, lng: 139.6503, name: 'Tokyo', size: 14 },
-      { lat: 48.8566, lng: 2.3522, name: 'Paris', size: 13 },
-      { lat: 37.7749, lng: -122.4194, name: 'San Francisco', size: 12 },
-      { lat: 50.4501, lng: 30.5234, name: 'Kyiv', size: 12 },
-      { lat: 33.8869, lng: 35.5131, name: 'Beirut', size: 11 },
-      { lat: 31.7917, lng: 35.2172, name: 'Jerusalem', size: 11 },
-      { lat: 33.3152, lng: 44.3661, name: 'Baghdad', size: 11 },
-      { lat: 34.0522, lng: -118.2437, name: 'Los Angeles', size: 13 },
-      { lat: 55.7558, lng: 37.6173, name: 'Moscow', size: 13 },
-      { lat: 39.9042, lng: 116.4074, name: 'Beijing', size: 14 },
-      { lat: -33.8688, lng: 151.2093, name: 'Sydney', size: 12 },
-      { lat: 19.4326, lng: -99.1332, name: 'Mexico City', size: 13 },
-      { lat: -23.5505, lng: -46.6333, name: 'São Paulo', size: 12 },
-      { lat: 28.6139, lng: 77.2090, name: 'Delhi', size: 13 },
-      { lat: 1.3521, lng: 103.8198, name: 'Singapore', size: 11 },
-      { lat: 25.2048, lng: 55.2708, name: 'Dubai', size: 11 },
-      { lat: -34.6037, lng: -58.3816, name: 'Buenos Aires', size: 12 },
-      { lat: 52.5200, lng: 13.4050, name: 'Berlin', size: 12 },
-      { lat: 41.9028, lng: 12.4964, name: 'Rome', size: 12 },
-      { lat: 59.3293, lng: 18.0686, name: 'Stockholm', size: 11 },
-      { lat: -1.2921, lng: 36.8219, name: 'Nairobi', size: 11 },
-      { lat: 30.0444, lng: 31.2357, name: 'Cairo', size: 12 },
-      { lat: -33.9249, lng: 18.4241, name: 'Cape Town', size: 11 },
-      { lat: 23.1291, lng: -82.3822, name: 'Havana', size: 10 },
-      { lat: 13.7563, lng: 100.5018, name: 'Bangkok', size: 11 },
-      { lat: -22.9068, lng: -43.1729, name: 'Rio de Janeiro', size: 11 },
-      { lat: 41.0082, lng: 28.9784, name: 'Istanbul', size: 12 },
-      { lat: 45.4215, lng: -75.6972, name: 'Ottawa', size: 10 },
-    ];
-
-    // Initialize Globe
+    // Initialize Globe - Clean and minimal
     const globe = Globe()
       (document.getElementById('globe-container'))
-      // Raw Natural Earth map with terrain
-      .globeImageUrl('//unpkg.com/three-globe/example/img/earth-day.jpg')
-      // No bump map - keep it flat and raw
+      // Clean dark map showing geography
+      .globeImageUrl('//unpkg.com/three-globe/example/img/earth-dark.jpg')
+      // No bump map - flat
       .bumpImageUrl(null)
-      // Deep space black background
+      // Black background
       .backgroundImageUrl('//unpkg.com/three-globe/example/img/night-sky.png')
-      // Minimal atmospheric glow
+      // Subtle atmosphere
       .atmosphereColor('#0066ff')
-      .atmosphereAltitude(0.15)
+      .atmosphereAltitude(0.1)
       .showAtmosphere(true);
 
-    // Load and display country borders and names
+    // Load country borders - clean white lines
     fetch('https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json')
       .then(res => res.json())
       .then(countries => {
         const countriesData = topojson.feature(countries, countries.objects.countries).features;
 
-        // Add country borders
         globe
           .polygonsData(countriesData)
-          .polygonCapColor(() => 'rgba(0, 0, 0, 0)') // Transparent fill
-          .polygonSideColor(() => 'rgba(0, 0, 0, 0)') // Transparent sides
-          .polygonStrokeColor(() => 'rgba(255, 255, 255, 0.5)') // White borders, more visible
-          .polygonAltitude(0.001)
-          .polygonLabel(d => `
-            <div style="
-              padding: 8px 12px;
-              background: rgba(0, 0, 0, 0.9);
-              border: 1px solid rgba(255, 255, 255, 0.3);
-              border-radius: 6px;
-              font-family: -apple-system, sans-serif;
-              font-size: 12px;
-              color: white;
-            ">
-              ${d.properties.name}
-            </div>
-          `);
+          .polygonCapColor(() => 'rgba(0, 0, 0, 0)')
+          .polygonSideColor(() => 'rgba(0, 0, 0, 0)')
+          .polygonStrokeColor(() => 'rgba(255, 255, 255, 0.4)')
+          .polygonAltitude(0.001);
       });
-
-    // Add city labels
-    globe
-      .labelsData(majorCities)
-      .labelLat('lat')
-      .labelLng('lng')
-      .labelText('name')
-      .labelSize('size')
-      .labelColor(() => 'rgba(255, 255, 255, 0.8)')
-      .labelResolution(2)
-      .labelAltitude(0.01)
-      .labelDotRadius(0.3)
-      .labelDotOrientation(() => 'bottom');
 
 
     // Configure pulsing hotspot markers
