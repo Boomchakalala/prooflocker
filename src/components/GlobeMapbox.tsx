@@ -829,9 +829,9 @@ export default function GlobeMapbox({ claims, osint }: GlobeMapboxProps) {
         />
       )}
 
-      {/* Sidebar - Desktop: always visible right, Mobile: slide from bottom */}
+      {/* Sidebar - Desktop: always visible RIGHT side, Mobile: slide from bottom */}
       <aside className={`fixed z-[950] flex flex-col bg-gradient-to-b from-[#0A0A0F]/98 via-[#111118]/98 to-[#0A0A0F]/98 backdrop-blur-[30px] border-purple-500/20 shadow-[-20px_0_40px_rgba(91,33,182,0.15)]
-        md:top-14 md:right-0 md:w-[360px] md:h-[calc(100vh-56px)] md:border-l
+        md:top-14 md:right-0 md:left-auto md:w-[360px] md:h-[calc(100vh-56px)] md:border-l
         bottom-0 left-0 right-0 h-[70vh] rounded-t-2xl border-t md:rounded-none md:border-t-0
         transition-transform duration-300
         ${sidebarOpen ? 'translate-y-0' : 'translate-y-full'} md:translate-y-0`}>
