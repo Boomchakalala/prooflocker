@@ -114,7 +114,7 @@ export async function GET(request: NextRequest) {
     // Fetch predictions from database with correct field names
     const { data: predictions, error } = await supabase
       .from('predictions')
-      .select('id, text, author_number, pseudonym, created_at, outcome, status, anon_id, category, evidence_score')
+      .select('id, text, author_number, pseudonym, created_at, outcome, status, anon_id')
       .eq('moderation_status', 'active')
       .order('created_at', { ascending: false })
       .limit(50);
@@ -128,15 +128,6 @@ export async function GET(request: NextRequest) {
     }
 
     console.log(`[Globe API] Fetched ${predictions?.length || 0} predictions from database`);
-    if (predictions && predictions.length > 0) {
-      console.log(`[Globe API] Sample prediction fields:`, {
-        id: predictions[0].id,
-        has_category: !!predictions[0].category,
-        category: predictions[0].category,
-        has_evidence_score: predictions[0].evidence_score !== null && predictions[0].evidence_score !== undefined,
-        evidence_score: predictions[0].evidence_score
-      });
-    }
 
     // Transform predictions to globe format
     // For now, we'll assign random global locations to predictions
@@ -208,8 +199,6 @@ export async function GET(request: NextRequest) {
           day: 'numeric',
         }),
         outcome,
-        category: prediction.category,
-        evidence_score: prediction.evidence_score,
       };
     });
 
