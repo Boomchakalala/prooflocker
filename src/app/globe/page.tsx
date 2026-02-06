@@ -114,6 +114,7 @@ export default function GlobePage() {
       .then(res => res.json())
       .then(data => {
         console.log('[Globe] Data loaded:', data.claims?.length, 'claims');
+        console.log('[Globe] Sample claim:', data.claims?.[0]);
         if (data.claims && data.osint) {
           setClaims(data.claims);
           setOsint(data.osint);

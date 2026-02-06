@@ -127,6 +127,17 @@ export async function GET(request: NextRequest) {
     }
 
     console.log(`[Globe API] Fetched ${predictions?.length || 0} predictions from database`);
+    if (predictions && predictions.length > 0) {
+      console.log(`[Globe API] Sample prediction fields:`, {
+        id: predictions[0].id,
+        has_category: !!predictions[0].category,
+        category: predictions[0].category,
+        has_evidence_score: predictions[0].evidence_score !== null && predictions[0].evidence_score !== undefined,
+        evidence_score: predictions[0].evidence_score,
+        has_reliability_tier: !!predictions[0].author_reliability_tier,
+        reliability_tier: predictions[0].author_reliability_tier
+      });
+    }
 
     // Transform predictions to globe format
     // For now, we'll assign random global locations to predictions
