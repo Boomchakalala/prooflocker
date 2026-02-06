@@ -1,4 +1,4 @@
-// Polyglobe-inspired minimalist globe with ProofLocker theming
+// Raw Polyglobe-style Globe - Dark, minimal, floating Earth in space
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
@@ -32,98 +32,58 @@ export default function GlobeVisualizationPolyglobe({ hotspots, onHotspotClick }
   useEffect(() => {
     if (!globeRef.current) return;
 
-    console.log('[Globe] Initializing Polyglobe-style globe...');
+    console.log('[Globe] Initializing raw Polyglobe-style globe...');
 
-    // Initialize minimalist dark globe
+    // Initialize minimal dark globe - Polyglobe aesthetic
     const globe = Globe()
       .width(globeRef.current.clientWidth)
       .height(globeRef.current.clientHeight)
-      // Dark globe with subtle texture
+      // Dark night Earth - city lights visible, NO political borders
       .globeImageUrl('//unpkg.com/three-globe/example/img/earth-night.jpg')
       // No bump map - keep it flat and minimal
       .bumpImageUrl(null as any)
       // Deep space background
       .backgroundImageUrl('//unpkg.com/three-globe/example/img/night-sky.png')
-      // ProofLocker brand: blue-purple gradient atmosphere
-      .atmosphereColor('#2E5CFF')
-      .atmosphereAltitude(0.25)
+      // Subtle blue atmosphere glow (ProofLocker blue)
+      .atmosphereColor('#0066ff')
+      .atmosphereAltitude(0.2)
       .showAtmosphere(true);
 
-    // Configure glowing hotspot markers (Polyglobe style)
+    // Configure glowing hotspot markers - NO labels, NO borders
     globe
       .pointsData(hotspots)
       .pointLat('lat')
       .pointLng('lng')
-      .pointAltitude((d: any) => {
-        // Markers float above surface
-        if (d.marker_style.size === 'large') return 0.05;
-        if (d.marker_style.size === 'medium') return 0.03;
-        return 0.02;
-      })
+      .pointAltitude(0.01) // Float just above surface
       .pointRadius((d: any) => {
-        // Larger, more prominent dots
-        if (d.marker_style.size === 'large') return 1.5;
-        if (d.marker_style.size === 'medium') return 1.0;
-        return 0.6;
+        // Size by importance
+        if (d.marker_style.size === 'large') return 0.6;
+        if (d.marker_style.size === 'medium') return 0.4;
+        return 0.3;
       })
       .pointColor((d: any) => d.marker_style.color)
-      // Glowing effect with transparency
-      .pointAltitude((d: any) => {
-        if (d.marker_style.size === 'large') return 0.05;
-        if (d.marker_style.size === 'medium') return 0.03;
-        return 0.02;
-      })
-      // Enhanced tooltip with ProofLocker styling
+      // Minimal tooltip on hover only
       .pointLabel((d: any) => `
         <div style="
-          padding: 16px;
-          background: linear-gradient(135deg, rgba(14, 14, 15, 0.95) 0%, rgba(10, 10, 10, 0.95) 100%);
-          border: 2px solid ${d.marker_style.color};
-          border-radius: 12px;
-          box-shadow: 0 8px 32px rgba(46, 92, 255, 0.4);
-          max-width: 280px;
-          backdrop-filter: blur(20px);
+          padding: 12px 16px;
+          background: rgba(0, 0, 0, 0.95);
+          border: 1px solid ${d.marker_style.color};
+          border-radius: 8px;
+          font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+          font-size: 13px;
+          line-height: 1.6;
+          color: white;
+          box-shadow: 0 8px 20px rgba(0, 0, 0, 0.8);
+          max-width: 220px;
         ">
-          <div style="
-            font-weight: bold;
-            color: white;
-            margin-bottom: 8px;
-            font-size: 16px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-          ">
-            <span style="font-size: 20px;">📍</span>
+          <div style="font-weight: 700; margin-bottom: 4px; color: ${d.marker_style.color};">
             ${d.city}, ${d.country}
           </div>
-          <div style="
-            color: #94a3b8;
-            font-size: 13px;
-            margin-bottom: 6px;
-            line-height: 1.5;
-          ">
-            <strong style="color: white;">${d.claim_count}</strong> claim${d.claim_count !== 1 ? 's' : ''} locked
+          <div style="color: rgba(255,255,255,0.7); font-size: 12px;">
+            ${d.claim_count} claims • ${d.avg_reliability} reliability
           </div>
-          <div style="
-            display: flex;
-            gap: 12px;
-            font-size: 12px;
-            color: #64748b;
-            margin-top: 8px;
-            padding-top: 8px;
-            border-top: 1px solid rgba(100, 116, 139, 0.3);
-          ">
-            <span>Avg: <strong style="color: #2E5CFF;">${d.avg_reliability}</strong></span>
-            <span>•</span>
-            <span><strong style="color: ${d.accuracy_pct > 70 ? '#34d399' : '#f87171'};">${d.accuracy_pct}%</strong> Correct</span>
-          </div>
-          <div style="
-            margin-top: 10px;
-            font-size: 11px;
-            color: #64748b;
-            text-align: center;
-          ">
-            Click to view claims →
+          <div style="margin-top: 6px; font-size: 11px; color: rgba(255,255,255,0.5);">
+            Click for details
           </div>
         </div>
       `)
@@ -132,17 +92,17 @@ export default function GlobeVisualizationPolyglobe({ hotspots, onHotspotClick }
         onHotspotClick(point as Hotspot);
       });
 
-    // Configure camera controls
+    // Smooth camera controls - Polyglobe style
     try {
       const controls = globe.controls();
       if (controls) {
         controls.autoRotate = true;
-        controls.autoRotateSpeed = 0.3;
+        controls.autoRotateSpeed = 0.3; // Slow, cinematic rotation
         controls.enableZoom = true;
         controls.minDistance = 180;
         controls.maxDistance = 600;
         controls.enableDamping = true;
-        controls.dampingFactor = 0.15;
+        controls.dampingFactor = 0.1;
       }
     } catch (err) {
       console.warn('[Globe] Controls not available:', err);
@@ -154,7 +114,7 @@ export default function GlobeVisualizationPolyglobe({ hotspots, onHotspotClick }
     setIsReady(true);
 
     // Initial camera position - elevated view
-    globe.pointOfView({ lat: 25, lng: 0, altitude: 2.2 }, 0);
+    globe.pointOfView({ lat: 25, lng: 0, altitude: 2.5 }, 0);
 
     // Handle window resize
     const handleResize = () => {
@@ -180,7 +140,7 @@ export default function GlobeVisualizationPolyglobe({ hotspots, onHotspotClick }
     };
   }, [hotspots, onHotspotClick]);
 
-  // Enhanced pulse animation with glow effect
+  // Pulsing animation for urgent/pending markers
   useEffect(() => {
     if (!globeInstanceRef.current || !isReady) return;
 
@@ -190,30 +150,32 @@ export default function GlobeVisualizationPolyglobe({ hotspots, onHotspotClick }
     let frame = 0;
     const animate = () => {
       frame++;
-      const pulse = Math.sin(frame * 0.08) * 0.015 + 0.03; // Slower, more dramatic pulse
+
+      // Altitude pulse (breathing effect)
+      const altitudePulse = Math.sin(frame * 0.05) * 0.008 + 0.01;
+
+      // Radius pulse (scale effect)
+      const radiusPulse = Math.sin(frame * 0.05) * 0.15 + 1;
 
       if (globeInstanceRef.current) {
+        // Altitude animation
         globeInstanceRef.current.pointAltitude((d: any) => {
           if (d.marker_style.pulse) {
-            // Extra bounce for pulsing markers
-            return pulse + (d.marker_style.size === 'large' ? 0.03 : 0.02);
+            return altitudePulse + 0.005; // Extra lift for pulsing
           }
-          if (d.marker_style.size === 'large') return 0.05;
-          if (d.marker_style.size === 'medium') return 0.03;
-          return 0.02;
+          return 0.01;
         });
 
-        // Also pulse the radius for extra effect
+        // Radius animation
         globeInstanceRef.current.pointRadius((d: any) => {
-          const basePulse = Math.sin(frame * 0.08) * 0.3 + 1;
+          const baseRadius = d.marker_style.size === 'large' ? 0.6 : d.marker_style.size === 'medium' ? 0.4 : 0.3;
+
           if (d.marker_style.pulse) {
-            if (d.marker_style.size === 'large') return 1.5 * basePulse;
-            if (d.marker_style.size === 'medium') return 1.0 * basePulse;
-            return 0.6 * basePulse;
+            return baseRadius * radiusPulse;
           }
-          if (d.marker_style.size === 'large') return 1.5;
-          if (d.marker_style.size === 'medium') return 1.0;
-          return 0.6;
+
+          // Subtle pulse for non-urgent
+          return baseRadius * (1 + Math.sin(frame * 0.03) * 0.08);
         });
       }
 
@@ -231,7 +193,7 @@ export default function GlobeVisualizationPolyglobe({ hotspots, onHotspotClick }
       className="w-full h-full"
       style={{
         cursor: 'grab',
-        background: 'radial-gradient(ellipse at center, rgba(46, 92, 255, 0.15) 0%, #0a0a0a 60%)'
+        background: '#000000'
       }}
     />
   );
