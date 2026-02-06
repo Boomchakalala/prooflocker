@@ -139,15 +139,15 @@
     // Initialize Globe
     const globe = Globe()
       (document.getElementById('globe-container'))
-      // Raw dark night Earth - city lights visible, no political borders
-      .globeImageUrl('//unpkg.com/three-globe/example/img/earth-night.jpg')
-      // No bump map - keep it flat and minimal
+      // Raw political map with borders and cities visible
+      .globeImageUrl('//unpkg.com/three-globe/example/img/earth-blue-marble.jpg')
+      // No bump map - keep it flat and raw
       .bumpImageUrl(null)
       // Deep space black background
       .backgroundImageUrl('//unpkg.com/three-globe/example/img/night-sky.png')
-      // Subtle blue atmospheric glow (ProofLocker blue)
+      // Minimal atmospheric glow
       .atmosphereColor('#0066ff')
-      .atmosphereAltitude(0.2)
+      .atmosphereAltitude(0.15)
       .showAtmosphere(true);
 
     // Configure pulsing hotspot markers
@@ -157,10 +157,16 @@
       .pointLng('lng')
       .pointAltitude(0.01) // Float just above surface
       .pointRadius((d) => {
-        // Size by claim count
-        if (d.claims > 150) return 0.6;
-        if (d.claims > 80) return 0.4;
-        return 0.3;
+        // Dynamic sizing: bigger dots = more claims
+        // Scale from 0.2 (min) to 1.0 (max) based on claim count
+        const minSize = 0.2;
+        const maxSize = 1.0;
+        const minClaims = Math.min(...mockClaims.map(c => c.claims));
+        const maxClaims = Math.max(...mockClaims.map(c => c.claims));
+
+        // Linear interpolation based on claims
+        const normalized = (d.claims - minClaims) / (maxClaims - minClaims);
+        return minSize + (normalized * (maxSize - minSize));
       })
       .pointColor('color')
       // Minimal tooltip on hover
@@ -207,6 +213,9 @@
 
     // Pulsing animation for urgent markers
     let frame = 0;
+    const minClaims = Math.min(...mockClaims.map(c => c.claims));
+    const maxClaims = Math.max(...mockClaims.map(c => c.claims));
+
     function animatePulse() {
       frame++;
 
@@ -224,7 +233,11 @@
           return 0.01;
         })
         .pointRadius((d) => {
-          const baseRadius = d.claims > 150 ? 0.6 : d.claims > 80 ? 0.4 : 0.3;
+          // Dynamic base size calculation
+          const minSize = 0.2;
+          const maxSize = 1.0;
+          const normalized = (d.claims - minClaims) / (maxClaims - minClaims);
+          const baseRadius = minSize + (normalized * (maxSize - minSize));
 
           // Pulse urgent markers
           if (d.status === 'urgent') {
