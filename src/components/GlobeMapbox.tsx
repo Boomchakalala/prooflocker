@@ -233,14 +233,14 @@ export default function GlobeMapbox({ claims, osint }: GlobeMapboxProps) {
       },
     });
 
-    // Claims layers
+    // Claims layers (Purple theme)
     map.current.addLayer({
       id: 'claims-clusters',
       type: 'circle',
       source: 'claims',
       filter: ['has', 'point_count'],
       paint: {
-        'circle-color': '#14b8a6',
+        'circle-color': '#8b5cf6',
         'circle-radius': ['step', ['get', 'point_count'], 18, 5, 28, 10, 38],
         'circle-opacity': 0.85,
         'circle-stroke-width': 2,
@@ -258,7 +258,7 @@ export default function GlobeMapbox({ claims, osint }: GlobeMapboxProps) {
         'text-font': ['DIN Offc Pro Medium', 'Arial Unicode MS Bold'],
         'text-size': 12,
       },
-      paint: { 'text-color': '#0f172a' },
+      paint: { 'text-color': '#fff' },
     });
 
     map.current.addLayer({
@@ -270,7 +270,7 @@ export default function GlobeMapbox({ claims, osint }: GlobeMapboxProps) {
         'circle-color': [
           'match',
           ['get', 'status'],
-          'verified', '#14b8a6',
+          'verified', '#8b5cf6',
           'disputed', '#ef4444',
           'void', '#6b7280',
           '#f59e0b',
@@ -282,7 +282,7 @@ export default function GlobeMapbox({ claims, osint }: GlobeMapboxProps) {
       },
     });
 
-    // Heatmap
+    // Heatmap (Purple gradient)
     map.current.addLayer({
       id: 'claims-heatmap',
       type: 'heatmap',
@@ -295,9 +295,9 @@ export default function GlobeMapbox({ claims, osint }: GlobeMapboxProps) {
           'interpolate',
           ['linear'],
           ['heatmap-density'],
-          0, 'rgba(20, 184, 166, 0)',
-          0.5, 'rgba(20, 184, 166, 0.5)',
-          1, 'rgba(239, 68, 68, 0.8)',
+          0, 'rgba(139, 92, 246, 0)',
+          0.5, 'rgba(139, 92, 246, 0.5)',
+          1, 'rgba(168, 85, 247, 0.8)',
         ],
         'heatmap-radius': 20,
         'heatmap-opacity': 0.7,
