@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ProofLocker Globe - Ultra Raw Polyglobe Style</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: #000000;
+      color: white;
+      overflow: hidden;
+      width: 100vw;
+      height: 100vh;
+    }
+
+    #globe-container {
+      width: 100%;
+      height: 100%;
+      background: #000000;
+    }
+
+    /* Minimal branding overlay */
+    #overlay {
+      position: absolute;
+      top: 30px;
+      left: 30px;
+      z-index: 100;
+      pointer-events: none;
+      opacity: 0.6;
+      transition: opacity 0.3s;
+    }
+
+    #overlay:hover {
+      opacity: 1;
+    }
+
+    #overlay h1 {
+      font-size: 26px;
+      font-weight: 700;
+      color: #0066ff;
+      margin-bottom: 4px;
+      letter-spacing: -0.8px;
+      text-shadow: 0 0 20px rgba(0, 102, 255, 0.5);
+    }
+
+    #overlay p {
+      font-size: 12px;
+      color: rgba(255, 255, 255, 0.4);
+      font-weight: 400;
+    }
+
+    /* Loading screen */
+    #loading {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+      z-index: 50;
+    }
+
+    #loading .spinner {
+      width: 60px;
+      height: 60px;
+      border: 3px solid rgba(0, 102, 255, 0.1);
+      border-top: 3px solid #0066ff;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 20px;
+      box-shadow: 0 0 20px rgba(0, 102, 255, 0.3);
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    #loading p {
+      color: rgba(255, 255, 255, 0.5);
+      font-size: 13px;
+    }
+
+    .fade-out {
+      animation: fadeOut 0.8s forwards;
+    }
+
+    @keyframes fadeOut {
+      to { opacity: 0; pointer-events: none; }
+    }
+
+    /* Legend */
+    #legend {
+      position: absolute;
+      bottom: 30px;
+      left: 30px;
+      z-index: 100;
+      display: flex;
+      gap: 20px;
+      pointer-events: none;
+      opacity: 0.7;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 11px;
+      color: rgba(255, 255, 255, 0.6);
+    }
+
+    .legend-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      animation: legendPulse 2s ease-in-out infinite;
+    }
+
+    @keyframes legendPulse {
+      0%, 100% { transform: scale(1); opacity: 0.8; }
+      50% { transform: scale(1.3); opacity: 1; }
+    }
+
+    .legend-dot.red {
+      background: #ff4444;
+      box-shadow: 0 0 15px #ff4444;
+    }
+
+    .legend-dot.green {
+      background: #00cc66;
+      box-shadow: 0 0 15px #00cc66;
+    }
+
+    .legend-dot.blue {
+      background: #0066ff;
+      box-shadow: 0 0 15px #0066ff;
+    }
+  </style>
+</head>
+<body>
+  <div id="globe-container"></div>
+
+  <div id="overlay">
+    <h1>ProofLocker</h1>
+    <p>Global Evidence Network</p>
+  </div>
+
+  <div id="legend">
+    <div class="legend-item">
+      <div class="legend-dot red"></div>
+      <span>Urgent</span>
+    </div>
+    <div class="legend-item">
+      <div class="legend-dot green"></div>
+      <span>Verified</span>
+    </div>
+    <div class="legend-item">
+      <div class="legend-dot blue"></div>
+      <span>Active</span>
+    </div>
+  </div>
+
+  <div id="loading">
+    <div class="spinner"></div>
+    <p>Initializing globe...</p>
+  </div>
+
+  <!-- Globe.GL from CDN -->
+  <script src="//unpkg.com/globe.gl"></script>
+
+  <script>
+    // ========================================
+    // MOCK CLAIM DATA - 40 global hotspots
+    // ========================================
+    const mockClaims = [
+      // Urgent (red - intense pulse)
+      { lat: 50.4501, lng: 30.5234, city: 'Kyiv', volume: 10, status: 'urgent', color: '#ff4444', intensity: 1.0 },
+      { lat: 33.8869, lng: 35.5131, city: 'Beirut', volume: 7, status: 'urgent', color: '#ff4444', intensity: 0.9 },
+      { lat: 31.7917, lng: 35.2172, city: 'Jerusalem', volume: 8, status: 'urgent', color: '#ff4444', intensity: 0.95 },
+      { lat: 33.3152, lng: 44.3661, city: 'Baghdad', volume: 6, status: 'urgent', color: '#ff4444', intensity: 0.85 },
+      { lat: 34.0522, lng: -118.2437, city: 'Los Angeles', volume: 8, status: 'urgent', color: '#ff4444', intensity: 0.9 },
+      { lat: 24.4539, lng: 54.3773, city: 'Abu Dhabi', volume: 5, status: 'urgent', color: '#ff4444', intensity: 0.8 },
+      { lat: 36.2048, lng: 37.1612, city: 'Aleppo', volume: 7, status: 'urgent', color: '#ff4444', intensity: 0.9 },
+
+      // Verified (green - calm pulse)
+      { lat: 40.7128, lng: -74.0060, city: 'New York', volume: 10, status: 'resolved', color: '#00cc66', intensity: 0.6 },
+      { lat: 35.6762, lng: 139.6503, city: 'Tokyo', volume: 10, status: 'resolved', color: '#00cc66', intensity: 0.7 },
+      { lat: 37.7749, lng: -122.4194, city: 'San Francisco', volume: 9, status: 'resolved', color: '#00cc66', intensity: 0.65 },
+      { lat: 51.5074, lng: -0.1278, city: 'London', volume: 8, status: 'resolved', color: '#00cc66', intensity: 0.6 },
+      { lat: 48.8566, lng: 2.3522, city: 'Paris', volume: 7, status: 'resolved', color: '#00cc66', intensity: 0.55 },
+      { lat: 52.5200, lng: 13.4050, city: 'Berlin', volume: 7, status: 'resolved', color: '#00cc66', intensity: 0.6 },
+
+      // Active (blue - moderate pulse)
+      { lat: 55.7558, lng: 37.6173, city: 'Moscow', volume: 7, status: 'pending', color: '#0066ff', intensity: 0.7 },
+      { lat: 39.9042, lng: 116.4074, city: 'Beijing', volume: 9, status: 'pending', color: '#0066ff', intensity: 0.75 },
+      { lat: -33.8688, lng: 151.2093, city: 'Sydney', volume: 6, status: 'pending', color: '#0066ff', intensity: 0.65 },
+      { lat: 19.4326, lng: -99.1332, city: 'Mexico City', volume: 7, status: 'pending', color: '#0066ff', intensity: 0.7 },
+      { lat: -23.5505, lng: -46.6333, city: 'São Paulo', volume: 7, status: 'pending', color: '#0066ff', intensity: 0.7 },
+      { lat: 28.6139, lng: 77.2090, city: 'Delhi', volume: 8, status: 'pending', color: '#0066ff', intensity: 0.75 },
+      { lat: 1.3521, lng: 103.8198, city: 'Singapore', volume: 7, status: 'pending', color: '#0066ff', intensity: 0.7 },
+      { lat: 25.2048, lng: 55.2708, city: 'Dubai', volume: 6, status: 'pending', color: '#0066ff', intensity: 0.65 },
+      { lat: -34.6037, lng: -58.3816, city: 'Buenos Aires', volume: 6, status: 'pending', color: '#0066ff', intensity: 0.65 },
+      { lat: 41.9028, lng: 12.4964, city: 'Rome', volume: 6, status: 'pending', color: '#0066ff', intensity: 0.65 },
+      { lat: 59.3293, lng: 18.0686, city: 'Stockholm', volume: 5, status: 'pending', color: '#0066ff', intensity: 0.6 },
+      { lat: -1.2921, lng: 36.8219, city: 'Nairobi', volume: 5, status: 'pending', color: '#0066ff', intensity: 0.6 },
+      { lat: 30.0444, lng: 31.2357, city: 'Cairo', volume: 6, status: 'pending', color: '#0066ff', intensity: 0.65 },
+      { lat: -33.9249, lng: 18.4241, city: 'Cape Town', volume: 5, status: 'pending', color: '#0066ff', intensity: 0.6 },
+      { lat: 23.1291, lng: -82.3822, city: 'Havana', volume: 4, status: 'pending', color: '#0066ff', intensity: 0.55 },
+      { lat: 13.7563, lng: 100.5018, city: 'Bangkok', volume: 6, status: 'pending', color: '#0066ff', intensity: 0.65 },
+      { lat: -22.9068, lng: -43.1729, city: 'Rio', volume: 6, status: 'pending', color: '#0066ff', intensity: 0.65 },
+      { lat: 41.0082, lng: 28.9784, city: 'Istanbul', volume: 7, status: 'pending', color: '#0066ff', intensity: 0.7 },
+      { lat: 45.4215, lng: -75.6972, city: 'Ottawa', volume: 5, status: 'pending', color: '#0066ff', intensity: 0.6 },
+      { lat: 22.3193, lng: 114.1694, city: 'Hong Kong', volume: 7, status: 'pending', color: '#0066ff', intensity: 0.7 },
+      { lat: -37.8136, lng: 144.9631, city: 'Melbourne', volume: 6, status: 'pending', color: '#0066ff', intensity: 0.65 },
+      { lat: 47.6062, lng: -122.3321, city: 'Seattle', volume: 6, status: 'pending', color: '#0066ff', intensity: 0.65 },
+      { lat: 43.6532, lng: -79.3832, city: 'Toronto', volume: 6, status: 'pending', color: '#0066ff', intensity: 0.65 },
+      { lat: 52.3702, lng: 4.8952, city: 'Amsterdam', volume: 5, status: 'pending', color: '#0066ff', intensity: 0.6 },
+      { lat: 55.9533, lng: -3.1883, city: 'Edinburgh', volume: 4, status: 'pending', color: '#0066ff', intensity: 0.55 },
+      { lat: 35.6892, lng: 51.3890, city: 'Tehran', volume: 6, status: 'pending', color: '#0066ff', intensity: 0.65 },
+      { lat: 25.2760, lng: 51.5200, city: 'Doha', volume: 5, status: 'pending', color: '#0066ff', intensity: 0.6 },
+    ];
+
+    // ========================================
+    // INITIALIZE ULTRA RAW GLOBE
+    // ========================================
+    const globe = Globe({ animateIn: false })
+      (document.getElementById('globe-container'))
+      // CRITICAL: Pure dark night Earth - NO DAY TEXTURE
+      .globeImageUrl('//unpkg.com/three-globe/example/img/earth-night.jpg')
+      // No bump map - completely flat surface for raw look
+      .bumpImageUrl(null)
+      // Pure void background - no stars, just black
+      .backgroundImageUrl(null)
+      .backgroundColor('rgba(0, 0, 0, 1)')
+      // ENHANCED blue atmospheric glow (ProofLocker blue)
+      .atmosphereColor('#0066ff')
+      .atmosphereAltitude(0.25) // Stronger, more visible glow
+      .showAtmosphere(true)
+      // Point clustering for performance
+      .pointsMerge(true)
+      .pointsTransitionDuration(400);
+
+    // ========================================
+    // CONFIGURE GLOWING HOTSPOTS
+    // ========================================
+    globe
+      .pointsData(mockClaims)
+      .pointLat('lat')
+      .pointLng('lng')
+      .pointAltitude(0.015) // Lower altitude for tighter surface contact
+      .pointRadius((d) => {
+        // Dynamic sizing: 0.4 to 1.5 based on volume
+        const minSize = 0.4;
+        const maxSize = 1.5;
+        const minVol = Math.min(...mockClaims.map((c) => c.volume));
+        const maxVol = Math.max(...mockClaims.map((c) => c.volume));
+        const normalized = (d.volume - minVol) / (maxVol - minVol || 1);
+        return minSize + normalized * (maxSize - minSize);
+      })
+      .pointColor('color')
+      // Minimal tooltip - NO PERMANENT LABELS
+      .pointLabel((d) => `
+        <div style="
+          padding: 8px 12px;
+          background: rgba(0, 0, 0, 0.98);
+          border: 2px solid ${d.color};
+          border-radius: 4px;
+          font-family: -apple-system, sans-serif;
+          font-size: 11px;
+          line-height: 1.4;
+          color: white;
+          box-shadow: 0 0 20px ${d.color}80;
+          text-transform: uppercase;
+          font-weight: 600;
+          letter-spacing: 0.5px;
+        ">
+          <div style="color: ${d.color}; margin-bottom: 2px;">
+            ${d.city}
+          </div>
+          <div style="color: rgba(255,255,255,0.6); font-size: 10px; font-weight: 400;">
+            Vol: ${d.volume}/10 • ${d.status}
+          </div>
+        </div>
+      `)
+      .onPointClick((point) => {
+        console.log('🔥 Hotspot clicked:', point);
+        alert(`${point.city}\nVolume: ${point.volume}/10\nStatus: ${point.status.toUpperCase()}\n\nClick detected ✓`);
+      });
+
+    // ========================================
+    // ULTRA SMOOTH CAMERA CONTROLS
+    // ========================================
+    const controls = globe.controls();
+    controls.autoRotate = true;
+    controls.autoRotateSpeed = 0.35; // Slower, more dramatic
+    controls.enableZoom = true;
+    controls.enablePan = false; // LOCKED - immersive feel
+    controls.minDistance = 105; // Allow very close dive-in
+    controls.maxDistance = 1200; // Allow dramatic pull-back
+    controls.enableDamping = true;
+    controls.dampingFactor = 0.04; // Ultra smooth inertia
+    controls.rotateSpeed = 0.4; // Slower manual rotation
+    controls.zoomSpeed = 0.7; // Smooth zoom transitions
+
+    // DRAMATIC initial camera position - angled view
+    globe.pointOfView({ lat: 30, lng: -20, altitude: 2.8 }, 0);
+
+    // ========================================
+    // INTENSE PULSING ANIMATION
+    // ========================================
+    let animationFrame = 0;
+    const minVol = Math.min(...mockClaims.map((c) => c.volume));
+    const maxVol = Math.max(...mockClaims.map((c) => c.volume));
+
+    function animatePulse() {
+      animationFrame++;
+
+      // Different pulse speeds for different statuses
+      const urgentPulse = 1 + Math.sin(animationFrame * 0.06) * 0.35; // Fast, intense (±35%)
+      const activePulse = 1 + Math.sin(animationFrame * 0.04) * 0.2;  // Medium (±20%)
+      const calmPulse = 1 + Math.sin(animationFrame * 0.02) * 0.12;   // Slow, subtle (±12%)
+
+      // Altitude breathing (more dramatic for urgent)
+      const urgentAlt = 0.015 + Math.sin(animationFrame * 0.05) * 0.02;
+      const normalAlt = 0.015 + Math.sin(animationFrame * 0.03) * 0.008;
+
+      globe
+        .pointAltitude((d) => {
+          if (d.status === 'urgent') {
+            return urgentAlt; // Higher, more dramatic breathing
+          }
+          return normalAlt;
+        })
+        .pointRadius((d) => {
+          // Base radius calculation
+          const minSize = 0.4;
+          const maxSize = 1.5;
+          const normalized = (d.volume - minVol) / (maxVol - minVol || 1);
+          const baseRadius = minSize + normalized * (maxSize - minSize);
+
+          // Apply status-specific pulse with intensity
+          if (d.status === 'urgent') {
+            return baseRadius * urgentPulse * (0.8 + d.intensity * 0.4);
+          } else if (d.status === 'resolved') {
+            return baseRadius * calmPulse * (0.9 + d.intensity * 0.2);
+          } else {
+            return baseRadius * activePulse * (0.85 + d.intensity * 0.3);
+          }
+        });
+
+      requestAnimationFrame(animatePulse);
+    }
+
+    // Start pulse animation
+    animatePulse();
+
+    // ========================================
+    // SCENE ENHANCEMENTS
+    // ========================================
+    const scene = globe.scene();
+    scene.fog = null; // No fog - pure clarity
+
+    const renderer = globe.renderer();
+    renderer.antialias = true;
+    renderer.setClearColor(0x000000, 1);
+
+    // Enhance renderer quality
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.shadowMap.enabled = false; // No shadows for performance
+
+    // ========================================
+    // READY STATE
+    // ========================================
+    setTimeout(() => {
+      const loading = document.getElementById('loading');
+      loading.classList.add('fade-out');
+      setTimeout(() => loading.remove(), 800);
+
+      console.log('🌍 ProofLocker Globe - ULTRA RAW MODE');
+      console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+      console.log('Controls:');
+      console.log('  • Drag = Rotate manually');
+      console.log('  • Scroll = Cinematic zoom dive-in');
+      console.log('  • Hover = City tooltip');
+      console.log('  • Click = Alert details');
+      console.log('');
+      console.log(`Hotspots: ${mockClaims.length}`);
+      console.log('  🔴 Urgent: Intense pulse (±35%)');
+      console.log('  🟢 Verified: Calm pulse (±12%)');
+      console.log('  🔵 Active: Medium pulse (±20%)');
+      console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+    }, 1200);
+
+    // ========================================
+    // RESPONSIVE RESIZE
+    // ========================================
+    window.addEventListener('resize', () => {
+      globe.width(window.innerWidth);
+      globe.height(window.innerHeight);
+    });
+
+    // ========================================
+    // ZOOM-AWARE AUTO-ROTATION SLOWDOWN
+    // ========================================
+    let lastDistance = controls.getDistance();
+    setInterval(() => {
+      const currentDistance = controls.getDistance();
+
+      // Slow down rotation when zoomed in close
+      if (currentDistance < 200) {
+        controls.autoRotateSpeed = 0.15; // Very slow when close
+      } else if (currentDistance < 400) {
+        controls.autoRotateSpeed = 0.25; // Moderate when mid-range
+      } else {
+        controls.autoRotateSpeed = 0.35; // Normal when far
+      }
+
+      lastDistance = currentDistance;
+    }, 100);
+  </script>
+</body>
+</html>
