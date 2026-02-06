@@ -5,15 +5,15 @@ import { useEffect, useState, useRef } from 'react';
 import dynamic from 'next/dynamic';
 import GlobeSidePanel from '@/components/GlobeSidePanel';
 
-// Dynamically import Polyglobe-style Globe
-const GlobeComponent = dynamic(() => import('@/components/GlobeVisualizationPolyglobe'), {
+// Dynamically import OSINT-style Globe with geographic detail
+const GlobeComponent = dynamic(() => import('@/components/GlobeVisualizationOSINT'), {
   ssr: false,
   loading: () => (
     <div className="flex items-center justify-center h-screen bg-[#0a0a0a]">
       <div className="text-center">
         <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-[#2E5CFF] mx-auto mb-4" />
-        <p className="text-slate-400">Initializing globe...</p>
-        <p className="text-slate-500 text-sm mt-2">Loading global claims data</p>
+        <p className="text-slate-400">Initializing intelligence globe...</p>
+        <p className="text-slate-500 text-sm mt-2">Loading geographic data & claims</p>
       </div>
     </div>
   ),
@@ -102,7 +102,7 @@ export default function GlobePage() {
             <span className="text-2xl">🌍</span>
             <div>
               <h1 className="text-xl font-bold text-white">ProofLocker Globe</h1>
-              <p className="text-xs text-slate-400">Global Claims Visualization</p>
+              <p className="text-xs text-slate-400">Intelligence & Claims Tracker</p>
             </div>
           </div>
 
