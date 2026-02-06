@@ -748,7 +748,7 @@ export default function GlobeMapbox({ claims, osint }: GlobeMapboxProps) {
           )}
         </div>
 
-        <div className="flex-1 overflow-y-auto px-4 py-4">
+        <div className="flex-1 overflow-y-auto px-5 py-4">
           {currentTab === 'claims' ? (
             <div className="space-y-3">
               {filteredClaims.slice(0, 20).map((claim) => (
