@@ -954,7 +954,30 @@
     // ============================================
     let heatmapVisible = false;
     let claimsLayerVisible = true;
+    let osintLayerVisible = true;
     let currentFilter = 'active';
+    let currentTab = 'claims';
+
+    // ============================================
+    // MOCK OSINT DATA - 15 News Signals
+    // ============================================
+    const osintData = [
+      { id: 1, title: "Satellite imagery confirms infrastructure changes in disputed region", source: "Bellingcat", lat: 50.4501, lng: 30.5234, timestamp: "2h ago", tags: ["OSINT", "Verification"] },
+      { id: 2, title: "Investigation reveals coordinated disinformation network", source: "IntelCrab", lat: 52.5200, lng: 13.4050, timestamp: "4h ago", tags: ["Disinformation", "Investigation"] },
+      { id: 3, title: "Video authentication confirms timeline discrepancies", source: "Aurora Intel", lat: 48.8566, lng: 2.3522, timestamp: "6h ago", tags: ["Video Analysis", "Timeline"] },
+      { id: 4, title: "Supply chain tracking reveals unusual pattern deviations", source: "OSINT Tech", lat: 35.6762, lng: 139.6503, timestamp: "8h ago", tags: ["Supply Chain", "Anomaly"] },
+      { id: 5, title: "Election monitoring data shows voting irregularities", source: "Bellingcat", lat: -15.8267, lng: -47.9218, timestamp: "10h ago", tags: ["Elections", "Monitoring"] },
+      { id: 6, title: "Energy infrastructure damage confirmed via commercial satellites", source: "IntelCrab", lat: 55.7558, lng: 37.6173, timestamp: "12h ago", tags: ["Infrastructure", "Satellites"] },
+      { id: 7, title: "Financial transaction patterns suggest laundering network", source: "Aurora Intel", lat: 40.7128, lng: -74.0060, timestamp: "14h ago", tags: ["Finance", "Investigation"] },
+      { id: 8, title: "Military equipment movement tracked across border regions", source: "OSINT Tech", lat: 31.7683, lng: 35.2137, timestamp: "16h ago", tags: ["Military", "Movement"] },
+      { id: 9, title: "Social media manipulation campaign targets regional elections", source: "Bellingcat", lat: 28.6139, lng: 77.2090, timestamp: "18h ago", tags: ["Social Media", "Elections"] },
+      { id: 10, title: "Cybersecurity breach exposes government communications", source: "IntelCrab", lat: 51.5074, lng: -0.1278, timestamp: "20h ago", tags: ["Cybersecurity", "Breach"] },
+      { id: 11, title: "Public records analysis reveals pattern inconsistencies", source: "Aurora Intel", lat: -33.8688, lng: 151.2093, timestamp: "22h ago", tags: ["Records", "Analysis"] },
+      { id: 12, title: "Crowdsourced verification completed with high confidence", source: "OSINT Tech", lat: 1.3521, lng: 103.8198, timestamp: "1d ago", tags: ["Crowdsourced", "Verification"] },
+      { id: 13, title: "Maritime tracking data shows unusual vessel patterns", source: "Bellingcat", lat: 25.2048, lng: 55.2708, timestamp: "1d ago", tags: ["Maritime", "Tracking"] },
+      { id: 14, title: "Environmental monitoring detects pollution spike", source: "IntelCrab", lat: 37.7749, lng: -122.4194, timestamp: "1d ago", tags: ["Environment", "Monitoring"] },
+      { id: 15, title: "Forensic analysis confirms document authenticity", source: "Aurora Intel", lat: 59.3293, lng: 18.0686, timestamp: "2d ago", tags: ["Forensics", "Documents"] }
+    ];
 
     // ============================================
     // INITIALIZE MAP
@@ -1014,6 +1037,112 @@
         cluster: true,
         clusterMaxZoom: 5,
         clusterRadius: 50
+      });
+
+      // Add OSINT source with clustering
+      const osintFeatures = osintData.map(item => ({
+        type: 'Feature',
+        geometry: {
+          type: 'Point',
+          coordinates: [item.lng, item.lat]
+        },
+        properties: {
+          id: item.id,
+          title: item.title,
+          source: item.source,
+          timestamp: item.timestamp,
+          tags: JSON.stringify(item.tags)
+        }
+      }));
+
+      map.addSource('osint', {
+        type: 'geojson',
+        data: {
+          type: 'FeatureCollection',
+          features: osintFeatures
+        },
+        cluster: true,
+        clusterMaxZoom: 5,
+        clusterRadius: 60
+      });
+
+      // ============================================
+      // OSINT LAYERS (RED - underneath claims)
+      // ============================================
+      // OSINT Cluster glow
+      map.addLayer({
+        id: 'osint-clusters-glow',
+        type: 'circle',
+        source: 'osint',
+        filter: ['has', 'point_count'],
+        paint: {
+          'circle-color': '#ef4444',
+          'circle-radius': ['step', ['get', 'point_count'], 28, 5, 38, 10, 48],
+          'circle-blur': 0.8,
+          'circle-opacity': 0.2
+        }
+      });
+
+      // OSINT Cluster core
+      map.addLayer({
+        id: 'osint-clusters-core',
+        type: 'circle',
+        source: 'osint',
+        filter: ['has', 'point_count'],
+        paint: {
+          'circle-color': '#ef4444',
+          'circle-radius': ['step', ['get', 'point_count'], 18, 5, 24, 10, 32],
+          'circle-opacity': 0.85,
+          'circle-stroke-width': 2,
+          'circle-stroke-color': '#f8fafc',
+          'circle-stroke-opacity': 0.6
+        }
+      });
+
+      // OSINT Cluster count
+      map.addLayer({
+        id: 'osint-cluster-count',
+        type: 'symbol',
+        source: 'osint',
+        filter: ['has', 'point_count'],
+        layout: {
+          'text-field': '{point_count_abbreviated}',
+          'text-font': ['DIN Offc Pro Medium', 'Arial Unicode MS Bold'],
+          'text-size': 12
+        },
+        paint: {
+          'text-color': '#ffffff'
+        }
+      });
+
+      // OSINT Points glow
+      map.addLayer({
+        id: 'osint-points-glow',
+        type: 'circle',
+        source: 'osint',
+        filter: ['!', ['has', 'point_count']],
+        paint: {
+          'circle-color': '#ef4444',
+          'circle-radius': 18,
+          'circle-blur': 0.7,
+          'circle-opacity': 0.25
+        }
+      });
+
+      // OSINT Points core
+      map.addLayer({
+        id: 'osint-points-core',
+        type: 'circle',
+        source: 'osint',
+        filter: ['!', ['has', 'point_count']],
+        paint: {
+          'circle-color': '#ef4444',
+          'circle-radius': 9,
+          'circle-opacity': 0.9,
+          'circle-stroke-width': 2,
+          'circle-stroke-color': '#f8fafc',
+          'circle-stroke-opacity': 0.8
+        }
       });
 
       // ============================================
