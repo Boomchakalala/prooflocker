@@ -75,7 +75,7 @@ export default function GlobePage() {
               <img src="/logos/prooflocker-logo-dark.svg" alt="ProofLocker" className="h-8 w-auto" />
             </a>
             <span className="text-[12px] font-medium text-purple-300/70 tracking-wider hidden lg:block">
-              🌍 Global Intelligence Map
+              🌍 Verifiable Claims Worldwide
             </span>
           </div>
 
@@ -132,8 +132,8 @@ export default function GlobePage() {
               <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
               </svg>
-              <span className="hidden sm:inline">Lock Proof</span>
-              <span className="sm:hidden">Lock</span>
+              <span className="hidden sm:inline">Submit Claim</span>
+              <span className="sm:hidden">Submit</span>
             </a>
           </div>
         </div>
