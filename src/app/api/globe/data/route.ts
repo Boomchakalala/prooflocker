@@ -113,7 +113,7 @@ export async function GET(request: NextRequest) {
     // Fetch predictions from database with correct field names
     const { data: predictions, error } = await supabase
       .from('predictions')
-      .select('id, text, author_number, pseudonym, created_at, outcome, status, anon_id')
+      .select('id, text, author_number, pseudonym, created_at, outcome, status, anon_id, category, evidence_score, author_reliability_tier')
       .eq('moderation_status', 'active')
       .order('created_at', { ascending: false })
       .limit(50);
@@ -195,6 +195,9 @@ export async function GET(request: NextRequest) {
           day: 'numeric',
         }),
         outcome,
+        category: prediction.category,
+        evidence_score: prediction.evidence_score,
+        author_reliability_tier: prediction.author_reliability_tier,
       };
     });
 
