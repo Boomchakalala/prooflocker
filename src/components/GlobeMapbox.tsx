@@ -1,8 +1,7 @@
 'use client';
 
-import { useEffect, useRef, useState, useCallback, useMemo } from 'react';
+import { useEffect, useRef, useState, useCallback } from 'react';
 
-// Types
 interface Claim {
   id: number;
   claim: string;
@@ -34,159 +33,154 @@ interface GlobeMapboxProps {
 export default function GlobeMapbox({ claims, osint }: GlobeMapboxProps) {
   const mapContainer = useRef<HTMLDivElement>(null);
   const map = useRef<any>(null);
-  const initialized = useRef(false);
-
   const [currentTab, setCurrentTab] = useState<'claims' | 'osint'>('claims');
   const [claimsLayerVisible, setClaimsLayerVisible] = useState(true);
   const [osintLayerVisible, setOsintLayerVisible] = useState(true);
   const [heatmapVisible, setHeatmapVisible] = useState(false);
   const [currentFilter, setCurrentFilter] = useState('active');
-  const [mapLoaded, setMapLoaded] = useState(false);
+  const [mapReady, setMapReady] = useState(false);
 
-  // Memoize GeoJSON data
-  const claimsGeoJSON = useMemo(() => ({
-    type: 'FeatureCollection',
+  console.log('[Globe] Component render - claims:', claims.length, 'osint:', osint.length);
+
+  // Create GeoJSON
+  const createClaimsGeoJSON = () => ({
+    type: 'FeatureCollection' as const,
     features: claims.map((claim) => ({
-      type: 'Feature',
-      geometry: { type: 'Point', coordinates: [claim.lng, claim.lat] },
-      properties: { ...claim },
+      type: 'Feature' as const,
+      geometry: { type: 'Point' as const, coordinates: [claim.lng, claim.lat] },
+      properties: claim,
     })),
-  }), [claims]);
+  });
 
-  const osintGeoJSON = useMemo(() => ({
-    type: 'FeatureCollection',
+  const createOsintGeoJSON = () => ({
+    type: 'FeatureCollection' as const,
     features: osint.map((item) => ({
-      type: 'Feature',
-      geometry: { type: 'Point', coordinates: [item.lng, item.lat] },
+      type: 'Feature' as const,
+      geometry: { type: 'Point' as const, coordinates: [item.lng, item.lat] },
       properties: { ...item, tags: JSON.stringify(item.tags) },
     })),
-  }), [osint]);
+  });
 
   // Filter claims
-  const filteredClaims = useMemo(() => {
+  const getFilteredClaims = () => {
     if (currentFilter === 'active') return claims.filter((c) => c.status === 'pending');
     if (currentFilter === 'high-confidence') return claims.filter((c) => c.confidence >= 75);
     return claims;
-  }, [claims, currentFilter]);
+  };
 
-  // Initialize map once
+  // Initialize map
   useEffect(() => {
-    if (initialized.current) return;
+    // @ts-ignore
+    if (!window.mapboxgl || !mapContainer.current || map.current) {
+      console.log('[Globe] Skipping init - mapbox:', !!window.mapboxgl, 'container:', !!mapContainer.current, 'map exists:', !!map.current);
+      return;
+    }
 
-    const initMap = () => {
-      // @ts-ignore
-      const mapboxgl = window.mapboxgl;
-      if (!mapboxgl || !mapContainer.current) {
-        console.log('[Globe] Waiting for Mapbox...');
-        setTimeout(initMap, 100);
-        return;
-      }
+    console.log('[Globe] Starting map initialization...');
+    // @ts-ignore
+    const mapboxgl = window.mapboxgl;
+    mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_TOKEN || 'pk.eyJ1IjoicHJvb2Zsb2NrZXIiLCJhIjoiY21sYjBxcTAwMGVoYzNlczI4YWlzampqZyJ9.nY-yqSucTzvNyK1qDCq9rQ';
 
-      console.log('[Globe] Initializing map...');
-      initialized.current = true;
-      mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_TOKEN || 'pk.eyJ1IjoicHJvb2Zsb2NrZXIiLCJhIjoiY21sYjBxcTAwMGVoYzNlczI4YWlzampqZyJ9.nY-yqSucTzvNyK1qDCq9rQ';
+    try {
+      map.current = new mapboxgl.Map({
+        container: mapContainer.current,
+        style: 'mapbox://styles/mapbox/dark-v11',
+        projection: 'globe',
+        center: [15, 35],
+        zoom: 1.5,
+        attributionControl: false,
+      });
 
-      try {
-        map.current = new mapboxgl.Map({
-          container: mapContainer.current,
-          style: 'mapbox://styles/mapbox/dark-v11',
-          projection: 'globe', // 3D globe projection
-          center: [15, 35],
-          zoom: 1.5,
-          attributionControl: false,
+      console.log('[Globe] Map instance created');
+
+      map.current.on('load', () => {
+        console.log('[Globe] Map loaded event fired');
+
+        // Set atmosphere
+        try {
+          map.current.setFog({
+            range: [0.5, 10],
+            color: '#0f172a',
+            'horizon-blend': 0.1,
+            'high-color': '#1e293b',
+            'space-color': '#0f172a',
+            'star-intensity': 0.3,
+          });
+        } catch (e) {
+          console.warn('[Globe] Fog not supported');
+        }
+
+        // Add sources
+        map.current.addSource('osint', {
+          type: 'geojson',
+          data: createOsintGeoJSON(),
+          cluster: true,
+          clusterMaxZoom: 5,
+          clusterRadius: 60,
         });
 
-        map.current.on('load', () => {
-          console.log('[Globe] Map loaded successfully');
-          setMapLoaded(true);
+        map.current.addSource('claims', {
+          type: 'geojson',
+          data: createClaimsGeoJSON(),
+          cluster: true,
+          clusterMaxZoom: 5,
+          clusterRadius: 50,
+        });
 
-          // Set fog/atmosphere for globe
-          try {
-            map.current.setFog({
-              range: [0.5, 10],
-              color: '#0f172a',
-              'horizon-blend': 0.1,
-              'high-color': '#1e293b',
-              'space-color': '#0f172a',
-              'star-intensity': 0.3,
-            });
-            console.log('[Globe] Atmosphere configured');
-          } catch (err) {
-            console.warn('[Globe] Could not set fog:', err);
+        console.log('[Globe] Sources added');
+
+        // Add layers
+        addLayers();
+        addInteractions();
+
+        setMapReady(true);
+        console.log('[Globe] Map ready!');
+
+        // Auto-rotate
+        map.current.on('idle', () => {
+          if (map.current && map.current.getZoom() < 2.5 && !map.current.isMoving()) {
+            map.current.rotateTo(map.current.getBearing() + 15, { duration: 120000 });
           }
-
-          // Add sources
-          map.current.addSource('osint', {
-            type: 'geojson',
-            data: osintGeoJSON,
-            cluster: true,
-            clusterMaxZoom: 5,
-            clusterRadius: 60,
-          });
-
-          map.current.addSource('claims', {
-            type: 'geojson',
-            data: claimsGeoJSON,
-            cluster: true,
-            clusterMaxZoom: 5,
-            clusterRadius: 50,
-          });
-
-          console.log('[Globe] Adding layers...');
-          addLayers(mapboxgl);
-          console.log('[Globe] Setup complete!');
-
-          // Slow rotation
-          map.current.on('idle', () => {
-            if (map.current && map.current.getZoom() < 2.5 && !map.current.isMoving()) {
-              map.current.rotateTo(map.current.getBearing() + 15, { duration: 120000 });
-            }
-          });
         });
+      });
 
-        map.current.on('error', (e: any) => {
-          console.error('[Globe] Map error:', e);
-        });
+      map.current.on('error', (e: any) => {
+        console.error('[Globe] Map error:', e);
+      });
 
-      } catch (error) {
-        console.error('[Globe] Failed to create map:', error);
-      }
-    };
-
-    initMap();
+    } catch (error) {
+      console.error('[Globe] Failed to create map:', error);
+    }
 
     return () => {
       if (map.current) {
+        console.log('[Globe] Cleaning up map');
         map.current.remove();
         map.current = null;
-        initialized.current = false;
       }
     };
   }, []);
 
-  // Update sources when data changes
+  // Update data when it changes
   useEffect(() => {
-    if (!mapLoaded || !map.current) return;
+    if (!mapReady || !map.current) return;
 
-    console.log('[Globe] Updating claims data:', claims.length, 'claims');
+    console.log('[Globe] Updating map data');
     const claimsSource = map.current.getSource('claims');
-    if (claimsSource) {
-      claimsSource.setData(claimsGeoJSON);
-    }
-  }, [claimsGeoJSON, mapLoaded]);
-
-  useEffect(() => {
-    if (!mapLoaded || !map.current) return;
-
-    console.log('[Globe] Updating OSINT data:', osint.length, 'items');
     const osintSource = map.current.getSource('osint');
-    if (osintSource) {
-      osintSource.setData(osintGeoJSON);
-    }
-  }, [osintGeoJSON, mapLoaded]);
 
-  const addLayers = (mapboxgl: any) => {
-    // OSINT Layers
+    if (claimsSource) {
+      claimsSource.setData(createClaimsGeoJSON());
+    }
+    if (osintSource) {
+      osintSource.setData(createOsintGeoJSON());
+    }
+  }, [claims, osint, mapReady]);
+
+  const addLayers = () => {
+    if (!map.current) return;
+
+    // OSINT layers
     map.current.addLayer({
       id: 'osint-clusters',
       type: 'circle',
@@ -228,7 +222,7 @@ export default function GlobeMapbox({ claims, osint }: GlobeMapboxProps) {
       },
     });
 
-    // Claims Layers
+    // Claims layers
     map.current.addLayer({
       id: 'claims-clusters',
       type: 'circle',
@@ -300,7 +294,15 @@ export default function GlobeMapbox({ claims, osint }: GlobeMapboxProps) {
       layout: { visibility: 'none' },
     });
 
-    // Interactions
+    console.log('[Globe] Layers added');
+  };
+
+  const addInteractions = () => {
+    if (!map.current) return;
+    // @ts-ignore
+    const mapboxgl = window.mapboxgl;
+
+    // Cursor
     ['claims-clusters', 'claims-points', 'osint-clusters', 'osint-points'].forEach((layer) => {
       map.current.on('mouseenter', layer, () => {
         map.current.getCanvas().style.cursor = 'pointer';
@@ -310,17 +312,13 @@ export default function GlobeMapbox({ claims, osint }: GlobeMapboxProps) {
       });
     });
 
-    // Click on clusters
+    // Cluster clicks
     map.current.on('click', 'claims-clusters', (e: any) => {
       const features = map.current.queryRenderedFeatures(e.point, { layers: ['claims-clusters'] });
       const clusterId = features[0].properties.cluster_id;
       map.current.getSource('claims').getClusterExpansionZoom(clusterId, (err: any, zoom: any) => {
         if (!err) {
-          map.current.easeTo({
-            center: features[0].geometry.coordinates,
-            zoom: zoom,
-            duration: 500,
-          });
+          map.current.easeTo({ center: features[0].geometry.coordinates, zoom, duration: 500 });
         }
       });
     });
@@ -330,16 +328,12 @@ export default function GlobeMapbox({ claims, osint }: GlobeMapboxProps) {
       const clusterId = features[0].properties.cluster_id;
       map.current.getSource('osint').getClusterExpansionZoom(clusterId, (err: any, zoom: any) => {
         if (!err) {
-          map.current.easeTo({
-            center: features[0].geometry.coordinates,
-            zoom: zoom,
-            duration: 500,
-          });
+          map.current.easeTo({ center: features[0].geometry.coordinates, zoom, duration: 500 });
         }
       });
     });
 
-    // Click on points
+    // Point clicks
     map.current.on('click', 'claims-points', (e: any) => {
       const props = e.features[0].properties;
       const html = `
@@ -355,7 +349,7 @@ export default function GlobeMapbox({ claims, osint }: GlobeMapboxProps) {
           </div>
         </div>
       `;
-      new mapboxgl.Popup({ offset: 15, closeButton: true })
+      new mapboxgl.Popup({ offset: 15 })
         .setLngLat(e.features[0].geometry.coordinates)
         .setHTML(html)
         .addTo(map.current);
@@ -376,11 +370,13 @@ export default function GlobeMapbox({ claims, osint }: GlobeMapboxProps) {
           </div>
         </div>
       `;
-      new mapboxgl.Popup({ offset: 15, closeButton: true })
+      new mapboxgl.Popup({ offset: 15 })
         .setLngLat(e.features[0].geometry.coordinates)
         .setHTML(html)
         .addTo(map.current);
     });
+
+    console.log('[Globe] Interactions added');
   };
 
   const flyTo = useCallback((lng: number, lat: number) => {
@@ -415,21 +411,17 @@ export default function GlobeMapbox({ claims, osint }: GlobeMapboxProps) {
 
   const resetView = useCallback(() => {
     if (map.current) {
-      map.current.flyTo({
-        center: [15, 35],
-        zoom: 1.8,
-        pitch: 0,
-        bearing: 0,
-        duration: 1500,
-      });
+      map.current.flyTo({ center: [15, 35], zoom: 1.5, pitch: 0, bearing: 0, duration: 1500 });
     }
   }, []);
+
+  const filteredClaims = getFilteredClaims();
 
   return (
     <div className="relative w-full h-full bg-[#0f172a]">
       <div ref={mapContainer} className="absolute inset-0" />
 
-      {!mapLoaded && (
+      {!mapReady && (
         <div className="absolute inset-0 flex items-center justify-center bg-[#0f172a] z-[1000]">
           <div className="text-center">
             <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-[#14b8a6] mx-auto mb-4" />
@@ -547,7 +539,6 @@ export default function GlobeMapbox({ claims, osint }: GlobeMapboxProps) {
               ? 'bg-[#14b8a6] text-[#0f172a]'
               : 'bg-[#0f172a]/95 text-[#94a3b8] border border-[rgba(148,163,184,0.1)]'
           }`}
-          title="Toggle Claims"
         >
           <svg className="w-[18px] h-[18px]" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
@@ -561,7 +552,6 @@ export default function GlobeMapbox({ claims, osint }: GlobeMapboxProps) {
               ? 'bg-[#14b8a6] text-[#0f172a]'
               : 'bg-[#0f172a]/95 text-[#94a3b8] border border-[rgba(148,163,184,0.1)]'
           }`}
-          title="Toggle OSINT"
         >
           <svg className="w-[18px] h-[18px]" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
@@ -575,7 +565,6 @@ export default function GlobeMapbox({ claims, osint }: GlobeMapboxProps) {
               ? 'bg-[#14b8a6] text-[#0f172a]'
               : 'bg-[#0f172a]/95 text-[#94a3b8] border border-[rgba(148,163,184,0.1)]'
           }`}
-          title="Toggle Heatmap"
         >
           <svg className="w-[18px] h-[18px]" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" d="M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.656 7.343A7.975 7.975 0 0120 13a7.975 7.975 0 01-2.343 5.657z" />
@@ -585,7 +574,6 @@ export default function GlobeMapbox({ claims, osint }: GlobeMapboxProps) {
         <button
           onClick={resetView}
           className="w-[42px] h-[42px] bg-[#0f172a]/95 text-[#94a3b8] border border-[rgba(148,163,184,0.1)] rounded-lg flex items-center justify-center transition-all hover:border-[#14b8a6] hover:text-[#14b8a6]"
-          title="Reset View"
         >
           <svg className="w-[18px] h-[18px]" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
