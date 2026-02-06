@@ -139,8 +139,8 @@
     // Initialize Globe
     const globe = Globe()
       (document.getElementById('globe-container'))
-      // Natural Earth map with political borders and geographic features
-      .globeImageUrl('//unpkg.com/three-globe/example/img/earth-topology.png')
+      // High-resolution Natural Earth political map with country borders
+      .globeImageUrl('https://cdn.jsdelivr.net/npm/three-globe/example/img/earth-blue-marble.jpg')
       // No bump map - keep it flat and raw
       .bumpImageUrl(null)
       // Deep space black background
@@ -148,7 +148,9 @@
       // Minimal atmospheric glow
       .atmosphereColor('#0066ff')
       .atmosphereAltitude(0.15)
-      .showAtmosphere(true);
+      .showAtmosphere(true)
+      // Higher polygon detail for smoother zoom
+      .polygonCapCurvatureResolution(20);
 
     // Configure pulsing hotspot markers
     globe
@@ -201,12 +203,14 @@
     // Smooth camera controls
     const controls = globe.controls();
     controls.autoRotate = true;
-    controls.autoRotateSpeed = 0.3; // Slow, cinematic rotation
+    controls.autoRotateSpeed = 0.5; // Smooth rotation
     controls.enableZoom = true;
-    controls.minDistance = 180;
-    controls.maxDistance = 600;
+    controls.minDistance = 150; // Allow closer zoom
+    controls.maxDistance = 800; // Allow farther out
     controls.enableDamping = true;
-    controls.dampingFactor = 0.1;
+    controls.dampingFactor = 0.05; // Smoother damping
+    controls.rotateSpeed = 0.5; // Smoother manual rotation
+    controls.zoomSpeed = 0.8; // Smoother zoom
 
     // Initial view - elevated perspective
     globe.pointOfView({ lat: 25, lng: 0, altitude: 2.5 }, 0);
