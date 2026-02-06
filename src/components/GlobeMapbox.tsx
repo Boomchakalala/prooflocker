@@ -377,8 +377,15 @@ export default function GlobeMapbox({ claims, osint }: GlobeMapboxProps) {
       layout: { visibility: 'none' },
     });
 
+    console.log('[GlobeMapbox] All layers added successfully');
+
     // Add click handlers
+    console.log('[GlobeMapbox] Adding map interactions');
     addMapInteractions();
+    console.log('[GlobeMapbox] Map initialization complete');
+    } catch (error) {
+      console.error('[GlobeMapbox] Error adding map layers:', error);
+    }
   };
 
   const addMapInteractions = () => {
