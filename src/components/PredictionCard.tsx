@@ -364,7 +364,7 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
                 <Link
                   href={`/user/${prediction.userId || prediction.anonId}`}
                   onClick={(e) => e.stopPropagation()}
-                  className="text-sm font-semibold text-white hover:text-cyan-400 transition-colors truncate"
+                  className="text-sm font-semibold text-white hover:text-slate-300 transition-colors truncate"
                 >
                   Anon #{authorNumber}
                 </Link>
@@ -673,7 +673,7 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
               e.stopPropagation();
               copyLink();
             }}
-            className="w-11 h-full text-sm font-semibold text-purple-300 bg-purple-500/10 rounded-lg transition-all border border-purple-500/30 hover:border-purple-400/50 flex items-center justify-center hover:bg-purple-500/15"
+            className="w-11 h-full text-sm font-semibold text-slate-300 bg-slate-700/50 rounded-lg transition-all border border-slate-600 hover:border-slate-500 flex items-center justify-center hover:bg-slate-700/70"
           >
             {linkCopied ? (
               <svg className="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
