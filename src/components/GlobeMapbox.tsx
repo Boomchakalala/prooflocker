@@ -701,15 +701,15 @@ export default function GlobeMapbox({ claims, osint }: GlobeMapboxProps) {
       )}
 
       {/* Sidebar */}
-      <aside className="fixed top-14 right-0 w-[360px] h-[calc(100vh-56px)] bg-[#0f172a]/95 backdrop-blur-[20px] border-l border-[rgba(148,163,184,0.1)] z-[950] flex flex-col">
-        <div className="p-5 border-b border-[rgba(148,163,184,0.1)]">
+      <aside className="fixed top-14 right-0 w-[360px] h-[calc(100vh-56px)] bg-gradient-to-b from-[#1a0f2e]/95 to-[#0f172a]/95 backdrop-blur-[20px] border-l border-purple-500/20 z-[950] flex flex-col shadow-[-10px_0_30px_rgba(139,92,246,0.1)]">
+        <div className="p-5 border-b border-purple-500/20">
           <div className="flex gap-2 mb-4">
             <button
               onClick={() => setCurrentTab('claims')}
               className={`flex-1 px-4 py-2 rounded-lg text-[13px] font-semibold transition-all ${
                 currentTab === 'claims'
-                  ? 'bg-[#14b8a6] text-[#0f172a]'
-                  : 'bg-transparent text-[#94a3b8] border border-[rgba(148,163,184,0.2)]'
+                  ? 'bg-gradient-to-r from-purple-600 to-purple-700 text-white shadow-[0_0_20px_rgba(139,92,246,0.3)]'
+                  : 'bg-transparent text-[#94a3b8] border border-purple-500/20 hover:bg-purple-500/10'
               }`}
             >
               Claims ({filteredClaims.length})
@@ -718,8 +718,8 @@ export default function GlobeMapbox({ claims, osint }: GlobeMapboxProps) {
               onClick={() => setCurrentTab('osint')}
               className={`flex-1 px-4 py-2 rounded-lg text-[13px] font-semibold transition-all ${
                 currentTab === 'osint'
-                  ? 'bg-[#ef4444] text-white'
-                  : 'bg-transparent text-[#94a3b8] border border-[rgba(148,163,184,0.2)]'
+                  ? 'bg-gradient-to-r from-red-600 to-red-700 text-white shadow-[0_0_20px_rgba(239,68,68,0.3)]'
+                  : 'bg-transparent text-[#94a3b8] border border-purple-500/20 hover:bg-red-500/10'
               }`}
             >
               OSINT ({osint.length})
@@ -734,8 +734,8 @@ export default function GlobeMapbox({ claims, osint }: GlobeMapboxProps) {
                   onClick={() => setCurrentFilter(filter)}
                   className={`px-3 py-1.5 rounded-2xl text-[12px] font-medium transition-all ${
                     currentFilter === filter
-                      ? 'bg-[rgba(20,184,166,0.15)] text-[#14b8a6] border border-[#14b8a6]'
-                      : 'bg-transparent text-[#94a3b8] border border-[rgba(148,163,184,0.2)]'
+                      ? 'bg-gradient-to-r from-purple-600/80 to-purple-700/80 text-white border border-purple-500/40 shadow-[0_0_15px_rgba(139,92,246,0.3)]'
+                      : 'bg-transparent text-[#94a3b8] border border-purple-500/20 hover:bg-purple-500/10'
                   }`}
                 >
                   {filter === 'active' ? 'Active' : 'High Confidence'}
@@ -752,15 +752,15 @@ export default function GlobeMapbox({ claims, osint }: GlobeMapboxProps) {
                 <div
                   key={claim.id}
                   onClick={() => flyTo(claim.lng, claim.lat)}
-                  className="bg-[#1e293b] border border-[rgba(148,163,184,0.1)] rounded-lg p-3.5 cursor-pointer transition-all hover:border-[#14b8a6]"
+                  className="bg-gradient-to-br from-[#1e1b2e] to-[#1a0f2e] border border-purple-500/20 rounded-lg p-3.5 cursor-pointer transition-all hover:border-purple-500 hover:shadow-[0_0_20px_rgba(139,92,246,0.2)]"
                 >
                   <div className="flex items-center justify-between mb-2.5">
                     <span className="text-[12px] font-semibold text-[#f8fafc]">{claim.submitter}</span>
                     <span className={`px-2 py-0.5 rounded-lg text-[10px] font-semibold uppercase ${
-                      claim.status === 'verified' ? 'bg-[rgba(20,184,166,0.2)] text-[#14b8a6]' :
-                      claim.status === 'disputed' ? 'bg-[rgba(239,68,68,0.2)] text-[#ef4444]' :
-                      claim.status === 'void' ? 'bg-[rgba(107,114,128,0.2)] text-[#6b7280]' :
-                      'bg-[rgba(245,158,11,0.2)] text-[#f59e0b]'
+                      claim.status === 'verified' ? 'bg-purple-500/20 text-purple-300 border border-purple-500/30' :
+                      claim.status === 'disputed' ? 'bg-red-500/20 text-red-300 border border-red-500/30' :
+                      claim.status === 'void' ? 'bg-gray-500/20 text-gray-300 border border-gray-500/30' :
+                      'bg-amber-500/20 text-amber-300 border border-amber-500/30'
                     }`}>
                       {claim.status}
                     </span>
@@ -768,7 +768,7 @@ export default function GlobeMapbox({ claims, osint }: GlobeMapboxProps) {
                   <div className="text-[13px] text-[#f8fafc] mb-2.5 line-clamp-2">{claim.claim}</div>
                   <div className="flex items-center justify-between text-[11px] text-[#64748b]">
                     <span>{claim.lockedDate}</span>
-                    <span className="font-semibold text-[#94a3b8]">{claim.confidence}%</span>
+                    <span className="font-semibold text-purple-300">{claim.confidence}%</span>
                   </div>
                 </div>
               ))}
@@ -779,7 +779,7 @@ export default function GlobeMapbox({ claims, osint }: GlobeMapboxProps) {
                 <div
                   key={item.id}
                   onClick={() => flyTo(item.lng, item.lat)}
-                  className="bg-[#1e293b] border border-[rgba(148,163,184,0.1)] border-l-[3px] border-l-[#ef4444] rounded-lg p-3.5 cursor-pointer transition-all hover:border-[#ef4444]"
+                  className="bg-gradient-to-br from-[#1e1b2e] to-[#1a0f2e] border border-red-500/20 border-l-[3px] border-l-[#ef4444] rounded-lg p-3.5 cursor-pointer transition-all hover:border-red-500 hover:shadow-[0_0_20px_rgba(239,68,68,0.2)]"
                 >
                   <div className="flex items-center justify-between mb-2">
                     <span className="text-[12px] font-semibold text-[#f8fafc]">{item.source}</span>
@@ -788,7 +788,7 @@ export default function GlobeMapbox({ claims, osint }: GlobeMapboxProps) {
                   <div className="text-[13px] text-[#f8fafc] mb-2 line-clamp-2">{item.title}</div>
                   <div className="flex gap-1.5 flex-wrap">
                     {item.tags.map((tag, idx) => (
-                      <span key={idx} className="px-2 py-0.5 bg-[rgba(239,68,68,0.15)] rounded-lg text-[10px] font-semibold text-[#ef4444] uppercase">
+                      <span key={idx} className="px-2 py-0.5 bg-red-500/15 border border-red-500/30 rounded-lg text-[10px] font-semibold text-red-300 uppercase">
                         {tag}
                       </span>
                     ))}
