@@ -1275,7 +1275,7 @@
       // INTERACTION HANDLERS
       // ============================================
       // Hover cursor
-      ['claims-clusters-core', 'claims-points-core'].forEach(layer => {
+      ['claims-clusters-core', 'claims-points-core', 'osint-clusters-core', 'osint-points-core'].forEach(layer => {
         map.on('mouseenter', layer, () => {
           map.getCanvas().style.cursor = 'pointer';
         });
@@ -1284,7 +1284,57 @@
         });
       });
 
-      // Click cluster to expand
+      // Click OSINT cluster to expand
+      map.on('click', 'osint-clusters-core', (e) => {
+        const features = map.queryRenderedFeatures(e.point, {
+          layers: ['osint-clusters-core']
+        });
+        const clusterId = features[0].properties.cluster_id;
+        map.getSource('osint').getClusterExpansionZoom(clusterId, (err, zoom) => {
+          if (err) return;
+          map.easeTo({
+            center: features[0].geometry.coordinates,
+            zoom: zoom,
+            duration: 800
+          });
+        });
+      });
+
+      // Click OSINT point to show popup
+      map.on('click', 'osint-points-core', (e) => {
+        const props = e.features[0].properties;
+        const osint = osintData.find(o => o.id === props.id);
+
+        if (!osint) return;
+
+        const tags = JSON.parse(props.tags || '[]');
+        const popupHTML = `
+          <div class="popup-title">${osint.title}</div>
+
+          <div class="popup-submitter" style="border-bottom: 1px solid var(--border-subtle); padding-bottom: 10px; margin-bottom: 10px;">
+            <span class="popup-handle">${osint.source}</span>
+            <span style="font-size: 11px; color: var(--text-muted);">${osint.timestamp}</span>
+          </div>
+
+          <div style="display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 12px;">
+            ${tags.map(tag => `<span class="osint-tag">${tag}</span>`).join('')}
+          </div>
+
+          <button class="popup-btn popup-btn-support" onclick="window.open('https://example.com/source', '_blank'); return false;" style="width: 100%;">
+            <svg class="popup-btn-icon" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+            </svg>
+            View Source
+          </button>
+        `;
+
+        new mapboxgl.Popup({ offset: 25, closeButton: true, maxWidth: '400px' })
+          .setLngLat(e.features[0].geometry.coordinates)
+          .setHTML(popupHTML)
+          .addTo(map);
+      });
+
+      // Click claim cluster to expand
       map.on('click', 'claims-clusters-core', (e) => {
         const features = map.queryRenderedFeatures(e.point, {
           layers: ['claims-clusters-core']
