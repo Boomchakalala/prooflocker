@@ -521,7 +521,7 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
       </div>
 
       {/* 2. TITLE - Prediction text */}
-      <h3 className="text-white text-base font-semibold mb-4 line-clamp-3 leading-snug">
+      <h3 className="text-cyan-400 text-base font-semibold mb-4 line-clamp-3 leading-snug">
         {displayTitle}
       </h3>
 
