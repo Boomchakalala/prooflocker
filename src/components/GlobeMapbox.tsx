@@ -148,6 +148,13 @@ export default function GlobeMapbox({ claims, osint }: GlobeMapboxProps) {
       return;
     }
 
+    // Double-check style is loaded
+    if (!map.current.isStyleLoaded || !map.current.isStyleLoaded()) {
+      console.warn('[GlobeMapbox] Style not loaded yet, waiting...');
+      setTimeout(() => addMapLayers(), 100);
+      return;
+    }
+
     console.log('[GlobeMapbox] Starting to add layers with', claims.length, 'claims and', osint.length, 'OSINT items');
 
     try {
