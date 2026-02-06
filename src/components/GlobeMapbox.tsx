@@ -233,18 +233,19 @@ export default function GlobeMapbox({ claims, osint }: GlobeMapboxProps) {
       },
     });
 
-    // Claims layers (Purple theme)
+    // Claims layers (Purple theme - ProofLocker style)
     map.current.addLayer({
       id: 'claims-clusters',
       type: 'circle',
       source: 'claims',
       filter: ['has', 'point_count'],
       paint: {
-        'circle-color': '#8b5cf6',
-        'circle-radius': ['step', ['get', 'point_count'], 18, 5, 28, 10, 38],
-        'circle-opacity': 0.85,
-        'circle-stroke-width': 2,
-        'circle-stroke-color': '#fff',
+        'circle-color': '#5B21B6',
+        'circle-radius': ['step', ['get', 'point_count'], 20, 5, 32, 10, 44],
+        'circle-opacity': 0.9,
+        'circle-stroke-width': 3,
+        'circle-stroke-color': '#2E5CFF',
+        'circle-blur': 0.15,
       },
     });
 
@@ -256,9 +257,13 @@ export default function GlobeMapbox({ claims, osint }: GlobeMapboxProps) {
       layout: {
         'text-field': '{point_count}',
         'text-font': ['DIN Offc Pro Medium', 'Arial Unicode MS Bold'],
-        'text-size': 12,
+        'text-size': 13,
       },
-      paint: { 'text-color': '#fff' },
+      paint: {
+        'text-color': '#fff',
+        'text-halo-color': 'rgba(91, 33, 182, 0.5)',
+        'text-halo-width': 1.5,
+      },
     });
 
     map.current.addLayer({
@@ -270,19 +275,20 @@ export default function GlobeMapbox({ claims, osint }: GlobeMapboxProps) {
         'circle-color': [
           'match',
           ['get', 'status'],
-          'verified', '#8b5cf6',
+          'verified', '#5B21B6',
           'disputed', '#ef4444',
           'void', '#6b7280',
           '#f59e0b',
         ],
-        'circle-radius': 7,
+        'circle-radius': 8,
         'circle-opacity': 0.95,
-        'circle-stroke-width': 2,
+        'circle-stroke-width': 2.5,
         'circle-stroke-color': '#fff',
+        'circle-blur': 0.1,
       },
     });
 
-    // Heatmap (Purple gradient)
+    // Heatmap (Purple gradient - ProofLocker style)
     map.current.addLayer({
       id: 'claims-heatmap',
       type: 'heatmap',
@@ -290,17 +296,20 @@ export default function GlobeMapbox({ claims, osint }: GlobeMapboxProps) {
       maxzoom: 9,
       paint: {
         'heatmap-weight': 1,
-        'heatmap-intensity': 1,
+        'heatmap-intensity': ['interpolate', ['linear'], ['zoom'], 0, 1, 9, 3],
         'heatmap-color': [
           'interpolate',
           ['linear'],
           ['heatmap-density'],
-          0, 'rgba(139, 92, 246, 0)',
-          0.5, 'rgba(139, 92, 246, 0.5)',
-          1, 'rgba(168, 85, 247, 0.8)',
+          0, 'rgba(91, 33, 182, 0)',
+          0.2, 'rgba(91, 33, 182, 0.2)',
+          0.4, 'rgba(139, 92, 246, 0.4)',
+          0.6, 'rgba(46, 92, 255, 0.6)',
+          0.8, 'rgba(139, 92, 246, 0.8)',
+          1, 'rgba(91, 33, 182, 1)',
         ],
-        'heatmap-radius': 20,
-        'heatmap-opacity': 0.7,
+        'heatmap-radius': ['interpolate', ['linear'], ['zoom'], 0, 20, 9, 40],
+        'heatmap-opacity': ['interpolate', ['linear'], ['zoom'], 7, 0.8, 9, 0],
       },
       layout: { visibility: 'none' },
     });

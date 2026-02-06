@@ -43,6 +43,72 @@ export default function GlobePage() {
     link.rel = 'stylesheet';
     document.head.appendChild(link);
 
+    // Add custom popup styles
+    const style = document.createElement('style');
+    style.textContent = `
+      /* Mapbox popup styling */
+      .mapboxgl-popup-content {
+        padding: 0 !important;
+        background: transparent !important;
+        box-shadow: none !important;
+      }
+
+      .mapboxgl-popup-tip {
+        display: none !important;
+      }
+
+      .stack-panel-popup .mapboxgl-popup-content {
+        animation: panelSlideIn 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      @keyframes panelSlideIn {
+        from {
+          opacity: 0;
+          transform: translateY(10px) scale(0.96);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0) scale(1);
+        }
+      }
+
+      .mapboxgl-popup-close-button {
+        color: #ffffff !important;
+        font-size: 20px !important;
+        padding: 8px 12px !important;
+        right: 8px !important;
+        top: 8px !important;
+        background: rgba(91, 33, 182, 0.2) !important;
+        border-radius: 6px !important;
+        transition: all 0.2s !important;
+        z-index: 10 !important;
+      }
+
+      .mapboxgl-popup-close-button:hover {
+        background: rgba(91, 33, 182, 0.4) !important;
+        transform: scale(1.1) !important;
+      }
+
+      .stack-panel-popup ::-webkit-scrollbar {
+        width: 6px;
+      }
+
+      .stack-panel-popup ::-webkit-scrollbar-track {
+        background: rgba(91, 33, 182, 0.1);
+        border-radius: 3px;
+      }
+
+      .stack-panel-popup ::-webkit-scrollbar-thumb {
+        background: rgba(91, 33, 182, 0.4);
+        border-radius: 3px;
+      }
+
+      .stack-panel-popup ::-webkit-scrollbar-thumb:hover {
+        background: rgba(91, 33, 182, 0.6);
+      }
+    `;
+    document.head.appendChild(style);
+
     // Fetch data
     fetch('/api/globe/data')
       .then(res => res.json())
