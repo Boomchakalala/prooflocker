@@ -39,8 +39,9 @@ export default function GlobeMapbox({ claims, osint }: GlobeMapboxProps) {
   const [heatmapVisible, setHeatmapVisible] = useState(false);
   const [currentFilter, setCurrentFilter] = useState('active');
   const [mapReady, setMapReady] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  console.log('[Globe] Component render - claims:', claims.length, 'osint:', osint.length);
+  console.log('[Globe] Render - claims:', claims.length, 'osint:', osint.length, 'mapReady:', mapReady);
 
   // Create GeoJSON
   const createClaimsGeoJSON = () => ({
