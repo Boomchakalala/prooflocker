@@ -13,8 +13,6 @@ interface Claim {
   confidence: number;
   lockedDate: string;
   outcome: string | null;
-  category?: string;
-  evidence_score?: number;
 }
 
 interface OsintItem {
