@@ -71,13 +71,24 @@ export default function GlobeMapbox({ claims, osint }: GlobeMapboxProps) {
 
   // Initialize map
   useEffect(() => {
+    console.log('[Globe] useEffect triggered');
+
     // @ts-ignore
     if (!window.mapboxgl || !mapContainer.current || map.current) {
-      console.log('[Globe] Skipping init - mapbox:', !!window.mapboxgl, 'container:', !!mapContainer.current, 'map exists:', !!map.current);
+      console.log('[Globe] Waiting... mapbox:', !!window.mapboxgl, 'container:', !!mapContainer.current, 'map exists:', !!map.current);
+
+      // Retry if mapbox not loaded yet
+      // @ts-ignore
+      if (!window.mapboxgl && !map.current) {
+        const timer = setTimeout(() => {
+          console.log('[Globe] Retry init...');
+        }, 500);
+        return () => clearTimeout(timer);
+      }
       return;
     }
 
-    console.log('[Globe] Starting map initialization...');
+    console.log('[Globe] Starting initialization...');
     // @ts-ignore
     const mapboxgl = window.mapboxgl;
     mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_TOKEN || 'pk.eyJ1IjoicHJvb2Zsb2NrZXIiLCJhIjoiY21sYjBxcTAwMGVoYzNlczI4YWlzampqZyJ9.nY-yqSucTzvNyK1qDCq9rQ';
@@ -92,12 +103,11 @@ export default function GlobeMapbox({ claims, osint }: GlobeMapboxProps) {
         attributionControl: false,
       });
 
-      console.log('[Globe] Map instance created');
+      console.log('[Globe] Map created');
 
       map.current.on('load', () => {
-        console.log('[Globe] Map loaded event fired');
+        console.log('[Globe] ✅ MAP LOADED!');
 
-        // Set atmosphere
         try {
           map.current.setFog({
             range: [0.5, 10],
@@ -135,7 +145,7 @@ export default function GlobeMapbox({ claims, osint }: GlobeMapboxProps) {
         addInteractions();
 
         setMapReady(true);
-        console.log('[Globe] Map ready!');
+        console.log('[Globe] ✅ ALL READY!');
 
         // Auto-rotate
         map.current.on('idle', () => {
@@ -146,16 +156,18 @@ export default function GlobeMapbox({ claims, osint }: GlobeMapboxProps) {
       });
 
       map.current.on('error', (e: any) => {
-        console.error('[Globe] Map error:', e);
+        console.error('[Globe] ❌ Map error:', e);
+        setError(`Map error: ${e.error?.message || 'Unknown'}`);
       });
 
     } catch (error) {
-      console.error('[Globe] Failed to create map:', error);
+      console.error('[Globe] ❌ Failed to create map:', error);
+      setError(error instanceof Error ? error.message : 'Failed to initialize');
     }
 
     return () => {
       if (map.current) {
-        console.log('[Globe] Cleaning up map');
+        console.log('[Globe] Cleanup');
         map.current.remove();
         map.current = null;
       }
@@ -420,13 +432,38 @@ export default function GlobeMapbox({ claims, osint }: GlobeMapboxProps) {
 
   return (
     <div className="relative w-full h-full bg-[#0f172a]">
+      {/* Debug info */}
+      <div className="absolute top-4 left-4 z-[2000] bg-black/80 text-white p-3 rounded-lg text-xs font-mono">
+        <div>Claims: {claims.length}</div>
+        <div>OSINT: {osint.length}</div>
+        <div>Map Ready: {mapReady ? '✅' : '⏳'}</div>
+        {error && <div className="text-red-400">Error: {error}</div>}
+      </div>
+
       <div ref={mapContainer} className="absolute inset-0" />
 
-      {!mapReady && (
+      {!mapReady && !error && (
         <div className="absolute inset-0 flex items-center justify-center bg-[#0f172a] z-[1000]">
           <div className="text-center">
             <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-[#14b8a6] mx-auto mb-4" />
             <p className="text-[#94a3b8]">Loading globe...</p>
+            <p className="text-[#64748b] text-sm mt-2">Initializing Mapbox GL</p>
+          </div>
+        </div>
+      )}
+
+      {error && (
+        <div className="absolute inset-0 flex items-center justify-center bg-[#0f172a] z-[1000]">
+          <div className="text-center max-w-md px-6">
+            <div className="text-[#ef4444] text-5xl mb-4">⚠️</div>
+            <p className="text-[#f8fafc] text-lg font-semibold mb-2">Failed to load globe</p>
+            <p className="text-[#94a3b8] text-sm mb-4">{error}</p>
+            <button
+              onClick={() => window.location.reload()}
+              className="px-4 py-2 bg-[#14b8a6] text-[#0f172a] rounded-lg text-sm font-semibold hover:bg-[#0d9488]"
+            >
+              Reload Page
+            </button>
           </div>
         </div>
       )}
