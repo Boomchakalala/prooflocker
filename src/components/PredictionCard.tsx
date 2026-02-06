@@ -336,162 +336,147 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
   // Card content (shared between Link and div versions)
   const cardContent = (
     <>
-      {/* Quality indicator bar - top - Subtle emerald for high quality verified predictions */}
-      {prediction.evidence_score && prediction.evidence_score >= 76 && isResolved && (
-        <div className="absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-emerald-400 to-transparent opacity-60" />
-      )}
-
-      {/* 1. HEADER ROW - Author info + Time + Menu */}
-      <div className="mb-4">
-        <div className="flex items-center justify-between gap-3">
-          {/* Left: Avatar + Author info + Reliability Tier */}
+      {/* 1. HEADER ROW - Compact like V4: Avatar, Name, Tier, Time, Category */}
+      <div className="mb-3">
+        <div className="flex items-start justify-between gap-3 mb-2">
+          {/* Left: Avatar + Author info */}
           <div className="flex items-center gap-3 min-w-0 flex-1">
             <div className="w-10 h-10 rounded-full bg-gradient-to-br from-slate-700 to-slate-800 flex items-center justify-center text-sm font-bold text-slate-300 border border-slate-600 flex-shrink-0">
               {authorNumber.toString().slice(-2)}
             </div>
             <div className="flex flex-col min-w-0">
-              {isPreview ? (
-                <span className="text-sm font-semibold text-white truncate">
-                  Anon #{authorNumber}
-                </span>
-              ) : (
-                <button
-                  onClick={(e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    router.push(`/user/${prediction.userId || prediction.anonId}`);
-                  }}
-                  className="text-sm font-semibold text-white hover:text-slate-300 transition-colors truncate text-left"
-                >
-                  Anon #{authorNumber}
-                </button>
-              )}
-              {/* Author Reliability Tier Badge with Icon - Compact */}
-              {authorTierInfo && (
-                <div className={`inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md ${authorTierInfo.bgColor} border ${authorTierInfo.color.replace('text-', 'border-')}/30`}>
-                  <span className="text-[9px]">
-                    {prediction.author_reliability_tier === 'legend' && '⭐'}
-                    {prediction.author_reliability_tier === 'master' && '👑'}
-                    {prediction.author_reliability_tier === 'expert' && '💎'}
-                    {prediction.author_reliability_tier === 'trusted' && '✓'}
-                    {prediction.author_reliability_tier === 'novice' && '•'}
+              <div className="flex items-center gap-2">
+                {isPreview ? (
+                  <span className="text-sm font-semibold text-white truncate">
+                    Anon #{authorNumber}
                   </span>
-                  <span className={`text-[9px] font-semibold uppercase tracking-wide ${authorTierInfo.color}`}>
-                    {authorTierInfo.label}
-                  </span>
-                </div>
-              )}
-            </div>
-          </div>
-
-          {/* Right: Time + Menu */}
-          <div className="flex items-center gap-3 flex-shrink-0">
-            <span className="text-xs text-slate-400 font-medium">{formatRelativeTime(prediction.timestamp)}</span>
-            {/* Three-dot menu - hide in preview mode */}
-            {!isPreview && (
-              <div className="relative">
-                <button
-                  onClick={(e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    setShowMenu(!showMenu);
-                  }}
-                  className="p-1.5 hover:bg-white/10 rounded-lg transition-colors"
-                >
-                  <svg className="w-4 h-4 text-gray-400 hover:text-gray-200" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/>
-                  </svg>
-                </button>
-
-              {/* Dropdown menu */}
-              {showMenu && (
-                <>
-                  <div
-                    className="fixed inset-0 z-40"
+                ) : (
+                  <button
                     onClick={(e) => {
                       e.preventDefault();
                       e.stopPropagation();
-                      setShowMenu(false);
+                      router.push(`/user/${prediction.userId || prediction.anonId}`);
                     }}
-                  />
-                  <div className="absolute right-0 top-full mt-1 w-48 bg-[#1a1a1a] border border-slate-700 rounded-lg shadow-lg z-50 py-1">
+                    className="text-sm font-semibold text-white hover:text-slate-300 transition-colors truncate text-left"
+                  >
+                    Anon #{authorNumber}
+                  </button>
+                )}
+                {/* Tier badge inline */}
+                {authorTierInfo && (
+                  <span className={`px-2 py-0.5 text-[10px] font-medium rounded-md ${authorTierInfo.bgColor} border ${authorTierInfo.color.replace('text-', 'border-')}/30 ${authorTierInfo.color}`}>
+                    {authorTierInfo.label}
+                  </span>
+                )}
+              </div>
+              <span className="text-xs text-slate-400">{formatRelativeTime(prediction.timestamp)}</span>
+            </div>
+          </div>
+
+          {/* Right: Three-dot menu - hide in preview mode */}
+          {!isPreview && (
+            <div className="relative flex-shrink-0">
+              <button
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  setShowMenu(!showMenu);
+                }}
+                className="p-1.5 hover:bg-white/10 rounded-lg transition-colors"
+              >
+                <svg className="w-4 h-4 text-gray-400 hover:text-gray-200" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/>
+                </svg>
+              </button>
+
+            {/* Dropdown menu */}
+            {showMenu && (
+              <>
+                <div
+                  className="fixed inset-0 z-40"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    setShowMenu(false);
+                  }}
+                />
+                <div className="absolute right-0 top-full mt-1 w-48 bg-[#1a1a1a] border border-slate-700 rounded-lg shadow-lg z-50 py-1">
+                  <button
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      handleHide();
+                    }}
+                    className="w-full px-4 py-2 text-left text-sm text-gray-300 hover:text-white hover:bg-slate-800 transition-colors flex items-center gap-2"
+                  >
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21" />
+                    </svg>
+                    Hide this
+                  </button>
+                  <div className="relative">
                     <button
                       onClick={(e) => {
                         e.preventDefault();
                         e.stopPropagation();
-                        handleHide();
+                        setShowReportMenu(!showReportMenu);
                       }}
-                      className="w-full px-4 py-2 text-left text-sm text-gray-300 hover:text-white hover:bg-slate-800 transition-colors flex items-center gap-2"
+                      className="w-full px-4 py-2 text-left text-sm text-gray-300 hover:text-white hover:bg-slate-800 transition-colors flex items-center justify-between"
                     >
-                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21" />
-                      </svg>
-                      Hide this
-                    </button>
-                    <div className="relative">
-                      <button
-                        onClick={(e) => {
-                          e.preventDefault();
-                          e.stopPropagation();
-                          setShowReportMenu(!showReportMenu);
-                        }}
-                        className="w-full px-4 py-2 text-left text-sm text-gray-300 hover:text-white hover:bg-slate-800 transition-colors flex items-center justify-between"
-                      >
-                        <div className="flex items-center gap-2">
-                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-                          </svg>
-                          Report
-                        </div>
+                      <div className="flex items-center gap-2">
                         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
                         </svg>
-                      </button>
-                      {showReportMenu && (
-                        <div className="absolute left-full top-0 ml-1 w-40 bg-[#1a1a1a] border border-slate-700 rounded-lg shadow-lg py-1">
-                          <button
-                            onClick={(e) => {
-                              e.preventDefault();
-                              e.stopPropagation();
-                              handleReport('spam');
-                            }}
-                            className="w-full px-4 py-2 text-left text-sm text-gray-300 hover:text-white hover:bg-slate-800 transition-colors"
-                          >
-                            Spam
-                          </button>
-                          <button
-                            onClick={(e) => {
-                              e.preventDefault();
-                              e.stopPropagation();
-                              handleReport('low_quality');
-                            }}
-                            className="w-full px-4 py-2 text-left text-sm text-gray-300 hover:text-white hover:bg-slate-800 transition-colors"
-                          >
-                            Low Quality
-                          </button>
-                          <button
-                            onClick={(e) => {
-                              e.preventDefault();
-                              e.stopPropagation();
-                              handleReport('inappropriate');
-                            }}
-                            className="w-full px-4 py-2 text-left text-sm text-gray-300 hover:text-white hover:bg-slate-800 transition-colors"
-                          >
-                            Inappropriate
-                          </button>
-                        </div>
-                      )}
-                    </div>
+                        Report
+                      </div>
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                      </svg>
+                    </button>
+                    {showReportMenu && (
+                      <div className="absolute left-full top-0 ml-1 w-40 bg-[#1a1a1a] border border-slate-700 rounded-lg shadow-lg py-1">
+                        <button
+                          onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            handleReport('spam');
+                          }}
+                          className="w-full px-4 py-2 text-left text-sm text-gray-300 hover:text-white hover:bg-slate-800 transition-colors"
+                        >
+                          Spam
+                        </button>
+                        <button
+                          onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            handleReport('low_quality');
+                          }}
+                          className="w-full px-4 py-2 text-left text-sm text-gray-300 hover:text-white hover:bg-slate-800 transition-colors"
+                        >
+                          Low Quality
+                        </button>
+                        <button
+                          onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            handleReport('inappropriate');
+                          }}
+                          className="w-full px-4 py-2 text-left text-sm text-gray-300 hover:text-white hover:bg-slate-800 transition-colors"
+                        >
+                          Inappropriate
+                        </button>
+                      </div>
+                    )}
                   </div>
-                </>
-              )}
-              </div>
+                </div>
+              </>
             )}
-          </div>
+            </div>
+          )}
         </div>
 
-        {/* Category + Status badges row - Smaller, more compact */}
-        <div className="flex items-center gap-2 flex-wrap mt-3">
+        {/* Category + Status badges row - Single line like V4 */}
+        <div className="flex items-center gap-2 flex-wrap">
           {prediction.category && (
             <span className={`inline-flex items-center gap-1 px-2 py-0.5 text-[10px] font-medium rounded-md border ${getCategoryStyle(prediction.category)}`}>
               {getCategoryIcon(prediction.category)}
