@@ -140,7 +140,7 @@
     // Initialize Globe
     const globe = Globe()
       (document.getElementById('globe-container'))
-      // High-resolution Natural Earth political map
+      // Clean blue marble texture
       .globeImageUrl('https://cdn.jsdelivr.net/npm/three-globe/example/img/earth-blue-marble.jpg')
       // No bump map - keep it flat and raw
       .bumpImageUrl(null)
@@ -149,20 +149,20 @@
       // Minimal atmospheric glow
       .atmosphereColor('#0066ff')
       .atmosphereAltitude(0.15)
-      .showAtmosphere(true)
-      // Higher polygon detail for smoother zoom
-      .polygonCapCurvatureResolution(20);
+      .showAtmosphere(true);
 
-    // Load country borders from GeoJSON
+    // Load and display country borders
     fetch('https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json')
       .then(res => res.json())
       .then(countries => {
+        const countriesData = topojson.feature(countries, countries.objects.countries).features;
+
         globe
-          .hexPolygonsData(topojson.feature(countries, countries.objects.countries).features)
-          .hexPolygonResolution(3)
-          .hexPolygonMargin(0.3)
-          .hexPolygonColor(() => 'rgba(255, 255, 255, 0.05)')
-          .hexPolygonAltitude(0.001);
+          .polygonsData(countriesData)
+          .polygonCapColor(() => 'rgba(0, 0, 0, 0)') // Transparent fill
+          .polygonSideColor(() => 'rgba(0, 0, 0, 0)') // Transparent sides
+          .polygonStrokeColor(() => 'rgba(255, 255, 255, 0.3)') // White borders
+          .polygonAltitude(0.001);
       });
 
     // Configure pulsing hotspot markers
