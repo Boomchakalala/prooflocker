@@ -369,17 +369,17 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
                   Anon #{authorNumber}
                 </Link>
               )}
-              {/* Author Reliability Tier Badge with Icon */}
+              {/* Author Reliability Tier Badge with Icon - Compact */}
               {authorTierInfo && (
-                <div className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full ${authorTierInfo.bgColor} border ${authorTierInfo.color.replace('text-', 'border-')}/30`}>
-                  <span className="text-[10px]">
+                <div className={`inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md ${authorTierInfo.bgColor} border ${authorTierInfo.color.replace('text-', 'border-')}/30`}>
+                  <span className="text-[9px]">
                     {prediction.author_reliability_tier === 'legend' && '⭐'}
                     {prediction.author_reliability_tier === 'master' && '👑'}
                     {prediction.author_reliability_tier === 'expert' && '💎'}
                     {prediction.author_reliability_tier === 'trusted' && '✓'}
                     {prediction.author_reliability_tier === 'novice' && '•'}
                   </span>
-                  <span className={`text-[10px] font-bold uppercase tracking-wide ${authorTierInfo.color}`}>
+                  <span className={`text-[9px] font-semibold uppercase tracking-wide ${authorTierInfo.color}`}>
                     {authorTierInfo.label}
                   </span>
                 </div>
@@ -493,16 +493,16 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
           </div>
         </div>
 
-        {/* Category + Status badges row */}
+        {/* Category + Status badges row - Smaller, more compact */}
         <div className="flex items-center gap-2 flex-wrap mt-3">
           {prediction.category && (
-            <span className={`inline-flex items-center gap-1 px-2 py-0.5 text-[10px] font-semibold rounded-full border ${getCategoryStyle(prediction.category)}`}>
+            <span className={`inline-flex items-center gap-1 px-2 py-0.5 text-[10px] font-medium rounded-md border ${getCategoryStyle(prediction.category)}`}>
               {getCategoryIcon(prediction.category)}
               {prediction.category}
             </span>
           )}
           {isOnChain() && (
-            <span className="px-2 py-0.5 text-[10px] font-semibold rounded-full bg-indigo-500/10 border border-indigo-400/30 text-indigo-300 flex items-center gap-1">
+            <span className="px-2 py-0.5 text-[10px] font-medium rounded-md bg-indigo-500/10 border border-indigo-400/30 text-indigo-300 flex items-center gap-1">
               <svg className="w-2.5 h-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
@@ -510,7 +510,7 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
             </span>
           )}
           {isResolutionOnChain() && (
-            <span className="px-2 py-0.5 text-[10px] font-semibold rounded-full bg-blue-500/10 border border-blue-400/30 text-blue-300 flex items-center gap-1">
+            <span className="px-2 py-0.5 text-[10px] font-medium rounded-md bg-blue-500/10 border border-blue-400/30 text-blue-300 flex items-center gap-1">
               <svg className="w-2.5 h-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
               </svg>
@@ -525,40 +525,41 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
         {displayTitle}
       </h3>
 
-      {/* 3. OUTCOME + EVIDENCE SCORE - Clean professional styling */}
-      <div className="flex items-center gap-2.5 mb-4 flex-wrap">
-        {/* Outcome Badge - Soft professional colors */}
+      {/* 3. OUTCOME + EVIDENCE SCORE - Compact professional styling */}
+      <div className="flex items-center gap-3 mb-4 flex-wrap">
+        {/* Outcome Badge - Smaller, cleaner */}
         {prediction.outcome === 'correct' ? (
-          <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-sm font-semibold">
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+          <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-500/10 border border-emerald-500/30">
+            <svg className="w-3.5 h-3.5 text-emerald-400" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7"/>
             </svg>
-            Correct
-          </span>
+            <span className="text-emerald-400 text-sm font-medium">Correct</span>
+          </div>
         ) : prediction.outcome === 'incorrect' ? (
-          <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-rose-500/10 border border-rose-500/30 text-rose-400 text-sm font-semibold">
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+          <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-rose-500/10 border border-rose-500/30">
+            <svg className="w-3.5 h-3.5 text-rose-400" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12"/>
             </svg>
-            Incorrect
-          </span>
+            <span className="text-rose-400 text-sm font-medium">Incorrect</span>
+          </div>
         ) : (
-          <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-amber-500/10 border border-amber-500/30 text-amber-400 text-sm font-semibold">
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+          <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-amber-500/10 border border-amber-500/30">
+            <svg className="w-3.5 h-3.5 text-amber-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
               <circle cx="12" cy="12" r="10"/>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6l4 2"/>
             </svg>
-            Pending
-          </span>
+            <span className="text-amber-400 text-sm font-medium">Pending</span>
+          </div>
         )}
 
-        {/* Evidence Score Badge - Prominent when resolved */}
-        {prediction.evidence_score !== undefined && isResolved && evidenceTier && (
-          <div className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border ${evidenceTier.bgColor} ${evidenceTier.borderColor}`}>
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-            </svg>
-            <span className={`text-sm font-bold ${evidenceTier.color}`}>
+        {/* Evidence Score - V4 style, simple and clean */}
+        {prediction.evidence_score !== undefined && isResolved && (
+          <div className="flex items-center gap-2 text-sm">
+            <span className="text-slate-500">Evidence</span>
+            <span className={`font-semibold ${
+              prediction.evidence_score >= 76 ? 'text-emerald-400' :
+              prediction.evidence_score >= 51 ? 'text-blue-400' :
+              prediction.evidence_score >= 26 ? 'text-amber-400' : 'text-slate-400'
+            }`}>
               {prediction.evidence_score}/100
             </span>
           </div>
