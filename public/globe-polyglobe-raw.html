@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ProofLocker Globe - Polyglobe Style</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: #000000;
+      color: white;
+      overflow: hidden;
+    }
+
+    #globe-container {
+      width: 100vw;
+      height: 100vh;
+    }
+
+    /* Minimal UI overlay */
+    #overlay {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      z-index: 100;
+      pointer-events: none;
+    }
+
+    #overlay h1 {
+      font-size: 24px;
+      font-weight: 700;
+      color: #0066ff;
+      margin-bottom: 4px;
+      letter-spacing: -0.5px;
+    }
+
+    #overlay p {
+      font-size: 12px;
+      color: rgba(255, 255, 255, 0.5);
+      font-weight: 400;
+    }
+
+    /* Legend - minimal */
+    #legend {
+      position: absolute;
+      bottom: 20px;
+      left: 20px;
+      z-index: 100;
+      display: flex;
+      gap: 16px;
+      pointer-events: none;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      color: rgba(255, 255, 255, 0.6);
+    }
+
+    .legend-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      box-shadow: 0 0 8px currentColor;
+    }
+  </style>
+</head>
+<body>
+  <div id="globe-container"></div>
+
+  <!-- Minimal overlay -->
+  <div id="overlay">
+    <h1>ProofLocker</h1>
+    <p>Global Claims Tracker</p>
+  </div>
+
+  <!-- Legend -->
+  <div id="legend">
+    <div class="legend-item">
+      <div class="legend-dot" style="background: #00cc66; color: #00cc66;"></div>
+      <span>High Rep</span>
+    </div>
+    <div class="legend-item">
+      <div class="legend-dot" style="background: #ff4444; color: #ff4444;"></div>
+      <span>Urgent</span>
+    </div>
+    <div class="legend-item">
+      <div class="legend-dot" style="background: #0066ff; color: #0066ff;"></div>
+      <span>Pending</span>
+    </div>
+  </div>
+
+  <!-- Globe.GL from CDN -->
+  <script src="//unpkg.com/globe.gl"></script>
+
+  <script>
+    // Mock claim data - 25 global hotspots
+    const mockClaims = [
+      // High rep resolved (green)
+      { lat: 40.7128, lng: -74.0060, city: 'New York', claims: 142, reliability: 825, status: 'resolved', color: '#00cc66' },
+      { lat: 51.5074, lng: -0.1278, city: 'London', claims: 98, reliability: 792, status: 'resolved', color: '#00cc66' },
+      { lat: 35.6762, lng: 139.6503, city: 'Tokyo', claims: 215, reliability: 843, status: 'resolved', color: '#00cc66' },
+      { lat: 48.8566, lng: 2.3522, city: 'Paris', claims: 76, reliability: 778, status: 'resolved', color: '#00cc66' },
+      { lat: 37.7749, lng: -122.4194, city: 'San Francisco', claims: 189, reliability: 811, status: 'resolved', color: '#00cc66' },
+
+      // Urgent pending (red)
+      { lat: 50.4501, lng: 30.5234, city: 'Kyiv', claims: 231, reliability: 654, status: 'urgent', color: '#ff4444' },
+      { lat: 33.8869, lng: 35.5131, city: 'Beirut', claims: 87, reliability: 621, status: 'urgent', color: '#ff4444' },
+      { lat: 31.7917, lng: 35.2172, city: 'Jerusalem', claims: 112, reliability: 598, status: 'urgent', color: '#ff4444' },
+      { lat: 33.3152, lng: 44.3661, city: 'Baghdad', claims: 94, reliability: 612, status: 'urgent', color: '#ff4444' },
+      { lat: 34.0522, lng: -118.2437, city: 'Los Angeles', claims: 156, reliability: 689, status: 'urgent', color: '#ff4444' },
+
+      // Pending (blue)
+      { lat: 55.7558, lng: 37.6173, city: 'Moscow', claims: 87, reliability: 701, status: 'pending', color: '#0066ff' },
+      { lat: 39.9042, lng: 116.4074, city: 'Beijing', claims: 163, reliability: 746, status: 'pending', color: '#0066ff' },
+      { lat: -33.8688, lng: 151.2093, city: 'Sydney', claims: 54, reliability: 718, status: 'pending', color: '#0066ff' },
+      { lat: 19.4326, lng: -99.1332, city: 'Mexico City', claims: 61, reliability: 692, status: 'pending', color: '#0066ff' },
+      { lat: -23.5505, lng: -46.6333, city: 'São Paulo', claims: 72, reliability: 708, status: 'pending', color: '#0066ff' },
+      { lat: 28.6139, lng: 77.2090, city: 'Delhi', claims: 103, reliability: 724, status: 'pending', color: '#0066ff' },
+      { lat: 1.3521, lng: 103.8198, city: 'Singapore', claims: 89, reliability: 761, status: 'pending', color: '#0066ff' },
+      { lat: 25.2048, lng: 55.2708, city: 'Dubai', claims: 67, reliability: 732, status: 'pending', color: '#0066ff' },
+      { lat: -34.6037, lng: -58.3816, city: 'Buenos Aires', claims: 45, reliability: 695, status: 'pending', color: '#0066ff' },
+      { lat: 52.5200, lng: 13.4050, city: 'Berlin', claims: 78, reliability: 754, status: 'pending', color: '#0066ff' },
+      { lat: 41.9028, lng: 12.4964, city: 'Rome', claims: 56, reliability: 712, status: 'pending', color: '#0066ff' },
+      { lat: 59.3293, lng: 18.0686, city: 'Stockholm', claims: 42, reliability: 768, status: 'pending', color: '#0066ff' },
+      { lat: -1.2921, lng: 36.8219, city: 'Nairobi', claims: 38, reliability: 687, status: 'pending', color: '#0066ff' },
+      { lat: 30.0444, lng: 31.2357, city: 'Cairo', claims: 64, reliability: 698, status: 'pending', color: '#0066ff' },
+      { lat: -33.9249, lng: 18.4241, city: 'Cape Town', claims: 31, reliability: 704, status: 'pending', color: '#0066ff' },
+    ];
+
+    // Initialize Globe
+    const globe = Globe()
+      (document.getElementById('globe-container'))
+      // Raw dark night Earth - city lights visible, no political borders
+      .globeImageUrl('//unpkg.com/three-globe/example/img/earth-night.jpg')
+      // No bump map - keep it flat and minimal
+      .bumpImageUrl(null)
+      // Deep space black background
+      .backgroundImageUrl('//unpkg.com/three-globe/example/img/night-sky.png')
+      // Subtle blue atmospheric glow (ProofLocker blue)
+      .atmosphereColor('#0066ff')
+      .atmosphereAltitude(0.2)
+      .showAtmosphere(true);
+
+    // Configure pulsing hotspot markers
+    globe
+      .pointsData(mockClaims)
+      .pointLat('lat')
+      .pointLng('lng')
+      .pointAltitude(0.01) // Float just above surface
+      .pointRadius((d) => {
+        // Size by claim count
+        if (d.claims > 150) return 0.6;
+        if (d.claims > 80) return 0.4;
+        return 0.3;
+      })
+      .pointColor('color')
+      // Minimal tooltip on hover
+      .pointLabel((d) => `
+        <div style="
+          padding: 12px 16px;
+          background: rgba(0, 0, 0, 0.95);
+          border: 1px solid ${d.color};
+          border-radius: 8px;
+          font-family: -apple-system, sans-serif;
+          font-size: 13px;
+          line-height: 1.6;
+          color: white;
+          box-shadow: 0 8px 20px rgba(0, 0, 0, 0.8);
+        ">
+          <div style="font-weight: 700; margin-bottom: 4px; color: ${d.color};">
+            ${d.city}
+          </div>
+          <div style="color: rgba(255,255,255,0.7); font-size: 12px;">
+            ${d.claims} claims • ${d.reliability} reliability
+          </div>
+          <div style="margin-top: 6px; font-size: 11px; color: rgba(255,255,255,0.5);">
+            Click for details
+          </div>
+        </div>
+      `)
+      .onPointClick((point) => {
+        console.log('Clicked:', point);
+        alert(`${point.city}\n${point.claims} claims • ${point.reliability} reliability\nStatus: ${point.status}`);
+      });
+
+    // Smooth camera controls
+    const controls = globe.controls();
+    controls.autoRotate = true;
+    controls.autoRotateSpeed = 0.3; // Slow, cinematic rotation
+    controls.enableZoom = true;
+    controls.minDistance = 180;
+    controls.maxDistance = 600;
+    controls.enableDamping = true;
+    controls.dampingFactor = 0.1;
+
+    // Initial view - elevated perspective
+    globe.pointOfView({ lat: 25, lng: 0, altitude: 2.5 }, 0);
+
+    // Pulsing animation for urgent markers
+    let frame = 0;
+    function animatePulse() {
+      frame++;
+
+      // Pulse altitude (breathing effect)
+      const altitudePulse = Math.sin(frame * 0.05) * 0.008 + 0.01;
+
+      // Pulse radius (scale effect)
+      const radiusPulse = Math.sin(frame * 0.05) * 0.15 + 1;
+
+      globe
+        .pointAltitude((d) => {
+          if (d.status === 'urgent') {
+            return altitudePulse + 0.005; // Extra lift for urgent
+          }
+          return 0.01;
+        })
+        .pointRadius((d) => {
+          const baseRadius = d.claims > 150 ? 0.6 : d.claims > 80 ? 0.4 : 0.3;
+
+          // Pulse urgent markers
+          if (d.status === 'urgent') {
+            return baseRadius * radiusPulse;
+          }
+
+          // Subtle pulse for resolved
+          if (d.status === 'resolved') {
+            return baseRadius * (1 + Math.sin(frame * 0.03) * 0.08);
+          }
+
+          return baseRadius;
+        });
+
+      requestAnimationFrame(animatePulse);
+    }
+
+    // Start animation
+    animatePulse();
+
+    console.log('🌍 ProofLocker Globe loaded');
+    console.log('Controls:');
+    console.log('- Drag to rotate');
+    console.log('- Scroll to zoom');
+    console.log('- Hover markers for info');
+    console.log('- Click markers for details');
+    console.log(`\nShowing ${mockClaims.length} claim hotspots`);
+  </script>
+</body>
+</html>
