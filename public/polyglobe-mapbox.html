@@ -1435,12 +1435,32 @@
     // ============================================
     // UI CONTROLS
     // ============================================
+    function switchTab(tab) {
+      currentTab = tab;
+
+      // Update tab buttons
+      document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+      if (tab === 'claims') {
+        document.querySelectorAll('.tab-btn')[0].classList.add('active');
+        document.getElementById('claimsFilters').style.display = 'flex';
+      } else {
+        document.querySelectorAll('.tab-btn')[1].classList.add('active');
+        document.getElementById('claimsFilters').style.display = 'none';
+      }
+
+      // Update tab content
+      document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+      document.getElementById(tab + 'Tab').classList.add('active');
+
+      // Render appropriate list
+      if (tab === 'osint') {
+        renderOsintList();
+      }
+    }
+
     function toggleSidebar() {
       const sidebar = document.getElementById('rightSidebar');
       sidebar.classList.toggle('open');
-      if (sidebar.classList.contains('open')) {
-        renderClaimsList();
-      }
     }
 
     function toggleClaimsLayer() {
@@ -1453,6 +1473,18 @@
       });
 
       document.getElementById('claimsToggle').classList.toggle('active', claimsLayerVisible);
+    }
+
+    function toggleOsintLayer() {
+      osintLayerVisible = !osintLayerVisible;
+      const visibility = osintLayerVisible ? 'visible' : 'none';
+
+      ['osint-clusters-glow', 'osint-clusters-core', 'osint-cluster-count',
+       'osint-points-glow', 'osint-points-core'].forEach(layer => {
+        map.setLayoutProperty(layer, 'visibility', visibility);
+      });
+
+      document.getElementById('osintToggle').classList.toggle('active', osintLayerVisible);
     }
 
     function toggleHeatmap() {
@@ -1478,7 +1510,14 @@
         zoom: 6,
         duration: 1500
       });
-      toggleSidebar(); // Close sidebar after flying
+    }
+
+    function flyToOsint(lng, lat) {
+      map.flyTo({
+        center: [lng, lat],
+        zoom: 6,
+        duration: 1500
+      });
     }
 
     // ============================================
