@@ -75,6 +75,22 @@ export default function LandingHeader() {
             )}
 
             <Link
+              href="/globe"
+              className={`font-medium transition-all duration-200 text-sm relative group flex items-center gap-1.5 ${
+                isActive("/globe") ? "text-[#2E5CFF]" : "text-white/80 hover:text-[#2E5CFF]"
+              }`}
+              style={{ fontFamily: 'var(--font-inter)' }}
+            >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              Globe
+              <span className={`absolute bottom-0 left-0 h-0.5 bg-[#2E5CFF] transition-all duration-200 ${
+                isActive("/globe") ? "w-full" : "w-0 group-hover:w-full"
+              }`} />
+            </Link>
+
+            <Link
               href="/how-scoring-works"
               className={`font-medium transition-all duration-200 text-sm relative group flex items-center gap-1.5 ${
                 isActive("/how-scoring-works") ? "text-[#2E5CFF]" : "text-white/80 hover:text-[#2E5CFF]"
@@ -246,6 +262,20 @@ export default function LandingHeader() {
                     Explore
                   </Link>
                 )}
+
+                {/* Globe */}
+                <Link
+                  href="/globe"
+                  onClick={() => setShowMobileMenu(false)}
+                  className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${
+                    isActive("/globe") ? "text-[#2E5CFF] bg-white/5" : "text-white/80 hover:text-[#2E5CFF] hover:bg-white/5"
+                  }`}
+                >
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                  Globe
+                </Link>
 
                 {/* Scoring */}
                 <Link
