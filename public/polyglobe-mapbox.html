@@ -780,6 +780,15 @@
       .right-sidebar {
         width: 100%;
         right: -100%;
+        transition: right 0.3s ease;
+      }
+
+      .right-sidebar.open {
+        right: 0;
+      }
+
+      #map {
+        right: 0;
       }
 
       .mapboxgl-popup-content {
@@ -817,7 +826,7 @@
     </div>
 
     <div class="header-actions">
-      <button class="btn btn-ghost" onclick="toggleSidebar()" title="View Claims List">
+      <button class="btn btn-ghost mobile-sidebar-toggle" onclick="toggleSidebar()" title="View Claims List" style="display: none;">
         <svg class="btn-icon" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
         </svg>
