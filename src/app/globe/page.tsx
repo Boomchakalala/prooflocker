@@ -5,15 +5,15 @@ import { useEffect, useState, useRef } from 'react';
 import dynamic from 'next/dynamic';
 import GlobeSidePanel from '@/components/GlobeSidePanel';
 
-// Dynamically import Enhanced Globe to avoid SSR issues
-const GlobeComponent = dynamic(() => import('@/components/GlobeVisualizationEnhanced'), {
+// Dynamically import Polyglobe-style Globe
+const GlobeComponent = dynamic(() => import('@/components/GlobeVisualizationPolyglobe'), {
   ssr: false,
   loading: () => (
     <div className="flex items-center justify-center h-screen bg-[#0a0a0a]">
       <div className="text-center">
-        <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-white mx-auto mb-4" />
-        <p className="text-gray-400">Loading enhanced globe...</p>
-        <p className="text-gray-500 text-sm mt-2">Preparing country borders and city labels...</p>
+        <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-purple-500 mx-auto mb-4" />
+        <p className="text-gray-400">Initializing globe...</p>
+        <p className="text-gray-500 text-sm mt-2">If it's not on chain, it didn't happen</p>
       </div>
     </div>
   ),
