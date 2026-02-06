@@ -389,7 +389,7 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
 
           {/* Right: Time + Menu */}
           <div className="flex items-center gap-3 flex-shrink-0">
-            <span className="text-xs text-gray-500">{formatRelativeTime(prediction.timestamp)}</span>
+            <span className="text-xs text-slate-400 font-medium">{formatRelativeTime(prediction.timestamp)}</span>
             {/* Three-dot menu - hide in preview mode */}
             {!isPreview && (
               <div className="relative">
