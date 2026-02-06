@@ -73,10 +73,10 @@ export default function GlobeSidePanel({ hotspot, onClose }: GlobeSidePanelProps
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'pending': return 'text-orange-500';
-      case 'correct': return 'text-green-500';
-      case 'incorrect': return 'text-red-500';
-      default: return 'text-gray-500';
+      case 'pending': return 'text-amber-400';
+      case 'correct': return 'text-emerald-400';
+      case 'incorrect': return 'text-rose-400';
+      default: return 'text-slate-500';
     }
   };
 
@@ -90,11 +90,11 @@ export default function GlobeSidePanel({ hotspot, onClose }: GlobeSidePanelProps
   };
 
   const getReliabilityBadge = (score: number) => {
-    if (score >= 800) return { label: 'Elite', color: 'bg-purple-500/20 text-purple-400' };
-    if (score >= 700) return { label: 'Trusted+', color: 'bg-blue-500/20 text-blue-400' };
-    if (score >= 500) return { label: 'Trusted', color: 'bg-green-500/20 text-green-400' };
-    if (score >= 300) return { label: 'Active', color: 'bg-yellow-500/20 text-yellow-400' };
-    return { label: 'New', color: 'bg-gray-500/20 text-gray-400' };
+    if (score >= 800) return { label: 'Elite', color: 'bg-[#5B21B6]/20 text-[#a78bfa]' };
+    if (score >= 700) return { label: 'Trusted+', color: 'bg-[#2E5CFF]/20 text-[#60a5fa]' };
+    if (score >= 500) return { label: 'Trusted', color: 'bg-emerald-500/20 text-emerald-400' };
+    if (score >= 300) return { label: 'Active', color: 'bg-amber-500/20 text-amber-400' };
+    return { label: 'New', color: 'bg-slate-500/20 text-slate-400' };
   };
 
   const formatTimeAgo = (date: string) => {
@@ -111,21 +111,21 @@ export default function GlobeSidePanel({ hotspot, onClose }: GlobeSidePanelProps
   };
 
   return (
-    <div className="fixed right-0 top-0 h-full w-full md:w-[480px] bg-[#0f0f0f] border-l border-[#1f1f1f] shadow-2xl z-50 overflow-y-auto animate-slide-in-right">
+    <div className="fixed right-0 top-0 h-full w-full md:w-[480px] bg-[#0f0f0f] border-l border-slate-700 shadow-2xl z-50 overflow-y-auto animate-slide-in-right">
       {/* Header */}
-      <div className="sticky top-0 bg-[#0f0f0f] border-b border-[#1f1f1f] p-4 z-10">
+      <div className="sticky top-0 bg-[#0f0f0f] border-b border-slate-700 p-4 z-10">
         <div className="flex justify-between items-start mb-3">
           <div>
             <h2 className="text-xl font-bold text-white">
               {hotspot.city}, {hotspot.country}
             </h2>
-            <p className="text-sm text-gray-400 mt-1">
+            <p className="text-sm text-slate-400 mt-1">
               {hotspot.claim_count} claim{hotspot.claim_count !== 1 ? 's' : ''} • Avg Reliability: {hotspot.avg_reliability}
             </p>
           </div>
           <button
             onClick={onClose}
-            className="text-gray-400 hover:text-white text-3xl leading-none"
+            className="text-slate-400 hover:text-white text-3xl leading-none"
           >
             ×
           </button>
@@ -139,8 +139,8 @@ export default function GlobeSidePanel({ hotspot, onClose }: GlobeSidePanelProps
               onClick={() => setActiveTab(tab)}
               className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
                 activeTab === tab
-                  ? 'bg-[#1a1a1a] text-white border border-[#2f2f2f]'
-                  : 'text-gray-400 hover:text-white hover:bg-[#1a1a1a]'
+                  ? 'bg-[#1a1a1a] text-white border border-[#2E5CFF]'
+                  : 'text-slate-400 hover:text-white hover:bg-[#1a1a1a]'
               }`}
             >
               {tab.charAt(0).toUpperCase() + tab.slice(1)}
@@ -153,13 +153,13 @@ export default function GlobeSidePanel({ hotspot, onClose }: GlobeSidePanelProps
       <div className="p-4 space-y-3">
         {loading ? (
           <div className="text-center py-12">
-            <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-white mx-auto mb-3" />
-            <p className="text-gray-400 text-sm">Loading claims...</p>
+            <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-[#2E5CFF] mx-auto mb-3" />
+            <p className="text-slate-400 text-sm">Loading claims...</p>
           </div>
         ) : claims.length === 0 ? (
           <div className="text-center py-12">
-            <p className="text-gray-400 text-sm">No claims in this region yet.</p>
-            <p className="text-gray-500 text-xs mt-2">
+            <p className="text-slate-400 text-sm">No claims in this region yet.</p>
+            <p className="text-slate-500 text-xs mt-2">
               Be the first to lock a geotagged claim here! 🚀
             </p>
           </div>
@@ -170,7 +170,7 @@ export default function GlobeSidePanel({ hotspot, onClose }: GlobeSidePanelProps
               <Link
                 key={claim.id}
                 href={`/predictions/${claim.id}`}
-                className="block bg-[#0a0a0a] border border-[#1f1f1f] rounded-lg p-4 hover:border-[#2f2f2f] transition-colors"
+                className="block bg-[#0a0a0a] border border-slate-700 rounded-lg p-4 hover:border-[#2E5CFF] transition-colors"
               >
                 {/* Status & Time */}
                 <div className="flex items-center justify-between mb-2">
@@ -180,12 +180,12 @@ export default function GlobeSidePanel({ hotspot, onClose }: GlobeSidePanelProps
                       {claim.status.toUpperCase()}
                     </span>
                     {claim.evidence_score && (
-                      <span className="text-xs text-gray-400">
+                      <span className="text-xs text-slate-400">
                         (Evidence: {claim.evidence_score})
                       </span>
                     )}
                   </div>
-                  <span className="text-xs text-gray-500">
+                  <span className="text-xs text-slate-500">
                     {formatTimeAgo(claim.created_at)}
                   </span>
                 </div>
@@ -195,8 +195,8 @@ export default function GlobeSidePanel({ hotspot, onClose }: GlobeSidePanelProps
                   <span className={`px-2 py-1 rounded text-xs font-medium ${badge.color}`}>
                     {badge.label}
                   </span>
-                  <span className="text-sm text-gray-400">{claim.pseudonym}</span>
-                  <span className="text-xs text-gray-500">
+                  <span className="text-sm text-slate-400">{claim.pseudonym}</span>
+                  <span className="text-xs text-slate-500">
                     (Rel: {claim.reliability_score})
                   </span>
                 </div>
@@ -209,22 +209,22 @@ export default function GlobeSidePanel({ hotspot, onClose }: GlobeSidePanelProps
                 {/* Category & Evidence */}
                 <div className="flex items-center gap-3 text-xs">
                   {claim.category && (
-                    <span className="px-2 py-1 bg-[#1a1a1a] border border-[#2f2f2f] rounded text-gray-400">
+                    <span className="px-2 py-1 bg-[#1a1a1a] border border-slate-700 rounded text-slate-400">
                       {claim.category}
                     </span>
                   )}
                   {claim.evidence_count > 0 && (
-                    <span className="text-gray-500">
+                    <span className="text-slate-500">
                       {claim.evidence_count} evidence item{claim.evidence_count !== 1 ? 's' : ''}
                     </span>
                   )}
                   {claim.on_chain_verified && (
-                    <span className="text-green-500">✓ On-Chain</span>
+                    <span className="text-emerald-400">✓ On-Chain</span>
                   )}
                 </div>
 
                 {/* View Link */}
-                <div className="mt-3 text-xs text-blue-400 hover:text-blue-300">
+                <div className="mt-3 text-xs text-[#2E5CFF] hover:text-[#4d7dff]">
                   View Full Proof →
                 </div>
               </Link>
