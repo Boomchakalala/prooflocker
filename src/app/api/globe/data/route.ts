@@ -114,7 +114,7 @@ export async function GET(request: NextRequest) {
     // Fetch predictions from database with correct field names
     const { data: predictions, error } = await supabase
       .from('predictions')
-      .select('id, text, author_number, pseudonym, created_at, outcome, status, anon_id, category, evidence_score, author_reliability_tier')
+      .select('id, text, author_number, pseudonym, created_at, outcome, status, anon_id, category, evidence_score')
       .eq('moderation_status', 'active')
       .order('created_at', { ascending: false })
       .limit(50);
@@ -134,9 +134,7 @@ export async function GET(request: NextRequest) {
         has_category: !!predictions[0].category,
         category: predictions[0].category,
         has_evidence_score: predictions[0].evidence_score !== null && predictions[0].evidence_score !== undefined,
-        evidence_score: predictions[0].evidence_score,
-        has_reliability_tier: !!predictions[0].author_reliability_tier,
-        reliability_tier: predictions[0].author_reliability_tier
+        evidence_score: predictions[0].evidence_score
       });
     }
 
@@ -192,6 +190,9 @@ export async function GET(request: NextRequest) {
       // Calculate confidence score (mock for now, can be enhanced with actual scoring)
       const confidence = Math.floor(60 + Math.random() * 35);
 
+      // Calculate mock reputation (will be replaced with actual user stats)
+      const rep = Math.floor(50 + Math.random() * 50);
+
       return {
         id: prediction.id,
         claim: prediction.text,
@@ -199,7 +200,7 @@ export async function GET(request: NextRequest) {
         lng: location.lng,
         status,
         submitter,
-        rep: Math.floor(50 + Math.random() * 50), // Mock reputation for now
+        rep,
         confidence,
         lockedDate: new Date(prediction.created_at).toLocaleDateString('en-US', {
           year: 'numeric',
@@ -209,7 +210,6 @@ export async function GET(request: NextRequest) {
         outcome,
         category: prediction.category,
         evidence_score: prediction.evidence_score,
-        author_reliability_tier: prediction.author_reliability_tier,
       };
     });
 
