@@ -823,50 +823,109 @@ export default function GlobeMapbox({ claims, osint }: GlobeMapboxProps) {
         <div className="flex-1 overflow-y-auto px-5 py-4">
           {currentTab === 'claims' ? (
             <div className="space-y-3">
-              {filteredClaims.slice(0, 20).map((claim) => (
-                <div
-                  key={claim.id}
-                  onClick={() => flyTo(claim.lng, claim.lat)}
-                  className="bg-gradient-to-br from-[#0A0A0F] to-[#111118] border border-purple-500/30 rounded-xl p-4 cursor-pointer transition-all hover:border-purple-500/60 hover:shadow-[0_0_25px_rgba(91,33,182,0.3)] hover:scale-[1.01]"
-                >
-                  <div className="flex items-center justify-between mb-2.5">
-                    <span className="text-[12px] font-bold text-white">{claim.submitter}</span>
-                    <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider ${
-                      claim.status === 'verified' ? 'bg-purple-500/20 text-purple-300 border border-purple-500/40' :
-                      claim.status === 'disputed' ? 'bg-red-500/20 text-red-300 border border-red-500/40' :
-                      claim.status === 'void' ? 'bg-gray-500/20 text-gray-300 border border-gray-500/40' :
-                      'bg-amber-500/20 text-amber-300 border border-amber-500/40'
-                    }`}>
-                      {claim.status}
-                    </span>
+              {filteredClaims.slice(0, 20).map((claim) => {
+                const getReliabilityBadge = (rep: number) => {
+                  if (rep >= 90) return { label: 'Elite', color: 'text-yellow-400 bg-yellow-500/20 border-yellow-500/40' };
+                  if (rep >= 70) return { label: 'Proven', color: 'text-purple-300 bg-purple-500/20 border-purple-500/40' };
+                  if (rep >= 50) return { label: 'Active', color: 'text-blue-300 bg-blue-500/20 border-blue-500/40' };
+                  return { label: 'New', color: 'text-gray-400 bg-gray-500/20 border-gray-500/40' };
+                };
+                const reliability = getReliabilityBadge(claim.rep);
+
+                return (
+                  <div
+                    key={claim.id}
+                    className="bg-gradient-to-br from-[#0A0A0F] to-[#111118] border border-purple-500/30 rounded-xl p-4 transition-all hover:border-purple-500/60 hover:shadow-[0_0_25px_rgba(91,33,182,0.3)]"
+                  >
+                    <div className="flex items-center justify-between mb-2.5">
+                      <div className="flex items-center gap-2">
+                        <span className="text-[12px] font-bold text-white">{claim.submitter}</span>
+                        <span className={`px-2 py-0.5 rounded-full text-[9px] font-bold uppercase tracking-wider border ${reliability.color}`}>
+                          {reliability.label}
+                        </span>
+                      </div>
+                      <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider ${
+                        claim.status === 'verified' ? 'bg-purple-500/20 text-purple-300 border border-purple-500/40' :
+                        claim.status === 'disputed' ? 'bg-red-500/20 text-red-300 border border-red-500/40' :
+                        claim.status === 'void' ? 'bg-gray-500/20 text-gray-300 border border-gray-500/40' :
+                        'bg-amber-500/20 text-amber-300 border border-amber-500/40'
+                      }`}>
+                        {claim.status}
+                      </span>
+                    </div>
+                    <div className="text-[13px] text-gray-200 mb-3 line-clamp-2 leading-relaxed">{claim.claim}</div>
+                    <div className="flex items-center justify-between gap-2">
+                      <span className="text-[11px] text-gray-500">{claim.lockedDate}</span>
+                      <div className="flex gap-2">
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            flyTo(claim.lng, claim.lat);
+                          }}
+                          className="px-3 py-1 bg-purple-600/80 hover:bg-purple-600 text-white text-[10px] font-bold rounded-lg transition-all"
+                        >
+                          View on Map
+                        </button>
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            // Navigate to claim detail page
+                            window.location.href = `/claim/${claim.id}`;
+                          }}
+                          className="px-3 py-1 bg-gradient-to-r from-[#5B21B6] to-[#2E5CFF] hover:from-[#6B31C6] hover:to-[#3D6CFF] text-white text-[10px] font-bold rounded-lg transition-all"
+                        >
+                          Verify
+                        </button>
+                      </div>
+                    </div>
                   </div>
-                  <div className="text-[13px] text-gray-200 mb-2.5 line-clamp-2 leading-relaxed">{claim.claim}</div>
-                  <div className="flex items-center justify-between text-[11px] text-gray-500">
-                    <span>{claim.lockedDate}</span>
-                    <span className="font-bold text-purple-400">{claim.confidence}%</span>
-                  </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           ) : (
             <div className="space-y-3">
               {osint.slice(0, 20).map((item) => (
                 <div
                   key={item.id}
-                  onClick={() => flyTo(item.lng, item.lat)}
-                  className="bg-gradient-to-br from-[#0A0A0F] to-[#111118] border border-red-500/30 border-l-[3px] border-l-red-500 rounded-xl p-4 cursor-pointer transition-all hover:border-red-500/60 hover:shadow-[0_0_25px_rgba(239,68,68,0.3)] hover:scale-[1.01]"
+                  className="bg-gradient-to-br from-[#0A0A0F] to-[#111118] border border-red-500/30 border-l-[3px] border-l-red-500 rounded-xl p-4 transition-all hover:border-red-500/60 hover:shadow-[0_0_25px_rgba(239,68,68,0.3)]"
                 >
                   <div className="flex items-center justify-between mb-2">
                     <span className="text-[12px] font-bold text-white">{item.source}</span>
                     <span className="text-[11px] text-gray-500">{item.timestamp}</span>
                   </div>
-                  <div className="text-[13px] text-gray-200 mb-2.5 line-clamp-2 leading-relaxed">{item.title}</div>
-                  <div className="flex gap-1.5 flex-wrap">
-                    {item.tags.map((tag, idx) => (
-                      <span key={idx} className="px-2.5 py-0.5 bg-red-500/15 border border-red-500/30 rounded-full text-[10px] font-bold text-red-300 uppercase tracking-wider">
-                        {tag}
-                      </span>
-                    ))}
+                  <div className="text-[13px] text-gray-200 mb-3 line-clamp-2 leading-relaxed">{item.title}</div>
+                  <div className="flex items-center justify-between gap-2">
+                    <div className="flex gap-1.5 flex-wrap">
+                      {item.tags.slice(0, 1).map((tag, idx) => (
+                        <span key={idx} className="px-2.5 py-0.5 bg-red-500/15 border border-red-500/30 rounded-full text-[10px] font-bold text-red-300 uppercase tracking-wider">
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+                    <div className="flex gap-2">
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          flyTo(item.lng, item.lat);
+                        }}
+                        className="px-3 py-1 bg-red-600/80 hover:bg-red-600 text-white text-[10px] font-bold rounded-lg transition-all"
+                      >
+                        View on Map
+                      </button>
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          // Open tweet on X
+                          window.open(`https://twitter.com/search?q=${encodeURIComponent(item.title)}`, '_blank');
+                        }}
+                        className="flex items-center gap-1 px-3 py-1 bg-black hover:bg-gray-900 text-white text-[10px] font-bold rounded-lg transition-all"
+                      >
+                        <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 24 24">
+                          <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                        </svg>
+                        View on X
+                      </button>
+                    </div>
                   </div>
                 </div>
               ))}
