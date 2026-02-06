@@ -90,10 +90,6 @@ export default function GlobePage() {
     };
 
     fetchGlobeData();
-
-    // Refresh data every 60 seconds
-    const interval = setInterval(fetchGlobeData, 60000);
-    return () => clearInterval(interval);
   }, []);
 
   return (
