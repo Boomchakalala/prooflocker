@@ -451,14 +451,14 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
                         </svg>
                       </button>
                       {showReportMenu && (
-                        <div className="absolute left-full top-0 ml-1 w-40 bg-[#1a1a1a] border border-purple-500/30 rounded-lg shadow-[0_0_20px_rgba(168,85,247,0.3)] py-1">
+                        <div className="absolute left-full top-0 ml-1 w-40 bg-[#1a1a1a] border border-slate-700 rounded-lg shadow-lg py-1">
                           <button
                             onClick={(e) => {
                               e.preventDefault();
                               e.stopPropagation();
                               handleReport('spam');
                             }}
-                            className="w-full px-4 py-2 text-left text-sm text-gray-300 hover:text-white hover:bg-purple-500/20 transition-colors"
+                            className="w-full px-4 py-2 text-left text-sm text-gray-300 hover:text-white hover:bg-slate-800 transition-colors"
                           >
                             Spam
                           </button>
@@ -468,7 +468,7 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
                               e.stopPropagation();
                               handleReport('low_quality');
                             }}
-                            className="w-full px-4 py-2 text-left text-sm text-gray-300 hover:text-white hover:bg-purple-500/20 transition-colors"
+                            className="w-full px-4 py-2 text-left text-sm text-gray-300 hover:text-white hover:bg-slate-800 transition-colors"
                           >
                             Low Quality
                           </button>
@@ -478,7 +478,7 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
                               e.stopPropagation();
                               handleReport('inappropriate');
                             }}
-                            className="w-full px-4 py-2 text-left text-sm text-gray-300 hover:text-white hover:bg-purple-500/20 transition-colors"
+                            className="w-full px-4 py-2 text-left text-sm text-gray-300 hover:text-white hover:bg-slate-800 transition-colors"
                           >
                             Inappropriate
                           </button>
