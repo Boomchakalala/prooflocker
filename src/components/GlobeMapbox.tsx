@@ -431,16 +431,21 @@ export default function GlobeMapbox({ claims, osint }: GlobeMapboxProps) {
   const filteredClaims = getFilteredClaims();
 
   return (
-    <div className="relative w-full h-full bg-[#0f172a]">
+    <div className="relative w-full h-full bg-[#0f172a]" style={{ minHeight: '100vh', width: '100%' }}>
       {/* Debug info */}
       <div className="absolute top-4 left-4 z-[2000] bg-black/80 text-white p-3 rounded-lg text-xs font-mono">
         <div>Claims: {claims.length}</div>
         <div>OSINT: {osint.length}</div>
         <div>Map Ready: {mapReady ? '✅' : '⏳'}</div>
+        <div>Container: {mapContainer.current ? '✅' : '❌'}</div>
         {error && <div className="text-red-400">Error: {error}</div>}
       </div>
 
-      <div ref={mapContainer} className="absolute inset-0" />
+      <div
+        ref={mapContainer}
+        className="absolute inset-0 w-full h-full"
+        style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, width: '100%', height: '100%' }}
+      />
 
       {!mapReady && !error && (
         <div className="absolute inset-0 flex items-center justify-center bg-[#0f172a] z-[1000]">
