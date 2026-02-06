@@ -1,5 +1,8 @@
 import { NextResponse } from 'next/server';
-import { createClient } from '@/lib/supabase/server';
+import { createClient } from '@supabase/supabase-js';
+
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
 
 // Simple in-memory rate limiter
 const shareTracking = new Map<string, number>();
@@ -37,7 +40,7 @@ export async function POST(request: Request) {
       });
     }
 
-    const supabase = await createClient();
+    const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
     // Get prediction owner
     const { data: prediction, error: predError } = await supabase

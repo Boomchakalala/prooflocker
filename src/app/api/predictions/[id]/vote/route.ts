@@ -138,10 +138,10 @@ export async function GET(
 ) {
   try {
     const predictionId = params.id;
-    const supabase = await createClient();
+    const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
     // Get current user (optional for GET)
-    const { data: { user } } = await supabase.auth.getUser();
+    const user = await getCurrentUser();
 
     if (!user) {
       return NextResponse.json({
