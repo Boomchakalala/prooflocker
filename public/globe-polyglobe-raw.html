@@ -100,6 +100,7 @@
 
   <!-- Globe.GL from CDN -->
   <script src="//unpkg.com/globe.gl"></script>
+  <script src="//unpkg.com/topojson-client"></script>
 
   <script>
     // Mock claim data - 25 global hotspots
@@ -139,7 +140,7 @@
     // Initialize Globe
     const globe = Globe()
       (document.getElementById('globe-container'))
-      // High-resolution Natural Earth political map with country borders
+      // High-resolution Natural Earth political map
       .globeImageUrl('https://cdn.jsdelivr.net/npm/three-globe/example/img/earth-blue-marble.jpg')
       // No bump map - keep it flat and raw
       .bumpImageUrl(null)
@@ -151,6 +152,18 @@
       .showAtmosphere(true)
       // Higher polygon detail for smoother zoom
       .polygonCapCurvatureResolution(20);
+
+    // Load country borders from GeoJSON
+    fetch('https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json')
+      .then(res => res.json())
+      .then(countries => {
+        globe
+          .hexPolygonsData(topojson.feature(countries, countries.objects.countries).features)
+          .hexPolygonResolution(3)
+          .hexPolygonMargin(0.3)
+          .hexPolygonColor(() => 'rgba(255, 255, 255, 0.05)')
+          .hexPolygonAltitude(0.001);
+      });
 
     // Configure pulsing hotspot markers
     globe
