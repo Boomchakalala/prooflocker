@@ -90,7 +90,7 @@ export default function GlobePage() {
             </a>
 
             <a
-              href="/scoring"
+              href="/how-scoring-works"
               className="flex items-center gap-1.5 px-3 py-1.5 text-[12px] font-medium text-gray-400 hover:text-white transition-all hover:bg-white/10 rounded-lg"
             >
               <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
