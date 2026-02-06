@@ -7,10 +7,10 @@ const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
 
 export async function POST(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const predictionId = params.id;
+    const { id: predictionId } = await params;
     const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
     // Get current user
@@ -134,10 +134,10 @@ export async function POST(
 
 export async function GET(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const predictionId = params.id;
+    const { id: predictionId } = await params;
     const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
     // Get current user (optional for GET)
