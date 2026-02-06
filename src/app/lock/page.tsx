@@ -4,19 +4,16 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import BrandLogo from "@/components/BrandLogo";
-import LocationPicker from "@/components/LocationPicker";
 import { getOrCreateUserId, isAnonymousUser } from "@/lib/user";
 import { getSiteUrl } from "@/lib/config";
 import { supabase } from "@/lib/supabase";
 import { useToast } from "@/contexts/ToastContext";
-import type { LocationResult } from "@/lib/geocode";
 
 export default function LockPage() {
   const router = useRouter();
   const { showScoreToast } = useToast();
   const [text, setText] = useState("");
   const [category, setCategory] = useState<string>("Other");
-  const [selectedLocation, setSelectedLocation] = useState<LocationResult | null>(null);
   const [loading, setLoading] = useState(false);
   const [userId, setUserId] = useState<string>("");
   const [isAnonymous, setIsAnonymous] = useState(true);
@@ -50,18 +47,12 @@ export default function LockPage() {
       }
 
       // Prepare geotag data if location selected
-      const geotag = selectedLocation ? {
-        lat: selectedLocation.lat,
-        lng: selectedLocation.lng,
-        city: selectedLocation.city,
-        country: selectedLocation.country,
-        region: selectedLocation.region,
-      } : null;
+      const geotag = null; // Automatic geolocation happens server-side now
 
       const response = await fetch("/api/lock-proof", {
         method: "POST",
         headers,
-        body: JSON.stringify({ text, userId, category, geotag }),
+        body: JSON.stringify({ text, userId, category }),
       });
 
       if (response.ok) {
@@ -217,14 +208,6 @@ export default function LockPage() {
                 <p className="text-xs text-neutral-500 mt-2">
                   Helps others discover your prediction
                 </p>
-              </div>
-
-              {/* Location Picker for Globe View */}
-              <div className="mb-6">
-                <LocationPicker
-                  selectedLocation={selectedLocation}
-                  onLocationSelect={setSelectedLocation}
-                />
               </div>
 
               {/* How it works - Collapsible */}

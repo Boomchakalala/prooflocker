@@ -6,6 +6,7 @@ import { submitToDigitalEvidence, isDigitalEvidenceEnabled } from "@/lib/digital
 import { validatePredictionContent } from "@/lib/contentFilter";
 import { createClient } from "@supabase/supabase-js";
 import { awardLockPoints } from "@/lib/insight-db";
+import { getClientIP, getCachedLocation } from "@/lib/geolocation";
 
 export const runtime = "nodejs";
 
@@ -14,7 +15,17 @@ const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
 
 export async function POST(request: NextRequest) {
   try {
-    const { text, userId: anonId, category, geotag } = await request.json();
+    const { text, userId: anonId, category } = await request.json();
+
+    // Automatically detect user's location from IP
+    const clientIP = getClientIP(request);
+    const autoLocation = await getCachedLocation(clientIP);
+
+    if (autoLocation) {
+      console.log(`[Lock Proof API] Auto-detected location: ${autoLocation.city}, ${autoLocation.country}`);
+    } else {
+      console.log('[Lock Proof API] Could not detect location (likely localhost)');
+    }
 
     if (!text || typeof text !== "string") {
       return NextResponse.json(
@@ -172,12 +183,12 @@ export async function POST(request: NextRequest) {
       deSubmittedAt,
       confirmedAt,
       claimedAt: authenticatedUserId ? new Date().toISOString() : undefined, // Mark as claimed if authenticated
-      // Globe View: Add geotag fields if provided
-      geotagLat: geotag?.lat || null,
-      geotagLng: geotag?.lng || null,
-      geotagCity: geotag?.city || null,
-      geotagCountry: geotag?.country || null,
-      geotagRegion: geotag?.region || null,
+      // Globe View: Automatic geotag from IP detection
+      geotagLat: autoLocation?.lat || null,
+      geotagLng: autoLocation?.lng || null,
+      geotagCity: autoLocation?.city || null,
+      geotagCountry: autoLocation?.country || null,
+      geotagRegion: autoLocation?.region || null,
     };
 
     // Save prediction to storage (Supabase)
