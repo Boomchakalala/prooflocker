@@ -51,9 +51,20 @@ export default function GlobePage() {
   useEffect(() => {
     const fetchGlobeData = async () => {
       try {
+        console.log('[Globe Page] Fetching data from API...');
         setLoading(true);
         const response = await fetch('/api/globe/data');
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
         const data = await response.json();
+        console.log('[Globe Page] Received data:', {
+          claimsCount: data.claims?.length,
+          osintCount: data.osint?.length,
+          firstClaim: data.claims?.[0]?.claim?.substring(0, 50)
+        });
 
         if (data.claims && data.osint) {
           setClaims(data.claims);
@@ -68,11 +79,13 @@ export default function GlobePage() {
             : 79;
 
           setStats({ activeClaims: activeClaims || data.count.claims, accuracy });
+          console.log('[Globe Page] Stats updated:', { activeClaims: activeClaims || data.count.claims, accuracy });
         }
       } catch (error) {
         console.error('[Globe Page] Error fetching data:', error);
       } finally {
         setLoading(false);
+        console.log('[Globe Page] Loading complete');
       }
     };
 

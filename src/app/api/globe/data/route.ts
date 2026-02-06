@@ -110,12 +110,13 @@ export async function GET(request: NextRequest) {
 
     const supabase = createClient(supabaseUrl, supabaseKey);
 
-    // Fetch predictions from database
+    // Fetch predictions from database with correct field names
     const { data: predictions, error } = await supabase
       .from('predictions')
-      .select('*')
+      .select('id, text, author_number, pseudonym, created_at, outcome, status, anon_id')
+      .eq('moderation_status', 'active')
       .order('created_at', { ascending: false })
-      .limit(100);
+      .limit(50);
 
     if (error) {
       console.error('[Globe API] Error fetching predictions:', error);
@@ -124,6 +125,8 @@ export async function GET(request: NextRequest) {
         { status: 500 }
       );
     }
+
+    console.log(`[Globe API] Fetched ${predictions?.length || 0} predictions from database`);
 
     // Transform predictions to globe format
     // For now, we'll assign random global locations to predictions
@@ -154,35 +157,36 @@ export async function GET(request: NextRequest) {
     const claims = (predictions || []).slice(0, 20).map((prediction: any, index: number) => {
       const location = globalLocations[index % globalLocations.length];
 
-      // Determine status from resolution
+      // Format user handle: use pseudonym if available, otherwise "Anon #authorNumber"
+      const submitter = prediction.pseudonym
+        ? `@${prediction.pseudonym}`
+        : `Anon #${prediction.author_number}`;
+
+      // Determine status from outcome
       let status: 'verified' | 'disputed' | 'void' | 'pending' = 'pending';
       let outcome: string | null = null;
 
-      if (prediction.resolution_status === 'resolved') {
-        if (prediction.resolution_outcome === 'true') {
-          status = 'verified';
-          outcome = 'true';
-        } else if (prediction.resolution_outcome === 'false') {
-          status = 'disputed';
-          outcome = 'false';
-        } else if (prediction.resolution_outcome === 'void') {
-          status = 'void';
-          outcome = 'void';
-        }
+      if (prediction.outcome === 'correct') {
+        status = 'verified';
+        outcome = 'true';
+      } else if (prediction.outcome === 'incorrect') {
+        status = 'disputed';
+        outcome = 'false';
+      } else if (prediction.outcome === 'invalid') {
+        status = 'void';
+        outcome = 'void';
       }
 
-      // Calculate confidence from total_score or use default
-      const confidence = prediction.total_score
-        ? Math.min(100, Math.max(0, Math.round(prediction.total_score)))
-        : Math.floor(50 + Math.random() * 40);
+      // Calculate confidence score (mock for now, can be enhanced with actual scoring)
+      const confidence = Math.floor(60 + Math.random() * 35);
 
       return {
         id: prediction.id,
-        claim: prediction.claim_text,
+        claim: prediction.text,
         lat: location.lat,
         lng: location.lng,
         status,
-        submitter: prediction.user_handle || `@user${index + 1}`,
+        submitter,
         rep: Math.floor(50 + Math.random() * 50), // Mock reputation for now
         confidence,
         lockedDate: new Date(prediction.created_at).toLocaleDateString('en-US', {
@@ -196,6 +200,8 @@ export async function GET(request: NextRequest) {
 
     // Generate OSINT data
     const osint = generateOsintData();
+
+    console.log(`[Globe API] Returning ${claims.length} claims and ${osint.length} OSINT signals`);
 
     return NextResponse.json({
       claims,
