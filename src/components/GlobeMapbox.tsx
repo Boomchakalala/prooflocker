@@ -43,49 +43,25 @@ export default function GlobeMapbox({ claims, osint }: GlobeMapboxProps) {
   const [mapError, setMapError] = useState<string | null>(null);
 
   useEffect(() => {
-    // Load Mapbox GL JS
-    const loadMapbox = async () => {
-      try {
-        console.log('[GlobeMapbox] Starting Mapbox load...');
-        // @ts-ignore
-        if (typeof window !== 'undefined' && !window.mapboxgl) {
-          console.log('[GlobeMapbox] Loading Mapbox scripts...');
-          // Load CSS
-          const link = document.createElement('link');
-          link.href = 'https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css';
-          link.rel = 'stylesheet';
-          document.head.appendChild(link);
+    console.log('[GlobeMapbox] Component mounted');
 
-          // Load JS
-          const script = document.createElement('script');
-          script.src = 'https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js';
-          script.async = true;
-          document.head.appendChild(script);
-
-          await new Promise((resolve, reject) => {
-            script.onload = resolve;
-            script.onerror = () => reject(new Error('Failed to load Mapbox GL JS'));
-            setTimeout(() => reject(new Error('Mapbox GL JS load timeout')), 10000);
-          });
-          console.log('[GlobeMapbox] Mapbox scripts loaded');
-        } else {
-          console.log('[GlobeMapbox] Mapbox already loaded');
-        }
-
-        // Wait a bit for Mapbox to be fully available
-        setTimeout(() => {
-          initializeMap();
-        }, 100);
-      } catch (error) {
-        console.error('[GlobeMapbox] Error loading Mapbox:', error);
-        setMapError(error instanceof Error ? error.message : 'Failed to load map');
+    // Wait for Mapbox to be available
+    const checkMapbox = () => {
+      // @ts-ignore
+      if (typeof window !== 'undefined' && window.mapboxgl) {
+        console.log('[GlobeMapbox] Mapbox GL JS is available, initializing map');
+        initializeMap();
+      } else {
+        console.log('[GlobeMapbox] Waiting for Mapbox GL JS...');
+        setTimeout(checkMapbox, 100);
       }
     };
 
-    loadMapbox();
+    checkMapbox();
 
     return () => {
       if (map.current) {
+        console.log('[GlobeMapbox] Cleaning up map');
         map.current.remove();
         map.current = null;
       }
