@@ -66,51 +66,69 @@ export default function GlobePage() {
         strategy="beforeInteractive"
       />
 
-      <header className="fixed top-0 left-0 right-0 h-14 bg-[#0f172a]/95 backdrop-blur-[20px] border-b border-[rgba(148,163,184,0.1)] z-[1000]">
+      <header className="fixed top-0 left-0 right-0 h-14 bg-gradient-to-r from-[#0f172a] via-[#1a0f2e] to-[#0f172a] backdrop-blur-[20px] border-b border-purple-500/20 z-[1000] shadow-[0_0_20px_rgba(168,85,247,0.15)]">
         <div className="flex items-center justify-between px-6 h-full">
           <div className="flex items-center gap-8">
             <a href="/" className="flex items-center">
               <img src="/logos/prooflocker-logo-dark.svg" alt="ProofLocker" className="h-9 w-auto" />
             </a>
-            <span className="text-[13px] font-medium text-[#94a3b8] tracking-wide hidden lg:block">
-              Verifiable Predictions Worldwide
+            <span className="text-[13px] font-medium text-purple-300/80 tracking-wide hidden lg:block">
+              🌍 Verifiable Predictions Worldwide
             </span>
           </div>
 
-          <div className="flex items-center gap-6">
-            <div className="flex items-center gap-2 text-[13px] text-[#94a3b8]">
-              <svg className="w-[18px] h-[18px]" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+          <div className="flex items-center gap-3">
+            {/* Navigation buttons */}
+            <a
+              href="/app"
+              className="flex items-center gap-1.5 px-3 py-1.5 text-[12px] font-medium text-gray-400 hover:text-white transition-all hover:bg-white/10 rounded-lg"
+            >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z" />
+              </svg>
+              <span className="hidden sm:inline">Feed</span>
+            </a>
+
+            <a
+              href="/scoring"
+              className="flex items-center gap-1.5 px-3 py-1.5 text-[12px] font-medium text-gray-400 hover:text-white transition-all hover:bg-white/10 rounded-lg"
+            >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+              </svg>
+              <span className="hidden sm:inline">Scoring</span>
+            </a>
+
+            <a
+              href="/profile"
+              className="flex items-center gap-1.5 px-3 py-1.5 text-[12px] font-medium text-gray-400 hover:text-white transition-all hover:bg-white/10 rounded-lg"
+            >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+              </svg>
+              <span className="hidden sm:inline">Profile</span>
+            </a>
+
+            <div className="h-6 w-px bg-purple-500/30 mx-1 hidden md:block"></div>
+
+            <div className="flex items-center gap-2 text-[12px] text-gray-400 hidden lg:flex">
+              <svg className="w-[16px] h-[16px] text-purple-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
               </svg>
               <span>
-                Active: <span className="font-semibold text-[#f8fafc]">{stats.activeClaims}</span>
-              </span>
-            </div>
-            <div className="flex items-center gap-2 text-[13px] text-[#94a3b8]">
-              <svg className="w-[18px] h-[18px]" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-              <span>
-                Accuracy: <span className="font-semibold text-[#f8fafc]">{stats.accuracy}%</span>
+                <span className="font-semibold text-purple-300">{stats.activeClaims}</span> Active
               </span>
             </div>
 
             <a
               href="/lock"
-              className="flex items-center gap-2 px-4 py-2 bg-[#14b8a6] text-[#0f172a] rounded-lg text-[13px] font-semibold transition-all hover:bg-[#0d9488] hover:-translate-y-px"
+              className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-500 hover:to-purple-600 text-white rounded-lg text-[13px] font-semibold transition-all shadow-[0_0_15px_rgba(168,85,247,0.3)] hover:-translate-y-px"
             >
               <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
               </svg>
-              Submit Claim
+              <span className="hidden sm:inline">Submit</span>
             </a>
-
-            <div className="flex items-center gap-1.5 px-3 py-1.5 bg-[rgba(20,184,166,0.15)] border border-[rgba(20,184,166,0.3)] rounded-full text-[12px] font-semibold text-[#14b8a6]">
-              <svg className="w-3 h-3" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-              </svg>
-              <span>84</span>
-            </div>
           </div>
         </div>
       </header>
