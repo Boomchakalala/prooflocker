@@ -100,60 +100,79 @@ export default function GlobeMapbox({ claims, osint }: GlobeMapboxProps) {
   }, [claims, osint]);
 
   const initializeMap = () => {
-    // @ts-ignore
-    const mapboxgl = window.mapboxgl;
-    if (!mapboxgl || !mapContainer.current || map.current) {
-      console.log('[GlobeMapbox] Skipping map init - already initialized or missing dependencies');
-      return;
+    try {
+      // @ts-ignore
+      const mapboxgl = window.mapboxgl;
+      if (!mapboxgl) {
+        console.error('[GlobeMapbox] Mapbox GL JS not available');
+        setMapError('Mapbox GL JS failed to load');
+        return;
+      }
+
+      if (!mapContainer.current) {
+        console.error('[GlobeMapbox] Map container ref not set');
+        setMapError('Map container not ready');
+        return;
+      }
+
+      if (map.current) {
+        console.log('[GlobeMapbox] Map already initialized');
+        return;
+      }
+
+      console.log('[GlobeMapbox] Initializing Mapbox GL JS map');
+
+      mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_TOKEN || 'pk.eyJ1IjoicHJvb2Zsb2NrZXIiLCJhIjoiY21sYjBxcTAwMGVoYzNlczI4YWlzampqZyJ9.nY-yqSucTzvNyK1qDCq9rQ';
+
+      map.current = new mapboxgl.Map({
+        container: mapContainer.current,
+        style: 'mapbox://styles/mapbox/dark-v11',
+        projection: 'globe' as any,
+        center: [15, 35],
+        zoom: 1.8,
+        pitch: 0,
+        bearing: 0,
+        antialias: true,
+        attributionControl: false,
+      });
+
+      map.current.on('load', () => {
+        console.log('[GlobeMapbox] Map loaded successfully');
+        setMapLoaded(true);
+
+        // Configure atmosphere & fog
+        try {
+          map.current.setFog({
+            range: [0.5, 10],
+            color: '#000000',
+            'horizon-blend': 0.05,
+            'high-color': '#0a0a0a',
+            'space-color': '#000000',
+            'star-intensity': 0.2,
+          });
+        } catch (error) {
+          console.error('[GlobeMapbox] Error setting fog:', error);
+        }
+
+        console.log('[GlobeMapbox] Adding map layers');
+        addMapLayers();
+      });
+
+      map.current.on('error', (e: any) => {
+        console.error('[GlobeMapbox] Map error:', e);
+        setMapError(`Map error: ${e.error?.message || 'Unknown error'}`);
+      });
+
+      // Slow rotation when idle
+      map.current.on('idle', () => {
+        if (map.current && map.current.getZoom() < 2.5 && !map.current.isMoving()) {
+          map.current.rotateTo(map.current.getBearing() + 15, { duration: 120000 });
+        }
+      });
+    } catch (error) {
+      console.error('[GlobeMapbox] Error initializing map:', error);
+      setMapError(error instanceof Error ? error.message : 'Failed to initialize map');
     }
-
-    console.log('[GlobeMapbox] Initializing Mapbox GL JS map');
-
-    mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_TOKEN || 'pk.eyJ1IjoicHJvb2Zsb2NrZXIiLCJhIjoiY21sYjBxcTAwMGVoYzNlczI4YWlzampqZyJ9.nY-yqSucTzvNyK1qDCq9rQ';
-
-    map.current = new mapboxgl.Map({
-      container: mapContainer.current,
-      style: 'mapbox://styles/mapbox/dark-v11',
-      projection: 'globe' as any,
-      center: [15, 35],
-      zoom: 1.8,
-      pitch: 0,
-      bearing: 0,
-      antialias: true,
-      attributionControl: false,
-    });
-
-    map.current.on('load', () => {
-      console.log('[GlobeMapbox] Map loaded, configuring atmosphere');
-
-      // Configure atmosphere & fog
-      try {
-        map.current.setFog({
-          range: [0.5, 10],
-          color: '#000000',
-          'horizon-blend': 0.05,
-          'high-color': '#0a0a0a',
-          'space-color': '#000000',
-          'star-intensity': 0.2,
-        });
-      } catch (error) {
-        console.error('[GlobeMapbox] Error setting fog:', error);
-      }
-
-      console.log('[GlobeMapbox] Adding map layers');
-      addMapLayers();
-    });
-
-    map.current.on('error', (e: any) => {
-      console.error('[GlobeMapbox] Map error:', e);
-    });
-
-    // Slow rotation when idle
-    map.current.on('idle', () => {
-      if (map.current && map.current.getZoom() < 2.5 && !map.current.isMoving()) {
-        map.current.rotateTo(map.current.getBearing() + 15, { duration: 120000 });
-      }
-    });
   };
 
   const addMapLayers = () => {
@@ -608,6 +627,33 @@ export default function GlobeMapbox({ claims, osint }: GlobeMapboxProps) {
     <div className="relative w-full h-full">
       {/* Map Container */}
       <div ref={mapContainer} className="absolute inset-0" />
+
+      {/* Loading/Error Overlay */}
+      {!mapLoaded && !mapError && (
+        <div className="absolute inset-0 flex items-center justify-center bg-[#0f172a] z-[1000]">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-[#14b8a6] mx-auto mb-4" />
+            <p className="text-[#94a3b8]">Initializing globe...</p>
+            <p className="text-[#64748b] text-sm mt-2">Loading Mapbox GL JS</p>
+          </div>
+        </div>
+      )}
+
+      {mapError && (
+        <div className="absolute inset-0 flex items-center justify-center bg-[#0f172a] z-[1000]">
+          <div className="text-center max-w-md px-6">
+            <div className="text-[#ef4444] text-5xl mb-4">⚠️</div>
+            <p className="text-[#f8fafc] text-lg font-semibold mb-2">Failed to load globe</p>
+            <p className="text-[#94a3b8] text-sm mb-4">{mapError}</p>
+            <button
+              onClick={() => window.location.reload()}
+              className="px-4 py-2 bg-[#14b8a6] text-[#0f172a] rounded-lg text-sm font-semibold hover:bg-[#0d9488]"
+            >
+              Reload Page
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* Right Sidebar */}
       <aside className="fixed top-14 right-0 w-[360px] h-[calc(100vh-56px)] bg-[#0f172a]/95 backdrop-blur-[20px] border-l border-[rgba(148,163,184,0.1)] z-[950] flex flex-col">
