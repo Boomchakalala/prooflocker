@@ -768,13 +768,40 @@ export default function GlobeMapbox({ claims, osint }: GlobeMapboxProps) {
         </div>
       )}
 
-      {/* Sidebar */}
-      <aside className="fixed top-14 right-0 w-[360px] h-[calc(100vh-56px)] bg-gradient-to-b from-[#0A0A0F]/98 via-[#111118]/98 to-[#0A0A0F]/98 backdrop-blur-[30px] border-l border-purple-500/20 z-[950] flex flex-col shadow-[-20px_0_40px_rgba(91,33,182,0.15)]">
-        <div className="p-5 border-b border-purple-500/20">
-          <div className="flex gap-2 mb-4">
+      {/* Mobile Toggle Button */}
+      <button
+        onClick={() => setSidebarOpen(!sidebarOpen)}
+        className="md:hidden fixed bottom-6 right-6 z-[960] w-14 h-14 bg-gradient-to-r from-[#5B21B6] to-[#2E5CFF] rounded-full shadow-[0_0_30px_rgba(91,33,182,0.6)] flex items-center justify-center transition-transform active:scale-95"
+      >
+        <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+        </svg>
+      </button>
+
+      {/* Overlay for mobile */}
+      {sidebarOpen && (
+        <div
+          className="md:hidden fixed inset-0 bg-black/60 z-[940]"
+          onClick={() => setSidebarOpen(false)}
+        />
+      )}
+
+      {/* Sidebar - Desktop: fixed right, Mobile: slide from bottom */}
+      <aside className={`fixed z-[950] flex flex-col bg-gradient-to-b from-[#0A0A0F]/98 via-[#111118]/98 to-[#0A0A0F]/98 backdrop-blur-[30px] border-purple-500/20 shadow-[-20px_0_40px_rgba(91,33,182,0.15)] transition-transform duration-300
+        md:top-14 md:right-0 md:w-[360px] md:h-[calc(100vh-56px)] md:border-l md:translate-x-0
+        ${sidebarOpen ? 'translate-y-0' : 'translate-y-full'}
+        bottom-0 left-0 right-0 h-[70vh] rounded-t-2xl border-t`}>
+
+        {/* Mobile drag handle */}
+        <div className="md:hidden flex justify-center py-2 border-b border-purple-500/20">
+          <div className="w-12 h-1 bg-purple-500/40 rounded-full" />
+        </div>
+
+        <div className="p-4 md:p-5 border-b border-purple-500/20">
+          <div className="flex gap-2 mb-3 md:mb-4">
             <button
               onClick={() => setCurrentTab('claims')}
-              className={`flex-1 px-4 py-2.5 rounded-lg text-[13px] font-bold transition-all ${
+              className={`flex-1 px-3 md:px-4 py-2 md:py-2.5 rounded-lg text-[11px] md:text-[13px] font-bold transition-all ${
                 currentTab === 'claims'
                   ? 'bg-gradient-to-r from-[#5B21B6] to-[#2E5CFF] text-white shadow-[0_0_20px_rgba(91,33,182,0.5)]'
                   : 'bg-transparent text-gray-400 border border-purple-500/20 hover:bg-purple-500/10 hover:border-purple-500/40'
@@ -784,7 +811,7 @@ export default function GlobeMapbox({ claims, osint }: GlobeMapboxProps) {
             </button>
             <button
               onClick={() => setCurrentTab('osint')}
-              className={`flex-1 px-4 py-2.5 rounded-lg text-[13px] font-bold transition-all ${
+              className={`flex-1 px-3 md:px-4 py-2 md:py-2.5 rounded-lg text-[11px] md:text-[13px] font-bold transition-all ${
                 currentTab === 'osint'
                   ? 'bg-gradient-to-r from-red-600 to-red-700 text-white shadow-[0_0_20px_rgba(239,68,68,0.5)]'
                   : 'bg-transparent text-gray-400 border border-purple-500/20 hover:bg-red-500/10 hover:border-red-500/40'
@@ -800,7 +827,7 @@ export default function GlobeMapbox({ claims, osint }: GlobeMapboxProps) {
                 <button
                   key={filter}
                   onClick={() => setCurrentFilter(filter)}
-                  className={`px-4 py-1.5 rounded-full text-[11px] font-bold uppercase tracking-wide transition-all ${
+                  className={`px-3 md:px-4 py-1 md:py-1.5 rounded-full text-[10px] md:text-[11px] font-bold uppercase tracking-wide transition-all ${
                     currentFilter === filter
                       ? 'bg-gradient-to-r from-[#5B21B6]/90 to-[#2E5CFF]/90 text-white border border-purple-400/50 shadow-[0_0_15px_rgba(91,33,182,0.4)]'
                       : 'bg-transparent text-gray-400 border border-purple-500/20 hover:bg-purple-500/10 hover:border-purple-500/40 hover:text-purple-300'
@@ -813,7 +840,7 @@ export default function GlobeMapbox({ claims, osint }: GlobeMapboxProps) {
           )}
         </div>
 
-        <div className="flex-1 overflow-y-auto px-5 py-4">
+        <div className="flex-1 overflow-y-auto px-4 md:px-5 py-3 md:py-4">
           {currentTab === 'claims' ? (
             <div className="space-y-3">
               {filteredClaims.slice(0, 20).map((claim) => {
