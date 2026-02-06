@@ -611,7 +611,7 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
             e.stopPropagation();
             handleViewClick(e);
           }}
-          className={`px-4 py-2.5 text-sm font-semibold text-cyan-300 bg-cyan-500/10 rounded-lg transition-all border border-cyan-500/30 hover:border-cyan-400/50 hover:bg-cyan-500/15 flex items-center justify-center gap-2 ${isPreview ? 'cursor-default opacity-60' : 'cursor-pointer'}`}
+          className={`px-4 py-2.5 text-sm font-semibold text-slate-300 bg-slate-700/50 rounded-lg transition-all border border-slate-600 hover:border-slate-500 hover:bg-slate-700/70 flex items-center justify-center gap-2 ${isPreview ? 'cursor-default opacity-60' : 'cursor-pointer'}`}
         >
           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -645,8 +645,8 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
             disabled={!currentUserId || isVoting || isOwner}
             className={`px-3 py-2.5 text-sm font-semibold rounded-lg transition-all border flex items-center justify-center gap-1.5 min-w-[70px] ${
               hasVoted
-                ? 'text-purple-300 bg-purple-500/20 border-purple-500/40'
-                : 'text-gray-400 bg-gray-500/10 border-gray-500/30 hover:border-gray-400/50 hover:bg-gray-500/15'
+                ? 'text-indigo-300 bg-indigo-500/15 border-indigo-500/30'
+                : 'text-slate-400 bg-slate-700/30 border-slate-600 hover:border-slate-500 hover:bg-slate-700/50'
             } ${(!currentUserId || isOwner) ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}
             title={
               !currentUserId
