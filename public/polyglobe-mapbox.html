@@ -29,6 +29,7 @@
       --text-primary: #ffffff;
       --text-secondary: #9ca3af;
       --accent-purple: #9333ea;
+      --accent-red: #ff3b3b;
       --accent-verified: #10b981;
       --accent-disputed: #ef4444;
       --accent-pending: #f59e0b;
@@ -50,7 +51,7 @@
       left: 0;
       right: 0;
       height: 60px;
-      background: rgba(10, 10, 10, 0.9);
+      background: rgba(10, 10, 10, 0.95);
       backdrop-filter: blur(20px);
       border-bottom: 1px solid var(--border);
       display: flex;
@@ -128,397 +129,296 @@
       border-color: var(--accent-purple);
     }
 
-    /* Map Container - Full hero */
-    #map {
+    /* Left Sidebar with Feeds */
+    .feed-sidebar {
       position: fixed;
       top: 60px;
       left: 0;
-      right: 0;
-      bottom: 0;
-      width: 100%;
+      width: 380px;
+      height: calc(100vh - 60px);
+      background: rgba(10, 10, 10, 0.95);
+      backdrop-filter: blur(30px);
+      border-right: 1px solid var(--border);
+      z-index: 900;
+      display: flex;
+      flex-direction: column;
     }
 
-    /* Signals Drawer Toggle */
-    .signals-toggle {
-      position: fixed;
-      right: 20px;
-      top: 50%;
-      transform: translateY(-50%);
-      z-index: 999;
-      background: rgba(17, 17, 17, 0.95);
-      backdrop-filter: blur(20px);
-      border: 1px solid var(--border);
-      border-radius: 24px;
-      padding: 12px 16px;
-      cursor: pointer;
+    /* OSINT Monitor Section */
+    .osint-monitor {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      border-bottom: 1px solid var(--border);
+      max-height: 50%;
+    }
+
+    .feed-header {
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .feed-title {
       display: flex;
       align-items: center;
       gap: 8px;
-      font-size: 13px;
-      font-weight: 500;
-      color: var(--text-primary);
-      transition: all 0.3s;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
-    }
-
-    .signals-toggle:hover {
-      border-color: var(--accent-purple);
-      box-shadow: 0 4px 20px var(--shadow-glow);
-    }
-
-    .signals-toggle .badge {
-      background: var(--accent-purple);
-      color: white;
-      border-radius: 12px;
-      padding: 2px 8px;
-      font-size: 11px;
+      font-size: 14px;
       font-weight: 600;
     }
 
-    /* Signals Drawer */
-    .signals-drawer {
-      position: fixed;
-      top: 60px;
-      right: -440px;
-      width: 420px;
-      height: calc(100vh - 60px);
-      background: rgba(17, 17, 17, 0.98);
-      backdrop-filter: blur(30px);
-      border-left: 1px solid var(--border);
-      z-index: 998;
-      transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-      display: flex;
-      flex-direction: column;
-      box-shadow: -10px 0 30px rgba(0, 0, 0, 0.7);
+    .feed-title.osint {
+      color: var(--accent-red);
     }
 
-    .signals-drawer.open {
-      right: 0;
-    }
-
-    .drawer-header {
-      padding: 20px;
-      border-bottom: 1px solid var(--border);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .drawer-title {
-      font-size: 16px;
-      font-weight: 600;
-    }
-
-    .drawer-close {
-      width: 32px;
-      height: 32px;
-      border-radius: 8px;
-      background: transparent;
-      border: none;
-      color: var(--text-secondary);
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: all 0.2s;
-    }
-
-    .drawer-close:hover {
-      background: var(--bg-card);
-      color: var(--text-primary);
-    }
-
-    .drawer-tabs {
-      display: flex;
-      gap: 4px;
-      padding: 16px 20px 0;
-      border-bottom: 1px solid var(--border);
-    }
-
-    .drawer-tab {
-      padding: 8px 16px;
-      font-size: 13px;
-      font-weight: 500;
-      color: var(--text-secondary);
-      background: transparent;
-      border: none;
-      border-bottom: 2px solid transparent;
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-
-    .drawer-tab.active {
+    .feed-title.claims {
       color: var(--accent-purple);
-      border-bottom-color: var(--accent-purple);
     }
 
-    .drawer-tab:hover {
-      color: var(--text-primary);
+    .feed-badge {
+      font-size: 10px;
+      padding: 2px 6px;
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.1);
+      color: var(--text-secondary);
     }
 
-    .drawer-content {
+    .feed-content {
       flex: 1;
       overflow-y: auto;
-      padding: 16px;
+      padding: 12px;
     }
 
-    .drawer-content::-webkit-scrollbar {
-      width: 6px;
+    .feed-content::-webkit-scrollbar {
+      width: 4px;
     }
 
-    .drawer-content::-webkit-scrollbar-track {
+    .feed-content::-webkit-scrollbar-track {
       background: transparent;
     }
 
-    .drawer-content::-webkit-scrollbar-thumb {
+    .feed-content::-webkit-scrollbar-thumb {
       background: var(--border);
-      border-radius: 3px;
+      border-radius: 2px;
     }
 
-    .drawer-content::-webkit-scrollbar-thumb:hover {
-      background: var(--accent-purple);
-    }
-
-    /* Signal Item */
-    .signal-item {
+    /* News Item */
+    .news-item {
       background: var(--bg-card);
       border: 1px solid var(--border);
-      border-radius: 10px;
+      border-left: 3px solid var(--accent-red);
+      border-radius: 8px;
       padding: 12px;
       margin-bottom: 10px;
       cursor: pointer;
       transition: all 0.2s;
     }
 
-    .signal-item:hover {
-      border-color: var(--accent-purple);
-      background: rgba(147, 51, 234, 0.05);
+    .news-item:hover {
+      background: rgba(255, 59, 59, 0.05);
+      border-color: var(--accent-red);
     }
 
-    .signal-header {
+    .news-item.selected {
+      background: rgba(255, 59, 59, 0.1);
+      border-color: var(--accent-red);
+    }
+
+    .news-header {
       display: flex;
-      gap: 10px;
+      align-items: center;
+      gap: 8px;
       margin-bottom: 8px;
     }
 
-    .signal-icon {
-      width: 32px;
-      height: 32px;
-      border-radius: 8px;
-      background: var(--accent-purple);
+    .news-source-icon {
+      width: 24px;
+      height: 24px;
+      border-radius: 6px;
+      background: var(--accent-red);
       display: flex;
       align-items: center;
       justify-content: center;
       color: white;
-      font-size: 14px;
-      font-weight: 600;
+      font-size: 11px;
+      font-weight: 700;
       flex-shrink: 0;
     }
 
-    .signal-meta {
-      flex: 1;
-      min-width: 0;
-    }
-
-    .signal-source {
-      font-size: 12px;
+    .news-source {
+      font-size: 11px;
       font-weight: 600;
       color: var(--text-primary);
     }
 
-    .signal-time {
-      font-size: 11px;
+    .news-time {
+      margin-left: auto;
+      font-size: 10px;
       color: var(--text-secondary);
     }
 
-    .signal-title {
-      font-size: 13px;
-      line-height: 1.4;
-      color: var(--text-primary);
-      margin-bottom: 8px;
+    .news-snippet {
+      font-size: 12px;
+      line-height: 1.5;
+      color: var(--text-secondary);
       display: -webkit-box;
-      -webkit-line-clamp: 2;
+      -webkit-line-clamp: 3;
       -webkit-box-orient: vertical;
       overflow: hidden;
     }
 
-    .signal-tags {
+    .news-tags {
       display: flex;
-      gap: 6px;
+      gap: 4px;
+      margin-top: 8px;
       flex-wrap: wrap;
     }
 
-    .signal-tag {
-      font-size: 10px;
-      padding: 3px 8px;
-      border-radius: 6px;
-      background: rgba(147, 51, 234, 0.1);
-      color: var(--accent-purple);
+    .news-tag {
+      font-size: 9px;
+      padding: 2px 6px;
+      border-radius: 4px;
+      background: rgba(255, 59, 59, 0.1);
+      color: var(--accent-red);
     }
 
-    /* Signal Detail View */
-    .signal-detail {
-      display: none;
-    }
-
-    .signal-detail.active {
-      display: block;
-    }
-
-    .detail-back {
+    /* Claims Section */
+    .claims-monitor {
+      flex: 1;
       display: flex;
-      align-items: center;
-      gap: 8px;
-      color: var(--text-secondary);
-      font-size: 13px;
-      cursor: pointer;
-      margin-bottom: 16px;
-      padding: 8px;
-      border-radius: 8px;
-      transition: all 0.2s;
+      flex-direction: column;
+      max-height: 50%;
     }
 
-    .detail-back:hover {
-      color: var(--text-primary);
-      background: var(--bg-card);
-    }
-
-    .detail-content {
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 16px;
-    }
-
-    .detail-header {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin-bottom: 12px;
-    }
-
-    .detail-source {
-      font-size: 14px;
-      font-weight: 600;
-    }
-
-    .detail-text {
-      font-size: 14px;
-      line-height: 1.6;
-      color: var(--text-secondary);
-      margin-bottom: 16px;
-    }
-
-    .detail-actions {
-      display: flex;
-      gap: 8px;
-    }
-
-    /* Draft Claim Item */
-    .draft-item {
+    /* Claim Item */
+    .claim-item {
       background: var(--bg-card);
       border: 1px solid var(--border);
       border-left: 3px solid var(--accent-purple);
-      border-radius: 10px;
-      padding: 14px;
-      margin-bottom: 12px;
-    }
-
-    .draft-title {
-      font-size: 14px;
-      font-weight: 600;
-      margin-bottom: 8px;
-      color: var(--text-primary);
-    }
-
-    .draft-meta {
-      display: flex;
-      gap: 12px;
-      margin-bottom: 10px;
-      font-size: 12px;
-    }
-
-    .draft-meta-item {
-      display: flex;
-      align-items: center;
-      gap: 4px;
-      color: var(--text-secondary);
-    }
-
-    .draft-confidence {
-      color: var(--accent-verified);
-      font-weight: 600;
-    }
-
-    .draft-actions {
-      display: flex;
-      gap: 8px;
-    }
-
-    .btn-sm {
-      padding: 6px 12px;
-      font-size: 12px;
-      border-radius: 6px;
-    }
-
-    /* Locked Item */
-    .locked-item {
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: 10px;
+      border-radius: 8px;
       padding: 12px;
       margin-bottom: 10px;
+      cursor: pointer;
+      transition: all 0.2s;
     }
 
-    .locked-header {
+    .claim-item:hover {
+      background: rgba(147, 51, 234, 0.05);
+      border-color: var(--accent-purple);
+    }
+
+    .claim-item.selected {
+      background: rgba(147, 51, 234, 0.1);
+      border-color: var(--accent-purple);
+    }
+
+    .claim-item.resolved-true {
+      border-left-color: var(--accent-verified);
+    }
+
+    .claim-item.resolved-false {
+      border-left-color: var(--accent-disputed);
+    }
+
+    .claim-item.resolved-void {
+      border-left-color: #6b7280;
+    }
+
+    .claim-header {
       display: flex;
+      align-items: center;
       justify-content: space-between;
-      align-items: flex-start;
       margin-bottom: 8px;
     }
 
-    .locked-title {
-      font-size: 13px;
-      font-weight: 500;
-      color: var(--text-primary);
-      flex: 1;
+    .claim-author {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
     }
 
-    .locked-status {
+    .claim-handle {
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .claim-rep {
+      display: flex;
+      align-items: center;
+      gap: 3px;
+      padding: 2px 6px;
+      border-radius: 10px;
+      background: rgba(147, 51, 234, 0.15);
+      color: var(--accent-purple);
       font-size: 10px;
-      padding: 3px 8px;
-      border-radius: 6px;
+      font-weight: 600;
+    }
+
+    .claim-status {
+      font-size: 9px;
+      padding: 3px 6px;
+      border-radius: 10px;
       font-weight: 600;
       text-transform: uppercase;
     }
 
-    .status-verified {
+    .claim-status.open {
+      background: rgba(147, 51, 234, 0.15);
+      color: var(--accent-purple);
+    }
+
+    .claim-status.resolved-true {
       background: rgba(16, 185, 129, 0.15);
       color: var(--accent-verified);
     }
 
-    .status-pending {
-      background: rgba(245, 158, 11, 0.15);
-      color: var(--accent-pending);
-    }
-
-    .status-disputed {
+    .claim-status.resolved-false {
       background: rgba(239, 68, 68, 0.15);
       color: var(--accent-disputed);
     }
 
-    .locked-footer {
+    .claim-status.resolved-void {
+      background: rgba(107, 114, 128, 0.15);
+      color: #9ca3af;
+    }
+
+    .claim-text {
+      font-size: 12px;
+      line-height: 1.5;
+      color: var(--text-primary);
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      margin-bottom: 8px;
+    }
+
+    .claim-footer {
       display: flex;
+      align-items: center;
       justify-content: space-between;
-      font-size: 11px;
+      font-size: 10px;
       color: var(--text-secondary);
+    }
+
+    /* Map Container */
+    #map {
+      position: fixed;
+      top: 60px;
+      left: 380px;
+      right: 0;
+      bottom: 0;
+      width: calc(100% - 380px);
     }
 
     /* Map Controls */
     .map-controls {
       position: fixed;
       top: 80px;
-      left: 20px;
+      right: 20px;
       z-index: 900;
       display: flex;
       flex-direction: column;
@@ -555,7 +455,7 @@
     .vignette {
       position: fixed;
       top: 60px;
-      left: 0;
+      left: 380px;
       right: 0;
       bottom: 0;
       pointer-events: none;
@@ -563,95 +463,82 @@
       z-index: 700;
     }
 
-    /* Map Popups */
-    .mapboxgl-popup-content {
-      background: var(--bg-card) !important;
-      border: 1px solid var(--border) !important;
-      border-radius: 12px !important;
-      padding: 16px !important;
-      min-width: 260px;
-      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8) !important;
+    /* Map Tooltip */
+    .map-tooltip {
+      position: fixed;
+      background: rgba(17, 17, 17, 0.98);
+      backdrop-filter: blur(20px);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 12px;
+      pointer-events: none;
+      display: none;
+      z-index: 1001;
+      max-width: 300px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.7);
     }
 
-    .mapboxgl-popup-close-button {
-      color: var(--text-secondary) !important;
-      font-size: 18px !important;
+    .map-tooltip.visible {
+      display: block;
     }
 
-    .popup-title {
-      font-size: 14px;
+    .tooltip-title {
+      font-size: 13px;
       font-weight: 600;
-      margin-bottom: 10px;
+      margin-bottom: 6px;
+      color: var(--text-primary);
     }
 
-    .popup-meta {
-      font-size: 12px;
+    .tooltip-meta {
+      font-size: 11px;
       color: var(--text-secondary);
-      margin-bottom: 12px;
-    }
-
-    .popup-stats {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-      margin-bottom: 12px;
-    }
-
-    .popup-stat {
-      background: rgba(147, 51, 234, 0.1);
-      padding: 8px;
-      border-radius: 8px;
-      text-align: center;
-    }
-
-    .popup-stat-value {
-      font-size: 16px;
-      font-weight: 700;
-      color: var(--accent-purple);
-    }
-
-    .popup-stat-label {
-      font-size: 10px;
-      color: var(--text-secondary);
-      margin-top: 2px;
-    }
-
-    .popup-actions {
-      display: flex;
-      gap: 8px;
+      margin-bottom: 4px;
     }
 
     /* Responsive */
-    @media (max-width: 768px) {
+    @media (max-width: 1024px) {
       .stats {
         display: none;
       }
 
-      .signals-drawer {
+      .feed-sidebar {
+        width: 320px;
+      }
+
+      #map {
+        left: 320px;
+        width: calc(100% - 320px);
+      }
+
+      .vignette {
+        left: 320px;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .feed-sidebar {
         width: 100%;
-        right: -100%;
+        left: -100%;
+        transition: left 0.3s;
       }
 
-      .signals-toggle {
-        right: 16px;
+      .feed-sidebar.open {
+        left: 0;
       }
-    }
 
-    /* Empty State */
-    .empty-state {
-      text-align: center;
-      padding: 40px 20px;
-      color: var(--text-secondary);
-    }
+      #map {
+        left: 0;
+        width: 100%;
+      }
 
-    .empty-state i {
-      font-size: 48px;
-      margin-bottom: 16px;
-      opacity: 0.3;
-    }
+      .vignette {
+        left: 0;
+      }
 
-    .empty-state p {
-      font-size: 13px;
+      .map-controls {
+        left: 20px;
+        right: auto;
+      }
     }
 
     /* Hide Mapbox attribution */
@@ -662,6 +549,28 @@
 
     .mapboxgl-ctrl-logo {
       display: none !important;
+    }
+
+    /* Live indicator */
+    .live-indicator {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 10px;
+      color: var(--accent-red);
+    }
+
+    .live-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--accent-red);
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
     }
   </style>
 </head>
@@ -694,112 +603,148 @@
         <i class="fas fa-trophy"></i>
         Leaderboard
       </button>
-      <button class="btn btn-primary">
+      <button class="btn btn-primary" onclick="openNewClaimModal()">
         <i class="fas fa-plus"></i>
         New Claim
       </button>
     </div>
   </header>
 
+  <!-- Left Sidebar with Feeds -->
+  <aside class="feed-sidebar">
+    <!-- OSINT Monitor -->
+    <div class="osint-monitor">
+      <div class="feed-header">
+        <div class="feed-title osint">
+          <i class="fas fa-satellite-dish"></i>
+          OSINT Monitor
+          <div class="live-indicator">
+            <span class="live-dot"></span>
+            LIVE
+          </div>
+        </div>
+        <span class="feed-badge" id="osintCount">12</span>
+      </div>
+      <div class="feed-content" id="osintFeed">
+        <!-- Dynamically filled -->
+      </div>
+    </div>
+
+    <!-- Claims Monitor -->
+    <div class="claims-monitor">
+      <div class="feed-header">
+        <div class="feed-title claims">
+          <i class="fas fa-lock"></i>
+          Active Claims
+        </div>
+        <span class="feed-badge" id="claimsCount">8</span>
+      </div>
+      <div class="feed-content" id="claimsFeed">
+        <!-- Dynamically filled -->
+      </div>
+    </div>
+  </aside>
+
   <!-- Map -->
   <div id="map"></div>
   <div class="vignette"></div>
 
+  <!-- Map Tooltip -->
+  <div id="mapTooltip" class="map-tooltip"></div>
+
   <!-- Map Controls -->
   <div class="map-controls">
-    <div class="map-control-btn active" title="All Claims" onclick="toggleLayer('all')">
-      <i class="fas fa-globe"></i>
+    <div class="map-control-btn" title="Toggle OSINT" onclick="toggleOSINT()">
+      <i class="fas fa-eye"></i>
     </div>
-    <div class="map-control-btn" title="Verified Only" onclick="toggleLayer('verified')">
-      <i class="fas fa-check-circle"></i>
-    </div>
-    <div class="map-control-btn" title="Heatmap" onclick="toggleHeatmap()">
-      <i class="fas fa-fire"></i>
+    <div class="map-control-btn" title="Toggle Claims" onclick="toggleClaims()">
+      <i class="fas fa-lock"></i>
     </div>
     <div class="map-control-btn" title="Reset View" onclick="resetView()">
       <i class="fas fa-redo"></i>
     </div>
   </div>
 
-  <!-- Signals Toggle -->
-  <div class="signals-toggle" onclick="toggleDrawer()">
-    <i class="fas fa-satellite-dish"></i>
-    Signals
-    <span class="badge">12</span>
-  </div>
-
-  <!-- Signals Drawer -->
-  <aside class="signals-drawer" id="signalsDrawer">
-    <div class="drawer-header">
-      <div class="drawer-title">Signals</div>
-      <button class="drawer-close" onclick="toggleDrawer()">
-        <i class="fas fa-times"></i>
-      </button>
-    </div>
-
-    <div class="drawer-tabs">
-      <button class="drawer-tab active" onclick="switchTab('signals')">Signals</button>
-      <button class="drawer-tab" onclick="switchTab('drafts')">Draft Claims</button>
-      <button class="drawer-tab" onclick="switchTab('locked')">Locked</button>
-    </div>
-
-    <div class="drawer-content">
-      <!-- Signals List -->
-      <div id="signalsTab" class="tab-content">
-        <!-- Dynamically filled -->
-      </div>
-
-      <!-- Signal Detail -->
-      <div id="signalDetail" class="signal-detail">
-        <!-- Dynamically filled -->
-      </div>
-
-      <!-- Drafts Tab -->
-      <div id="draftsTab" class="tab-content" style="display: none;">
-        <!-- Dynamically filled -->
-      </div>
-
-      <!-- Locked Tab -->
-      <div id="lockedTab" class="tab-content" style="display: none;">
-        <!-- Dynamically filled -->
-      </div>
-    </div>
-  </aside>
-
   <script>
     // Mapbox Config
     mapboxgl.accessToken = "pk.eyJ1IjoicHJvb2Zsb2NrZXIiLCJhIjoiY21sYjBxcTAwMGVoYzNlczI4YWlzampqZyJ9.nY-yqSucTzvNyK1qDCq9rQ";
 
-    // Mock Data
-    const mockClaims = [
-      { id: 1, title: "Election outcome in District 5", location: [2.3522, 48.8566], city: "Paris", status: "verified", user: "@DataMaster", reputation: 92, stake: 500, confidence: 87, hash: "0x7a8f...d3c2" },
-      { id: 2, title: "GDP growth Q1 2024", location: [-74.006, 40.7128], city: "New York", status: "pending", user: "@EconWatcher", reputation: 78, stake: 750, confidence: 65, hash: "0x9b2e...a1f4" },
-      { id: 3, title: "Tech merger timeline", location: [139.6917, 35.6895], city: "Tokyo", status: "pending", user: "@TechInsider", reputation: 85, stake: 1000, confidence: 73, hash: "0x3d4f...b6e8" },
-      { id: 4, title: "Climate summit outcome", location: [-0.1276, 51.5074], city: "London", status: "verified", user: "@ClimatePro", reputation: 88, stake: 600, confidence: 91, hash: "0x5c7a...e2d9" },
-      { id: 5, title: "Policy implementation date", location: [116.4074, 39.9042], city: "Beijing", status: "disputed", user: "@PolicyWatch", reputation: 71, stake: 400, confidence: 58, hash: "0x8e1b...f3c7" }
+    // Mock Data Generator
+    const sources = ["Bellingcat", "IntelCrab", "OSINT Tech", "Aurora Intel"];
+    const regions = {
+      europe: [[2.3522, 48.8566], [-0.1276, 51.5074], [13.4050, 52.5200], [30.5234, 50.4501]],
+      asia: [[116.4074, 39.9042], [139.6917, 35.6895], [55.2708, 25.2048], [37.6173, 55.7558]],
+      americas: [[-74.006, 40.7128], [-99.1332, 19.4326], [-118.2437, 34.0522], [-43.1729, -22.9068]],
+      oceania: [[151.2093, -33.8688]]
+    };
+
+    const newsTemplates = [
+      "Investigation reveals coordinated disinformation across multiple countries",
+      "Satellite imagery confirms infrastructure changes in disputed region",
+      "Public records show pattern inconsistencies in recent claims",
+      "Crowdsourced verification completed with high confidence level",
+      "Video authentication techniques published in new forensics report",
+      "Supply chain tracking reveals significant pattern deviations",
+      "Election monitoring data shows voting pattern irregularities",
+      "Energy infrastructure sabotage evidence emerges",
+      "Financial transaction patterns suggest money laundering network",
+      "Military equipment movement tracked via commercial satellites",
+      "Social media manipulation campaign targets regional elections",
+      "Cybersecurity breach exposes government communications"
     ];
 
-    const mockSignals = [
-      { id: 1, source: "Bellingcat", handle: "B", content: "Investigation reveals coordinated disinformation across 12 countries", time: "2h", tags: ["Investigation", "Evidence"] },
-      { id: 2, source: "IntelCrab", handle: "I", content: "Satellite imagery confirms infrastructure changes in disputed region", time: "4h", tags: ["Satellite", "OSINT"] },
-      { id: 3, source: "OSINT Tech", handle: "O", content: "Public records show pattern inconsistencies in recent claims", time: "6h", tags: ["Analysis", "Timeline"] },
-      { id: 4, source: "Aurora Intel", handle: "A", content: "Crowdsourced verification completed: 87% confidence level", time: "8h", tags: ["Verification", "Confidence"] },
-      { id: 5, source: "Bellingcat", handle: "B", content: "Video authentication techniques published in new forensics report", time: "10h", tags: ["Forensics", "Video"] },
-      { id: 6, source: "OSINT Tech", handle: "O", content: "Supply chain tracking reveals significant pattern deviations", time: "12h", tags: ["Supply Chain", "Tracking"] }
+    const claimTemplates = [
+      "Election outcome in District 5 will favor candidate A",
+      "GDP growth Q1 2024 will exceed 3.5%",
+      "Tech merger will be approved by regulatory bodies",
+      "Climate summit will result in binding emissions targets",
+      "Policy implementation will be delayed beyond Q2",
+      "Market volatility will decrease in tech sector",
+      "International treaty ratification before end of quarter",
+      "Resource allocation decision favors renewable energy"
     ];
 
-    const mockDrafts = [
-      { id: 1, title: "Infrastructure changes will be confirmed by independent sources", outcome: "Verification within 72h", timeframe: "3 days", confidence: 85 },
-      { id: 2, title: "Disinformation campaign attribution completed", outcome: "Full attribution report", timeframe: "1 week", confidence: 78 },
-      { id: 3, title: "Supply chain disruption impacts Q1 deliveries", outcome: "15% delay confirmed", timeframe: "30 days", confidence: 72 }
-    ];
+    // Generate initial OSINT data
+    let osintData = Array.from({length: 12}, (_, i) => {
+      const regionKeys = Object.keys(regions);
+      const regionKey = regionKeys[Math.floor(Math.random() * regionKeys.length)];
+      const coords = regions[regionKey];
+      const location = coords[Math.floor(Math.random() * coords.length)];
 
-    const mockLocked = [
-      { id: 1, title: "Election outcome prediction District 5", status: "verified", time: "2d ago", hash: "0x7a8f...d3c2" },
-      { id: 2, title: "GDP growth forecast Q1", status: "pending", time: "1d ago", hash: "0x9b2e...a1f4" },
-      { id: 3, title: "Tech merger approval timeline", status: "pending", time: "8h ago", hash: "0x3d4f...b6e8" },
-      { id: 4, title: "Climate summit resolution", status: "verified", time: "3d ago", hash: "0x5c7a...e2d9" }
-    ];
+      return {
+        id: i + 1,
+        title: newsTemplates[i % newsTemplates.length],
+        source: sources[Math.floor(Math.random() * sources.length)],
+        timestamp: `${Math.floor(Math.random() * 24)}h ago`,
+        tags: ["OSINT", "Verification"],
+        location: location,
+        createdAt: Date.now() - (i * 3600000)
+      };
+    });
+
+    // Generate claims data
+    const claimsData = Array.from({length: 8}, (_, i) => {
+      const regionKeys = Object.keys(regions);
+      const regionKey = regionKeys[Math.floor(Math.random() * regionKeys.length)];
+      const coords = regions[regionKey];
+      const location = coords[Math.floor(Math.random() * coords.length)];
+      const isResolved = Math.random() > 0.5;
+      const outcomes = ["true", "false", "void"];
+
+      return {
+        id: i + 1,
+        claim: claimTemplates[i % claimTemplates.length],
+        status: isResolved ? "resolved" : "open",
+        outcome: isResolved ? outcomes[Math.floor(Math.random() * outcomes.length)] : null,
+        authorHandle: `@User${i + 1}`,
+        authorRep: 70 + Math.floor(Math.random() * 30),
+        lockedAt: `${Math.floor(Math.random() * 5)}d ago`,
+        location: location
+      };
+    });
+
+    let selectedOSINTId = null;
+    let selectedClaimId = null;
 
     // Initialize Map
     const map = new mapboxgl.Map({
@@ -807,12 +752,10 @@
       style: "mapbox://styles/mapbox/dark-v11",
       projection: "globe",
       center: [15, 35],
-      zoom: 1.3,
+      zoom: 1.5,
       antialias: true,
       attributionControl: false
     });
-
-    let heatmapVisible = false;
 
     map.on("style.load", () => {
       map.setFog({
@@ -824,39 +767,156 @@
         "star-intensity": 0.15
       });
 
-      const claimsGeoJSON = {
-        type: "FeatureCollection",
-        features: mockClaims.map(claim => ({
-          type: "Feature",
-          geometry: { type: "Point", coordinates: claim.location },
-          properties: { ...claim }
-        }))
-      };
-
-      map.addSource("claims", {
+      // Add OSINT source with clustering
+      map.addSource("osint", {
         type: "geojson",
-        data: claimsGeoJSON
+        data: {
+          type: "FeatureCollection",
+          features: osintData.map(item => ({
+            type: "Feature",
+            geometry: { type: "Point", coordinates: item.location },
+            properties: { ...item, tags: JSON.stringify(item.tags) }
+          }))
+        },
+        cluster: true,
+        clusterRadius: 60,
+        clusterMaxZoom: 6
       });
 
+      // Add Claims source with clustering
+      map.addSource("claims", {
+        type: "geojson",
+        data: {
+          type: "FeatureCollection",
+          features: claimsData.map(item => ({
+            type: "Feature",
+            geometry: { type: "Point", coordinates: item.location },
+            properties: { ...item }
+          }))
+        },
+        cluster: true,
+        clusterRadius: 50,
+        clusterMaxZoom: 6
+      });
+
+      // OSINT Layers (red heat)
       map.addLayer({
-        id: "claims-glow",
+        id: "osint-clusters",
         type: "circle",
-        source: "claims",
+        source: "osint",
+        filter: ["has", "point_count"],
         paint: {
-          "circle-radius": ["interpolate", ["linear"], ["zoom"], 1, 25, 5, 90, 10, 130],
-          "circle-color": ["match", ["get", "status"], "verified", "#10b981", "disputed", "#ef4444", "#f59e0b"],
-          "circle-opacity": 0.2,
-          "circle-blur": 1
+          "circle-color": "#ff3b3b",
+          "circle-radius": ["step", ["get", "point_count"], 20, 3, 30, 5, 40],
+          "circle-blur": 0.9,
+          "circle-opacity": 0.25
         }
       });
 
       map.addLayer({
-        id: "claims-core",
+        id: "osint-cluster-count",
+        type: "symbol",
+        source: "osint",
+        filter: ["has", "point_count"],
+        layout: {
+          "text-field": "{point_count_abbreviated}",
+          "text-font": ["DIN Offc Pro Medium", "Arial Unicode MS Bold"],
+          "text-size": 11
+        },
+        paint: { "text-color": "#ffffff" }
+      });
+
+      map.addLayer({
+        id: "osint-unclustered",
+        type: "circle",
+        source: "osint",
+        filter: ["!", ["has", "point_count"]],
+        paint: {
+          "circle-color": "#ff3b3b",
+          "circle-radius": 8,
+          "circle-blur": 0.5,
+          "circle-opacity": 0.6,
+          "circle-stroke-width": 1,
+          "circle-stroke-color": "#ffffff",
+          "circle-stroke-opacity": 0.4
+        }
+      });
+
+      // Claims Layers
+      map.addLayer({
+        id: "claims-clusters-glow",
         type: "circle",
         source: "claims",
+        filter: ["has", "point_count"],
         paint: {
-          "circle-radius": ["interpolate", ["linear"], ["zoom"], 1, 8, 5, 16, 10, 24],
-          "circle-color": ["match", ["get", "status"], "verified", "#10b981", "disputed", "#ef4444", "#f59e0b"],
+          "circle-color": "#8a5cf6",
+          "circle-radius": ["step", ["get", "point_count"], 25, 3, 35, 5, 45],
+          "circle-blur": 0.7,
+          "circle-opacity": 0.2
+        }
+      });
+
+      map.addLayer({
+        id: "claims-clusters-core",
+        type: "circle",
+        source: "claims",
+        filter: ["has", "point_count"],
+        paint: {
+          "circle-color": "#8a5cf6",
+          "circle-radius": ["step", ["get", "point_count"], 12, 3, 18, 5, 24],
+          "circle-opacity": 0.8,
+          "circle-stroke-width": 2,
+          "circle-stroke-color": "#ffffff",
+          "circle-stroke-opacity": 0.6
+        }
+      });
+
+      map.addLayer({
+        id: "claims-cluster-count",
+        type: "symbol",
+        source: "claims",
+        filter: ["has", "point_count"],
+        layout: {
+          "text-field": "{point_count_abbreviated}",
+          "text-font": ["DIN Offc Pro Medium", "Arial Unicode MS Bold"],
+          "text-size": 11
+        },
+        paint: { "text-color": "#ffffff" }
+      });
+
+      map.addLayer({
+        id: "claims-unclustered-glow",
+        type: "circle",
+        source: "claims",
+        filter: ["!", ["has", "point_count"]],
+        paint: {
+          "circle-color": [
+            "case",
+            ["==", ["get", "outcome"], "true"], "#10b981",
+            ["==", ["get", "outcome"], "false"], "#ef4444",
+            ["==", ["get", "outcome"], "void"], "#6b7280",
+            "#8a5cf6"
+          ],
+          "circle-radius": 14,
+          "circle-blur": 0.6,
+          "circle-opacity": 0.3
+        }
+      });
+
+      map.addLayer({
+        id: "claims-unclustered-core",
+        type: "circle",
+        source: "claims",
+        filter: ["!", ["has", "point_count"]],
+        paint: {
+          "circle-color": [
+            "case",
+            ["==", ["get", "outcome"], "true"], "#10b981",
+            ["==", ["get", "outcome"], "false"], "#ef4444",
+            ["==", ["get", "outcome"], "void"], "#6b7280",
+            "#8a5cf6"
+          ],
+          "circle-radius": 7,
           "circle-opacity": 0.9,
           "circle-stroke-width": 2,
           "circle-stroke-color": "#ffffff",
@@ -864,225 +924,221 @@
         }
       });
 
-      map.addLayer({
-        id: "claims-heatmap",
-        type: "heatmap",
-        source: "claims",
-        paint: {
-          "heatmap-weight": ["get", "confidence"],
-          "heatmap-intensity": 1,
-          "heatmap-color": ["interpolate", ["linear"], ["heatmap-density"], 0, "rgba(0,0,255,0)", 0.2, "#9333ea", 0.4, "#a78bfa", 0.6, "#c084fc", 0.8, "#e9d5ff", 1, "#ffffff"],
-          "heatmap-radius": 50,
-          "heatmap-opacity": 0.8
-        },
-        layout: { "visibility": "none" }
+      // Hover interactions
+      const tooltip = document.getElementById('mapTooltip');
+
+      function updateTooltip(e, sourceId) {
+        const features = map.queryRenderedFeatures(e.point, {
+          layers: sourceId === 'claims'
+            ? ['claims-clusters-core', 'claims-unclustered-core']
+            : ['osint-clusters', 'osint-unclustered']
+        });
+
+        if (features.length > 0) {
+          const props = features[0].properties;
+
+          if (props.cluster) {
+            const pointCount = props.point_count;
+            tooltip.innerHTML = `
+              <div class="tooltip-title">${pointCount} ${sourceId === 'claims' ? 'Claims' : 'Signals'}</div>
+              <div class="tooltip-meta">Click to expand</div>
+            `;
+          } else {
+            if (sourceId === 'claims') {
+              const statusText = props.status === 'resolved' ? props.outcome : 'Open';
+              tooltip.innerHTML = `
+                <div class="tooltip-title">${props.claim}</div>
+                <div class="tooltip-meta">${props.authorHandle} • Rep: ${props.authorRep}</div>
+                <div class="tooltip-meta">Status: ${statusText}</div>
+              `;
+            } else {
+              tooltip.innerHTML = `
+                <div class="tooltip-title">${props.title}</div>
+                <div class="tooltip-meta">${props.source} • ${props.timestamp}</div>
+              `;
+            }
+          }
+
+          tooltip.style.left = e.point.x + 15 + 'px';
+          tooltip.style.top = e.point.y + 15 + 'px';
+          tooltip.classList.add('visible');
+        } else {
+          tooltip.classList.remove('visible');
+        }
+      }
+
+      ['claims-clusters-core', 'claims-unclustered-core'].forEach(layer => {
+        map.on('mousemove', layer, (e) => updateTooltip(e, 'claims'));
+        map.on('mouseleave', layer, () => tooltip.classList.remove('visible'));
       });
 
-      map.on("click", "claims-core", (e) => {
-        const props = e.features[0].properties;
-        const popupHTML = `
-          <div class="popup-title">${props.title}</div>
-          <div class="popup-meta">
-            ${props.city} • ${props.user} • Rep: ${props.reputation}
-          </div>
-          <div class="popup-stats">
-            <div class="popup-stat">
-              <div class="popup-stat-value">${props.stake}</div>
-              <div class="popup-stat-label">Staked</div>
-            </div>
-            <div class="popup-stat">
-              <div class="popup-stat-value">${props.confidence}%</div>
-              <div class="popup-stat-label">Confidence</div>
-            </div>
-          </div>
-          <div class="popup-actions">
-            <button class="btn btn-primary btn-sm" onclick="viewEvidence(${props.id})">Evidence</button>
-            <button class="btn btn-ghost btn-sm" onclick="challengeClaim(${props.id})">Challenge</button>
-          </div>
-        `;
-
-        new mapboxgl.Popup({ offset: 25 })
-          .setLngLat(e.features[0].geometry.coordinates)
-          .setHTML(popupHTML)
-          .addTo(map);
+      ['osint-clusters', 'osint-unclustered'].forEach(layer => {
+        map.on('mousemove', layer, (e) => {
+          const claimsFeatures = map.queryRenderedFeatures(e.point, { layers: ['claims-clusters-core', 'claims-unclustered-core'] });
+          if (claimsFeatures.length === 0) updateTooltip(e, 'osint');
+        });
+        map.on('mouseleave', layer, () => tooltip.classList.remove('visible'));
       });
 
-      map.on("mouseenter", "claims-core", () => {
-        map.getCanvas().style.cursor = "pointer";
+      // Click interactions
+      map.on('click', 'osint-clusters', (e) => {
+        const clusterId = e.features[0].properties.cluster_id;
+        map.getSource('osint').getClusterExpansionZoom(clusterId, (err, zoom) => {
+          if (!err) map.easeTo({ center: e.features[0].geometry.coordinates, zoom: zoom });
+        });
       });
 
-      map.on("mouseleave", "claims-core", () => {
-        map.getCanvas().style.cursor = "";
+      map.on('click', 'claims-clusters-core', (e) => {
+        const clusterId = e.features[0].properties.cluster_id;
+        map.getSource('claims').getClusterExpansionZoom(clusterId, (err, zoom) => {
+          if (!err) map.easeTo({ center: e.features[0].geometry.coordinates, zoom: zoom });
+        });
+      });
+
+      map.on('click', 'osint-unclustered', (e) => {
+        const id = e.features[0].properties.id;
+        map.easeTo({ center: e.features[0].geometry.coordinates, zoom: 5, duration: 1000 });
+        selectOSINT(id);
+      });
+
+      map.on('click', 'claims-unclustered-core', (e) => {
+        const id = e.features[0].properties.id;
+        map.easeTo({ center: e.features[0].geometry.coordinates, zoom: 5, duration: 1000 });
+        selectClaim(id);
+      });
+
+      ['claims-clusters-core', 'claims-unclustered-core', 'osint-clusters', 'osint-unclustered'].forEach(layer => {
+        map.on('mouseenter', layer, () => { map.getCanvas().style.cursor = 'pointer'; });
+        map.on('mouseleave', layer, () => { map.getCanvas().style.cursor = ''; });
       });
 
       map.on("idle", () => {
-        if (map.getZoom() < 2) {
-          map.rotateTo(map.getBearing() + 10, { duration: 60000 });
-        }
+        if (map.getZoom() < 2) map.rotateTo(map.getBearing() + 10, { duration: 60000 });
       });
     });
 
-    // UI Functions
-    function toggleDrawer() {
-      document.getElementById("signalsDrawer").classList.toggle("open");
-    }
-
-    function switchTab(tab) {
-      document.querySelectorAll('.drawer-tab').forEach(t => t.classList.remove('active'));
-      event.target.classList.add('active');
-
-      document.getElementById('signalsTab').style.display = 'none';
-      document.getElementById('signalDetail').style.display = 'none';
-      document.getElementById('draftsTab').style.display = 'none';
-      document.getElementById('lockedTab').style.display = 'none';
-
-      if (tab === 'signals') {
-        document.getElementById('signalsTab').style.display = 'block';
-      } else if (tab === 'drafts') {
-        document.getElementById('draftsTab').style.display = 'block';
-      } else if (tab === 'locked') {
-        document.getElementById('lockedTab').style.display = 'block';
-      }
-    }
-
-    function renderSignals() {
-      const container = document.getElementById('signalsTab');
-      container.innerHTML = mockSignals.map(s => `
-        <div class="signal-item" onclick="showSignalDetail(${s.id})">
-          <div class="signal-header">
-            <div class="signal-icon">${s.handle}</div>
-            <div class="signal-meta">
-              <div class="signal-source">${s.source}</div>
-              <div class="signal-time">${s.time} ago</div>
-            </div>
+    // Render feeds
+    function renderOSINT() {
+      const container = document.getElementById('osintFeed');
+      container.innerHTML = osintData.slice(0, 20).map(item => `
+        <div class="news-item ${selectedOSINTId === item.id ? 'selected' : ''}" data-id="${item.id}" onclick="selectOSINT(${item.id}); flyToLocation([${item.location[0]}, ${item.location[1]}]);">
+          <div class="news-header">
+            <div class="news-source-icon">${item.source.charAt(0)}</div>
+            <div class="news-source">${item.source}</div>
+            <div class="news-time">${item.timestamp}</div>
           </div>
-          <div class="signal-title">${s.content}</div>
-          <div class="signal-tags">
-            ${s.tags.map(tag => `<span class="signal-tag">#${tag}</span>`).join('')}
+          <div class="news-snippet">${item.title}</div>
+          <div class="news-tags">
+            ${item.tags.map(tag => `<span class="news-tag">#${tag}</span>`).join('')}
           </div>
         </div>
       `).join('');
+      document.getElementById('osintCount').textContent = osintData.length;
     }
 
-    function showSignalDetail(id) {
-      const signal = mockSignals.find(s => s.id === id);
-      document.getElementById('signalsTab').style.display = 'none';
-      const detail = document.getElementById('signalDetail');
-      detail.innerHTML = `
-        <div class="detail-back" onclick="backToSignals()">
-          <i class="fas fa-arrow-left"></i> Back
-        </div>
-        <div class="detail-content">
-          <div class="detail-header">
-            <div class="signal-icon">${signal.handle}</div>
-            <div>
-              <div class="detail-source">${signal.source}</div>
-              <div class="signal-time">${signal.time} ago</div>
+    function renderClaims() {
+      const container = document.getElementById('claimsFeed');
+      container.innerHTML = claimsData.map(item => {
+        const statusClass = item.status === 'resolved' ? `resolved-${item.outcome}` : 'open';
+        const statusText = item.status === 'resolved' ? item.outcome : 'open';
+        return `
+          <div class="claim-item ${statusClass} ${selectedClaimId === item.id ? 'selected' : ''}" data-id="${item.id}" onclick="selectClaim(${item.id}); flyToLocation([${item.location[0]}, ${item.location[1]}]);">
+            <div class="claim-header">
+              <div class="claim-author">
+                <span class="claim-handle">${item.authorHandle}</span>
+                <span class="claim-rep"><i class="fas fa-star"></i> ${item.authorRep}</span>
+              </div>
+              <span class="claim-status ${statusClass}">${statusText}</span>
+            </div>
+            <div class="claim-text">${item.claim}</div>
+            <div class="claim-footer">
+              <span>Locked ${item.lockedAt}</span>
             </div>
           </div>
-          <div class="detail-text">${signal.content}</div>
-          <div class="signal-tags" style="margin-bottom: 16px;">
-            ${signal.tags.map(tag => `<span class="signal-tag">#${tag}</span>`).join('')}
-          </div>
-          <div class="detail-actions">
-            <button class="btn btn-primary btn-sm" onclick="createClaimFromSignal(${signal.id})">
-              <i class="fas fa-plus"></i> Create Claim
-            </button>
-            <button class="btn btn-ghost btn-sm" onclick="window.open('https://x.com/${signal.source}', '_blank')">
-              <i class="fas fa-external-link-alt"></i> View Source
-            </button>
-          </div>
-        </div>
-      `;
-      detail.style.display = 'block';
+        `;
+      }).join('');
+      document.getElementById('claimsCount').textContent = claimsData.length;
     }
 
-    function backToSignals() {
-      document.getElementById('signalDetail').style.display = 'none';
-      document.getElementById('signalsTab').style.display = 'block';
+    function selectOSINT(id) {
+      selectedOSINTId = id;
+      renderOSINT();
     }
 
-    function renderDrafts() {
-      const container = document.getElementById('draftsTab');
-      container.innerHTML = mockDrafts.map(d => `
-        <div class="draft-item">
-          <div class="draft-title">${d.title}</div>
-          <div class="draft-meta">
-            <div class="draft-meta-item">
-              <i class="fas fa-calendar"></i> ${d.timeframe}
-            </div>
-            <div class="draft-meta-item">
-              <i class="fas fa-chart-line"></i>
-              <span class="draft-confidence">${d.confidence}%</span>
-            </div>
-          </div>
-          <div class="draft-actions">
-            <button class="btn btn-primary btn-sm" onclick="lockClaim(${d.id})">
-              <i class="fas fa-lock"></i> Lock Claim
-            </button>
-            <button class="btn btn-ghost btn-sm">Edit</button>
-          </div>
-        </div>
-      `).join('');
+    function selectClaim(id) {
+      selectedClaimId = id;
+      renderClaims();
     }
 
-    function renderLocked() {
-      const container = document.getElementById('lockedTab');
-      container.innerHTML = mockLocked.map(l => `
-        <div class="locked-item">
-          <div class="locked-header">
-            <div class="locked-title">${l.title}</div>
-            <span class="locked-status status-${l.status}">${l.status}</span>
-          </div>
-          <div class="locked-footer">
-            <span>${l.time}</span>
-            <span>${l.hash}</span>
-          </div>
-        </div>
-      `).join('');
+    function flyToLocation(coords) {
+      map.flyTo({ center: coords, zoom: 5, duration: 1500 });
     }
 
-    function toggleLayer(type) {
-      if (type === 'all') {
-        map.setFilter("claims-core", null);
-        map.setFilter("claims-glow", null);
-      } else if (type === 'verified') {
-        map.setFilter("claims-core", ["==", ["get", "status"], "verified"]);
-        map.setFilter("claims-glow", ["==", ["get", "status"], "verified"]);
-      }
+    function toggleOSINT() {
+      const visible = map.getLayoutProperty('osint-clusters', 'visibility') === 'visible';
+      const visibility = visible ? 'none' : 'visible';
+      ['osint-clusters', 'osint-cluster-count', 'osint-unclustered'].forEach(layer => {
+        map.setLayoutProperty(layer, 'visibility', visibility);
+      });
     }
 
-    function toggleHeatmap() {
-      heatmapVisible = !heatmapVisible;
-      map.setLayoutProperty("claims-heatmap", "visibility", heatmapVisible ? "visible" : "none");
-      map.setLayoutProperty("claims-core", "visibility", heatmapVisible ? "none" : "visible");
-      map.setLayoutProperty("claims-glow", "visibility", heatmapVisible ? "none" : "visible");
+    function toggleClaims() {
+      const visible = map.getLayoutProperty('claims-clusters-core', 'visibility') === 'visible';
+      const visibility = visible ? 'none' : 'visible';
+      ['claims-clusters-glow', 'claims-clusters-core', 'claims-cluster-count', 'claims-unclustered-glow', 'claims-unclustered-core'].forEach(layer => {
+        map.setLayoutProperty(layer, 'visibility', visibility);
+      });
     }
 
     function resetView() {
-      map.flyTo({ center: [15, 35], zoom: 1.3, duration: 2000 });
+      map.flyTo({ center: [15, 35], zoom: 1.5, duration: 2000 });
     }
 
-    function viewEvidence(id) {
-      alert(`Viewing evidence for claim #${id}`);
+    function openNewClaimModal() {
+      alert('New Claim modal would open here. User drops a pin on the map or enters location, writes claim, and locks it.');
     }
 
-    function challengeClaim(id) {
-      alert(`Challenge claim #${id}`);
-    }
+    // Auto-refresh OSINT feed every 45 seconds
+    setInterval(() => {
+      // Remove oldest items beyond 20
+      if (osintData.length > 20) {
+        osintData = osintData.slice(0, 20);
+      }
 
-    function createClaimFromSignal(id) {
-      alert(`Creating claim from signal #${id}`);
-    }
+      // Add new item at the top
+      const regionKeys = Object.keys(regions);
+      const regionKey = regionKeys[Math.floor(Math.random() * regionKeys.length)];
+      const coords = regions[regionKey];
+      const location = coords[Math.floor(Math.random() * coords.length)];
 
-    function lockClaim(id) {
-      alert(`Locking claim #${id}`);
-    }
+      const newItem = {
+        id: Date.now(),
+        title: newsTemplates[Math.floor(Math.random() * newsTemplates.length)],
+        source: sources[Math.floor(Math.random() * sources.length)],
+        timestamp: "Just now",
+        tags: ["OSINT", "Verification"],
+        location: location,
+        createdAt: Date.now()
+      };
+
+      osintData.unshift(newItem);
+
+      // Update map source
+      map.getSource('osint').setData({
+        type: "FeatureCollection",
+        features: osintData.map(item => ({
+          type: "Feature",
+          geometry: { type: "Point", coordinates: item.location },
+          properties: { ...item, tags: JSON.stringify(item.tags) }
+        }))
+      });
+
+      renderOSINT();
+    }, 45000);
 
     // Initialize
-    renderSignals();
-    renderDrafts();
-    renderLocked();
+    renderOSINT();
+    renderClaims();
   </script>
 
 </body>
