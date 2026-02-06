@@ -133,74 +133,45 @@ export default function GlobePage() {
         strategy="beforeInteractive"
       />
 
-      {/* ProofLocker Header */}
+      {/* ProofLocker Header - Mobile Optimized */}
       <header className="fixed top-0 left-0 right-0 h-14 bg-gradient-to-r from-[#0A0A0F] via-[#111118] to-[#0A0A0F] backdrop-blur-[20px] border-b border-purple-500/20 z-[1000] shadow-[0_0_30px_rgba(91,33,182,0.15)]">
-        <div className="flex items-center justify-between px-6 h-full">
-          {/* Left: Logo + Tagline */}
-          <div className="flex items-center gap-6">
+        <div className="flex items-center justify-between px-3 md:px-6 h-full">
+          {/* Left: Logo */}
+          <div className="flex items-center gap-2 md:gap-6">
             <a href="/" className="flex items-center transition-transform hover:scale-105">
-              <img src="/logos/prooflocker-logo-dark.svg" alt="ProofLocker" className="h-8 w-auto" />
+              <img src="/logos/prooflocker-logo-dark.svg" alt="ProofLocker" className="h-6 md:h-8 w-auto" />
             </a>
-            <span className="text-[12px] font-medium text-purple-300/70 tracking-wider hidden lg:block">
-              🌍 Verifiable Claims Worldwide
+            <span className="text-[10px] md:text-[12px] font-medium text-purple-300/70 tracking-wider hidden sm:block">
+              🌍 Verifiable Claims
             </span>
           </div>
 
-          {/* Center: Stats */}
-          <div className="hidden md:flex items-center gap-6 text-[12px]">
-            <div className="flex items-center gap-2">
-              <div className="w-2 h-2 bg-purple-500 rounded-full animate-pulse shadow-[0_0_8px_rgba(139,92,246,0.6)]" />
-              <span className="text-gray-400">Active:</span>
-              <span className="font-bold text-purple-300">{stats.activeClaims}</span>
-            </div>
-            <div className="h-4 w-px bg-purple-500/30" />
-            <div className="flex items-center gap-2">
-              <span className="text-gray-400">Accuracy:</span>
-              <span className="font-bold text-purple-300">{stats.accuracy}%</span>
-            </div>
-          </div>
-
           {/* Right: Navigation */}
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1 md:gap-2">
             {/* Feed Icon */}
             <a
               href="/app"
-              className="group flex items-center gap-2 px-3 py-2 text-[12px] font-semibold text-gray-400 hover:text-white transition-all hover:bg-purple-500/10 rounded-lg border border-transparent hover:border-purple-500/20"
+              className="group flex items-center gap-1 px-2 md:px-3 py-2 text-[11px] md:text-[12px] font-semibold text-gray-400 hover:text-white transition-all hover:bg-purple-500/10 rounded-lg border border-transparent hover:border-purple-500/20"
               title="View Feed"
             >
-              <svg className="w-4 h-4 group-hover:text-purple-400 transition-colors" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+              <svg className="w-3.5 md:w-4 h-3.5 md:h-4 group-hover:text-purple-400 transition-colors" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                 <rect x="3" y="3" width="7" height="7" rx="1" />
                 <rect x="14" y="3" width="7" height="7" rx="1" />
                 <rect x="14" y="14" width="7" height="7" rx="1" />
                 <rect x="3" y="14" width="7" height="7" rx="1" />
               </svg>
-              <span className="hidden sm:inline">Feed</span>
+              <span className="hidden md:inline">Feed</span>
             </a>
-
-            {/* Profile Icon */}
-            <a
-              href="/profile"
-              className="group flex items-center gap-2 px-3 py-2 text-[12px] font-semibold text-gray-400 hover:text-white transition-all hover:bg-purple-500/10 rounded-lg border border-transparent hover:border-purple-500/20"
-              title="View Profile"
-            >
-              <svg className="w-4 h-4 group-hover:text-purple-400 transition-colors" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-              </svg>
-              <span className="hidden sm:inline">Profile</span>
-            </a>
-
-            <div className="h-6 w-px bg-purple-500/30 mx-1" />
 
             {/* Submit Button */}
             <a
               href="/lock"
-              className="flex items-center gap-2 px-5 py-2 bg-gradient-to-r from-[#5B21B6] to-[#2E5CFF] hover:from-[#6B31C6] hover:to-[#3D6CFF] text-white rounded-lg text-[13px] font-bold transition-all shadow-[0_0_20px_rgba(91,33,182,0.4)] hover:shadow-[0_0_30px_rgba(91,33,182,0.6)] hover:scale-[1.02]"
+              className="flex items-center gap-1.5 px-3 md:px-5 py-1.5 md:py-2 bg-gradient-to-r from-[#5B21B6] to-[#2E5CFF] hover:from-[#6B31C6] hover:to-[#3D6CFF] text-white rounded-lg text-[11px] md:text-[13px] font-bold transition-all shadow-[0_0_20px_rgba(91,33,182,0.4)] hover:shadow-[0_0_30px_rgba(91,33,182,0.6)]"
             >
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+              <svg className="w-3.5 md:w-4 h-3.5 md:h-4" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
               </svg>
-              <span className="hidden sm:inline">Submit Claim</span>
-              <span className="sm:hidden">Submit</span>
+              <span>Submit</span>
             </a>
           </div>
         </div>

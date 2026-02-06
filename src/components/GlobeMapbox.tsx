@@ -40,6 +40,7 @@ export default function GlobeMapbox({ claims, osint }: GlobeMapboxProps) {
   const [currentFilter, setCurrentFilter] = useState('active');
   const [mapReady, setMapReady] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   // Create GeoJSON
   const createClaimsGeoJSON = () => ({
