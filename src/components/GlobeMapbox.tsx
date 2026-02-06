@@ -109,11 +109,11 @@ export default function GlobeMapbox({ claims, osint }: GlobeMapboxProps) {
         try {
           map.current.setFog({
             range: [0.5, 10],
-            color: '#0f172a',
-            'horizon-blend': 0.1,
-            'high-color': '#1e293b',
-            'space-color': '#0f172a',
-            'star-intensity': 0.3,
+            color: '#0A0A0F',
+            'horizon-blend': 0.15,
+            'high-color': '#111118',
+            'space-color': '#0A0A0F',
+            'star-intensity': 0.4,
           });
         } catch (e) {
           console.warn('[Globe] Fog not supported');
@@ -667,7 +667,7 @@ export default function GlobeMapbox({ claims, osint }: GlobeMapboxProps) {
   const filteredClaims = getFilteredClaims();
 
   return (
-    <div className="relative w-full h-full bg-[#0f172a]" style={{ minHeight: '100vh', width: '100%' }}>
+    <div className="relative w-full h-full bg-gradient-to-b from-[#0A0A0F] via-[#111118] to-[#0A0A0F]" style={{ minHeight: '100vh', width: '100%' }}>
       <div
         ref={mapContainer}
         className="absolute inset-0 w-full h-full"
@@ -675,27 +675,27 @@ export default function GlobeMapbox({ claims, osint }: GlobeMapboxProps) {
       />
 
       {!mapReady && !error && (
-        <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-b from-[#1a0f2e]/90 to-[#0f172a]/90 z-[999]">
+        <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-b from-[#0A0A0F]/95 via-[#111118]/95 to-[#0A0A0F]/95 z-[999]">
           <div className="text-center">
             <div className="relative mb-4 mx-auto w-16 h-16">
-              <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-purple-500" />
-              <div className="absolute inset-0 rounded-full bg-purple-500/20 blur-xl animate-pulse" />
+              <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-purple-500" />
+              <div className="absolute inset-0 rounded-full bg-purple-500/30 blur-2xl animate-pulse" />
             </div>
-            <p className="text-purple-300 font-medium">Loading globe...</p>
-            <p className="text-[#64748b] text-sm mt-2">Initializing Mapbox GL</p>
+            <p className="text-purple-300 font-semibold text-lg">Loading Globe...</p>
+            <p className="text-gray-500 text-sm mt-2">Initializing Mapbox</p>
           </div>
         </div>
       )}
 
       {error && (
-        <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-b from-[#1a0f2e]/90 to-[#0f172a]/90 z-[999]">
+        <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-b from-[#0A0A0F]/95 via-[#111118]/95 to-[#0A0A0F]/95 z-[999]">
           <div className="text-center max-w-md px-6">
-            <div className="text-[#ef4444] text-5xl mb-4">⚠️</div>
-            <p className="text-[#f8fafc] text-lg font-semibold mb-2">Failed to load globe</p>
-            <p className="text-[#94a3b8] text-sm mb-4">{error}</p>
+            <div className="text-red-500 text-6xl mb-4">⚠️</div>
+            <p className="text-white text-xl font-bold mb-2">Failed to Load Globe</p>
+            <p className="text-gray-400 text-sm mb-6">{error}</p>
             <button
               onClick={() => window.location.reload()}
-              className="px-6 py-3 bg-gradient-to-r from-purple-600 to-purple-700 text-white rounded-lg text-sm font-semibold hover:from-purple-500 hover:to-purple-600 shadow-[0_0_20px_rgba(139,92,246,0.3)] transition-all"
+              className="px-8 py-3 bg-gradient-to-r from-[#5B21B6] to-[#2E5CFF] hover:from-[#6B31C6] hover:to-[#3D6CFF] text-white rounded-lg text-sm font-bold shadow-[0_0_20px_rgba(91,33,182,0.4)] hover:shadow-[0_0_30px_rgba(91,33,182,0.6)] transition-all"
             >
               Reload Page
             </button>
