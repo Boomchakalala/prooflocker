@@ -19,6 +19,9 @@ interface Claim {
   confidence: number;
   lockedDate: string;
   outcome: string | null;
+  category?: string;
+  evidence_score?: number;
+  author_reliability_tier?: 'elite' | 'proven' | 'active' | 'new';
 }
 
 interface OsintItem {
