@@ -1,8 +1,11 @@
 import { NextResponse } from 'next/server';
-import { createClient } from '@/lib/supabase/server';
+import { createClient } from '@supabase/supabase-js';
 import { getReliabilityTier } from '@/lib/user-scoring';
 
 export const revalidate = 300; // Cache for 5 minutes
+
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
 
 export async function GET(request: Request) {
   try {
@@ -10,7 +13,7 @@ export async function GET(request: Request) {
     const category = searchParams.get('category');
     const limit = parseInt(searchParams.get('limit') || '50', 10);
 
-    const supabase = await createClient();
+    const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
     // Build query to get top sources with minimum reliability 300
     let query = supabase
