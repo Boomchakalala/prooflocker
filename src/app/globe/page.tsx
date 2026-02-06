@@ -39,6 +39,14 @@ export default function GlobePage() {
   const [stats, setStats] = useState({ activeClaims: 512, accuracy: 79 });
   const [loading, setLoading] = useState(true);
 
+  // Add Mapbox CSS
+  useEffect(() => {
+    const link = document.createElement('link');
+    link.href = 'https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css';
+    link.rel = 'stylesheet';
+    document.head.appendChild(link);
+  }, []);
+
   // Fetch real data from API
   useEffect(() => {
     const fetchGlobeData = async () => {
@@ -91,10 +99,6 @@ export default function GlobePage() {
   return (
     <div className="min-h-screen bg-[#0f172a]">
       {/* Load Mapbox GL JS */}
-      <link
-        href="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css"
-        rel="stylesheet"
-      />
       <Script
         src="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js"
         strategy="beforeInteractive"
