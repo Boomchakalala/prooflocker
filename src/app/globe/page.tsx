@@ -2,20 +2,12 @@
 
 import { useState, useEffect } from 'react';
 import dynamic from 'next/dynamic';
+import Script from 'next/script';
 import LandingHeader from '@/components/LandingHeader';
 
 // Dynamically import globe component (client-side only)
 const GlobeMapbox = dynamic(() => import('@/components/GlobeMapbox'), {
   ssr: false,
-  loading: () => (
-    <div className="flex items-center justify-center h-screen bg-[#0f172a]">
-      <div className="text-center">
-        <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-[#14b8a6] mx-auto mb-4" />
-        <p className="text-[#94a3b8]">Initializing globe...</p>
-        <p className="text-[#64748b] text-sm mt-2">Loading global claims & OSINT</p>
-      </div>
-    </div>
-  ),
 });
 
 interface Claim {
@@ -98,6 +90,16 @@ export default function GlobePage() {
 
   return (
     <div className="min-h-screen bg-[#0f172a]">
+      {/* Load Mapbox GL JS */}
+      <link
+        href="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css"
+        rel="stylesheet"
+      />
+      <Script
+        src="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js"
+        strategy="beforeInteractive"
+      />
+
       {/* Header */}
       <header className="fixed top-0 left-0 right-0 h-14 bg-[#0f172a]/95 backdrop-blur-[20px] border-b border-[rgba(148,163,184,0.1)] z-[1000]">
         <div className="flex items-center justify-between px-6 h-full">

@@ -629,10 +629,16 @@ export default function GlobeMapbox({ claims, osint }: GlobeMapboxProps) {
     return true;
   });
 
+  console.log('[GlobeMapbox] Rendering component, mapLoaded:', mapLoaded, 'mapError:', mapError);
+
   return (
-    <div className="relative w-full h-full">
+    <div className="relative w-full h-full bg-[#0f172a]">
       {/* Map Container */}
-      <div ref={mapContainer} className="absolute inset-0" />
+      <div
+        ref={mapContainer}
+        className="absolute inset-0 w-full h-full"
+        style={{ minHeight: '100vh' }}
+      />
 
       {/* Loading/Error Overlay */}
       {!mapLoaded && !mapError && (
