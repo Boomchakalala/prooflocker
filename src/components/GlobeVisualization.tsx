@@ -83,13 +83,19 @@ export default function GlobeVisualization({ hotspots, onHotspotClick }: GlobeVi
         onHotspotClick(point as Hotspot);
       });
 
-    // Configure controls
-    const controls = globe.controls();
-    controls.autoRotate = true;
-    controls.autoRotateSpeed = 0.3;
-    controls.enableZoom = true;
-    controls.minDistance = 180;
-    controls.maxDistance = 600;
+    // Configure controls (with safety check)
+    try {
+      const controls = globe.controls();
+      if (controls) {
+        controls.autoRotate = true;
+        controls.autoRotateSpeed = 0.3;
+        controls.enableZoom = true;
+        controls.minDistance = 180;
+        controls.maxDistance = 600;
+      }
+    } catch (err) {
+      console.warn('[Globe] Controls not available:', err);
+    }
 
     // Mount globe
     globe(globeRef.current);
