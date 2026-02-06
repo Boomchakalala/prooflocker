@@ -3,16 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ProofLocker Globe - Digital Evidence & Accountability</title>
+  <title>ProofLocker Globe</title>
 
   <!-- Mapbox GL JS -->
   <link href="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css" rel="stylesheet">
   <script src="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js"></script>
 
-  <!-- Chart.js for dashboards -->
-  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-
-  <!-- Font Awesome for icons -->
+  <!-- Font Awesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
   <!-- Google Fonts -->
@@ -26,104 +23,89 @@
     }
 
     :root {
-      --bg-primary: #001F3F;
-      --bg-secondary: #002B4D;
-      --bg-card: #003355;
-      --text-primary: #FFFFFF;
-      --text-secondary: #B0BEC5;
-      --accent-verified: #28A745;
-      --accent-disputed: #DC3545;
-      --accent-pending: #FFC107;
+      --bg-primary: #0a0a0a;
+      --bg-secondary: #111111;
+      --bg-card: #1a1a1a;
+      --text-primary: #ffffff;
+      --text-secondary: #9ca3af;
       --accent-purple: #9333ea;
-      --border-subtle: #1A4D6F;
+      --accent-verified: #10b981;
+      --accent-disputed: #ef4444;
+      --accent-pending: #f59e0b;
+      --border: #1f1f1f;
       --shadow-glow: rgba(147, 51, 234, 0.3);
     }
 
     body {
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      font-family: 'Inter', sans-serif;
       background: var(--bg-primary);
       color: var(--text-primary);
       overflow: hidden;
     }
 
-    /* Top Header Dashboard */
+    /* Top Header */
     .top-header {
       position: fixed;
       top: 0;
       left: 0;
       right: 0;
-      height: 70px;
-      background: rgba(0, 31, 63, 0.95);
-      backdrop-filter: blur(10px);
-      border-bottom: 2px solid var(--accent-purple);
+      height: 60px;
+      background: rgba(10, 10, 10, 0.9);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 0 30px;
+      padding: 0 24px;
       z-index: 1000;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
     }
 
-    .logo-section {
+    .logo {
       display: flex;
       align-items: center;
-      gap: 15px;
+      gap: 10px;
+      font-size: 18px;
+      font-weight: 600;
     }
 
-    .logo-icon {
-      font-size: 32px;
+    .logo i {
       color: var(--accent-purple);
     }
 
-    .logo-text {
-      font-size: 24px;
-      font-weight: 700;
-      background: linear-gradient(135deg, var(--accent-purple) 0%, #c084fc 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-
-    .global-stats {
+    .stats {
       display: flex;
-      gap: 40px;
-      align-items: center;
+      gap: 32px;
+      font-size: 13px;
     }
 
-    .stat-item {
-      text-align: center;
+    .stat {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--text-secondary);
     }
 
     .stat-value {
-      font-size: 24px;
-      font-weight: 700;
-      color: var(--accent-purple);
-    }
-
-    .stat-label {
-      font-size: 11px;
-      text-transform: uppercase;
-      color: var(--text-secondary);
-      margin-top: 4px;
-      letter-spacing: 0.5px;
+      color: var(--text-primary);
+      font-weight: 600;
     }
 
     .header-actions {
       display: flex;
-      gap: 12px;
+      gap: 10px;
     }
 
     .btn {
-      padding: 10px 20px;
-      border-radius: 6px;
-      font-size: 14px;
-      font-weight: 600;
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 500;
       cursor: pointer;
       border: none;
-      transition: all 0.3s ease;
+      transition: all 0.2s;
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 6px;
     }
 
     .btn-primary {
@@ -133,453 +115,505 @@
 
     .btn-primary:hover {
       background: #7c3aed;
-      transform: translateY(-2px);
-      box-shadow: 0 4px 12px var(--shadow-glow);
     }
 
-    .btn-secondary {
+    .btn-ghost {
       background: transparent;
-      border: 1px solid var(--accent-purple);
-      color: var(--accent-purple);
+      color: var(--text-secondary);
+      border: 1px solid var(--border);
     }
 
-    .btn-secondary:hover {
-      background: rgba(147, 51, 234, 0.1);
+    .btn-ghost:hover {
+      color: var(--text-primary);
+      border-color: var(--accent-purple);
     }
 
-    /* Main Container */
+    /* Map Container - Full hero */
     #map {
       position: fixed;
-      top: 70px;
+      top: 60px;
       left: 0;
       right: 0;
-      bottom: 280px;
+      bottom: 0;
       width: 100%;
     }
 
-    /* Sidebar - Claims Feed */
-    .sidebar {
+    /* Signals Drawer Toggle */
+    .signals-toggle {
       position: fixed;
-      top: 70px;
-      right: -420px;
-      width: 420px;
-      height: calc(100vh - 350px);
-      background: rgba(0, 43, 77, 0.95);
-      backdrop-filter: blur(15px);
-      border-left: 2px solid var(--accent-purple);
-      transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-      z-index: 900;
-      overflow-y: auto;
-      box-shadow: -4px 0 20px rgba(0, 0, 0, 0.5);
-    }
-
-    .sidebar.open {
-      right: 0;
-    }
-
-    .sidebar-toggle {
-      position: fixed;
-      top: 120px;
       right: 20px;
-      width: 50px;
-      height: 50px;
-      background: var(--accent-purple);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 999;
+      background: rgba(17, 17, 17, 0.95);
+      backdrop-filter: blur(20px);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 12px 16px;
       cursor: pointer;
-      z-index: 1001;
-      box-shadow: 0 4px 15px var(--shadow-glow);
-      transition: all 0.3s ease;
-    }
-
-    .sidebar-toggle:hover {
-      transform: scale(1.1);
-      box-shadow: 0 6px 25px var(--shadow-glow);
-    }
-
-    .sidebar-toggle i {
-      color: white;
-      font-size: 20px;
-    }
-
-    .sidebar-header {
-      padding: 20px;
-      border-bottom: 1px solid var(--border-subtle);
-      position: sticky;
-      top: 0;
-      background: rgba(0, 43, 77, 0.98);
-      backdrop-filter: blur(10px);
-      z-index: 10;
-    }
-
-    .sidebar-title {
-      font-size: 18px;
-      font-weight: 700;
-      margin-bottom: 12px;
       display: flex;
       align-items: center;
-      gap: 10px;
-    }
-
-    .filter-tabs {
-      display: flex;
       gap: 8px;
-      margin-top: 12px;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-primary);
+      transition: all 0.3s;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
     }
 
-    .filter-tab {
-      padding: 6px 14px;
-      border-radius: 20px;
-      font-size: 12px;
-      background: transparent;
-      border: 1px solid var(--border-subtle);
-      color: var(--text-secondary);
-      cursor: pointer;
-      transition: all 0.3s ease;
+    .signals-toggle:hover {
+      border-color: var(--accent-purple);
+      box-shadow: 0 4px 20px var(--shadow-glow);
     }
 
-    .filter-tab.active {
+    .signals-toggle .badge {
       background: var(--accent-purple);
       color: white;
-      border-color: var(--accent-purple);
-    }
-
-    .claims-list {
-      padding: 15px;
-    }
-
-    .claim-card {
-      background: var(--bg-card);
-      border: 1px solid var(--border-subtle);
       border-radius: 12px;
-      padding: 16px;
-      margin-bottom: 12px;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .claim-card::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 4px;
-      height: 100%;
-      background: var(--accent-pending);
-    }
-
-    .claim-card.verified::before {
-      background: var(--accent-verified);
-    }
-
-    .claim-card.disputed::before {
-      background: var(--accent-disputed);
-    }
-
-    .claim-card:hover {
-      border-color: var(--accent-purple);
-      box-shadow: 0 4px 20px rgba(147, 51, 234, 0.2);
-      transform: translateY(-2px);
-    }
-
-    .claim-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      margin-bottom: 10px;
-    }
-
-    .claim-title {
-      font-size: 15px;
-      font-weight: 600;
-      line-height: 1.4;
-      flex: 1;
-    }
-
-    .claim-status {
-      padding: 4px 10px;
-      border-radius: 12px;
-      font-size: 11px;
-      font-weight: 600;
-      text-transform: uppercase;
-      margin-left: 10px;
-    }
-
-    .status-pending {
-      background: rgba(255, 193, 7, 0.15);
-      color: var(--accent-pending);
-    }
-
-    .status-verified {
-      background: rgba(40, 167, 69, 0.15);
-      color: var(--accent-verified);
-    }
-
-    .status-disputed {
-      background: rgba(220, 53, 69, 0.15);
-      color: var(--accent-disputed);
-    }
-
-    .claim-meta {
-      display: flex;
-      gap: 15px;
-      font-size: 12px;
-      color: var(--text-secondary);
-      margin-top: 12px;
-    }
-
-    .claim-meta-item {
-      display: flex;
-      align-items: center;
-      gap: 5px;
-    }
-
-    .reputation-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-      padding: 3px 8px;
-      border-radius: 10px;
-      background: rgba(147, 51, 234, 0.15);
-      color: var(--accent-purple);
+      padding: 2px 8px;
       font-size: 11px;
       font-weight: 600;
     }
 
-    .claim-evidence {
-      margin-top: 10px;
-      display: flex;
-      gap: 8px;
-    }
-
-    .evidence-btn {
-      padding: 6px 12px;
-      border-radius: 6px;
-      font-size: 11px;
-      background: rgba(147, 51, 234, 0.1);
-      border: 1px solid var(--accent-purple);
-      color: var(--accent-purple);
-      cursor: pointer;
-      transition: all 0.2s ease;
-    }
-
-    .evidence-btn:hover {
-      background: rgba(147, 51, 234, 0.2);
-    }
-
-    /* OSINT Panel */
-    .osint-panel {
+    /* Signals Drawer */
+    .signals-drawer {
       position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      height: 280px;
-      background: rgba(0, 31, 63, 0.95);
-      backdrop-filter: blur(15px);
-      border-top: 2px solid var(--accent-purple);
-      z-index: 800;
-      overflow: hidden;
+      top: 60px;
+      right: -440px;
+      width: 420px;
+      height: calc(100vh - 60px);
+      background: rgba(17, 17, 17, 0.98);
+      backdrop-filter: blur(30px);
+      border-left: 1px solid var(--border);
+      z-index: 998;
+      transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      display: flex;
+      flex-direction: column;
+      box-shadow: -10px 0 30px rgba(0, 0, 0, 0.7);
     }
 
-    .osint-header {
-      padding: 15px 30px;
-      border-bottom: 1px solid var(--border-subtle);
+    .signals-drawer.open {
+      right: 0;
+    }
+
+    .drawer-header {
+      padding: 20px;
+      border-bottom: 1px solid var(--border);
       display: flex;
       justify-content: space-between;
       align-items: center;
     }
 
-    .osint-title {
+    .drawer-title {
       font-size: 16px;
-      font-weight: 700;
-      display: flex;
-      align-items: center;
-      gap: 10px;
+      font-weight: 600;
     }
 
-    .osint-title i {
-      color: var(--accent-purple);
-    }
-
-    .osint-sources {
-      display: flex;
-      gap: 8px;
-      font-size: 11px;
+    .drawer-close {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      background: transparent;
+      border: none;
       color: var(--text-secondary);
-    }
-
-    .osint-feed {
-      display: flex;
-      gap: 15px;
-      padding: 15px 30px;
-      overflow-x: auto;
-      overflow-y: hidden;
-      height: calc(280px - 60px);
-    }
-
-    .osint-feed::-webkit-scrollbar {
-      height: 8px;
-    }
-
-    .osint-feed::-webkit-scrollbar-track {
-      background: rgba(255, 255, 255, 0.05);
-    }
-
-    .osint-feed::-webkit-scrollbar-thumb {
-      background: var(--accent-purple);
-      border-radius: 4px;
-    }
-
-    .osint-card {
-      flex: 0 0 350px;
-      background: var(--bg-card);
-      border: 1px solid var(--border-subtle);
-      border-radius: 12px;
-      padding: 16px;
-      transition: all 0.3s ease;
-    }
-
-    .osint-card:hover {
-      border-color: var(--accent-purple);
-      box-shadow: 0 4px 20px rgba(147, 51, 234, 0.2);
-    }
-
-    .osint-card-header {
+      cursor: pointer;
       display: flex;
       align-items: center;
-      gap: 10px;
-      margin-bottom: 12px;
+      justify-content: center;
+      transition: all 0.2s;
     }
 
-    .osint-avatar {
-      width: 36px;
-      height: 36px;
-      border-radius: 50%;
+    .drawer-close:hover {
+      background: var(--bg-card);
+      color: var(--text-primary);
+    }
+
+    .drawer-tabs {
+      display: flex;
+      gap: 4px;
+      padding: 16px 20px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .drawer-tab {
+      padding: 8px 16px;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-secondary);
+      background: transparent;
+      border: none;
+      border-bottom: 2px solid transparent;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .drawer-tab.active {
+      color: var(--accent-purple);
+      border-bottom-color: var(--accent-purple);
+    }
+
+    .drawer-tab:hover {
+      color: var(--text-primary);
+    }
+
+    .drawer-content {
+      flex: 1;
+      overflow-y: auto;
+      padding: 16px;
+    }
+
+    .drawer-content::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .drawer-content::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    .drawer-content::-webkit-scrollbar-thumb {
+      background: var(--border);
+      border-radius: 3px;
+    }
+
+    .drawer-content::-webkit-scrollbar-thumb:hover {
+      background: var(--accent-purple);
+    }
+
+    /* Signal Item */
+    .signal-item {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 12px;
+      margin-bottom: 10px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .signal-item:hover {
+      border-color: var(--accent-purple);
+      background: rgba(147, 51, 234, 0.05);
+    }
+
+    .signal-header {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+
+    .signal-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
       background: var(--accent-purple);
       display: flex;
       align-items: center;
       justify-content: center;
       color: white;
-      font-weight: 700;
-    }
-
-    .osint-author {
-      flex: 1;
-    }
-
-    .osint-handle {
       font-size: 14px;
       font-weight: 600;
+      flex-shrink: 0;
+    }
+
+    .signal-meta {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .signal-source {
+      font-size: 12px;
+      font-weight: 600;
       color: var(--text-primary);
     }
 
-    .osint-timestamp {
+    .signal-time {
       font-size: 11px;
       color: var(--text-secondary);
     }
 
-    .osint-content {
+    .signal-title {
       font-size: 13px;
-      line-height: 1.6;
+      line-height: 1.4;
       color: var(--text-primary);
-      margin-bottom: 12px;
+      margin-bottom: 8px;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
     }
 
-    .osint-tags {
+    .signal-tags {
       display: flex;
       gap: 6px;
       flex-wrap: wrap;
     }
 
-    .osint-tag {
-      padding: 4px 10px;
-      border-radius: 12px;
-      font-size: 11px;
+    .signal-tag {
+      font-size: 10px;
+      padding: 3px 8px;
+      border-radius: 6px;
       background: rgba(147, 51, 234, 0.1);
       color: var(--accent-purple);
-      border: 1px solid rgba(147, 51, 234, 0.3);
     }
 
-    .osint-actions {
-      margin-top: 12px;
+    /* Signal Detail View */
+    .signal-detail {
+      display: none;
+    }
+
+    .signal-detail.active {
+      display: block;
+    }
+
+    .detail-back {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--text-secondary);
+      font-size: 13px;
+      cursor: pointer;
+      margin-bottom: 16px;
+      padding: 8px;
+      border-radius: 8px;
+      transition: all 0.2s;
+    }
+
+    .detail-back:hover {
+      color: var(--text-primary);
+      background: var(--bg-card);
+    }
+
+    .detail-content {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px;
+    }
+
+    .detail-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .detail-source {
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .detail-text {
+      font-size: 14px;
+      line-height: 1.6;
+      color: var(--text-secondary);
+      margin-bottom: 16px;
+    }
+
+    .detail-actions {
       display: flex;
       gap: 8px;
     }
 
-    .osint-btn {
-      padding: 6px 12px;
-      border-radius: 6px;
-      font-size: 11px;
-      background: transparent;
-      border: 1px solid var(--border-subtle);
-      color: var(--text-secondary);
-      cursor: pointer;
-      transition: all 0.2s ease;
+    /* Draft Claim Item */
+    .draft-item {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--accent-purple);
+      border-radius: 10px;
+      padding: 14px;
+      margin-bottom: 12px;
     }
 
-    .osint-btn:hover {
+    .draft-title {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: var(--text-primary);
+    }
+
+    .draft-meta {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 10px;
+      font-size: 12px;
+    }
+
+    .draft-meta-item {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      color: var(--text-secondary);
+    }
+
+    .draft-confidence {
+      color: var(--accent-verified);
+      font-weight: 600;
+    }
+
+    .draft-actions {
+      display: flex;
+      gap: 8px;
+    }
+
+    .btn-sm {
+      padding: 6px 12px;
+      font-size: 12px;
+      border-radius: 6px;
+    }
+
+    /* Locked Item */
+    .locked-item {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 12px;
+      margin-bottom: 10px;
+    }
+
+    .locked-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 8px;
+    }
+
+    .locked-title {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-primary);
+      flex: 1;
+    }
+
+    .locked-status {
+      font-size: 10px;
+      padding: 3px 8px;
+      border-radius: 6px;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+
+    .status-verified {
+      background: rgba(16, 185, 129, 0.15);
+      color: var(--accent-verified);
+    }
+
+    .status-pending {
+      background: rgba(245, 158, 11, 0.15);
+      color: var(--accent-pending);
+    }
+
+    .status-disputed {
+      background: rgba(239, 68, 68, 0.15);
+      color: var(--accent-disputed);
+    }
+
+    .locked-footer {
+      display: flex;
+      justify-content: space-between;
+      font-size: 11px;
+      color: var(--text-secondary);
+    }
+
+    /* Map Controls */
+    .map-controls {
+      position: fixed;
+      top: 80px;
+      left: 20px;
+      z-index: 900;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .map-control-btn {
+      width: 40px;
+      height: 40px;
+      background: rgba(17, 17, 17, 0.95);
+      backdrop-filter: blur(20px);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.2s;
+      color: var(--text-secondary);
+    }
+
+    .map-control-btn:hover {
       border-color: var(--accent-purple);
       color: var(--accent-purple);
+    }
+
+    .map-control-btn.active {
+      background: var(--accent-purple);
+      color: white;
+      border-color: var(--accent-purple);
+    }
+
+    /* Vignette */
+    .vignette {
+      position: fixed;
+      top: 60px;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      pointer-events: none;
+      background: radial-gradient(ellipse at center, transparent 0%, rgba(147, 51, 234, 0.03) 60%, rgba(0, 0, 0, 0.2) 100%);
+      z-index: 700;
     }
 
     /* Map Popups */
     .mapboxgl-popup-content {
       background: var(--bg-card) !important;
-      border: 2px solid var(--accent-purple) !important;
+      border: 1px solid var(--border) !important;
       border-radius: 12px !important;
-      padding: 20px !important;
-      min-width: 280px;
-      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.7) !important;
+      padding: 16px !important;
+      min-width: 260px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8) !important;
     }
 
     .mapboxgl-popup-close-button {
-      color: var(--text-primary) !important;
-      font-size: 20px !important;
-      padding: 5px !important;
+      color: var(--text-secondary) !important;
+      font-size: 18px !important;
     }
 
     .popup-title {
-      font-size: 16px;
-      font-weight: 700;
-      color: var(--text-primary);
-      margin-bottom: 12px;
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 10px;
     }
 
-    .popup-info {
-      font-size: 13px;
+    .popup-meta {
+      font-size: 12px;
       color: var(--text-secondary);
-      line-height: 1.6;
       margin-bottom: 12px;
     }
 
     .popup-stats {
-      display: flex;
-      gap: 20px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
       margin-bottom: 12px;
     }
 
     .popup-stat {
-      flex: 1;
-      text-align: center;
-      padding: 10px;
       background: rgba(147, 51, 234, 0.1);
+      padding: 8px;
       border-radius: 8px;
+      text-align: center;
     }
 
     .popup-stat-value {
-      font-size: 20px;
+      font-size: 16px;
       font-weight: 700;
       color: var(--accent-purple);
     }
 
     .popup-stat-label {
-      font-size: 11px;
+      font-size: 10px;
       color: var(--text-secondary);
-      margin-top: 4px;
+      margin-top: 2px;
     }
 
     .popup-actions {
@@ -587,504 +621,184 @@
       gap: 8px;
     }
 
-    .popup-btn {
-      flex: 1;
-      padding: 10px;
-      border-radius: 6px;
-      font-size: 12px;
-      font-weight: 600;
-      cursor: pointer;
-      border: none;
-      transition: all 0.3s ease;
-    }
-
-    .popup-btn-primary {
-      background: var(--accent-purple);
-      color: white;
-    }
-
-    .popup-btn-secondary {
-      background: transparent;
-      border: 1px solid var(--border-subtle);
-      color: var(--text-secondary);
-    }
-
-    /* Globe Enhancements */
-    .globe-controls {
-      position: fixed;
-      top: 90px;
-      left: 20px;
-      z-index: 900;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-
-    .globe-control-btn {
-      width: 45px;
-      height: 45px;
-      background: rgba(0, 43, 77, 0.95);
-      backdrop-filter: blur(10px);
-      border: 1px solid var(--accent-purple);
-      border-radius: 10px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      color: var(--accent-purple);
-    }
-
-    .globe-control-btn:hover {
-      background: rgba(147, 51, 234, 0.2);
-      box-shadow: 0 4px 15px var(--shadow-glow);
-    }
-
-    .globe-control-btn.active {
-      background: var(--accent-purple);
-      color: white;
-    }
-
-    /* Leaderboard Modal */
-    .modal {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: rgba(0, 0, 0, 0.8);
-      z-index: 2000;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .modal.open {
-      display: flex;
-    }
-
-    .modal-content {
-      background: var(--bg-secondary);
-      border: 2px solid var(--accent-purple);
-      border-radius: 16px;
-      padding: 30px;
-      width: 90%;
-      max-width: 700px;
-      max-height: 80vh;
-      overflow-y: auto;
-      box-shadow: 0 10px 50px rgba(0, 0, 0, 0.8);
-    }
-
-    .modal-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 20px;
-    }
-
-    .modal-title {
-      font-size: 24px;
-      font-weight: 700;
-      color: var(--text-primary);
-    }
-
-    .modal-close {
-      font-size: 28px;
-      cursor: pointer;
-      color: var(--text-secondary);
-    }
-
-    .leaderboard-table {
-      width: 100%;
-      border-collapse: collapse;
-    }
-
-    .leaderboard-table thead {
-      background: rgba(147, 51, 234, 0.1);
-      border-bottom: 2px solid var(--accent-purple);
-    }
-
-    .leaderboard-table th {
-      padding: 12px;
-      text-align: left;
-      font-size: 12px;
-      font-weight: 700;
-      text-transform: uppercase;
-      color: var(--accent-purple);
-    }
-
-    .leaderboard-table td {
-      padding: 14px 12px;
-      border-bottom: 1px solid var(--border-subtle);
-      font-size: 14px;
-    }
-
-    .leaderboard-table tr:hover {
-      background: rgba(147, 51, 234, 0.05);
-    }
-
-    .rank-badge {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      width: 30px;
-      height: 30px;
-      border-radius: 50%;
-      background: var(--accent-purple);
-      color: white;
-      font-weight: 700;
-      font-size: 14px;
-    }
-
-    .rank-badge.top {
-      background: linear-gradient(135deg, #FFD700, #FFA500);
-      color: #000;
-    }
-
-    /* Vignette overlay */
-    .vignette {
-      position: fixed;
-      top: 70px;
-      left: 0;
-      right: 0;
-      bottom: 280px;
-      pointer-events: none;
-      background: radial-gradient(ellipse at center, transparent 0%, rgba(88, 28, 135, 0.05) 50%, rgba(0, 0, 0, 0.3) 100%);
-      z-index: 700;
-    }
-
     /* Responsive */
     @media (max-width: 768px) {
-      .global-stats {
+      .stats {
         display: none;
       }
 
-      .sidebar {
+      .signals-drawer {
         width: 100%;
         right: -100%;
       }
 
-      .osint-panel {
-        height: 200px;
-      }
-
-      #map {
-        bottom: 200px;
+      .signals-toggle {
+        right: 16px;
       }
     }
 
-    /* Scrollbar styling */
-    ::-webkit-scrollbar {
-      width: 10px;
+    /* Empty State */
+    .empty-state {
+      text-align: center;
+      padding: 40px 20px;
+      color: var(--text-secondary);
     }
 
-    ::-webkit-scrollbar-track {
-      background: rgba(255, 255, 255, 0.05);
+    .empty-state i {
+      font-size: 48px;
+      margin-bottom: 16px;
+      opacity: 0.3;
     }
 
-    ::-webkit-scrollbar-thumb {
-      background: var(--accent-purple);
-      border-radius: 5px;
+    .empty-state p {
+      font-size: 13px;
+    }
+
+    /* Hide Mapbox attribution */
+    .mapboxgl-ctrl-bottom-left,
+    .mapboxgl-ctrl-bottom-right {
+      display: none;
+    }
+
+    .mapboxgl-ctrl-logo {
+      display: none !important;
     }
   </style>
 </head>
 <body>
 
-  <!-- Top Header Dashboard -->
+  <!-- Top Header -->
   <header class="top-header">
-    <div class="logo-section">
-      <i class="fas fa-lock logo-icon"></i>
-      <div class="logo-text">ProofLocker</div>
+    <div class="logo">
+      <i class="fas fa-lock"></i>
+      ProofLocker
     </div>
 
-    <div class="global-stats">
-      <div class="stat-item">
-        <div class="stat-value" id="totalClaims">1,247</div>
-        <div class="stat-label">Active Claims</div>
+    <div class="stats">
+      <div class="stat">
+        <span class="stat-value">1,247</span>
+        <span>claims</span>
       </div>
-      <div class="stat-item">
-        <div class="stat-value" id="accuracy">82%</div>
-        <div class="stat-label">Avg Accuracy</div>
+      <div class="stat">
+        <span class="stat-value">82%</span>
+        <span>accuracy</span>
       </div>
-      <div class="stat-item">
-        <div class="stat-value" id="topUser">@VerifierPro</div>
-        <div class="stat-label">Top Rep User</div>
+      <div class="stat">
+        <span class="stat-value">@VerifierPro</span>
+        <span>top user</span>
       </div>
     </div>
 
     <div class="header-actions">
-      <button class="btn btn-secondary" onclick="openLeaderboard()">
-        <i class="fas fa-trophy"></i> Leaderboard
+      <button class="btn btn-ghost">
+        <i class="fas fa-trophy"></i>
+        Leaderboard
       </button>
       <button class="btn btn-primary">
-        <i class="fas fa-plus"></i> New Claim
+        <i class="fas fa-plus"></i>
+        New Claim
       </button>
     </div>
   </header>
 
-  <!-- Globe Controls -->
-  <div class="globe-controls">
-    <div class="globe-control-btn active" title="Show All Claims" onclick="toggleLayer('all')">
+  <!-- Map -->
+  <div id="map"></div>
+  <div class="vignette"></div>
+
+  <!-- Map Controls -->
+  <div class="map-controls">
+    <div class="map-control-btn active" title="All Claims" onclick="toggleLayer('all')">
       <i class="fas fa-globe"></i>
     </div>
-    <div class="globe-control-btn" title="Verified Only" onclick="toggleLayer('verified')">
+    <div class="map-control-btn" title="Verified Only" onclick="toggleLayer('verified')">
       <i class="fas fa-check-circle"></i>
     </div>
-    <div class="globe-control-btn" title="Heatmap View" onclick="toggleHeatmap()">
+    <div class="map-control-btn" title="Heatmap" onclick="toggleHeatmap()">
       <i class="fas fa-fire"></i>
     </div>
-    <div class="globe-control-btn" title="Reset View" onclick="resetView()">
+    <div class="map-control-btn" title="Reset View" onclick="resetView()">
       <i class="fas fa-redo"></i>
     </div>
   </div>
 
-  <!-- Map Container -->
-  <div id="map"></div>
-  <div class="vignette"></div>
-
-  <!-- Sidebar Toggle -->
-  <div class="sidebar-toggle" onclick="toggleSidebar()">
-    <i class="fas fa-bars"></i>
+  <!-- Signals Toggle -->
+  <div class="signals-toggle" onclick="toggleDrawer()">
+    <i class="fas fa-satellite-dish"></i>
+    Signals
+    <span class="badge">12</span>
   </div>
 
-  <!-- Claims Sidebar -->
-  <aside class="sidebar" id="claimsSidebar">
-    <div class="sidebar-header">
-      <div class="sidebar-title">
-        <i class="fas fa-list"></i>
-        Active Claims Feed
-      </div>
-      <div class="filter-tabs">
-        <button class="filter-tab active" onclick="filterClaims('all')">All</button>
-        <button class="filter-tab" onclick="filterClaims('verified')">Verified</button>
-        <button class="filter-tab" onclick="filterClaims('pending')">Pending</button>
-        <button class="filter-tab" onclick="filterClaims('disputed')">Disputed</button>
-      </div>
+  <!-- Signals Drawer -->
+  <aside class="signals-drawer" id="signalsDrawer">
+    <div class="drawer-header">
+      <div class="drawer-title">Signals</div>
+      <button class="drawer-close" onclick="toggleDrawer()">
+        <i class="fas fa-times"></i>
+      </button>
     </div>
 
-    <div class="claims-list" id="claimsList">
-      <!-- Claims will be dynamically inserted here -->
+    <div class="drawer-tabs">
+      <button class="drawer-tab active" onclick="switchTab('signals')">Signals</button>
+      <button class="drawer-tab" onclick="switchTab('drafts')">Draft Claims</button>
+      <button class="drawer-tab" onclick="switchTab('locked')">Locked</button>
+    </div>
+
+    <div class="drawer-content">
+      <!-- Signals List -->
+      <div id="signalsTab" class="tab-content">
+        <!-- Dynamically filled -->
+      </div>
+
+      <!-- Signal Detail -->
+      <div id="signalDetail" class="signal-detail">
+        <!-- Dynamically filled -->
+      </div>
+
+      <!-- Drafts Tab -->
+      <div id="draftsTab" class="tab-content" style="display: none;">
+        <!-- Dynamically filled -->
+      </div>
+
+      <!-- Locked Tab -->
+      <div id="lockedTab" class="tab-content" style="display: none;">
+        <!-- Dynamically filled -->
+      </div>
     </div>
   </aside>
 
-  <!-- OSINT Panel -->
-  <section class="osint-panel">
-    <div class="osint-header">
-      <div class="osint-title">
-        <i class="fas fa-satellite-dish"></i>
-        Live OSINT Intelligence Feed
-      </div>
-      <div class="osint-sources">
-        Sources: @bellingcat, @IntelCrab, @OSINTtechnical, @AuroraIntel
-      </div>
-    </div>
-
-    <div class="osint-feed" id="osintFeed">
-      <!-- OSINT cards will be dynamically inserted here -->
-    </div>
-  </section>
-
-  <!-- Leaderboard Modal -->
-  <div class="modal" id="leaderboardModal">
-    <div class="modal-content">
-      <div class="modal-header">
-        <div class="modal-title"><i class="fas fa-trophy"></i> Top Verifiers Leaderboard</div>
-        <div class="modal-close" onclick="closeLeaderboard()">&times;</div>
-      </div>
-
-      <table class="leaderboard-table">
-        <thead>
-          <tr>
-            <th>Rank</th>
-            <th>User</th>
-            <th>Score</th>
-            <th>Claims Resolved</th>
-            <th>Accuracy</th>
-          </tr>
-        </thead>
-        <tbody id="leaderboardBody">
-          <!-- Leaderboard data will be inserted here -->
-        </tbody>
-      </table>
-    </div>
-  </div>
-
   <script>
-    // Mapbox Configuration
+    // Mapbox Config
     mapboxgl.accessToken = "pk.eyJ1IjoicHJvb2Zsb2NrZXIiLCJhIjoiY21sYjBxcTAwMGVoYzNlczI4YWlzampqZyJ9.nY-yqSucTzvNyK1qDCq9rQ";
 
-    // Mock Data - Claims
+    // Mock Data
     const mockClaims = [
-      {
-        id: 1,
-        title: "Election outcome prediction in District 5",
-        location: [2.3522, 48.8566],
-        city: "Paris",
-        status: "verified",
-        user: "@DataMaster",
-        reputation: 92,
-        stake: 500,
-        confidence: 87,
-        timestamp: "2024-02-01T10:30:00Z",
-        hash: "0x7a8f...d3c2"
-      },
-      {
-        id: 2,
-        title: "Economic forecast: GDP growth Q1 2024",
-        location: [-74.006, 40.7128],
-        city: "New York",
-        status: "pending",
-        user: "@EconWatcher",
-        reputation: 78,
-        stake: 750,
-        confidence: 65,
-        timestamp: "2024-02-03T14:20:00Z",
-        hash: "0x9b2e...a1f4"
-      },
-      {
-        id: 3,
-        title: "Tech merger approval timeline prediction",
-        location: [139.6917, 35.6895],
-        city: "Tokyo",
-        status: "pending",
-        user: "@TechInsider",
-        reputation: 85,
-        stake: 1000,
-        confidence: 73,
-        timestamp: "2024-02-04T08:15:00Z",
-        hash: "0x3d4f...b6e8"
-      },
-      {
-        id: 4,
-        title: "Climate summit outcome prediction",
-        location: [-0.1276, 51.5074],
-        city: "London",
-        status: "verified",
-        user: "@ClimatePro",
-        reputation: 88,
-        stake: 600,
-        confidence: 91,
-        timestamp: "2024-02-02T16:45:00Z",
-        hash: "0x5c7a...e2d9"
-      },
-      {
-        id: 5,
-        title: "Policy change implementation date",
-        location: [116.4074, 39.9042],
-        city: "Beijing",
-        status: "disputed",
-        user: "@PolicyWatch",
-        reputation: 71,
-        stake: 400,
-        confidence: 58,
-        timestamp: "2024-02-05T11:30:00Z",
-        hash: "0x8e1b...f3c7"
-      },
-      {
-        id: 6,
-        title: "Market volatility prediction for tech sector",
-        location: [-118.2437, 34.0522],
-        city: "Los Angeles",
-        status: "pending",
-        user: "@MarketGuru",
-        reputation: 95,
-        stake: 1200,
-        confidence: 82,
-        timestamp: "2024-02-05T09:00:00Z",
-        hash: "0x2f6d...c4a1"
-      },
-      {
-        id: 7,
-        title: "International treaty ratification timeline",
-        location: [37.6173, 55.7558],
-        city: "Moscow",
-        status: "verified",
-        user: "@DiplomacyExpert",
-        reputation: 83,
-        stake: 550,
-        confidence: 79,
-        timestamp: "2024-02-03T13:20:00Z",
-        hash: "0x6b9e...d8f2"
-      },
-      {
-        id: 8,
-        title: "Resource allocation decision outcome",
-        location: [151.2093, -33.8688],
-        city: "Sydney",
-        status: "pending",
-        user: "@ResourceTracker",
-        reputation: 76,
-        stake: 450,
-        confidence: 68,
-        timestamp: "2024-02-06T06:15:00Z",
-        hash: "0x1a7c...b5e3"
-      }
+      { id: 1, title: "Election outcome in District 5", location: [2.3522, 48.8566], city: "Paris", status: "verified", user: "@DataMaster", reputation: 92, stake: 500, confidence: 87, hash: "0x7a8f...d3c2" },
+      { id: 2, title: "GDP growth Q1 2024", location: [-74.006, 40.7128], city: "New York", status: "pending", user: "@EconWatcher", reputation: 78, stake: 750, confidence: 65, hash: "0x9b2e...a1f4" },
+      { id: 3, title: "Tech merger timeline", location: [139.6917, 35.6895], city: "Tokyo", status: "pending", user: "@TechInsider", reputation: 85, stake: 1000, confidence: 73, hash: "0x3d4f...b6e8" },
+      { id: 4, title: "Climate summit outcome", location: [-0.1276, 51.5074], city: "London", status: "verified", user: "@ClimatePro", reputation: 88, stake: 600, confidence: 91, hash: "0x5c7a...e2d9" },
+      { id: 5, title: "Policy implementation date", location: [116.4074, 39.9042], city: "Beijing", status: "disputed", user: "@PolicyWatch", reputation: 71, stake: 400, confidence: 58, hash: "0x8e1b...f3c7" }
     ];
 
-    // Mock Data - OSINT Feed
-    const mockOSINT = [
-      {
-        id: 1,
-        author: "@bellingcat",
-        handle: "Bellingcat",
-        content: "New investigation reveals coordinated disinformation campaign across 12 countries. Full report with evidence chains published.",
-        timestamp: "2h ago",
-        tags: ["Investigation", "Evidence", "Verification"]
-      },
-      {
-        id: 2,
-        author: "@IntelCrab",
-        handle: "IntelCrab",
-        content: "Breaking: Satellite imagery confirms infrastructure changes in disputed region. Cross-referenced with ground sources.",
-        timestamp: "4h ago",
-        tags: ["Satellite", "OSINT", "Verification"]
-      },
-      {
-        id: 3,
-        author: "@OSINTtechnical",
-        handle: "OSINT Technical",
-        content: "Analysis of public records shows pattern inconsistencies. Timeline reconstruction available with cryptographic proof.",
-        timestamp: "6h ago",
-        tags: ["Analysis", "Timeline", "Proof"]
-      },
-      {
-        id: 4,
-        author: "@AuroraIntel",
-        handle: "Aurora Intel",
-        content: "Crowdsourced verification of recent claims completed. 87% confidence level across multiple independent sources.",
-        timestamp: "8h ago",
-        tags: ["Crowdsource", "Verification", "Confidence"]
-      },
-      {
-        id: 5,
-        author: "@bellingcat",
-        handle: "Bellingcat",
-        content: "Digital forensics workshop outcomes: New techniques for video authentication and metadata analysis published.",
-        timestamp: "10h ago",
-        tags: ["Forensics", "Video", "Authentication"]
-      },
-      {
-        id: 6,
-        author: "@OSINTtechnical",
-        handle: "OSINT Technical",
-        content: "Tracking supply chain movements through open source intelligence. Pattern analysis reveals significant deviations.",
-        timestamp: "12h ago",
-        tags: ["Supply Chain", "Tracking", "Analysis"]
-      }
+    const mockSignals = [
+      { id: 1, source: "Bellingcat", handle: "B", content: "Investigation reveals coordinated disinformation across 12 countries", time: "2h", tags: ["Investigation", "Evidence"] },
+      { id: 2, source: "IntelCrab", handle: "I", content: "Satellite imagery confirms infrastructure changes in disputed region", time: "4h", tags: ["Satellite", "OSINT"] },
+      { id: 3, source: "OSINT Tech", handle: "O", content: "Public records show pattern inconsistencies in recent claims", time: "6h", tags: ["Analysis", "Timeline"] },
+      { id: 4, source: "Aurora Intel", handle: "A", content: "Crowdsourced verification completed: 87% confidence level", time: "8h", tags: ["Verification", "Confidence"] },
+      { id: 5, source: "Bellingcat", handle: "B", content: "Video authentication techniques published in new forensics report", time: "10h", tags: ["Forensics", "Video"] },
+      { id: 6, source: "OSINT Tech", handle: "O", content: "Supply chain tracking reveals significant pattern deviations", time: "12h", tags: ["Supply Chain", "Tracking"] }
     ];
 
-    // Mock Data - Leaderboard
-    const mockLeaderboard = [
-      { rank: 1, user: "@VerifierPro", score: 95, claims: 342, accuracy: 94 },
-      { rank: 2, user: "@DataMaster", score: 92, claims: 298, accuracy: 91 },
-      { rank: 3, user: "@TruthSeeker", score: 90, claims: 276, accuracy: 89 },
-      { rank: 4, user: "@EvidenceKing", score: 88, claims: 254, accuracy: 87 },
-      { rank: 5, user: "@ClimatePro", score: 88, claims: 241, accuracy: 88 },
-      { rank: 6, user: "@TechInsider", score: 85, claims: 219, accuracy: 84 },
-      { rank: 7, user: "@DiplomacyExpert", score: 83, claims: 203, accuracy: 85 },
-      { rank: 8, user: "@EconWatcher", score: 78, claims: 187, accuracy: 79 },
-      { rank: 9, user: "@ResourceTracker", score: 76, claims: 165, accuracy: 77 },
-      { rank: 10, user: "@PolicyWatch", score: 71, claims: 142, accuracy: 73 }
+    const mockDrafts = [
+      { id: 1, title: "Infrastructure changes will be confirmed by independent sources", outcome: "Verification within 72h", timeframe: "3 days", confidence: 85 },
+      { id: 2, title: "Disinformation campaign attribution completed", outcome: "Full attribution report", timeframe: "1 week", confidence: 78 },
+      { id: 3, title: "Supply chain disruption impacts Q1 deliveries", outcome: "15% delay confirmed", timeframe: "30 days", confidence: 72 }
+    ];
+
+    const mockLocked = [
+      { id: 1, title: "Election outcome prediction District 5", status: "verified", time: "2d ago", hash: "0x7a8f...d3c2" },
+      { id: 2, title: "GDP growth forecast Q1", status: "pending", time: "1d ago", hash: "0x9b2e...a1f4" },
+      { id: 3, title: "Tech merger approval timeline", status: "pending", time: "8h ago", hash: "0x3d4f...b6e8" },
+      { id: 4, title: "Climate summit resolution", status: "verified", time: "3d ago", hash: "0x5c7a...e2d9" }
     ];
 
     // Initialize Map
@@ -1098,12 +812,9 @@
       attributionControl: false
     });
 
-    let currentFilter = 'all';
     let heatmapVisible = false;
 
-    // Map Style Load Handler
     map.on("style.load", () => {
-      // Set fog/atmosphere
       map.setFog({
         "range": [0.5, 10],
         "color": "#000000",
@@ -1113,74 +824,39 @@
         "star-intensity": 0.15
       });
 
-      // Create GeoJSON from claims
       const claimsGeoJSON = {
         type: "FeatureCollection",
         features: mockClaims.map(claim => ({
           type: "Feature",
-          geometry: {
-            type: "Point",
-            coordinates: claim.location
-          },
-          properties: {
-            ...claim
-          }
+          geometry: { type: "Point", coordinates: claim.location },
+          properties: { ...claim }
         }))
       };
 
-      // Add claims source
       map.addSource("claims", {
         type: "geojson",
         data: claimsGeoJSON
       });
 
-      // Add glow layer
       map.addLayer({
         id: "claims-glow",
         type: "circle",
         source: "claims",
         paint: {
-          "circle-radius": [
-            "interpolate",
-            ["linear"],
-            ["zoom"],
-            1, 25,
-            5, 90,
-            10, 130
-          ],
-          "circle-color": [
-            "match",
-            ["get", "status"],
-            "verified", "#28A745",
-            "disputed", "#DC3545",
-            "#FFC107"
-          ],
+          "circle-radius": ["interpolate", ["linear"], ["zoom"], 1, 25, 5, 90, 10, 130],
+          "circle-color": ["match", ["get", "status"], "verified", "#10b981", "disputed", "#ef4444", "#f59e0b"],
           "circle-opacity": 0.2,
           "circle-blur": 1
         }
       });
 
-      // Add core markers
       map.addLayer({
         id: "claims-core",
         type: "circle",
         source: "claims",
         paint: {
-          "circle-radius": [
-            "interpolate",
-            ["linear"],
-            ["zoom"],
-            1, 8,
-            5, 16,
-            10, 24
-          ],
-          "circle-color": [
-            "match",
-            ["get", "status"],
-            "verified", "#28A745",
-            "disputed", "#DC3545",
-            "#FFC107"
-          ],
+          "circle-radius": ["interpolate", ["linear"], ["zoom"], 1, 8, 5, 16, 10, 24],
+          "circle-color": ["match", ["get", "status"], "verified", "#10b981", "disputed", "#ef4444", "#f59e0b"],
           "circle-opacity": 0.9,
           "circle-stroke-width": 2,
           "circle-stroke-color": "#ffffff",
@@ -1188,7 +864,6 @@
         }
       });
 
-      // Add heatmap layer (initially hidden)
       map.addLayer({
         id: "claims-heatmap",
         type: "heatmap",
@@ -1196,41 +871,24 @@
         paint: {
           "heatmap-weight": ["get", "confidence"],
           "heatmap-intensity": 1,
-          "heatmap-color": [
-            "interpolate",
-            ["linear"],
-            ["heatmap-density"],
-            0, "rgba(0, 0, 255, 0)",
-            0.2, "#9333ea",
-            0.4, "#a78bfa",
-            0.6, "#c084fc",
-            0.8, "#e9d5ff",
-            1, "#ffffff"
-          ],
+          "heatmap-color": ["interpolate", ["linear"], ["heatmap-density"], 0, "rgba(0,0,255,0)", 0.2, "#9333ea", 0.4, "#a78bfa", 0.6, "#c084fc", 0.8, "#e9d5ff", 1, "#ffffff"],
           "heatmap-radius": 50,
           "heatmap-opacity": 0.8
         },
-        layout: {
-          "visibility": "none"
-        }
+        layout: { "visibility": "none" }
       });
 
-      // Marker click handlers
       map.on("click", "claims-core", (e) => {
-        const feature = e.features[0];
-        const props = feature.properties;
-
+        const props = e.features[0].properties;
         const popupHTML = `
           <div class="popup-title">${props.title}</div>
-          <div class="popup-info">
-            <strong>Location:</strong> ${props.city}<br>
-            <strong>Submitter:</strong> ${props.user} <span class="reputation-badge"><i class="fas fa-star"></i> ${props.reputation}</span><br>
-            <strong>Hash:</strong> <code>${props.hash}</code>
+          <div class="popup-meta">
+            ${props.city} • ${props.user} • Rep: ${props.reputation}
           </div>
           <div class="popup-stats">
             <div class="popup-stat">
               <div class="popup-stat-value">${props.stake}</div>
-              <div class="popup-stat-label">Tokens Staked</div>
+              <div class="popup-stat-label">Staked</div>
             </div>
             <div class="popup-stat">
               <div class="popup-stat-value">${props.confidence}%</div>
@@ -1238,26 +896,17 @@
             </div>
           </div>
           <div class="popup-actions">
-            <button class="popup-btn popup-btn-primary" onclick="viewEvidence(${props.id})">
-              <i class="fas fa-link"></i> View Evidence
-            </button>
-            <button class="popup-btn popup-btn-secondary" onclick="challengeClaim(${props.id})">
-              <i class="fas fa-gavel"></i> Challenge
-            </button>
+            <button class="btn btn-primary btn-sm" onclick="viewEvidence(${props.id})">Evidence</button>
+            <button class="btn btn-ghost btn-sm" onclick="challengeClaim(${props.id})">Challenge</button>
           </div>
         `;
 
-        new mapboxgl.Popup({
-          offset: 25,
-          closeButton: true,
-          closeOnClick: false
-        })
-          .setLngLat(feature.geometry.coordinates)
+        new mapboxgl.Popup({ offset: 25 })
+          .setLngLat(e.features[0].geometry.coordinates)
           .setHTML(popupHTML)
           .addTo(map);
       });
 
-      // Hover cursor
       map.on("mouseenter", "claims-core", () => {
         map.getCanvas().style.cursor = "pointer";
       });
@@ -1266,7 +915,6 @@
         map.getCanvas().style.cursor = "";
       });
 
-      // Auto-rotation when idle
       map.on("idle", () => {
         if (map.getZoom() < 2) {
           map.rotateTo(map.getBearing() + 10, { duration: 60000 });
@@ -1275,15 +923,126 @@
     });
 
     // UI Functions
-    function toggleSidebar() {
-      const sidebar = document.getElementById("claimsSidebar");
-      sidebar.classList.toggle("open");
+    function toggleDrawer() {
+      document.getElementById("signalsDrawer").classList.toggle("open");
+    }
+
+    function switchTab(tab) {
+      document.querySelectorAll('.drawer-tab').forEach(t => t.classList.remove('active'));
+      event.target.classList.add('active');
+
+      document.getElementById('signalsTab').style.display = 'none';
+      document.getElementById('signalDetail').style.display = 'none';
+      document.getElementById('draftsTab').style.display = 'none';
+      document.getElementById('lockedTab').style.display = 'none';
+
+      if (tab === 'signals') {
+        document.getElementById('signalsTab').style.display = 'block';
+      } else if (tab === 'drafts') {
+        document.getElementById('draftsTab').style.display = 'block';
+      } else if (tab === 'locked') {
+        document.getElementById('lockedTab').style.display = 'block';
+      }
+    }
+
+    function renderSignals() {
+      const container = document.getElementById('signalsTab');
+      container.innerHTML = mockSignals.map(s => `
+        <div class="signal-item" onclick="showSignalDetail(${s.id})">
+          <div class="signal-header">
+            <div class="signal-icon">${s.handle}</div>
+            <div class="signal-meta">
+              <div class="signal-source">${s.source}</div>
+              <div class="signal-time">${s.time} ago</div>
+            </div>
+          </div>
+          <div class="signal-title">${s.content}</div>
+          <div class="signal-tags">
+            ${s.tags.map(tag => `<span class="signal-tag">#${tag}</span>`).join('')}
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function showSignalDetail(id) {
+      const signal = mockSignals.find(s => s.id === id);
+      document.getElementById('signalsTab').style.display = 'none';
+      const detail = document.getElementById('signalDetail');
+      detail.innerHTML = `
+        <div class="detail-back" onclick="backToSignals()">
+          <i class="fas fa-arrow-left"></i> Back
+        </div>
+        <div class="detail-content">
+          <div class="detail-header">
+            <div class="signal-icon">${signal.handle}</div>
+            <div>
+              <div class="detail-source">${signal.source}</div>
+              <div class="signal-time">${signal.time} ago</div>
+            </div>
+          </div>
+          <div class="detail-text">${signal.content}</div>
+          <div class="signal-tags" style="margin-bottom: 16px;">
+            ${signal.tags.map(tag => `<span class="signal-tag">#${tag}</span>`).join('')}
+          </div>
+          <div class="detail-actions">
+            <button class="btn btn-primary btn-sm" onclick="createClaimFromSignal(${signal.id})">
+              <i class="fas fa-plus"></i> Create Claim
+            </button>
+            <button class="btn btn-ghost btn-sm" onclick="window.open('https://x.com/${signal.source}', '_blank')">
+              <i class="fas fa-external-link-alt"></i> View Source
+            </button>
+          </div>
+        </div>
+      `;
+      detail.style.display = 'block';
+    }
+
+    function backToSignals() {
+      document.getElementById('signalDetail').style.display = 'none';
+      document.getElementById('signalsTab').style.display = 'block';
+    }
+
+    function renderDrafts() {
+      const container = document.getElementById('draftsTab');
+      container.innerHTML = mockDrafts.map(d => `
+        <div class="draft-item">
+          <div class="draft-title">${d.title}</div>
+          <div class="draft-meta">
+            <div class="draft-meta-item">
+              <i class="fas fa-calendar"></i> ${d.timeframe}
+            </div>
+            <div class="draft-meta-item">
+              <i class="fas fa-chart-line"></i>
+              <span class="draft-confidence">${d.confidence}%</span>
+            </div>
+          </div>
+          <div class="draft-actions">
+            <button class="btn btn-primary btn-sm" onclick="lockClaim(${d.id})">
+              <i class="fas fa-lock"></i> Lock Claim
+            </button>
+            <button class="btn btn-ghost btn-sm">Edit</button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function renderLocked() {
+      const container = document.getElementById('lockedTab');
+      container.innerHTML = mockLocked.map(l => `
+        <div class="locked-item">
+          <div class="locked-header">
+            <div class="locked-title">${l.title}</div>
+            <span class="locked-status status-${l.status}">${l.status}</span>
+          </div>
+          <div class="locked-footer">
+            <span>${l.time}</span>
+            <span>${l.hash}</span>
+          </div>
+        </div>
+      `).join('');
     }
 
     function toggleLayer(type) {
-      currentFilter = type;
-      updateGlobeControls();
-
       if (type === 'all') {
         map.setFilter("claims-core", null);
         map.setFilter("claims-glow", null);
@@ -1295,157 +1054,35 @@
 
     function toggleHeatmap() {
       heatmapVisible = !heatmapVisible;
-      map.setLayoutProperty(
-        "claims-heatmap",
-        "visibility",
-        heatmapVisible ? "visible" : "none"
-      );
-      map.setLayoutProperty(
-        "claims-core",
-        "visibility",
-        heatmapVisible ? "none" : "visible"
-      );
-      map.setLayoutProperty(
-        "claims-glow",
-        "visibility",
-        heatmapVisible ? "none" : "visible"
-      );
-      updateGlobeControls();
+      map.setLayoutProperty("claims-heatmap", "visibility", heatmapVisible ? "visible" : "none");
+      map.setLayoutProperty("claims-core", "visibility", heatmapVisible ? "none" : "visible");
+      map.setLayoutProperty("claims-glow", "visibility", heatmapVisible ? "none" : "visible");
     }
 
     function resetView() {
-      map.flyTo({
-        center: [15, 35],
-        zoom: 1.3,
-        duration: 2000
-      });
-    }
-
-    function updateGlobeControls() {
-      document.querySelectorAll('.globe-control-btn').forEach(btn => {
-        btn.classList.remove('active');
-      });
-    }
-
-    function filterClaims(status) {
-      document.querySelectorAll('.filter-tab').forEach(tab => {
-        tab.classList.remove('active');
-      });
-      event.target.classList.add('active');
-
-      renderClaims(status);
-    }
-
-    function renderClaims(filter = 'all') {
-      const claimsList = document.getElementById("claimsList");
-      const filtered = filter === 'all'
-        ? mockClaims
-        : mockClaims.filter(c => c.status === filter);
-
-      claimsList.innerHTML = filtered.map(claim => `
-        <div class="claim-card ${claim.status}" onclick="flyToClaim(${claim.location[0]}, ${claim.location[1]})">
-          <div class="claim-header">
-            <div class="claim-title">${claim.title}</div>
-            <span class="claim-status status-${claim.status}">${claim.status}</span>
-          </div>
-          <div class="claim-meta">
-            <div class="claim-meta-item">
-              <i class="fas fa-user"></i> ${claim.user}
-            </div>
-            <div class="claim-meta-item">
-              <span class="reputation-badge"><i class="fas fa-star"></i> ${claim.reputation}</span>
-            </div>
-            <div class="claim-meta-item">
-              <i class="fas fa-coins"></i> ${claim.stake}
-            </div>
-          </div>
-          <div class="claim-evidence">
-            <button class="evidence-btn" onclick="event.stopPropagation(); viewEvidence(${claim.id})">
-              <i class="fas fa-link"></i> Evidence
-            </button>
-            <button class="evidence-btn" onclick="event.stopPropagation(); alert('Hash: ${claim.hash}')">
-              <i class="fas fa-hashtag"></i> Hash
-            </button>
-          </div>
-        </div>
-      `).join('');
-    }
-
-    function renderOSINT() {
-      const osintFeed = document.getElementById("osintFeed");
-      osintFeed.innerHTML = mockOSINT.map(post => `
-        <div class="osint-card">
-          <div class="osint-card-header">
-            <div class="osint-avatar">${post.handle.charAt(0)}</div>
-            <div class="osint-author">
-              <div class="osint-handle">${post.handle}</div>
-              <div class="osint-timestamp">${post.timestamp}</div>
-            </div>
-          </div>
-          <div class="osint-content">${post.content}</div>
-          <div class="osint-tags">
-            ${post.tags.map(tag => `<span class="osint-tag">#${tag}</span>`).join('')}
-          </div>
-          <div class="osint-actions">
-            <button class="osint-btn" onclick="alert('Creating claim from OSINT post')">
-              <i class="fas fa-plus"></i> Create Claim
-            </button>
-            <button class="osint-btn" onclick="window.open('https://x.com/${post.author}', '_blank')">
-              <i class="fas fa-external-link-alt"></i> View Source
-            </button>
-          </div>
-        </div>
-      `).join('');
-    }
-
-    function openLeaderboard() {
-      const modal = document.getElementById("leaderboardModal");
-      const tbody = document.getElementById("leaderboardBody");
-
-      tbody.innerHTML = mockLeaderboard.map(entry => `
-        <tr>
-          <td><span class="rank-badge ${entry.rank <= 3 ? 'top' : ''}">${entry.rank}</span></td>
-          <td><strong>${entry.user}</strong></td>
-          <td>${entry.score}</td>
-          <td>${entry.claims}</td>
-          <td>${entry.accuracy}%</td>
-        </tr>
-      `).join('');
-
-      modal.classList.add("open");
-    }
-
-    function closeLeaderboard() {
-      document.getElementById("leaderboardModal").classList.remove("open");
-    }
-
-    function flyToClaim(lng, lat) {
-      map.flyTo({
-        center: [lng, lat],
-        zoom: 8,
-        duration: 2000
-      });
+      map.flyTo({ center: [15, 35], zoom: 1.3, duration: 2000 });
     }
 
     function viewEvidence(id) {
-      alert(`Viewing evidence for claim #${id}\nThis would open the evidence details page with cryptographic proof, timestamps, and blockchain verification.`);
+      alert(`Viewing evidence for claim #${id}`);
     }
 
     function challengeClaim(id) {
-      alert(`Challenging claim #${id}\nThis would open a form to submit counter-evidence and stake tokens on your dispute.`);
+      alert(`Challenge claim #${id}`);
     }
 
-    // Initialize UI
-    renderClaims();
-    renderOSINT();
-
-    // Close modal on outside click
-    window.onclick = function(event) {
-      const modal = document.getElementById("leaderboardModal");
-      if (event.target === modal) {
-        closeLeaderboard();
-      }
+    function createClaimFromSignal(id) {
+      alert(`Creating claim from signal #${id}`);
     }
+
+    function lockClaim(id) {
+      alert(`Locking claim #${id}`);
+    }
+
+    // Initialize
+    renderSignals();
+    renderDrafts();
+    renderLocked();
   </script>
 
 </body>
