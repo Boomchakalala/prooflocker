@@ -29,9 +29,11 @@ interface PredictionCardProps {
   onOutcomeUpdate?: () => void; // Callback to refresh predictions
   onHide?: (id: string) => void; // Callback to hide prediction
   isPreview?: boolean; // If true, renders as non-clickable mockup for landing page
+  variant?: "full" | "compact"; // Display variant: full (Feed) or compact (Globe)
+  onViewOnMap?: () => void; // Callback to center map on this item's location (Globe only)
 }
 
-export default function PredictionCard({ prediction, currentUserId, onOutcomeUpdate, onHide, isPreview = false }: PredictionCardProps) {
+export default function PredictionCard({ prediction, currentUserId, onOutcomeUpdate, onHide, isPreview = false, variant = "full", onViewOnMap }: PredictionCardProps) {
   const router = useRouter();
   const [copied, setCopied] = useState(false);
   const [linkCopied, setLinkCopied] = useState(false);
