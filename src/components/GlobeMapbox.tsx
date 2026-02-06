@@ -590,6 +590,40 @@ export default function GlobeMapbox({ claims, osint }: GlobeMapboxProps) {
                   pending: '#f59e0b'
                 }[claim.status] || '#f59e0b';
 
+                // Get reliability badge info
+                const getReliabilityBadge = (rep: number) => {
+                  if (rep >= 90) return { label: 'Elite', color: '#fbbf24', bgColor: 'rgba(251,191,36,0.2)' };
+                  if (rep >= 70) return { label: 'Proven', color: '#c4b5fd', bgColor: 'rgba(196,181,253,0.2)' };
+                  if (rep >= 50) return { label: 'Active', color: '#93c5fd', bgColor: 'rgba(147,197,253,0.2)' };
+                  return { label: 'New', color: '#9ca3af', bgColor: 'rgba(156,163,175,0.2)' };
+                };
+                const reliability = getReliabilityBadge(claim.rep);
+
+                // Get evidence grade if exists
+                const evidenceGrade = claim.evidence_score ? (() => {
+                  if (claim.evidence_score >= 76) return { label: 'Strong', color: '#34d399', bgColor: 'rgba(52,211,153,0.2)' };
+                  if (claim.evidence_score >= 51) return { label: 'Solid', color: '#60a5fa', bgColor: 'rgba(96,165,250,0.2)' };
+                  if (claim.evidence_score >= 26) return { label: 'Basic', color: '#fbbf24', bgColor: 'rgba(251,191,36,0.2)' };
+                  return { label: 'Unverified', color: '#9ca3af', bgColor: 'rgba(156,163,175,0.2)' };
+                })() : null;
+
+                // Get category styling if exists
+                const categoryStyle = claim.category ? (() => {
+                  const cat = claim.category.toLowerCase();
+                  const styles = {
+                    crypto: { color: '#93c5fd', bgColor: 'rgba(147,197,253,0.15)' },
+                    sports: { color: '#fdba74', bgColor: 'rgba(253,186,116,0.15)' },
+                    tech: { color: '#cbd5e1', bgColor: 'rgba(203,213,225,0.15)' },
+                    personal: { color: '#c4b5fd', bgColor: 'rgba(196,181,253,0.15)' },
+                    politics: { color: '#fda4af', bgColor: 'rgba(253,164,175,0.15)' },
+                    markets: { color: '#6ee7b7', bgColor: 'rgba(110,231,183,0.15)' },
+                    osint: { color: '#a5b4fc', bgColor: 'rgba(165,180,252,0.15)' },
+                    culture: { color: '#f9a8d4', bgColor: 'rgba(249,168,212,0.15)' },
+                    other: { color: '#d6d3d1', bgColor: 'rgba(214,211,209,0.15)' }
+                  };
+                  return styles[cat] || styles.other;
+                })() : null;
+
                 return `
                   <div style="
                     background: rgba(30, 41, 59, 0.5);
@@ -620,6 +654,21 @@ export default function GlobeMapbox({ claims, osint }: GlobeMapboxProps) {
 
                     <!-- Content -->
                     <div style="flex: 1; min-width: 0;">
+                      ${categoryStyle ? `
+                        <div style="margin-bottom: 6px;">
+                          <span style="
+                            padding: 3px 8px;
+                            background: ${categoryStyle.bgColor};
+                            border-radius: 6px;
+                            font-size: 9px;
+                            font-weight: 700;
+                            color: ${categoryStyle.color};
+                            text-transform: uppercase;
+                            letter-spacing: 0.5px;
+                          ">${claim.category}</span>
+                        </div>
+                      ` : ''}
+
                       <!-- Claim text -->
                       <div style="
                         font-size: 13px;
@@ -637,14 +686,24 @@ export default function GlobeMapbox({ claims, osint }: GlobeMapboxProps) {
                       <div style="display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 6px;">
                         <span style="
                           padding: 2px 8px;
-                          background: rgba(139,92,246,0.2);
-                          border: 1px solid rgba(139,92,246,0.3);
+                          background: ${reliability.bgColor};
                           border-radius: 8px;
                           font-size: 10px;
                           font-weight: 700;
-                          color: #c4b5fd;
+                          color: ${reliability.color};
                           text-transform: uppercase;
-                        ">CLAIM</span>
+                        ">${reliability.label}</span>
+                        ${evidenceGrade ? `
+                          <span style="
+                            padding: 2px 8px;
+                            background: ${evidenceGrade.bgColor};
+                            border-radius: 8px;
+                            font-size: 10px;
+                            font-weight: 700;
+                            color: ${evidenceGrade.color};
+                            text-transform: uppercase;
+                          ">${evidenceGrade.label}</span>
+                        ` : ''}
                         <span style="
                           padding: 2px 8px;
                           background: rgba(${statusColor === '#8b5cf6' ? '139,92,246' : statusColor === '#ef4444' ? '239,68,68' : statusColor === '#6b7280' ? '107,114,128' : '245,158,11'},0.2);
@@ -654,14 +713,6 @@ export default function GlobeMapbox({ claims, osint }: GlobeMapboxProps) {
                           color: ${statusColor};
                           text-transform: uppercase;
                         ">${claim.status}</span>
-                        <span style="
-                          padding: 2px 8px;
-                          background: rgba(139,92,246,0.15);
-                          border-radius: 8px;
-                          font-size: 10px;
-                          font-weight: 600;
-                          color: #a78bfa;
-                        ">Rep ${claim.rep}</span>
                       </div>
 
                       <!-- Submitter -->
