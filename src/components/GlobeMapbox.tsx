@@ -634,7 +634,8 @@ export default function GlobeMapbox({ claims, osint }: GlobeMapboxProps) {
       `;
 
       new mapboxgl.Popup({
-        offset: 15,
+        offset: [0, -15],
+        anchor: 'bottom',
         closeButton: true,
         closeOnClick: true,
         maxWidth: '440px',
