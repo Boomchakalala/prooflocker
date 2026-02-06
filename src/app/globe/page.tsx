@@ -150,12 +150,12 @@ export default function GlobePage() {
 
       {/* Globe Container */}
       <div className="pt-14 h-screen">
-        {loading ? (
+        {loading && claims.length === 0 ? (
           <div className="flex items-center justify-center h-full">
             <div className="text-center">
               <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-[#14b8a6] mx-auto mb-4" />
               <p className="text-[#94a3b8]">Loading globe data...</p>
-              <p className="text-[#64748b] text-sm mt-2">Fetching {claims.length} claims & {osint.length} OSINT signals</p>
+              <p className="text-[#64748b] text-sm mt-2">Initializing map...</p>
             </div>
           </div>
         ) : (
