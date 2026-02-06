@@ -18,53 +18,70 @@ const GlobeMapbox = dynamic(() => import('@/components/GlobeMapbox'), {
   ),
 });
 
-// Mock data - 20 claims
-const MOCK_CLAIMS = [
-  { id: 1, claim: "US Presidential Election 2024 will have record voter turnout", lat: 40.7128, lng: -74.0060, status: "verified" as const, submitter: "@politicalanalyst", rep: 92, confidence: 87, lockedDate: "2024-01-15", outcome: "true" },
-  { id: 2, claim: "Global semiconductor shortage will ease by Q3 2025", lat: 37.5665, lng: 126.9780, status: "pending" as const, submitter: "@techinsider", rep: 78, confidence: 64, lockedDate: "2024-01-20", outcome: null },
-  { id: 3, claim: "UK will implement new AI regulation framework", lat: 51.5074, lng: -0.1278, status: "verified" as const, submitter: "@policyexpert", rep: 88, confidence: 91, lockedDate: "2024-01-10", outcome: "true" },
-  { id: 4, claim: "Bitcoin will reach $100K by end of 2025", lat: 35.6762, lng: 139.6503, status: "disputed" as const, submitter: "@cryptotrader", rep: 54, confidence: 42, lockedDate: "2024-01-25", outcome: "false" },
-  { id: 5, claim: "Climate summit will achieve binding emissions targets", lat: 48.8566, lng: 2.3522, status: "pending" as const, submitter: "@climatewatch", rep: 85, confidence: 71, lockedDate: "2024-02-01", outcome: null },
-  { id: 6, claim: "Major tech merger will be blocked by regulators", lat: 37.7749, lng: -122.4194, status: "void" as const, submitter: "@antitrust_observer", rep: 76, confidence: 58, lockedDate: "2024-01-28", outcome: "void" },
-  { id: 7, claim: "Australian housing market will correct by 15%", lat: -33.8688, lng: 151.2093, status: "pending" as const, submitter: "@marketanalyst", rep: 81, confidence: 68, lockedDate: "2024-02-03", outcome: null },
-  { id: 8, claim: "India GDP growth will exceed 7% in FY2025", lat: 28.6139, lng: 77.2090, status: "verified" as const, submitter: "@economicdata", rep: 94, confidence: 89, lockedDate: "2024-01-18", outcome: "true" },
-  { id: 9, claim: "EU will expand Digital Services Act enforcement", lat: 50.8503, lng: 4.3517, status: "pending" as const, submitter: "@euregulatorywatch", rep: 72, confidence: 76, lockedDate: "2024-02-05", outcome: null },
-  { id: 10, claim: "Brazilian elections will see runoff in October", lat: -15.8267, lng: -47.9218, status: "disputed" as const, submitter: "@latampolitics", rep: 67, confidence: 51, lockedDate: "2024-01-30", outcome: "false" },
-  { id: 11, claim: "Middle East peace talks will resume before June", lat: 31.7683, lng: 35.2137, status: "pending" as const, submitter: "@diplomaticsource", rep: 79, confidence: 62, lockedDate: "2024-02-02", outcome: null },
-  { id: 12, claim: "Toronto real estate will stabilize in Q2", lat: 43.6532, lng: -79.3832, status: "pending" as const, submitter: "@cdnhousing", rep: 83, confidence: 73, lockedDate: "2024-01-22", outcome: null },
-  { id: 13, claim: "German coalition will complete full term", lat: 52.5200, lng: 13.4050, status: "verified" as const, submitter: "@berlinpolitik", rep: 90, confidence: 84, lockedDate: "2024-01-12", outcome: "true" },
-  { id: 14, claim: "Singapore fintech sector will grow 25% YoY", lat: 1.3521, lng: 103.8198, status: "pending" as const, submitter: "@asiafinance", rep: 86, confidence: 79, lockedDate: "2024-01-27", outcome: null },
-  { id: 15, claim: "Mexico manufacturing output will exceed US imports", lat: 19.4326, lng: -99.1332, status: "disputed" as const, submitter: "@trademetrics", rep: 62, confidence: 48, lockedDate: "2024-02-04", outcome: "false" },
-  { id: 16, claim: "Russian oil exports will shift to Asian markets", lat: 55.7558, lng: 37.6173, status: "verified" as const, submitter: "@energyintel", rep: 87, confidence: 82, lockedDate: "2024-01-16", outcome: "true" },
-  { id: 17, claim: "South African power grid will achieve stability", lat: -33.9249, lng: 18.4241, status: "pending" as const, submitter: "@africanenergy", rep: 74, confidence: 66, lockedDate: "2024-01-29", outcome: null },
-  { id: 18, claim: "Dubai property prices will rise 12% in 2025", lat: 25.2048, lng: 55.2708, status: "pending" as const, submitter: "@gulfpropertytracker", rep: 77, confidence: 69, lockedDate: "2024-02-01", outcome: null },
-  { id: 19, claim: "Stockholm will implement congestion pricing expansion", lat: 59.3293, lng: 18.0686, status: "verified" as const, submitter: "@nordictransport", rep: 82, confidence: 88, lockedDate: "2024-01-14", outcome: "true" },
-  { id: 20, claim: "Argentine peso stabilization plan will succeed", lat: -34.6037, lng: -58.3816, status: "disputed" as const, submitter: "@latamecon", rep: 58, confidence: 44, lockedDate: "2024-02-06", outcome: "false" }
-];
+interface Claim {
+  id: number;
+  claim: string;
+  lat: number;
+  lng: number;
+  status: 'verified' | 'pending' | 'disputed' | 'void';
+  submitter: string;
+  rep: number;
+  confidence: number;
+  lockedDate: string;
+  outcome: string | null;
+}
 
-// Mock data - 15 OSINT signals
-const MOCK_OSINT = [
-  { id: 1, title: "Satellite imagery confirms infrastructure changes in disputed region", source: "Bellingcat", lat: 50.4501, lng: 30.5234, timestamp: "2h ago", tags: ["OSINT", "Verification"] },
-  { id: 2, title: "Investigation reveals coordinated disinformation network", source: "IntelCrab", lat: 52.5200, lng: 13.4050, timestamp: "4h ago", tags: ["Disinformation", "Investigation"] },
-  { id: 3, title: "Video authentication confirms timeline discrepancies", source: "Aurora Intel", lat: 48.8566, lng: 2.3522, timestamp: "6h ago", tags: ["Video Analysis", "Timeline"] },
-  { id: 4, title: "Supply chain tracking reveals unusual pattern deviations", source: "OSINT Tech", lat: 35.6762, lng: 139.6503, timestamp: "8h ago", tags: ["Supply Chain", "Anomaly"] },
-  { id: 5, title: "Election monitoring data shows voting irregularities", source: "Bellingcat", lat: -15.8267, lng: -47.9218, timestamp: "10h ago", tags: ["Elections", "Monitoring"] },
-  { id: 6, title: "Energy infrastructure damage confirmed via commercial satellites", source: "IntelCrab", lat: 55.7558, lng: 37.6173, timestamp: "12h ago", tags: ["Infrastructure", "Satellites"] },
-  { id: 7, title: "Financial transaction patterns suggest laundering network", source: "Aurora Intel", lat: 40.7128, lng: -74.0060, timestamp: "14h ago", tags: ["Finance", "Investigation"] },
-  { id: 8, title: "Military equipment movement tracked across border regions", source: "OSINT Tech", lat: 31.7683, lng: 35.2137, timestamp: "16h ago", tags: ["Military", "Movement"] },
-  { id: 9, title: "Social media manipulation campaign targets regional elections", source: "Bellingcat", lat: 28.6139, lng: 77.2090, timestamp: "18h ago", tags: ["Social Media", "Elections"] },
-  { id: 10, title: "Cybersecurity breach exposes government communications", source: "IntelCrab", lat: 51.5074, lng: -0.1278, timestamp: "20h ago", tags: ["Cybersecurity", "Breach"] },
-  { id: 11, title: "Public records analysis reveals pattern inconsistencies", source: "Aurora Intel", lat: -33.8688, lng: 151.2093, timestamp: "22h ago", tags: ["Records", "Analysis"] },
-  { id: 12, title: "Crowdsourced verification completed with high confidence", source: "OSINT Tech", lat: 1.3521, lng: 103.8198, timestamp: "1d ago", tags: ["Crowdsourced", "Verification"] },
-  { id: 13, title: "Maritime tracking data shows unusual vessel patterns", source: "Bellingcat", lat: 25.2048, lng: 55.2708, timestamp: "1d ago", tags: ["Maritime", "Tracking"] },
-  { id: 14, title: "Environmental monitoring detects pollution spike", source: "IntelCrab", lat: 37.7749, lng: -122.4194, timestamp: "1d ago", tags: ["Environment", "Monitoring"] },
-  { id: 15, title: "Forensic analysis confirms document authenticity", source: "Aurora Intel", lat: 59.3293, lng: 18.0686, timestamp: "2d ago", tags: ["Forensics", "Documents"] }
-];
+interface OsintItem {
+  id: number;
+  title: string;
+  source: string;
+  lat: number;
+  lng: number;
+  timestamp: string;
+  tags: string[];
+}
 
 export default function GlobePage() {
-  const [claims, setClaims] = useState(MOCK_CLAIMS);
-  const [osint, setOsint] = useState(MOCK_OSINT);
+  const [claims, setClaims] = useState<Claim[]>([]);
+  const [osint, setOsint] = useState<OsintItem[]>([]);
   const [stats, setStats] = useState({ activeClaims: 512, accuracy: 79 });
+  const [loading, setLoading] = useState(true);
+
+  // Fetch real data from API
+  useEffect(() => {
+    const fetchGlobeData = async () => {
+      try {
+        setLoading(true);
+        const response = await fetch('/api/globe/data');
+        const data = await response.json();
+
+        if (data.claims && data.osint) {
+          setClaims(data.claims);
+          setOsint(data.osint);
+
+          // Calculate stats from real data
+          const activeClaims = data.claims.filter((c: Claim) => c.status === 'pending').length;
+          const resolvedClaims = data.claims.filter((c: Claim) => c.outcome !== null);
+          const correctClaims = resolvedClaims.filter((c: Claim) => c.outcome === 'true').length;
+          const accuracy = resolvedClaims.length > 0
+            ? Math.round((correctClaims / resolvedClaims.length) * 100)
+            : 79;
+
+          setStats({ activeClaims: activeClaims || data.count.claims, accuracy });
+        }
+      } catch (error) {
+        console.error('[Globe Page] Error fetching data:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchGlobeData();
+
+    // Refresh data every 60 seconds
+    const interval = setInterval(fetchGlobeData, 60000);
+    return () => clearInterval(interval);
+  }, []);
 
   // Update stats every 30 seconds (mock)
   useEffect(() => {
