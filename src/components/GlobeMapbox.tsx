@@ -735,10 +735,10 @@ export default function GlobeMapbox({ claims, osint }: GlobeMapboxProps) {
                 <button
                   key={filter}
                   onClick={() => setCurrentFilter(filter)}
-                  className={`px-3 py-1.5 rounded-2xl text-[12px] font-medium transition-all ${
+                  className={`px-4 py-1.5 rounded-full text-[11px] font-bold uppercase tracking-wide transition-all ${
                     currentFilter === filter
-                      ? 'bg-gradient-to-r from-purple-600/80 to-purple-700/80 text-white border border-purple-500/40 shadow-[0_0_15px_rgba(139,92,246,0.3)]'
-                      : 'bg-transparent text-[#94a3b8] border border-purple-500/20 hover:bg-purple-500/10'
+                      ? 'bg-gradient-to-r from-[#5B21B6]/90 to-[#2E5CFF]/90 text-white border border-purple-400/50 shadow-[0_0_15px_rgba(91,33,182,0.4)]'
+                      : 'bg-transparent text-gray-400 border border-purple-500/20 hover:bg-purple-500/10 hover:border-purple-500/40 hover:text-purple-300'
                   }`}
                 >
                   {filter === 'active' ? 'Active' : 'High Confidence'}
@@ -807,48 +807,52 @@ export default function GlobeMapbox({ claims, osint }: GlobeMapboxProps) {
       <div className="fixed top-[76px] right-[380px] z-[900] flex flex-col gap-2">
         <button
           onClick={() => toggleLayer('claims')}
-          className={`w-[42px] h-[42px] rounded-lg flex items-center justify-center transition-all ${
+          className={`w-[44px] h-[44px] rounded-xl flex items-center justify-center transition-all ${
             claimsLayerVisible
-              ? 'bg-gradient-to-br from-purple-600 to-purple-700 text-white shadow-[0_0_20px_rgba(139,92,246,0.4)]'
-              : 'bg-[#0f172a]/95 text-[#94a3b8] border border-purple-500/20 hover:bg-purple-500/10'
+              ? 'bg-gradient-to-br from-[#5B21B6] to-[#2E5CFF] text-white shadow-[0_0_25px_rgba(91,33,182,0.5)] scale-105'
+              : 'bg-[#0A0A0F]/95 text-gray-400 border border-purple-500/20 hover:bg-purple-500/10 hover:border-purple-500/40'
           }`}
+          title="Toggle Claims Layer"
         >
-          <svg className="w-[18px] h-[18px]" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+          <svg className="w-[20px] h-[20px]" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
           </svg>
         </button>
 
         <button
           onClick={() => toggleLayer('osint')}
-          className={`w-[42px] h-[42px] rounded-lg flex items-center justify-center transition-all ${
+          className={`w-[44px] h-[44px] rounded-xl flex items-center justify-center transition-all ${
             osintLayerVisible
-              ? 'bg-gradient-to-br from-red-600 to-red-700 text-white shadow-[0_0_20px_rgba(239,68,68,0.4)]'
-              : 'bg-[#0f172a]/95 text-[#94a3b8] border border-purple-500/20 hover:bg-red-500/10'
+              ? 'bg-gradient-to-br from-red-600 to-red-700 text-white shadow-[0_0_25px_rgba(239,68,68,0.5)] scale-105'
+              : 'bg-[#0A0A0F]/95 text-gray-400 border border-purple-500/20 hover:bg-red-500/10 hover:border-red-500/40'
           }`}
+          title="Toggle OSINT Layer"
         >
-          <svg className="w-[18px] h-[18px]" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+          <svg className="w-[20px] h-[20px]" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
           </svg>
         </button>
 
         <button
           onClick={() => toggleLayer('heatmap')}
-          className={`w-[42px] h-[42px] rounded-lg flex items-center justify-center transition-all ${
+          className={`w-[44px] h-[44px] rounded-xl flex items-center justify-center transition-all ${
             heatmapVisible
-              ? 'bg-gradient-to-br from-purple-600 to-purple-700 text-white shadow-[0_0_20px_rgba(139,92,246,0.4)]'
-              : 'bg-[#0f172a]/95 text-[#94a3b8] border border-purple-500/20 hover:bg-purple-500/10'
+              ? 'bg-gradient-to-br from-[#5B21B6] to-[#2E5CFF] text-white shadow-[0_0_25px_rgba(91,33,182,0.5)] scale-105'
+              : 'bg-[#0A0A0F]/95 text-gray-400 border border-purple-500/20 hover:bg-purple-500/10 hover:border-purple-500/40'
           }`}
+          title="Toggle Heatmap"
         >
-          <svg className="w-[18px] h-[18px]" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+          <svg className="w-[20px] h-[20px]" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" d="M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.656 7.343A7.975 7.975 0 0120 13a7.975 7.975 0 01-2.343 5.657z" />
           </svg>
         </button>
 
         <button
           onClick={resetView}
-          className="w-[42px] h-[42px] bg-[#0f172a]/95 text-[#94a3b8] border border-purple-500/20 rounded-lg flex items-center justify-center transition-all hover:border-purple-500 hover:text-purple-300 hover:bg-purple-500/10"
+          className="w-[44px] h-[44px] bg-[#0A0A0F]/95 text-gray-400 border border-purple-500/20 rounded-xl flex items-center justify-center transition-all hover:border-purple-500/60 hover:text-purple-300 hover:bg-purple-500/10 hover:scale-105"
+          title="Reset View"
         >
-          <svg className="w-[18px] h-[18px]" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+          <svg className="w-[20px] h-[20px]" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
           </svg>
         </button>
