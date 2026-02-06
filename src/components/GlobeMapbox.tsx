@@ -877,52 +877,21 @@ export default function GlobeMapbox({ claims, osint }: GlobeMapboxProps) {
           {currentTab === 'claims' ? (
             <div className="space-y-3">
               {filteredClaims.slice(0, 20).map((claim) => {
-                const getReliabilityBadge = (rep: number) => {
-                  if (rep >= 90) return { label: 'Elite', color: 'text-yellow-400 bg-yellow-500/20 border-yellow-500/40' };
-                  if (rep >= 70) return { label: 'Proven', color: 'text-purple-300 bg-purple-500/20 border-purple-500/40' };
-                  if (rep >= 50) return { label: 'Active', color: 'text-blue-300 bg-blue-500/20 border-blue-500/40' };
-                  return { label: 'New', color: 'text-gray-400 bg-gray-500/20 border-gray-500/40' };
-                };
-                const reliability = getReliabilityBadge(claim.rep);
-                const evidenceGrade = claim.evidence_score ? getEvidenceGrade(claim.evidence_score) : null;
-
                 return (
                   <div
                     key={claim.id}
                     className="bg-gradient-to-br from-[#0A0A0F] to-[#111118] border border-purple-500/30 rounded-xl p-4 transition-all hover:border-purple-500/60 hover:shadow-[0_0_25px_rgba(91,33,182,0.3)]"
                   >
-                    {/* Category Badge */}
-                    {claim.category && (
-                      <div className={`inline-flex items-center gap-1.5 px-2 py-0.5 rounded-md text-[10px] font-bold uppercase tracking-wider border mb-2 ${getCategoryStyle(claim.category)}`}>
-                        {getCategoryIcon(claim.category)}
-                        {claim.category}
-                      </div>
-                    )}
-
                     <div className="flex items-center justify-between mb-2.5">
-                      <div className="flex items-center gap-2">
-                        <span className="text-[12px] font-bold text-white">{claim.submitter}</span>
-                        <span className={`px-2 py-0.5 rounded-full text-[9px] font-bold uppercase tracking-wider border ${reliability.color}`}>
-                          {reliability.label}
-                        </span>
-                      </div>
-                      <div className="flex items-center gap-1.5">
-                        {/* Evidence Score Badge */}
-                        {evidenceGrade && (
-                          <span className={`px-2 py-0.5 rounded-full text-[9px] font-bold uppercase tracking-wider border ${evidenceGrade.color}`}>
-                            {evidenceGrade.label}
-                          </span>
-                        )}
-                        {/* Status Badge */}
-                        <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider ${
-                          claim.status === 'verified' ? 'bg-purple-500/20 text-purple-300 border border-purple-500/40' :
-                          claim.status === 'disputed' ? 'bg-red-500/20 text-red-300 border border-red-500/40' :
-                          claim.status === 'void' ? 'bg-gray-500/20 text-gray-300 border border-gray-500/40' :
-                          'bg-amber-500/20 text-amber-300 border border-amber-500/40'
-                        }`}>
-                          {claim.status}
-                        </span>
-                      </div>
+                      <span className="text-[12px] font-bold text-white">{claim.submitter}</span>
+                      <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider ${
+                        claim.status === 'verified' ? 'bg-purple-500/20 text-purple-300 border border-purple-500/40' :
+                        claim.status === 'disputed' ? 'bg-red-500/20 text-red-300 border border-red-500/40' :
+                        claim.status === 'void' ? 'bg-gray-500/20 text-gray-300 border border-gray-500/40' :
+                        'bg-amber-500/20 text-amber-300 border border-amber-500/40'
+                      }`}>
+                        {claim.status}
+                      </span>
                     </div>
                     <div className="text-[13px] text-gray-200 mb-3 line-clamp-2 leading-relaxed">{claim.claim}</div>
                     <div className="flex items-center justify-between gap-2">
