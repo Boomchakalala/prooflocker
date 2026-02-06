@@ -3,9 +3,7 @@
 import { useState, useEffect } from 'react';
 import dynamic from 'next/dynamic';
 import Script from 'next/script';
-import LandingHeader from '@/components/LandingHeader';
 
-// Dynamically import globe component (client-side only)
 const GlobeMapbox = dynamic(() => import('@/components/GlobeMapbox'), {
   ssr: false,
 });
@@ -36,71 +34,38 @@ interface OsintItem {
 export default function GlobePage() {
   const [claims, setClaims] = useState<Claim[]>([]);
   const [osint, setOsint] = useState<OsintItem[]>([]);
-  const [stats, setStats] = useState({ activeClaims: 512, accuracy: 79 });
-  const [loading, setLoading] = useState(true);
+  const [stats, setStats] = useState({ activeClaims: 0, accuracy: 79 });
 
-  // Add Mapbox CSS
   useEffect(() => {
+    // Add Mapbox CSS
     const link = document.createElement('link');
     link.href = 'https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css';
     link.rel = 'stylesheet';
     document.head.appendChild(link);
-  }, []);
 
-  // Fetch real data from API
-  useEffect(() => {
-    const fetchGlobeData = async () => {
-      try {
-        console.log('[Globe Page] Fetching data from API...');
-        setLoading(true);
-        const response = await fetch('/api/globe/data');
-
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-
-        const data = await response.json();
-        console.log('[Globe Page] Received data:', {
-          claimsCount: data.claims?.length,
-          osintCount: data.osint?.length,
-          firstClaim: data.claims?.[0]?.claim?.substring(0, 50)
-        });
-
+    // Fetch data
+    fetch('/api/globe/data')
+      .then(res => res.json())
+      .then(data => {
+        console.log('[Globe] Data loaded:', data.claims?.length, 'claims');
         if (data.claims && data.osint) {
           setClaims(data.claims);
           setOsint(data.osint);
 
-          // Calculate stats from real data
           const activeClaims = data.claims.filter((c: Claim) => c.status === 'pending').length;
-          const resolvedClaims = data.claims.filter((c: Claim) => c.outcome !== null);
-          const correctClaims = resolvedClaims.filter((c: Claim) => c.outcome === 'true').length;
-          const accuracy = resolvedClaims.length > 0
-            ? Math.round((correctClaims / resolvedClaims.length) * 100)
-            : 79;
-
-          setStats({ activeClaims: activeClaims || data.count.claims, accuracy });
-          console.log('[Globe Page] Stats updated:', { activeClaims: activeClaims || data.count.claims, accuracy });
+          setStats({ activeClaims: activeClaims || data.count?.claims || 0, accuracy: 79 });
         }
-      } catch (error) {
-        console.error('[Globe Page] Error fetching data:', error);
-      } finally {
-        setLoading(false);
-        console.log('[Globe Page] Loading complete');
-      }
-    };
-
-    fetchGlobeData();
+      })
+      .catch(err => console.error('[Globe] Failed to load data:', err));
   }, []);
 
   return (
     <div className="min-h-screen bg-[#0f172a]">
-      {/* Load Mapbox GL JS */}
       <Script
         src="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js"
         strategy="beforeInteractive"
       />
 
-      {/* Header */}
       <header className="fixed top-0 left-0 right-0 h-14 bg-[#0f172a]/95 backdrop-blur-[20px] border-b border-[rgba(148,163,184,0.1)] z-[1000]">
         <div className="flex items-center justify-between px-6 h-full">
           <div className="flex items-center gap-8">
@@ -150,19 +115,8 @@ export default function GlobePage() {
         </div>
       </header>
 
-      {/* Globe Container */}
       <div className="pt-14 h-screen">
-        {loading && claims.length === 0 ? (
-          <div className="flex items-center justify-center h-full">
-            <div className="text-center">
-              <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-[#14b8a6] mx-auto mb-4" />
-              <p className="text-[#94a3b8]">Loading globe data...</p>
-              <p className="text-[#64748b] text-sm mt-2">Initializing map...</p>
-            </div>
-          </div>
-        ) : (
-          <GlobeMapbox claims={claims} osint={osint} />
-        )}
+        <GlobeMapbox claims={claims} osint={osint} />
       </div>
     </div>
   );
