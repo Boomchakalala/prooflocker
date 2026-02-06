@@ -93,6 +93,12 @@ export default function GlobeMapbox({ claims, osint }: GlobeMapboxProps) {
   }, []);
 
   useEffect(() => {
+    console.log('[GlobeMapbox] Received props:', {
+      claimsCount: claims.length,
+      osintCount: osint.length,
+      firstClaim: claims[0]?.claim?.substring(0, 50)
+    });
+
     if (map.current && map.current.isStyleLoaded && map.current.isStyleLoaded()) {
       console.log('[GlobeMapbox] Updating map sources with new data');
       updateMapSources();
