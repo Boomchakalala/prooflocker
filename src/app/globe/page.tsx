@@ -83,18 +83,6 @@ export default function GlobePage() {
     return () => clearInterval(interval);
   }, []);
 
-  // Update stats every 30 seconds (mock)
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setStats({
-        activeClaims: Math.floor(500 + Math.random() * 50),
-        accuracy: Math.floor(75 + Math.random() * 10),
-      });
-    }, 30000);
-
-    return () => clearInterval(interval);
-  }, []);
-
   return (
     <div className="min-h-screen bg-[#0f172a]">
       {/* Header */}
@@ -149,7 +137,17 @@ export default function GlobePage() {
 
       {/* Globe Container */}
       <div className="pt-14 h-screen">
-        <GlobeMapbox claims={claims} osint={osint} />
+        {loading ? (
+          <div className="flex items-center justify-center h-full">
+            <div className="text-center">
+              <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-[#14b8a6] mx-auto mb-4" />
+              <p className="text-[#94a3b8]">Loading globe data...</p>
+              <p className="text-[#64748b] text-sm mt-2">Fetching {claims.length} claims & {osint.length} OSINT signals</p>
+            </div>
+          </div>
+        ) : (
+          <GlobeMapbox claims={claims} osint={osint} />
+        )}
       </div>
     </div>
   );
