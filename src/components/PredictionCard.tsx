@@ -321,25 +321,16 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
     router.push(`/proof/${prediction.publicSlug}`);
   };
 
-  // Determine card border style - Clean professional styling with subtle shadows
+  // Determine card border style - Clean professional styling like V4
   const getCardBorderStyle = () => {
-    // TEMPORARY TEST: Big red border
-    return 'border-4 border-red-500 bg-slate-500/5 shadow-sm hover:shadow-md transition-shadow';
-
     if (prediction.outcome === 'correct') {
-      if (prediction.evidence_score && prediction.evidence_score >= 76) {
-        // High quality correct: Soft emerald accent
-        return 'border-emerald-500/20 bg-emerald-500/5 shadow-sm hover:shadow-md transition-shadow';
-      }
-      // Correct: Subtle emerald accent
-      return 'border-emerald-500/20 bg-emerald-500/5 shadow-sm hover:shadow-md transition-shadow';
+      return 'border-emerald-500/20 bg-white/5 shadow-sm hover:shadow-md transition-all';
     }
     if (prediction.outcome === 'incorrect') {
-      // Incorrect: Subtle rose accent
-      return 'border-rose-500/20 bg-rose-500/5 shadow-sm hover:shadow-md transition-shadow';
+      return 'border-rose-500/20 bg-white/5 shadow-sm hover:shadow-md transition-all';
     }
-    // Pending: Subtle slate accent
-    return 'border-slate-500/20 bg-slate-500/5 shadow-sm hover:shadow-md transition-shadow';
+    // Pending
+    return 'border-slate-700 bg-white/5 shadow-sm hover:shadow-md transition-all';
   };
 
   // Card content (shared between Link and div versions)
@@ -527,7 +518,7 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
       </div>
 
       {/* 2. TITLE - Prediction text */}
-      <h3 className="text-cyan-400 text-base font-semibold mb-4 line-clamp-3 leading-snug">
+      <h3 className="text-white text-base font-semibold mb-4 line-clamp-3 leading-snug">
         {displayTitle}
       </h3>
 
