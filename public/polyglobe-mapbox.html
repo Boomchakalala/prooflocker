@@ -1562,6 +1562,35 @@
           </div>
         </div>
       `).join('');
+
+      document.getElementById('claimsTabCount').textContent = `(${filteredClaims.length})`;
+    }
+
+    // ============================================
+    // SIDEBAR OSINT LIST
+    // ============================================
+    function renderOsintList() {
+      const container = document.getElementById('osintList');
+
+      container.innerHTML = osintData.map(item => {
+        const tags = item.tags || [];
+        return `
+          <div class="osint-item" onclick="flyToOsint(${item.lng}, ${item.lat})">
+            <div class="osint-header">
+              <div class="osint-source">
+                <span class="osint-source-name">${item.source}</span>
+              </div>
+              <span class="osint-time">${item.timestamp}</span>
+            </div>
+            <div class="osint-text">${item.title}</div>
+            <div class="osint-tags">
+              ${tags.map(tag => `<span class="osint-tag">${tag}</span>`).join('')}
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      document.getElementById('osintTabCount').textContent = `(${osintData.length})`;
     }
 
     // Filter chips
