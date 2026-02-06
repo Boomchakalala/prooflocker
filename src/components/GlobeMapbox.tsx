@@ -383,152 +383,251 @@ export default function GlobeMapbox({ claims, osint }: GlobeMapboxProps) {
     function showStackPanel(lngLat: any, claims: any[], osintItems: any[]) {
       const html = `
         <div style="
-          background: linear-gradient(135deg, #0A0A0F 0%, #111118 100%);
-          border: 2px solid rgba(91,33,182,0.4);
-          border-radius: 14px;
-          padding: 0;
-          min-width: 320px;
-          max-width: 360px;
-          max-height: 420px;
-          box-shadow: 0 20px 40px rgba(0,0,0,0.7), 0 0 30px rgba(91,33,182,0.25);
+          background: rgba(10, 12, 20, 0.92);
+          backdrop-filter: blur(24px);
+          border: 1px solid rgba(91,33,182,0.3);
+          border-radius: 16px;
+          min-width: 340px;
+          max-width: 420px;
+          max-height: 500px;
+          box-shadow: 0 20px 60px rgba(0,0,0,0.7), 0 0 40px rgba(91,33,182,0.2);
           font-family: system-ui, -apple-system, sans-serif;
+          overflow: hidden;
         ">
           <!-- Header -->
           <div style="
-            padding: 14px 16px;
-            border-bottom: 1px solid rgba(91,33,182,0.25);
-            background: linear-gradient(90deg, rgba(91,33,182,0.12) 0%, transparent 100%);
+            padding: 16px 20px;
+            border-bottom: 1px solid rgba(91,33,182,0.2);
           ">
             <div style="
-              font-size: 13px;
+              font-size: 14px;
               font-weight: 700;
               color: #ffffff;
-              display: flex;
-              align-items: center;
-              gap: 8px;
+            ">Selected Area</div>
+            <div style="
+              font-size: 12px;
+              color: #9ca3af;
+              margin-top: 2px;
             ">
-              <span style="color: #a78bfa; font-weight: 600;">
-                ${claims.length > 0 ? `${claims.length} Claim${claims.length !== 1 ? 's' : ''}` : ''}
-                ${claims.length > 0 && osintItems.length > 0 ? ' • ' : ''}
-                ${osintItems.length > 0 ? `${osintItems.length} OSINT` : ''}
-              </span>
+              ${claims.length > 0 ? `${claims.length} Claim${claims.length !== 1 ? 's' : ''}` : ''}
+              ${claims.length > 0 && osintItems.length > 0 ? ' • ' : ''}
+              ${osintItems.length > 0 ? `${osintItems.length} OSINT` : ''}
             </div>
           </div>
 
           <!-- Content -->
-          <div style="max-height: 340px; overflow-y: auto; padding: 12px;">
+          <div style="max-height: 420px; overflow-y: auto; padding: 16px;">
             ${claims.length > 0 ? `
-              ${claims.map((claim, idx) => {
-                const statusColor = {
-                  verified: '#8b5cf6',
-                  disputed: '#ef4444',
-                  void: '#6b7280',
-                  pending: '#f59e0b'
-                }[claim.status] || '#f59e0b';
+              <!-- Claims -->
+              <div style="margin-bottom: ${osintItems.length > 0 ? '20px' : '0'};">
+                <div style="
+                  font-size: 11px;
+                  font-weight: 700;
+                  text-transform: uppercase;
+                  letter-spacing: 1px;
+                  color: #8b5cf6;
+                  margin-bottom: 12px;
+                  display: flex;
+                  align-items: center;
+                  gap: 6px;
+                ">
+                  <svg style="width: 14px; height: 14px; fill: currentColor;" viewBox="0 0 24 24">
+                    <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/>
+                  </svg>
+                  Claims
+                </div>
+                ${claims.map((claim, idx) => {
+                  const statusColor = {
+                    verified: '#8b5cf6',
+                    disputed: '#ef4444',
+                    void: '#6b7280',
+                    pending: '#f59e0b'
+                  }[claim.status] || '#f59e0b';
 
-                return `
-                  <div style="
-                    background: rgba(91,33,182,0.06);
-                    border: 1px solid rgba(91,33,182,0.25);
-                    border-radius: 10px;
-                    padding: 10px;
-                    margin-bottom: ${idx < claims.length - 1 || osintItems.length > 0 ? '10px' : '0'};
-                  ">
+                  return `
                     <div style="
-                      font-size: 13px;
-                      font-weight: 600;
-                      line-height: 1.5;
-                      color: #ffffff;
-                      margin-bottom: 8px;
-                    ">${claim.claim}</div>
-                    <div style="display: flex; gap: 6px; flex-wrap: wrap; align-items: center;">
-                      <span style="
-                        padding: 3px 8px;
-                        background: rgba(91,33,182,0.2);
-                        border: 1px solid rgba(91,33,182,0.35);
-                        border-radius: 10px;
-                        font-size: 9px;
-                        font-weight: 700;
-                        color: #c4b5fd;
-                        text-transform: uppercase;
-                        letter-spacing: 0.5px;
-                      ">CLAIM</span>
-                      <span style="
-                        padding: 3px 8px;
-                        background: rgba(${statusColor === '#8b5cf6' ? '139,92,246' : statusColor === '#ef4444' ? '239,68,68' : statusColor === '#6b7280' ? '107,114,128' : '245,158,11'},0.2);
-                        border-radius: 10px;
-                        font-size: 9px;
-                        font-weight: 600;
-                        color: ${statusColor};
-                        text-transform: uppercase;
-                      ">${claim.status}</span>
-                      <span style="
-                        font-size: 10px;
-                        color: #9ca3af;
-                      ">Rep ${claim.rep}</span>
-                      <span style="
-                        font-size: 10px;
-                        color: #6b7280;
-                      ">•</span>
-                      <span style="
-                        font-size: 10px;
-                        color: #9ca3af;
-                      ">${claim.submitter}</span>
+                      background: rgba(30, 41, 59, 0.5);
+                      border: 1px solid rgba(139,92,246,0.2);
+                      border-left: 3px solid #8b5cf6;
+                      border-radius: 10px;
+                      padding: 12px;
+                      margin-bottom: ${idx < claims.length - 1 ? '10px' : '0'};
+                      display: flex;
+                      gap: 12px;
+                    ">
+                      <!-- Icon -->
+                      <div style="
+                        width: 32px;
+                        height: 32px;
+                        border-radius: 50%;
+                        background: linear-gradient(135deg, #8b5cf6 0%, #6d28d9 100%);
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        flex-shrink: 0;
+                        box-shadow: 0 4px 12px rgba(139,92,246,0.3);
+                      ">
+                        <svg style="width: 16px; height: 16px; fill: white;" viewBox="0 0 24 24">
+                          <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/>
+                        </svg>
+                      </div>
+
+                      <!-- Content -->
+                      <div style="flex: 1; min-width: 0;">
+                        <!-- Claim text -->
+                        <div style="
+                          font-size: 13px;
+                          font-weight: 600;
+                          line-height: 1.4;
+                          color: #ffffff;
+                          margin-bottom: 8px;
+                          display: -webkit-box;
+                          -webkit-line-clamp: 2;
+                          -webkit-box-orient: vertical;
+                          overflow: hidden;
+                        ">${claim.claim}</div>
+
+                        <!-- Badges -->
+                        <div style="display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 6px;">
+                          <span style="
+                            padding: 2px 8px;
+                            background: rgba(139,92,246,0.2);
+                            border: 1px solid rgba(139,92,246,0.3);
+                            border-radius: 8px;
+                            font-size: 10px;
+                            font-weight: 700;
+                            color: #c4b5fd;
+                            text-transform: uppercase;
+                          ">CLAIM</span>
+                          <span style="
+                            padding: 2px 8px;
+                            background: rgba(${statusColor === '#8b5cf6' ? '139,92,246' : statusColor === '#ef4444' ? '239,68,68' : statusColor === '#6b7280' ? '107,114,128' : '245,158,11'},0.2);
+                            border-radius: 8px;
+                            font-size: 10px;
+                            font-weight: 600;
+                            color: ${statusColor};
+                            text-transform: uppercase;
+                          ">${claim.status}</span>
+                          <span style="
+                            padding: 2px 8px;
+                            background: rgba(139,92,246,0.15);
+                            border-radius: 8px;
+                            font-size: 10px;
+                            font-weight: 600;
+                            color: #a78bfa;
+                          ">Rep ${claim.rep}</span>
+                        </div>
+
+                        <!-- Submitter -->
+                        <div style="
+                          font-size: 11px;
+                          color: #9ca3af;
+                        ">${claim.submitter}</div>
+                      </div>
                     </div>
-                  </div>
-                `;
-              }).join('')}
+                  `;
+                }).join('')}
+              </div>
             ` : ''}
 
             ${osintItems.length > 0 ? `
-              ${osintItems.map((item, idx) => {
-                const tags = typeof item.tags === 'string' ? JSON.parse(item.tags || '[]') : (item.tags || []);
-                return `
-                  <div style="
-                    background: rgba(239,68,68,0.06);
-                    border: 1px solid rgba(239,68,68,0.25);
-                    border-radius: 10px;
-                    padding: 10px;
-                    margin-bottom: ${idx < osintItems.length - 1 ? '10px' : '0'};
-                  ">
+              <!-- OSINT -->
+              <div>
+                <div style="
+                  font-size: 11px;
+                  font-weight: 700;
+                  text-transform: uppercase;
+                  letter-spacing: 1px;
+                  color: #ef4444;
+                  margin-bottom: 12px;
+                  display: flex;
+                  align-items: center;
+                  gap: 6px;
+                ">
+                  <svg style="width: 14px; height: 14px; fill: currentColor;" viewBox="0 0 24 24">
+                    <path d="M13 3L4 14h7v7l9-11h-7V3z"/>
+                  </svg>
+                  OSINT Signals
+                </div>
+                ${osintItems.map((item, idx) => {
+                  const tags = typeof item.tags === 'string' ? JSON.parse(item.tags || '[]') : (item.tags || []);
+                  return `
                     <div style="
-                      font-size: 13px;
-                      font-weight: 600;
-                      color: #ffffff;
-                      line-height: 1.5;
-                      margin-bottom: 8px;
-                    ">${item.title}</div>
-                    <div style="display: flex; gap: 6px; flex-wrap: wrap; align-items: center;">
-                      <span style="
-                        padding: 3px 8px;
-                        background: rgba(239,68,68,0.2);
-                        border: 1px solid rgba(239,68,68,0.35);
-                        border-radius: 10px;
-                        font-size: 9px;
-                        font-weight: 700;
-                        color: #fca5a5;
-                        text-transform: uppercase;
-                        letter-spacing: 0.5px;
-                      ">OSINT</span>
-                      <span style="
-                        font-size: 10px;
-                        color: #ef4444;
-                        font-weight: 600;
-                      ">${item.source}</span>
-                      ${tags.slice(0, 2).map((tag: string) => `
-                        <span style="
-                          padding: 3px 7px;
-                          background: rgba(239,68,68,0.12);
-                          border-radius: 8px;
-                          font-size: 9px;
+                      background: rgba(30, 41, 59, 0.5);
+                      border: 1px solid rgba(239,68,68,0.2);
+                      border-left: 3px solid #ef4444;
+                      border-radius: 10px;
+                      padding: 12px;
+                      margin-bottom: ${idx < osintItems.length - 1 ? '10px' : '0'};
+                      display: flex;
+                      gap: 12px;
+                    ">
+                      <!-- Icon -->
+                      <div style="
+                        width: 32px;
+                        height: 32px;
+                        border-radius: 50%;
+                        background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        flex-shrink: 0;
+                        box-shadow: 0 4px 12px rgba(239,68,68,0.3);
+                      ">
+                        <svg style="width: 16px; height: 16px; fill: white;" viewBox="0 0 24 24">
+                          <path d="M13 3L4 14h7v7l9-11h-7V3z"/>
+                        </svg>
+                      </div>
+
+                      <!-- Content -->
+                      <div style="flex: 1; min-width: 0;">
+                        <!-- Title -->
+                        <div style="
+                          font-size: 13px;
                           font-weight: 600;
-                          color: #fca5a5;
-                        ">${tag}</span>
-                      `).join('')}
+                          color: #ffffff;
+                          line-height: 1.4;
+                          margin-bottom: 8px;
+                          display: -webkit-box;
+                          -webkit-line-clamp: 2;
+                          -webkit-box-orient: vertical;
+                          overflow: hidden;
+                        ">${item.title}</div>
+
+                        <!-- Badges -->
+                        <div style="display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 6px;">
+                          <span style="
+                            padding: 2px 8px;
+                            background: rgba(239,68,68,0.2);
+                            border: 1px solid rgba(239,68,68,0.3);
+                            border-radius: 8px;
+                            font-size: 10px;
+                            font-weight: 700;
+                            color: #fca5a5;
+                            text-transform: uppercase;
+                          ">OSINT</span>
+                          ${tags.slice(0, 2).map((tag: string) => `
+                            <span style="
+                              padding: 2px 8px;
+                              background: rgba(239,68,68,0.12);
+                              border-radius: 8px;
+                              font-size: 10px;
+                              font-weight: 600;
+                              color: #fca5a5;
+                            ">${tag}</span>
+                          `).join('')}
+                        </div>
+
+                        <!-- Source -->
+                        <div style="
+                          font-size: 11px;
+                          color: #9ca3af;
+                        ">${item.source}</div>
+                      </div>
                     </div>
-                  </div>
-                `;
-              }).join('')}
+                  `;
+                }).join('')}
+              </div>
             ` : ''}
           </div>
         </div>
@@ -538,7 +637,7 @@ export default function GlobeMapbox({ claims, osint }: GlobeMapboxProps) {
         offset: 15,
         closeButton: true,
         closeOnClick: true,
-        maxWidth: '380px',
+        maxWidth: '440px',
         className: 'stack-panel-popup'
       })
         .setLngLat(lngLat)
