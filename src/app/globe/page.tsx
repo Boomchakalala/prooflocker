@@ -153,7 +153,7 @@ export default function GlobePage() {
               <img src="/logos/prooflocker-logo-dark.svg" alt="ProofLocker" className="h-6 md:h-8 w-auto" />
             </a>
             <span className="text-[10px] md:text-[12px] font-medium text-purple-300/70 tracking-wider hidden sm:block">
-              🌍 Verifiable Claims
+              Verifiable Claims Worldwide
             </span>
           </div>
 
