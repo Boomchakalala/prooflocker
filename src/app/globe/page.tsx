@@ -72,6 +72,17 @@ export default function GlobePage() {
         }
       }
 
+      @keyframes slideUp {
+        from {
+          opacity: 0;
+          transform: translateY(100%);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
       .mapboxgl-popup-close-button {
         color: #ffffff !important;
         font-size: 20px !important;

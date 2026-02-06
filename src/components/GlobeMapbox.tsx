@@ -397,35 +397,78 @@ export default function GlobeMapbox({ claims, osint }: GlobeMapboxProps) {
         existingPanel.remove();
       }
 
+      // Check if mobile
+      const isMobile = window.innerWidth < 768;
+
       // Create panel element
       const panel = document.createElement('div');
       panel.id = 'stack-panel';
-      panel.style.cssText = `
-        position: fixed;
-        background: rgba(10, 12, 20, 0.92);
-        backdrop-filter: blur(24px);
-        border: 1px solid rgba(91,33,182,0.3);
-        border-radius: 16px;
-        min-width: 340px;
-        max-width: 420px;
-        max-height: 70vh;
-        box-shadow: 0 20px 60px rgba(0,0,0,0.7), 0 0 40px rgba(91,33,182,0.2);
-        font-family: system-ui, -apple-system, sans-serif;
-        overflow: hidden;
-        z-index: 1000;
-        animation: panelSlideIn 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-      `;
 
-      // Position panel - offset from click point, with bounds checking
-      const left = Math.min(point.x + 20, window.innerWidth - 440);
-      const top = Math.min(point.y - 50, window.innerHeight - 600);
-      panel.style.left = `${left}px`;
-      panel.style.top = `${top}px`;
+      if (isMobile) {
+        // Mobile: bottom sheet style
+        panel.style.cssText = `
+          position: fixed;
+          bottom: 0;
+          left: 0;
+          right: 0;
+          background: rgba(10, 12, 20, 0.96);
+          backdrop-filter: blur(24px);
+          border: 1px solid rgba(91,33,182,0.3);
+          border-bottom: none;
+          border-radius: 20px 20px 0 0;
+          max-height: 60vh;
+          box-shadow: 0 -20px 60px rgba(0,0,0,0.7), 0 0 40px rgba(91,33,182,0.2);
+          font-family: system-ui, -apple-system, sans-serif;
+          overflow: hidden;
+          z-index: 1000;
+          animation: slideUp 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        `;
+      } else {
+        // Desktop: positioned near click
+        panel.style.cssText = `
+          position: fixed;
+          background: rgba(10, 12, 20, 0.92);
+          backdrop-filter: blur(24px);
+          border: 1px solid rgba(91,33,182,0.3);
+          border-radius: 16px;
+          min-width: 340px;
+          max-width: 420px;
+          max-height: 70vh;
+          box-shadow: 0 20px 60px rgba(0,0,0,0.7), 0 0 40px rgba(91,33,182,0.2);
+          font-family: system-ui, -apple-system, sans-serif;
+          overflow: hidden;
+          z-index: 1000;
+          animation: panelSlideIn 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        `;
+
+        // Position panel - offset from click point, with bounds checking
+        const left = Math.min(point.x + 20, window.innerWidth - 440);
+        const top = Math.min(point.y - 50, window.innerHeight - 600);
+        panel.style.left = `${left}px`;
+        panel.style.top = `${top}px`;
+      }
 
       panel.innerHTML = `
+        ${isMobile ? `
+          <!-- Mobile drag handle -->
+          <div style="
+            display: flex;
+            justify-content: center;
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(91,33,182,0.2);
+          ">
+            <div style="
+              width: 40px;
+              height: 4px;
+              background: rgba(139,92,246,0.4);
+              border-radius: 2px;
+            "></div>
+          </div>
+        ` : ''}
+
         <!-- Header -->
         <div style="
-          padding: 16px 20px;
+          padding: ${isMobile ? '12px 16px' : '16px 20px'};
           border-bottom: 1px solid rgba(91,33,182,0.2);
           display: flex;
           align-items: center;
@@ -433,7 +476,7 @@ export default function GlobeMapbox({ claims, osint }: GlobeMapboxProps) {
         ">
           <div>
             <div style="
-              font-size: 14px;
+              font-size: ${isMobile ? '13px' : '14px'};
               font-weight: 700;
               color: #ffffff;
             ">Selected Area</div>
