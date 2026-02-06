@@ -323,6 +323,9 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
 
   // Determine card border style - Clean professional styling with subtle shadows
   const getCardBorderStyle = () => {
+    // TEMPORARY TEST: Big red border
+    return 'border-4 border-red-500 bg-slate-500/5 shadow-sm hover:shadow-md transition-shadow';
+
     if (prediction.outcome === 'correct') {
       if (prediction.evidence_score && prediction.evidence_score >= 76) {
         // High quality correct: Soft emerald accent
