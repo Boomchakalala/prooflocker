@@ -60,74 +60,80 @@ export default function GlobePage() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-[#0f172a]">
+    <div className="min-h-screen bg-gradient-to-b from-[#0A0A0F] via-[#111118] to-[#0A0A0F]">
       <Script
         src="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js"
         strategy="beforeInteractive"
       />
 
-      <header className="fixed top-0 left-0 right-0 h-14 bg-gradient-to-r from-[#0f172a] via-[#1a0f2e] to-[#0f172a] backdrop-blur-[20px] border-b border-purple-500/20 z-[1000] shadow-[0_0_20px_rgba(168,85,247,0.15)]">
+      {/* ProofLocker Header */}
+      <header className="fixed top-0 left-0 right-0 h-14 bg-gradient-to-r from-[#0A0A0F] via-[#111118] to-[#0A0A0F] backdrop-blur-[20px] border-b border-purple-500/20 z-[1000] shadow-[0_0_30px_rgba(91,33,182,0.15)]">
         <div className="flex items-center justify-between px-6 h-full">
-          <div className="flex items-center gap-8">
-            <a href="/" className="flex items-center">
-              <img src="/logos/prooflocker-logo-dark.svg" alt="ProofLocker" className="h-9 w-auto" />
+          {/* Left: Logo + Tagline */}
+          <div className="flex items-center gap-6">
+            <a href="/" className="flex items-center transition-transform hover:scale-105">
+              <img src="/logos/prooflocker-logo-dark.svg" alt="ProofLocker" className="h-8 w-auto" />
             </a>
-            <span className="text-[13px] font-medium text-purple-300/80 tracking-wide hidden lg:block">
-              🌍 Verifiable Predictions Worldwide
+            <span className="text-[12px] font-medium text-purple-300/70 tracking-wider hidden lg:block">
+              🌍 Global Intelligence Map
             </span>
           </div>
 
-          <div className="flex items-center gap-3">
-            {/* Navigation buttons */}
+          {/* Center: Stats */}
+          <div className="hidden md:flex items-center gap-6 text-[12px]">
+            <div className="flex items-center gap-2">
+              <div className="w-2 h-2 bg-purple-500 rounded-full animate-pulse shadow-[0_0_8px_rgba(139,92,246,0.6)]" />
+              <span className="text-gray-400">Active:</span>
+              <span className="font-bold text-purple-300">{stats.activeClaims}</span>
+            </div>
+            <div className="h-4 w-px bg-purple-500/30" />
+            <div className="flex items-center gap-2">
+              <span className="text-gray-400">Accuracy:</span>
+              <span className="font-bold text-purple-300">{stats.accuracy}%</span>
+            </div>
+          </div>
+
+          {/* Right: Navigation */}
+          <div className="flex items-center gap-2">
+            {/* Feed Icon */}
             <a
               href="/app"
-              className="flex items-center gap-1.5 px-3 py-1.5 text-[12px] font-medium text-gray-400 hover:text-white transition-all hover:bg-white/10 rounded-lg"
+              className="group flex items-center gap-2 px-3 py-2 text-[12px] font-semibold text-gray-400 hover:text-white transition-all hover:bg-purple-500/10 rounded-lg border border-transparent hover:border-purple-500/20"
+              title="View Feed"
             >
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z" />
+              <svg className="w-4 h-4 group-hover:text-purple-400 transition-colors" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                <rect x="3" y="3" width="7" height="7" rx="1" />
+                <rect x="14" y="3" width="7" height="7" rx="1" />
+                <rect x="14" y="14" width="7" height="7" rx="1" />
+                <rect x="3" y="14" width="7" height="7" rx="1" />
               </svg>
               <span className="hidden sm:inline">Feed</span>
             </a>
 
-            <a
-              href="/how-scoring-works"
-              className="flex items-center gap-1.5 px-3 py-1.5 text-[12px] font-medium text-gray-400 hover:text-white transition-all hover:bg-white/10 rounded-lg"
-            >
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-              </svg>
-              <span className="hidden sm:inline">Scoring</span>
-            </a>
-
+            {/* Profile Icon */}
             <a
               href="/profile"
-              className="flex items-center gap-1.5 px-3 py-1.5 text-[12px] font-medium text-gray-400 hover:text-white transition-all hover:bg-white/10 rounded-lg"
+              className="group flex items-center gap-2 px-3 py-2 text-[12px] font-semibold text-gray-400 hover:text-white transition-all hover:bg-purple-500/10 rounded-lg border border-transparent hover:border-purple-500/20"
+              title="View Profile"
             >
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+              <svg className="w-4 h-4 group-hover:text-purple-400 transition-colors" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
               </svg>
               <span className="hidden sm:inline">Profile</span>
             </a>
 
-            <div className="h-6 w-px bg-purple-500/30 mx-1 hidden md:block"></div>
+            <div className="h-6 w-px bg-purple-500/30 mx-1" />
 
-            <div className="flex items-center gap-2 text-[12px] text-gray-400 hidden lg:flex">
-              <svg className="w-[16px] h-[16px] text-purple-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-              </svg>
-              <span>
-                <span className="font-semibold text-purple-300">{stats.activeClaims}</span> Active
-              </span>
-            </div>
-
+            {/* Submit Button */}
             <a
               href="/lock"
-              className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-500 hover:to-purple-600 text-white rounded-lg text-[13px] font-semibold transition-all shadow-[0_0_15px_rgba(168,85,247,0.3)] hover:-translate-y-px"
+              className="flex items-center gap-2 px-5 py-2 bg-gradient-to-r from-[#5B21B6] to-[#2E5CFF] hover:from-[#6B31C6] hover:to-[#3D6CFF] text-white rounded-lg text-[13px] font-bold transition-all shadow-[0_0_20px_rgba(91,33,182,0.4)] hover:shadow-[0_0_30px_rgba(91,33,182,0.6)] hover:scale-[1.02]"
             >
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
               </svg>
-              <span className="hidden sm:inline">Submit</span>
+              <span className="hidden sm:inline">Lock Proof</span>
+              <span className="sm:hidden">Lock</span>
             </a>
           </div>
         </div>
