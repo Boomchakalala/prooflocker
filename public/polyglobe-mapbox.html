@@ -877,19 +877,43 @@
   </div>
 
   <!-- ============================================
-       RIGHT SIDEBAR - Claims List
+       RIGHT SIDEBAR - Always visible with tabs
        ============================================ -->
   <aside class="right-sidebar" id="rightSidebar">
     <div class="sidebar-header">
-      <h2 class="sidebar-title">Global Claims</h2>
-      <div class="sidebar-filters">
+      <div class="sidebar-tabs">
+        <button class="tab-btn active" onclick="switchTab('claims')">
+          <svg style="width: 14px; height: 14px; display: inline-block; vertical-align: middle; margin-right: 4px;" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+          </svg>
+          Claims <span id="claimsTabCount">(20)</span>
+        </button>
+        <button class="tab-btn osint-tab" onclick="switchTab('osint')">
+          <svg style="width: 14px; height: 14px; display: inline-block; vertical-align: middle; margin-right: 4px;" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
+          </svg>
+          OSINT <span id="osintTabCount">(15)</span>
+        </button>
+      </div>
+      <div class="sidebar-filters" id="claimsFilters">
         <button class="filter-chip active" data-filter="active">Active</button>
         <button class="filter-chip" data-filter="high-confidence">High Confidence</button>
         <button class="filter-chip" data-filter="my-predictions">My Predictions</button>
       </div>
     </div>
-    <div class="sidebar-content" id="claimsList">
-      <!-- Dynamically populated -->
+    <div class="sidebar-content">
+      <!-- Claims Tab Content -->
+      <div class="tab-content active" id="claimsTab">
+        <div id="claimsList">
+          <!-- Dynamically populated -->
+        </div>
+      </div>
+      <!-- OSINT Tab Content -->
+      <div class="tab-content" id="osintTab">
+        <div id="osintList">
+          <!-- Dynamically populated -->
+        </div>
+      </div>
     </div>
   </aside>
 
