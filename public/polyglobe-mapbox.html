@@ -28,11 +28,23 @@
       --text-secondary: #94a3b8;
       --text-muted: #64748b;
 
+      /* ProofLocker DNA - Claims (Purple/Blue) */
+      --claim-accent: #8b5cf6;
+      --claim-accent-light: #a78bfa;
+      --claim-bg: rgba(139, 92, 246, 0.1);
+      --claim-border: rgba(139, 92, 246, 0.3);
+
+      /* OSINT Signal DNA - (Red/Orange) */
+      --osint-accent: #ef4444;
+      --osint-accent-light: #f87171;
+      --osint-bg: rgba(239, 68, 68, 0.1);
+      --osint-border: rgba(239, 68, 68, 0.3);
+
       /* Accountability colors */
-      --color-verified: #14b8a6;    /* Teal for positive/verified/high-rep */
-      --color-disputed: #ef4444;    /* Crimson for negative/disputed */
-      --color-pending: #f59e0b;     /* Amber for pending */
-      --color-neutral: #6b7280;     /* Gray for neutral/void */
+      --color-verified: #14b8a6;
+      --color-disputed: #ef4444;
+      --color-pending: #f59e0b;
+      --color-neutral: #6b7280;
 
       /* UI elements */
       --border-subtle: rgba(148, 163, 184, 0.1);
@@ -297,25 +309,18 @@
 
     .tab-btn:hover {
       color: var(--text-primary);
-      border-color: var(--color-verified);
+      border-color: var(--claim-accent);
     }
 
     .tab-btn.active {
-      background: var(--color-verified);
-      color: #0f172a;
-      border-color: var(--color-verified);
+      background: var(--claim-accent);
+      color: white;
+      border-color: var(--claim-accent);
     }
 
     .tab-btn.osint-tab.active {
-      background: var(--color-disputed);
-      border-color: var(--color-disputed);
-    }
-
-    .sidebar-title {
-      font-size: 16px;
-      font-weight: 700;
-      color: var(--text-primary);
-      margin-bottom: 12px;
+      background: var(--osint-accent);
+      border-color: var(--osint-accent);
     }
 
     .sidebar-filters {
@@ -338,9 +343,9 @@
 
     .filter-chip:hover,
     .filter-chip.active {
-      background: rgba(20, 184, 166, 0.15);
-      color: var(--color-verified);
-      border-color: var(--color-verified);
+      background: var(--claim-bg);
+      color: var(--claim-accent);
+      border-color: var(--claim-border);
     }
 
     .sidebar-content {
@@ -366,6 +371,7 @@
     .claim-card {
       background: var(--bg-secondary);
       border: 1px solid var(--border-subtle);
+      border-left: 3px solid var(--claim-accent);
       border-radius: 10px;
       padding: 14px;
       margin-bottom: 12px;
@@ -374,8 +380,9 @@
     }
 
     .claim-card:hover {
-      border-color: var(--color-verified);
-      background: rgba(20, 184, 166, 0.05);
+      border-color: var(--claim-accent);
+      background: var(--claim-bg);
+      box-shadow: 0 0 0 1px var(--claim-border);
     }
 
     .claim-card-header {
@@ -402,11 +409,11 @@
       align-items: center;
       gap: 4px;
       padding: 2px 6px;
-      background: rgba(20, 184, 166, 0.15);
+      background: var(--claim-bg);
       border-radius: 10px;
       font-size: 11px;
       font-weight: 600;
-      color: var(--color-verified);
+      color: var(--claim-accent);
     }
 
     .rep-icon {
@@ -483,7 +490,7 @@
 
     .confidence-fill {
       height: 100%;
-      background: var(--color-verified);
+      background: var(--claim-accent);
       border-radius: 2px;
     }
 
@@ -491,7 +498,7 @@
     .osint-item {
       background: var(--bg-secondary);
       border: 1px solid var(--border-subtle);
-      border-left: 3px solid var(--color-disputed);
+      border-left: 3px solid var(--osint-accent);
       border-radius: 10px;
       padding: 14px;
       margin-bottom: 12px;
@@ -500,8 +507,9 @@
     }
 
     .osint-item:hover {
-      border-color: var(--color-disputed);
-      background: rgba(239, 68, 68, 0.05);
+      border-color: var(--osint-accent);
+      background: var(--osint-bg);
+      box-shadow: 0 0 0 1px var(--osint-border);
     }
 
     .osint-header {
@@ -547,13 +555,14 @@
 
     .osint-tag {
       padding: 3px 8px;
-      background: rgba(239, 68, 68, 0.15);
+      background: var(--osint-bg);
       border-radius: 10px;
       font-size: 10px;
       font-weight: 600;
-      color: var(--color-disputed);
+      color: var(--osint-accent);
       text-transform: uppercase;
       letter-spacing: 0.03em;
+      border: 1px solid var(--osint-border);
     }
 
     .tab-content {
@@ -565,208 +574,352 @@
     }
 
     /* ============================================
-       MAPBOX POPUP - Clean card with actions
+       STACK PANEL - Unified popup for Claims + OSINT
        ============================================ */
-    .mapboxgl-popup-content {
-      background: var(--bg-overlay) !important;
-      backdrop-filter: var(--backdrop-blur);
-      border: 1px solid var(--border-medium) !important;
-      border-radius: 12px !important;
-      padding: 18px !important;
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5) !important;
-      min-width: 320px;
-      max-width: 400px;
-    }
-
-    .mapboxgl-popup-close-button {
-      color: var(--text-secondary) !important;
-      font-size: 20px !important;
-      padding: 8px !important;
-      right: 6px !important;
-      top: 6px !important;
-    }
-
-    .mapboxgl-popup-close-button:hover {
-      color: var(--text-primary) !important;
-      background: rgba(148, 163, 184, 0.1) !important;
-      border-radius: 6px;
-    }
-
-    .mapboxgl-popup-tip {
-      display: none;
-    }
-
-    .popup-title {
-      font-size: 15px;
-      font-weight: 600;
-      color: var(--text-primary);
-      margin-bottom: 12px;
-      line-height: 1.4;
-    }
-
-    .popup-submitter {
+    .stack-panel {
+      position: fixed;
+      background: rgba(10, 12, 20, 0.86);
+      backdrop-filter: blur(24px);
+      border: 1px solid var(--border-medium);
+      border-radius: 16px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+      max-width: 420px;
+      max-height: 70vh;
+      overflow: hidden;
       display: flex;
-      align-items: center;
-      gap: 8px;
-      margin-bottom: 12px;
-      padding-bottom: 12px;
+      flex-direction: column;
+      z-index: 2000;
+      animation: panelSlideIn 0.3s ease;
+    }
+
+    @keyframes panelSlideIn {
+      from {
+        opacity: 0;
+        transform: translateY(-10px) scale(0.95);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    .panel-header {
+      padding: 16px 20px;
       border-bottom: 1px solid var(--border-subtle);
-    }
-
-    .popup-handle {
-      font-size: 13px;
-      font-weight: 600;
-      color: var(--text-primary);
-    }
-
-    .popup-rep {
-      display: flex;
-      align-items: center;
-      gap: 4px;
-      padding: 3px 8px;
-      background: rgba(20, 184, 166, 0.15);
-      border-radius: 10px;
-      font-size: 11px;
-      font-weight: 600;
-      color: var(--color-verified);
-    }
-
-    .popup-info-grid {
-      display: grid;
-      gap: 10px;
-      margin-bottom: 14px;
-    }
-
-    .popup-info-item {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      font-size: 12px;
     }
 
-    .popup-info-label {
-      color: var(--text-muted);
-    }
-
-    .popup-info-value {
-      font-weight: 600;
+    .panel-title {
+      font-size: 14px;
+      font-weight: 700;
       color: var(--text-primary);
     }
 
-    .popup-confidence {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 10px;
-      background: rgba(20, 184, 166, 0.1);
-      border-radius: 8px;
-      margin-bottom: 14px;
-    }
-
-    .popup-confidence-label {
-      font-size: 11px;
-      color: var(--text-muted);
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-    }
-
-    .popup-confidence-bar {
-      flex: 1;
-      height: 6px;
-      background: rgba(148, 163, 184, 0.2);
-      border-radius: 3px;
-      overflow: hidden;
-    }
-
-    .popup-confidence-fill {
-      height: 100%;
-      background: linear-gradient(90deg, var(--color-verified), #0d9488);
-      border-radius: 3px;
-    }
-
-    .popup-confidence-value {
-      font-size: 14px;
-      font-weight: 700;
-      color: var(--color-verified);
-    }
-
-    .popup-evidence {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      padding: 8px 12px;
-      background: rgba(148, 163, 184, 0.05);
-      border: 1px solid var(--border-subtle);
-      border-radius: 8px;
-      font-size: 11px;
+    .panel-count {
+      font-size: 12px;
       color: var(--text-secondary);
-      margin-bottom: 14px;
-      text-decoration: none;
-      transition: all 0.2s ease;
+      margin-top: 2px;
     }
 
-    .popup-evidence:hover {
-      border-color: var(--color-verified);
-      color: var(--color-verified);
-      background: rgba(20, 184, 166, 0.05);
-    }
-
-    .popup-evidence-icon {
-      width: 14px;
-      height: 14px;
-      stroke: currentColor;
-      stroke-width: 2;
-      fill: none;
-    }
-
-    .popup-actions {
-      display: flex;
-      gap: 8px;
-    }
-
-    .popup-btn {
-      flex: 1;
+    .panel-close {
+      width: 28px;
+      height: 28px;
+      border-radius: 6px;
+      background: transparent;
+      border: none;
+      color: var(--text-secondary);
+      cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 6px;
-      padding: 10px;
+      transition: all 0.2s ease;
+    }
+
+    .panel-close:hover {
+      background: rgba(148, 163, 184, 0.1);
+      color: var(--text-primary);
+    }
+
+    .panel-category-chips {
+      display: flex;
+      gap: 8px;
+      padding: 0 20px 16px 20px;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .category-chip {
+      flex: 1;
+      padding: 8px 12px;
       border-radius: 8px;
       font-size: 12px;
       font-weight: 600;
       cursor: pointer;
       transition: all 0.2s ease;
-      text-decoration: none;
-    }
-
-    .popup-btn-support {
-      background: rgba(20, 184, 166, 0.15);
-      color: var(--color-verified);
+      text-align: center;
       border: 1px solid transparent;
     }
 
-    .popup-btn-support:hover {
-      background: rgba(20, 184, 166, 0.25);
-      border-color: var(--color-verified);
+    .category-chip.claims {
+      background: var(--claim-bg);
+      color: var(--claim-accent);
+      border-color: var(--claim-border);
     }
 
-    .popup-btn-challenge {
-      background: rgba(239, 68, 68, 0.15);
-      color: var(--color-disputed);
-      border: 1px solid transparent;
+    .category-chip.claims:hover {
+      background: rgba(139, 92, 246, 0.2);
     }
 
-    .popup-btn-challenge:hover {
-      background: rgba(239, 68, 68, 0.25);
-      border-color: var(--color-disputed);
+    .category-chip.osint {
+      background: var(--osint-bg);
+      color: var(--osint-accent);
+      border-color: var(--osint-border);
     }
 
-    .popup-btn-icon {
-      width: 14px;
-      height: 14px;
+    .category-chip.osint:hover {
+      background: rgba(239, 68, 68, 0.2);
+    }
+
+    .panel-content {
+      overflow-y: auto;
+      flex: 1;
+    }
+
+    .panel-content::-webkit-scrollbar {
+      width: 4px;
+    }
+
+    .panel-content::-webkit-scrollbar-thumb {
+      background: var(--border-medium);
+      border-radius: 2px;
+    }
+
+    .panel-section {
+      padding: 16px 20px;
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 12px;
+      font-size: 13px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .section-header.claims {
+      color: var(--claim-accent);
+    }
+
+    .section-header.osint {
+      color: var(--osint-accent);
+    }
+
+    .section-icon {
+      width: 16px;
+      height: 16px;
       stroke: currentColor;
       stroke-width: 2;
       fill: none;
+    }
+
+    /* Claims mini-cards */
+    .claim-mini {
+      background: var(--bg-secondary);
+      border: 1px solid var(--claim-border);
+      border-left: 3px solid var(--claim-accent);
+      border-radius: 10px;
+      padding: 12px;
+      margin-bottom: 10px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+    }
+
+    .claim-mini:hover {
+      background: var(--claim-bg);
+      box-shadow: 0 0 0 2px var(--claim-border);
+    }
+
+    .claim-mini-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: var(--claim-bg);
+      border: 1px solid var(--claim-border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .claim-mini-icon svg {
+      width: 16px;
+      height: 16px;
+      stroke: var(--claim-accent);
+      stroke-width: 2;
+      fill: none;
+    }
+
+    .claim-mini-content {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .claim-mini-text {
+      font-size: 13px;
+      line-height: 1.4;
+      color: var(--text-primary);
+      margin-bottom: 6px;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .claim-mini-meta {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      font-size: 11px;
+      color: var(--text-secondary);
+    }
+
+    .claim-mini-pill {
+      padding: 2px 8px;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 10px;
+      text-transform: uppercase;
+    }
+
+    .claim-mini-pill.type {
+      background: var(--claim-bg);
+      color: var(--claim-accent);
+      border: 1px solid var(--claim-border);
+    }
+
+    .claim-mini-pill.status {
+      background: rgba(245, 158, 11, 0.2);
+      color: var(--color-pending);
+    }
+
+    .claim-mini-pill.status.verified {
+      background: rgba(20, 184, 166, 0.2);
+      color: var(--color-verified);
+    }
+
+    .claim-mini-pill.rep {
+      background: var(--claim-bg);
+      color: var(--claim-accent);
+      border: 1px solid var(--claim-border);
+    }
+
+    /* OSINT alert rows */
+    .osint-row {
+      background: var(--bg-secondary);
+      border: 1px solid var(--osint-border);
+      border-left: 3px solid var(--osint-accent);
+      border-radius: 10px;
+      padding: 12px;
+      margin-bottom: 10px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+    }
+
+    .osint-row:hover {
+      background: var(--osint-bg);
+      box-shadow: 0 0 0 2px var(--osint-border);
+    }
+
+    .osint-row-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: var(--osint-bg);
+      border: 1px solid var(--osint-border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .osint-row-icon svg {
+      width: 16px;
+      height: 16px;
+      stroke: var(--osint-accent);
+      stroke-width: 2;
+      fill: none;
+    }
+
+    .osint-row-content {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .osint-row-text {
+      font-size: 13px;
+      line-height: 1.4;
+      color: var(--text-primary);
+      margin-bottom: 6px;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .osint-row-meta {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      font-size: 11px;
+      color: var(--text-secondary);
+      margin-bottom: 6px;
+    }
+
+    .osint-row-pill {
+      padding: 2px 8px;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 10px;
+      text-transform: uppercase;
+      background: var(--osint-bg);
+      color: var(--osint-accent);
+      border: 1px solid var(--osint-border);
+    }
+
+    .osint-row-tags {
+      display: flex;
+      gap: 4px;
+      flex-wrap: wrap;
+    }
+
+    .osint-row-tag {
+      padding: 2px 6px;
+      border-radius: 6px;
+      font-size: 9px;
+      font-weight: 600;
+      background: var(--osint-bg);
+      color: var(--osint-accent);
+      border: 1px solid var(--osint-border);
+      text-transform: uppercase;
+    }
+
+    .panel-empty {
+      padding: 20px;
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 13px;
     }
 
     /* ============================================
@@ -791,8 +944,8 @@
         right: 0;
       }
 
-      .mapboxgl-popup-content {
-        min-width: 280px;
+      .stack-panel {
+        max-width: calc(100vw - 32px);
       }
     }
   </style>
@@ -952,7 +1105,10 @@
       { id: 17, claim: "South African power grid will achieve stability", lat: -33.9249, lng: 18.4241, status: "pending", submitter: "@africanenergy", rep: 74, confidence: 66, lockedDate: "2024-01-29", outcome: null },
       { id: 18, claim: "Dubai property prices will rise 12% in 2025", lat: 25.2048, lng: 55.2708, status: "pending", submitter: "@gulfpropertytracker", rep: 77, confidence: 69, lockedDate: "2024-02-01", outcome: null },
       { id: 19, claim: "Stockholm will implement congestion pricing expansion", lat: 59.3293, lng: 18.0686, status: "verified", submitter: "@nordictransport", rep: 82, confidence: 88, lockedDate: "2024-01-14", outcome: "true" },
-      { id: 20, claim: "Argentine peso stabilization plan will succeed", lat: -34.6037, lng: -58.3816, status: "disputed", submitter: "@latamecon", rep: 58, confidence: 44, lockedDate: "2024-02-06", outcome: "false" }
+      { id: 20, claim: "Argentine peso stabilization plan will succeed", lat: -34.6037, lng: -58.3816, status: "disputed", submitter: "@latamecon", rep: 58, confidence: 44, lockedDate: "2024-02-06", outcome: "false" },
+      // Add Paris duplicates for testing overlap
+      { id: 21, claim: "French elections will have record turnout", lat: 48.8566, lng: 2.3522, status: "pending", submitter: "@parisvoter", rep: 75, confidence: 68, lockedDate: "2024-02-07", outcome: null },
+      { id: 22, claim: "Paris Olympics 2024 security measures approved", lat: 48.8566, lng: 2.3522, status: "verified", submitter: "@sportsnews", rep: 88, confidence: 92, lockedDate: "2024-01-05", outcome: "true" }
     ];
 
     // ============================================
@@ -963,6 +1119,7 @@
     let osintLayerVisible = true;
     let currentFilter = 'active';
     let currentTab = 'claims';
+    let currentPanel = null;
 
     // ============================================
     // MOCK OSINT DATA - 15 News Signals
@@ -1152,7 +1309,7 @@
       });
 
       // ============================================
-      // CLUSTER LAYERS
+      // CLAIMS CLUSTER LAYERS (ABOVE OSINT)
       // ============================================
       // Cluster glow
       map.addLayer({
@@ -1161,7 +1318,7 @@
         source: 'claims',
         filter: ['has', 'point_count'],
         paint: {
-          'circle-color': '#14b8a6',
+          'circle-color': '#8b5cf6',
           'circle-radius': ['step', ['get', 'point_count'], 25, 5, 35, 10, 45],
           'circle-blur': 0.8,
           'circle-opacity': 0.2
@@ -1175,7 +1332,7 @@
         source: 'claims',
         filter: ['has', 'point_count'],
         paint: {
-          'circle-color': '#14b8a6',
+          'circle-color': '#8b5cf6',
           'circle-radius': ['step', ['get', 'point_count'], 15, 5, 20, 10, 28],
           'circle-opacity': 0.9,
           'circle-stroke-width': 2,
@@ -1196,12 +1353,12 @@
           'text-size': 12
         },
         paint: {
-          'text-color': '#0f172a'
+          'text-color': '#ffffff'
         }
       });
 
       // ============================================
-      // UNCLUSTERED POINT LAYERS (Color by status)
+      // UNCLUSTERED CLAIM POINTS (Color by status)
       // ============================================
       // Glow layer
       map.addLayer({
@@ -1278,6 +1435,80 @@
       });
 
       // ============================================
+      // UNIFIED CLICK HANDLER - Stack Panel
+      // ============================================
+      map.on('click', (e) => {
+        const bbox = [
+          [e.point.x - 10, e.point.y - 10],
+          [e.point.x + 10, e.point.y + 10]
+        ];
+
+        // Query ALL layers at this point
+        const claimFeatures = map.queryRenderedFeatures(bbox, {
+          layers: ['claims-points-core', 'claims-clusters-core']
+        });
+
+        const osintFeatures = map.queryRenderedFeatures(bbox, {
+          layers: ['osint-points-core', 'osint-clusters-core']
+        });
+
+        // If nothing clicked, close panel
+        if (claimFeatures.length === 0 && osintFeatures.length === 0) {
+          closeStackPanel();
+          return;
+        }
+
+        // Process claims
+        let claims = [];
+        claimFeatures.forEach(feature => {
+          if (feature.properties.cluster) {
+            // Get cluster leaves
+            const clusterId = feature.properties.cluster_id;
+            map.getSource('claims').getClusterLeaves(clusterId, 3, 0, (err, leaves) => {
+              if (!err && leaves) {
+                leaves.forEach(leaf => {
+                  const claim = claimsData.find(c => c.id === leaf.properties.id);
+                  if (claim) claims.push(claim);
+                });
+                showStackPanel(e.lngLat, claims, []);
+              }
+            });
+            return;
+          } else {
+            const claim = claimsData.find(c => c.id === feature.properties.id);
+            if (claim) claims.push(claim);
+          }
+        });
+
+        // Process OSINT
+        let osintItems = [];
+        osintFeatures.forEach(feature => {
+          if (feature.properties.cluster) {
+            // Get cluster leaves
+            const clusterId = feature.properties.cluster_id;
+            map.getSource('osint').getClusterLeaves(clusterId, 3, 0, (err, leaves) => {
+              if (!err && leaves) {
+                leaves.forEach(leaf => {
+                  const item = osintData.find(o => o.id === leaf.properties.id);
+                  if (item) osintItems.push(item);
+                });
+                showStackPanel(e.lngLat, [], osintItems);
+              }
+            });
+            return;
+          } else {
+            const item = osintData.find(o => o.id === feature.properties.id);
+            if (item) osintItems.push(item);
+          }
+        });
+
+        // Show panel if we have non-cluster items
+        if (claims.length > 0 || osintItems.length > 0) {
+          showStackPanel(e.lngLat, claims, osintItems);
+        }
+      });
+
+      // ============================================
       // INTERACTION HANDLERS
       // ============================================
       // Hover cursor
@@ -1290,146 +1521,6 @@
         });
       });
 
-      // Click OSINT cluster to expand
-      map.on('click', 'osint-clusters-core', (e) => {
-        const features = map.queryRenderedFeatures(e.point, {
-          layers: ['osint-clusters-core']
-        });
-        const clusterId = features[0].properties.cluster_id;
-        map.getSource('osint').getClusterExpansionZoom(clusterId, (err, zoom) => {
-          if (err) return;
-          map.easeTo({
-            center: features[0].geometry.coordinates,
-            zoom: zoom,
-            duration: 800
-          });
-        });
-      });
-
-      // Click OSINT point to show popup
-      map.on('click', 'osint-points-core', (e) => {
-        const props = e.features[0].properties;
-        const osint = osintData.find(o => o.id === props.id);
-
-        if (!osint) return;
-
-        const tags = JSON.parse(props.tags || '[]');
-        const popupHTML = `
-          <div class="popup-title">${osint.title}</div>
-
-          <div class="popup-submitter" style="border-bottom: 1px solid var(--border-subtle); padding-bottom: 10px; margin-bottom: 10px;">
-            <span class="popup-handle">${osint.source}</span>
-            <span style="font-size: 11px; color: var(--text-muted);">${osint.timestamp}</span>
-          </div>
-
-          <div style="display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 12px;">
-            ${tags.map(tag => `<span class="osint-tag">${tag}</span>`).join('')}
-          </div>
-
-          <button class="popup-btn popup-btn-support" onclick="window.open('https://example.com/source', '_blank'); return false;" style="width: 100%;">
-            <svg class="popup-btn-icon" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-            </svg>
-            View Source
-          </button>
-        `;
-
-        new mapboxgl.Popup({ offset: 25, closeButton: true, maxWidth: '400px' })
-          .setLngLat(e.features[0].geometry.coordinates)
-          .setHTML(popupHTML)
-          .addTo(map);
-      });
-
-      // Click claim cluster to expand
-      map.on('click', 'claims-clusters-core', (e) => {
-        const features = map.queryRenderedFeatures(e.point, {
-          layers: ['claims-clusters-core']
-        });
-        const clusterId = features[0].properties.cluster_id;
-        map.getSource('claims').getClusterExpansionZoom(clusterId, (err, zoom) => {
-          if (err) return;
-          map.easeTo({
-            center: features[0].geometry.coordinates,
-            zoom: zoom,
-            duration: 800
-          });
-        });
-      });
-
-      // Click unclustered point to show popup
-      map.on('click', 'claims-points-core', (e) => {
-        const props = e.features[0].properties;
-        const claim = claimsData.find(c => c.id === props.id);
-
-        if (!claim) return;
-
-        const statusBadge = `<span class="status-badge ${claim.status}">${claim.status.toUpperCase()}</span>`;
-        const evidenceHash = `0x${Math.random().toString(16).substr(2, 12)}...`;
-
-        const popupHTML = `
-          <div class="popup-title">${claim.claim}</div>
-
-          <div class="popup-submitter">
-            <span class="popup-handle">${claim.submitter}</span>
-            <div class="popup-rep">
-              <svg class="rep-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-              </svg>
-              ${claim.rep}
-            </div>
-            ${statusBadge}
-          </div>
-
-          <div class="popup-info-grid">
-            <div class="popup-info-item">
-              <span class="popup-info-label">Locked</span>
-              <span class="popup-info-value">${claim.lockedDate}</span>
-            </div>
-            ${claim.outcome ? `
-            <div class="popup-info-item">
-              <span class="popup-info-label">Outcome</span>
-              <span class="popup-info-value">${claim.outcome.toUpperCase()}</span>
-            </div>
-            ` : ''}
-          </div>
-
-          <div class="popup-confidence">
-            <span class="popup-confidence-label">Confidence</span>
-            <div class="popup-confidence-bar">
-              <div class="popup-confidence-fill" style="width: ${claim.confidence}%"></div>
-            </div>
-            <span class="popup-confidence-value">${claim.confidence}%</span>
-          </div>
-
-          <a href="#" class="popup-evidence" onclick="alert('View on blockchain: ${evidenceHash}'); return false;">
-            <svg class="popup-evidence-icon" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
-            </svg>
-            <span>View Proof: ${evidenceHash}</span>
-          </a>
-
-          <div class="popup-actions">
-            <button class="popup-btn popup-btn-support" onclick="alert('Support this claim'); return false;">
-              <svg class="popup-btn-icon" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-              Support
-            </button>
-            <button class="popup-btn popup-btn-challenge" onclick="alert('Challenge this claim'); return false;">
-              <svg class="popup-btn-icon" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-              Challenge
-            </button>
-          </div>
-        `;
-
-        new mapboxgl.Popup({ offset: 25, closeButton: true, maxWidth: '400px' })
-          .setLngLat(e.features[0].geometry.coordinates)
-          .setHTML(popupHTML)
-          .addTo(map);
-      });
-
       // Slow globe rotation when idle
       map.on('idle', () => {
         if (map.getZoom() < 2.5 && !map.isMoving()) {
@@ -1437,6 +1528,131 @@
         }
       });
     });
+
+    // ============================================
+    // STACK PANEL FUNCTIONS
+    // ============================================
+    function showStackPanel(lngLat, claims, osintItems) {
+      closeStackPanel();
+
+      const panel = document.createElement('div');
+      panel.className = 'stack-panel';
+      panel.id = 'stackPanel';
+
+      // Calculate position
+      const point = map.project(lngLat);
+      panel.style.left = Math.min(point.x + 20, window.innerWidth - 440) + 'px';
+      panel.style.top = Math.min(point.y - 50, window.innerHeight - 600) + 'px';
+
+      const totalCount = claims.length + osintItems.length;
+      const location = "Selected Area"; // Could enhance with geocoding
+
+      panel.innerHTML = `
+        <div class="panel-header">
+          <div>
+            <div class="panel-title">${location}</div>
+            <div class="panel-count">${claims.length} Claims • ${osintItems.length} OSINT</div>
+          </div>
+          <button class="panel-close" onclick="closeStackPanel()">✕</button>
+        </div>
+
+        ${(claims.length > 0 && osintItems.length > 0) ? `
+        <div class="panel-category-chips">
+          <div class="category-chip claims" onclick="scrollToSection('claims-section')">
+            Claims (${claims.length})
+          </div>
+          <div class="category-chip osint" onclick="scrollToSection('osint-section')">
+            OSINT (${osintItems.length})
+          </div>
+        </div>
+        ` : ''}
+
+        <div class="panel-content">
+          ${claims.length > 0 ? `
+          <div class="panel-section" id="claims-section">
+            <div class="section-header claims">
+              <svg class="section-icon" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+              </svg>
+              Claims
+            </div>
+            ${claims.map(claim => `
+            <div class="claim-mini" onclick="console.log('OPEN_CLAIM_MODAL:${claim.id}'); closeStackPanel();">
+              <div class="claim-mini-icon">
+                <svg viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                </svg>
+              </div>
+              <div class="claim-mini-content">
+                <div class="claim-mini-text">${claim.claim}</div>
+                <div class="claim-mini-meta">
+                  <span class="claim-mini-pill type">CLAIM</span>
+                  <span class="claim-mini-pill status ${claim.status}">${claim.status.toUpperCase()}</span>
+                  <span class="claim-mini-pill rep">Rep ${claim.rep}</span>
+                  <span>${claim.submitter}</span>
+                </div>
+              </div>
+            </div>
+            `).join('')}
+          </div>
+          ` : ''}
+
+          ${osintItems.length > 0 ? `
+          <div class="panel-section" id="osint-section">
+            <div class="section-header osint">
+              <svg class="section-icon" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
+              </svg>
+              OSINT Signals
+            </div>
+            ${osintItems.map(item => `
+            <div class="osint-row" onclick="console.log('OPEN_SIGNAL:${item.id}'); closeStackPanel();">
+              <div class="osint-row-icon">
+                <svg viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                </svg>
+              </div>
+              <div class="osint-row-content">
+                <div class="osint-row-text">${item.title}</div>
+                <div class="osint-row-meta">
+                  <span class="osint-row-pill">OSINT SIGNAL</span>
+                  <span class="osint-row-pill">SOURCE</span>
+                  <span>${item.source}</span>
+                  <span>•</span>
+                  <span>${item.timestamp}</span>
+                </div>
+                <div class="osint-row-tags">
+                  ${item.tags.map(tag => `<span class="osint-row-tag">${tag}</span>`).join('')}
+                </div>
+              </div>
+            </div>
+            `).join('')}
+          </div>
+          ` : ''}
+
+          ${claims.length === 0 && osintItems.length === 0 ? `
+          <div class="panel-empty">No data at this location</div>
+          ` : ''}
+        </div>
+      `;
+
+      document.body.appendChild(panel);
+      currentPanel = panel;
+    }
+
+    function closeStackPanel() {
+      if (currentPanel) {
+        currentPanel.remove();
+        currentPanel = null;
+      }
+    }
+
+    function scrollToSection(sectionId) {
+      const section = document.getElementById(sectionId);
+      if (section) {
+        section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }
 
     // ============================================
     // UI CONTROLS
