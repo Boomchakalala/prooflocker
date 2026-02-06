@@ -704,25 +704,25 @@ export default function GlobeMapbox({ claims, osint }: GlobeMapboxProps) {
       )}
 
       {/* Sidebar */}
-      <aside className="fixed top-14 right-0 w-[360px] h-[calc(100vh-56px)] bg-gradient-to-b from-[#1a0f2e]/95 to-[#0f172a]/95 backdrop-blur-[20px] border-l border-purple-500/20 z-[950] flex flex-col shadow-[-10px_0_30px_rgba(139,92,246,0.1)]">
+      <aside className="fixed top-14 right-0 w-[360px] h-[calc(100vh-56px)] bg-gradient-to-b from-[#0A0A0F]/98 via-[#111118]/98 to-[#0A0A0F]/98 backdrop-blur-[30px] border-l border-purple-500/20 z-[950] flex flex-col shadow-[-20px_0_40px_rgba(91,33,182,0.15)]">
         <div className="p-5 border-b border-purple-500/20">
           <div className="flex gap-2 mb-4">
             <button
               onClick={() => setCurrentTab('claims')}
-              className={`flex-1 px-4 py-2 rounded-lg text-[13px] font-semibold transition-all ${
+              className={`flex-1 px-4 py-2.5 rounded-lg text-[13px] font-bold transition-all ${
                 currentTab === 'claims'
-                  ? 'bg-gradient-to-r from-purple-600 to-purple-700 text-white shadow-[0_0_20px_rgba(139,92,246,0.3)]'
-                  : 'bg-transparent text-[#94a3b8] border border-purple-500/20 hover:bg-purple-500/10'
+                  ? 'bg-gradient-to-r from-[#5B21B6] to-[#2E5CFF] text-white shadow-[0_0_20px_rgba(91,33,182,0.5)]'
+                  : 'bg-transparent text-gray-400 border border-purple-500/20 hover:bg-purple-500/10 hover:border-purple-500/40'
               }`}
             >
               Claims ({filteredClaims.length})
             </button>
             <button
               onClick={() => setCurrentTab('osint')}
-              className={`flex-1 px-4 py-2 rounded-lg text-[13px] font-semibold transition-all ${
+              className={`flex-1 px-4 py-2.5 rounded-lg text-[13px] font-bold transition-all ${
                 currentTab === 'osint'
-                  ? 'bg-gradient-to-r from-red-600 to-red-700 text-white shadow-[0_0_20px_rgba(239,68,68,0.3)]'
-                  : 'bg-transparent text-[#94a3b8] border border-purple-500/20 hover:bg-red-500/10'
+                  ? 'bg-gradient-to-r from-red-600 to-red-700 text-white shadow-[0_0_20px_rgba(239,68,68,0.5)]'
+                  : 'bg-transparent text-gray-400 border border-purple-500/20 hover:bg-red-500/10 hover:border-red-500/40'
               }`}
             >
               OSINT ({osint.length})
@@ -755,23 +755,23 @@ export default function GlobeMapbox({ claims, osint }: GlobeMapboxProps) {
                 <div
                   key={claim.id}
                   onClick={() => flyTo(claim.lng, claim.lat)}
-                  className="bg-gradient-to-br from-[#1e1b2e] to-[#1a0f2e] border border-purple-500/20 rounded-lg p-3.5 cursor-pointer transition-all hover:border-purple-500 hover:shadow-[0_0_20px_rgba(139,92,246,0.2)]"
+                  className="bg-gradient-to-br from-[#0A0A0F] to-[#111118] border border-purple-500/30 rounded-xl p-4 cursor-pointer transition-all hover:border-purple-500/60 hover:shadow-[0_0_25px_rgba(91,33,182,0.3)] hover:scale-[1.01]"
                 >
                   <div className="flex items-center justify-between mb-2.5">
-                    <span className="text-[12px] font-semibold text-[#f8fafc]">{claim.submitter}</span>
-                    <span className={`px-2 py-0.5 rounded-lg text-[10px] font-semibold uppercase ${
-                      claim.status === 'verified' ? 'bg-purple-500/20 text-purple-300 border border-purple-500/30' :
-                      claim.status === 'disputed' ? 'bg-red-500/20 text-red-300 border border-red-500/30' :
-                      claim.status === 'void' ? 'bg-gray-500/20 text-gray-300 border border-gray-500/30' :
-                      'bg-amber-500/20 text-amber-300 border border-amber-500/30'
+                    <span className="text-[12px] font-bold text-white">{claim.submitter}</span>
+                    <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider ${
+                      claim.status === 'verified' ? 'bg-purple-500/20 text-purple-300 border border-purple-500/40' :
+                      claim.status === 'disputed' ? 'bg-red-500/20 text-red-300 border border-red-500/40' :
+                      claim.status === 'void' ? 'bg-gray-500/20 text-gray-300 border border-gray-500/40' :
+                      'bg-amber-500/20 text-amber-300 border border-amber-500/40'
                     }`}>
                       {claim.status}
                     </span>
                   </div>
-                  <div className="text-[13px] text-[#f8fafc] mb-2.5 line-clamp-2">{claim.claim}</div>
-                  <div className="flex items-center justify-between text-[11px] text-[#64748b]">
+                  <div className="text-[13px] text-gray-200 mb-2.5 line-clamp-2 leading-relaxed">{claim.claim}</div>
+                  <div className="flex items-center justify-between text-[11px] text-gray-500">
                     <span>{claim.lockedDate}</span>
-                    <span className="font-semibold text-purple-300">{claim.confidence}%</span>
+                    <span className="font-bold text-purple-400">{claim.confidence}%</span>
                   </div>
                 </div>
               ))}
@@ -782,16 +782,16 @@ export default function GlobeMapbox({ claims, osint }: GlobeMapboxProps) {
                 <div
                   key={item.id}
                   onClick={() => flyTo(item.lng, item.lat)}
-                  className="bg-gradient-to-br from-[#1e1b2e] to-[#1a0f2e] border border-red-500/20 border-l-[3px] border-l-[#ef4444] rounded-lg p-3.5 cursor-pointer transition-all hover:border-red-500 hover:shadow-[0_0_20px_rgba(239,68,68,0.2)]"
+                  className="bg-gradient-to-br from-[#0A0A0F] to-[#111118] border border-red-500/30 border-l-[3px] border-l-red-500 rounded-xl p-4 cursor-pointer transition-all hover:border-red-500/60 hover:shadow-[0_0_25px_rgba(239,68,68,0.3)] hover:scale-[1.01]"
                 >
                   <div className="flex items-center justify-between mb-2">
-                    <span className="text-[12px] font-semibold text-[#f8fafc]">{item.source}</span>
-                    <span className="text-[11px] text-[#64748b]">{item.timestamp}</span>
+                    <span className="text-[12px] font-bold text-white">{item.source}</span>
+                    <span className="text-[11px] text-gray-500">{item.timestamp}</span>
                   </div>
-                  <div className="text-[13px] text-[#f8fafc] mb-2 line-clamp-2">{item.title}</div>
+                  <div className="text-[13px] text-gray-200 mb-2.5 line-clamp-2 leading-relaxed">{item.title}</div>
                   <div className="flex gap-1.5 flex-wrap">
                     {item.tags.map((tag, idx) => (
-                      <span key={idx} className="px-2 py-0.5 bg-red-500/15 border border-red-500/30 rounded-lg text-[10px] font-semibold text-red-300 uppercase">
+                      <span key={idx} className="px-2.5 py-0.5 bg-red-500/15 border border-red-500/30 rounded-full text-[10px] font-bold text-red-300 uppercase tracking-wider">
                         {tag}
                       </span>
                     ))}
