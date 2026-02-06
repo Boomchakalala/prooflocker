@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ProofLocker Globe - Political Map Style</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: #000000;
+      color: white;
+      overflow: hidden;
+      width: 100vw;
+      height: 100vh;
+    }
+
+    #globe-container {
+      width: 100%;
+      height: 100%;
+      background: #000000;
+    }
+
+    #overlay {
+      position: absolute;
+      top: 30px;
+      left: 30px;
+      z-index: 100;
+      pointer-events: none;
+      opacity: 0.7;
+    }
+
+    #overlay h1 {
+      font-size: 26px;
+      font-weight: 700;
+      color: #0066ff;
+      margin-bottom: 4px;
+      letter-spacing: -0.8px;
+      text-shadow: 0 0 20px rgba(0, 102, 255, 0.5);
+    }
+
+    #overlay p {
+      font-size: 12px;
+      color: rgba(255, 255, 255, 0.4);
+      font-weight: 400;
+    }
+
+    #loading {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+      z-index: 50;
+    }
+
+    #loading .spinner {
+      width: 60px;
+      height: 60px;
+      border: 3px solid rgba(0, 102, 255, 0.1);
+      border-top: 3px solid #0066ff;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 20px;
+      box-shadow: 0 0 20px rgba(0, 102, 255, 0.3);
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    #loading p {
+      color: rgba(255, 255, 255, 0.5);
+      font-size: 13px;
+    }
+
+    .fade-out {
+      animation: fadeOut 0.8s forwards;
+    }
+
+    @keyframes fadeOut {
+      to { opacity: 0; pointer-events: none; }
+    }
+
+    #legend {
+      position: absolute;
+      bottom: 30px;
+      left: 30px;
+      z-index: 100;
+      display: flex;
+      gap: 20px;
+      pointer-events: none;
+      opacity: 0.7;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 11px;
+      color: rgba(255, 255, 255, 0.6);
+    }
+
+    .legend-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      animation: legendPulse 2s ease-in-out infinite;
+    }
+
+    @keyframes legendPulse {
+      0%, 100% { transform: scale(1); opacity: 0.8; }
+      50% { transform: scale(1.3); opacity: 1; }
+    }
+
+    .legend-dot.red {
+      background: #ff4444;
+      box-shadow: 0 0 15px #ff4444;
+    }
+
+    .legend-dot.green {
+      background: #00cc66;
+      box-shadow: 0 0 15px #00cc66;
+    }
+
+    .legend-dot.blue {
+      background: #0066ff;
+      box-shadow: 0 0 15px #0066ff;
+    }
+  </style>
+</head>
+<body>
+  <div id="globe-container"></div>
+
+  <div id="overlay">
+    <h1>ProofLocker</h1>
+    <p>Global Evidence Network</p>
+  </div>
+
+  <div id="legend">
+    <div class="legend-item">
+      <div class="legend-dot red"></div>
+      <span>Urgent</span>
+    </div>
+    <div class="legend-item">
+      <div class="legend-dot green"></div>
+      <span>Verified</span>
+    </div>
+    <div class="legend-item">
+      <div class="legend-dot blue"></div>
+      <span>Active</span>
+    </div>
+  </div>
+
+  <div id="loading">
+    <div class="spinner"></div>
+    <p>Loading political map...</p>
+  </div>
+
+  <!-- Globe.GL + TopoJSON for country borders -->
+  <script src="//unpkg.com/globe.gl"></script>
+  <script src="//unpkg.com/topojson-client"></script>
+
+  <script>
+    // Mock claim data
+    const mockClaims = [
+      // Urgent (red)
+      { lat: 50.4501, lng: 30.5234, city: 'Kyiv', volume: 10, status: 'urgent', color: '#ff4444' },
+      { lat: 33.8869, lng: 35.5131, city: 'Beirut', volume: 7, status: 'urgent', color: '#ff4444' },
+      { lat: 31.7917, lng: 35.2172, city: 'Jerusalem', volume: 8, status: 'urgent', color: '#ff4444' },
+      { lat: 33.3152, lng: 44.3661, city: 'Baghdad', volume: 6, status: 'urgent', color: '#ff4444' },
+      { lat: 34.0522, lng: -118.2437, city: 'Los Angeles', volume: 8, status: 'urgent', color: '#ff4444' },
+
+      // Verified (green)
+      { lat: 40.7128, lng: -74.0060, city: 'New York', volume: 10, status: 'resolved', color: '#00cc66' },
+      { lat: 35.6762, lng: 139.6503, city: 'Tokyo', volume: 10, status: 'resolved', color: '#00cc66' },
+      { lat: 37.7749, lng: -122.4194, city: 'San Francisco', volume: 9, status: 'resolved', color: '#00cc66' },
+      { lat: 51.5074, lng: -0.1278, city: 'London', volume: 8, status: 'resolved', color: '#00cc66' },
+      { lat: 48.8566, lng: 2.3522, city: 'Paris', volume: 7, status: 'resolved', color: '#00cc66' },
+
+      // Active (blue)
+      { lat: 55.7558, lng: 37.6173, city: 'Moscow', volume: 7, status: 'pending', color: '#0066ff' },
+      { lat: 39.9042, lng: 116.4074, city: 'Beijing', volume: 9, status: 'pending', color: '#0066ff' },
+      { lat: -33.8688, lng: 151.2093, city: 'Sydney', volume: 6, status: 'pending', color: '#0066ff' },
+      { lat: 19.4326, lng: -99.1332, city: 'Mexico City', volume: 7, status: 'pending', color: '#0066ff' },
+      { lat: -23.5505, lng: -46.6333, city: 'São Paulo', volume: 7, status: 'pending', color: '#0066ff' },
+      { lat: 28.6139, lng: 77.2090, city: 'Delhi', volume: 8, status: 'pending', color: '#0066ff' },
+      { lat: 1.3521, lng: 103.8198, city: 'Singapore', volume: 7, status: 'pending', color: '#0066ff' },
+      { lat: 25.2048, lng: 55.2708, city: 'Dubai', volume: 6, status: 'pending', color: '#0066ff' },
+      { lat: 52.5200, lng: 13.4050, city: 'Berlin', volume: 7, status: 'pending', color: '#0066ff' },
+      { lat: 41.9028, lng: 12.4964, city: 'Rome', volume: 6, status: 'pending', color: '#0066ff' },
+    ];
+
+    // Major cities to label
+    const cityLabels = [
+      { lat: 40.7128, lng: -74.0060, name: 'New York', size: 1.2 },
+      { lat: 51.5074, lng: -0.1278, name: 'London', size: 1.2 },
+      { lat: 35.6762, lng: 139.6503, name: 'Tokyo', size: 1.2 },
+      { lat: 48.8566, lng: 2.3522, name: 'Paris', size: 1.0 },
+      { lat: 55.7558, lng: 37.6173, name: 'Moscow', size: 1.0 },
+      { lat: 39.9042, lng: 116.4074, name: 'Beijing', size: 1.2 },
+      { lat: -33.8688, lng: 151.2093, name: 'Sydney', size: 1.0 },
+      { lat: 19.4326, lng: -99.1332, name: 'Mexico City', size: 1.0 },
+      { lat: 28.6139, lng: 77.2090, name: 'Delhi', size: 1.0 },
+      { lat: 1.3521, lng: 103.8198, name: 'Singapore', size: 0.9 },
+      { lat: 52.5200, lng: 13.4050, name: 'Berlin', size: 1.0 },
+      { lat: 37.7749, lng: -122.4194, name: 'San Francisco', size: 1.0 },
+      { lat: 50.4501, lng: 30.5234, name: 'Kyiv', size: 0.9 },
+      { lat: 25.2048, lng: 55.2708, name: 'Dubai', size: 0.9 },
+      { lat: 41.9028, lng: 12.4964, name: 'Rome', size: 0.9 },
+    ];
+
+    // Initialize globe with HIGH-RES political map
+    const globe = Globe({ animateIn: false })
+      (document.getElementById('globe-container'))
+      // HIGH-RESOLUTION Blue Marble with visible geography
+      .globeImageUrl('https://unpkg.com/three-globe/example/img/earth-blue-marble.jpg')
+      // No bump map initially
+      .bumpImageUrl(null)
+      // Dark background
+      .backgroundImageUrl(null)
+      .backgroundColor('rgba(0, 0, 0, 1)')
+      // Blue atmosphere
+      .atmosphereColor('#0066ff')
+      .atmosphereAltitude(0.2)
+      .showAtmosphere(true)
+      .pointsMerge(false); // Disable merging to show all dots clearly
+
+    // Load country borders with country names
+    fetch('https://cdn.jsdelivr.net/npm/world-atlas@2/countries-50m.json')
+      .then(res => res.json())
+      .then(countries => {
+        const countriesData = topojson.feature(countries, countries.objects.countries).features;
+
+        // Add country polygons with borders
+        globe
+          .polygonsData(countriesData)
+          .polygonCapColor(() => 'rgba(0, 0, 0, 0)') // Transparent fill
+          .polygonSideColor(() => 'rgba(0, 0, 0, 0)')
+          .polygonStrokeColor(() => 'rgba(255, 255, 255, 0.6)') // Bright white borders
+          .polygonAltitude(0.001)
+          // Country names on hover
+          .polygonLabel(d => `
+            <div style="
+              padding: 6px 10px;
+              background: rgba(0, 0, 0, 0.95);
+              border: 1px solid rgba(255, 255, 255, 0.4);
+              border-radius: 4px;
+              font-family: -apple-system, sans-serif;
+              font-size: 13px;
+              font-weight: 600;
+              color: white;
+            ">
+              ${d.properties.name}
+            </div>
+          `);
+      });
+
+    // Add city labels (always visible)
+    globe
+      .labelsData(cityLabels)
+      .labelLat('lat')
+      .labelLng('lng')
+      .labelText('name')
+      .labelSize('size')
+      .labelColor(() => 'rgba(255, 255, 255, 0.9)')
+      .labelResolution(3) // Higher resolution for clearer text
+      .labelAltitude(0.01)
+      .labelDotRadius(0.15)
+      .labelDotOrientation(() => 'bottom');
+
+    // Add hotspot points
+    globe
+      .pointsData(mockClaims)
+      .pointLat('lat')
+      .pointLng('lng')
+      .pointAltitude(0.02)
+      .pointRadius((d) => {
+        const minSize = 0.5;
+        const maxSize = 1.5;
+        const minVol = Math.min(...mockClaims.map(c => c.volume));
+        const maxVol = Math.max(...mockClaims.map(c => c.volume));
+        const normalized = (d.volume - minVol) / (maxVol - minVol || 1);
+        return minSize + normalized * (maxSize - minSize);
+      })
+      .pointColor('color')
+      .pointLabel(d => `
+        <div style="
+          padding: 8px 12px;
+          background: rgba(0, 0, 0, 0.98);
+          border: 2px solid ${d.color};
+          border-radius: 4px;
+          font-family: -apple-system, sans-serif;
+          font-size: 11px;
+          color: white;
+          box-shadow: 0 0 20px ${d.color}80;
+        ">
+          <div style="color: ${d.color}; font-weight: 700; margin-bottom: 2px;">
+            ${d.city}
+          </div>
+          <div style="color: rgba(255,255,255,0.7); font-size: 10px;">
+            Volume: ${d.volume}/10 • ${d.status}
+          </div>
+        </div>
+      `)
+      .onPointClick(point => {
+        alert(`${point.city}\nVolume: ${point.volume}/10\nStatus: ${point.status}`);
+      });
+
+    // Camera controls
+    const controls = globe.controls();
+    controls.autoRotate = true;
+    controls.autoRotateSpeed = 0.5;
+    controls.enableZoom = true;
+    controls.enablePan = false;
+    controls.minDistance = 120; // Allow close zoom
+    controls.maxDistance = 800;
+    controls.enableDamping = true;
+    controls.dampingFactor = 0.05;
+    controls.rotateSpeed = 0.5;
+    controls.zoomSpeed = 1.0;
+
+    // Initial view
+    globe.pointOfView({ lat: 25, lng: 0, altitude: 2.5 }, 0);
+
+    // Pulsing animation
+    let frame = 0;
+    function animatePulse() {
+      frame++;
+      const urgentPulse = 1 + Math.sin(frame * 0.05) * 0.3;
+      const normalPulse = 1 + Math.sin(frame * 0.03) * 0.15;
+
+      globe.pointRadius(d => {
+        const minSize = 0.5;
+        const maxSize = 1.5;
+        const minVol = Math.min(...mockClaims.map(c => c.volume));
+        const maxVol = Math.max(...mockClaims.map(c => c.volume));
+        const normalized = (d.volume - minVol) / (maxVol - minVol || 1);
+        const baseRadius = minSize + normalized * (maxSize - minSize);
+
+        return d.status === 'urgent' ? baseRadius * urgentPulse : baseRadius * normalPulse;
+      });
+
+      requestAnimationFrame(animatePulse);
+    }
+    animatePulse();
+
+    // High quality rendering
+    const renderer = globe.renderer();
+    renderer.antialias = true;
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+    // Ready
+    setTimeout(() => {
+      const loading = document.getElementById('loading');
+      loading.classList.add('fade-out');
+      setTimeout(() => loading.remove(), 800);
+      console.log('🌍 Political map globe loaded');
+      console.log('✅ Country borders visible');
+      console.log('✅ City labels visible');
+      console.log('✅ Clean zoom (high-res texture)');
+    }, 1500);
+
+    // Responsive
+    window.addEventListener('resize', () => {
+      globe.width(window.innerWidth);
+      globe.height(window.innerHeight);
+    });
+  </script>
+</body>
+</html>
