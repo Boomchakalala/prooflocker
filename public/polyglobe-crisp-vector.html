@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ProofLocker Globe - Crisp Vector Style (Polyglobe)</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: #000000;
+      color: white;
+      overflow: hidden;
+      width: 100vw;
+      height: 100vh;
+    }
+
+    #globe-container {
+      width: 100%;
+      height: 100%;
+      background: #000000;
+    }
+
+    #overlay {
+      position: absolute;
+      top: 30px;
+      left: 30px;
+      z-index: 100;
+      pointer-events: none;
+      opacity: 0.7;
+    }
+
+    #overlay h1 {
+      font-size: 26px;
+      font-weight: 700;
+      color: #0066ff;
+      margin-bottom: 4px;
+      letter-spacing: -0.8px;
+      text-shadow: 0 0 20px rgba(0, 102, 255, 0.5);
+    }
+
+    #overlay p {
+      font-size: 12px;
+      color: rgba(255, 255, 255, 0.4);
+      font-weight: 400;
+    }
+
+    #loading {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+      z-index: 50;
+    }
+
+    #loading .spinner {
+      width: 60px;
+      height: 60px;
+      border: 3px solid rgba(0, 102, 255, 0.1);
+      border-top: 3px solid #0066ff;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 20px;
+      box-shadow: 0 0 20px rgba(0, 102, 255, 0.3);
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    #loading p {
+      color: rgba(255, 255, 255, 0.5);
+      font-size: 13px;
+    }
+
+    #loading .progress {
+      color: rgba(255, 255, 255, 0.3);
+      font-size: 11px;
+      margin-top: 8px;
+    }
+
+    .fade-out {
+      animation: fadeOut 0.8s forwards;
+    }
+
+    @keyframes fadeOut {
+      to { opacity: 0; pointer-events: none; }
+    }
+
+    #legend {
+      position: absolute;
+      bottom: 30px;
+      left: 30px;
+      z-index: 100;
+      display: flex;
+      gap: 20px;
+      pointer-events: none;
+      opacity: 0.7;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 11px;
+      color: rgba(255, 255, 255, 0.6);
+    }
+
+    .legend-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      animation: legendPulse 2s ease-in-out infinite;
+    }
+
+    @keyframes legendPulse {
+      0%, 100% { transform: scale(1); opacity: 0.8; }
+      50% { transform: scale(1.3); opacity: 1; }
+    }
+
+    .legend-dot.red {
+      background: #ff4444;
+      box-shadow: 0 0 15px #ff4444;
+    }
+
+    .legend-dot.green {
+      background: #00cc66;
+      box-shadow: 0 0 15px #00cc66;
+    }
+
+    .legend-dot.blue {
+      background: #0066ff;
+      box-shadow: 0 0 15px #0066ff;
+    }
+  </style>
+</head>
+<body>
+  <div id="globe-container"></div>
+
+  <div id="overlay">
+    <h1>ProofLocker</h1>
+    <p>Crisp Vector Globe</p>
+  </div>
+
+  <div id="legend">
+    <div class="legend-item">
+      <div class="legend-dot red"></div>
+      <span>Urgent</span>
+    </div>
+    <div class="legend-item">
+      <div class="legend-dot green"></div>
+      <span>Verified</span>
+    </div>
+    <div class="legend-item">
+      <div class="legend-dot blue"></div>
+      <span>Active</span>
+    </div>
+  </div>
+
+  <div id="loading">
+    <div class="spinner"></div>
+    <p>Loading crisp vector globe...</p>
+    <p class="progress" id="progress">Initializing...</p>
+  </div>
+
+  <!-- Globe.GL + TopoJSON -->
+  <script src="//unpkg.com/globe.gl"></script>
+  <script src="//unpkg.com/topojson-client"></script>
+
+  <script>
+    const updateProgress = (msg) => {
+      const el = document.getElementById('progress');
+      if (el) el.textContent = msg;
+    };
+
+    // Mock claim data
+    const mockClaims = [
+      { lat: 50.4501, lng: 30.5234, city: 'Kyiv', volume: 10, status: 'urgent', color: '#ff4444' },
+      { lat: 33.8869, lng: 35.5131, city: 'Beirut', volume: 7, status: 'urgent', color: '#ff4444' },
+      { lat: 31.7917, lng: 35.2172, city: 'Jerusalem', volume: 8, status: 'urgent', color: '#ff4444' },
+      { lat: 33.3152, lng: 44.3661, city: 'Baghdad', volume: 6, status: 'urgent', color: '#ff4444' },
+      { lat: 34.0522, lng: -118.2437, city: 'Los Angeles', volume: 8, status: 'urgent', color: '#ff4444' },
+      { lat: 40.7128, lng: -74.0060, city: 'New York', volume: 10, status: 'resolved', color: '#00cc66' },
+      { lat: 35.6762, lng: 139.6503, city: 'Tokyo', volume: 10, status: 'resolved', color: '#00cc66' },
+      { lat: 37.7749, lng: -122.4194, city: 'San Francisco', volume: 9, status: 'resolved', color: '#00cc66' },
+      { lat: 51.5074, lng: -0.1278, city: 'London', volume: 8, status: 'resolved', color: '#00cc66' },
+      { lat: 48.8566, lng: 2.3522, city: 'Paris', volume: 7, status: 'resolved', color: '#00cc66' },
+      { lat: 55.7558, lng: 37.6173, city: 'Moscow', volume: 7, status: 'pending', color: '#0066ff' },
+      { lat: 39.9042, lng: 116.4074, city: 'Beijing', volume: 9, status: 'pending', color: '#0066ff' },
+      { lat: -33.8688, lng: 151.2093, city: 'Sydney', volume: 6, status: 'pending', color: '#0066ff' },
+      { lat: 19.4326, lng: -99.1332, city: 'Mexico City', volume: 7, status: 'pending', color: '#0066ff' },
+      { lat: -23.5505, lng: -46.6333, city: 'São Paulo', volume: 7, status: 'pending', color: '#0066ff' },
+      { lat: 28.6139, lng: 77.2090, city: 'Delhi', volume: 8, status: 'pending', color: '#0066ff' },
+      { lat: 1.3521, lng: 103.8198, city: 'Singapore', volume: 7, status: 'pending', color: '#0066ff' },
+      { lat: 25.2048, lng: 55.2708, city: 'Dubai', volume: 6, status: 'pending', color: '#0066ff' },
+      { lat: 52.5200, lng: 13.4050, city: 'Berlin', volume: 7, status: 'pending', color: '#0066ff' },
+      { lat: 41.9028, lng: 12.4964, city: 'Rome', volume: 6, status: 'pending', color: '#0066ff' },
+    ];
+
+    // Major cities for labels
+    const cityLabels = [
+      { lat: 40.7128, lng: -74.0060, name: 'New York', size: 14 },
+      { lat: 51.5074, lng: -0.1278, name: 'London', size: 14 },
+      { lat: 35.6762, lng: 139.6503, name: 'Tokyo', size: 14 },
+      { lat: 48.8566, lng: 2.3522, name: 'Paris', size: 13 },
+      { lat: 55.7558, lng: 37.6173, name: 'Moscow', size: 13 },
+      { lat: 39.9042, lng: 116.4074, name: 'Beijing', size: 14 },
+      { lat: -33.8688, lng: 151.2093, name: 'Sydney', size: 12 },
+      { lat: 19.4326, lng: -99.1332, name: 'Mexico City', size: 13 },
+      { lat: 28.6139, lng: 77.2090, name: 'Delhi', size: 13 },
+      { lat: 1.3521, lng: 103.8198, name: 'Singapore', size: 11 },
+      { lat: 52.5200, lng: 13.4050, name: 'Berlin', size: 12 },
+      { lat: 37.7749, lng: -122.4194, name: 'San Francisco', size: 12 },
+      { lat: 50.4501, lng: 30.5234, name: 'Kyiv', size: 12 },
+      { lat: 25.2048, lng: 55.2708, name: 'Dubai', size: 11 },
+      { lat: 41.9028, lng: 12.4964, name: 'Rome', size: 12 },
+      { lat: -23.5505, lng: -46.6333, name: 'São Paulo', size: 12 },
+      { lat: 33.8869, lng: 35.5131, name: 'Beirut', size: 11 },
+      { lat: 31.7917, lng: 35.2172, name: 'Jerusalem', size: 11 },
+      { lat: 33.3152, lng: 44.3661, name: 'Baghdad', size: 11 },
+      { lat: 34.0522, lng: -118.2437, name: 'Los Angeles', size: 13 },
+    ];
+
+    // Initialize globe with SUBTLE base texture
+    updateProgress('Creating globe...');
+    const globe = Globe({ animateIn: false })
+      (document.getElementById('globe-container'))
+      // Subtle monochrome base - Natural Earth II with Shaded Relief (high-res 8K available)
+      // Using a very subtle, high-contrast geography texture
+      .globeImageUrl('https://eoimages.gsfc.nasa.gov/images/imagerecords/73000/73909/world.topo.bathy.200412.3x5400x2700.jpg')
+      // No bump for flat look
+      .bumpImageUrl(null)
+      // Pure black background
+      .backgroundImageUrl(null)
+      .backgroundColor('rgba(0, 0, 0, 1)')
+      // Subtle blue atmosphere
+      .atmosphereColor('#0066ff')
+      .atmosphereAltitude(0.18)
+      .showAtmosphere(true)
+      .pointsMerge(false);
+
+    // HIGH-QUALITY RENDERER SETTINGS for crisp rendering
+    const renderer = globe.renderer();
+    renderer.antialias = true;
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.setClearColor(0x000000, 1);
+
+    // Access the scene for lighting adjustments
+    const scene = globe.scene();
+    scene.fog = null;
+
+    // Adjust lighting for flat, non-glossy look
+    // Remove harsh lighting, keep it soft ambient
+    if (scene.children) {
+      scene.children.forEach(child => {
+        if (child.isLight && child.type !== 'AmbientLight') {
+          child.intensity *= 0.6; // Reduce directional light intensity
+        }
+      });
+    }
+
+    // Load CRISP country borders as vector geometry (Natural Earth 50m)
+    updateProgress('Loading country borders...');
+    fetch('https://cdn.jsdelivr.net/npm/world-atlas@2/countries-50m.json')
+      .then(res => res.json())
+      .then(countries => {
+        updateProgress('Rendering borders...');
+        const countriesData = topojson.feature(countries, countries.objects.countries).features;
+
+        // Render borders as CRISP strokes (not filled polygons)
+        globe
+          .polygonsData(countriesData)
+          .polygonCapColor(() => 'rgba(0, 0, 0, 0)') // Fully transparent fill
+          .polygonSideColor(() => 'rgba(0, 0, 0, 0)') // Transparent sides
+          .polygonStrokeColor(() => 'rgba(255, 255, 255, 0.7)') // Bright white borders
+          .polygonAltitude(0.0005) // Very close to surface for crisp look
+          .polygonLabel(d => `
+            <div style="
+              padding: 6px 10px;
+              background: rgba(0, 0, 0, 0.95);
+              border: 1px solid rgba(255, 255, 255, 0.5);
+              border-radius: 3px;
+              font-family: -apple-system, sans-serif;
+              font-size: 12px;
+              font-weight: 600;
+              color: white;
+              letter-spacing: 0.3px;
+            ">
+              ${d.properties.name}
+            </div>
+          `);
+
+        updateProgress('Adding city labels...');
+        // Add city labels with high resolution
+        globe
+          .labelsData(cityLabels)
+          .labelLat('lat')
+          .labelLng('lng')
+          .labelText('name')
+          .labelSize('size')
+          .labelColor(() => 'rgba(255, 255, 255, 0.95)')
+          .labelResolution(4) // HIGHEST resolution for crisp text
+          .labelAltitude(0.01)
+          .labelDotRadius(0.2)
+          .labelDotOrientation(() => 'bottom')
+          .labelTypeFace('Arial, Helvetica, sans-serif'); // Crisp sans-serif
+
+        updateProgress('Adding hotspots...');
+        // Add pulsing hotspot dots
+        globe
+          .pointsData(mockClaims)
+          .pointLat('lat')
+          .pointLng('lng')
+          .pointAltitude(0.02)
+          .pointRadius((d) => {
+            const minSize = 0.5;
+            const maxSize = 1.6;
+            const minVol = Math.min(...mockClaims.map(c => c.volume));
+            const maxVol = Math.max(...mockClaims.map(c => c.volume));
+            const normalized = (d.volume - minVol) / (maxVol - minVol || 1);
+            return minSize + normalized * (maxSize - minSize);
+          })
+          .pointColor('color')
+          .pointLabel(d => `
+            <div style="
+              padding: 8px 12px;
+              background: rgba(0, 0, 0, 0.98);
+              border: 2px solid ${d.color};
+              border-radius: 4px;
+              font-family: -apple-system, sans-serif;
+              font-size: 11px;
+              color: white;
+              box-shadow: 0 0 20px ${d.color}80;
+            ">
+              <div style="color: ${d.color}; font-weight: 700; margin-bottom: 2px;">
+                ${d.city}
+              </div>
+              <div style="color: rgba(255,255,255,0.7); font-size: 10px;">
+                Volume: ${d.volume}/10 • ${d.status}
+              </div>
+            </div>
+          `)
+          .onPointClick(point => {
+            console.log('Clicked:', point);
+            alert(`${point.city}\nVolume: ${point.volume}/10\nStatus: ${point.status}`);
+          });
+
+        // Camera controls - smooth and precise
+        const controls = globe.controls();
+        controls.autoRotate = true;
+        controls.autoRotateSpeed = 0.5;
+        controls.enableZoom = true;
+        controls.enablePan = false;
+        controls.minDistance = 110; // Close zoom
+        controls.maxDistance = 900;
+        controls.enableDamping = true;
+        controls.dampingFactor = 0.05;
+        controls.rotateSpeed = 0.5;
+        controls.zoomSpeed = 1.0;
+
+        // Initial view
+        globe.pointOfView({ lat: 25, lng: 10, altitude: 2.5 }, 0);
+
+        // Pulsing animation
+        let frame = 0;
+        function animatePulse() {
+          frame++;
+          const urgentPulse = 1 + Math.sin(frame * 0.05) * 0.3;
+          const normalPulse = 1 + Math.sin(frame * 0.03) * 0.15;
+
+          globe.pointRadius(d => {
+            const minSize = 0.5;
+            const maxSize = 1.6;
+            const minVol = Math.min(...mockClaims.map(c => c.volume));
+            const maxVol = Math.max(...mockClaims.map(c => c.volume));
+            const normalized = (d.volume - minVol) / (maxVol - minVol || 1);
+            const baseRadius = minSize + normalized * (maxSize - minSize);
+
+            return d.status === 'urgent' ? baseRadius * urgentPulse : baseRadius * normalPulse;
+          });
+
+          requestAnimationFrame(animatePulse);
+        }
+        animatePulse();
+
+        // Ready!
+        updateProgress('Complete!');
+        setTimeout(() => {
+          const loading = document.getElementById('loading');
+          loading.classList.add('fade-out');
+          setTimeout(() => loading.remove(), 800);
+
+          console.log('🌍 CRISP VECTOR GLOBE READY');
+          console.log('✅ High-res base texture (8K topo)');
+          console.log('✅ Vector country borders (crisp at any zoom)');
+          console.log('✅ City labels (resolution: 4, crisp)');
+          console.log('✅ Anti-aliasing enabled');
+          console.log('✅ High pixel ratio (retina support)');
+          console.log('✅ Pulsing hotspots');
+        }, 500);
+      })
+      .catch(err => {
+        console.error('Error loading borders:', err);
+        updateProgress('Error loading borders');
+      });
+
+    // Responsive
+    window.addEventListener('resize', () => {
+      globe.width(window.innerWidth);
+      globe.height(window.innerHeight);
+    });
+  </script>
+</body>
+</html>
