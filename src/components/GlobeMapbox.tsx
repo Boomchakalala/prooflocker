@@ -143,41 +143,50 @@ export default function GlobeMapbox({ claims, osint }: GlobeMapboxProps) {
   };
 
   const addMapLayers = () => {
-    if (!map.current) return;
+    if (!map.current) {
+      console.error('[GlobeMapbox] Cannot add layers - map not initialized');
+      return;
+    }
 
-    // Create GeoJSON features
-    const claimsFeatures = claims.map((claim) => ({
-      type: 'Feature',
-      geometry: { type: 'Point', coordinates: [claim.lng, claim.lat] },
-      properties: { ...claim },
-    }));
+    console.log('[GlobeMapbox] Starting to add layers with', claims.length, 'claims and', osint.length, 'OSINT items');
 
-    const osintFeatures = osint.map((item) => ({
-      type: 'Feature',
-      geometry: { type: 'Point', coordinates: [item.lng, item.lat] },
-      properties: { ...item, tags: JSON.stringify(item.tags) },
-    }));
+    try {
+      // Create GeoJSON features
+      const claimsFeatures = claims.map((claim) => ({
+        type: 'Feature',
+        geometry: { type: 'Point', coordinates: [claim.lng, claim.lat] },
+        properties: { ...claim },
+      }));
 
-    // Add OSINT source
-    map.current.addSource('osint', {
-      type: 'geojson',
-      data: { type: 'FeatureCollection', features: osintFeatures },
-      cluster: true,
-      clusterMaxZoom: 5,
-      clusterRadius: 60,
-    });
+      const osintFeatures = osint.map((item) => ({
+        type: 'Feature',
+        geometry: { type: 'Point', coordinates: [item.lng, item.lat] },
+        properties: { ...item, tags: JSON.stringify(item.tags) },
+      }));
 
-    // Add Claims source
-    map.current.addSource('claims', {
-      type: 'geojson',
-      data: { type: 'FeatureCollection', features: claimsFeatures },
-      cluster: true,
-      clusterMaxZoom: 5,
-      clusterRadius: 50,
-    });
+      console.log('[GlobeMapbox] Adding OSINT source');
+      // Add OSINT source
+      map.current.addSource('osint', {
+        type: 'geojson',
+        data: { type: 'FeatureCollection', features: osintFeatures },
+        cluster: true,
+        clusterMaxZoom: 5,
+        clusterRadius: 60,
+      });
 
-    // OSINT Layers (red)
-    map.current.addLayer({
+      console.log('[GlobeMapbox] Adding Claims source');
+      // Add Claims source
+      map.current.addSource('claims', {
+        type: 'geojson',
+        data: { type: 'FeatureCollection', features: claimsFeatures },
+        cluster: true,
+        clusterMaxZoom: 5,
+        clusterRadius: 50,
+      });
+
+      console.log('[GlobeMapbox] Adding OSINT layers');
+      // OSINT Layers (red)
+      map.current.addLayer({
       id: 'osint-clusters-glow',
       type: 'circle',
       source: 'osint',
