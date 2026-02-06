@@ -383,31 +383,31 @@ export default function GlobeMapbox({ claims, osint }: GlobeMapboxProps) {
     function showStackPanel(lngLat: any, claims: any[], osintItems: any[]) {
       const html = `
         <div style="
-          background: linear-gradient(135deg, #0A0A0F 0%, #111118 50%, #0A0A0F 100%);
-          border: 2px solid rgba(91,33,182,0.5);
-          border-radius: 16px;
+          background: linear-gradient(135deg, #0A0A0F 0%, #111118 100%);
+          border: 2px solid rgba(91,33,182,0.4);
+          border-radius: 14px;
           padding: 0;
-          max-width: 380px;
-          max-height: 450px;
-          box-shadow: 0 25px 50px rgba(0,0,0,0.8), 0 0 40px rgba(91,33,182,0.3);
+          min-width: 320px;
+          max-width: 360px;
+          max-height: 420px;
+          box-shadow: 0 20px 40px rgba(0,0,0,0.7), 0 0 30px rgba(91,33,182,0.25);
           font-family: system-ui, -apple-system, sans-serif;
         ">
           <!-- Header -->
           <div style="
-            padding: 16px 18px;
-            border-bottom: 1px solid rgba(91,33,182,0.3);
-            background: linear-gradient(90deg, rgba(91,33,182,0.15) 0%, transparent 100%);
+            padding: 14px 16px;
+            border-bottom: 1px solid rgba(91,33,182,0.25);
+            background: linear-gradient(90deg, rgba(91,33,182,0.12) 0%, transparent 100%);
           ">
             <div style="
-              font-size: 15px;
-              font-weight: 800;
+              font-size: 13px;
+              font-weight: 700;
               color: #ffffff;
               display: flex;
               align-items: center;
-              gap: 10px;
+              gap: 8px;
             ">
-              <span style="color: #8b5cf6;">${claims.length + osintItems.length}</span>
-              <span style="font-weight: 600; color: #a78bfa;">
+              <span style="color: #a78bfa; font-weight: 600;">
                 ${claims.length > 0 ? `${claims.length} Claim${claims.length !== 1 ? 's' : ''}` : ''}
                 ${claims.length > 0 && osintItems.length > 0 ? ' • ' : ''}
                 ${osintItems.length > 0 ? `${osintItems.length} OSINT` : ''}
@@ -415,199 +415,120 @@ export default function GlobeMapbox({ claims, osint }: GlobeMapboxProps) {
             </div>
           </div>
 
-          <!-- Scrollable content -->
-          <div style="max-height: 380px; overflow-y: auto;">
+          <!-- Content -->
+          <div style="max-height: 340px; overflow-y: auto; padding: 12px;">
             ${claims.length > 0 ? `
-              <!-- Claims Section -->
-              <div style="padding: 14px; border-bottom: 1px solid rgba(91,33,182,0.2);">
-                <div style="
-                  font-size: 11px;
-                  font-weight: 800;
-                  text-transform: uppercase;
-                  letter-spacing: 1.2px;
-                  color: #8b5cf6;
-                  margin-bottom: 12px;
-                  display: flex;
-                  align-items: center;
-                  gap: 7px;
-                ">
-                  <svg style="width: 15px; height: 15px; fill: currentColor;" viewBox="0 0 24 24">
-                    <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/>
-                  </svg>
-                  Claims
-                </div>
-                ${claims.map(claim => {
-                  const statusColor = {
-                    verified: '#8b5cf6',
-                    disputed: '#ef4444',
-                    void: '#6b7280',
-                    pending: '#f59e0b'
-                  }[claim.status] || '#f59e0b';
+              ${claims.map((claim, idx) => {
+                const statusColor = {
+                  verified: '#8b5cf6',
+                  disputed: '#ef4444',
+                  void: '#6b7280',
+                  pending: '#f59e0b'
+                }[claim.status] || '#f59e0b';
 
-                  return `
+                return `
+                  <div style="
+                    background: rgba(91,33,182,0.06);
+                    border: 1px solid rgba(91,33,182,0.25);
+                    border-radius: 10px;
+                    padding: 10px;
+                    margin-bottom: ${idx < claims.length - 1 || osintItems.length > 0 ? '10px' : '0'};
+                  ">
                     <div style="
-                      background: rgba(91,33,182,0.08);
-                      border: 1.5px solid rgba(91,33,182,0.3);
-                      border-radius: 12px;
-                      padding: 12px;
-                      margin-bottom: 10px;
-                    ">
-                      <div style="display: flex; gap: 10px; margin-bottom: 10px;">
-                        <div style="
-                          width: 34px;
-                          height: 34px;
-                          border-radius: 50%;
-                          background: linear-gradient(135deg, #5B21B6 0%, #2E5CFF 100%);
-                          display: flex;
-                          align-items: center;
-                          justify-content: center;
-                          flex-shrink: 0;
-                          box-shadow: 0 4px 15px rgba(91,33,182,0.4);
-                        ">
-                          <svg style="width: 17px; height: 17px; fill: white;" viewBox="0 0 24 24">
-                            <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/>
-                          </svg>
-                        </div>
-                        <div style="flex: 1;">
-                          <div style="
-                            font-size: 13px;
-                            font-weight: 600;
-                            line-height: 1.5;
-                            color: #ffffff;
-                            margin-bottom: 8px;
-                          ">${claim.claim}</div>
-                          <div style="display: flex; gap: 5px; flex-wrap: wrap;">
-                            <span style="
-                              padding: 3px 10px;
-                              background: rgba(91,33,182,0.25);
-                              border: 1px solid rgba(91,33,182,0.4);
-                              border-radius: 12px;
-                              font-size: 9px;
-                              font-weight: 800;
-                              color: #c4b5fd;
-                              text-transform: uppercase;
-                              letter-spacing: 0.6px;
-                            ">CLAIM</span>
-                            <span style="
-                              padding: 3px 10px;
-                              background: rgba(${statusColor === '#8b5cf6' ? '139,92,246' : statusColor === '#ef4444' ? '239,68,68' : '107,114,128'},0.25);
-                              border-radius: 12px;
-                              font-size: 9px;
-                              font-weight: 700;
-                              color: ${statusColor};
-                              text-transform: uppercase;
-                            ">${claim.status}</span>
-                            <span style="
-                              padding: 3px 10px;
-                              background: rgba(91,33,182,0.2);
-                              border-radius: 12px;
-                              font-size: 9px;
-                              font-weight: 700;
-                              color: #a78bfa;
-                            ">Rep ${claim.rep}</span>
-                          </div>
-                        </div>
-                      </div>
-                      <div style="
+                      font-size: 13px;
+                      font-weight: 600;
+                      line-height: 1.5;
+                      color: #ffffff;
+                      margin-bottom: 8px;
+                    ">${claim.claim}</div>
+                    <div style="display: flex; gap: 6px; flex-wrap: wrap; align-items: center;">
+                      <span style="
+                        padding: 3px 8px;
+                        background: rgba(91,33,182,0.2);
+                        border: 1px solid rgba(91,33,182,0.35);
+                        border-radius: 10px;
+                        font-size: 9px;
+                        font-weight: 700;
+                        color: #c4b5fd;
+                        text-transform: uppercase;
+                        letter-spacing: 0.5px;
+                      ">CLAIM</span>
+                      <span style="
+                        padding: 3px 8px;
+                        background: rgba(${statusColor === '#8b5cf6' ? '139,92,246' : statusColor === '#ef4444' ? '239,68,68' : statusColor === '#6b7280' ? '107,114,128' : '245,158,11'},0.2);
+                        border-radius: 10px;
+                        font-size: 9px;
+                        font-weight: 600;
+                        color: ${statusColor};
+                        text-transform: uppercase;
+                      ">${claim.status}</span>
+                      <span style="
+                        font-size: 10px;
+                        color: #9ca3af;
+                      ">Rep ${claim.rep}</span>
+                      <span style="
                         font-size: 10px;
                         color: #6b7280;
-                        padding-left: 44px;
-                      ">
-                        ${claim.submitter} • ${claim.confidence}% confidence
-                      </div>
+                      ">•</span>
+                      <span style="
+                        font-size: 10px;
+                        color: #9ca3af;
+                      ">${claim.submitter}</span>
                     </div>
-                  `;
-                }).join('')}
-              </div>
+                  </div>
+                `;
+              }).join('')}
             ` : ''}
 
             ${osintItems.length > 0 ? `
-              <!-- OSINT Section -->
-              <div style="padding: 14px;">
-                <div style="
-                  font-size: 11px;
-                  font-weight: 800;
-                  text-transform: uppercase;
-                  letter-spacing: 1.2px;
-                  color: #ef4444;
-                  margin-bottom: 12px;
-                  display: flex;
-                  align-items: center;
-                  gap: 7px;
-                ">
-                  <svg style="width: 15px; height: 15px; fill: currentColor;" viewBox="0 0 24 24">
-                    <path d="M13 3L4 14h7v7l9-11h-7V3z"/>
-                  </svg>
-                  OSINT Signals
-                </div>
-                ${osintItems.map(item => {
-                  const tags = typeof item.tags === 'string' ? JSON.parse(item.tags || '[]') : (item.tags || []);
-                  return `
+              ${osintItems.map((item, idx) => {
+                const tags = typeof item.tags === 'string' ? JSON.parse(item.tags || '[]') : (item.tags || []);
+                return `
+                  <div style="
+                    background: rgba(239,68,68,0.06);
+                    border: 1px solid rgba(239,68,68,0.25);
+                    border-radius: 10px;
+                    padding: 10px;
+                    margin-bottom: ${idx < osintItems.length - 1 ? '10px' : '0'};
+                  ">
                     <div style="
-                      background: rgba(239,68,68,0.08);
-                      border: 1.5px solid rgba(239,68,68,0.3);
-                      border-radius: 12px;
-                      padding: 12px;
-                      margin-bottom: 10px;
-                    ">
-                      <div style="display: flex; gap: 10px; align-items: center; margin-bottom: 8px;">
-                        <div style="
-                          width: 34px;
-                          height: 34px;
-                          border-radius: 50%;
-                          background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
-                          display: flex;
-                          align-items: center;
-                          justify-content: center;
-                          flex-shrink: 0;
-                          box-shadow: 0 4px 15px rgba(239,68,68,0.4);
-                        ">
-                          <svg style="width: 17px; height: 17px; fill: white;" viewBox="0 0 24 24">
-                            <path d="M13 3L4 14h7v7l9-11h-7V3z"/>
-                          </svg>
-                        </div>
-                        <div style="flex: 1;">
-                          <div style="
-                            font-size: 13px;
-                            font-weight: 600;
-                            color: #ffffff;
-                            line-height: 1.4;
-                            margin-bottom: 5px;
-                          ">${item.title}</div>
-                          <div style="display: flex; gap: 5px; flex-wrap: wrap; align-items: center;">
-                            <span style="
-                              padding: 3px 10px;
-                              background: rgba(239,68,68,0.25);
-                              border: 1px solid rgba(239,68,68,0.4);
-                              border-radius: 12px;
-                              font-size: 9px;
-                              font-weight: 800;
-                              color: #fca5a5;
-                              text-transform: uppercase;
-                              letter-spacing: 0.6px;
-                            ">OSINT SIGNAL</span>
-                            <span style="
-                              font-size: 10px;
-                              color: #ef4444;
-                              font-weight: 700;
-                            ">${item.source}</span>
-                            ${tags.slice(0, 2).map((tag: string) => `
-                              <span style="
-                                padding: 3px 8px;
-                                background: rgba(239,68,68,0.15);
-                                border-radius: 10px;
-                                font-size: 9px;
-                                font-weight: 600;
-                                color: #fca5a5;
-                              ">${tag}</span>
-                            `).join('')}
-                          </div>
-                        </div>
-                      </div>
+                      font-size: 13px;
+                      font-weight: 600;
+                      color: #ffffff;
+                      line-height: 1.5;
+                      margin-bottom: 8px;
+                    ">${item.title}</div>
+                    <div style="display: flex; gap: 6px; flex-wrap: wrap; align-items: center;">
+                      <span style="
+                        padding: 3px 8px;
+                        background: rgba(239,68,68,0.2);
+                        border: 1px solid rgba(239,68,68,0.35);
+                        border-radius: 10px;
+                        font-size: 9px;
+                        font-weight: 700;
+                        color: #fca5a5;
+                        text-transform: uppercase;
+                        letter-spacing: 0.5px;
+                      ">OSINT</span>
+                      <span style="
+                        font-size: 10px;
+                        color: #ef4444;
+                        font-weight: 600;
+                      ">${item.source}</span>
+                      ${tags.slice(0, 2).map((tag: string) => `
+                        <span style="
+                          padding: 3px 7px;
+                          background: rgba(239,68,68,0.12);
+                          border-radius: 8px;
+                          font-size: 9px;
+                          font-weight: 600;
+                          color: #fca5a5;
+                        ">${tag}</span>
+                      `).join('')}
                     </div>
-                  `;
-                }).join('')}
-              </div>
+                  </div>
+                `;
+              }).join('')}
             ` : ''}
           </div>
         </div>
@@ -617,7 +538,7 @@ export default function GlobeMapbox({ claims, osint }: GlobeMapboxProps) {
         offset: 15,
         closeButton: true,
         closeOnClick: true,
-        maxWidth: '400px',
+        maxWidth: '380px',
         className: 'stack-panel-popup'
       })
         .setLngLat(lngLat)
