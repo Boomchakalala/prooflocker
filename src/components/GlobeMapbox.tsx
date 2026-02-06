@@ -90,17 +90,30 @@ export default function GlobeMapbox({ claims, osint }: GlobeMapboxProps) {
         map.current = new mapboxgl.Map({
           container: mapContainer.current,
           style: 'mapbox://styles/mapbox/dark-v11',
-          projection: 'mercator', // Use mercator instead of globe for free tier
+          projection: 'globe', // 3D globe projection
           center: [15, 35],
           zoom: 1.5,
-          pitch: 0,
-          bearing: 0,
           attributionControl: false,
         });
 
         map.current.on('load', () => {
           console.log('[Globe] Map loaded successfully');
           setMapLoaded(true);
+
+          // Set fog/atmosphere for globe
+          try {
+            map.current.setFog({
+              range: [0.5, 10],
+              color: '#0f172a',
+              'horizon-blend': 0.1,
+              'high-color': '#1e293b',
+              'space-color': '#0f172a',
+              'star-intensity': 0.3,
+            });
+            console.log('[Globe] Atmosphere configured');
+          } catch (err) {
+            console.warn('[Globe] Could not set fog:', err);
+          }
 
           // Add sources
           map.current.addSource('osint', {
