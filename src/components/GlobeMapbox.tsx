@@ -675,24 +675,27 @@ export default function GlobeMapbox({ claims, osint }: GlobeMapboxProps) {
       />
 
       {!mapReady && !error && (
-        <div className="absolute inset-0 flex items-center justify-center bg-[#0f172a]/90 z-[999]">
+        <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-b from-[#1a0f2e]/90 to-[#0f172a]/90 z-[999]">
           <div className="text-center">
-            <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-[#14b8a6] mx-auto mb-4" />
-            <p className="text-[#94a3b8]">Loading globe...</p>
+            <div className="relative mb-4 mx-auto w-16 h-16">
+              <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-purple-500" />
+              <div className="absolute inset-0 rounded-full bg-purple-500/20 blur-xl animate-pulse" />
+            </div>
+            <p className="text-purple-300 font-medium">Loading globe...</p>
             <p className="text-[#64748b] text-sm mt-2">Initializing Mapbox GL</p>
           </div>
         </div>
       )}
 
       {error && (
-        <div className="absolute inset-0 flex items-center justify-center bg-[#0f172a]/90 z-[999]">
+        <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-b from-[#1a0f2e]/90 to-[#0f172a]/90 z-[999]">
           <div className="text-center max-w-md px-6">
             <div className="text-[#ef4444] text-5xl mb-4">⚠️</div>
             <p className="text-[#f8fafc] text-lg font-semibold mb-2">Failed to load globe</p>
             <p className="text-[#94a3b8] text-sm mb-4">{error}</p>
             <button
               onClick={() => window.location.reload()}
-              className="px-4 py-2 bg-[#14b8a6] text-[#0f172a] rounded-lg text-sm font-semibold hover:bg-[#0d9488]"
+              className="px-6 py-3 bg-gradient-to-r from-purple-600 to-purple-700 text-white rounded-lg text-sm font-semibold hover:from-purple-500 hover:to-purple-600 shadow-[0_0_20px_rgba(139,92,246,0.3)] transition-all"
             >
               Reload Page
             </button>
@@ -806,8 +809,8 @@ export default function GlobeMapbox({ claims, osint }: GlobeMapboxProps) {
           onClick={() => toggleLayer('claims')}
           className={`w-[42px] h-[42px] rounded-lg flex items-center justify-center transition-all ${
             claimsLayerVisible
-              ? 'bg-[#14b8a6] text-[#0f172a]'
-              : 'bg-[#0f172a]/95 text-[#94a3b8] border border-[rgba(148,163,184,0.1)]'
+              ? 'bg-gradient-to-br from-purple-600 to-purple-700 text-white shadow-[0_0_20px_rgba(139,92,246,0.4)]'
+              : 'bg-[#0f172a]/95 text-[#94a3b8] border border-purple-500/20 hover:bg-purple-500/10'
           }`}
         >
           <svg className="w-[18px] h-[18px]" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
@@ -819,8 +822,8 @@ export default function GlobeMapbox({ claims, osint }: GlobeMapboxProps) {
           onClick={() => toggleLayer('osint')}
           className={`w-[42px] h-[42px] rounded-lg flex items-center justify-center transition-all ${
             osintLayerVisible
-              ? 'bg-[#14b8a6] text-[#0f172a]'
-              : 'bg-[#0f172a]/95 text-[#94a3b8] border border-[rgba(148,163,184,0.1)]'
+              ? 'bg-gradient-to-br from-red-600 to-red-700 text-white shadow-[0_0_20px_rgba(239,68,68,0.4)]'
+              : 'bg-[#0f172a]/95 text-[#94a3b8] border border-purple-500/20 hover:bg-red-500/10'
           }`}
         >
           <svg className="w-[18px] h-[18px]" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
@@ -832,8 +835,8 @@ export default function GlobeMapbox({ claims, osint }: GlobeMapboxProps) {
           onClick={() => toggleLayer('heatmap')}
           className={`w-[42px] h-[42px] rounded-lg flex items-center justify-center transition-all ${
             heatmapVisible
-              ? 'bg-[#14b8a6] text-[#0f172a]'
-              : 'bg-[#0f172a]/95 text-[#94a3b8] border border-[rgba(148,163,184,0.1)]'
+              ? 'bg-gradient-to-br from-purple-600 to-purple-700 text-white shadow-[0_0_20px_rgba(139,92,246,0.4)]'
+              : 'bg-[#0f172a]/95 text-[#94a3b8] border border-purple-500/20 hover:bg-purple-500/10'
           }`}
         >
           <svg className="w-[18px] h-[18px]" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
@@ -843,7 +846,7 @@ export default function GlobeMapbox({ claims, osint }: GlobeMapboxProps) {
 
         <button
           onClick={resetView}
-          className="w-[42px] h-[42px] bg-[#0f172a]/95 text-[#94a3b8] border border-[rgba(148,163,184,0.1)] rounded-lg flex items-center justify-center transition-all hover:border-[#14b8a6] hover:text-[#14b8a6]"
+          className="w-[42px] h-[42px] bg-[#0f172a]/95 text-[#94a3b8] border border-purple-500/20 rounded-lg flex items-center justify-center transition-all hover:border-purple-500 hover:text-purple-300 hover:bg-purple-500/10"
         >
           <svg className="w-[18px] h-[18px]" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
