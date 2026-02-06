@@ -41,8 +41,6 @@ export default function GlobeMapbox({ claims, osint }: GlobeMapboxProps) {
   const [mapReady, setMapReady] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  console.log('[Globe] Render - claims:', claims.length, 'osint:', osint.length, 'mapReady:', mapReady);
-
   // Create GeoJSON
   const createClaimsGeoJSON = () => ({
     type: 'FeatureCollection' as const,
@@ -349,20 +347,125 @@ export default function GlobeMapbox({ claims, osint }: GlobeMapboxProps) {
     // Point clicks
     map.current.on('click', 'claims-points', (e: any) => {
       const props = e.features[0].properties;
+      const statusColors: any = {
+        verified: '#14b8a6',
+        disputed: '#ef4444',
+        void: '#6b7280',
+        pending: '#f59e0b'
+      };
+      const statusColor = statusColors[props.status] || '#f59e0b';
+
       const html = `
-        <div style="padding: 8px; max-width: 300px;">
-          <div style="font-size: 14px; font-weight: 600; margin-bottom: 8px;">${props.claim}</div>
-          <div style="display: flex; gap: 8px; margin-bottom: 8px; font-size: 12px;">
-            <span style="font-weight: 600;">${props.submitter}</span>
-            <span style="color: #14b8a6;">Rep: ${props.rep}</span>
+        <div style="
+          background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+          border: 2px solid ${statusColor};
+          border-radius: 12px;
+          padding: 16px;
+          max-width: 350px;
+          box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+        ">
+          <div style="
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 12px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(148,163,184,0.2);
+          ">
+            <svg style="width: 16px; height: 16px; fill: ${statusColor};" viewBox="0 0 24 24">
+              <path d="M12 2L2 7v10c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V7l-10-5z"/>
+            </svg>
+            <span style="
+              font-size: 11px;
+              font-weight: 700;
+              text-transform: uppercase;
+              letter-spacing: 1px;
+              color: ${statusColor};
+            ">${props.status}</span>
           </div>
-          <div style="font-size: 11px; color: #666;">
-            <div>Locked: ${props.lockedDate}</div>
-            <div>Confidence: ${props.confidence}%</div>
+
+          <div style="
+            font-size: 15px;
+            font-weight: 600;
+            line-height: 1.5;
+            color: #f8fafc;
+            margin-bottom: 14px;
+          ">${props.claim}</div>
+
+          <div style="
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 12px;
+            padding: 10px;
+            background: rgba(20,184,166,0.1);
+            border-radius: 8px;
+            border: 1px solid rgba(20,184,166,0.2);
+          ">
+            <div>
+              <div style="font-size: 10px; color: #64748b; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px;">Submitter</div>
+              <div style="font-size: 13px; font-weight: 700; color: #14b8a6;">${props.submitter}</div>
+            </div>
+            <div style="text-align: right;">
+              <div style="font-size: 10px; color: #64748b; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px;">Reputation</div>
+              <div style="font-size: 13px; font-weight: 700; color: #14b8a6;">${props.rep}</div>
+            </div>
+          </div>
+
+          <div style="
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px;
+            background: rgba(148,163,184,0.05);
+            border-radius: 8px;
+            margin-bottom: 10px;
+          ">
+            <div style="flex: 1;">
+              <div style="font-size: 10px; color: #64748b; margin-bottom: 4px;">Confidence</div>
+              <div style="
+                height: 6px;
+                background: rgba(148,163,184,0.2);
+                border-radius: 3px;
+                overflow: hidden;
+              ">
+                <div style="
+                  height: 100%;
+                  width: ${props.confidence}%;
+                  background: linear-gradient(90deg, #14b8a6, #0d9488);
+                  border-radius: 3px;
+                "></div>
+              </div>
+            </div>
+            <div style="
+              font-size: 16px;
+              font-weight: 700;
+              color: #14b8a6;
+            ">${props.confidence}%</div>
+          </div>
+
+          <div style="
+            font-size: 11px;
+            color: #64748b;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+          ">
+            <svg style="width: 12px; height: 12px; fill: currentColor;" viewBox="0 0 24 24">
+              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/>
+            </svg>
+            Locked: ${props.lockedDate}
           </div>
         </div>
       `;
-      new mapboxgl.Popup({ offset: 15 })
+
+      new mapboxgl.Popup({
+        offset: 15,
+        closeButton: true,
+        closeOnClick: true,
+        maxWidth: '400px',
+        className: 'claim-popup'
+      })
         .setLngLat(e.features[0].geometry.coordinates)
         .setHTML(html)
         .addTo(map.current);
@@ -371,19 +474,93 @@ export default function GlobeMapbox({ claims, osint }: GlobeMapboxProps) {
     map.current.on('click', 'osint-points', (e: any) => {
       const props = e.features[0].properties;
       const tags = JSON.parse(props.tags || '[]');
+
       const html = `
-        <div style="padding: 8px; max-width: 300px;">
-          <div style="font-size: 14px; font-weight: 600; margin-bottom: 8px;">${props.title}</div>
-          <div style="font-size: 12px; margin-bottom: 8px;">
-            <span style="font-weight: 600;">${props.source}</span>
-            <span style="color: #666; margin-left: 8px;">${props.timestamp}</span>
+        <div style="
+          background: linear-gradient(135deg, #450a0a 0%, #0f172a 100%);
+          border: 2px solid #ef4444;
+          border-radius: 12px;
+          padding: 16px;
+          max-width: 350px;
+          box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+        ">
+          <div style="
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 12px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(239,68,68,0.3);
+          ">
+            <svg style="width: 16px; height: 16px; fill: #ef4444;" viewBox="0 0 24 24">
+              <path d="M13 3L4 14h7v7l9-11h-7V3z"/>
+            </svg>
+            <span style="
+              font-size: 11px;
+              font-weight: 700;
+              text-transform: uppercase;
+              letter-spacing: 1px;
+              color: #ef4444;
+            ">OSINT Signal</span>
           </div>
-          <div style="display: flex; gap: 4px; flex-wrap: wrap;">
-            ${tags.map((tag: string) => `<span style="padding: 2px 6px; background: #ef4444; color: white; border-radius: 4px; font-size: 10px;">${tag}</span>`).join('')}
+
+          <div style="
+            font-size: 15px;
+            font-weight: 600;
+            line-height: 1.5;
+            color: #f8fafc;
+            margin-bottom: 14px;
+          ">${props.title}</div>
+
+          <div style="
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 12px;
+            padding: 10px;
+            background: rgba(239,68,68,0.1);
+            border-radius: 8px;
+            border: 1px solid rgba(239,68,68,0.2);
+          ">
+            <div>
+              <div style="font-size: 10px; color: #fca5a5; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px;">Source</div>
+              <div style="font-size: 13px; font-weight: 700; color: #ef4444;">${props.source}</div>
+            </div>
+            <div style="text-align: right;">
+              <div style="font-size: 10px; color: #fca5a5; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px;">Time</div>
+              <div style="font-size: 13px; font-weight: 700; color: #ef4444;">${props.timestamp}</div>
+            </div>
+          </div>
+
+          <div style="
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+          ">
+            ${tags.map((tag: string) => `
+              <span style="
+                padding: 4px 10px;
+                background: rgba(239,68,68,0.15);
+                border: 1px solid rgba(239,68,68,0.3);
+                border-radius: 12px;
+                font-size: 10px;
+                font-weight: 600;
+                color: #ef4444;
+                text-transform: uppercase;
+                letter-spacing: 0.5px;
+              ">${tag}</span>
+            `).join('')}
           </div>
         </div>
       `;
-      new mapboxgl.Popup({ offset: 15 })
+
+      new mapboxgl.Popup({
+        offset: 15,
+        closeButton: true,
+        closeOnClick: true,
+        maxWidth: '400px',
+        className: 'osint-popup'
+      })
         .setLngLat(e.features[0].geometry.coordinates)
         .setHTML(html)
         .addTo(map.current);
@@ -432,15 +609,6 @@ export default function GlobeMapbox({ claims, osint }: GlobeMapboxProps) {
 
   return (
     <div className="relative w-full h-full bg-[#0f172a]" style={{ minHeight: '100vh', width: '100%' }}>
-      {/* Debug info */}
-      <div className="absolute top-4 left-4 z-[2000] bg-black/80 text-white p-3 rounded-lg text-xs font-mono">
-        <div>Claims: {claims.length}</div>
-        <div>OSINT: {osint.length}</div>
-        <div>Map Ready: {mapReady ? '✅' : '⏳'}</div>
-        <div>Container: {mapContainer.current ? '✅' : '❌'}</div>
-        {error && <div className="text-red-400">Error: {error}</div>}
-      </div>
-
       <div
         ref={mapContainer}
         className="absolute inset-0 w-full h-full"
