@@ -448,7 +448,7 @@ export default function GlobeMapbox({ claims, osint }: GlobeMapboxProps) {
       />
 
       {!mapReady && !error && (
-        <div className="absolute inset-0 flex items-center justify-center bg-[#0f172a] z-[1000]">
+        <div className="absolute inset-0 flex items-center justify-center bg-[#0f172a]/90 z-[999]">
           <div className="text-center">
             <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-[#14b8a6] mx-auto mb-4" />
             <p className="text-[#94a3b8]">Loading globe...</p>
@@ -458,7 +458,7 @@ export default function GlobeMapbox({ claims, osint }: GlobeMapboxProps) {
       )}
 
       {error && (
-        <div className="absolute inset-0 flex items-center justify-center bg-[#0f172a] z-[1000]">
+        <div className="absolute inset-0 flex items-center justify-center bg-[#0f172a]/90 z-[999]">
           <div className="text-center max-w-md px-6">
             <div className="text-[#ef4444] text-5xl mb-4">⚠️</div>
             <p className="text-[#f8fafc] text-lg font-semibold mb-2">Failed to load globe</p>
