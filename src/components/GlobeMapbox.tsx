@@ -323,138 +323,292 @@ export default function GlobeMapbox({ claims, osint }: GlobeMapboxProps) {
       });
     });
 
-    // Cluster clicks
-    map.current.on('click', 'claims-clusters', (e: any) => {
-      const features = map.current.queryRenderedFeatures(e.point, { layers: ['claims-clusters'] });
-      const clusterId = features[0].properties.cluster_id;
-      map.current.getSource('claims').getClusterExpansionZoom(clusterId, (err: any, zoom: any) => {
-        if (!err) {
-          map.current.easeTo({ center: features[0].geometry.coordinates, zoom, duration: 500 });
+    // Unified click handler for Stack Panel
+    map.current.on('click', (e: any) => {
+      const bbox = [
+        [e.point.x - 10, e.point.y - 10],
+        [e.point.x + 10, e.point.y + 10]
+      ];
+
+      // Query both layers
+      const claimFeatures = map.current.queryRenderedFeatures(bbox, {
+        layers: ['claims-points', 'claims-clusters']
+      });
+      const osintFeatures = map.current.queryRenderedFeatures(bbox, {
+        layers: ['osint-points', 'osint-clusters']
+      });
+
+      if (claimFeatures.length === 0 && osintFeatures.length === 0) return;
+
+      // Collect all items
+      const claimsList: any[] = [];
+      const osintList: any[] = [];
+
+      // Process claims
+      claimFeatures.slice(0, 3).forEach((feature: any) => {
+        if (feature.properties.cluster) {
+          // Handle cluster - get leaves
+          const clusterId = feature.properties.cluster_id;
+          map.current.getSource('claims').getClusterLeaves(clusterId, 3, 0, (err: any, features: any) => {
+            if (!err && features) {
+              features.forEach((f: any) => claimsList.push(f.properties));
+            }
+          });
+        } else {
+          claimsList.push(feature.properties);
         }
       });
-    });
 
-    map.current.on('click', 'osint-clusters', (e: any) => {
-      const features = map.current.queryRenderedFeatures(e.point, { layers: ['osint-clusters'] });
-      const clusterId = features[0].properties.cluster_id;
-      map.current.getSource('osint').getClusterExpansionZoom(clusterId, (err: any, zoom: any) => {
-        if (!err) {
-          map.current.easeTo({ center: features[0].geometry.coordinates, zoom, duration: 500 });
+      // Process OSINT
+      osintFeatures.slice(0, 3).forEach((feature: any) => {
+        if (feature.properties.cluster) {
+          const clusterId = feature.properties.cluster_id;
+          map.current.getSource('osint').getClusterLeaves(clusterId, 3, 0, (err: any, features: any) => {
+            if (!err && features) {
+              features.forEach((f: any) => osintList.push(f.properties));
+            }
+          });
+        } else {
+          osintList.push(feature.properties);
         }
       });
+
+      // Wait a bit for async cluster data
+      setTimeout(() => {
+        if (claimsList.length === 0 && osintList.length === 0) return;
+        showStackPanel(e.lngLat, claimsList, osintList);
+      }, 100);
     });
 
-    // Point clicks
-    map.current.on('click', 'claims-points', (e: any) => {
-      const props = e.features[0].properties;
-      const statusColors: any = {
-        verified: '#14b8a6',
-        disputed: '#ef4444',
-        void: '#6b7280',
-        pending: '#f59e0b'
-      };
-      const statusColor = statusColors[props.status] || '#f59e0b';
-
+    function showStackPanel(lngLat: any, claims: any[], osintItems: any[]) {
       const html = `
         <div style="
-          background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
-          border: 2px solid ${statusColor};
+          background: linear-gradient(135deg, #1e1b2e 0%, #0f0a1a 100%);
+          border: 2px solid rgba(139,92,246,0.4);
           border-radius: 12px;
-          padding: 16px;
-          max-width: 350px;
-          box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+          padding: 0;
+          max-width: 380px;
+          max-height: 450px;
+          box-shadow: 0 20px 40px rgba(0,0,0,0.6), 0 0 30px rgba(139,92,246,0.2);
+          font-family: system-ui, -apple-system, sans-serif;
         ">
+          <!-- Header -->
           <div style="
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            margin-bottom: 12px;
-            padding-bottom: 10px;
-            border-bottom: 1px solid rgba(148,163,184,0.2);
+            padding: 14px 16px;
+            border-bottom: 1px solid rgba(139,92,246,0.2);
+            background: linear-gradient(90deg, rgba(139,92,246,0.1) 0%, transparent 100%);
           ">
-            <svg style="width: 16px; height: 16px; fill: ${statusColor};" viewBox="0 0 24 24">
-              <path d="M12 2L2 7v10c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V7l-10-5z"/>
-            </svg>
-            <span style="
-              font-size: 11px;
-              font-weight: 700;
-              text-transform: uppercase;
-              letter-spacing: 1px;
-              color: ${statusColor};
-            ">${props.status}</span>
-          </div>
-
-          <div style="
-            font-size: 15px;
-            font-weight: 600;
-            line-height: 1.5;
-            color: #f8fafc;
-            margin-bottom: 14px;
-          ">${props.claim}</div>
-
-          <div style="
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 12px;
-            padding: 10px;
-            background: rgba(20,184,166,0.1);
-            border-radius: 8px;
-            border: 1px solid rgba(20,184,166,0.2);
-          ">
-            <div>
-              <div style="font-size: 10px; color: #64748b; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px;">Submitter</div>
-              <div style="font-size: 13px; font-weight: 700; color: #14b8a6;">${props.submitter}</div>
-            </div>
-            <div style="text-align: right;">
-              <div style="font-size: 10px; color: #64748b; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px;">Reputation</div>
-              <div style="font-size: 13px; font-weight: 700; color: #14b8a6;">${props.rep}</div>
-            </div>
-          </div>
-
-          <div style="
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 10px;
-            background: rgba(148,163,184,0.05);
-            border-radius: 8px;
-            margin-bottom: 10px;
-          ">
-            <div style="flex: 1;">
-              <div style="font-size: 10px; color: #64748b; margin-bottom: 4px;">Confidence</div>
-              <div style="
-                height: 6px;
-                background: rgba(148,163,184,0.2);
-                border-radius: 3px;
-                overflow: hidden;
-              ">
-                <div style="
-                  height: 100%;
-                  width: ${props.confidence}%;
-                  background: linear-gradient(90deg, #14b8a6, #0d9488);
-                  border-radius: 3px;
-                "></div>
-              </div>
-            </div>
             <div style="
-              font-size: 16px;
+              font-size: 14px;
               font-weight: 700;
-              color: #14b8a6;
-            ">${props.confidence}%</div>
+              color: #f8fafc;
+              display: flex;
+              align-items: center;
+              gap: 8px;
+            ">
+              <span style="color: #8b5cf6;">${claims.length + osintItems.length}</span>
+              <span style="font-weight: 500; color: #94a3b8;">
+                ${claims.length > 0 ? `${claims.length} Claim${claims.length !== 1 ? 's' : ''}` : ''}
+                ${claims.length > 0 && osintItems.length > 0 ? ' • ' : ''}
+                ${osintItems.length > 0 ? `${osintItems.length} OSINT` : ''}
+              </span>
+            </div>
           </div>
 
-          <div style="
-            font-size: 11px;
-            color: #64748b;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-          ">
-            <svg style="width: 12px; height: 12px; fill: currentColor;" viewBox="0 0 24 24">
-              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/>
-            </svg>
-            Locked: ${props.lockedDate}
+          <!-- Scrollable content -->
+          <div style="max-height: 380px; overflow-y: auto;">
+            ${claims.length > 0 ? `
+              <!-- Claims Section -->
+              <div style="padding: 12px; border-bottom: 1px solid rgba(139,92,246,0.15);">
+                <div style="
+                  font-size: 11px;
+                  font-weight: 700;
+                  text-transform: uppercase;
+                  letter-spacing: 1px;
+                  color: #8b5cf6;
+                  margin-bottom: 10px;
+                  display: flex;
+                  align-items: center;
+                  gap: 6px;
+                ">
+                  <svg style="width: 14px; height: 14px; fill: currentColor;" viewBox="0 0 24 24">
+                    <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/>
+                  </svg>
+                  Claims
+                </div>
+                ${claims.map(claim => {
+                  const statusColor = {
+                    verified: '#8b5cf6',
+                    disputed: '#ef4444',
+                    void: '#6b7280',
+                    pending: '#f59e0b'
+                  }[claim.status] || '#f59e0b';
+
+                  return `
+                    <div style="
+                      background: rgba(139,92,246,0.05);
+                      border: 1.5px solid rgba(139,92,246,0.2);
+                      border-radius: 10px;
+                      padding: 10px;
+                      margin-bottom: 8px;
+                    ">
+                      <div style="display: flex; gap: 8px; margin-bottom: 8px;">
+                        <div style="
+                          width: 32px;
+                          height: 32px;
+                          border-radius: 50%;
+                          background: linear-gradient(135deg, #8b5cf6 0%, #6d28d9 100%);
+                          display: flex;
+                          align-items: center;
+                          justify-content: center;
+                          flex-shrink: 0;
+                          box-shadow: 0 4px 12px rgba(139,92,246,0.3);
+                        ">
+                          <svg style="width: 16px; height: 16px; fill: white;" viewBox="0 0 24 24">
+                            <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/>
+                          </svg>
+                        </div>
+                        <div style="flex: 1;">
+                          <div style="
+                            font-size: 13px;
+                            font-weight: 600;
+                            line-height: 1.4;
+                            color: #f8fafc;
+                            margin-bottom: 6px;
+                          ">${claim.claim}</div>
+                          <div style="display: flex; gap: 4px; flex-wrap: wrap;">
+                            <span style="
+                              padding: 2px 8px;
+                              background: rgba(139,92,246,0.2);
+                              border: 1px solid rgba(139,92,246,0.3);
+                              border-radius: 10px;
+                              font-size: 9px;
+                              font-weight: 700;
+                              color: #a78bfa;
+                              text-transform: uppercase;
+                              letter-spacing: 0.5px;
+                            ">CLAIM</span>
+                            <span style="
+                              padding: 2px 8px;
+                              background: rgba(${statusColor === '#8b5cf6' ? '139,92,246' : statusColor === '#ef4444' ? '239,68,68' : '107,114,128'},0.2);
+                              border-radius: 10px;
+                              font-size: 9px;
+                              font-weight: 600;
+                              color: ${statusColor};
+                              text-transform: uppercase;
+                            ">${claim.status}</span>
+                            <span style="
+                              padding: 2px 8px;
+                              background: rgba(139,92,246,0.15);
+                              border-radius: 10px;
+                              font-size: 9px;
+                              font-weight: 600;
+                              color: #a78bfa;
+                            ">Rep ${claim.rep}</span>
+                          </div>
+                        </div>
+                      </div>
+                      <div style="
+                        font-size: 10px;
+                        color: #64748b;
+                        padding-left: 40px;
+                      ">
+                        ${claim.submitter} • ${claim.confidence}% confidence
+                      </div>
+                    </div>
+                  `;
+                }).join('')}
+              </div>
+            ` : ''}
+
+            ${osintItems.length > 0 ? `
+              <!-- OSINT Section -->
+              <div style="padding: 12px;">
+                <div style="
+                  font-size: 11px;
+                  font-weight: 700;
+                  text-transform: uppercase;
+                  letter-spacing: 1px;
+                  color: #ef4444;
+                  margin-bottom: 10px;
+                  display: flex;
+                  align-items: center;
+                  gap: 6px;
+                ">
+                  <svg style="width: 14px; height: 14px; fill: currentColor;" viewBox="0 0 24 24">
+                    <path d="M13 3L4 14h7v7l9-11h-7V3z"/>
+                  </svg>
+                  OSINT Signals
+                </div>
+                ${osintItems.map(item => {
+                  const tags = typeof item.tags === 'string' ? JSON.parse(item.tags || '[]') : (item.tags || []);
+                  return `
+                    <div style="
+                      background: rgba(239,68,68,0.05);
+                      border: 1.5px solid rgba(239,68,68,0.2);
+                      border-radius: 10px;
+                      padding: 10px;
+                      margin-bottom: 8px;
+                    ">
+                      <div style="display: flex; gap: 8px; align-items: center; margin-bottom: 6px;">
+                        <div style="
+                          width: 32px;
+                          height: 32px;
+                          border-radius: 50%;
+                          background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+                          display: flex;
+                          align-items: center;
+                          justify-content: center;
+                          flex-shrink: 0;
+                          box-shadow: 0 4px 12px rgba(239,68,68,0.3);
+                        ">
+                          <svg style="width: 16px; height: 16px; fill: white;" viewBox="0 0 24 24">
+                            <path d="M13 3L4 14h7v7l9-11h-7V3z"/>
+                          </svg>
+                        </div>
+                        <div style="flex: 1;">
+                          <div style="
+                            font-size: 12px;
+                            font-weight: 600;
+                            color: #f8fafc;
+                            line-height: 1.3;
+                            margin-bottom: 4px;
+                          ">${item.title}</div>
+                          <div style="display: flex; gap: 4px; flex-wrap: wrap; align-items: center;">
+                            <span style="
+                              padding: 2px 8px;
+                              background: rgba(239,68,68,0.2);
+                              border: 1px solid rgba(239,68,68,0.3);
+                              border-radius: 10px;
+                              font-size: 9px;
+                              font-weight: 700;
+                              color: #fca5a5;
+                              text-transform: uppercase;
+                              letter-spacing: 0.5px;
+                            ">OSINT SIGNAL</span>
+                            <span style="
+                              font-size: 10px;
+                              color: #ef4444;
+                              font-weight: 600;
+                            ">${item.source}</span>
+                            ${tags.slice(0, 2).map((tag: string) => `
+                              <span style="
+                                padding: 2px 6px;
+                                background: rgba(239,68,68,0.1);
+                                border-radius: 8px;
+                                font-size: 9px;
+                                font-weight: 500;
+                                color: #fca5a5;
+                              ">${tag}</span>
+                            `).join('')}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  `;
+                }).join('')}
+              </div>
+            ` : ''}
           </div>
         </div>
       `;
@@ -464,107 +618,12 @@ export default function GlobeMapbox({ claims, osint }: GlobeMapboxProps) {
         closeButton: true,
         closeOnClick: true,
         maxWidth: '400px',
-        className: 'claim-popup'
+        className: 'stack-panel-popup'
       })
-        .setLngLat(e.features[0].geometry.coordinates)
+        .setLngLat(lngLat)
         .setHTML(html)
         .addTo(map.current);
-    });
-
-    map.current.on('click', 'osint-points', (e: any) => {
-      const props = e.features[0].properties;
-      const tags = JSON.parse(props.tags || '[]');
-
-      const html = `
-        <div style="
-          background: linear-gradient(135deg, #450a0a 0%, #0f172a 100%);
-          border: 2px solid #ef4444;
-          border-radius: 12px;
-          padding: 16px;
-          max-width: 350px;
-          box-shadow: 0 20px 40px rgba(0,0,0,0.5);
-        ">
-          <div style="
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            margin-bottom: 12px;
-            padding-bottom: 10px;
-            border-bottom: 1px solid rgba(239,68,68,0.3);
-          ">
-            <svg style="width: 16px; height: 16px; fill: #ef4444;" viewBox="0 0 24 24">
-              <path d="M13 3L4 14h7v7l9-11h-7V3z"/>
-            </svg>
-            <span style="
-              font-size: 11px;
-              font-weight: 700;
-              text-transform: uppercase;
-              letter-spacing: 1px;
-              color: #ef4444;
-            ">OSINT Signal</span>
-          </div>
-
-          <div style="
-            font-size: 15px;
-            font-weight: 600;
-            line-height: 1.5;
-            color: #f8fafc;
-            margin-bottom: 14px;
-          ">${props.title}</div>
-
-          <div style="
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 12px;
-            padding: 10px;
-            background: rgba(239,68,68,0.1);
-            border-radius: 8px;
-            border: 1px solid rgba(239,68,68,0.2);
-          ">
-            <div>
-              <div style="font-size: 10px; color: #fca5a5; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px;">Source</div>
-              <div style="font-size: 13px; font-weight: 700; color: #ef4444;">${props.source}</div>
-            </div>
-            <div style="text-align: right;">
-              <div style="font-size: 10px; color: #fca5a5; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px;">Time</div>
-              <div style="font-size: 13px; font-weight: 700; color: #ef4444;">${props.timestamp}</div>
-            </div>
-          </div>
-
-          <div style="
-            display: flex;
-            gap: 6px;
-            flex-wrap: wrap;
-          ">
-            ${tags.map((tag: string) => `
-              <span style="
-                padding: 4px 10px;
-                background: rgba(239,68,68,0.15);
-                border: 1px solid rgba(239,68,68,0.3);
-                border-radius: 12px;
-                font-size: 10px;
-                font-weight: 600;
-                color: #ef4444;
-                text-transform: uppercase;
-                letter-spacing: 0.5px;
-              ">${tag}</span>
-            `).join('')}
-          </div>
-        </div>
-      `;
-
-      new mapboxgl.Popup({
-        offset: 15,
-        closeButton: true,
-        closeOnClick: true,
-        maxWidth: '400px',
-        className: 'osint-popup'
-      })
-        .setLngLat(e.features[0].geometry.coordinates)
-        .setHTML(html)
-        .addTo(map.current);
-    });
+    }
 
     console.log('[Globe] Interactions added');
   };
