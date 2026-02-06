@@ -14,7 +14,7 @@ const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
 
 export async function POST(request: NextRequest) {
   try {
-    const { text, userId: anonId, category } = await request.json();
+    const { text, userId: anonId, category, geotag } = await request.json();
 
     if (!text || typeof text !== "string") {
       return NextResponse.json(
@@ -172,6 +172,12 @@ export async function POST(request: NextRequest) {
       deSubmittedAt,
       confirmedAt,
       claimedAt: authenticatedUserId ? new Date().toISOString() : undefined, // Mark as claimed if authenticated
+      // Globe View: Add geotag fields if provided
+      geotagLat: geotag?.lat || null,
+      geotagLng: geotag?.lng || null,
+      geotagCity: geotag?.city || null,
+      geotagCountry: geotag?.country || null,
+      geotagRegion: geotag?.region || null,
     };
 
     // Save prediction to storage (Supabase)
