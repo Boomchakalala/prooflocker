@@ -198,13 +198,34 @@ export function mapClaimToCard(claim: {
   const hash = `claim_${claim.id}_${claim.lockedDate}`;
   const publicSlug = `claim-${claim.id}`;
 
+  // Create a Prediction-like object for _original
+  const predictionLike: Partial<Prediction> = {
+    id: `claim-${claim.id}`,
+    textPreview: claim.claim,
+    category: 'OSINT',
+    createdAt: claim.lockedDate,
+    timestamp: claim.lockedDate,
+    hash,
+    publicSlug,
+    outcome: claim.outcome === 'correct' ? 'correct' : claim.outcome === 'incorrect' ? 'incorrect' : 'pending',
+    authorNumber: claim.id % 10000,
+    anonId: `claim-submitter-${claim.id}`,
+    userId: null,
+    evidence_score,
+    author_reliability_tier,
+    author_reliability_score,
+    geotag_lat: claim.lat,
+    geotag_lng: claim.lng,
+    upvotesCount: 0,
+  };
+
   return {
     id: `claim-${claim.id}`,
     type: 'claim',
 
     title: claim.claim,
     textPreview: claim.claim,
-    category: 'OSINT', // Claims are typically OSINT category
+    category: 'OSINT',
 
     createdAt: claim.lockedDate,
     timestamp: claim.lockedDate,
@@ -215,7 +236,7 @@ export function mapClaimToCard(claim: {
     authorName: claim.submitter,
 
     status,
-    outcome: claim.outcome as any,
+    outcome: claim.outcome === 'correct' ? 'correct' : claim.outcome === 'incorrect' ? 'incorrect' : 'pending',
 
     lat: claim.lat,
     lng: claim.lng,
@@ -232,7 +253,7 @@ export function mapClaimToCard(claim: {
     hash,
     publicSlug,
 
-    _original: claim,
+    _original: predictionLike as Prediction,
   };
 }
 
@@ -261,6 +282,25 @@ export function mapOsintToCard(osint: {
   const hash = `osint_${osint.id}_${osint.timestamp}`;
   const publicSlug = `osint-${osint.id}`;
 
+  // Create a Prediction-like object for _original
+  const predictionLike: Partial<Prediction> = {
+    id: `osint-${osint.id}`,
+    textPreview: osint.title,
+    category: 'OSINT',
+    createdAt: osint.timestamp,
+    timestamp: osint.timestamp,
+    hash,
+    publicSlug,
+    outcome: 'pending',
+    authorNumber: osint.id % 10000,
+    anonId: `osint-source-${osint.id}`,
+    userId: null,
+    evidence_score,
+    geotag_lat: osint.lat,
+    geotag_lng: osint.lng,
+    upvotesCount: 0,
+  };
+
   return {
     id: `osint-${osint.id}`,
     type: 'osint',
@@ -278,7 +318,7 @@ export function mapOsintToCard(osint: {
     authorName: osint.source,
     source: osint.source,
 
-    status: 'pending', // OSINT items are always "pending" verification
+    status: 'pending',
 
     lat: osint.lat,
     lng: osint.lng,
@@ -293,7 +333,7 @@ export function mapOsintToCard(osint: {
     hash,
     publicSlug,
 
-    _original: osint,
+    _original: predictionLike as Prediction,
   };
 }
 
