@@ -3,17 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ProofLocker Globe</title>
+  <title>ProofLocker Globe - Verifiable Predictions Worldwide</title>
 
-  <!-- Mapbox GL JS -->
+  <!-- Mapbox GL JS v2.15.0 -->
   <link href="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css" rel="stylesheet">
   <script src="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js"></script>
 
-  <!-- Font Awesome -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
-  <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <!-- Google Fonts: Inter -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
   <style>
     * {
@@ -23,37 +20,46 @@
     }
 
     :root {
-      --bg-primary: #0a0a0a;
-      --bg-secondary: #111111;
-      --bg-card: #1a1a1a;
-      --text-primary: #ffffff;
-      --text-secondary: #9ca3af;
-      --accent-purple: #9333ea;
-      --accent-blue: #2E5CFF;
-      --accent-red: #ff3b3b;
-      --accent-verified: #10b981;
-      --accent-disputed: #ef4444;
-      --accent-pending: #f59e0b;
-      --border: #1f1f1f;
-      --shadow-glow: rgba(147, 51, 234, 0.3);
+      /* Updated color scheme - deep navy theme */
+      --bg-primary: #0f172a;
+      --bg-secondary: #1e293b;
+      --bg-overlay: rgba(15, 23, 42, 0.95);
+      --text-primary: #f8fafc;
+      --text-secondary: #94a3b8;
+      --text-muted: #64748b;
+
+      /* Accountability colors */
+      --color-verified: #14b8a6;    /* Teal for positive/verified/high-rep */
+      --color-disputed: #ef4444;    /* Crimson for negative/disputed */
+      --color-pending: #f59e0b;     /* Amber for pending */
+      --color-neutral: #6b7280;     /* Gray for neutral/void */
+
+      /* UI elements */
+      --border-subtle: rgba(148, 163, 184, 0.1);
+      --border-medium: rgba(148, 163, 184, 0.2);
+      --backdrop-blur: blur(20px);
     }
 
     body {
-      font-family: 'Inter', sans-serif;
-      background: var(--bg-primary);
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      background: #000000;
       color: var(--text-primary);
       overflow: hidden;
+      -webkit-font-smoothing: antialiased;
     }
 
-    /* Top Header - ProofLocker Style */
-    .top-header {
+    /* ============================================
+       HEADER - Slim, semi-transparent with stats
+       ============================================ */
+    .main-header {
       position: fixed;
       top: 0;
       left: 0;
       right: 0;
-      height: 64px;
-      background: linear-gradient(to right, #0A0A0F, #050509);
-      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      height: 56px;
+      background: var(--bg-overlay);
+      backdrop-filter: var(--backdrop-blur);
+      border-bottom: 1px solid var(--border-subtle);
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -61,65 +67,62 @@
       z-index: 1000;
     }
 
-    .logo {
+    .header-left {
       display: flex;
       align-items: center;
-      gap: 12px;
-      flex-shrink: 0;
+      gap: 32px;
     }
 
-    .logo img {
-      height: 32px;
+    .logo-link {
+      display: flex;
+      align-items: center;
+      text-decoration: none;
+    }
+
+    .logo-link img {
+      height: 36px;
       width: auto;
-      cursor: pointer;
     }
 
-    .nav-links {
+    .header-tagline {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-secondary);
+      letter-spacing: 0.02em;
+      display: none;
+    }
+
+    @media (min-width: 1024px) {
+      .header-tagline {
+        display: block;
+      }
+    }
+
+    .header-stats {
       display: flex;
       align-items: center;
       gap: 24px;
     }
 
-    .nav-link {
+    .stat-item {
       display: flex;
       align-items: center;
-      gap: 6px;
-      font-size: 14px;
-      font-weight: 500;
-      color: rgba(255, 255, 255, 0.8);
-      text-decoration: none;
-      transition: all 0.2s;
-      position: relative;
-      padding-bottom: 2px;
+      gap: 8px;
+      font-size: 13px;
+      color: var(--text-secondary);
     }
 
-    .nav-link:hover {
-      color: var(--accent-blue);
+    .stat-value {
+      font-weight: 600;
+      color: var(--text-primary);
     }
 
-    .nav-link.active {
-      color: var(--accent-blue);
-    }
-
-    .nav-link::after {
-      content: '';
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      width: 0;
-      height: 2px;
-      background: var(--accent-blue);
-      transition: width 0.2s;
-    }
-
-    .nav-link:hover::after,
-    .nav-link.active::after {
-      width: 100%;
-    }
-
-    .nav-link svg {
-      width: 16px;
-      height: 16px;
+    .stat-icon {
+      width: 18px;
+      height: 18px;
+      stroke: currentColor;
+      stroke-width: 2;
+      fill: none;
     }
 
     .header-actions {
@@ -129,429 +132,86 @@
     }
 
     .btn {
+      display: flex;
+      align-items: center;
+      gap: 6px;
       padding: 8px 16px;
       border-radius: 8px;
       font-size: 13px;
       font-weight: 600;
       cursor: pointer;
       border: none;
-      transition: all 0.2s;
-      display: flex;
-      align-items: center;
-      gap: 6px;
+      transition: all 0.2s ease;
       text-decoration: none;
     }
 
+    .btn-icon {
+      width: 16px;
+      height: 16px;
+      stroke: currentColor;
+      stroke-width: 2;
+      fill: none;
+    }
+
     .btn-primary {
-      background: linear-gradient(to right, var(--accent-blue), #5B21B6);
-      color: white;
-      box-shadow: 0 4px 12px rgba(46, 92, 255, 0.3);
+      background: var(--color-verified);
+      color: #0f172a;
     }
 
     .btn-primary:hover {
-      background: linear-gradient(to right, #3D6CFF, #6B31C6);
-      box-shadow: 0 0 20px rgba(46, 92, 255, 0.5);
+      background: #0d9488;
       transform: translateY(-1px);
     }
 
     .btn-ghost {
       background: transparent;
-      color: rgba(255, 255, 255, 0.8);
-      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: var(--text-secondary);
+      border: 1px solid var(--border-medium);
     }
 
     .btn-ghost:hover {
-      color: white;
-      border-color: var(--accent-blue);
-      background: rgba(46, 92, 255, 0.1);
+      color: var(--text-primary);
+      border-color: var(--color-verified);
+      background: rgba(20, 184, 166, 0.1);
     }
 
-    .reputation-pill {
+    .user-rep-badge {
       display: flex;
       align-items: center;
       gap: 6px;
       padding: 6px 12px;
-      background: rgba(147, 51, 234, 0.15);
-      border: 1px solid rgba(147, 51, 234, 0.3);
+      background: rgba(20, 184, 166, 0.15);
+      border: 1px solid rgba(20, 184, 166, 0.3);
       border-radius: 20px;
       font-size: 12px;
       font-weight: 600;
-      color: var(--accent-purple);
-      cursor: pointer;
-      transition: all 0.2s;
+      color: var(--color-verified);
     }
 
-    .reputation-pill:hover {
-      background: rgba(147, 51, 234, 0.25);
-      border-color: var(--accent-purple);
-    }
-
-    .reputation-pill i {
-      font-size: 11px;
-    }
-
-    .profile-btn {
-      position: relative;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      padding: 6px 12px;
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 20px;
-      font-size: 13px;
-      color: rgba(255, 255, 255, 0.8);
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-
-    .profile-btn:hover {
-      color: white;
-      background: rgba(255, 255, 255, 0.1);
-    }
-
-    .profile-btn svg {
-      width: 14px;
-      height: 14px;
-    }
-
-    .profile-menu {
-      display: none;
-      position: absolute;
-      top: calc(100% + 8px);
-      right: 0;
-      width: 200px;
-      background: rgba(17, 17, 17, 0.98);
-      backdrop-filter: blur(20px);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 12px;
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.8);
-      padding: 8px;
-      z-index: 1001;
-    }
-
-    .profile-menu.open {
-      display: block;
-    }
-
-    .profile-menu-item {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 10px 12px;
-      border-radius: 8px;
-      font-size: 13px;
-      color: rgba(255, 255, 255, 0.8);
-      text-decoration: none;
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-
-    .profile-menu-item:hover {
-      background: rgba(255, 255, 255, 0.05);
-      color: white;
-    }
-
-    .profile-menu-item svg {
-      width: 16px;
-      height: 16px;
-    }
-
-    .profile-menu-divider {
-      height: 1px;
-      background: rgba(255, 255, 255, 0.1);
-      margin: 8px 0;
-    }
-
-    /* Left Sidebar with Feeds */
-    .feed-sidebar {
-      position: fixed;
-      top: 64px;
-      left: 0;
-      width: 380px;
-      height: calc(100vh - 64px);
-      background: rgba(10, 10, 10, 0.95);
-      backdrop-filter: blur(30px);
-      border-right: 1px solid var(--border);
-      z-index: 900;
-      display: flex;
-      flex-direction: column;
-    }
-
-    /* OSINT Monitor Section */
-    .osint-monitor {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      border-bottom: 1px solid var(--border);
-      max-height: 50%;
-    }
-
-    .feed-header {
-      padding: 16px 20px;
-      border-bottom: 1px solid var(--border);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-
-    .feed-title {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 14px;
-      font-weight: 600;
-    }
-
-    .feed-title.osint {
-      color: var(--accent-red);
-    }
-
-    .feed-title.claims {
-      color: var(--accent-purple);
-    }
-
-    .feed-badge {
-      font-size: 10px;
-      padding: 2px 6px;
-      border-radius: 10px;
-      background: rgba(255, 255, 255, 0.1);
-      color: var(--text-secondary);
-    }
-
-    .feed-content {
-      flex: 1;
-      overflow-y: auto;
-      padding: 12px;
-    }
-
-    .feed-content::-webkit-scrollbar {
-      width: 4px;
-    }
-
-    .feed-content::-webkit-scrollbar-track {
-      background: transparent;
-    }
-
-    .feed-content::-webkit-scrollbar-thumb {
-      background: var(--border);
-      border-radius: 2px;
-    }
-
-    /* News Item */
-    .news-item {
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-left: 3px solid var(--accent-red);
-      border-radius: 8px;
-      padding: 12px;
-      margin-bottom: 10px;
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-
-    .news-item:hover {
-      background: rgba(255, 59, 59, 0.05);
-      border-color: var(--accent-red);
-    }
-
-    .news-item.selected {
-      background: rgba(255, 59, 59, 0.1);
-      border-color: var(--accent-red);
-    }
-
-    .news-header {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      margin-bottom: 8px;
-    }
-
-    .news-source-icon {
-      width: 24px;
-      height: 24px;
-      border-radius: 6px;
-      background: var(--accent-red);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: white;
-      font-size: 11px;
-      font-weight: 700;
-      flex-shrink: 0;
-    }
-
-    .news-source {
-      font-size: 11px;
-      font-weight: 600;
-      color: var(--text-primary);
-    }
-
-    .news-time {
-      margin-left: auto;
-      font-size: 10px;
-      color: var(--text-secondary);
-    }
-
-    .news-snippet {
-      font-size: 12px;
-      line-height: 1.5;
-      color: var(--text-secondary);
-      display: -webkit-box;
-      -webkit-line-clamp: 3;
-      -webkit-box-orient: vertical;
-      overflow: hidden;
-    }
-
-    .news-tags {
-      display: flex;
-      gap: 4px;
-      margin-top: 8px;
-      flex-wrap: wrap;
-    }
-
-    .news-tag {
-      font-size: 9px;
-      padding: 2px 6px;
-      border-radius: 4px;
-      background: rgba(255, 59, 59, 0.1);
-      color: var(--accent-red);
-    }
-
-    /* Claims Section */
-    .claims-monitor {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      max-height: 50%;
-    }
-
-    /* Claim Item */
-    .claim-item {
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-left: 3px solid var(--accent-purple);
-      border-radius: 8px;
-      padding: 12px;
-      margin-bottom: 10px;
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-
-    .claim-item:hover {
-      background: rgba(147, 51, 234, 0.05);
-      border-color: var(--accent-purple);
-    }
-
-    .claim-item.selected {
-      background: rgba(147, 51, 234, 0.1);
-      border-color: var(--accent-purple);
-    }
-
-    .claim-item.resolved-true {
-      border-left-color: var(--accent-verified);
-    }
-
-    .claim-item.resolved-false {
-      border-left-color: var(--accent-disputed);
-    }
-
-    .claim-item.resolved-void {
-      border-left-color: #6b7280;
-    }
-
-    .claim-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 8px;
-    }
-
-    .claim-author {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      font-size: 11px;
-    }
-
-    .claim-handle {
-      font-weight: 600;
-      color: var(--text-primary);
-    }
-
-    .claim-rep {
-      display: flex;
-      align-items: center;
-      gap: 3px;
-      padding: 2px 6px;
-      border-radius: 10px;
-      background: rgba(147, 51, 234, 0.15);
-      color: var(--accent-purple);
-      font-size: 10px;
-      font-weight: 600;
-    }
-
-    .claim-status {
-      font-size: 9px;
-      padding: 3px 6px;
-      border-radius: 10px;
-      font-weight: 600;
-      text-transform: uppercase;
-    }
-
-    .claim-status.open {
-      background: rgba(147, 51, 234, 0.15);
-      color: var(--accent-purple);
-    }
-
-    .claim-status.resolved-true {
-      background: rgba(16, 185, 129, 0.15);
-      color: var(--accent-verified);
-    }
-
-    .claim-status.resolved-false {
-      background: rgba(239, 68, 68, 0.15);
-      color: var(--accent-disputed);
-    }
-
-    .claim-status.resolved-void {
-      background: rgba(107, 114, 128, 0.15);
-      color: #9ca3af;
-    }
-
-    .claim-text {
-      font-size: 12px;
-      line-height: 1.5;
-      color: var(--text-primary);
-      display: -webkit-box;
-      -webkit-line-clamp: 2;
-      -webkit-box-orient: vertical;
-      overflow: hidden;
-      margin-bottom: 8px;
-    }
-
-    .claim-footer {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      font-size: 10px;
-      color: var(--text-secondary);
-    }
-
-    /* Map Container */
+    /* ============================================
+       MAP CONTAINER - Full screen below header
+       ============================================ */
     #map {
       position: fixed;
-      top: 64px;
-      left: 380px;
+      top: 56px;
+      left: 0;
       right: 0;
       bottom: 0;
-      width: calc(100% - 380px);
     }
 
-    /* Map Controls */
+    /* Hide Mapbox branding */
+    .mapboxgl-ctrl-bottom-left,
+    .mapboxgl-ctrl-bottom-right,
+    .mapboxgl-ctrl-logo {
+      display: none !important;
+    }
+
+    /* ============================================
+       MAP CONTROLS - Top right corner
+       ============================================ */
     .map-controls {
       position: fixed;
-      top: 84px;
+      top: 76px;
       right: 20px;
       z-index: 900;
       display: flex;
@@ -559,786 +219,1015 @@
       gap: 8px;
     }
 
-    .map-control-btn {
-      width: 40px;
-      height: 40px;
-      background: rgba(17, 17, 17, 0.95);
-      backdrop-filter: blur(20px);
-      border: 1px solid var(--border);
+    .control-btn {
+      width: 42px;
+      height: 42px;
+      background: var(--bg-overlay);
+      backdrop-filter: var(--backdrop-blur);
+      border: 1px solid var(--border-subtle);
       border-radius: 10px;
       display: flex;
       align-items: center;
       justify-content: center;
       cursor: pointer;
-      transition: all 0.2s;
+      transition: all 0.2s ease;
       color: var(--text-secondary);
     }
 
-    .map-control-btn:hover {
-      border-color: var(--accent-purple);
-      color: var(--accent-purple);
+    .control-btn:hover {
+      border-color: var(--color-verified);
+      color: var(--color-verified);
+      background: rgba(20, 184, 166, 0.1);
     }
 
-    .map-control-btn.active {
-      background: var(--accent-purple);
-      color: white;
-      border-color: var(--accent-purple);
+    .control-btn.active {
+      background: var(--color-verified);
+      color: #0f172a;
+      border-color: var(--color-verified);
     }
 
-    /* Vignette */
-    .vignette {
+    .control-icon {
+      width: 18px;
+      height: 18px;
+      stroke: currentColor;
+      stroke-width: 2;
+      fill: none;
+    }
+
+    /* ============================================
+       RIGHT SIDEBAR - Toggleable claims list (340px)
+       ============================================ */
+    .right-sidebar {
       position: fixed;
-      top: 64px;
-      left: 380px;
+      top: 56px;
+      right: -360px;
+      width: 340px;
+      height: calc(100vh - 56px);
+      background: var(--bg-overlay);
+      backdrop-filter: var(--backdrop-blur);
+      border-left: 1px solid var(--border-subtle);
+      z-index: 950;
+      transition: right 0.3s ease;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .right-sidebar.open {
       right: 0;
-      bottom: 0;
-      pointer-events: none;
-      background: radial-gradient(ellipse at center, transparent 0%, rgba(147, 51, 234, 0.03) 60%, rgba(0, 0, 0, 0.2) 100%);
-      z-index: 700;
     }
 
-    /* Map Tooltip */
-    .map-tooltip {
-      position: fixed;
-      background: rgba(17, 17, 17, 0.98);
-      backdrop-filter: blur(20px);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 12px;
-      pointer-events: none;
-      display: none;
-      z-index: 1001;
-      max-width: 300px;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.7);
+    .sidebar-header {
+      padding: 20px;
+      border-bottom: 1px solid var(--border-subtle);
     }
 
-    .map-tooltip.visible {
-      display: block;
-    }
-
-    .tooltip-title {
-      font-size: 13px;
-      font-weight: 600;
-      margin-bottom: 6px;
+    .sidebar-title {
+      font-size: 16px;
+      font-weight: 700;
       color: var(--text-primary);
+      margin-bottom: 12px;
     }
 
-    .tooltip-meta {
-      font-size: 11px;
+    .sidebar-filters {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .filter-chip {
+      padding: 6px 12px;
+      border-radius: 16px;
+      font-size: 12px;
+      font-weight: 500;
+      background: transparent;
       color: var(--text-secondary);
-      margin-bottom: 4px;
+      border: 1px solid var(--border-medium);
+      cursor: pointer;
+      transition: all 0.2s ease;
     }
 
-    /* Responsive */
-    @media (max-width: 1024px) {
-      .nav-links {
-        display: none;
-      }
-
-      .feed-sidebar {
-        width: 320px;
-      }
-
-      #map {
-        left: 320px;
-        width: calc(100% - 320px);
-      }
-
-      .vignette {
-        left: 320px;
-      }
+    .filter-chip:hover,
+    .filter-chip.active {
+      background: rgba(20, 184, 166, 0.15);
+      color: var(--color-verified);
+      border-color: var(--color-verified);
     }
 
-    @media (max-width: 768px) {
-      .feed-sidebar {
-        width: 100%;
-        left: -100%;
-        transition: left 0.3s;
-      }
-
-      .feed-sidebar.open {
-        left: 0;
-      }
-
-      #map {
-        left: 0;
-        width: 100%;
-      }
-
-      .vignette {
-        left: 0;
-      }
-
-      .map-controls {
-        left: 20px;
-        right: auto;
-      }
+    .sidebar-content {
+      flex: 1;
+      overflow-y: auto;
+      padding: 16px;
     }
 
-    /* Hide Mapbox attribution */
-    .mapboxgl-ctrl-bottom-left,
-    .mapboxgl-ctrl-bottom-right {
-      display: none;
+    .sidebar-content::-webkit-scrollbar {
+      width: 4px;
     }
 
-    .mapboxgl-ctrl-logo {
-      display: none !important;
+    .sidebar-content::-webkit-scrollbar-track {
+      background: transparent;
     }
 
-    /* Live indicator */
-    .live-indicator {
+    .sidebar-content::-webkit-scrollbar-thumb {
+      background: var(--border-medium);
+      border-radius: 2px;
+    }
+
+    /* Claim card in sidebar */
+    .claim-card {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-subtle);
+      border-radius: 10px;
+      padding: 14px;
+      margin-bottom: 12px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .claim-card:hover {
+      border-color: var(--color-verified);
+      background: rgba(20, 184, 166, 0.05);
+    }
+
+    .claim-card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+
+    .claim-submitter {
       display: flex;
       align-items: center;
       gap: 6px;
+      font-size: 12px;
+    }
+
+    .submitter-handle {
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .submitter-rep {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      padding: 2px 6px;
+      background: rgba(20, 184, 166, 0.15);
+      border-radius: 10px;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--color-verified);
+    }
+
+    .rep-icon {
+      width: 10px;
+      height: 10px;
+    }
+
+    .status-badge {
+      padding: 3px 8px;
+      border-radius: 10px;
       font-size: 10px;
-      color: var(--accent-red);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
     }
 
-    .live-dot {
-      width: 6px;
+    .status-badge.verified {
+      background: rgba(20, 184, 166, 0.2);
+      color: var(--color-verified);
+    }
+
+    .status-badge.disputed {
+      background: rgba(239, 68, 68, 0.2);
+      color: var(--color-disputed);
+    }
+
+    .status-badge.pending {
+      background: rgba(245, 158, 11, 0.2);
+      color: var(--color-pending);
+    }
+
+    .status-badge.void {
+      background: rgba(107, 114, 128, 0.2);
+      color: var(--color-neutral);
+    }
+
+    .claim-text {
+      font-size: 13px;
+      line-height: 1.5;
+      color: var(--text-primary);
+      margin-bottom: 10px;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .claim-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    .confidence-bar {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .confidence-value {
+      font-weight: 600;
+      color: var(--text-secondary);
+    }
+
+    .confidence-progress {
+      width: 40px;
+      height: 4px;
+      background: rgba(148, 163, 184, 0.2);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+
+    .confidence-fill {
+      height: 100%;
+      background: var(--color-verified);
+      border-radius: 2px;
+    }
+
+    /* ============================================
+       MAPBOX POPUP - Clean card with actions
+       ============================================ */
+    .mapboxgl-popup-content {
+      background: var(--bg-overlay) !important;
+      backdrop-filter: var(--backdrop-blur);
+      border: 1px solid var(--border-medium) !important;
+      border-radius: 12px !important;
+      padding: 18px !important;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5) !important;
+      min-width: 320px;
+      max-width: 400px;
+    }
+
+    .mapboxgl-popup-close-button {
+      color: var(--text-secondary) !important;
+      font-size: 20px !important;
+      padding: 8px !important;
+      right: 6px !important;
+      top: 6px !important;
+    }
+
+    .mapboxgl-popup-close-button:hover {
+      color: var(--text-primary) !important;
+      background: rgba(148, 163, 184, 0.1) !important;
+      border-radius: 6px;
+    }
+
+    .mapboxgl-popup-tip {
+      display: none;
+    }
+
+    .popup-title {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 12px;
+      line-height: 1.4;
+    }
+
+    .popup-submitter {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 12px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .popup-handle {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .popup-rep {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      padding: 3px 8px;
+      background: rgba(20, 184, 166, 0.15);
+      border-radius: 10px;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--color-verified);
+    }
+
+    .popup-info-grid {
+      display: grid;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .popup-info-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 12px;
+    }
+
+    .popup-info-label {
+      color: var(--text-muted);
+    }
+
+    .popup-info-value {
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .popup-confidence {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px;
+      background: rgba(20, 184, 166, 0.1);
+      border-radius: 8px;
+      margin-bottom: 14px;
+    }
+
+    .popup-confidence-label {
+      font-size: 11px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .popup-confidence-bar {
+      flex: 1;
       height: 6px;
-      border-radius: 50%;
-      background: var(--accent-red);
-      animation: pulse 2s infinite;
+      background: rgba(148, 163, 184, 0.2);
+      border-radius: 3px;
+      overflow: hidden;
     }
 
-    @keyframes pulse {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.5; }
+    .popup-confidence-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--color-verified), #0d9488);
+      border-radius: 3px;
+    }
+
+    .popup-confidence-value {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--color-verified);
+    }
+
+    .popup-evidence {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 12px;
+      background: rgba(148, 163, 184, 0.05);
+      border: 1px solid var(--border-subtle);
+      border-radius: 8px;
+      font-size: 11px;
+      color: var(--text-secondary);
+      margin-bottom: 14px;
+      text-decoration: none;
+      transition: all 0.2s ease;
+    }
+
+    .popup-evidence:hover {
+      border-color: var(--color-verified);
+      color: var(--color-verified);
+      background: rgba(20, 184, 166, 0.05);
+    }
+
+    .popup-evidence-icon {
+      width: 14px;
+      height: 14px;
+      stroke: currentColor;
+      stroke-width: 2;
+      fill: none;
+    }
+
+    .popup-actions {
+      display: flex;
+      gap: 8px;
+    }
+
+    .popup-btn {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 10px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-decoration: none;
+    }
+
+    .popup-btn-support {
+      background: rgba(20, 184, 166, 0.15);
+      color: var(--color-verified);
+      border: 1px solid transparent;
+    }
+
+    .popup-btn-support:hover {
+      background: rgba(20, 184, 166, 0.25);
+      border-color: var(--color-verified);
+    }
+
+    .popup-btn-challenge {
+      background: rgba(239, 68, 68, 0.15);
+      color: var(--color-disputed);
+      border: 1px solid transparent;
+    }
+
+    .popup-btn-challenge:hover {
+      background: rgba(239, 68, 68, 0.25);
+      border-color: var(--color-disputed);
+    }
+
+    .popup-btn-icon {
+      width: 14px;
+      height: 14px;
+      stroke: currentColor;
+      stroke-width: 2;
+      fill: none;
+    }
+
+    /* ============================================
+       RESPONSIVE
+       ============================================ */
+    @media (max-width: 768px) {
+      .header-stats {
+        display: none;
+      }
+
+      .right-sidebar {
+        width: 100%;
+        right: -100%;
+      }
+
+      .mapboxgl-popup-content {
+        min-width: 280px;
+      }
     }
   </style>
 </head>
 <body>
 
-  <!-- Top Header -->
-  <header class="top-header">
-    <div class="logo">
-      <a href="/">
+  <!-- ============================================
+       HEADER
+       ============================================ -->
+  <header class="main-header">
+    <div class="header-left">
+      <a href="/" class="logo-link">
         <img src="/logos/prooflocker-logo-dark.svg" alt="ProofLocker">
       </a>
+      <span class="header-tagline">Verifiable Predictions Worldwide</span>
     </div>
 
-    <nav class="nav-links">
-      <a href="/" class="nav-link">
-        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+    <div class="header-stats">
+      <div class="stat-item">
+        <svg class="stat-icon" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
         </svg>
-        Home
-      </a>
-      <a href="/app" class="nav-link">
-        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+        <span>Active: <span class="stat-value" id="activeClaims">512</span></span>
+      </div>
+      <div class="stat-item">
+        <svg class="stat-icon" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
         </svg>
-        Explore
-      </a>
-      <a href="/globe" class="nav-link active">
-        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-        </svg>
-        Globe
-      </a>
-      <a href="/how-scoring-works" class="nav-link">
-        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-        </svg>
-        Scoring
-      </a>
-      <a href="/leaderboard" class="nav-link">
-        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
-        </svg>
-        Leaderboard
-      </a>
-    </nav>
+        <span>Accuracy: <span class="stat-value" id="globalAccuracy">79%</span></span>
+      </div>
+    </div>
 
     <div class="header-actions">
-      <a href="/lock" class="btn btn-primary">
-        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" style="width: 16px; height: 16px;">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+      <button class="btn btn-ghost" onclick="toggleSidebar()" title="View Claims List">
+        <svg class="btn-icon" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
         </svg>
-        Lock Prediction
+      </button>
+
+      <a href="/lock" class="btn btn-primary">
+        <svg class="btn-icon" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+        </svg>
+        Submit Claim
       </a>
 
-      <div class="reputation-pill" onclick="window.location.href='/how-scoring-works'">
-        <i class="fas fa-star"></i>
-        <span>1,247</span>
-      </div>
-
-      <div class="profile-btn" onclick="toggleProfileMenu()">
-        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+      <div class="user-rep-badge" title="Your Reputation Score">
+        <svg class="rep-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
         </svg>
-        <span>@anon_user</span>
-
-        <div class="profile-menu" id="profileMenu">
-          <a href="/profile" class="profile-menu-item">
-            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-            </svg>
-            Profile
-          </a>
-          <a href="/app?tab=my" class="profile-menu-item">
-            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-            </svg>
-            My Predictions
-          </a>
-          <a href="/dashboard" class="profile-menu-item">
-            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-            </svg>
-            Dashboard
-          </a>
-          <div class="profile-menu-divider"></div>
-          <div class="profile-menu-item" onclick="alert('Sign out clicked')">
-            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
-            </svg>
-            Sign out
-          </div>
-        </div>
+        <span>84</span>
       </div>
     </div>
   </header>
 
-  <!-- Left Sidebar with Feeds -->
-  <aside class="feed-sidebar">
-    <!-- OSINT Monitor -->
-    <div class="osint-monitor">
-      <div class="feed-header">
-        <div class="feed-title osint">
-          <i class="fas fa-satellite-dish"></i>
-          OSINT Monitor
-          <div class="live-indicator">
-            <span class="live-dot"></span>
-            LIVE
-          </div>
-        </div>
-        <span class="feed-badge" id="osintCount">12</span>
-      </div>
-      <div class="feed-content" id="osintFeed">
-        <!-- Dynamically filled -->
+  <!-- ============================================
+       MAP CONTAINER
+       ============================================ -->
+  <div id="map"></div>
+
+  <!-- ============================================
+       MAP CONTROLS
+       ============================================ -->
+  <div class="map-controls">
+    <button class="control-btn active" id="claimsToggle" onclick="toggleClaimsLayer()" title="Toggle Claims">
+      <svg class="control-icon" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+      </svg>
+    </button>
+
+    <button class="control-btn" id="heatmapToggle" onclick="toggleHeatmap()" title="Toggle Heatmap">
+      <svg class="control-icon" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.656 7.343A7.975 7.975 0 0120 13a7.975 7.975 0 01-2.343 5.657z" />
+      </svg>
+    </button>
+
+    <button class="control-btn" onclick="resetMapView()" title="Reset View">
+      <svg class="control-icon" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+      </svg>
+    </button>
+  </div>
+
+  <!-- ============================================
+       RIGHT SIDEBAR - Claims List
+       ============================================ -->
+  <aside class="right-sidebar" id="rightSidebar">
+    <div class="sidebar-header">
+      <h2 class="sidebar-title">Global Claims</h2>
+      <div class="sidebar-filters">
+        <button class="filter-chip active" data-filter="active">Active</button>
+        <button class="filter-chip" data-filter="high-confidence">High Confidence</button>
+        <button class="filter-chip" data-filter="my-predictions">My Predictions</button>
       </div>
     </div>
-
-    <!-- Claims Monitor -->
-    <div class="claims-monitor">
-      <div class="feed-header">
-        <div class="feed-title claims">
-          <i class="fas fa-lock"></i>
-          Active Claims
-        </div>
-        <span class="feed-badge" id="claimsCount">8</span>
-      </div>
-      <div class="feed-content" id="claimsFeed">
-        <!-- Dynamically filled -->
-      </div>
+    <div class="sidebar-content" id="claimsList">
+      <!-- Dynamically populated -->
     </div>
   </aside>
 
-  <!-- Map -->
-  <div id="map"></div>
-  <div class="vignette"></div>
-
-  <!-- Map Tooltip -->
-  <div id="mapTooltip" class="map-tooltip"></div>
-
-  <!-- Map Controls -->
-  <div class="map-controls">
-    <div class="map-control-btn" title="Toggle OSINT" onclick="toggleOSINT()">
-      <i class="fas fa-eye"></i>
-    </div>
-    <div class="map-control-btn" title="Toggle Claims" onclick="toggleClaims()">
-      <i class="fas fa-lock"></i>
-    </div>
-    <div class="map-control-btn" title="Reset View" onclick="resetView()">
-      <i class="fas fa-redo"></i>
-    </div>
-  </div>
-
   <script>
-    // Mapbox Config
+    // ============================================
+    // MAPBOX CONFIGURATION
+    // ============================================
     mapboxgl.accessToken = "pk.eyJ1IjoicHJvb2Zsb2NrZXIiLCJhIjoiY21sYjBxcTAwMGVoYzNlczI4YWlzampqZyJ9.nY-yqSucTzvNyK1qDCq9rQ";
 
-    // Profile Menu Toggle
-    function toggleProfileMenu() {
-      const menu = document.getElementById('profileMenu');
-      menu.classList.toggle('open');
-      event.stopPropagation();
-    }
-
-    // Close menu when clicking outside
-    document.addEventListener('click', (e) => {
-      const menu = document.getElementById('profileMenu');
-      const profileBtn = document.querySelector('.profile-btn');
-      if (!profileBtn.contains(e.target)) {
-        menu.classList.remove('open');
-      }
-    });
-
-    // Mock Data Generator
-    const sources = ["Bellingcat", "IntelCrab", "OSINT Tech", "Aurora Intel"];
-    const regions = {
-      europe: [[2.3522, 48.8566], [-0.1276, 51.5074], [13.4050, 52.5200], [30.5234, 50.4501]],
-      asia: [[116.4074, 39.9042], [139.6917, 35.6895], [55.2708, 25.2048], [37.6173, 55.7558]],
-      americas: [[-74.006, 40.7128], [-99.1332, 19.4326], [-118.2437, 34.0522], [-43.1729, -22.9068]],
-      oceania: [[151.2093, -33.8688]]
-    };
-
-    const newsTemplates = [
-      "Investigation reveals coordinated disinformation across multiple countries",
-      "Satellite imagery confirms infrastructure changes in disputed region",
-      "Public records show pattern inconsistencies in recent claims",
-      "Crowdsourced verification completed with high confidence level",
-      "Video authentication techniques published in new forensics report",
-      "Supply chain tracking reveals significant pattern deviations",
-      "Election monitoring data shows voting pattern irregularities",
-      "Energy infrastructure sabotage evidence emerges",
-      "Financial transaction patterns suggest money laundering network",
-      "Military equipment movement tracked via commercial satellites",
-      "Social media manipulation campaign targets regional elections",
-      "Cybersecurity breach exposes government communications"
+    // ============================================
+    // MOCK DATA - 20 Claims with Realistic Locations
+    // ============================================
+    const claimsData = [
+      { id: 1, claim: "US Presidential Election 2024 will have record voter turnout", lat: 40.7128, lng: -74.0060, status: "verified", submitter: "@politicalanalyst", rep: 92, confidence: 87, lockedDate: "2024-01-15", outcome: "true" },
+      { id: 2, claim: "Global semiconductor shortage will ease by Q3 2025", lat: 37.5665, lng: 126.9780, status: "pending", submitter: "@techinsider", rep: 78, confidence: 64, lockedDate: "2024-01-20", outcome: null },
+      { id: 3, claim: "UK will implement new AI regulation framework", lat: 51.5074, lng: -0.1278, status: "verified", submitter: "@policyexpert", rep: 88, confidence: 91, lockedDate: "2024-01-10", outcome: "true" },
+      { id: 4, claim: "Bitcoin will reach $100K by end of 2025", lat: 35.6762, lng: 139.6503, status: "disputed", submitter: "@cryptotrader", rep: 54, confidence: 42, lockedDate: "2024-01-25", outcome: "false" },
+      { id: 5, claim: "Climate summit will achieve binding emissions targets", lat: 48.8566, lng: 2.3522, status: "pending", submitter: "@climatewatch", rep: 85, confidence: 71, lockedDate: "2024-02-01", outcome: null },
+      { id: 6, claim: "Major tech merger will be blocked by regulators", lat: 37.7749, lng: -122.4194, status: "void", submitter: "@antitrust_observer", rep: 76, confidence: 58, lockedDate: "2024-01-28", outcome: "void" },
+      { id: 7, claim: "Australian housing market will correct by 15%", lat: -33.8688, lng: 151.2093, status: "pending", submitter: "@marketanalyst", rep: 81, confidence: 68, lockedDate: "2024-02-03", outcome: null },
+      { id: 8, claim: "India GDP growth will exceed 7% in FY2025", lat: 28.6139, lng: 77.2090, status: "verified", submitter: "@economicdata", rep: 94, confidence: 89, lockedDate: "2024-01-18", outcome: "true" },
+      { id: 9, claim: "EU will expand Digital Services Act enforcement", lat: 50.8503, lng: 4.3517, status: "pending", submitter: "@euregulatorywatch", rep: 72, confidence: 76, lockedDate: "2024-02-05", outcome: null },
+      { id: 10, claim: "Brazilian elections will see runoff in October", lat: -15.8267, lng: -47.9218, status: "disputed", submitter: "@latampolitics", rep: 67, confidence: 51, lockedDate: "2024-01-30", outcome: "false" },
+      { id: 11, claim: "Middle East peace talks will resume before June", lat: 31.7683, lng: 35.2137, status: "pending", submitter: "@diplomaticsource", rep: 79, confidence: 62, lockedDate: "2024-02-02", outcome: null },
+      { id: 12, claim: "Toronto real estate will stabilize in Q2", lat: 43.6532, lng: -79.3832, status: "pending", submitter: "@cdnhousing", rep: 83, confidence: 73, lockedDate: "2024-01-22", outcome: null },
+      { id: 13, claim: "German coalition will complete full term", lat: 52.5200, lng: 13.4050, status: "verified", submitter: "@berlinpolitik", rep: 90, confidence: 84, lockedDate: "2024-01-12", outcome: "true" },
+      { id: 14, claim: "Singapore fintech sector will grow 25% YoY", lat: 1.3521, lng: 103.8198, status: "pending", submitter: "@asiafinance", rep: 86, confidence: 79, lockedDate: "2024-01-27", outcome: null },
+      { id: 15, claim: "Mexico manufacturing output will exceed US imports", lat: 19.4326, lng: -99.1332, status: "disputed", submitter: "@trademetrics", rep: 62, confidence: 48, lockedDate: "2024-02-04", outcome: "false" },
+      { id: 16, claim: "Russian oil exports will shift to Asian markets", lat: 55.7558, lng: 37.6173, status: "verified", submitter: "@energyintel", rep: 87, confidence: 82, lockedDate: "2024-01-16", outcome: "true" },
+      { id: 17, claim: "South African power grid will achieve stability", lat: -33.9249, lng: 18.4241, status: "pending", submitter: "@africanenergy", rep: 74, confidence: 66, lockedDate: "2024-01-29", outcome: null },
+      { id: 18, claim: "Dubai property prices will rise 12% in 2025", lat: 25.2048, lng: 55.2708, status: "pending", submitter: "@gulfpropertytracker", rep: 77, confidence: 69, lockedDate: "2024-02-01", outcome: null },
+      { id: 19, claim: "Stockholm will implement congestion pricing expansion", lat: 59.3293, lng: 18.0686, status: "verified", submitter: "@nordictransport", rep: 82, confidence: 88, lockedDate: "2024-01-14", outcome: "true" },
+      { id: 20, claim: "Argentine peso stabilization plan will succeed", lat: -34.6037, lng: -58.3816, status: "disputed", submitter: "@latamecon", rep: 58, confidence: 44, lockedDate: "2024-02-06", outcome: "false" }
     ];
 
-    const claimTemplates = [
-      "Election outcome in District 5 will favor candidate A",
-      "GDP growth Q1 2024 will exceed 3.5%",
-      "Tech merger will be approved by regulatory bodies",
-      "Climate summit will result in binding emissions targets",
-      "Policy implementation will be delayed beyond Q2",
-      "Market volatility will decrease in tech sector",
-      "International treaty ratification before end of quarter",
-      "Resource allocation decision favors renewable energy"
-    ];
+    // ============================================
+    // STATE MANAGEMENT
+    // ============================================
+    let heatmapVisible = false;
+    let claimsLayerVisible = true;
+    let currentFilter = 'active';
 
-    // Generate initial OSINT data
-    let osintData = Array.from({length: 12}, (_, i) => {
-      const regionKeys = Object.keys(regions);
-      const regionKey = regionKeys[Math.floor(Math.random() * regionKeys.length)];
-      const coords = regions[regionKey];
-      const location = coords[Math.floor(Math.random() * coords.length)];
-
-      return {
-        id: i + 1,
-        title: newsTemplates[i % newsTemplates.length],
-        source: sources[Math.floor(Math.random() * sources.length)],
-        timestamp: `${Math.floor(Math.random() * 24)}h ago`,
-        tags: ["OSINT", "Verification"],
-        location: location,
-        createdAt: Date.now() - (i * 3600000)
-      };
-    });
-
-    // Generate claims data
-    const claimsData = Array.from({length: 8}, (_, i) => {
-      const regionKeys = Object.keys(regions);
-      const regionKey = regionKeys[Math.floor(Math.random() * regionKeys.length)];
-      const coords = regions[regionKey];
-      const location = coords[Math.floor(Math.random() * coords.length)];
-      const isResolved = Math.random() > 0.5;
-      const outcomes = ["true", "false", "void"];
-
-      return {
-        id: i + 1,
-        claim: claimTemplates[i % claimTemplates.length],
-        status: isResolved ? "resolved" : "open",
-        outcome: isResolved ? outcomes[Math.floor(Math.random() * outcomes.length)] : null,
-        authorHandle: `@User${i + 1}`,
-        authorRep: 70 + Math.floor(Math.random() * 30),
-        lockedAt: `${Math.floor(Math.random() * 5)}d ago`,
-        location: location
-      };
-    });
-
-    let selectedOSINTId = null;
-    let selectedClaimId = null;
-
-    // Initialize Map
+    // ============================================
+    // INITIALIZE MAP
+    // ============================================
     const map = new mapboxgl.Map({
-      container: "map",
-      style: "mapbox://styles/mapbox/dark-v11",
-      projection: "globe",
+      container: 'map',
+      style: 'mapbox://styles/mapbox/dark-v11',
+      projection: 'globe',
       center: [15, 35],
-      zoom: 1.5,
+      zoom: 1.8,
+      pitch: 0,
+      bearing: 0,
       antialias: true,
       attributionControl: false
     });
 
-    map.on("style.load", () => {
+    // ============================================
+    // MAP STYLE LOAD EVENT
+    // ============================================
+    map.on('style.load', () => {
+      // Configure atmosphere & fog for "from space" effect
       map.setFog({
-        "range": [0.5, 10],
-        "color": "#000000",
-        "horizon-blend": 0.05,
-        "high-color": "#0a0a0a",
-        "space-color": "#000000",
-        "star-intensity": 0.15
+        range: [0.5, 10],
+        color: '#000000',
+        'horizon-blend': 0.05,
+        'high-color': '#0a0a0a',
+        'space-color': '#000000',
+        'star-intensity': 0.2
       });
 
-      // Add OSINT source with clustering
-      map.addSource("osint", {
-        type: "geojson",
+      // Create GeoJSON features from claims data
+      const claimsFeatures = claimsData.map(claim => ({
+        type: 'Feature',
+        geometry: {
+          type: 'Point',
+          coordinates: [claim.lng, claim.lat]
+        },
+        properties: {
+          id: claim.id,
+          claim: claim.claim,
+          status: claim.status,
+          submitter: claim.submitter,
+          rep: claim.rep,
+          confidence: claim.confidence,
+          lockedDate: claim.lockedDate,
+          outcome: claim.outcome
+        }
+      }));
+
+      // Add claims source with clustering
+      map.addSource('claims', {
+        type: 'geojson',
         data: {
-          type: "FeatureCollection",
-          features: osintData.map(item => ({
-            type: "Feature",
-            geometry: { type: "Point", coordinates: item.location },
-            properties: { ...item, tags: JSON.stringify(item.tags) }
-          }))
+          type: 'FeatureCollection',
+          features: claimsFeatures
         },
         cluster: true,
-        clusterRadius: 60,
-        clusterMaxZoom: 6
+        clusterMaxZoom: 5,
+        clusterRadius: 50
       });
 
-      // Add Claims source with clustering
-      map.addSource("claims", {
-        type: "geojson",
-        data: {
-          type: "FeatureCollection",
-          features: claimsData.map(item => ({
-            type: "Feature",
-            geometry: { type: "Point", coordinates: item.location },
-            properties: { ...item }
-          }))
-        },
-        cluster: true,
-        clusterRadius: 50,
-        clusterMaxZoom: 6
-      });
-
-      // OSINT Layers (red heat)
+      // ============================================
+      // CLUSTER LAYERS
+      // ============================================
+      // Cluster glow
       map.addLayer({
-        id: "osint-clusters",
-        type: "circle",
-        source: "osint",
-        filter: ["has", "point_count"],
+        id: 'claims-clusters-glow',
+        type: 'circle',
+        source: 'claims',
+        filter: ['has', 'point_count'],
         paint: {
-          "circle-color": "#ff3b3b",
-          "circle-radius": ["step", ["get", "point_count"], 20, 3, 30, 5, 40],
-          "circle-blur": 0.9,
-          "circle-opacity": 0.25
+          'circle-color': '#14b8a6',
+          'circle-radius': ['step', ['get', 'point_count'], 25, 5, 35, 10, 45],
+          'circle-blur': 0.8,
+          'circle-opacity': 0.2
         }
       });
 
+      // Cluster core
       map.addLayer({
-        id: "osint-cluster-count",
-        type: "symbol",
-        source: "osint",
-        filter: ["has", "point_count"],
+        id: 'claims-clusters-core',
+        type: 'circle',
+        source: 'claims',
+        filter: ['has', 'point_count'],
+        paint: {
+          'circle-color': '#14b8a6',
+          'circle-radius': ['step', ['get', 'point_count'], 15, 5, 20, 10, 28],
+          'circle-opacity': 0.9,
+          'circle-stroke-width': 2,
+          'circle-stroke-color': '#f8fafc',
+          'circle-stroke-opacity': 0.7
+        }
+      });
+
+      // Cluster count labels
+      map.addLayer({
+        id: 'claims-cluster-count',
+        type: 'symbol',
+        source: 'claims',
+        filter: ['has', 'point_count'],
         layout: {
-          "text-field": "{point_count_abbreviated}",
-          "text-font": ["DIN Offc Pro Medium", "Arial Unicode MS Bold"],
-          "text-size": 11
+          'text-field': '{point_count_abbreviated}',
+          'text-font': ['DIN Offc Pro Medium', 'Arial Unicode MS Bold'],
+          'text-size': 12
         },
-        paint: { "text-color": "#ffffff" }
-      });
-
-      map.addLayer({
-        id: "osint-unclustered",
-        type: "circle",
-        source: "osint",
-        filter: ["!", ["has", "point_count"]],
         paint: {
-          "circle-color": "#ff3b3b",
-          "circle-radius": 8,
-          "circle-blur": 0.5,
-          "circle-opacity": 0.6,
-          "circle-stroke-width": 1,
-          "circle-stroke-color": "#ffffff",
-          "circle-stroke-opacity": 0.4
+          'text-color': '#0f172a'
         }
       });
 
-      // Claims Layers
+      // ============================================
+      // UNCLUSTERED POINT LAYERS (Color by status)
+      // ============================================
+      // Glow layer
       map.addLayer({
-        id: "claims-clusters-glow",
-        type: "circle",
-        source: "claims",
-        filter: ["has", "point_count"],
+        id: 'claims-points-glow',
+        type: 'circle',
+        source: 'claims',
+        filter: ['!', ['has', 'point_count']],
         paint: {
-          "circle-color": "#8a5cf6",
-          "circle-radius": ["step", ["get", "point_count"], 25, 3, 35, 5, 45],
-          "circle-blur": 0.7,
-          "circle-opacity": 0.2
+          'circle-color': [
+            'match',
+            ['get', 'status'],
+            'verified', '#14b8a6',
+            'disputed', '#ef4444',
+            'void', '#6b7280',
+            '#f59e0b'  // pending (default)
+          ],
+          'circle-radius': 16,
+          'circle-blur': 0.7,
+          'circle-opacity': 0.25
         }
       });
 
+      // Core layer
       map.addLayer({
-        id: "claims-clusters-core",
-        type: "circle",
-        source: "claims",
-        filter: ["has", "point_count"],
+        id: 'claims-points-core',
+        type: 'circle',
+        source: 'claims',
+        filter: ['!', ['has', 'point_count']],
         paint: {
-          "circle-color": "#8a5cf6",
-          "circle-radius": ["step", ["get", "point_count"], 12, 3, 18, 5, 24],
-          "circle-opacity": 0.8,
-          "circle-stroke-width": 2,
-          "circle-stroke-color": "#ffffff",
-          "circle-stroke-opacity": 0.6
+          'circle-color': [
+            'match',
+            ['get', 'status'],
+            'verified', '#14b8a6',
+            'disputed', '#ef4444',
+            'void', '#6b7280',
+            '#f59e0b'  // pending
+          ],
+          'circle-radius': 8,
+          'circle-opacity': 0.95,
+          'circle-stroke-width': 2,
+          'circle-stroke-color': '#f8fafc',
+          'circle-stroke-opacity': 0.9
         }
       });
 
+      // ============================================
+      // HEATMAP LAYER (Hidden by default)
+      // ============================================
       map.addLayer({
-        id: "claims-cluster-count",
-        type: "symbol",
-        source: "claims",
-        filter: ["has", "point_count"],
+        id: 'claims-heatmap',
+        type: 'heatmap',
+        source: 'claims',
+        maxzoom: 9,
+        paint: {
+          'heatmap-weight': ['interpolate', ['linear'], ['get', 'confidence'], 0, 0, 100, 1],
+          'heatmap-intensity': ['interpolate', ['linear'], ['zoom'], 0, 1, 9, 3],
+          'heatmap-color': [
+            'interpolate',
+            ['linear'],
+            ['heatmap-density'],
+            0, 'rgba(20, 184, 166, 0)',
+            0.2, 'rgba(20, 184, 166, 0.2)',
+            0.4, 'rgba(20, 184, 166, 0.4)',
+            0.6, 'rgba(245, 158, 11, 0.5)',
+            0.8, 'rgba(239, 68, 68, 0.6)',
+            1, 'rgba(239, 68, 68, 0.8)'
+          ],
+          'heatmap-radius': ['interpolate', ['linear'], ['zoom'], 0, 15, 9, 30],
+          'heatmap-opacity': 0.7
+        },
         layout: {
-          "text-field": "{point_count_abbreviated}",
-          "text-font": ["DIN Offc Pro Medium", "Arial Unicode MS Bold"],
-          "text-size": 11
-        },
-        paint: { "text-color": "#ffffff" }
-      });
-
-      map.addLayer({
-        id: "claims-unclustered-glow",
-        type: "circle",
-        source: "claims",
-        filter: ["!", ["has", "point_count"]],
-        paint: {
-          "circle-color": [
-            "case",
-            ["==", ["get", "outcome"], "true"], "#10b981",
-            ["==", ["get", "outcome"], "false"], "#ef4444",
-            ["==", ["get", "outcome"], "void"], "#6b7280",
-            "#8a5cf6"
-          ],
-          "circle-radius": 14,
-          "circle-blur": 0.6,
-          "circle-opacity": 0.3
+          visibility: 'none'
         }
       });
 
-      map.addLayer({
-        id: "claims-unclustered-core",
-        type: "circle",
-        source: "claims",
-        filter: ["!", ["has", "point_count"]],
-        paint: {
-          "circle-color": [
-            "case",
-            ["==", ["get", "outcome"], "true"], "#10b981",
-            ["==", ["get", "outcome"], "false"], "#ef4444",
-            ["==", ["get", "outcome"], "void"], "#6b7280",
-            "#8a5cf6"
-          ],
-          "circle-radius": 7,
-          "circle-opacity": 0.9,
-          "circle-stroke-width": 2,
-          "circle-stroke-color": "#ffffff",
-          "circle-stroke-opacity": 0.8
-        }
-      });
-
-      // Hover interactions
-      const tooltip = document.getElementById('mapTooltip');
-
-      function updateTooltip(e, sourceId) {
-        const features = map.queryRenderedFeatures(e.point, {
-          layers: sourceId === 'claims'
-            ? ['claims-clusters-core', 'claims-unclustered-core']
-            : ['osint-clusters', 'osint-unclustered']
+      // ============================================
+      // INTERACTION HANDLERS
+      // ============================================
+      // Hover cursor
+      ['claims-clusters-core', 'claims-points-core'].forEach(layer => {
+        map.on('mouseenter', layer, () => {
+          map.getCanvas().style.cursor = 'pointer';
         });
-
-        if (features.length > 0) {
-          const props = features[0].properties;
-
-          if (props.cluster) {
-            const pointCount = props.point_count;
-            tooltip.innerHTML = `
-              <div class="tooltip-title">${pointCount} ${sourceId === 'claims' ? 'Claims' : 'Signals'}</div>
-              <div class="tooltip-meta">Click to expand</div>
-            `;
-          } else {
-            if (sourceId === 'claims') {
-              const statusText = props.status === 'resolved' ? props.outcome : 'Open';
-              tooltip.innerHTML = `
-                <div class="tooltip-title">${props.claim}</div>
-                <div class="tooltip-meta">${props.authorHandle} • Rep: ${props.authorRep}</div>
-                <div class="tooltip-meta">Status: ${statusText}</div>
-              `;
-            } else {
-              tooltip.innerHTML = `
-                <div class="tooltip-title">${props.title}</div>
-                <div class="tooltip-meta">${props.source} • ${props.timestamp}</div>
-              `;
-            }
-          }
-
-          tooltip.style.left = e.point.x + 15 + 'px';
-          tooltip.style.top = e.point.y + 15 + 'px';
-          tooltip.classList.add('visible');
-        } else {
-          tooltip.classList.remove('visible');
-        }
-      }
-
-      ['claims-clusters-core', 'claims-unclustered-core'].forEach(layer => {
-        map.on('mousemove', layer, (e) => updateTooltip(e, 'claims'));
-        map.on('mouseleave', layer, () => tooltip.classList.remove('visible'));
-      });
-
-      ['osint-clusters', 'osint-unclustered'].forEach(layer => {
-        map.on('mousemove', layer, (e) => {
-          const claimsFeatures = map.queryRenderedFeatures(e.point, { layers: ['claims-clusters-core', 'claims-unclustered-core'] });
-          if (claimsFeatures.length === 0) updateTooltip(e, 'osint');
-        });
-        map.on('mouseleave', layer, () => tooltip.classList.remove('visible'));
-      });
-
-      // Click interactions
-      map.on('click', 'osint-clusters', (e) => {
-        const clusterId = e.features[0].properties.cluster_id;
-        map.getSource('osint').getClusterExpansionZoom(clusterId, (err, zoom) => {
-          if (!err) map.easeTo({ center: e.features[0].geometry.coordinates, zoom: zoom });
+        map.on('mouseleave', layer, () => {
+          map.getCanvas().style.cursor = '';
         });
       });
 
+      // Click cluster to expand
       map.on('click', 'claims-clusters-core', (e) => {
-        const clusterId = e.features[0].properties.cluster_id;
+        const features = map.queryRenderedFeatures(e.point, {
+          layers: ['claims-clusters-core']
+        });
+        const clusterId = features[0].properties.cluster_id;
         map.getSource('claims').getClusterExpansionZoom(clusterId, (err, zoom) => {
-          if (!err) map.easeTo({ center: e.features[0].geometry.coordinates, zoom: zoom });
+          if (err) return;
+          map.easeTo({
+            center: features[0].geometry.coordinates,
+            zoom: zoom,
+            duration: 800
+          });
         });
       });
 
-      map.on('click', 'osint-unclustered', (e) => {
-        const id = e.features[0].properties.id;
-        map.easeTo({ center: e.features[0].geometry.coordinates, zoom: 5, duration: 1000 });
-        selectOSINT(id);
+      // Click unclustered point to show popup
+      map.on('click', 'claims-points-core', (e) => {
+        const props = e.features[0].properties;
+        const claim = claimsData.find(c => c.id === props.id);
+
+        if (!claim) return;
+
+        const statusBadge = `<span class="status-badge ${claim.status}">${claim.status.toUpperCase()}</span>`;
+        const evidenceHash = `0x${Math.random().toString(16).substr(2, 12)}...`;
+
+        const popupHTML = `
+          <div class="popup-title">${claim.claim}</div>
+
+          <div class="popup-submitter">
+            <span class="popup-handle">${claim.submitter}</span>
+            <div class="popup-rep">
+              <svg class="rep-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+              </svg>
+              ${claim.rep}
+            </div>
+            ${statusBadge}
+          </div>
+
+          <div class="popup-info-grid">
+            <div class="popup-info-item">
+              <span class="popup-info-label">Locked</span>
+              <span class="popup-info-value">${claim.lockedDate}</span>
+            </div>
+            ${claim.outcome ? `
+            <div class="popup-info-item">
+              <span class="popup-info-label">Outcome</span>
+              <span class="popup-info-value">${claim.outcome.toUpperCase()}</span>
+            </div>
+            ` : ''}
+          </div>
+
+          <div class="popup-confidence">
+            <span class="popup-confidence-label">Confidence</span>
+            <div class="popup-confidence-bar">
+              <div class="popup-confidence-fill" style="width: ${claim.confidence}%"></div>
+            </div>
+            <span class="popup-confidence-value">${claim.confidence}%</span>
+          </div>
+
+          <a href="#" class="popup-evidence" onclick="alert('View on blockchain: ${evidenceHash}'); return false;">
+            <svg class="popup-evidence-icon" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
+            </svg>
+            <span>View Proof: ${evidenceHash}</span>
+          </a>
+
+          <div class="popup-actions">
+            <button class="popup-btn popup-btn-support" onclick="alert('Support this claim'); return false;">
+              <svg class="popup-btn-icon" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              Support
+            </button>
+            <button class="popup-btn popup-btn-challenge" onclick="alert('Challenge this claim'); return false;">
+              <svg class="popup-btn-icon" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              Challenge
+            </button>
+          </div>
+        `;
+
+        new mapboxgl.Popup({ offset: 25, closeButton: true, maxWidth: '400px' })
+          .setLngLat(e.features[0].geometry.coordinates)
+          .setHTML(popupHTML)
+          .addTo(map);
       });
 
-      map.on('click', 'claims-unclustered-core', (e) => {
-        const id = e.features[0].properties.id;
-        map.easeTo({ center: e.features[0].geometry.coordinates, zoom: 5, duration: 1000 });
-        selectClaim(id);
-      });
-
-      ['claims-clusters-core', 'claims-unclustered-core', 'osint-clusters', 'osint-unclustered'].forEach(layer => {
-        map.on('mouseenter', layer, () => { map.getCanvas().style.cursor = 'pointer'; });
-        map.on('mouseleave', layer, () => { map.getCanvas().style.cursor = ''; });
-      });
-
-      map.on("idle", () => {
-        if (map.getZoom() < 2) map.rotateTo(map.getBearing() + 10, { duration: 60000 });
+      // Slow globe rotation when idle
+      map.on('idle', () => {
+        if (map.getZoom() < 2.5 && !map.isMoving()) {
+          map.rotateTo(map.getBearing() + 15, { duration: 120000 });
+        }
       });
     });
 
-    // Render feeds
-    function renderOSINT() {
-      const container = document.getElementById('osintFeed');
-      container.innerHTML = osintData.slice(0, 20).map(item => `
-        <div class="news-item ${selectedOSINTId === item.id ? 'selected' : ''}" data-id="${item.id}" onclick="selectOSINT(${item.id}); flyToLocation([${item.location[0]}, ${item.location[1]}]);">
-          <div class="news-header">
-            <div class="news-source-icon">${item.source.charAt(0)}</div>
-            <div class="news-source">${item.source}</div>
-            <div class="news-time">${item.timestamp}</div>
+    // ============================================
+    // UI CONTROLS
+    // ============================================
+    function toggleSidebar() {
+      const sidebar = document.getElementById('rightSidebar');
+      sidebar.classList.toggle('open');
+      if (sidebar.classList.contains('open')) {
+        renderClaimsList();
+      }
+    }
+
+    function toggleClaimsLayer() {
+      claimsLayerVisible = !claimsLayerVisible;
+      const visibility = claimsLayerVisible ? 'visible' : 'none';
+
+      ['claims-clusters-glow', 'claims-clusters-core', 'claims-cluster-count',
+       'claims-points-glow', 'claims-points-core'].forEach(layer => {
+        map.setLayoutProperty(layer, 'visibility', visibility);
+      });
+
+      document.getElementById('claimsToggle').classList.toggle('active', claimsLayerVisible);
+    }
+
+    function toggleHeatmap() {
+      heatmapVisible = !heatmapVisible;
+      const visibility = heatmapVisible ? 'visible' : 'none';
+      map.setLayoutProperty('claims-heatmap', 'visibility', visibility);
+      document.getElementById('heatmapToggle').classList.toggle('active', heatmapVisible);
+    }
+
+    function resetMapView() {
+      map.flyTo({
+        center: [15, 35],
+        zoom: 1.8,
+        pitch: 0,
+        bearing: 0,
+        duration: 2000
+      });
+    }
+
+    function flyToClaim(lng, lat) {
+      map.flyTo({
+        center: [lng, lat],
+        zoom: 6,
+        duration: 1500
+      });
+      toggleSidebar(); // Close sidebar after flying
+    }
+
+    // ============================================
+    // SIDEBAR CLAIMS LIST
+    // ============================================
+    function renderClaimsList() {
+      const container = document.getElementById('claimsList');
+
+      let filteredClaims = claimsData;
+      if (currentFilter === 'active') {
+        filteredClaims = claimsData.filter(c => c.status === 'pending');
+      } else if (currentFilter === 'high-confidence') {
+        filteredClaims = claimsData.filter(c => c.confidence >= 75);
+      } else if (currentFilter === 'my-predictions') {
+        // Mock: show claims by current user
+        filteredClaims = claimsData.filter(c => c.submitter === '@politicalanalyst');
+      }
+
+      container.innerHTML = filteredClaims.map(claim => `
+        <div class="claim-card" onclick="flyToClaim(${claim.lng}, ${claim.lat})">
+          <div class="claim-card-header">
+            <div class="claim-submitter">
+              <span class="submitter-handle">${claim.submitter}</span>
+              <div class="submitter-rep">
+                <svg class="rep-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                </svg>
+                ${claim.rep}
+              </div>
+            </div>
+            <span class="status-badge ${claim.status}">${claim.status}</span>
           </div>
-          <div class="news-snippet">${item.title}</div>
-          <div class="news-tags">
-            ${item.tags.map(tag => `<span class="news-tag">#${tag}</span>`).join('')}
+          <div class="claim-text">${claim.claim}</div>
+          <div class="claim-meta">
+            <span>${claim.lockedDate}</span>
+            <div class="confidence-bar">
+              <span class="confidence-value">${claim.confidence}%</span>
+              <div class="confidence-progress">
+                <div class="confidence-fill" style="width: ${claim.confidence}%"></div>
+              </div>
+            </div>
           </div>
         </div>
       `).join('');
-      document.getElementById('osintCount').textContent = osintData.length;
     }
 
-    function renderClaims() {
-      const container = document.getElementById('claimsFeed');
-      container.innerHTML = claimsData.map(item => {
-        const statusClass = item.status === 'resolved' ? `resolved-${item.outcome}` : 'open';
-        const statusText = item.status === 'resolved' ? item.outcome : 'open';
-        return `
-          <div class="claim-item ${statusClass} ${selectedClaimId === item.id ? 'selected' : ''}" data-id="${item.id}" onclick="selectClaim(${item.id}); flyToLocation([${item.location[0]}, ${item.location[1]}]);">
-            <div class="claim-header">
-              <div class="claim-author">
-                <span class="claim-handle">${item.authorHandle}</span>
-                <span class="claim-rep"><i class="fas fa-star"></i> ${item.authorRep}</span>
-              </div>
-              <span class="claim-status ${statusClass}">${statusText}</span>
-            </div>
-            <div class="claim-text">${item.claim}</div>
-            <div class="claim-footer">
-              <span>Locked ${item.lockedAt}</span>
-            </div>
-          </div>
-        `;
-      }).join('');
-      document.getElementById('claimsCount').textContent = claimsData.length;
-    }
-
-    function selectOSINT(id) {
-      selectedOSINTId = id;
-      renderOSINT();
-    }
-
-    function selectClaim(id) {
-      selectedClaimId = id;
-      renderClaims();
-    }
-
-    function flyToLocation(coords) {
-      map.flyTo({ center: coords, zoom: 5, duration: 1500 });
-    }
-
-    function toggleOSINT() {
-      const visible = map.getLayoutProperty('osint-clusters', 'visibility') === 'visible';
-      const visibility = visible ? 'none' : 'visible';
-      ['osint-clusters', 'osint-cluster-count', 'osint-unclustered'].forEach(layer => {
-        map.setLayoutProperty(layer, 'visibility', visibility);
+    // Filter chips
+    document.querySelectorAll('.filter-chip').forEach(chip => {
+      chip.addEventListener('click', (e) => {
+        document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+        e.target.classList.add('active');
+        currentFilter = e.target.dataset.filter;
+        renderClaimsList();
       });
-    }
+    });
 
-    function toggleClaims() {
-      const visible = map.getLayoutProperty('claims-clusters-core', 'visibility') === 'visible';
-      const visibility = visible ? 'none' : 'visible';
-      ['claims-clusters-glow', 'claims-clusters-core', 'claims-cluster-count', 'claims-unclustered-glow', 'claims-unclustered-core'].forEach(layer => {
-        map.setLayoutProperty(layer, 'visibility', visibility);
-      });
-    }
+    // ============================================
+    // INITIALIZE
+    // ============================================
+    renderClaimsList();
 
-    function resetView() {
-      map.flyTo({ center: [15, 35], zoom: 1.5, duration: 2000 });
-    }
-
-    // Auto-refresh OSINT feed every 45 seconds
+    // Update stats periodically (mock)
     setInterval(() => {
-      if (osintData.length > 20) {
-        osintData = osintData.slice(0, 20);
-      }
-
-      const regionKeys = Object.keys(regions);
-      const regionKey = regionKeys[Math.floor(Math.random() * regionKeys.length)];
-      const coords = regions[regionKey];
-      const location = coords[Math.floor(Math.random() * coords.length)];
-
-      const newItem = {
-        id: Date.now(),
-        title: newsTemplates[Math.floor(Math.random() * newsTemplates.length)],
-        source: sources[Math.floor(Math.random() * sources.length)],
-        timestamp: "Just now",
-        tags: ["OSINT", "Verification"],
-        location: location,
-        createdAt: Date.now()
-      };
-
-      osintData.unshift(newItem);
-
-      map.getSource('osint').setData({
-        type: "FeatureCollection",
-        features: osintData.map(item => ({
-          type: "Feature",
-          geometry: { type: "Point", coordinates: item.location },
-          properties: { ...item, tags: JSON.stringify(item.tags) }
-        }))
-      });
-
-      renderOSINT();
-    }, 45000);
-
-    // Initialize
-    renderOSINT();
-    renderClaims();
+      const activeClaims = Math.floor(500 + Math.random() * 50);
+      const accuracy = Math.floor(75 + Math.random() * 10);
+      document.getElementById('activeClaims').textContent = activeClaims;
+      document.getElementById('globalAccuracy').textContent = accuracy + '%';
+    }, 30000);
   </script>
 
 </body>
