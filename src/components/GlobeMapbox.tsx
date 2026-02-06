@@ -39,33 +39,47 @@ export default function GlobeMapbox({ claims, osint }: GlobeMapboxProps) {
   const [osintLayerVisible, setOsintLayerVisible] = useState(true);
   const [heatmapVisible, setHeatmapVisible] = useState(false);
   const [currentFilter, setCurrentFilter] = useState('active');
+  const [mapLoaded, setMapLoaded] = useState(false);
+  const [mapError, setMapError] = useState<string | null>(null);
 
   useEffect(() => {
     // Load Mapbox GL JS
     const loadMapbox = async () => {
-      // @ts-ignore
-      if (typeof window !== 'undefined' && !window.mapboxgl) {
-        // Load CSS
-        const link = document.createElement('link');
-        link.href = 'https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css';
-        link.rel = 'stylesheet';
-        document.head.appendChild(link);
+      try {
+        console.log('[GlobeMapbox] Starting Mapbox load...');
+        // @ts-ignore
+        if (typeof window !== 'undefined' && !window.mapboxgl) {
+          console.log('[GlobeMapbox] Loading Mapbox scripts...');
+          // Load CSS
+          const link = document.createElement('link');
+          link.href = 'https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css';
+          link.rel = 'stylesheet';
+          document.head.appendChild(link);
 
-        // Load JS
-        const script = document.createElement('script');
-        script.src = 'https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js';
-        script.async = true;
-        document.head.appendChild(script);
+          // Load JS
+          const script = document.createElement('script');
+          script.src = 'https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js';
+          script.async = true;
+          document.head.appendChild(script);
 
-        await new Promise((resolve) => {
-          script.onload = resolve;
-        });
+          await new Promise((resolve, reject) => {
+            script.onload = resolve;
+            script.onerror = () => reject(new Error('Failed to load Mapbox GL JS'));
+            setTimeout(() => reject(new Error('Mapbox GL JS load timeout')), 10000);
+          });
+          console.log('[GlobeMapbox] Mapbox scripts loaded');
+        } else {
+          console.log('[GlobeMapbox] Mapbox already loaded');
+        }
+
+        // Wait a bit for Mapbox to be fully available
+        setTimeout(() => {
+          initializeMap();
+        }, 100);
+      } catch (error) {
+        console.error('[GlobeMapbox] Error loading Mapbox:', error);
+        setMapError(error instanceof Error ? error.message : 'Failed to load map');
       }
-
-      // Wait a bit for Mapbox to be fully available
-      setTimeout(() => {
-        initializeMap();
-      }, 100);
     };
 
     loadMapbox();
