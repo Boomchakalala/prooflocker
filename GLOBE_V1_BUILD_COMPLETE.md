@@ -1,8 +1,8 @@
 # 🌍 ProofLocker Globe V1 — Build Complete!
 
 **Status:** ✅ All systems operational
-**Dev Server:** http://localhost:3000
-**Globe Page:** http://localhost:3000/globe
+**Preview URL:** https://preview-hjmfjdaermhp.share.sandbox.dev/
+**Globe Page:** https://preview-hjmfjdaermhp.share.sandbox.dev/globe
 
 ---
 
@@ -94,7 +94,7 @@ supabase-globe-geotag-migration.sql
 ```
 
 ### Step 2: Create Geotagged Claims
-1. Go to http://localhost:3000/lock
+1. Go to https://preview-hjmfjdaermhp.share.sandbox.dev/lock
 2. Write your claim
 3. Select category
 4. **NEW:** Type a location (e.g., "San Francisco")
@@ -102,7 +102,7 @@ supabase-globe-geotag-migration.sql
 6. Lock claim
 
 ### Step 3: Visit the Globe
-1. Go to http://localhost:3000/globe
+1. Go to https://preview-hjmfjdaermhp.share.sandbox.dev/globe
 2. See your claim appear as a hotspot!
 3. Click hotspot → side panel opens
 4. View claims in that region
@@ -188,10 +188,10 @@ supabase-globe-geotag-migration.sql  # Database migration
 
 ## URLs
 
-- **Landing:** http://localhost:3000
-- **Lock Claim:** http://localhost:3000/lock
-- **Globe View:** http://localhost:3000/globe
-- **Claim Feed:** http://localhost:3000/app
+- **Landing:** https://preview-hjmfjdaermhp.share.sandbox.dev/
+- **Lock Claim:** https://preview-hjmfjdaermhp.share.sandbox.dev/lock
+- **Globe View:** https://preview-hjmfjdaermhp.share.sandbox.dev/globe
+- **Claim Feed:** https://preview-hjmfjdaermhp.share.sandbox.dev/app
 
 ---
 
