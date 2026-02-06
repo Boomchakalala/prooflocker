@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ProofLocker Globe - OSINT Style Demo</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', sans-serif;
+      background: #0a0a0a;
+      color: white;
+      overflow: hidden;
+    }
+
+    #globe-container {
+      width: 100vw;
+      height: 100vh;
+      background: linear-gradient(180deg, #0a0a0a 0%, #050509 100%);
+    }
+
+    #controls {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      background: rgba(10, 10, 10, 0.9);
+      border: 1px solid rgba(46, 92, 255, 0.3);
+      border-radius: 12px;
+      padding: 16px;
+      z-index: 100;
+      backdrop-filter: blur(10px);
+      min-width: 250px;
+    }
+
+    #controls h2 {
+      font-size: 16px;
+      font-weight: 700;
+      color: #2E5CFF;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    #controls .stat {
+      display: flex;
+      justify-content: space-between;
+      padding: 8px 0;
+      border-bottom: 1px solid rgba(148, 163, 184, 0.1);
+    }
+
+    #controls .stat:last-child {
+      border-bottom: none;
+    }
+
+    #controls .stat-label {
+      color: #94a3b8;
+      font-size: 13px;
+    }
+
+    #controls .stat-value {
+      color: white;
+      font-weight: 600;
+      font-size: 13px;
+    }
+
+    #legend {
+      position: absolute;
+      bottom: 20px;
+      left: 20px;
+      background: rgba(10, 10, 10, 0.9);
+      border: 1px solid rgba(46, 92, 255, 0.3);
+      border-radius: 12px;
+      padding: 16px;
+      z-index: 100;
+      backdrop-filter: blur(10px);
+    }
+
+    #legend h3 {
+      font-size: 12px;
+      font-weight: 700;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 10px;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+
+    .legend-item:last-child {
+      margin-bottom: 0;
+    }
+
+    .legend-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      box-shadow: 0 0 10px currentColor;
+    }
+
+    .legend-label {
+      color: #cbd5e1;
+      font-size: 12px;
+    }
+
+    #info {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background: rgba(10, 10, 10, 0.9);
+      border: 1px solid rgba(46, 92, 255, 0.3);
+      border-radius: 12px;
+      padding: 16px;
+      z-index: 100;
+      backdrop-filter: blur(10px);
+      text-align: center;
+      max-width: 200px;
+    }
+
+    #info h2 {
+      font-size: 18px;
+      font-weight: 800;
+      background: linear-gradient(135deg, #2E5CFF 0%, #5B21B6 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 8px;
+    }
+
+    #info p {
+      color: #94a3b8;
+      font-size: 11px;
+      line-height: 1.5;
+    }
+  </style>
+</head>
+<body>
+  <div id="globe-container"></div>
+
+  <!-- Controls Panel -->
+  <div id="controls">
+    <h2>
+      <span>🌍</span>
+      Globe Stats
+    </h2>
+    <div class="stat">
+      <span class="stat-label">Total Hotspots</span>
+      <span class="stat-value" id="hotspot-count">0</span>
+    </div>
+    <div class="stat">
+      <span class="stat-label">Total Claims</span>
+      <span class="stat-value" id="claim-count">0</span>
+    </div>
+    <div class="stat">
+      <span class="stat-label">Avg Reliability</span>
+      <span class="stat-value" id="avg-reliability">0</span>
+    </div>
+  </div>
+
+  <!-- Legend -->
+  <div id="legend">
+    <h3>Marker Status</h3>
+    <div class="legend-item">
+      <div class="legend-dot" style="background: #34d399; color: #34d399;"></div>
+      <span class="legend-label">High Accuracy</span>
+    </div>
+    <div class="legend-item">
+      <div class="legend-dot" style="background: #fbbf24; color: #fbbf24;"></div>
+      <span class="legend-label">Mixed Status</span>
+    </div>
+    <div class="legend-item">
+      <div class="legend-dot" style="background: #ef4444; color: #ef4444;"></div>
+      <span class="legend-label">High Pending</span>
+    </div>
+  </div>
+
+  <!-- Info -->
+  <div id="info">
+    <h2>ProofLocker</h2>
+    <p>Intelligence Globe Demo<br>Click markers to view claims</p>
+  </div>
+
+  <!-- Globe.GL + Three.js -->
+  <script src="//unpkg.com/globe.gl"></script>
+
+  <script>
+    // Mock hotspot data for demo
+    const mockHotspots = [
+      {
+        lat: 40.7128,
+        lng: -74.0060,
+        city: 'New York',
+        country: 'USA',
+        claim_count: 142,
+        avg_reliability: 785,
+        accuracy_pct: 87,
+        color: '#34d399'
+      },
+      {
+        lat: 51.5074,
+        lng: -0.1278,
+        city: 'London',
+        country: 'UK',
+        claim_count: 98,
+        avg_reliability: 692,
+        accuracy_pct: 78,
+        color: '#fbbf24'
+      },
+      {
+        lat: 35.6762,
+        lng: 139.6503,
+        city: 'Tokyo',
+        country: 'Japan',
+        claim_count: 215,
+        avg_reliability: 823,
+        accuracy_pct: 91,
+        color: '#34d399'
+      },
+      {
+        lat: 48.8566,
+        lng: 2.3522,
+        city: 'Paris',
+        country: 'France',
+        claim_count: 76,
+        avg_reliability: 651,
+        accuracy_pct: 72,
+        color: '#fbbf24'
+      },
+      {
+        lat: 37.7749,
+        lng: -122.4194,
+        city: 'San Francisco',
+        country: 'USA',
+        claim_count: 189,
+        avg_reliability: 801,
+        accuracy_pct: 89,
+        color: '#34d399'
+      },
+      {
+        lat: -33.8688,
+        lng: 151.2093,
+        city: 'Sydney',
+        country: 'Australia',
+        claim_count: 54,
+        avg_reliability: 598,
+        accuracy_pct: 65,
+        color: '#ef4444'
+      },
+      {
+        lat: 55.7558,
+        lng: 37.6173,
+        city: 'Moscow',
+        country: 'Russia',
+        claim_count: 87,
+        avg_reliability: 672,
+        accuracy_pct: 74,
+        color: '#fbbf24'
+      },
+      {
+        lat: 39.9042,
+        lng: 116.4074,
+        city: 'Beijing',
+        country: 'China',
+        claim_count: 163,
+        avg_reliability: 746,
+        accuracy_pct: 82,
+        color: '#34d399'
+      },
+      {
+        lat: 19.4326,
+        lng: -99.1332,
+        city: 'Mexico City',
+        country: 'Mexico',
+        claim_count: 61,
+        avg_reliability: 612,
+        accuracy_pct: 68,
+        color: '#fbbf24'
+      },
+      {
+        lat: -23.5505,
+        lng: -46.6333,
+        city: 'São Paulo',
+        country: 'Brazil',
+        claim_count: 72,
+        avg_reliability: 638,
+        accuracy_pct: 71,
+        color: '#fbbf24'
+      },
+    ];
+
+    // Update stats
+    document.getElementById('hotspot-count').textContent = mockHotspots.length;
+    document.getElementById('claim-count').textContent = mockHotspots.reduce((sum, h) => sum + h.claim_count, 0);
+    document.getElementById('avg-reliability').textContent = Math.round(
+      mockHotspots.reduce((sum, h) => sum + h.avg_reliability, 0) / mockHotspots.length
+    );
+
+    // Initialize Globe
+    const globe = Globe()
+      (document.getElementById('globe-container'))
+      .globeImageUrl('//unpkg.com/three-globe/example/img/earth-blue-marble.jpg')
+      .bumpImageUrl('//unpkg.com/three-globe/example/img/earth-topology.png')
+      .backgroundColor('#0a0a0a')
+      .atmosphereColor('#2E5CFF')
+      .atmosphereAltitude(0.15)
+      .showAtmosphere(true);
+
+    // Load and display country borders
+    fetch('https://unpkg.com/world-atlas@2.0.2/countries-110m.json')
+      .then(res => res.json())
+      .then(countries => {
+        globe
+          .polygonsData(countries.objects.countries.geometries)
+          .polygonCapColor(() => 'rgba(46, 92, 255, 0.1)')
+          .polygonSideColor(() => 'rgba(46, 92, 255, 0.05)')
+          .polygonStrokeColor(() => '#2E5CFF')
+          .polygonAltitude(0.001)
+          .polygonLabel(({ properties }) => `
+            <div style="
+              padding: 8px 12px;
+              background: rgba(10, 10, 10, 0.95);
+              border: 1px solid #2E5CFF;
+              border-radius: 6px;
+              color: white;
+              font-size: 13px;
+              font-weight: 500;
+              box-shadow: 0 4px 12px rgba(46, 92, 255, 0.3);
+            ">
+              ${properties.name}
+            </div>
+          `);
+      });
+
+    // Add hotspot markers
+    globe
+      .pointsData(mockHotspots)
+      .pointLat('lat')
+      .pointLng('lng')
+      .pointAltitude(0.05)
+      .pointRadius(1.5)
+      .pointColor('color')
+      .pointLabel(d => `
+        <div style="
+          padding: 16px;
+          background: linear-gradient(135deg, #0a0a0a 0%, #0f0f0f 100%);
+          border: 2px solid ${d.color};
+          border-radius: 10px;
+          box-shadow: 0 8px 24px rgba(0, 0, 0, 0.8), 0 0 20px ${d.color}40;
+          max-width: 300px;
+          font-family: -apple-system, BlinkMacSystemFont, 'Inter', sans-serif;
+        ">
+          <div style="
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 12px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid ${d.color}40;
+          ">
+            <div style="
+              width: 8px;
+              height: 8px;
+              border-radius: 50%;
+              background: ${d.color};
+              box-shadow: 0 0 10px ${d.color};
+            "></div>
+            <div style="
+              font-weight: 700;
+              color: white;
+              font-size: 15px;
+            ">
+              ${d.city}, ${d.country}
+            </div>
+          </div>
+
+          <div style="
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 12px;
+          ">
+            <div style="
+              background: rgba(46, 92, 255, 0.1);
+              border: 1px solid rgba(46, 92, 255, 0.3);
+              padding: 8px;
+              border-radius: 6px;
+            ">
+              <div style="color: #94a3b8; font-size: 10px; text-transform: uppercase; margin-bottom: 2px;">
+                Claims
+              </div>
+              <div style="color: #2E5CFF; font-size: 16px; font-weight: 700;">
+                ${d.claim_count}
+              </div>
+            </div>
+
+            <div style="
+              background: rgba(46, 92, 255, 0.1);
+              border: 1px solid rgba(46, 92, 255, 0.3);
+              padding: 8px;
+              border-radius: 6px;
+            ">
+              <div style="color: #94a3b8; font-size: 10px; text-transform: uppercase; margin-bottom: 2px;">
+                Score
+              </div>
+              <div style="color: #2E5CFF; font-size: 16px; font-weight: 700;">
+                ${d.avg_reliability}
+              </div>
+            </div>
+          </div>
+
+          <div style="margin-bottom: 10px;">
+            <div style="
+              display: flex;
+              justify-content: space-between;
+              margin-bottom: 4px;
+            ">
+              <span style="color: #94a3b8; font-size: 11px;">Accuracy</span>
+              <span style="color: ${d.accuracy_pct > 70 ? '#34d399' : '#f87171'}; font-size: 13px; font-weight: 700;">
+                ${d.accuracy_pct}%
+              </span>
+            </div>
+            <div style="
+              width: 100%;
+              height: 6px;
+              background: rgba(100, 116, 139, 0.2);
+              border-radius: 3px;
+              overflow: hidden;
+            ">
+              <div style="
+                width: ${d.accuracy_pct}%;
+                height: 100%;
+                background: ${d.accuracy_pct > 70 ? '#34d399' : '#f87171'};
+                box-shadow: 0 0 10px ${d.accuracy_pct > 70 ? '#34d399' : '#f87171'}80;
+              "></div>
+            </div>
+          </div>
+
+          <div style="
+            text-align: center;
+            color: #2E5CFF;
+            font-size: 11px;
+            font-weight: 600;
+            margin-top: 12px;
+            padding-top: 10px;
+            border-top: 1px solid rgba(46, 92, 255, 0.2);
+          ">
+            Click to View Claims →
+          </div>
+        </div>
+      `)
+      .onPointClick(point => {
+        alert(`Clicked: ${point.city}, ${point.country}\n${point.claim_count} claims • ${point.accuracy_pct}% accuracy`);
+      });
+
+    // Camera controls
+    const controls = globe.controls();
+    controls.autoRotate = true;
+    controls.autoRotateSpeed = 0.5;
+    controls.enableZoom = true;
+    controls.minDistance = 120;
+    controls.maxDistance = 800;
+    controls.enableDamping = true;
+    controls.dampingFactor = 0.1;
+
+    // Initial view
+    globe.pointOfView({ lat: 30, lng: 0, altitude: 2.5 }, 0);
+
+    // Pulsing animation for markers
+    let frame = 0;
+    function animate() {
+      frame++;
+      const pulse = Math.sin(frame * 0.06) * 0.3 + 1;
+
+      globe.pointRadius(d => 1.5 * pulse);
+      globe.pointAltitude(d => 0.05 + Math.sin(frame * 0.06) * 0.02);
+
+      requestAnimationFrame(animate);
+    }
+    animate();
+
+    console.log('ProofLocker Globe loaded successfully!');
+    console.log('- Drag to rotate');
+    console.log('- Scroll to zoom');
+    console.log('- Hover countries for names');
+    console.log('- Hover markers for stats');
+    console.log('- Click markers for details');
+  </script>
+</body>
+</html>
