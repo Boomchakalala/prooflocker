@@ -3,7 +3,6 @@ import { createClient } from '@supabase/supabase-js';
 
 export const dynamic = 'force-dynamic';
 export const maxDuration = 10;
-const DEBUG = true; // Enable debug logging
 
 // OSINT Twitter sources for ProofLocker Globe
 const OSINT_SOURCES = [
