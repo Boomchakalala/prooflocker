@@ -44,9 +44,9 @@ export default function GlobeVisualizationPolyglobe({ hotspots, onHotspotClick }
       .bumpImageUrl(null as any)
       // Deep space background
       .backgroundImageUrl('//unpkg.com/three-globe/example/img/night-sky.png')
-      // Subtle purple atmosphere matching ProofLocker theme
-      .atmosphereColor('#5B21B6')
-      .atmosphereAltitude(0.2)
+      // ProofLocker brand: blue-purple gradient atmosphere
+      .atmosphereColor('#2E5CFF')
+      .atmosphereAltitude(0.25)
       .showAtmosphere(true);
 
     // Configure glowing hotspot markers (Polyglobe style)
@@ -77,12 +77,12 @@ export default function GlobeVisualizationPolyglobe({ hotspots, onHotspotClick }
       .pointLabel((d: any) => `
         <div style="
           padding: 16px;
-          background: linear-gradient(135deg, #1a0033 0%, #0a0a0a 100%);
-          border: 1px solid ${d.marker_style.color};
+          background: linear-gradient(135deg, rgba(14, 14, 15, 0.95) 0%, rgba(10, 10, 10, 0.95) 100%);
+          border: 2px solid ${d.marker_style.color};
           border-radius: 12px;
-          box-shadow: 0 8px 32px rgba(91, 33, 182, 0.3);
+          box-shadow: 0 8px 32px rgba(46, 92, 255, 0.4);
           max-width: 280px;
-          backdrop-filter: blur(10px);
+          backdrop-filter: blur(20px);
         ">
           <div style="
             font-weight: bold;
@@ -97,30 +97,30 @@ export default function GlobeVisualizationPolyglobe({ hotspots, onHotspotClick }
             ${d.city}, ${d.country}
           </div>
           <div style="
-            color: #a78bfa;
+            color: #94a3b8;
             font-size: 13px;
             margin-bottom: 6px;
             line-height: 1.5;
           ">
-            <strong>${d.claim_count}</strong> claim${d.claim_count !== 1 ? 's' : ''} locked
+            <strong style="color: white;">${d.claim_count}</strong> claim${d.claim_count !== 1 ? 's' : ''} locked
           </div>
           <div style="
             display: flex;
             gap: 12px;
             font-size: 12px;
-            color: #9ca3af;
+            color: #64748b;
             margin-top: 8px;
             padding-top: 8px;
-            border-top: 1px solid rgba(167, 139, 250, 0.2);
+            border-top: 1px solid rgba(100, 116, 139, 0.3);
           ">
-            <span>Avg: <strong style="color: #a78bfa;">${d.avg_reliability}</strong></span>
+            <span>Avg: <strong style="color: #2E5CFF;">${d.avg_reliability}</strong></span>
             <span>•</span>
-            <span><strong style="color: ${d.accuracy_pct > 70 ? '#22c55e' : '#ef4444'};">${d.accuracy_pct}%</strong> Correct</span>
+            <span><strong style="color: ${d.accuracy_pct > 70 ? '#34d399' : '#f87171'};">${d.accuracy_pct}%</strong> Correct</span>
           </div>
           <div style="
             margin-top: 10px;
             font-size: 11px;
-            color: #6b7280;
+            color: #64748b;
             text-align: center;
           ">
             Click to view claims →
@@ -231,7 +231,7 @@ export default function GlobeVisualizationPolyglobe({ hotspots, onHotspotClick }
       className="w-full h-full"
       style={{
         cursor: 'grab',
-        background: 'radial-gradient(ellipse at center, #1a0033 0%, #0a0a0a 70%)'
+        background: 'radial-gradient(ellipse at center, rgba(46, 92, 255, 0.15) 0%, #0a0a0a 60%)'
       }}
     />
   );
