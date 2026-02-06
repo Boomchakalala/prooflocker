@@ -41,15 +41,6 @@ export default function GlobeMapbox({ claims, osint }: GlobeMapboxProps) {
   const [mapReady, setMapReady] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [mounted, setMounted] = useState(false);
-
-  // Handle initial sidebar state after mount
-  useEffect(() => {
-    setMounted(true);
-    if (typeof window !== 'undefined' && window.innerWidth >= 768) {
-      setSidebarOpen(true);
-    }
-  }, []);
 
   // Create GeoJSON
   const createClaimsGeoJSON = () => ({
@@ -788,7 +779,7 @@ export default function GlobeMapbox({ claims, osint }: GlobeMapboxProps) {
       <div
         ref={mapContainer}
         className="absolute inset-0 w-full h-full"
-        style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, width: '100%', height: '100%' }}
+        style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }}
       />
 
       {!mapReady && !error && (
