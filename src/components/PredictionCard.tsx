@@ -211,28 +211,28 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
     ? prediction.textPreview.slice(0, MAX_TITLE_LENGTH) + "…"
     : prediction.textPreview;
 
-  // Helper to get category styling - Original theme with more vibrant colors
+  // Helper to get category styling - Subtle professional colors
   const getCategoryStyle = (category: string) => {
     switch (category.toLowerCase()) {
       case 'crypto':
-        return 'bg-gradient-to-r from-cyan-500/20 to-cyan-600/20 border-cyan-400/50 text-cyan-300';
+        return 'bg-blue-500/10 border-blue-400/30 text-blue-300';
       case 'sports':
-        return 'bg-gradient-to-r from-orange-500/20 to-red-500/20 border-orange-400/50 text-orange-300';
+        return 'bg-orange-500/10 border-orange-400/30 text-orange-300';
       case 'tech':
-        return 'bg-gradient-to-r from-blue-500/20 to-cyan-500/20 border-blue-400/50 text-blue-300';
+        return 'bg-slate-500/10 border-slate-400/30 text-slate-300';
       case 'personal':
-        return 'bg-gradient-to-r from-purple-500/20 to-pink-500/20 border-purple-400/50 text-purple-300';
+        return 'bg-violet-500/10 border-violet-400/30 text-violet-300';
       case 'politics':
-        return 'bg-gradient-to-r from-red-500/20 to-pink-500/20 border-red-400/50 text-red-300';
+        return 'bg-rose-500/10 border-rose-400/30 text-rose-300';
       case 'markets':
-        return 'bg-gradient-to-r from-emerald-500/20 to-teal-500/20 border-emerald-400/50 text-emerald-300';
+        return 'bg-emerald-500/10 border-emerald-400/30 text-emerald-300';
       case 'osint':
-        return 'bg-gradient-to-r from-indigo-500/20 to-violet-500/20 border-indigo-400/50 text-indigo-300';
+        return 'bg-indigo-500/10 border-indigo-400/30 text-indigo-300';
       case 'culture':
-        return 'bg-gradient-to-r from-pink-500/20 to-purple-500/20 border-pink-400/50 text-pink-300';
+        return 'bg-pink-500/10 border-pink-400/30 text-pink-300';
       case 'other':
       default:
-        return 'bg-gradient-to-r from-gray-500/20 to-gray-600/20 border-gray-400/50 text-gray-300';
+        return 'bg-stone-500/10 border-stone-400/30 text-stone-300';
     }
   };
 
@@ -321,30 +321,30 @@ export default function PredictionCard({ prediction, currentUserId, onOutcomeUpd
     router.push(`/proof/${prediction.publicSlug}`);
   };
 
-  // Determine card border style - Professional styling with subtle gradients
+  // Determine card border style - Clean professional styling with subtle shadows
   const getCardBorderStyle = () => {
     if (prediction.outcome === 'correct') {
       if (prediction.evidence_score && prediction.evidence_score >= 76) {
-        // High quality correct: Premium emerald glow
-        return 'border-emerald-500/40 bg-gradient-to-br from-emerald-500/5 to-teal-500/5 shadow-[0_0_20px_rgba(16,185,129,0.15)] hover:shadow-[0_0_30px_rgba(16,185,129,0.25)]';
+        // High quality correct: Soft emerald accent
+        return 'border-emerald-500/20 bg-emerald-500/5 shadow-sm hover:shadow-md transition-shadow';
       }
       // Correct: Subtle emerald accent
-      return 'border-emerald-500/30 bg-emerald-500/5 shadow-[0_0_15px_rgba(16,185,129,0.1)] hover:shadow-[0_0_25px_rgba(16,185,129,0.2)]';
+      return 'border-emerald-500/20 bg-emerald-500/5 shadow-sm hover:shadow-md transition-shadow';
     }
     if (prediction.outcome === 'incorrect') {
-      // Incorrect: Subtle red accent
-      return 'border-red-500/30 bg-red-500/5 shadow-[0_0_15px_rgba(239,68,68,0.1)] hover:shadow-[0_0_25px_rgba(239,68,68,0.2)]';
+      // Incorrect: Subtle rose accent
+      return 'border-rose-500/20 bg-rose-500/5 shadow-sm hover:shadow-md transition-shadow';
     }
-    // Pending: Subtle purple accent
-    return 'border-purple-500/20 bg-purple-500/5 shadow-[0_0_10px_rgba(168,85,247,0.1)] hover:shadow-[0_0_20px_rgba(168,85,247,0.15)]';
+    // Pending: Subtle slate accent
+    return 'border-slate-500/20 bg-slate-500/5 shadow-sm hover:shadow-md transition-shadow';
   };
 
   // Card content (shared between Link and div versions)
   const cardContent = (
     <>
-      {/* Quality indicator bar - top - Emerald for high quality verified predictions */}
+      {/* Quality indicator bar - top - Subtle emerald for high quality verified predictions */}
       {prediction.evidence_score && prediction.evidence_score >= 76 && isResolved && (
-        <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-emerald-500 via-teal-500 to-emerald-500" />
+        <div className="absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-emerald-400 to-transparent opacity-60" />
       )}
 
       {/* 1. HEADER ROW - Author info + Time + Menu */}
