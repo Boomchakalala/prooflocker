@@ -62,7 +62,10 @@ export default function GlobeMapbox({ claims, osint }: GlobeMapboxProps) {
         });
       }
 
-      initializeMap();
+      // Wait a bit for Mapbox to be fully available
+      setTimeout(() => {
+        initializeMap();
+      }, 100);
     };
 
     loadMapbox();
@@ -70,12 +73,14 @@ export default function GlobeMapbox({ claims, osint }: GlobeMapboxProps) {
     return () => {
       if (map.current) {
         map.current.remove();
+        map.current = null;
       }
     };
   }, []);
 
   useEffect(() => {
-    if (map.current && map.current.isStyleLoaded()) {
+    if (map.current && map.current.isStyleLoaded && map.current.isStyleLoaded()) {
+      console.log('[GlobeMapbox] Updating map sources with new data');
       updateMapSources();
     }
   }, [claims, osint]);
