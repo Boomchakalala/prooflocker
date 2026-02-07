@@ -2,6 +2,13 @@
 
 import { useEffect, useRef, useState, useCallback } from 'react';
 
+// Extend Window type for mapboxgl
+declare global {
+  interface Window {
+    mapboxgl: any;
+  }
+}
+
 interface Claim {
   id: number;
   claim: string;
