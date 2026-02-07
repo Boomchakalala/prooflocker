@@ -6,6 +6,7 @@ import Link from "next/link";
 import PredictionCard from "@/components/PredictionCard";
 import TopSourcesList from "@/components/TopSourcesList";
 import LandingHeader from "@/components/LandingHeader";
+import UnifiedHeader from "@/components/UnifiedHeader";
 import DEStatusBanner from "@/components/DEStatusBanner";
 import ClaimModal from "@/components/ClaimModal";
 import Footer from "@/components/Footer";
@@ -40,6 +41,7 @@ function AppFeedContent() {
   const [hiddenPredictions, setHiddenPredictions] = useState<Set<string>>(new Set());
   const [showHidden, setShowHidden] = useState(false);
   const [selectedOsint, setSelectedOsint] = useState<any | null>(null);
+  const [showLockModal, setShowLockModal] = useState(false);
 
   const categories = ["all", "Crypto", "Politics", "Markets", "Tech", "Sports", "OSINT", "Culture", "Personal", "Other"];
 
@@ -278,11 +280,14 @@ function AppFeedContent() {
         <div className="absolute bottom-20 left-1/2 w-80 h-80 bg-purple-600/6 rounded-full blur-3xl" />
       </div>
 
-      {/* Header */}
-      <LandingHeader />
+      {/* Unified Header */}
+      <UnifiedHeader
+        currentView="feed"
+        onLockClick={() => setShowLockModal(true)}
+      />
 
-      {/* Main content */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-5 pb-5 md:py-5 relative z-10">
+      {/* Main content - adjusted for unified header */}
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-5 md:py-24 relative z-10">
         {/* Page header */}
         <div className="flex items-center justify-between mb-5">
           <div>
