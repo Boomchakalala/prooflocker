@@ -46,7 +46,7 @@ export default function GlobePage() {
   const { user } = useAuth();
   const [claims, setClaims] = useState<Claim[]>([]);
   const [osint, setOsint] = useState<OsintItem[]>([]);
-  const [currentTab, setCurrentTab] = useState<'claims' | 'osint'>('claims');
+  const [currentTab, setCurrentTab] = useState<'claims' | 'osint'>('osint'); // Default to OSINT
   const [activeFilter, setActiveFilter] = useState<string>('all');
 
   useEffect(() => {
@@ -336,8 +336,7 @@ export default function GlobePage() {
                 (displayItems as OsintItem[]).map((item) => (
                   <div
                     key={item.id}
-                    className="bg-[#0A0A0F]/80 border border-purple-500/20 border-l-[3px] border-l-[#ef4444] rounded-[10px] p-3.5 cursor-pointer transition-all hover:border-[#ef4444] hover:bg-[rgba(239,68,68,0.1)] hover:shadow-[0_0_0_1px_rgba(239,68,68,0.3)]"
-                    onClick={() => router.push(`/osint/${item.id}`)}
+                    className="bg-[#0A0A0F]/80 border border-purple-500/20 border-l-[3px] border-l-[#ef4444] rounded-[10px] p-3.5 transition-all hover:border-[#ef4444] hover:bg-[rgba(239,68,68,0.1)] hover:shadow-[0_0_0_1px_rgba(239,68,68,0.3)]"
                   >
                     {/* Header */}
                     <div className="flex items-center justify-between mb-2">
@@ -356,7 +355,7 @@ export default function GlobePage() {
                     </p>
 
                     {/* Tags */}
-                    <div className="flex flex-wrap gap-1.5">
+                    <div className="flex flex-wrap gap-1.5 mb-3">
                       {item.tags.slice(0, 3).map((tag, i) => (
                         <span
                           key={i}
@@ -366,6 +365,17 @@ export default function GlobePage() {
                         </span>
                       ))}
                     </div>
+
+                    {/* Action Button */}
+                    <button
+                      onClick={() => router.push(`/lock?osint=${item.id}`)}
+                      className="w-full flex items-center justify-center gap-2 px-4 py-2 rounded-lg text-[13px] font-semibold bg-gradient-to-r from-red-600 to-purple-600 text-white hover:from-red-500 hover:to-purple-500 transition-all shadow-[0_0_15px_rgba(239,68,68,0.3)]"
+                    >
+                      <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clipRule="evenodd" />
+                      </svg>
+                      Create Claim from this Signal
+                    </button>
                   </div>
                 ))
               )
