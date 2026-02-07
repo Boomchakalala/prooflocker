@@ -34,9 +34,9 @@ export default function AccountabilityScore() {
                 </svg>
               </div>
             </div>
-            <h3 className="text-lg md:text-xl font-bold text-white mb-3">Early Claims Rewarded</h3>
-            <p className="text-sm md:text-base text-white/70">
-              Claim before OSINT confirms it. Get multipliers for early accuracy. Your score reflects reality.
+            <h3 className="text-lg md:text-xl font-bold text-white mb-3">Early Predictions Win</h3>
+            <p className="text-sm md:text-base text-white/75 leading-relaxed">
+              Lock your prediction before OSINT confirms it. Early accuracy earns multipliers. The earlier you call it, the more your reputation grows.
             </p>
           </div>
 
@@ -49,9 +49,9 @@ export default function AccountabilityScore() {
                 </svg>
               </div>
             </div>
-            <h3 className="text-lg md:text-xl font-bold text-white mb-3">Reputation Built</h3>
-            <p className="text-sm md:text-base text-white/70">
-              Long-term reliability visible to everyone. No identity needed — just results.
+            <h3 className="text-lg md:text-xl font-bold text-white mb-3">Transparent Track Record</h3>
+            <p className="text-sm md:text-base text-white/75 leading-relaxed">
+              Your accuracy is public and permanent. No credentials required—just provable results anyone can verify.
             </p>
           </div>
 
@@ -64,9 +64,9 @@ export default function AccountabilityScore() {
                 </svg>
               </div>
             </div>
-            <h3 className="text-lg md:text-xl font-bold text-white mb-3">Trust Compounded</h3>
-            <p className="text-sm md:text-base text-white/70">
-              Each resolution strengthens your history. Credibility earned through proof.
+            <h3 className="text-lg md:text-xl font-bold text-white mb-3">Credibility Compounds</h3>
+            <p className="text-sm md:text-base text-white/75 leading-relaxed">
+              Every correct prediction strengthens your reputation. Build momentum through consistency and watch your influence grow.
             </p>
           </div>
         </div>
