@@ -70,7 +70,7 @@ export default function LandingHero() {
           className="text-5xl md:text-7xl lg:text-8xl font-black mb-6 tracking-tight leading-[1.1] animate-fade-in-up"
           style={{ fontFamily: 'var(--font-montserrat)' }}
         >
-          <span className="block gradient-text-animated font-black">Build Undeniable Credibility.</span>
+          <span className="block gradient-text-animated font-black">Undeniable Credibility.</span>
           <span className="block text-[#F8F9FA]/80 font-black">One Claim at a Time.</span>
         </h1>
 
@@ -105,23 +105,23 @@ export default function LandingHero() {
             <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7"/>
             </svg>
-            <span className="font-bold">1,247</span>
-            <span className="text-gray-400">Claims Resolved</span>
+            <span className="font-bold">{stats.totalClaims.toLocaleString()}</span>
+            <span className="text-gray-400">Claims Locked</span>
           </div>
           <span className="text-[#4C1D95] hidden sm:inline">·</span>
           <div className="flex items-center gap-2 text-cyan-400">
             <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/>
             </svg>
-            <span className="font-bold">892</span>
-            <span className="text-gray-400">Reputation Points Earned</span>
+            <span className="font-bold">{stats.resolvedClaims.toLocaleString()}</span>
+            <span className="text-gray-400">Claims Resolved</span>
           </div>
           <span className="text-[#4C1D95] hidden sm:inline">·</span>
           <div className="flex items-center gap-2 text-purple-400">
             <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
             </svg>
-            <span className="font-bold">67</span>
+            <span className="font-bold">{stats.totalUsers.toLocaleString()}</span>
             <span className="text-gray-400">Predictors Ranked</span>
           </div>
         </div>
