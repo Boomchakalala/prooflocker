@@ -95,59 +95,41 @@ export default function LockPage() {
   };
 
   return (
-    <div className="min-h-screen gradient-bg relative">
-      {/* Decorative gradient orbs */}
+    <div className="min-h-screen gradient-bg text-white relative">
+      {/* Decorative gradient orbs - matching other pages */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-20 -left-40 w-80 h-80 bg-[#5B21B6]/10 rounded-full blur-3xl" />
-        <div className="absolute top-40 -right-40 w-96 h-96 bg-[#2E5CFF]/10 rounded-full blur-3xl" />
+        <div className="absolute top-20 -left-40 w-80 h-80 bg-blue-500/10 rounded-full blur-3xl" />
+        <div className="absolute top-40 -right-40 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl" />
       </div>
 
-      {/* Header */}
-      <header className="glass border-b border-white/5 sticky top-0 z-50 bg-[#0a0a0a]/80 backdrop-blur-xl">
-        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-14 md:h-16">
-            <Link
-              href="/"
-              className="flex items-center gap-2 text-neutral-400 hover:text-white transition-colors text-sm"
-            >
-              <svg
-                className="w-4 h-4"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M10 19l-7-7m0 0l7-7m-7 7h18"
-                />
-              </svg>
-              Back
-            </Link>
-            <BrandLogo />
-          </div>
-        </div>
-      </header>
-
       {/* Main content */}
-      <main className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-12 relative z-10">
+      <main className="relative z-10 max-w-4xl mx-auto px-4 py-12">
         {!locked ? (
           <>
-            <div className="mb-8 fade-in">
-              <h1 className="text-4xl font-bold text-white mb-3">
+            {/* Header - matching scoring page style */}
+            <div className="mb-10">
+              <Link
+                href="/app"
+                className="inline-flex items-center text-neutral-400 hover:text-white transition-colors mb-8 text-sm"
+              >
+                <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                </svg>
+                Back to App
+              </Link>
+              <h1 className="text-4xl font-bold text-white mb-3 tracking-tight">
                 Lock your prediction
               </h1>
-              <p className="text-neutral-400 text-lg">
-                Create a timestamped record you can verify later.
+              <p className="text-neutral-400">
+                Create a timestamped, immutable record on Constellation DAG
               </p>
             </div>
 
-            <div className="glass border border-white/10 rounded-xl p-6">
+            <div className="glass border border-white/10 rounded-xl p-8">
               <div className="mb-6">
                 <label
                   htmlFor="prediction-text"
-                  className="block text-sm font-medium text-[#e0e0e0] mb-3"
+                  className="block text-sm font-medium text-white mb-3"
                 >
                   Your prediction or statement
                 </label>
@@ -156,21 +138,21 @@ export default function LockPage() {
                   value={text}
                   onChange={(e) => setText(e.target.value)}
                   placeholder="e.g., Bitcoin hits $150K by June 2026"
-                  className="w-full h-48 px-4 py-3 glass border border-white/10 rounded-lg text-white placeholder-[#555] focus:outline-none focus:ring-2 focus:ring-[#2E5CFF] focus:border-transparent resize-none transition-all"
+                  className="w-full h-48 px-4 py-3 glass border border-white/10 rounded-lg text-white placeholder-neutral-500 focus:outline-none focus:ring-2 focus:ring-[#2E5CFF] focus:border-transparent resize-none transition-all"
                   disabled={loading}
                 />
                 <div className="flex items-center justify-between mt-2">
                   {text.length > 0 && (
-                    <span className="text-sm text-[#6b6b6b]">
+                    <span className="text-sm text-neutral-400">
                       {text.length} characters
                       {text.length < 20 && text.length > 0 && (
-                        <span className="ml-2 text-xs text-neutral-600">· Concise predictions work best</span>
+                        <span className="ml-2 text-xs text-neutral-500">· Concise predictions work best</span>
                       )}
                     </span>
                   )}
                   {text.length === 0 && <span></span>}
                   {text.length > 80 && (
-                    <span className="text-xs text-yellow-500 flex items-center gap-1">
+                    <span className="text-xs text-yellow-400 flex items-center gap-1">
                       <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
                         <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
                       </svg>
@@ -180,24 +162,24 @@ export default function LockPage() {
                 </div>
               </div>
 
-              {/* Category selector */}
-              <div className="mb-6">
+              {/* Category selector - improved styling */}
+              <div className="mb-8">
                 <label
                   htmlFor="category-select"
-                  className="block text-sm font-medium text-[#e0e0e0] mb-3"
+                  className="block text-sm font-medium text-white mb-3"
                 >
-                  Category <span className="text-[#2E5CFF] font-normal">(recommended)</span>
+                  Category <span className="text-neutral-400 font-normal text-xs">(helps others discover your prediction)</span>
                 </label>
-                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2">
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
                   {categories.map((cat) => (
                     <button
                       key={cat}
                       type="button"
                       onClick={() => setCategory(cat)}
-                      className={`px-3 py-2 text-sm font-medium rounded-lg transition-all ${
+                      className={`px-4 py-3 text-sm font-medium rounded-lg transition-all ${
                         category === cat
-                          ? "bg-gradient-to-r from-blue-600/80 to-purple-600/80 text-white border border-blue-500/50"
-                          : "glass text-neutral-400 hover:text-white hover:bg-white/5 border border-white/10"
+                          ? "bg-gradient-to-r from-[#5B21B6] to-[#2E5CFF] text-white border border-[#5B21B6] shadow-lg shadow-purple-500/30"
+                          : "glass text-neutral-400 hover:text-white hover:bg-white/5 border border-white/10 hover:border-white/20"
                       }`}
                       disabled={loading}
                     >
@@ -205,18 +187,15 @@ export default function LockPage() {
                     </button>
                   ))}
                 </div>
-                <p className="text-xs text-neutral-500 mt-2">
-                  Helps others discover your prediction
-                </p>
               </div>
 
               {/* How it works - Collapsible */}
-              <div className="glass border border-white/10 rounded-lg p-4 mb-6">
+              <div className="glass border border-white/10 rounded-lg p-5 mb-6">
                 <button
                   onClick={() => setHowItWorksExpanded(!howItWorksExpanded)}
                   className="w-full flex items-center justify-between text-left group"
                 >
-                  <h3 className="text-sm font-semibold text-[#e0e0e0] flex items-center gap-2">
+                  <h3 className="text-sm font-semibold text-white flex items-center gap-2">
                     <svg
                       className="w-4 h-4 text-[#2E5CFF]"
                       fill="currentColor"
@@ -231,7 +210,7 @@ export default function LockPage() {
                     How it works — immutable & on-chain
                   </h3>
                   <svg
-                    className={`w-4 h-4 text-neutral-500 transition-transform ${
+                    className={`w-4 h-4 text-neutral-400 transition-transform ${
                       howItWorksExpanded ? "rotate-180" : ""
                     }`}
                     fill="none"
@@ -242,22 +221,22 @@ export default function LockPage() {
                   </svg>
                 </button>
                 {howItWorksExpanded && (
-                  <ol className="space-y-2 text-sm text-[#a0a0a0] mt-3 pt-3 border-t border-white/10">
-                    <li className="flex gap-2">
+                  <ol className="space-y-3 text-sm text-neutral-400 mt-4 pt-4 border-t border-white/10">
+                    <li className="flex gap-3">
                       <span className="text-[#2E5CFF] flex-shrink-0 font-semibold">1.</span>
                       <span>Your text is hashed using SHA-256 (cryptographic fingerprint)</span>
                     </li>
-                    <li className="flex gap-2">
+                    <li className="flex gap-3">
                       <span className="text-[#2E5CFF] flex-shrink-0 font-semibold">2.</span>
                       <span>
                         Fingerprint is submitted on-chain—permanent and immutable
                       </span>
                     </li>
-                    <li className="flex gap-2">
+                    <li className="flex gap-3">
                       <span className="text-[#2E5CFF] flex-shrink-0 font-semibold">3.</span>
                       <span>You get a proof ID to share and verify</span>
                     </li>
-                    <li className="flex gap-2">
+                    <li className="flex gap-3">
                       <span className="text-[#2E5CFF] flex-shrink-0 font-semibold">4.</span>
                       <span>
                         Once locked, it cannot be edited. Ever.
@@ -267,8 +246,8 @@ export default function LockPage() {
                 )}
               </div>
 
-              {/* Privacy notice - Moved above CTA */}
-              <div className="glass rounded-lg p-4 border border-white/10 mb-6">
+              {/* Privacy notice */}
+              <div className="bg-white/5 rounded-lg p-5 border border-white/10 mb-6">
                 <div className="flex items-start gap-3">
                   <svg
                     className="w-5 h-5 text-green-400 flex-shrink-0 mt-0.5"
@@ -282,13 +261,13 @@ export default function LockPage() {
                     />
                   </svg>
                   <div>
-                    <p className="text-sm text-[#e0e0e0] font-medium mb-1">
+                    <p className="text-sm text-white font-medium mb-1">
                       Privacy & Anonymity
                     </p>
-                    <p className="text-sm text-[#888]">
+                    <p className="text-sm text-neutral-400">
                       No login required. Only the SHA-256 fingerprint is submitted to the blockchain.
                       {isAnonymous && (
-                        <span className="block mt-1 text-green-400 font-medium text-xs">
+                        <span className="block mt-2 text-green-400 font-medium text-xs">
                           ✓ You're using ProofLocker anonymously
                         </span>
                       )}
@@ -297,11 +276,11 @@ export default function LockPage() {
                 </div>
               </div>
 
-              {/* Primary CTA - Enhanced */}
+              {/* Primary CTA */}
               <button
                 onClick={handleLock}
                 disabled={!text.trim() || loading}
-                className="relative w-full px-6 py-5 bg-gradient-to-r from-[#2E5CFF] to-[#5B21B6] hover:from-[#3D6CFF] hover:to-[#6B31C6] disabled:bg-neutral-900 disabled:text-neutral-600 disabled:cursor-not-allowed text-white font-semibold text-base rounded-lg transition-all disabled:from-neutral-900 disabled:to-neutral-900 shadow-lg shadow-[#2E5CFF]/25 hover:shadow-[#2E5CFF]/40 disabled:shadow-none"
+                className="relative w-full px-6 py-5 bg-gradient-to-r from-[#5B21B6] to-[#2E5CFF] hover:from-[#6B31C6] hover:to-[#3D6CFF] disabled:bg-neutral-800 disabled:text-neutral-600 disabled:cursor-not-allowed text-white font-semibold text-base rounded-lg transition-all disabled:from-neutral-800 disabled:to-neutral-800 shadow-lg shadow-purple-500/25 hover:shadow-purple-500/40 disabled:shadow-none"
               >
                 {loading ? (
                   <span className="flex items-center justify-center gap-2">
@@ -324,20 +303,25 @@ export default function LockPage() {
                         d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
                       />
                     </svg>
-                    Locking...
+                    Locking on-chain...
                   </span>
                 ) : (
-                  "Lock on-chain"
+                  <span className="flex items-center justify-center gap-2">
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                    </svg>
+                    Lock on-chain
+                  </span>
                 )}
               </button>
 
               {/* Microcopy */}
-              <p className="text-xs text-neutral-400 text-center mt-3">
-                Fingerprint + timestamp. Immutable proof.
+              <p className="text-xs text-neutral-500 text-center mt-4">
+                Fingerprint + timestamp. Immutable proof forever.
               </p>
 
               {/* Content policy notice */}
-              <p className="mt-4 text-xs text-neutral-600 text-center">
+              <p className="mt-3 text-xs text-neutral-600 text-center">
                 No hate, harassment, or illegal content
               </p>
             </div>
