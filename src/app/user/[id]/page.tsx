@@ -211,7 +211,7 @@ export default function PublicProfilePage() {
             <div className="mb-6">
               <div className="flex items-center gap-3 mb-3">
                 <h2 className="text-lg font-semibold text-neutral-300">Reliability Score</h2>
-                <div className={`px-3 py-1 rounded-full text-xs font-bold ${tier.bgColor} ${tier.color} border ${tier.borderColor}`}>
+                <div className={`px-3 py-1 rounded-full text-xs font-bold ${tier.bgColor} ${tier.color} border border-white/20`}>
                   {tier.label}
                 </div>
               </div>
