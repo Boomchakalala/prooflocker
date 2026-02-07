@@ -226,7 +226,7 @@ export default function PublicProfilePage() {
                 <div className="mb-3">
                   <div className="flex items-center justify-between text-xs text-neutral-400 mb-2">
                     <span>Current: {stats.reliabilityScore}</span>
-                    <span>Next: {nextMilestone.tierName} ({nextMilestone.threshold})</span>
+                    <span>Next: {nextMilestone.tierInfo?.label} ({nextMilestone.tierInfo?.min})</span>
                   </div>
                   <div className="h-2 bg-neutral-900 rounded-full overflow-hidden">
                     <div
@@ -235,7 +235,7 @@ export default function PublicProfilePage() {
                     />
                   </div>
                   <p className="text-xs text-neutral-500 mt-2">
-                    {nextMilestone.pointsNeeded} points to {nextMilestone.tierName}
+                    {nextMilestone.pointsNeeded} points to {nextMilestone.tierInfo?.label}
                   </p>
                 </div>
               )}
