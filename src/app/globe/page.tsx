@@ -121,65 +121,16 @@ export default function GlobePage() {
       `}</style>
 
       <div className="min-h-screen bg-gradient-to-b from-[#0A0A0F] via-[#111118] to-[#0A0A0F]">
-        {/* Header */}
-        <header className="fixed top-0 left-0 right-0 h-14 bg-gradient-to-r from-[#0A0A0F] via-[#111118] to-[#0A0A0F] backdrop-blur-[20px] border-b border-purple-500/20 z-[1000] flex items-center justify-between px-6 shadow-[0_0_30px_rgba(91,33,182,0.15)]">
-          <div className="flex items-center gap-8">
-            <a href="/" className="flex items-center">
-              <img src="/logos/prooflocker-logo-dark.svg" alt="ProofLocker" className="h-9 w-auto" />
-            </a>
-            <span className="text-[13px] font-medium text-purple-300/70 tracking-wide hidden lg:block">
-              Verifiable Claims Worldwide
-            </span>
-          </div>
+        {/* Unified Header */}
+        <UnifiedHeader currentView="globe" />
 
-          <div className="flex items-center gap-6 text-[13px] text-[#94a3b8]">
-            <div className="flex items-center gap-2">
-              <svg className="w-[18px] h-[18px]" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-              <span className="font-semibold text-purple-300">{claims.length}</span> Claims
-            </div>
-            <div className="flex items-center gap-2">
-              <svg className="w-[18px] h-[18px]" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                <circle cx="12" cy="12" r="3" />
-                <path d="M12 1v6m0 6v6M1 12h6m6 0h6" />
-              </svg>
-              <span className="font-semibold text-red-300">{osint.length}</span> OSINT
-            </div>
-          </div>
-
-          <div className="flex items-center gap-3">
-            <a
-              href="/app"
-              className="flex items-center gap-2 px-4 py-2 rounded-lg text-[13px] font-semibold text-gray-400 border border-purple-500/20 hover:text-white hover:border-purple-500/40 hover:bg-purple-500/10 transition-all"
-            >
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                <rect x="3" y="3" width="7" height="7" rx="1" />
-                <rect x="14" y="3" width="7" height="7" rx="1" />
-                <rect x="14" y="14" width="7" height="7" rx="1" />
-                <rect x="3" y="14" width="7" height="7" rx="1" />
-              </svg>
-              Feed
-            </a>
-            <a
-              href="/lock"
-              className="flex items-center gap-2 px-4 py-2 rounded-lg text-[13px] font-semibold bg-gradient-to-r from-[#5B21B6] to-[#2E5CFF] hover:from-[#6B31C6] hover:to-[#3D6CFF] text-white transition-all shadow-[0_0_20px_rgba(91,33,182,0.4)]"
-            >
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-              </svg>
-              Submit
-            </a>
-          </div>
-        </header>
-
-        {/* Map Container */}
-        <div className="fixed top-14 left-0 right-[360px] bottom-0">
+        {/* Map Container - adjusted for unified header */}
+        <div className="fixed top-16 left-0 right-[360px] bottom-0">
           <GlobeMapbox claims={claims} osint={osint} />
         </div>
 
-        {/* Right Sidebar */}
-        <aside className="fixed top-14 right-0 w-[360px] h-[calc(100vh-56px)] bg-gradient-to-b from-[#0A0A0F]/98 via-[#111118]/98 to-[#0A0A0F]/98 backdrop-blur-[30px] border-l border-purple-500/20 z-[950] flex flex-col">
+        {/* Right Sidebar - adjusted for unified header */}
+        <aside className="fixed top-16 right-0 w-[360px] h-[calc(100vh-64px)] bg-gradient-to-b from-[#0A0A0F]/98 via-[#111118]/98 to-[#0A0A0F]/98 backdrop-blur-[30px] border-l border-purple-500/20 z-[950] flex flex-col">
           {/* Sidebar Header */}
           <div className="p-5 border-b border-purple-500/20">
             {/* Tabs */}
