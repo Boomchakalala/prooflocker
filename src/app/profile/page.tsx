@@ -203,12 +203,20 @@ export default function ProfilePage() {
               <h1 className="text-4xl font-bold text-white mb-2 tracking-tight">Your Profile</h1>
               <p className="text-neutral-400 text-sm">{user.email}</p>
             </div>
-            <button
-              onClick={handleSignOut}
-              className="px-4 py-2 text-sm font-medium text-neutral-400 hover:text-white border border-white/20 hover:border-neutral-600 rounded-md transition-all"
-            >
-              Sign out
-            </button>
+            <div className="flex items-center gap-3">
+              <Link
+                href="/dashboard"
+                className="px-6 py-2.5 text-sm font-semibold bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-500 hover:to-purple-600 text-white rounded-lg transition-all shadow-lg hover:shadow-[0_0_20px_rgba(168,85,247,0.4)]"
+              >
+                View Stats
+              </Link>
+              <button
+                onClick={handleSignOut}
+                className="px-4 py-2 text-sm font-medium text-neutral-400 hover:text-white border border-white/20 hover:border-neutral-600 rounded-md transition-all"
+              >
+                Sign out
+              </button>
+            </div>
           </div>
 
           {/* Pseudonym section */}
