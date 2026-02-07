@@ -682,6 +682,19 @@ export default function PredictionCard({ prediction, card, currentUserId, onOutc
                 <path strokeLinecap="round" strokeLinejoin="round" d="M5 15l7-7 7 7" />
               </svg>
               {voteCount}
+              {/* Show upvoter faces for resolved correct predictions with votes */}
+              {voteCount > 0 && prediction?.outcome === 'correct' && (
+                <div className="flex -space-x-1 ml-1">
+                  {[...Array(Math.min(voteCount, 3))].map((_, i) => (
+                    <div
+                      key={i}
+                      className="w-5 h-5 rounded-full bg-gradient-to-br from-slate-600 to-slate-800 border border-slate-900 flex items-center justify-center"
+                    >
+                      <span className="text-[8px] text-white font-bold">{i + 1}</span>
+                    </div>
+                  ))}
+                </div>
+              )}
             </button>
           )}
           <button
@@ -691,7 +704,18 @@ export default function PredictionCard({ prediction, card, currentUserId, onOutc
             View
           </button>
         </div>
-        <code className="text-xs text-slate-500 font-mono">{prediction.hash.slice(0, 12)}...{prediction.hash.slice(-8)}</code>
+        <div className="flex items-center gap-3">
+          {/* "Cited as evidence" indicator - placeholder, would need backend support */}
+          {prediction?.outcome === 'correct' && prediction?.upvotesCount > 5 && (
+            <div className="flex items-center gap-1 text-xs text-cyan-400">
+              <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/>
+              </svg>
+              <span className="font-semibold">Cited</span>
+            </div>
+          )}
+          <code className="text-xs text-slate-500 font-mono">{prediction.hash.slice(0, 12)}...{prediction.hash.slice(-8)}</code>
+        </div>
       </div>
       {/* Resolve Modal */}
       {showResolveModal && (
