@@ -58,7 +58,7 @@ export default function MomentOfTruth() {
                 </div>
 
                 <h3 className="text-white text-lg font-medium mb-4 leading-relaxed">
-                  Bitcoin hits $150K by Q2 2026
+                  Satellite imagery shows military buildup at border—conflict escalates within 90 days
                 </h3>
 
                 <div className="space-y-2 text-sm text-slate-400">
@@ -116,7 +116,7 @@ export default function MomentOfTruth() {
                 </div>
 
                 <h3 className="text-white text-lg font-medium mb-4 leading-relaxed">
-                  Bitcoin hits $150K by Q2 2026
+                  Satellite imagery shows military buildup at border—conflict escalates within 90 days
                 </h3>
 
                 <div className="space-y-2 text-sm mb-4">
@@ -134,7 +134,7 @@ export default function MomentOfTruth() {
                   </div>
                   <div className="flex items-center gap-2">
                     <span className="text-slate-500">Streak:</span>
-                    <span className="text-orange-400 font-bold">0 → 5 🔥</span>
+                    <span className="text-orange-400 font-bold">0 → 5</span>
                   </div>
                 </div>
 
@@ -189,7 +189,7 @@ export default function MomentOfTruth() {
                 </div>
                 <div className="text-center">
                   <div className="text-white font-semibold mb-1">Event</div>
-                  <div className="text-xs text-slate-400">BTC $150K</div>
+                  <div className="text-xs text-slate-400">Conflict starts</div>
                 </div>
               </div>
 
