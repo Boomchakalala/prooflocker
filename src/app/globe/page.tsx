@@ -51,6 +51,7 @@ export default function GlobePage() {
   const [currentTab, setCurrentTab] = useState<'claims' | 'osint'>('osint'); // Default to OSINT
   const [activeFilter, setActiveFilter] = useState<string>('all');
   const [selectedOsint, setSelectedOsint] = useState<OsintItem | null>(null);
+  const [showQuickLock, setShowQuickLock] = useState(false);
 
   useEffect(() => {
     fetch('/api/globe/data')
@@ -365,6 +366,47 @@ export default function GlobePage() {
             }}
             currentUserId={user?.id}
           />
+        )}
+
+        {/* Floating Action Button */}
+        <button
+          onClick={() => setShowQuickLock(true)}
+          className="fixed bottom-8 right-8 z-[999] w-16 h-16 rounded-full bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 shadow-2xl shadow-purple-500/50 flex items-center justify-center text-white transition-all hover:scale-110 active:scale-95 group"
+          title="Quick Lock (Space)"
+        >
+          <svg className="w-7 h-7 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+          </svg>
+          <div className="absolute inset-0 rounded-full bg-purple-500 animate-ping opacity-20" />
+        </button>
+
+        {/* Quick Lock Modal */}
+        {showQuickLock && (
+          <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
+            <div className="w-full max-w-lg glass border border-purple-500/30 rounded-xl p-6 animate-in fade-in zoom-in duration-200">
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-xl font-bold text-white">Quick Lock Claim</h3>
+                <button
+                  onClick={() => setShowQuickLock(false)}
+                  className="text-gray-400 hover:text-white transition-colors"
+                >
+                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              </div>
+              <p className="text-gray-300 mb-6">
+                Lock your prediction with full evidence support and on-chain commitment.
+              </p>
+              <Link
+                href="/lock"
+                className="block w-full py-3 rounded-lg bg-gradient-to-r from-purple-600 to-blue-600 text-white font-semibold text-center hover:from-purple-500 hover:to-blue-500 transition-all shadow-lg"
+                onClick={() => setShowQuickLock(false)}
+              >
+                Go to Lock Page
+              </Link>
+            </div>
+          </div>
         )}
       </div>
     </>
