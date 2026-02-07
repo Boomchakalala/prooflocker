@@ -161,6 +161,87 @@ export default function DashboardPage() {
           </div>
         </div>
 
+        {/* Progress to Next Tier */}
+        <div className="bg-gradient-to-br from-purple-900/20 to-blue-900/20 border border-purple-500/30 rounded-xl p-8 mb-8">
+          <h2 className="text-2xl font-bold mb-6 text-center">
+            <span className="bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent">
+              Progress to Next Tier
+            </span>
+          </h2>
+
+          {score.totalPoints < 300 ? (
+            <div>
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-sm text-slate-400">Current: Novice</span>
+                <span className="text-sm text-yellow-400 font-semibold">Next: Trusted (300 pts)</span>
+              </div>
+              <div className="w-full bg-slate-800 rounded-full h-4 mb-2 overflow-hidden">
+                <div
+                  className="bg-gradient-to-r from-purple-600 to-blue-600 h-4 rounded-full transition-all duration-500"
+                  style={{ width: `${Math.min((score.totalPoints / 300) * 100, 100)}%` }}
+                />
+              </div>
+              <p className="text-center text-sm text-slate-400">
+                {300 - score.totalPoints} points to go
+              </p>
+            </div>
+          ) : score.totalPoints < 500 ? (
+            <div>
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-sm text-yellow-400">Current: Trusted</span>
+                <span className="text-sm text-green-400 font-semibold">Next: Expert (500 pts)</span>
+              </div>
+              <div className="w-full bg-slate-800 rounded-full h-4 mb-2 overflow-hidden">
+                <div
+                  className="bg-gradient-to-r from-yellow-600 to-green-600 h-4 rounded-full transition-all duration-500"
+                  style={{ width: `${Math.min(((score.totalPoints - 300) / 200) * 100, 100)}%` }}
+                />
+              </div>
+              <p className="text-center text-sm text-slate-400">
+                {500 - score.totalPoints} points to go
+              </p>
+            </div>
+          ) : score.totalPoints < 650 ? (
+            <div>
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-sm text-green-400">Current: Expert</span>
+                <span className="text-sm text-blue-400 font-semibold">Next: Master (650 pts)</span>
+              </div>
+              <div className="w-full bg-slate-800 rounded-full h-4 mb-2 overflow-hidden">
+                <div
+                  className="bg-gradient-to-r from-green-600 to-blue-600 h-4 rounded-full transition-all duration-500"
+                  style={{ width: `${Math.min(((score.totalPoints - 500) / 150) * 100, 100)}%` }}
+                />
+              </div>
+              <p className="text-center text-sm text-slate-400">
+                {650 - score.totalPoints} points to go
+              </p>
+            </div>
+          ) : score.totalPoints < 800 ? (
+            <div>
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-sm text-blue-400">Current: Master</span>
+                <span className="text-sm text-purple-400 font-semibold">Next: Legend (800 pts)</span>
+              </div>
+              <div className="w-full bg-slate-800 rounded-full h-4 mb-2 overflow-hidden">
+                <div
+                  className="bg-gradient-to-r from-blue-600 to-purple-600 h-4 rounded-full transition-all duration-500"
+                  style={{ width: `${Math.min(((score.totalPoints - 650) / 150) * 100, 100)}%` }}
+                />
+              </div>
+              <p className="text-center text-sm text-slate-400">
+                {800 - score.totalPoints} points to go
+              </p>
+            </div>
+          ) : (
+            <div className="text-center">
+              <div className="text-3xl mb-2">👑</div>
+              <p className="text-purple-400 font-bold text-xl mb-2">Legend Tier Achieved!</p>
+              <p className="text-sm text-slate-400">You're in the top tier of predictors</p>
+            </div>
+          )}
+        </div>
+
         {/* Stats Grid */}
         <div className="grid md:grid-cols-4 gap-6 mb-8">
           <div className="bg-[#1e1e1e] border border-gray-800 rounded-xl p-6">
@@ -262,6 +343,65 @@ export default function DashboardPage() {
             </div>
           </div>
         )}
+
+        {/* Next Badge Goals */}
+        <div className="bg-gradient-to-br from-slate-900/50 to-slate-800/30 border border-slate-700 rounded-xl p-8 mb-8">
+          <h2 className="text-2xl font-bold mb-6">🎯 Next Achievements</h2>
+          <div className="grid md:grid-cols-3 gap-4">
+            {score.totalResolves < 25 && (
+              <div className="bg-slate-800/50 border border-slate-700 rounded-lg p-4">
+                <div className="text-3xl mb-2">🏆</div>
+                <div className="text-white font-semibold mb-1">&quot;25 Resolves&quot; badge</div>
+                <div className="text-sm text-slate-400">
+                  Resolve {25 - score.totalResolves} more claim{25 - score.totalResolves !== 1 ? 's' : ''}
+                </div>
+                <div className="w-full bg-slate-700 rounded-full h-2 mt-3">
+                  <div
+                    className="bg-purple-500 h-2 rounded-full transition-all"
+                    style={{ width: `${(score.totalResolves / 25) * 100}%` }}
+                  />
+                </div>
+              </div>
+            )}
+            {score.currentStreak < 5 && (
+              <div className="bg-slate-800/50 border border-slate-700 rounded-lg p-4">
+                <div className="text-3xl mb-2">🔥</div>
+                <div className="text-white font-semibold mb-1">&quot;5-Streak&quot; badge</div>
+                <div className="text-sm text-slate-400">
+                  {score.currentStreak === 0 ? 'Start a streak' : `Keep streak for ${5 - score.currentStreak} more`}
+                </div>
+                <div className="w-full bg-slate-700 rounded-full h-2 mt-3">
+                  <div
+                    className="bg-orange-500 h-2 rounded-full transition-all"
+                    style={{ width: `${(score.currentStreak / 5) * 100}%` }}
+                  />
+                </div>
+              </div>
+            )}
+            {Object.keys(score.categoryStats).length < 3 && (
+              <div className="bg-slate-800/50 border border-slate-700 rounded-lg p-4">
+                <div className="text-3xl mb-2">📊</div>
+                <div className="text-white font-semibold mb-1">&quot;Multi-Category&quot; badge</div>
+                <div className="text-sm text-slate-400">
+                  Predict in {3 - Object.keys(score.categoryStats).length} more categor{3 - Object.keys(score.categoryStats).length === 1 ? 'y' : 'ies'}
+                </div>
+                <div className="w-full bg-slate-700 rounded-full h-2 mt-3">
+                  <div
+                    className="bg-cyan-500 h-2 rounded-full transition-all"
+                    style={{ width: `${(Object.keys(score.categoryStats).length / 3) * 100}%` }}
+                  />
+                </div>
+              </div>
+            )}
+            {score.totalResolves >= 25 && score.currentStreak >= 5 && Object.keys(score.categoryStats).length >= 3 && (
+              <div className="col-span-3 text-center py-8">
+                <div className="text-4xl mb-2">🌟</div>
+                <p className="text-xl text-white font-bold mb-2">All near-term goals achieved!</p>
+                <p className="text-slate-400">Keep building your reputation to unlock legendary status</p>
+              </div>
+            )}
+          </div>
+        </div>
 
         {/* CTAs */}
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
