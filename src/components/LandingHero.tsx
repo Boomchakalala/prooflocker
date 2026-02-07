@@ -48,33 +48,60 @@ export default function LandingHero() {
           className="text-5xl md:text-7xl lg:text-8xl font-black mb-6 tracking-tight leading-[1.1] animate-fade-in-up"
           style={{ fontFamily: 'var(--font-montserrat)' }}
         >
-          <span className="block text-[#F8F9FA]/80 font-black">Your claim.</span>
-          <span className="block gradient-text-animated font-black">Verified forever.</span>
+          <span className="block gradient-text-animated font-black">Build Undeniable Credibility.</span>
+          <span className="block text-[#F8F9FA]/80 font-black">One Claim at a Time.</span>
         </h1>
 
         {/* Subheadline */}
-        <p className="text-2xl md:text-3xl font-bold text-[#F8F9FA] mb-8 leading-relaxed animate-fade-in-up" style={{ fontFamily: 'var(--font-inter)', animationDelay: '0.1s' }}>
-          Lock it now. Prove it with evidence. Build your reliability.
+        <p className="text-xl md:text-2xl font-semibold text-[#F8F9FA]/90 mb-6 leading-relaxed animate-fade-in-up" style={{ fontFamily: 'var(--font-inter)', animationDelay: '0.1s' }}>
+          Lock claims before they happen. Resolve them when they do. Build reputation that opens doors.
         </p>
 
         {/* Two big CTAs side-by-side */}
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-8 animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-6 animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
+          <Link
+            href="/lock"
+            className="w-full sm:w-auto px-12 py-4 bg-gradient-to-r from-[#2E5CFF] to-[#5B21B6] hover:from-[#3D6CFF] hover:to-[#6B31C6] text-white text-lg font-bold rounded-xl transition-all shadow-lg hover:shadow-[0_0_30px_rgba(46,92,255,0.4)] hover:scale-[1.05] btn-glow"
+          >
+            Lock Your First Claim
+          </Link>
           <Link
             href="/globe"
-            className="w-full sm:w-auto px-12 py-4 bg-gradient-to-r from-[#2E5CFF] to-[#5B21B6] hover:from-[#3D6CFF] hover:to-[#6B31C6] text-white text-lg font-bold rounded-xl transition-all shadow-lg hover:shadow-[0_0_30px_rgba(46,92,255,0.4)] hover:scale-[1.05] btn-glow flex items-center justify-center gap-2"
+            className="w-full sm:w-auto px-12 py-4 border-2 border-[#2E5CFF]/40 hover:border-[#2E5CFF] hover:bg-[#2E5CFF]/10 text-white text-lg font-bold rounded-xl transition-all backdrop-blur-sm hover:scale-[1.05] flex items-center justify-center gap-2"
           >
             <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
               <circle cx="12" cy="12" r="10" />
               <path d="M2 12h20M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z" />
             </svg>
-            Launch Globe
+            See The Globe
           </Link>
-          <Link
-            href="/lock"
-            className="w-full sm:w-auto px-12 py-4 border-2 border-[#2E5CFF]/40 hover:border-[#2E5CFF] hover:bg-[#2E5CFF]/10 text-white text-lg font-bold rounded-xl transition-all backdrop-blur-sm hover:scale-[1.05]"
-          >
-            Lock a Claim
-          </Link>
+        </div>
+
+        {/* Stats ticker - animated counters */}
+        <div className="flex items-center justify-center gap-4 md:gap-8 mb-8 text-sm md:text-base animate-fade-in-up flex-wrap" style={{ animationDelay: '0.25s' }}>
+          <div className="flex items-center gap-2 text-emerald-400">
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7"/>
+            </svg>
+            <span className="font-bold">1,247</span>
+            <span className="text-gray-400">Claims Resolved</span>
+          </div>
+          <span className="text-[#4C1D95] hidden sm:inline">·</span>
+          <div className="flex items-center gap-2 text-cyan-400">
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/>
+            </svg>
+            <span className="font-bold">892</span>
+            <span className="text-gray-400">Reputation Points Earned</span>
+          </div>
+          <span className="text-[#4C1D95] hidden sm:inline">·</span>
+          <div className="flex items-center gap-2 text-purple-400">
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
+            </svg>
+            <span className="font-bold">67</span>
+            <span className="text-gray-400">Predictors Ranked</span>
+          </div>
         </div>
 
         {/* Trust line with blue icons */}
