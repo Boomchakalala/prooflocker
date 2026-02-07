@@ -9,6 +9,7 @@ import LandingHeader from "@/components/LandingHeader";
 import DEStatusBanner from "@/components/DEStatusBanner";
 import ClaimModal from "@/components/ClaimModal";
 import Footer from "@/components/Footer";
+import LinkOsintModal from "@/components/LinkOsintModal";
 import { Prediction } from "@/lib/storage";
 import { getOrCreateUserId } from "@/lib/user";
 import { useAuth } from "@/contexts/AuthContext";
@@ -38,6 +39,7 @@ function AppFeedContent() {
   const [resolvedOnly, setResolvedOnly] = useState(false);
   const [hiddenPredictions, setHiddenPredictions] = useState<Set<string>>(new Set());
   const [showHidden, setShowHidden] = useState(false);
+  const [selectedOsint, setSelectedOsint] = useState<any | null>(null);
 
   const categories = ["all", "Crypto", "Politics", "Markets", "Tech", "Sports", "OSINT", "Culture", "Personal", "Other"];
 
@@ -769,7 +771,7 @@ function AppFeedContent() {
                       </a>
                       <button
                         onClick={() => {
-                          alert('Link this OSINT signal as evidence to one of your existing claims. Feature coming soon!');
+                          setSelectedOsint(signal);
                         }}
                         className="px-3 py-1.5 text-xs rounded bg-purple-600/20 hover:bg-purple-600/30 text-purple-300 border border-purple-500/30 transition-colors"
                       >
@@ -795,6 +797,34 @@ function AppFeedContent() {
         <ClaimModal
           onClose={() => setShowClaimModal(false)}
           onSuccess={fetchPredictions}
+        />
+      )}
+
+      {/* Link OSINT Modal */}
+      {selectedOsint && (
+        <LinkOsintModal
+          osintSignal={{
+            id: selectedOsint.id,
+            createdAt: selectedOsint.createdAt,
+            title: selectedOsint.title,
+            content: selectedOsint.content || '',
+            sourceName: selectedOsint.sourceName,
+            sourceHandle: selectedOsint.sourceHandle,
+            sourceUrl: selectedOsint.sourceUrl,
+            geotagLat: selectedOsint.geotagLat,
+            geotagLng: selectedOsint.geotagLng,
+            locationName: selectedOsint.locationName,
+            tags: selectedOsint.tags || [],
+            publishedAt: selectedOsint.publishedAt,
+            ingestedAt: selectedOsint.ingestedAt,
+            confidenceScore: selectedOsint.confidenceScore,
+          }}
+          onClose={() => setSelectedOsint(null)}
+          onLinked={() => {
+            setSelectedOsint(null);
+            fetchPredictions(); // Refresh to show updated evidence scores
+          }}
+          currentUserId={user?.id}
         />
       )}
     </div>
