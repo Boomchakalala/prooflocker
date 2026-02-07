@@ -2,10 +2,14 @@ import Link from "next/link";
 import BrandLogo from "@/components/BrandLogo";
 import LandingHeader from "@/components/LandingHeader";
 import LandingHero from "@/components/LandingHero";
+import MomentOfTruth from "@/components/MomentOfTruth";
 import HowItWorks from "@/components/HowItWorks";
 import ConstellationSection from "@/components/ConstellationSection";
 import AccountabilityScore from "@/components/AccountabilityScore";
+import ReputationImpact from "@/components/ReputationImpact";
 import WhyProofLocker from "@/components/WhyProofLocker";
+import WallOfWins from "@/components/WallOfWins";
+import LeaderboardPreview from "@/components/LeaderboardPreview";
 import ProofCardPreview from "@/components/ProofCardPreview";
 import DEStatusBanner from "@/components/DEStatusBanner";
 import Footer from "@/components/Footer";
@@ -21,10 +25,16 @@ export default function LandingPage() {
         {/* Hero Section */}
         <LandingHero />
 
+        {/* The Moment of Truth - NEW */}
+        <MomentOfTruth />
+
         {/* Real Proof Section */}
         <ProofCardPreview />
 
-        {/* How It Works Section */}
+        {/* Reputation Opens Doors - NEW */}
+        <ReputationImpact />
+
+        {/* How It Works Section - REWRITTEN */}
         <HowItWorks />
 
         {/* Accountability Score Section */}
@@ -32,6 +42,12 @@ export default function LandingPage() {
 
         {/* Why ProofLocker Section */}
         <WhyProofLocker />
+
+        {/* Wall of Wins - NEW */}
+        <WallOfWins />
+
+        {/* Leaderboard Preview - NEW */}
+        <LeaderboardPreview />
 
         {/* Final CTA Section - Updated for Globe-first */}
         <div className="relative z-10 py-20 md:py-28 px-6 bg-gradient-to-b from-[#0A0A0F] via-[#111118]/30 to-[#0A0A0F]">
