@@ -95,9 +95,10 @@ export default function ReputationImpact() {
               <div className="space-y-2">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
-                    <span className="text-yellow-400 text-lg">🥇</span>
-                    <span className="text-white font-semibold text-sm">#1</span>
-                    <span className="text-slate-400 text-sm">Anon #2834</span>
+                    <div className="w-6 h-6 rounded-full bg-gradient-to-br from-yellow-500 to-yellow-600 flex items-center justify-center">
+                      <span className="text-white text-xs font-bold">1</span>
+                    </div>
+                    <span className="text-white font-semibold text-sm">Anon #2834</span>
                   </div>
                   <div className="flex items-center gap-1">
                     <svg className="w-3 h-3 text-purple-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
@@ -108,9 +109,10 @@ export default function ReputationImpact() {
                 </div>
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
-                    <span className="text-slate-500 text-lg">•</span>
-                    <span className="text-white font-semibold text-sm">#47</span>
-                    <span className="text-slate-500 text-sm">You</span>
+                    <div className="w-6 h-6 rounded-full bg-gradient-to-br from-slate-600 to-slate-700 flex items-center justify-center">
+                      <span className="text-white text-xs font-bold">47</span>
+                    </div>
+                    <span className="text-slate-400 text-sm">You</span>
                   </div>
                   <div className="flex items-center gap-1">
                     <svg className="w-3 h-3 text-emerald-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">

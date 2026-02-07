@@ -260,7 +260,7 @@ export default function WallOfWins() {
         <div className="text-center mt-12">
           <Link
             href="/app"
-            className="inline-block px-8 py-3 border-2 border-emerald-500/30 hover:border-emerald-500/50 hover:bg-emerald-500/10 text-emerald-300 hover:text-emerald-200 font-semibold rounded-lg transition-all"
+            className="inline-block px-8 py-3 border-2 border-slate-500/30 hover:border-slate-400/50 hover:bg-slate-500/10 text-slate-300 hover:text-slate-200 font-semibold rounded-lg transition-all"
           >
             View All Predictions
           </Link>
