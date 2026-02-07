@@ -1,16 +1,14 @@
-import { ImageResponse } from '@vercel/og';
+import { ImageResponse } from 'next/og';
 import { supabase } from '@/lib/supabase';
 import { getReliabilityTier, getTierInfo } from '@/lib/user-scoring';
 
 export const runtime = 'edge';
-export const alt = 'ProofLocker Profile';
-export const size = {
-  width: 1200,
-  height: 630,
-};
-export const contentType = 'image/png';
+export const dynamic = 'force-dynamic';
 
-export default async function Image({ params }: { params: Promise<{ id: string }> }) {
+export async function GET(
+  request: Request,
+  { params }: { params: Promise<{ id: string }> }
+) {
   const { id: userId } = await params;
 
   // Fetch user stats
@@ -207,7 +205,8 @@ export default async function Image({ params }: { params: Promise<{ id: string }
       </div>
     ),
     {
-      ...size,
+      width: 1200,
+      height: 630,
     }
   );
 }
