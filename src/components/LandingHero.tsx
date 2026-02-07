@@ -1,10 +1,32 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 export default function LandingHero() {
   const particlesRef = useRef<HTMLDivElement>(null);
+  const [stats, setStats] = useState({
+    totalClaims: 0,
+    resolvedClaims: 0,
+    totalUsers: 0,
+  });
+
+  // Fetch real stats from API
+  useEffect(() => {
+    Promise.all([
+      fetch('/api/predictions').then(r => r.json()),
+      fetch('/api/leaderboard?limit=1').then(r => r.json()),
+    ]).then(([predictions, leaderboard]) => {
+      const total = predictions?.total || 0;
+      const resolved = predictions?.predictions?.filter((p: any) =>
+        p.outcome === 'correct' || p.outcome === 'incorrect'
+      ).length || 0;
+      const users = leaderboard?.total || 0;
+      setStats({ totalClaims: total, resolvedClaims: resolved, totalUsers: users });
+    }).catch(() => {
+      // Keep default values on error
+    });
+  }, []);
 
   useEffect(() => {
     // Generate lightweight particles for constellation effect
