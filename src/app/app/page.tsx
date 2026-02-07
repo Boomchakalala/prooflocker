@@ -793,15 +793,24 @@ function AppFeedContent() {
                       </div>
                       <div>
                         <div className="text-sm text-white font-medium">Anon #{prediction.authorNumber}</div>
-                        <div className="text-xs text-slate-500 flex items-center gap-1">
-                          <svg className="w-3 h-3" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                        <div className="text-xs flex items-center gap-1">
+                          <svg className="w-3 h-3 text-purple-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
                           </svg>
-                          {new Date(prediction.timestamp).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+                          <span className="text-purple-300 font-medium">
+                            {new Date(prediction.timestamp).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+                          </span>
                         </div>
                       </div>
                     </div>
-                    <div className={`flex items-center gap-1 px-2 py-1 ${cardStyle.badgeBg} ${cardStyle.badgeText} text-xs font-semibold rounded border border-current/20`}>
+                    {/* Status Badge - Vibrant with glow */}
+                    <div className={`flex items-center gap-1 px-2.5 py-1.5 text-xs font-bold rounded-lg border-2 shadow-lg ${
+                      prediction.outcome === "correct"
+                        ? "bg-emerald-500/30 border-emerald-400/60 text-emerald-300 shadow-emerald-500/30"
+                        : prediction.outcome === "incorrect"
+                        ? "bg-red-500/30 border-red-400/60 text-red-300 shadow-red-500/30"
+                        : "bg-amber-500/30 border-amber-400/60 text-amber-300 shadow-amber-500/30"
+                    }`}>
                       {prediction.outcome === "correct" && (
                         <>
                           <svg className="w-3 h-3" fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24">
@@ -836,6 +845,16 @@ function AppFeedContent() {
                         <path strokeLinecap="round" strokeLinejoin="round" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"/>
                       </svg>
                       {prediction.category}
+                    </div>
+                  )}
+
+                  {/* On-chain timestamp - discrete indicator */}
+                  {prediction.deId && (
+                    <div className="inline-flex items-center gap-1 px-2 py-1 bg-purple-900/20 border border-purple-500/30 text-purple-300 text-[10px] rounded mb-3 ml-2">
+                      <svg className="w-2.5 h-2.5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/>
+                      </svg>
+                      <span className="font-mono">On-chain: {new Date(prediction.timestamp).toLocaleString('en-US', { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' })}</span>
                     </div>
                   )}
 
