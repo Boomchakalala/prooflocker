@@ -530,7 +530,7 @@ export default function GlobeMapbox({ claims, osint }: GlobeMapboxProps) {
                   disputed: '#ef4444',
                   void: '#6b7280',
                   pending: '#f59e0b'
-                }[claim.status] || '#f59e0b';
+                }[claim.status as 'verified' | 'disputed' | 'void' | 'pending'] || '#f59e0b';
 
                 return `
                   <div style="
