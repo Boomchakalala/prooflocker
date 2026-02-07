@@ -102,25 +102,65 @@ export default function TopSourcesList({ category = 'all' }: TopSourcesListProps
   if (sources.length === 0) {
     return (
       <div className="text-center py-20">
-        <div className="inline-block p-6 glass rounded-2xl glow-purple mb-6">
-          <svg
-            className="w-20 h-20 text-purple-400 mx-auto"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
+        <div className="max-w-3xl mx-auto">
+          <div className="inline-block p-6 glass rounded-2xl glow-purple mb-6">
+            <svg
+              className="w-20 h-20 text-purple-400 mx-auto"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={1.5}
+                d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
+              />
+            </svg>
+          </div>
+          <h3 className="text-3xl font-bold text-white mb-4">Leaderboard Coming Soon</h3>
+          <p className="text-gray-400 text-lg mb-8">
+            Start making predictions to climb the ranks and earn your spot among top predictors
+          </p>
+
+          {/* Mock Leaderboard Visual */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+            {[1, 2, 3].map((rank) => (
+              <div key={rank} className="glass border border-purple-500/30 rounded-xl p-6 text-left">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className={`w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm ${
+                    rank === 1 ? 'bg-yellow-500/20 text-yellow-300 ring-2 ring-yellow-500/50' :
+                    rank === 2 ? 'bg-slate-400/20 text-slate-300 ring-2 ring-slate-400/50' :
+                    'bg-orange-500/20 text-orange-300 ring-2 ring-orange-500/50'
+                  }`}>
+                    #{rank}
+                  </div>
+                  <div className="flex-1">
+                    <div className="text-white font-semibold">Anon #{1000 + rank}</div>
+                    <div className="text-xs text-slate-400">0 predictions</div>
+                  </div>
+                </div>
+                <div className="space-y-2 text-sm">
+                  <div className="flex justify-between">
+                    <span className="text-slate-400">Points:</span>
+                    <span className="text-purple-400 font-semibold">0</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-slate-400">Accuracy:</span>
+                    <span className="text-white">--%</span>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <Link
+            href="/lock"
+            className="inline-flex items-center px-8 py-3 bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-500 hover:to-purple-600 text-white font-semibold rounded-lg transition-all shadow-lg"
           >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={1.5}
-              d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
-            />
-          </svg>
+            Make Your First Prediction
+          </Link>
         </div>
-        <h3 className="text-2xl font-bold text-white mb-3">No trusted sources yet</h3>
-        <p className="text-gray-400 text-lg">
-          Be the first to reach Trusted tier or higher
-        </p>
       </div>
     );
   }
