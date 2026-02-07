@@ -155,27 +155,40 @@ export default function ReputationImpact() {
             <div className="bg-slate-900/50 border border-slate-700 rounded-lg p-4 mb-4">
               <div className="grid grid-cols-3 gap-2">
                 <div className="flex flex-col items-center gap-1 p-2 bg-emerald-500/10 border border-emerald-500/30 rounded">
-                  <span className="text-lg">🏆</span>
+                  <svg className="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"/>
+                  </svg>
                   <span className="text-[9px] text-emerald-400 font-semibold">Master</span>
                 </div>
                 <div className="flex flex-col items-center gap-1 p-2 bg-orange-500/10 border border-orange-500/30 rounded">
-                  <span className="text-lg">🔥</span>
+                  <svg className="w-5 h-5 text-orange-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.656 7.343A7.975 7.975 0 0120 13a7.975 7.975 0 01-2.343 5.657z"/>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M9.879 16.121A3 3 0 1012.015 11L11 14H9c0 .768.293 1.536.879 2.121z"/>
+                  </svg>
                   <span className="text-[9px] text-orange-400 font-semibold">5-Streak</span>
                 </div>
                 <div className="flex flex-col items-center gap-1 p-2 bg-blue-500/10 border border-blue-500/30 rounded">
-                  <span className="text-lg">💎</span>
+                  <svg className="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                  </svg>
                   <span className="text-[9px] text-blue-400 font-semibold">Crypto</span>
                 </div>
                 <div className="flex flex-col items-center gap-1 p-2 bg-purple-500/10 border border-purple-500/30 rounded">
-                  <span className="text-lg">⚡</span>
+                  <svg className="w-5 h-5 text-purple-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                  </svg>
                   <span className="text-[9px] text-purple-400 font-semibold">Early</span>
                 </div>
-                <div className="flex flex-col items-center gap-1 p-2 bg-slate-700/30 border border-slate-600/30 rounded">
-                  <span className="text-lg opacity-30">🎯</span>
+                <div className="flex flex-col items-center gap-1 p-2 bg-slate-700/30 border border-slate-600/30 rounded opacity-50">
+                  <svg className="w-5 h-5 text-slate-500" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"/>
+                  </svg>
                   <span className="text-[9px] text-slate-500">Locked</span>
                 </div>
-                <div className="flex flex-col items-center gap-1 p-2 bg-slate-700/30 border border-slate-600/30 rounded">
-                  <span className="text-lg opacity-30">⭐</span>
+                <div className="flex flex-col items-center gap-1 p-2 bg-slate-700/30 border border-slate-600/30 rounded opacity-50">
+                  <svg className="w-5 h-5 text-slate-500" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"/>
+                  </svg>
                   <span className="text-[9px] text-slate-500">Locked</span>
                 </div>
               </div>
