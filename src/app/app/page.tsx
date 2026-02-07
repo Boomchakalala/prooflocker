@@ -378,44 +378,108 @@ function AppFeedContent() {
           </p>
         </div>
 
-        {/* Tabs */}
-        <div className="flex flex-col gap-2.5 mb-4">
-          {/* Tab buttons row - Purple theme */}
-          <div className="flex items-center gap-1 p-1 glass rounded-lg w-fit">
+        {/* Tabs - Simplified and Clean */}
+        <div className="flex flex-col gap-3 mb-6">
+          {/* Main navigation tabs */}
+          <div className="flex items-center gap-2 p-1 glass rounded-lg w-fit">
             <button
               onClick={() => setActiveTab("all")}
-              className={`px-6 py-2 text-sm font-medium rounded-md transition-all ${
+              className={`px-6 py-2.5 text-sm font-semibold rounded-md transition-all ${
                 activeTab === "all"
-                  ? "bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-500 hover:to-purple-600 text-white shadow-[0_0_20px_rgba(168,85,247,0.3)]"
+                  ? "bg-gradient-to-r from-purple-600 to-purple-700 text-white shadow-[0_0_20px_rgba(168,85,247,0.3)]"
                   : "text-gray-400 hover:text-white hover:bg-white/10"
               }`}
             >
-              Explore predictions
+              All
             </button>
             <button
               onClick={handleMyProofsClick}
-              className={`px-6 py-2 text-sm font-medium rounded-md transition-all ${
+              className={`px-6 py-2.5 text-sm font-semibold rounded-md transition-all ${
                 activeTab === "my"
-                  ? "bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-500 hover:to-purple-600 text-white shadow-[0_0_20px_rgba(168,85,247,0.3)]"
+                  ? "bg-gradient-to-r from-purple-600 to-purple-700 text-white shadow-[0_0_20px_rgba(168,85,247,0.3)]"
                   : "text-gray-400 hover:text-white hover:bg-white/10"
               }`}
             >
-              My predictions
+              My Predictions
             </button>
             <button
               onClick={() => setActiveTab("leaderboard")}
-              className={`px-6 py-2 text-sm font-medium rounded-md transition-all ${
+              className={`px-6 py-2.5 text-sm font-semibold rounded-md transition-all ${
                 activeTab === "leaderboard"
-                  ? "bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-500 hover:to-purple-600 text-white shadow-[0_0_20px_rgba(168,85,247,0.3)]"
+                  ? "bg-gradient-to-r from-purple-600 to-purple-700 text-white shadow-[0_0_20px_rgba(168,85,247,0.3)]"
                   : "text-gray-400 hover:text-white hover:bg-white/10"
               }`}
             >
-              Top Trusted Sources
+              Leaderboard
             </button>
           </div>
 
-          {/* Category Pills + Refresh row */}
+          {/* Filters - only show for "all" tab */}
           {activeTab === "all" && (
+            <div className="flex items-center gap-3 flex-wrap">
+              {/* Claims/OSINT toggle - Clean and simple */}
+              <div className="flex items-center gap-1 p-1 glass rounded-lg">
+                <button
+                  onClick={() => setContentType("claims")}
+                  className={`px-4 py-1.5 text-sm font-medium rounded-md transition-all ${
+                    contentType === "claims"
+                      ? "bg-purple-600 text-white shadow-sm"
+                      : "text-gray-400 hover:text-white"
+                  }`}
+                >
+                  Claims
+                </button>
+                <button
+                  onClick={() => setContentType("osint")}
+                  className={`px-4 py-1.5 text-sm font-medium rounded-md transition-all ${
+                    contentType === "osint"
+                      ? "bg-red-600 text-white shadow-sm"
+                      : "text-gray-400 hover:text-white"
+                  }`}
+                >
+                  OSINT
+                </button>
+                <button
+                  onClick={() => setContentType("all")}
+                  className={`px-4 py-1.5 text-sm font-medium rounded-md transition-all ${
+                    contentType === "all"
+                      ? "bg-slate-600 text-white shadow-sm"
+                      : "text-gray-400 hover:text-white"
+                  }`}
+                >
+                  All
+                </button>
+              </div>
+
+              {/* Category pills - simpler */}
+              <div className="flex items-center gap-2 overflow-x-auto no-scrollbar flex-1">
+                {categories.map((cat) => {
+                  const isActive = selectedCategory === cat;
+                  let activeClass = "glass border border-slate-700 text-slate-400 hover:text-white";
+
+                  if (isActive) {
+                    if (cat === "Crypto") activeClass = "bg-blue-500/20 border border-blue-500/50 text-blue-300";
+                    else if (cat === "Politics") activeClass = "bg-purple-500/20 border border-purple-500/50 text-purple-300";
+                    else if (cat === "Tech") activeClass = "bg-cyan-500/20 border border-cyan-500/50 text-cyan-300";
+                    else if (cat === "OSINT") activeClass = "bg-orange-500/20 border border-orange-500/50 text-orange-300";
+                    else if (cat === "Markets") activeClass = "bg-green-500/20 border border-green-500/50 text-green-300";
+                    else activeClass = "bg-slate-600/30 border border-slate-500/50 text-slate-200";
+                  }
+
+                  return (
+                    <button
+                      key={cat}
+                      onClick={() => setSelectedCategory(cat)}
+                      className={`px-3 py-1.5 text-xs font-medium rounded-lg transition-all whitespace-nowrap ${activeClass}`}
+                    >
+                      {cat === "all" ? "All" : cat}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+        </div>
             <div className="flex flex-col gap-2.5">
               {/* Content Type Filter - NEW */}
               <div className="flex items-center gap-2">
