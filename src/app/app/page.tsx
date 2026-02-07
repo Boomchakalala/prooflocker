@@ -805,6 +805,35 @@ function AppFeedContent() {
         />
       )}
 
+      {/* Quick Lock Modal */}
+      {showLockModal && (
+        <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
+          <div className="w-full max-w-lg glass border border-purple-500/30 rounded-xl p-6">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-xl font-bold text-white">Quick Lock</h3>
+              <button
+                onClick={() => setShowLockModal(false)}
+                className="text-gray-400 hover:text-white"
+              >
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+            <p className="text-gray-400 mb-4">
+              For the full lock experience with evidence upload:
+            </p>
+            <Link
+              href="/lock"
+              className="block w-full py-3 rounded-lg bg-gradient-to-r from-purple-600 to-blue-600 text-white font-semibold text-center hover:from-purple-500 hover:to-blue-500 transition-all"
+              onClick={() => setShowLockModal(false)}
+            >
+              Go to Lock Page
+            </Link>
+          </div>
+        </div>
+      )}
+
       {/* Link OSINT Modal */}
       {selectedOsint && (
         <LinkOsintModal
