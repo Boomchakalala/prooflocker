@@ -80,7 +80,9 @@ export interface CardViewModel {
   resolutionNote?: string;
   resolutionUrl?: string;
   tags?: string[];
-  source?: string; // For OSINT
+  source?: string; // For OSINT - source name (e.g., "Conflict Radar")
+  sourceHandle?: string; // For OSINT - Twitter handle (e.g., "@conflict_radar")
+  sourceUrl?: string; // For OSINT - Link to source (e.g., Twitter URL)
   confidence?: number; // For Claims
 
   // Original data (for actions that need full object)
@@ -203,7 +205,7 @@ export function mapClaimToCard(claim: {
   const predictionLike: Partial<Prediction> = {
     id: `claim-${claim.id}`,
     textPreview: claim.claim,
-    category: 'OSINT',
+    category: claim.category || 'Other', // Use actual category from database, fallback to "Other"
     createdAt: claim.lockedDate,
     timestamp: claim.lockedDate,
     hash,
@@ -226,7 +228,7 @@ export function mapClaimToCard(claim: {
 
     title: claim.claim,
     textPreview: claim.claim,
-    category: 'OSINT',
+    category: claim.category || 'Other', // Use actual category from database, fallback to "Other"
 
     createdAt: claim.lockedDate,
     timestamp: claim.lockedDate,
