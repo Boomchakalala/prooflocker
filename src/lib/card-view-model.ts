@@ -161,6 +161,7 @@ export function mapPredictionToCard(prediction: Prediction, currentUserId?: stri
 export function mapClaimToCard(claim: {
   id: number;
   claim: string;
+  category?: string; // Category from database (Feed taxonomy)
   lat: number;
   lng: number;
   status: 'verified' | 'pending' | 'disputed' | 'void';
