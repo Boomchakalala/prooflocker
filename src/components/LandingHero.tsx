@@ -67,14 +67,14 @@ export default function LandingHero() {
       <div className="max-w-5xl mx-auto relative z-10 w-full text-center">
         {/* Massive gradient headline with enhanced animation */}
         <h1
-          className="text-6xl md:text-8xl lg:text-9xl font-black mb-10 tracking-tighter leading-[0.95] animate-fade-in-up"
+          className="text-5xl sm:text-7xl md:text-8xl lg:text-9xl font-black mb-10 tracking-tighter leading-[0.95] animate-fade-in-up px-4"
           style={{ fontFamily: 'var(--font-montserrat)' }}
         >
-          <span className="gradient-text-animated font-black whitespace-nowrap">Undeniable Credibility</span>
+          <span className="gradient-text-animated font-black inline-block">Undeniable Credibility</span>
         </h1>
 
         {/* Subheadline */}
-        <p className="text-xl md:text-3xl font-medium text-[#F8F9FA]/85 mb-10 leading-relaxed max-w-5xl mx-auto animate-fade-in-up" style={{ fontFamily: 'var(--font-inter)', animationDelay: '0.1s' }}>
+        <p className="text-lg sm:text-xl md:text-3xl font-medium text-[#F8F9FA]/85 mb-10 leading-relaxed max-w-5xl mx-auto animate-fade-in-up px-4" style={{ fontFamily: 'var(--font-inter)', animationDelay: '0.1s' }}>
           Lock predictions before they happen. Resolve with evidence. Build proof that lasts forever.
         </p>
 

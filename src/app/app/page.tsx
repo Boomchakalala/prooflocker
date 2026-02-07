@@ -451,21 +451,38 @@ function AppFeedContent() {
                 </button>
               </div>
 
-              {/* Category pills - Purple/Cyan theme */}
+              {/* Category pills - Crypto/locked theme with color-coded categories */}
               <div className="flex items-center gap-2 overflow-x-auto no-scrollbar">
-                {categories.map((cat) => (
-                  <button
-                    key={cat}
-                    onClick={() => setSelectedCategory(cat)}
-                    className={`px-3 py-1.5 text-xs font-medium rounded-full transition-all whitespace-nowrap flex-shrink-0 ${
-                      selectedCategory === cat
-                        ? "bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-500 hover:to-purple-600 text-white border border-purple-500/40 shadow-[0_0_15px_rgba(168,85,247,0.3)]"
-                        : "glass border border-purple-500/20 text-gray-400 hover:text-white hover:bg-purple-500/10 hover:border-purple-500/40"
-                    }`}
-                  >
-                    {cat === "all" ? "All" : cat}
-                  </button>
-                ))}
+                {categories.map((cat) => {
+                  const isActive = selectedCategory === cat;
+                  let activeClass = "glass border border-slate-700 text-slate-400 hover:text-white hover:bg-slate-500/10";
+
+                  if (isActive) {
+                    if (cat === "Crypto") {
+                      activeClass = "bg-blue-500/20 border-2 border-blue-500/50 text-blue-300 shadow-[0_0_15px_rgba(59,130,246,0.3)]";
+                    } else if (cat === "Politics") {
+                      activeClass = "bg-purple-500/20 border-2 border-purple-500/50 text-purple-300 shadow-[0_0_15px_rgba(168,85,247,0.3)]";
+                    } else if (cat === "Tech") {
+                      activeClass = "bg-cyan-500/20 border-2 border-cyan-500/50 text-cyan-300 shadow-[0_0_15px_rgba(6,182,212,0.3)]";
+                    } else if (cat === "OSINT") {
+                      activeClass = "bg-orange-500/20 border-2 border-orange-500/50 text-orange-300 shadow-[0_0_15px_rgba(249,115,22,0.3)]";
+                    } else if (cat === "Markets") {
+                      activeClass = "bg-green-500/20 border-2 border-green-500/50 text-green-300 shadow-[0_0_15px_rgba(34,197,94,0.3)]";
+                    } else {
+                      activeClass = "bg-slate-600/30 border-2 border-slate-500/50 text-slate-200 shadow-[0_0_15px_rgba(148,163,184,0.2)]";
+                    }
+                  }
+
+                  return (
+                    <button
+                      key={cat}
+                      onClick={() => setSelectedCategory(cat)}
+                      className={`px-4 py-2 text-sm font-semibold rounded-lg transition-all whitespace-nowrap flex-shrink-0 ${activeClass}`}
+                    >
+                      {cat === "all" ? "All" : cat}
+                    </button>
+                  );
+                })}
               </div>
 
               {/* Sort and Filter Controls */}
