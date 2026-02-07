@@ -311,17 +311,17 @@ export default function GlobePage() {
                       {/* Meta */}
                       <div className="flex items-center justify-between text-[11px] text-[#64748b]">
                         <span>{claim.lockedDate}</span>
-                        <div className="flex items-center gap-1.5">
-                          <span className="font-semibold text-[#94a3b8]">{claim.confidence}%</span>
-                          <div className="w-10 h-1 bg-[rgba(148,163,184,0.2)] rounded-sm overflow-hidden">
-                            <div
-                              className="h-full bg-[#8b5cf6] rounded-sm"
-                              style={{ width: `${claim.confidence}%` }}
-                            />
-                          </div>
-                        </div>
+                        <button
+                          onClick={(e) => {
+                            e.preventDefault();
+                            window.location.href = `/proof/${claim.id}`;
+                          }}
+                          className="px-3 py-1 bg-gradient-to-r from-[#5B21B6] to-[#2E5CFF] hover:from-[#6B31C6] hover:to-[#3D6CFF] text-white rounded text-[11px] font-semibold transition-all shadow-[0_0_10px_rgba(91,33,182,0.3)]"
+                        >
+                          Verify
+                        </button>
                       </div>
-                    </div>
+                    </a>
                   );
                 })
               )
