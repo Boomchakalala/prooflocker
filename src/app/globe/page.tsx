@@ -48,7 +48,8 @@ export default function GlobePage() {
   const { user } = useAuth();
   const [claims, setClaims] = useState<Claim[]>([]);
   const [osint, setOsint] = useState<OsintItem[]>([]);
-  const [currentTab, setCurrentTab] = useState<'claims' | 'osint'>('osint'); // Default to OSINT
+  const [resolutions, setResolutions] = useState<any[]>([]);
+  const [currentTab, setCurrentTab] = useState<'claims' | 'osint' | 'resolutions'>('osint'); // Default to OSINT
   const [activeFilter, setActiveFilter] = useState<string>('all');
   const [selectedOsint, setSelectedOsint] = useState<OsintItem | null>(null);
   const [showQuickLock, setShowQuickLock] = useState(false);
@@ -61,6 +62,14 @@ export default function GlobePage() {
         if (data.osint) setOsint(data.osint);
       })
       .catch(err => console.error('[Globe] Failed to load data:', err));
+
+    // Fetch recent resolutions
+    fetch('/api/predictions?outcome=correct&limit=20')
+      .then(res => res.json())
+      .then(data => {
+        if (data.predictions) setResolutions(data.predictions);
+      })
+      .catch(err => console.error('[Globe] Failed to load resolutions:', err));
   }, []);
 
   const getDisplayItems = () => {
@@ -72,8 +81,10 @@ export default function GlobePage() {
         filtered = claims.filter(c => c.status === 'verified');
       }
       return filtered;
-    } else {
+    } else if (currentTab === 'osint') {
       return osint;
+    } else {
+      return resolutions;
     }
   };
 
@@ -138,23 +149,35 @@ export default function GlobePage() {
             <div className="flex gap-2 mb-4">
               <button
                 onClick={() => setCurrentTab('claims')}
-                className={`flex-1 px-4 py-2 rounded-lg text-[13px] font-semibold transition-all border ${
+                className={`flex-1 px-3 py-2 rounded-lg text-[12px] font-semibold transition-all border ${
                   currentTab === 'claims'
                     ? 'bg-[#8b5cf6] text-white border-[#8b5cf6]'
                     : 'bg-transparent text-[#94a3b8] border-[rgba(148,163,184,0.2)] hover:text-[#f8fafc] hover:border-[#8b5cf6]'
                 }`}
               >
-                Claims ({claims.length})
+                Claims
               </button>
               <button
                 onClick={() => setCurrentTab('osint')}
-                className={`flex-1 px-4 py-2 rounded-lg text-[13px] font-semibold transition-all border ${
+                className={`flex-1 px-3 py-2 rounded-lg text-[12px] font-semibold transition-all border ${
                   currentTab === 'osint'
                     ? 'bg-[#ef4444] text-white border-[#ef4444]'
                     : 'bg-transparent text-[#94a3b8] border-[rgba(148,163,184,0.2)] hover:text-[#f8fafc] hover:border-[#ef4444]'
                 }`}
               >
-                OSINT ({osint.length})
+                OSINT
+              </button>
+              <button
+                onClick={() => setCurrentTab('resolutions')}
+                className={`flex-1 px-3 py-2 rounded-lg text-[12px] font-semibold transition-all border ${
+                  currentTab === 'resolutions'
+                    ? 'bg-emerald-500 text-white border-emerald-500'
+                    : 'bg-transparent text-[#94a3b8] border-[rgba(148,163,184,0.2)] hover:text-[#f8fafc] hover:border-emerald-500'
+                }`}
+              >
+                <span className="flex items-center gap-1">
+                  🎉 Live
+                </span>
               </button>
             </div>
 
