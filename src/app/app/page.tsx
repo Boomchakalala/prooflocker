@@ -691,6 +691,7 @@ function AppFeedContent() {
           </div>
         ) : (
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-5">
+            {/* Render Claims */}
             {filteredPredictions.map((prediction, index) => (
               <div
                 key={prediction.id}
@@ -702,6 +703,71 @@ function AppFeedContent() {
                   onOutcomeUpdate={fetchPredictions}
                   onHide={handleHidePrediction}
                 />
+              </div>
+            ))}
+
+            {/* Render OSINT Signals */}
+            {filteredOsint.map((signal, index) => (
+              <div
+                key={signal.id}
+                className={`fade-in stagger-${Math.min(index + 1, 4)}`}
+              >
+                <div className="glass rounded-xl p-5 border border-red-500/30 bg-red-500/5 hover:border-red-500/50 hover:shadow-[0_0_20px_rgba(239,68,68,0.15)] transition-all">
+                  {/* OSINT Badge */}
+                  <div className="flex items-center gap-2 mb-3">
+                    <span className="inline-flex items-center gap-1 px-2 py-0.5 text-[10px] font-medium rounded bg-red-500/10 border border-red-400/30 text-red-300">
+                      <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6z"/>
+                      </svg>
+                      OSINT
+                    </span>
+                    {signal.category && (
+                      <span className="px-2 py-0.5 text-[10px] rounded bg-red-900/20 text-red-300">
+                        {signal.category}
+                      </span>
+                    )}
+                  </div>
+
+                  {/* Source info */}
+                  <div className="flex items-center gap-2 mb-3 text-sm">
+                    <span className="text-red-300 font-medium">{signal.sourceName}</span>
+                    {signal.sourceHandle && (
+                      <span className="text-red-400/70">{signal.sourceHandle}</span>
+                    )}
+                  </div>
+
+                  {/* Title */}
+                  <h3 className="text-base font-medium text-red-50 mb-3 line-clamp-2">
+                    {signal.title}
+                  </h3>
+
+                  {/* Content preview */}
+                  {signal.content && (
+                    <p className="text-sm text-gray-300 mb-3 line-clamp-2">
+                      {signal.content}
+                    </p>
+                  )}
+
+                  {/* Footer */}
+                  <div className="flex items-center justify-between pt-3 border-t border-slate-800">
+                    <div className="flex items-center gap-2">
+                      {signal.locationName && (
+                        <span className="text-xs text-gray-400">{signal.locationName}</span>
+                      )}
+                      {signal.confidenceScore && (
+                        <span className="text-xs text-red-400">{signal.confidenceScore}% confidence</span>
+                      )}
+                    </div>
+                    <a
+                      href={signal.sourceUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="px-3 py-1.5 text-xs rounded bg-red-600/20 hover:bg-red-600/30 text-red-300 border border-red-500/30 transition-colors"
+                    >
+                      View Source
+                    </a>
+                  </div>
+                </div>
               </div>
             ))}
           </div>
