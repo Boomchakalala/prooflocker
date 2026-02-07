@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Prediction, type PredictionOutcome } from "@/lib/storage";
+import { type CardViewModel } from "@/lib/card-view-model";
 import { formatRelativeTime } from "@/lib/utils";
 import { getSiteUrl } from "@/lib/config";
 import Link from "next/link";
@@ -11,11 +12,13 @@ import ResolutionModalWithEvidence from "./ResolutionModalWithEvidence";
 import ContestModal from "./ContestModal";
 import OutcomeBadge from "./OutcomeBadge";
 import EvidenceGradeBadge from "./EvidenceGradeBadge";
+import StatusBadge from "./StatusBadge";
+import OnChainBadge from "./OnChainBadge";
 import { getTierInfo, type ReliabilityTier } from "@/lib/user-scoring";
 import { getTierInfo as getEvidenceTierInfo } from "@/lib/evidence-scoring";
 
 interface PredictionCardProps {
-  prediction: Prediction & {
+  prediction?: Prediction & {
     // Extended fields from new schema (may not exist on all predictions yet)
     lifecycleStatus?: "draft" | "locked" | "resolved" | "contested" | "final";
     finalOutcome?: PredictionOutcome;
@@ -25,6 +28,7 @@ interface PredictionCardProps {
     evidence_score?: number; // New evidence score field (0-100)
     author_reliability_tier?: ReliabilityTier; // Author's reliability tier
   };
+  card?: CardViewModel; // New: accept CardViewModel for Globe/unified rendering
   currentUserId?: string | null; // Current authenticated user ID
   onOutcomeUpdate?: () => void; // Callback to refresh predictions
   onHide?: (id: string) => void; // Callback to hide prediction
@@ -33,7 +37,7 @@ interface PredictionCardProps {
   onViewOnMap?: () => void; // Callback to center map on this item's location (Globe only)
 }
 
-export default function PredictionCard({ prediction, currentUserId, onOutcomeUpdate, onHide, isPreview = false, variant = "full", onViewOnMap }: PredictionCardProps) {
+export default function PredictionCard({ prediction, card, currentUserId, onOutcomeUpdate, onHide, isPreview = false, variant = "full", onViewOnMap }: PredictionCardProps) {
   const router = useRouter();
   const [copied, setCopied] = useState(false);
   const [linkCopied, setLinkCopied] = useState(false);
