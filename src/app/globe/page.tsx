@@ -7,6 +7,7 @@ import Script from 'next/script';
 import { mapClaimToCard, mapOsintToCard, sortCards, filterCards, type CardViewModel } from '@/lib/card-view-model';
 import { useAuth } from '@/contexts/AuthContext';
 import { getTierInfo } from '@/lib/user-scoring';
+import LinkOsintModal from '@/components/LinkOsintModal';
 
 const GlobeMapbox = dynamic(() => import('@/components/GlobeMapbox'), {
   ssr: false,
@@ -48,6 +49,7 @@ export default function GlobePage() {
   const [osint, setOsint] = useState<OsintItem[]>([]);
   const [currentTab, setCurrentTab] = useState<'claims' | 'osint'>('osint'); // Default to OSINT
   const [activeFilter, setActiveFilter] = useState<string>('all');
+  const [selectedOsint, setSelectedOsint] = useState<OsintItem | null>(null);
 
   useEffect(() => {
     fetch('/api/globe/data')
@@ -370,8 +372,7 @@ export default function GlobePage() {
                     <div className="flex gap-2">
                       <button
                         onClick={() => {
-                          // TODO: Open modal to link to existing claim
-                          alert('Link to existing claim - Coming soon! This OSINT signal will be added as evidence to one of your claims.');
+                          setSelectedOsint(item);
                         }}
                         className="flex-1 flex items-center justify-center gap-2 px-4 py-2 rounded-lg text-[13px] font-semibold bg-gradient-to-r from-red-600 to-purple-600 text-white hover:from-red-500 hover:to-purple-500 transition-all shadow-[0_0_15px_rgba(239,68,68,0.3)]"
                       >
@@ -387,6 +388,32 @@ export default function GlobePage() {
             )}
           </div>
         </aside>
+
+        {/* Link OSINT Modal */}
+        {selectedOsint && (
+          <LinkOsintModal
+            osintSignal={{
+              id: selectedOsint.id.toString(),
+              createdAt: selectedOsint.createdAt || selectedOsint.timestamp,
+              title: selectedOsint.title,
+              content: '',
+              sourceName: selectedOsint.source,
+              sourceHandle: selectedOsint.handle,
+              sourceUrl: `https://twitter.com/${selectedOsint.handle}`,
+              geotagLat: selectedOsint.lat,
+              geotagLng: selectedOsint.lng,
+              tags: selectedOsint.tags,
+              publishedAt: selectedOsint.createdAt || selectedOsint.timestamp,
+              ingestedAt: new Date().toISOString(),
+            }}
+            onClose={() => setSelectedOsint(null)}
+            onLinked={() => {
+              setSelectedOsint(null);
+              // Optionally refresh data
+            }}
+            currentUserId={user?.id}
+          />
+        )}
       </div>
     </>
   );
