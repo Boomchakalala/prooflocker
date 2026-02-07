@@ -16,22 +16,44 @@ export function generateAuthorNumber(userId: string): number {
 /**
  * Format relative time (e.g., "2 minutes ago", "3 hours ago")
  * Falls back to UTC date for older timestamps
+ * Handles both ISO timestamps and relative time strings
  */
 export function formatRelativeTime(timestamp: string): string {
-  const now = new Date();
-  const past = new Date(timestamp);
-  const diffMs = now.getTime() - past.getTime();
-  const diffMins = Math.floor(diffMs / 60000);
-  const diffHours = Math.floor(diffMs / 3600000);
-  const diffDays = Math.floor(diffMs / 86400000);
+  // Handle invalid/empty timestamps
+  if (!timestamp || timestamp.trim() === '') {
+    return '—';
+  }
 
-  if (diffMins < 1) return "just now";
-  if (diffMins === 1) return "1 minute ago";
-  if (diffMins < 60) return `${diffMins} minutes ago`;
-  if (diffHours === 1) return "1 hour ago";
-  if (diffHours < 24) return `${diffHours} hours ago`;
-  if (diffDays === 1) return "1 day ago";
-  if (diffDays < 30) return `${diffDays} days ago`;
+  // If timestamp is already a relative string (like "2h ago", "3d ago"), return it
+  if (/^\d+[smhd]\s+ago$/.test(timestamp.trim())) {
+    return timestamp;
+  }
 
-  return past.toLocaleDateString("en-US", { timeZone: "UTC" }) + " UTC";
+  try {
+    const now = new Date();
+    const past = new Date(timestamp);
+
+    // Check if date is valid
+    if (isNaN(past.getTime())) {
+      return '—';
+    }
+
+    const diffMs = now.getTime() - past.getTime();
+    const diffMins = Math.floor(diffMs / 60000);
+    const diffHours = Math.floor(diffMs / 3600000);
+    const diffDays = Math.floor(diffMs / 86400000);
+
+    if (diffMins < 1) return "just now";
+    if (diffMins === 1) return "1 minute ago";
+    if (diffMins < 60) return `${diffMins} minutes ago`;
+    if (diffHours === 1) return "1 hour ago";
+    if (diffHours < 24) return `${diffHours} hours ago`;
+    if (diffDays === 1) return "1 day ago";
+    if (diffDays < 30) return `${diffDays} days ago`;
+
+    return past.toLocaleDateString("en-US", { timeZone: "UTC" }) + " UTC";
+  } catch (error) {
+    // If any error occurs during parsing, return fallback
+    return '—';
+  }
 }
