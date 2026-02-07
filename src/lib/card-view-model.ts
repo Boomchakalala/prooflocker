@@ -267,9 +267,11 @@ export function mapOsintToCard(osint: {
   id: number;
   title: string;
   source: string;
+  handle?: string; // Twitter handle like "@conflict_radar"
   lat: number;
   lng: number;
   timestamp: string;
+  createdAt?: string; // ISO timestamp
   tags: string[];
   [key: string]: any;
 }): CardViewModel {
@@ -282,16 +284,22 @@ export function mapOsintToCard(osint: {
   });
 
   // Generate a pseudo-hash for OSINT
-  const hash = `osint_${osint.id}_${osint.timestamp}`;
+  const hash = `osint_${osint.id}_${osint.createdAt || osint.timestamp}`;
   const publicSlug = `osint-${osint.id}`;
+
+  // Use OSINT-specific tags as category (first tag), fallback to "INTELLIGENCE"
+  const category = osint.tags && osint.tags.length > 0 ? osint.tags[0] : 'INTELLIGENCE';
+
+  // Generate Twitter URL from handle
+  const sourceUrl = osint.handle ? `https://twitter.com/${osint.handle.replace('@', '')}` : undefined;
 
   // Create a Prediction-like object for _original
   const predictionLike: Partial<Prediction> = {
     id: `osint-${osint.id}`,
     textPreview: osint.title,
-    category: 'OSINT',
-    createdAt: osint.timestamp,
-    timestamp: osint.timestamp,
+    category: category, // Use OSINT tag as category
+    createdAt: osint.createdAt || osint.timestamp,
+    timestamp: osint.createdAt || osint.timestamp,
     hash,
     publicSlug,
     outcome: 'pending',
@@ -310,16 +318,18 @@ export function mapOsintToCard(osint: {
 
     title: osint.title,
     textPreview: osint.title,
-    category: 'OSINT',
+    category: category, // Use OSINT tag as category, not hardcoded "OSINT"
 
-    createdAt: osint.timestamp,
-    timestamp: osint.timestamp,
+    createdAt: osint.createdAt || osint.timestamp,
+    timestamp: osint.createdAt || osint.timestamp,
 
     authorId: `osint-source-${osint.id}`,
     anonId: `osint-source-${osint.id}`,
     authorNumber: osint.id % 10000,
-    authorName: osint.source,
+    authorName: osint.source, // Source name like "Conflict Radar"
     source: osint.source,
+    sourceHandle: osint.handle, // Twitter handle like "@conflict_radar"
+    sourceUrl: sourceUrl, // Link to Twitter profile
 
     status: 'pending',
 
@@ -329,7 +339,7 @@ export function mapOsintToCard(osint: {
     evidence_score,
     evidenceGrade,
 
-    tags: osint.tags,
+    tags: osint.tags, // All OSINT tags
 
     trustScore,
 
