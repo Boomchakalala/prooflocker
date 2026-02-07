@@ -4,10 +4,7 @@ import LandingHeader from "@/components/LandingHeader";
 import LandingHero from "@/components/LandingHero";
 import MomentOfTruth from "@/components/MomentOfTruth";
 import HowItWorks from "@/components/HowItWorks";
-import ConstellationSection from "@/components/ConstellationSection";
-import AccountabilityScore from "@/components/AccountabilityScore";
 import ReputationImpact from "@/components/ReputationImpact";
-import WhyProofLocker from "@/components/WhyProofLocker";
 import WallOfWins from "@/components/WallOfWins";
 import LeaderboardPreview from "@/components/LeaderboardPreview";
 import ProofCardPreview from "@/components/ProofCardPreview";
@@ -25,32 +22,26 @@ export default function LandingPage() {
         {/* Hero Section */}
         <LandingHero />
 
-        {/* The Moment of Truth - NEW */}
+        {/* The Moment of Truth */}
         <MomentOfTruth />
 
         {/* Real Proof Section */}
         <ProofCardPreview />
 
-        {/* Reputation Opens Doors - NEW */}
-        <ReputationImpact />
-
-        {/* How It Works Section - REWRITTEN */}
+        {/* How It Works - Compact 3-step */}
         <HowItWorks />
 
-        {/* Accountability Score Section */}
-        <AccountabilityScore />
+        {/* Reputation Opens Doors */}
+        <ReputationImpact />
 
-        {/* Why ProofLocker Section */}
-        <WhyProofLocker />
-
-        {/* Wall of Wins - NEW */}
+        {/* Wall of Wins */}
         <WallOfWins />
 
-        {/* Leaderboard Preview - NEW */}
+        {/* Leaderboard Preview */}
         <LeaderboardPreview />
 
-        {/* Final CTA Section - REVISED */}
-        <div className="relative z-10 py-20 md:py-28 px-6 bg-gradient-to-b from-[#0A0A0F] via-[#111118]/30 to-[#0A0A0F]">
+        {/* Final CTA Section */}
+        <div className="relative z-10 py-12 md:py-20 px-4 md:px-6 bg-gradient-to-b from-[#0A0A0F] via-[#111118]/30 to-[#0A0A0F]">
           {/* Enhanced glow */}
           <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-20">
             <div
