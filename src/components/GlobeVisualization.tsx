@@ -97,8 +97,7 @@ export default function GlobeVisualization({ hotspots, onHotspotClick }: GlobeVi
       console.warn('[Globe] Controls not available:', err);
     }
 
-    // Mount globe
-    globe(globeRef.current);
+    // Globe is already mounted via constructor
     globeInstanceRef.current = globe;
 
     // Handle window resize
