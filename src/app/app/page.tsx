@@ -18,6 +18,86 @@ import { useAuth } from "@/contexts/AuthContext";
 type SortOption = "new" | "hot" | "top" | "resolved";
 type ContentType = "all" | "claims" | "osint";
 
+// Helper function to get card styling based on outcome and category
+function getCardStyle(prediction: Prediction, selectedCategory: string) {
+  const isCorrect = prediction.outcome === "correct";
+  const isIncorrect = prediction.outcome === "incorrect";
+
+  // For resolved correct predictions in "all" filter, always use green
+  if (isCorrect && selectedCategory === "all") {
+    return {
+      background: "from-emerald-600/8 via-emerald-500/5 to-emerald-700/8",
+      border: "border-emerald-500/30 hover:border-emerald-500/50",
+      shadow: "hover:shadow-[0_0_30px_rgba(16,185,129,0.2)]",
+      badgeBg: "bg-emerald-500/20",
+      badgeText: "text-emerald-400",
+      accentColor: "text-emerald-300",
+    };
+  }
+
+  // For category-specific views or pending
+  const categoryColors: Record<string, any> = {
+    Crypto: {
+      background: "from-blue-600/8 via-blue-500/5 to-blue-700/8",
+      border: "border-blue-500/30 hover:border-blue-500/50",
+      shadow: "hover:shadow-[0_0_30px_rgba(59,130,246,0.2)]",
+      badgeBg: isCorrect ? "bg-emerald-500/20" : "bg-blue-500/20",
+      badgeText: isCorrect ? "text-emerald-400" : "text-blue-400",
+      accentColor: "text-blue-300",
+    },
+    Politics: {
+      background: "from-purple-600/8 via-purple-500/5 to-purple-700/8",
+      border: "border-purple-500/30 hover:border-purple-500/50",
+      shadow: "hover:shadow-[0_0_30px_rgba(168,85,247,0.2)]",
+      badgeBg: isCorrect ? "bg-emerald-500/20" : "bg-purple-500/20",
+      badgeText: isCorrect ? "text-emerald-400" : "text-purple-400",
+      accentColor: "text-purple-300",
+    },
+    Tech: {
+      background: "from-cyan-600/8 via-cyan-500/5 to-cyan-700/8",
+      border: "border-cyan-500/30 hover:border-cyan-500/50",
+      shadow: "hover:shadow-[0_0_30px_rgba(6,182,212,0.2)]",
+      badgeBg: isCorrect ? "bg-emerald-500/20" : "bg-cyan-500/20",
+      badgeText: isCorrect ? "text-emerald-400" : "text-cyan-400",
+      accentColor: "text-cyan-300",
+    },
+    OSINT: {
+      background: "from-orange-600/8 via-orange-500/5 to-orange-700/8",
+      border: "border-orange-500/30 hover:border-orange-500/50",
+      shadow: "hover:shadow-[0_0_30px_rgba(249,115,22,0.2)]",
+      badgeBg: isCorrect ? "bg-emerald-500/20" : "bg-orange-500/20",
+      badgeText: isCorrect ? "text-emerald-400" : "text-orange-400",
+      accentColor: "text-orange-300",
+    },
+    Markets: {
+      background: "from-green-600/8 via-green-500/5 to-green-700/8",
+      border: "border-green-500/30 hover:border-green-500/50",
+      shadow: "hover:shadow-[0_0_30px_rgba(34,197,94,0.2)]",
+      badgeBg: isCorrect ? "bg-emerald-500/20" : "bg-green-500/20",
+      badgeText: isCorrect ? "text-emerald-400" : "text-green-400",
+      accentColor: "text-green-300",
+    },
+  };
+
+  const categoryKey = prediction.category || "Crypto";
+  const style = categoryColors[categoryKey] || categoryColors.Crypto;
+
+  // For "all" filter on pending/incorrect, use neutral
+  if (selectedCategory === "all" && !isCorrect) {
+    return {
+      background: "from-slate-700/8 via-slate-600/5 to-slate-700/8",
+      border: "border-slate-600/30 hover:border-slate-500/50",
+      shadow: "hover:shadow-[0_0_20px_rgba(148,163,184,0.15)]",
+      badgeBg: isIncorrect ? "bg-red-500/20" : "bg-slate-500/20",
+      badgeText: isIncorrect ? "text-red-400" : "text-slate-400",
+      accentColor: "text-slate-300",
+    };
+  }
+
+  return style;
+}
+
+
 function AppFeedContent() {
   const { user, loading: authLoading } = useAuth();
   const searchParams = useSearchParams();
@@ -289,34 +369,13 @@ function AppFeedContent() {
       {/* Main content - adjusted for unified header */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-5 md:py-24 relative z-10">
         {/* Page header */}
-        <div className="flex items-center justify-between mb-5">
-          <div>
-            <h1 className="text-2xl md:text-3xl font-bold text-white mb-0.5 leading-tight">Explore predictions</h1>
-            <p className="text-sm text-gray-400 leading-snug">Browse public predictions locked on-chain</p>
-          </div>
-          {/* Refresh button - Mobile only, icon-only */}
-          {activeTab === "all" && (
-            <button
-              onClick={syncDEStatus}
-              disabled={syncing}
-              className="md:hidden h-9 w-9 glass text-gray-400 hover:text-white rounded-lg transition-all hover:bg-white/10 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center flex-shrink-0"
-              title="Recheck on-chain status for pending proofs"
-            >
-              <svg
-                className={`w-4 h-4 ${syncing ? "animate-spin" : ""}`}
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
-                />
-              </svg>
-            </button>
-          )}
+        <div className="text-center mb-8">
+          <h1 className="text-4xl md:text-6xl font-extrabold mb-4 bg-gradient-to-r from-slate-300 via-white to-slate-300 bg-clip-text text-transparent" style={{ fontFamily: 'var(--font-montserrat)' }}>
+            Real Claims. Real Outcomes.
+          </h1>
+          <p className="text-lg md:text-xl text-white/70 max-w-3xl mx-auto">
+            Predictions locked on-chain with cryptographic proof and timestamped evidence
+          </p>
         </div>
 
         {/* Tabs */}
