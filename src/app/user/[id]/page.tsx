@@ -36,12 +36,22 @@ export default function PublicProfilePage() {
     setNotFound(false);
 
     try {
-      // Fetch predictions for this user
-      const response = await fetch(`/api/predictions?userId=${userId}`);
-      const data = await response.json();
-      const preds = data.predictions || [];
+      // Fetch predictions for this user (using anon_id)
+      const { data: preds, error: predsError } = await supabase
+        .from("predictions")
+        .select("*")
+        .eq("anon_id", userId)
+        .eq("moderation_status", "active")
+        .order("created_at", { ascending: false });
 
-      if (preds.length === 0) {
+      if (predsError) {
+        console.error("Error fetching predictions:", predsError);
+        setNotFound(true);
+        setLoading(false);
+        return;
+      }
+
+      if (!preds || preds.length === 0) {
         setNotFound(true);
         setLoading(false);
         return;
@@ -68,10 +78,10 @@ export default function PublicProfilePage() {
       // Process stats
       const userStats: UserStats = {
         totalPoints: statsData?.total_points || 0,
-        totalPredictions: statsData?.total_predictions || 0,
-        resolvedPredictions: statsData?.resolved_predictions || 0,
-        correctPredictions: statsData?.correct_predictions || 0,
-        incorrectPredictions: statsData?.incorrect_predictions || 0,
+        totalPredictions: statsData?.total_predictions || preds.length,
+        resolvedPredictions: statsData?.resolved_predictions || preds.filter(p => p.outcome !== 'pending').length,
+        correctPredictions: statsData?.correct_predictions || preds.filter(p => p.outcome === 'correct').length,
+        incorrectPredictions: statsData?.incorrect_predictions || preds.filter(p => p.outcome === 'incorrect').length,
         avgEvidenceScore: statsData?.avg_evidence_score || 0,
         winRate:
           statsData?.resolved_predictions > 0
