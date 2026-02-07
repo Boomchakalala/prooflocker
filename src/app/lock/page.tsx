@@ -32,32 +32,7 @@ export default function LockPage() {
     const id = getOrCreateUserId();
     setUserId(id);
     setIsAnonymous(isAnonymousUser());
-
-    // Check for OSINT prefill from Globe
-    const osintId = searchParams.get('osint');
-    if (osintId) {
-      fetchOsintSignal(osintId);
-    }
-  }, [searchParams]);
-
-  const fetchOsintSignal = async (osintId: string) => {
-    try {
-      const response = await fetch(`/api/osint/mock`);
-      if (!response.ok) return;
-      const signals: OsintSignal[] = await response.json();
-      const signal = signals.find(s => s.id === osintId);
-      if (signal) {
-        setPrefillOsint(signal);
-        // Prefill the text and category from OSINT
-        setText(`Claim related to: ${signal.title}\n\n`);
-        if (signal.category) {
-          setCategory(signal.category);
-        }
-      }
-    } catch (error) {
-      console.error('Error fetching OSINT signal:', error);
-    }
-  };
+  }, []);
 
   const handleLock = async () => {
     if (!text.trim() || !userId) return;
@@ -192,22 +167,6 @@ export default function LockPage() {
                 </div>
               </div>
 
-              {/* OSINT Prefill Notice */}
-              {prefillOsint && (
-                <div className="mb-6 p-4 rounded-lg bg-red-950/20 border border-red-800/30">
-                  <div className="flex items-start gap-3">
-                    <svg className="w-5 h-5 text-red-400 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
-                      <path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6z"/>
-                    </svg>
-                    <div className="flex-1">
-                      <div className="text-sm text-red-300 font-medium mb-1">Creating claim from OSINT signal</div>
-                      <div className="text-sm text-white mb-1">{prefillOsint.title}</div>
-                      <div className="text-xs text-gray-400">Source: {prefillOsint.sourceName}</div>
-                    </div>
-                  </div>
-                </div>
-              )}
-
               {/* Category selector - improved styling */}
               <div className="mb-8">
                 <label
@@ -325,9 +284,12 @@ export default function LockPage() {
               {/* Evidence Bundle Uploader */}
               <div className="mb-6">
                 <h3 className="text-sm font-medium text-white mb-3">Add Evidence (Optional)</h3>
+                <p className="text-xs text-gray-400 mb-3">
+                  Add links, files, or analysis supporting your prediction. Later, you can add OSINT signals as evidence when they confirm your claim.
+                </p>
                 <EvidenceBundleUploader
                   onUpload={(items) => setEvidenceItems(items)}
-                  prefillOsint={prefillOsint}
+                  prefillOsint={null}
                 />
               </div>
 

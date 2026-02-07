@@ -366,16 +366,21 @@ export default function GlobePage() {
                       ))}
                     </div>
 
-                    {/* Action Button */}
-                    <button
-                      onClick={() => router.push(`/lock?osint=${item.id}`)}
-                      className="w-full flex items-center justify-center gap-2 px-4 py-2 rounded-lg text-[13px] font-semibold bg-gradient-to-r from-red-600 to-purple-600 text-white hover:from-red-500 hover:to-purple-500 transition-all shadow-[0_0_15px_rgba(239,68,68,0.3)]"
-                    >
-                      <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                        <path fillRule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clipRule="evenodd" />
-                      </svg>
-                      Create Claim from this Signal
-                    </button>
+                    {/* Action Buttons */}
+                    <div className="flex gap-2">
+                      <button
+                        onClick={() => {
+                          // TODO: Open modal to link to existing claim
+                          alert('Link to existing claim - Coming soon! This OSINT signal will be added as evidence to one of your claims.');
+                        }}
+                        className="flex-1 flex items-center justify-center gap-2 px-4 py-2 rounded-lg text-[13px] font-semibold bg-gradient-to-r from-red-600 to-purple-600 text-white hover:from-red-500 hover:to-purple-500 transition-all shadow-[0_0_15px_rgba(239,68,68,0.3)]"
+                      >
+                        <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                          <path fillRule="evenodd" d="M12.586 4.586a2 2 0 112.828 2.828l-3 3a2 2 0 01-2.828 0 1 1 0 00-1.414 1.414 4 4 0 005.656 0l3-3a4 4 0 00-5.656-5.656l-1.5 1.5a1 1 0 101.414 1.414l1.5-1.5zm-5 5a2 2 0 012.828 0 1 1 0 101.414-1.414 4 4 0 00-5.656 0l-3 3a4 4 0 105.656 5.656l1.5-1.5a1 1 0 10-1.414-1.414l-1.5 1.5a2 2 0 11-2.828-2.828l3-3z" clipRule="evenodd" />
+                        </svg>
+                        Use as Evidence
+                      </button>
+                    </div>
                   </div>
                 ))
               )
