@@ -249,12 +249,12 @@ export default function PublicProfilePage() {
                       <div key={idx}>
                         <div className="flex items-center justify-between text-sm mb-1">
                           <span className="text-neutral-300">{item.label}</span>
-                          <span className="text-white font-semibold">{item.points} pts</span>
+                          <span className="text-white font-semibold">{item.value} pts</span>
                         </div>
                         <div className="h-1.5 bg-neutral-900 rounded-full overflow-hidden">
                           <div
                             className="h-full bg-gradient-to-r from-neutral-700 to-neutral-600"
-                            style={{ width: `${item.percentage}%` }}
+                            style={{ width: `${(item.value / item.maxValue) * 100}%` }}
                           />
                         </div>
                       </div>
