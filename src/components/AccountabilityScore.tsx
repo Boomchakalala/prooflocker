@@ -15,12 +15,12 @@ export default function AccountabilityScore() {
       <div className="max-w-5xl mx-auto relative z-10">
         {/* Heading */}
         <h2 className="text-3xl md:text-5xl font-bold text-center mb-3 bg-gradient-to-r from-emerald-400 via-green-400 to-emerald-500 bg-clip-text text-transparent" style={{ fontFamily: 'var(--font-montserrat)', filter: 'drop-shadow(0 0 20px rgba(16, 185, 129, 0.3))' }}>
-          Reliability Score
+          Why It Matters
         </h2>
 
         {/* Subheading */}
-        <p className="text-base md:text-lg text-white/60 text-center max-w-2xl mx-auto mb-14 font-medium">
-          Your credibility metric. Built on early claims + quality evidence.
+        <p className="text-base md:text-lg text-white/70 text-center max-w-2xl mx-auto mb-14">
+          Every prediction you make builds a permanent track record that compounds over time
         </p>
 
         {/* Three Compact Pillars */}
