@@ -12,44 +12,12 @@ if (!supabaseUrl || !supabaseAnonKey) {
 const projectId = supabaseUrl.split('//')[1]?.split('.')[0] || 'unknown';
 logWithEnv(`Supabase client initialized: ${projectId}`);
 
-// Custom storage adapter that works with SSR
-// This ensures localStorage is used on the client, not during SSR
-const customStorageAdapter = {
-  getItem: (key: string) => {
-    if (typeof window === 'undefined') return null;
-    try {
-      return window.localStorage.getItem(key);
-    } catch (error) {
-      console.warn('[Supabase] localStorage.getItem failed:', error);
-      return null;
-    }
-  },
-  setItem: (key: string, value: string) => {
-    if (typeof window === 'undefined') return;
-    try {
-      window.localStorage.setItem(key, value);
-    } catch (error) {
-      console.warn('[Supabase] localStorage.setItem failed:', error);
-    }
-  },
-  removeItem: (key: string) => {
-    if (typeof window === 'undefined') return;
-    try {
-      window.localStorage.removeItem(key);
-    } catch (error) {
-      console.warn('[Supabase] localStorage.removeItem failed:', error);
-    }
-  },
-};
-
+// Use implicit flow instead of PKCE to avoid cookie issues in preview environments
 export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
   auth: {
-    // Enable auto-detection of auth tokens in URL (for magic links)
+    flowType: 'implicit', // Use implicit flow - tokens in URL, no code verifier needed
     autoRefreshToken: true,
     persistSession: true,
     detectSessionInUrl: true,
-    // Use custom storage adapter that properly handles SSR
-    storage: customStorageAdapter,
-    flowType: 'pkce', // Use PKCE flow for better security
   }
 })
