@@ -37,6 +37,7 @@ export interface Prediction {
   // Evidence fields:
   evidenceGrade?: EvidenceGrade; // Evidence quality grade (A/B/C/D)
   evidenceSummary?: string; // Short explanation of evidence (max 280 chars)
+  evidence_score?: number; // Evidence quality score (0-100)
   resolutionFingerprint?: string; // SHA-256 hash of resolution + evidence
   // Digital Evidence metadata (when prediction locked on-chain):
   deReference?: string; // Constellation Digital Evidence reference/transaction ID
