@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import dynamic from 'next/dynamic';
 import Script from 'next/script';
 import { mapClaimToCard, mapOsintToCard, sortCards, filterCards, type CardViewModel } from '@/lib/card-view-model';
@@ -40,6 +41,7 @@ interface OsintItem {
 type SortOption = 'new' | 'trust' | 'upvotes' | 'evidence';
 
 export default function GlobePage() {
+  const router = useRouter();
   const { user } = useAuth();
   const [claims, setClaims] = useState<Claim[]>([]);
   const [osint, setOsint] = useState<OsintItem[]>([]);
