@@ -14,6 +14,7 @@ import { getOrCreateUserId } from "@/lib/user";
 import { useAuth } from "@/contexts/AuthContext";
 
 type SortOption = "new" | "hot" | "top" | "resolved";
+type ContentType = "all" | "claims" | "osint";
 
 function AppFeedContent() {
   const { user, loading: authLoading } = useAuth();
@@ -22,8 +23,10 @@ function AppFeedContent() {
   const [activeTab, setActiveTab] = useState<"all" | "my" | "leaderboard">(
     tabParam === "my" ? "my" : tabParam === "leaderboard" ? "leaderboard" : "all"
   );
+  const [contentType, setContentType] = useState<ContentType>("all");
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
   const [predictions, setPredictions] = useState<Prediction[]>([]);
+  const [osintSignals, setOsintSignals] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [anonId, setAnonId] = useState<string>("");
   const [syncing, setSyncing] = useState(false);
@@ -58,6 +61,9 @@ function AppFeedContent() {
   useEffect(() => {
     if (!authLoading) {
       fetchPredictions();
+      if (activeTab === "all") {
+        fetchOsintSignals();
+      }
     }
   }, [activeTab, anonId, user, authLoading]);
 
@@ -100,6 +106,21 @@ function AppFeedContent() {
     }
   };
 
+  const fetchOsintSignals = async () => {
+    try {
+      // Use mock endpoint for now
+      const response = await fetch("/api/osint/mock");
+      if (!response.ok) {
+        throw new Error(`API returned ${response.status}`);
+      }
+      const data = await response.json();
+      setOsintSignals(data || []);
+    } catch (error) {
+      console.error("Error fetching OSINT signals:", error);
+      setOsintSignals([]);
+    }
+  };
+
   const handleHidePrediction = (id: string) => {
     const newHidden = new Set(hiddenPredictions);
     newHidden.add(id);
@@ -129,6 +150,11 @@ function AppFeedContent() {
   // Apply filters and sorting
   const getFilteredAndSortedPredictions = () => {
     let filtered = predictions;
+
+    // Content type filter (predictions are user claims)
+    if (contentType === "osint") {
+      filtered = []; // No predictions if showing OSINT only
+    }
 
     // Category filter
     if (selectedCategory !== "all") {
@@ -185,7 +211,24 @@ function AppFeedContent() {
     return sorted;
   };
 
+  const getFilteredOsintSignals = () => {
+    let filtered = osintSignals;
+
+    // Content type filter
+    if (contentType === "claims") {
+      return []; // No OSINT if showing claims only
+    }
+
+    // Category filter
+    if (selectedCategory !== "all") {
+      filtered = filtered.filter(s => s.category === selectedCategory);
+    }
+
+    return filtered;
+  };
+
   const filteredPredictions = getFilteredAndSortedPredictions();
+  const filteredOsint = getFilteredOsintSignals();
   const hiddenCount = hiddenPredictions.size;
 
   const syncDEStatus = async () => {
@@ -308,6 +351,40 @@ function AppFeedContent() {
           {/* Category Pills + Refresh row */}
           {activeTab === "all" && (
             <div className="flex flex-col gap-2.5">
+              {/* Content Type Filter - NEW */}
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={() => setContentType("all")}
+                  className={`px-4 py-2 text-sm font-medium rounded-lg transition-all ${
+                    contentType === "all"
+                      ? "bg-gradient-to-r from-purple-600 to-purple-700 text-white shadow-[0_0_15px_rgba(168,85,247,0.3)]"
+                      : "glass border border-purple-500/20 text-gray-400 hover:text-white hover:bg-purple-500/10"
+                  }`}
+                >
+                  All ({predictions.length + osintSignals.length})
+                </button>
+                <button
+                  onClick={() => setContentType("claims")}
+                  className={`px-4 py-2 text-sm font-medium rounded-lg transition-all ${
+                    contentType === "claims"
+                      ? "bg-gradient-to-r from-purple-600 to-purple-700 text-white shadow-[0_0_15px_rgba(168,85,247,0.3)]"
+                      : "glass border border-purple-500/20 text-gray-400 hover:text-white hover:bg-purple-500/10"
+                  }`}
+                >
+                  Claims ({predictions.length})
+                </button>
+                <button
+                  onClick={() => setContentType("osint")}
+                  className={`px-4 py-2 text-sm font-medium rounded-lg transition-all ${
+                    contentType === "osint"
+                      ? "bg-gradient-to-r from-red-600 to-red-700 text-white shadow-[0_0_15px_rgba(239,68,68,0.3)]"
+                      : "glass border border-red-500/20 text-gray-400 hover:text-white hover:bg-red-500/10"
+                  }`}
+                >
+                  OSINT ({osintSignals.length})
+                </button>
+              </div>
+
               {/* Category pills - Purple/Cyan theme */}
               <div className="flex items-center gap-2 overflow-x-auto no-scrollbar">
                 {categories.map((cat) => (
