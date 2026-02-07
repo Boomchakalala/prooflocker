@@ -126,32 +126,50 @@ export default function WallOfWins() {
       <div className="max-w-7xl mx-auto relative z-10">
         {/* Section Header */}
         <div className="text-center mb-12">
-          <h2 className="text-4xl md:text-6xl font-extrabold mb-4 bg-gradient-to-r from-emerald-400 via-cyan-400 to-emerald-400 bg-clip-text text-transparent" style={{ fontFamily: 'var(--font-montserrat)', filter: 'drop-shadow(0 0 25px rgba(16, 185, 129, 0.3))' }}>
-            Wall of Wins
-          </h2>
-          <p className="text-lg md:text-xl text-white/70 mb-8 max-w-3xl mx-auto">
+          <h2 className="text-4xl md:text-6xl font-extrabold mb-4 bg-gradient-to-r from-slate-300 via-white to-slate-300 bg-clip-text text-transparent" style={{ fontFamily: 'var(--font-montserrat)' }}>
             Real Claims. Real Outcomes.
-          </p>
-          <p className="text-base text-slate-400">
-            These predictors put their reputation on the line—and delivered.
+          </h2>
+          <p className="text-lg md:text-xl text-white/70 max-w-3xl mx-auto">
+            Predictors who put their reputation on the line and delivered results
           </p>
         </div>
 
         {/* Filter Tabs */}
         <div className="flex items-center justify-center gap-2 mb-12 flex-wrap">
-          {filters.map((filter) => (
-            <button
-              key={filter}
-              onClick={() => setSelectedFilter(filter)}
-              className={`px-5 py-2.5 rounded-lg font-semibold text-sm transition-all ${
-                selectedFilter === filter
-                  ? "bg-emerald-500/20 border-2 border-emerald-500/50 text-emerald-300"
-                  : "bg-slate-800/50 border border-slate-700 text-slate-400 hover:text-white hover:border-slate-600"
-              }`}
-            >
-              {filter}
-            </button>
-          ))}
+          {filters.map((filter) => {
+            const isActive = selectedFilter === filter;
+            let activeClass = "bg-slate-700/50 border-2 border-slate-600/50 text-white";
+
+            if (isActive) {
+              if (filter === "Correct") {
+                activeClass = "bg-emerald-500/20 border-2 border-emerald-500/50 text-emerald-300";
+              } else if (filter === "Crypto") {
+                activeClass = "bg-blue-500/20 border-2 border-blue-500/50 text-blue-300";
+              } else if (filter === "Politics") {
+                activeClass = "bg-purple-500/20 border-2 border-purple-500/50 text-purple-300";
+              } else if (filter === "Tech") {
+                activeClass = "bg-cyan-500/20 border-2 border-cyan-500/50 text-cyan-300";
+              } else if (filter === "OSINT") {
+                activeClass = "bg-orange-500/20 border-2 border-orange-500/50 text-orange-300";
+              } else {
+                activeClass = "bg-slate-600/30 border-2 border-slate-500/50 text-slate-200";
+              }
+            }
+
+            return (
+              <button
+                key={filter}
+                onClick={() => setSelectedFilter(filter)}
+                className={`px-5 py-2.5 rounded-lg font-semibold text-sm transition-all ${
+                  isActive
+                    ? activeClass
+                    : "bg-slate-800/50 border border-slate-700 text-slate-400 hover:text-white hover:border-slate-600"
+                }`}
+              >
+                {filter}
+              </button>
+            );
+          })}
         </div>
 
         {/* Masonry Grid */}
@@ -166,65 +184,75 @@ export default function WallOfWins() {
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filteredPredictions.map((pred) => (
-              <Link
-                key={pred.id}
-                href={`/proof/${pred.publicSlug}`}
-                className="group bg-gradient-to-br from-emerald-600/5 via-emerald-500/5 to-emerald-700/5 border border-emerald-500/20 hover:border-emerald-500/50 rounded-xl p-6 transition-all duration-300 hover:shadow-[0_0_30px_rgba(16,185,129,0.2)] hover:-translate-y-1 cursor-pointer"
-              >
-                {/* Header */}
-                <div className="flex items-center justify-between mb-4">
-                  <div className="flex items-center gap-2">
-                    <div className="w-8 h-8 rounded-full bg-gradient-to-br from-emerald-600 to-emerald-800 flex items-center justify-center text-white text-xs font-bold">
-                      {pred.authorNumber.toString().slice(-2)}
+            {filteredPredictions.map((pred) => {
+              const cardStyle = getCardStyle(pred);
+              return (
+                <Link
+                  key={pred.id}
+                  href={`/proof/${pred.publicSlug}`}
+                  className={`group bg-gradient-to-br ${cardStyle.background} border ${cardStyle.border} rounded-xl p-6 transition-all duration-300 ${cardStyle.shadow} hover:-translate-y-1 cursor-pointer`}
+                >
+                  {/* Header */}
+                  <div className="flex items-center justify-between mb-4">
+                    <div className="flex items-center gap-2">
+                      <div className="w-8 h-8 rounded-full bg-gradient-to-br from-slate-600 to-slate-800 flex items-center justify-center text-white text-xs font-bold">
+                        {pred.authorNumber.toString().slice(-2)}
+                      </div>
+                      <div>
+                        <div className="text-sm text-white font-medium">Anon #{pred.authorNumber}</div>
+                        <div className="text-xs text-slate-500">{formatRelativeTime(pred.timestamp)}</div>
+                      </div>
                     </div>
-                    <div>
-                      <div className="text-sm text-white font-medium">Anon #{pred.authorNumber}</div>
-                      <div className="text-xs text-slate-500">{formatRelativeTime(pred.timestamp)}</div>
+                    <div className={`flex items-center gap-1 px-2 py-1 ${cardStyle.badgeBg} ${cardStyle.badgeText} text-xs font-semibold rounded`}>
+                      {pred.outcome === "correct" && (
+                        <svg className="w-3 h-3" fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7"/>
+                        </svg>
+                      )}
+                      {pred.outcome === "incorrect" && (
+                        <svg className="w-3 h-3" fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12"/>
+                        </svg>
+                      )}
+                      {pred.outcome === "correct" ? "Correct" : pred.outcome === "incorrect" ? "Incorrect" : "Pending"}
                     </div>
                   </div>
-                  <div className="flex items-center gap-1 px-2 py-1 bg-emerald-500/20 text-emerald-400 text-xs font-semibold rounded">
-                    <svg className="w-3 h-3" fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7"/>
-                    </svg>
-                    Correct
-                  </div>
-                </div>
 
-                {/* Category Badge */}
-                {pred.category && (
-                  <div className="inline-block px-2 py-1 bg-slate-800/50 text-slate-300 text-xs rounded mb-3">
-                    {pred.category}
-                  </div>
-                )}
-
-                {/* Title */}
-                <h3 className="text-white text-base font-medium leading-snug mb-4 line-clamp-3 group-hover:text-emerald-300 transition-colors">
-                  {pred.textPreview}
-                </h3>
-
-                {/* Footer */}
-                <div className="flex items-center justify-between pt-3 border-t border-emerald-500/10">
-                  {pred.evidence_score !== undefined && (
-                    <div className="flex items-center gap-1.5 text-sm">
-                      <svg className="w-4 h-4 text-cyan-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
-                      </svg>
-                      <span className="text-slate-400 text-xs">Evidence: </span>
-                      <span className="text-cyan-400 font-semibold text-xs">{pred.evidence_score}/100</span>
+                  {/* Category Badge */}
+                  {pred.category && (
+                    <div className="inline-block px-2 py-1 bg-slate-800/50 text-slate-300 text-xs rounded mb-3">
+                      {pred.category}
                     </div>
                   )}
-                  {pred.upvotesCount !== undefined && pred.upvotesCount > 0 && (
-                    <div className="flex items-center gap-1 text-sm text-slate-400">
-                      <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M5 15l7-7 7 7" />
-                      </svg>
-                      <span className="text-xs">{pred.upvotesCount}</span>
-                    </div>
-                  )}
-                </div>
-              </Link>
-            ))}
+
+                  {/* Title */}
+                  <h3 className={`text-white text-base font-medium leading-snug mb-4 line-clamp-3 group-hover:${cardStyle.badgeText} transition-colors`}>
+                    {pred.textPreview}
+                  </h3>
+
+                  {/* Footer */}
+                  <div className="flex items-center justify-between pt-3 border-t border-slate-600/20">
+                    {pred.evidence_score !== undefined && (
+                      <div className="flex items-center gap-1.5 text-sm">
+                        <svg className="w-4 h-4 text-cyan-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                        </svg>
+                        <span className="text-slate-400 text-xs">Evidence: </span>
+                        <span className="text-cyan-400 font-semibold text-xs">{pred.evidence_score}/100</span>
+                      </div>
+                    )}
+                    {pred.upvotesCount !== undefined && pred.upvotesCount > 0 && (
+                      <div className="flex items-center gap-1 text-sm text-slate-400">
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M5 15l7-7 7 7" />
+                        </svg>
+                        <span className="text-xs">{pred.upvotesCount}</span>
+                      </div>
+                    )}
+                  </div>
+                </Link>
+              );
+            })}
           </div>
         )}
 
