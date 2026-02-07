@@ -49,12 +49,45 @@ export default function PredictionCard({ prediction, card, currentUserId, onOutc
   const [voteCount, setVoteCount] = useState(0);
   const [isVoting, setIsVoting] = useState(false);
 
+  // Normalize data: support both direct prediction prop and CardViewModel card prop
+  const data = card || {
+    id: prediction?.id || '',
+    type: 'prediction' as const,
+    title: prediction?.textPreview || '',
+    textPreview: prediction?.textPreview || '',
+    category: prediction?.category,
+    createdAt: prediction?.createdAt || '',
+    timestamp: prediction?.timestamp || '',
+    authorNumber: prediction?.authorNumber || 1000,
+    authorName: `Anon #${prediction?.authorNumber || 1000}`,
+    status: (prediction?.outcome === 'correct' ? 'correct' : prediction?.outcome === 'incorrect' ? 'incorrect' : 'pending') as any,
+    outcome: prediction?.outcome,
+    evidence_score: prediction?.evidence_score,
+    author_reliability_tier: prediction?.author_reliability_tier,
+    upvotesCount: prediction?.upvotesCount || 0,
+    hash: prediction?.hash || '',
+    publicSlug: prediction?.publicSlug || '',
+    trustScore: 0,
+    userId: prediction?.userId,
+    anonId: prediction?.anonId,
+    source: undefined,
+    sourceHandle: undefined,
+    sourceUrl: undefined,
+    tags: undefined,
+    _original: prediction,
+  };
+
+  // Extract commonly used values
+  const cardType = data.type || 'prediction'; // 'prediction', 'claim', or 'osint'
+  const isOsint = cardType === 'osint';
+  const isClaim = cardType === 'claim';
+
   // Fallback for older predictions without authorNumber
-  const authorNumber = prediction.authorNumber || 1000;
-  const onChainStatus = prediction.onChainStatus || "pending";
-  const isClaimed = !!prediction.userId;
-  const isOwner = currentUserId && prediction.userId === currentUserId;
-  const isResolved = prediction.outcome === "correct" || prediction.outcome === "incorrect";
+  const authorNumber = data.authorNumber || 1000;
+  const onChainStatus = (data as any).onChainStatus || prediction?.onChainStatus || "pending";
+  const isClaimed = !!(data.userId || prediction?.userId);
+  const isOwner = currentUserId && (data.userId === currentUserId || prediction?.userId === currentUserId);
+  const isResolved = data.status === 'correct' || data.status === 'incorrect' || (data.outcome === "correct" || data.outcome === "incorrect");
 
   // Fetch vote status on mount if user is authenticated and prediction is resolved
   useEffect(() => {
