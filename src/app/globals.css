@@ -197,9 +197,6 @@ body {
   background: linear-gradient(135deg, #8b5cf6, #0891b2);
 }
 
-<<<<<<< HEAD
-/* Button glow - purple */
-=======
 /* Hide scrollbar but keep functionality */
 .scrollbar-hide {
   -ms-overflow-style: none;  /* IE and Edge */
@@ -210,8 +207,7 @@ body {
   display: none;  /* Chrome, Safari, Opera */
 }
 
-/* Button glow on hover */
->>>>>>> 1b291604e3b92c5442ae2d086b3704894518d4cd
+/* Button glow - purple */
 .btn-glow {
   position: relative;
   transition: all 0.3s ease;
