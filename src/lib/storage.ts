@@ -23,6 +23,7 @@ export interface Prediction {
   textPreview: string;
   hash: string;
   timestamp: string;
+  createdAt?: string; // Alias for timestamp for compatibility
   dagTransaction: string;
   proofId: string;
   publicSlug: string; // Unique slug for public proof page
