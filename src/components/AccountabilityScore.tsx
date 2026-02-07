@@ -15,12 +15,12 @@ export default function AccountabilityScore() {
       <div className="max-w-5xl mx-auto relative z-10">
         {/* Heading */}
         <h2 className="text-3xl md:text-5xl font-bold text-center mb-3 bg-gradient-to-r from-emerald-400 via-green-400 to-emerald-500 bg-clip-text text-transparent" style={{ fontFamily: 'var(--font-montserrat)', filter: 'drop-shadow(0 0 20px rgba(16, 185, 129, 0.3))' }}>
-          Track Record Over Hype
+          Reliability Score
         </h2>
 
         {/* Subheading */}
         <p className="text-base md:text-lg text-white/60 text-center max-w-2xl mx-auto mb-14 font-medium">
-          Build verifiable credibility through consistent accuracy.
+          Your credibility metric. Built on early claims + quality evidence.
         </p>
 
         {/* Three Compact Pillars */}
@@ -34,9 +34,9 @@ export default function AccountabilityScore() {
                 </svg>
               </div>
             </div>
-            <h3 className="text-lg md:text-xl font-bold text-white mb-3">Accuracy Rewarded</h3>
+            <h3 className="text-lg md:text-xl font-bold text-white mb-3">Early Claims Rewarded</h3>
             <p className="text-sm md:text-base text-white/70">
-              Win points for correct predictions. Lose points for misses. Your score reflects reality.
+              Claim before OSINT confirms it. Get multipliers for early accuracy. Your score reflects reality.
             </p>
           </div>
 

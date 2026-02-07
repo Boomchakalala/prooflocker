@@ -14,7 +14,7 @@ export default function HowItWorks() {
 
         {/* Three Horizontal Boxes */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
-          {/* Box 1: Write a Prediction */}
+          {/* Box 1: Lock Your Claim */}
           <div className="bg-gradient-to-br from-purple-600/10 via-blue-600/8 to-purple-700/10 border border-[#A78BFA]/30 hover:border-[#00E0FF]/50 rounded-2xl p-6 lg:p-8 transition-all duration-300 hover:shadow-[0_0_40px_rgba(0,224,255,0.25)] hover:-translate-y-1">
             <div className="flex items-center justify-center mb-4">
               <div className="w-14 h-14 bg-gradient-to-br from-[#00E0FF]/25 to-[#C084FC]/25 rounded-xl flex items-center justify-center shadow-[0_0_20px_rgba(0,224,255,0.3)]">
@@ -23,9 +23,9 @@ export default function HowItWorks() {
                 </svg>
               </div>
             </div>
-            <h3 className="text-xl md:text-2xl font-bold text-white text-center mb-4">Write Your Prediction</h3>
+            <h3 className="text-xl md:text-2xl font-bold text-white text-center mb-4">Lock Your Claim</h3>
             <p className="text-sm md:text-base text-white/75 leading-relaxed">
-              Write your prediction, goal, bet, or commitment — bold and clear. Public flex or private stake. No signup. Just hit lock.
+              Make your claim before the news breaks — bold and clear. Add your research as evidence. Public flex or private stake. No signup. Just lock it.
             </p>
           </div>
 
@@ -44,7 +44,7 @@ export default function HowItWorks() {
             </p>
           </div>
 
-          {/* Box 3: Resolve & Share */}
+          {/* Box 3: Resolve & Build Reliability */}
           <div className="bg-gradient-to-br from-purple-600/10 via-blue-600/8 to-purple-700/10 border border-[#A78BFA]/30 hover:border-[#00E0FF]/50 rounded-2xl p-6 lg:p-8 transition-all duration-300 hover:shadow-[0_0_40px_rgba(0,224,255,0.25)] hover:-translate-y-1">
             <div className="flex items-center justify-center mb-4">
               <div className="w-14 h-14 bg-gradient-to-br from-[#00E0FF]/25 to-[#C084FC]/25 rounded-xl flex items-center justify-center shadow-[0_0_20px_rgba(0,224,255,0.3)]">
@@ -53,9 +53,9 @@ export default function HowItWorks() {
                 </svg>
               </div>
             </div>
-            <h3 className="text-xl md:text-2xl font-bold text-white text-center mb-4">Resolve & Own It</h3>
+            <h3 className="text-xl md:text-2xl font-bold text-white text-center mb-4">Verify & Build Reliability</h3>
             <p className="text-sm md:text-base text-white/75 leading-relaxed">
-              Come back when it's time. Mark it hit, miss, or pending. Claim the outcome honestly. Build your reputation score and generate shareable proof cards to flex your track record.
+              Link OSINT signals as verification when news confirms your claim. Mark it hit, miss, or pending. Build your Reliability Score and generate shareable proof cards to flex your track record.
             </p>
           </div>
         </div>

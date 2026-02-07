@@ -48,28 +48,32 @@ export default function LandingHero() {
           className="text-5xl md:text-7xl lg:text-8xl font-black mb-6 tracking-tight leading-[1.1] animate-fade-in-up"
           style={{ fontFamily: 'var(--font-montserrat)' }}
         >
-          <span className="block text-[#F8F9FA]/80 font-black">Predictions.</span>
-          <span className="block gradient-text-animated font-black">Locked forever.</span>
+          <span className="block text-[#F8F9FA]/80 font-black">Your claim.</span>
+          <span className="block gradient-text-animated font-black">Verified forever.</span>
         </h1>
 
         {/* Subheadline */}
         <p className="text-2xl md:text-3xl font-bold text-[#F8F9FA] mb-8 leading-relaxed animate-fade-in-up" style={{ fontFamily: 'var(--font-inter)', animationDelay: '0.1s' }}>
-          Say it now. Prove it later.
+          Lock it now. Prove it with evidence. Build your reliability.
         </p>
 
         {/* Two big CTAs side-by-side */}
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-8 animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
           <Link
-            href="/lock"
-            className="w-full sm:w-auto px-12 py-4 bg-gradient-to-r from-[#2E5CFF] to-[#5B21B6] hover:from-[#3D6CFF] hover:to-[#6B31C6] text-white text-lg font-bold rounded-xl transition-all shadow-lg hover:shadow-[0_0_30px_rgba(46,92,255,0.4)] hover:scale-[1.05] btn-glow"
+            href="/globe"
+            className="w-full sm:w-auto px-12 py-4 bg-gradient-to-r from-[#2E5CFF] to-[#5B21B6] hover:from-[#3D6CFF] hover:to-[#6B31C6] text-white text-lg font-bold rounded-xl transition-all shadow-lg hover:shadow-[0_0_30px_rgba(46,92,255,0.4)] hover:scale-[1.05] btn-glow flex items-center justify-center gap-2"
           >
-            Lock a Prediction
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+              <circle cx="12" cy="12" r="10" />
+              <path d="M2 12h20M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z" />
+            </svg>
+            Launch Globe
           </Link>
           <Link
-            href="/app"
+            href="/lock"
             className="w-full sm:w-auto px-12 py-4 border-2 border-[#2E5CFF]/40 hover:border-[#2E5CFF] hover:bg-[#2E5CFF]/10 text-white text-lg font-bold rounded-xl transition-all backdrop-blur-sm hover:scale-[1.05]"
           >
-            Explore Proofs
+            Lock a Claim
           </Link>
         </div>
 
