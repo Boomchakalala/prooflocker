@@ -32,7 +32,7 @@ export default function GlobeVisualization({ hotspots, onHotspotClick }: GlobeVi
     if (!globeRef.current) return;
 
     // Initialize globe
-    const globe = Globe()
+    const globe = new Globe(globeRef.current as HTMLElement)
       .globeImageUrl('//unpkg.com/three-globe/example/img/earth-dark.jpg')
       .bumpImageUrl('//unpkg.com/three-globe/example/img/earth-topology.png')
       .backgroundImageUrl('//unpkg.com/three-globe/example/img/night-sky.png')
