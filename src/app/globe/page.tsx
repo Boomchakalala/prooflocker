@@ -246,16 +246,31 @@ export default function GlobePage() {
                 (displayItems as Claim[]).map((claim) => {
                   // Extract reputation score from rep field
                   const repScore = claim.rep || 0;
-                  const tierInfo = repScore >= 800 ? { label: 'Elite', color: '#8b5cf6' } :
-                                   repScore >= 700 ? { label: 'Trusted+', color: '#3b82f6' } :
-                                   repScore >= 500 ? { label: 'Trusted', color: '#14b8a6' } :
-                                   repScore >= 300 ? { label: 'Active', color: '#f59e0b' } :
-                                   { label: 'New', color: '#6b7280' };
+
+                  // Correct reliability tiers from /how-scoring-works
+                  const tierInfo = repScore >= 800 ? { label: 'Legend', color: '#a78bfa', bgColor: 'rgba(167, 139, 250, 0.1)' } :
+                                   repScore >= 650 ? { label: 'Master', color: '#60a5fa', bgColor: 'rgba(96, 165, 250, 0.1)' } :
+                                   repScore >= 500 ? { label: 'Expert', color: '#4ade80', bgColor: 'rgba(74, 222, 128, 0.1)' } :
+                                   repScore >= 300 ? { label: 'Trusted', color: '#facc15', bgColor: 'rgba(250, 204, 21, 0.1)' } :
+                                   { label: 'Novice', color: '#9ca3af', bgColor: 'rgba(156, 163, 175, 0.1)' };
+
+                  // Map status to correct values (pending, correct, incorrect)
+                  let displayStatus = 'pending';
+                  let statusColor = 'bg-[rgba(245,158,11,0.2)] text-[#f59e0b]';
+
+                  if (claim.status === 'verified' || claim.outcome === 'correct') {
+                    displayStatus = 'correct';
+                    statusColor = 'bg-[rgba(20,184,166,0.2)] text-[#14b8a6]';
+                  } else if (claim.status === 'disputed' || claim.outcome === 'incorrect') {
+                    displayStatus = 'incorrect';
+                    statusColor = 'bg-[rgba(239,68,68,0.2)] text-[#ef4444]';
+                  }
 
                   return (
-                    <div
+                    <a
                       key={claim.id}
-                      className="bg-[#0A0A0F]/80 border border-purple-500/20 border-l-[3px] border-l-[#8b5cf6] rounded-[10px] p-3.5 cursor-pointer transition-all hover:border-[#8b5cf6] hover:bg-[rgba(139,92,246,0.1)] hover:shadow-[0_0_0_1px_rgba(139,92,246,0.3)]"
+                      href={`/proof/${claim.id}`}
+                      className="block bg-[#0A0A0F]/80 border border-purple-500/20 border-l-[3px] border-l-[#8b5cf6] rounded-[10px] p-3.5 cursor-pointer transition-all hover:border-[#8b5cf6] hover:bg-[rgba(139,92,246,0.1)] hover:shadow-[0_0_0_1px_rgba(139,92,246,0.3)]"
                     >
                       {/* Header */}
                       <div className="flex items-center justify-between mb-2.5">
@@ -264,7 +279,7 @@ export default function GlobePage() {
                           <div
                             className="flex items-center gap-1 px-1.5 py-0.5 rounded-[10px] text-[11px] font-semibold"
                             style={{
-                              background: `${tierInfo.color}1a`,
+                              background: tierInfo.bgColor,
                               color: tierInfo.color
                             }}
                           >
@@ -274,13 +289,8 @@ export default function GlobePage() {
                             {tierInfo.label}
                           </div>
                         </div>
-                        <span className={`px-2 py-0.5 rounded-[10px] text-[10px] font-semibold uppercase tracking-wide ${
-                          claim.status === 'verified' ? 'bg-[rgba(20,184,166,0.2)] text-[#14b8a6]' :
-                          claim.status === 'disputed' ? 'bg-[rgba(239,68,68,0.2)] text-[#ef4444]' :
-                          claim.status === 'pending' ? 'bg-[rgba(245,158,11,0.2)] text-[#f59e0b]' :
-                          'bg-[rgba(107,114,128,0.2)] text-[#6b7280]'
-                        }`}>
-                          {claim.status}
+                        <span className={`px-2 py-0.5 rounded-[10px] text-[10px] font-semibold uppercase tracking-wide ${statusColor}`}>
+                          {displayStatus}
                         </span>
                       </div>
 
