@@ -67,16 +67,15 @@ export default function LandingHero() {
       <div className="max-w-5xl mx-auto relative z-10 w-full text-center">
         {/* Massive gradient headline with enhanced animation */}
         <h1
-          className="text-5xl md:text-7xl lg:text-8xl font-black mb-8 tracking-tight leading-[1.05] animate-fade-in-up"
+          className="text-6xl md:text-8xl lg:text-9xl font-black mb-10 tracking-tighter leading-[0.95] animate-fade-in-up"
           style={{ fontFamily: 'var(--font-montserrat)' }}
         >
-          <span className="block gradient-text-animated font-black">Undeniable Credibility.</span>
-          <span className="block text-[#F8F9FA]/80 font-black mt-2">One Claim at a Time.</span>
+          <span className="gradient-text-animated font-black whitespace-nowrap">Undeniable Credibility</span>
         </h1>
 
         {/* Subheadline */}
-        <p className="text-xl md:text-2xl font-medium text-[#F8F9FA]/85 mb-8 leading-relaxed max-w-4xl mx-auto animate-fade-in-up" style={{ fontFamily: 'var(--font-inter)', animationDelay: '0.1s' }}>
-          Lock predictions before they happen. Resolve them with evidence. Build a track record that speaks for itself.
+        <p className="text-xl md:text-3xl font-medium text-[#F8F9FA]/85 mb-10 leading-relaxed max-w-5xl mx-auto animate-fade-in-up" style={{ fontFamily: 'var(--font-inter)', animationDelay: '0.1s' }}>
+          Lock predictions before they happen. Resolve with evidence. Build proof that lasts forever.
         </p>
 
         {/* Two big CTAs side-by-side */}
