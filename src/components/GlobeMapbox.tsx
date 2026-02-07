@@ -33,14 +33,11 @@ interface GlobeMapboxProps {
 export default function GlobeMapbox({ claims, osint }: GlobeMapboxProps) {
   const mapContainer = useRef<HTMLDivElement>(null);
   const map = useRef<any>(null);
-  const [currentTab, setCurrentTab] = useState<'claims' | 'osint'>('claims');
   const [claimsLayerVisible, setClaimsLayerVisible] = useState(true);
   const [osintLayerVisible, setOsintLayerVisible] = useState(true);
   const [heatmapVisible, setHeatmapVisible] = useState(false);
-  const [currentFilter, setCurrentFilter] = useState('active');
   const [mapReady, setMapReady] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   // Create GeoJSON
   const createClaimsGeoJSON = () => ({
@@ -60,13 +57,6 @@ export default function GlobeMapbox({ claims, osint }: GlobeMapboxProps) {
       properties: { ...item, tags: JSON.stringify(item.tags) },
     })),
   });
-
-  // Filter claims
-  const getFilteredClaims = () => {
-    if (currentFilter === 'active') return claims.filter((c) => c.status === 'pending');
-    if (currentFilter === 'high-confidence') return claims.filter((c) => c.confidence >= 75);
-    return claims;
-  };
 
   // Initialize map
   useEffect(() => {
@@ -772,8 +762,6 @@ export default function GlobeMapbox({ claims, osint }: GlobeMapboxProps) {
     }
   }, []);
 
-  const filteredClaims = getFilteredClaims();
-
   return (
     <div className="relative w-full h-full bg-gradient-to-b from-[#0A0A0F] via-[#111118] to-[#0A0A0F]" style={{ minHeight: '100vh', width: '100%' }}>
       <div
@@ -811,183 +799,9 @@ export default function GlobeMapbox({ claims, osint }: GlobeMapboxProps) {
         </div>
       )}
 
-      {/* Mobile Toggle Button */}
-      <button
-        onClick={() => setSidebarOpen(!sidebarOpen)}
-        className="md:hidden fixed bottom-6 right-6 z-[960] w-14 h-14 bg-gradient-to-r from-[#5B21B6] to-[#2E5CFF] rounded-full shadow-[0_0_30px_rgba(91,33,182,0.6)] flex items-center justify-center transition-transform active:scale-95"
-      >
-        <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
-        </svg>
-      </button>
-
-      {/* Overlay for mobile */}
-      {sidebarOpen && (
-        <div
-          className="md:hidden fixed inset-0 bg-black/60 z-[940]"
-          onClick={() => setSidebarOpen(false)}
-        />
-      )}
-
-      {/* Sidebar - Desktop: always visible RIGHT side, Mobile: slide from bottom */}
-      <aside className={`fixed z-[950] flex flex-col bg-gradient-to-b from-[#0A0A0F]/98 via-[#111118]/98 to-[#0A0A0F]/98 backdrop-blur-[30px] border-purple-500/20 shadow-[-20px_0_40px_rgba(91,33,182,0.15)]
-        md:top-14 md:right-0 md:left-auto md:w-[360px] md:h-[calc(100vh-56px)] md:border-l
-        bottom-0 left-0 right-0 h-[70vh] rounded-t-2xl border-t md:rounded-none md:border-t-0
-        transition-transform duration-300
-        ${sidebarOpen ? 'translate-y-0' : 'translate-y-full'} md:translate-y-0`}>
-
-        {/* Mobile drag handle */}
-        <div className="md:hidden flex justify-center py-2 border-b border-purple-500/20">
-          <div className="w-12 h-1 bg-purple-500/40 rounded-full" />
-        </div>
-
-        <div className="p-4 md:p-5 border-b border-purple-500/20">
-          <div className="flex gap-2 mb-3 md:mb-4">
-            <button
-              onClick={() => setCurrentTab('claims')}
-              className={`flex-1 px-3 md:px-4 py-2 md:py-2.5 rounded-lg text-[11px] md:text-[13px] font-bold transition-all ${
-                currentTab === 'claims'
-                  ? 'bg-gradient-to-r from-[#5B21B6] to-[#2E5CFF] text-white shadow-[0_0_20px_rgba(91,33,182,0.5)]'
-                  : 'bg-transparent text-gray-400 border border-purple-500/20 hover:bg-purple-500/10 hover:border-purple-500/40'
-              }`}
-            >
-              Claims ({filteredClaims.length})
-            </button>
-            <button
-              onClick={() => setCurrentTab('osint')}
-              className={`flex-1 px-3 md:px-4 py-2 md:py-2.5 rounded-lg text-[11px] md:text-[13px] font-bold transition-all ${
-                currentTab === 'osint'
-                  ? 'bg-gradient-to-r from-red-600 to-red-700 text-white shadow-[0_0_20px_rgba(239,68,68,0.5)]'
-                  : 'bg-transparent text-gray-400 border border-purple-500/20 hover:bg-red-500/10 hover:border-red-500/40'
-              }`}
-            >
-              OSINT ({osint.length})
-            </button>
-          </div>
-
-          {currentTab === 'claims' && (
-            <div className="flex gap-2 flex-wrap">
-              {['active', 'high-confidence'].map((filter) => (
-                <button
-                  key={filter}
-                  onClick={() => setCurrentFilter(filter)}
-                  className={`px-3 md:px-4 py-1 md:py-1.5 rounded-full text-[10px] md:text-[11px] font-bold uppercase tracking-wide transition-all ${
-                    currentFilter === filter
-                      ? 'bg-gradient-to-r from-[#5B21B6]/90 to-[#2E5CFF]/90 text-white border border-purple-400/50 shadow-[0_0_15px_rgba(91,33,182,0.4)]'
-                      : 'bg-transparent text-gray-400 border border-purple-500/20 hover:bg-purple-500/10 hover:border-purple-500/40 hover:text-purple-300'
-                  }`}
-                >
-                  {filter === 'active' ? 'Active' : 'High Confidence'}
-                </button>
-              ))}
-            </div>
-          )}
-        </div>
-
-        <div className="flex-1 overflow-y-auto px-4 md:px-5 py-3 md:py-4">
-          {currentTab === 'claims' ? (
-            <div className="space-y-3">
-              {filteredClaims.slice(0, 20).map((claim) => {
-                return (
-                  <div
-                    key={claim.id}
-                    className="bg-gradient-to-br from-[#0A0A0F] to-[#111118] border border-purple-500/30 rounded-xl p-4 transition-all hover:border-purple-500/60 hover:shadow-[0_0_25px_rgba(91,33,182,0.3)]"
-                  >
-                    <div className="flex items-center justify-between mb-2.5">
-                      <span className="text-[12px] font-bold text-white">{claim.submitter}</span>
-                      <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider ${
-                        claim.status === 'verified' ? 'bg-purple-500/20 text-purple-300 border border-purple-500/40' :
-                        claim.status === 'disputed' ? 'bg-red-500/20 text-red-300 border border-red-500/40' :
-                        claim.status === 'void' ? 'bg-gray-500/20 text-gray-300 border border-gray-500/40' :
-                        'bg-amber-500/20 text-amber-300 border border-amber-500/40'
-                      }`}>
-                        {claim.status}
-                      </span>
-                    </div>
-                    <div className="text-[13px] text-gray-200 mb-3 line-clamp-2 leading-relaxed">{claim.claim}</div>
-                    <div className="flex items-center justify-between gap-2">
-                      <span className="text-[11px] text-gray-500">{claim.lockedDate}</span>
-                      <div className="flex gap-2">
-                        <button
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            flyTo(claim.lng, claim.lat);
-                          }}
-                          className="px-3 py-1 bg-purple-600/80 hover:bg-purple-600 text-white text-[10px] font-bold rounded-lg transition-all"
-                        >
-                          View on Map
-                        </button>
-                        <button
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            // Navigate to claim detail page
-                            window.location.href = `/claim/${claim.id}`;
-                          }}
-                          className="px-3 py-1 bg-gradient-to-r from-[#5B21B6] to-[#2E5CFF] hover:from-[#6B31C6] hover:to-[#3D6CFF] text-white text-[10px] font-bold rounded-lg transition-all"
-                        >
-                          Verify
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          ) : (
-            <div className="space-y-3">
-              {osint.slice(0, 20).map((item) => (
-                <div
-                  key={item.id}
-                  className="bg-gradient-to-br from-[#0A0A0F] to-[#111118] border border-red-500/30 border-l-[3px] border-l-red-500 rounded-xl p-4 transition-all hover:border-red-500/60 hover:shadow-[0_0_25px_rgba(239,68,68,0.3)]"
-                >
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="text-[12px] font-bold text-white">{item.source}</span>
-                    <span className="text-[11px] text-gray-500">{item.timestamp}</span>
-                  </div>
-                  <div className="text-[13px] text-gray-200 mb-3 line-clamp-2 leading-relaxed">{item.title}</div>
-                  <div className="flex items-center justify-between gap-2">
-                    <div className="flex gap-1.5 flex-wrap">
-                      {item.tags.slice(0, 1).map((tag, idx) => (
-                        <span key={idx} className="px-2.5 py-0.5 bg-red-500/15 border border-red-500/30 rounded-full text-[10px] font-bold text-red-300 uppercase tracking-wider">
-                          {tag}
-                        </span>
-                      ))}
-                    </div>
-                    <div className="flex gap-2">
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          flyTo(item.lng, item.lat);
-                        }}
-                        className="px-3 py-1 bg-red-600/80 hover:bg-red-600 text-white text-[10px] font-bold rounded-lg transition-all"
-                      >
-                        View on Map
-                      </button>
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          // Open tweet on X
-                          window.open(`https://twitter.com/search?q=${encodeURIComponent(item.title)}`, '_blank');
-                        }}
-                        className="flex items-center gap-1 px-3 py-1 bg-black hover:bg-gray-900 text-white text-[10px] font-bold rounded-lg transition-all"
-                      >
-                        <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 24 24">
-                          <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
-                        </svg>
-                        View on X
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
-      </aside>
-
-      {/* Controls - Desktop: right side, Mobile: top left */}
+      {/* Controls - Position adjusted for new parent-controlled sidebar */}
       <div className="fixed z-[900] flex gap-2
-        md:top-[76px] md:right-[380px] md:flex-col
+        md:top-[76px] md:right-[440px] md:flex-col
         top-[68px] left-3 flex-row">
         <button
           onClick={() => toggleLayer('claims')}
