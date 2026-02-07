@@ -3,10 +3,9 @@
 import { useState, useEffect } from 'react';
 import dynamic from 'next/dynamic';
 import Script from 'next/script';
-import UnifiedCard from '@/components/UnifiedCard';
-import { Prediction } from '@/lib/storage';
 import { mapClaimToCard, mapOsintToCard, sortCards, filterCards, type CardViewModel } from '@/lib/card-view-model';
 import { useAuth } from '@/contexts/AuthContext';
+import { getTierInfo } from '@/lib/user-scoring';
 
 const GlobeMapbox = dynamic(() => import('@/components/GlobeMapbox'), {
   ssr: false,
@@ -15,6 +14,7 @@ const GlobeMapbox = dynamic(() => import('@/components/GlobeMapbox'), {
 interface Claim {
   id: number;
   claim: string;
+  category?: string;
   lat: number;
   lng: number;
   status: 'verified' | 'pending' | 'disputed' | 'void';
@@ -29,290 +29,333 @@ interface OsintItem {
   id: number;
   title: string;
   source: string;
+  handle?: string;
   lat: number;
   lng: number;
   timestamp: string;
+  createdAt?: string;
   tags: string[];
 }
 
 type SortOption = 'new' | 'trust' | 'upvotes' | 'evidence';
-type TimeWindow = '24h' | '7d' | '30d' | 'all';
 
 export default function GlobePage() {
   const { user } = useAuth();
   const [claims, setClaims] = useState<Claim[]>([]);
   const [osint, setOsint] = useState<OsintItem[]>([]);
-  const [predictions, setPredictions] = useState<Prediction[]>([]);
-
-  // UI state
-  const [currentTab, setCurrentTab] = useState<'claims' | 'osint' | 'all'>('claims');
-  const [sortBy, setSortBy] = useState<SortOption>('new');
-  const [selectedCategory, setSelectedCategory] = useState<string>('all');
-  const [timeWindow, setTimeWindow] = useState<TimeWindow>('all');
-  const [searchQuery, setSearchQuery] = useState('');
-  const [showSortMenu, setShowSortMenu] = useState(false);
-
-  const categories = ['all', 'Crypto', 'Politics', 'Markets', 'Tech', 'Sports', 'OSINT', 'Culture', 'Personal', 'Other'];
+  const [currentTab, setCurrentTab] = useState<'claims' | 'osint'>('claims');
+  const [activeFilter, setActiveFilter] = useState<string>('all');
 
   useEffect(() => {
-    // Fetch data
-    Promise.all([
-      fetch('/api/globe/data').then(res => res.json()),
-      fetch('/api/predictions').then(res => res.json()),
-    ]).then(([globeData, predData]) => {
-      if (globeData.claims) setClaims(globeData.claims);
-      if (globeData.osint) setOsint(globeData.osint);
-      if (predData.predictions) setPredictions(predData.predictions);
-    }).catch(err => console.error('[Globe] Failed to load data:', err));
+    fetch('/api/globe/data')
+      .then(res => res.json())
+      .then(data => {
+        if (data.claims) setClaims(data.claims);
+        if (data.osint) setOsint(data.osint);
+      })
+      .catch(err => console.error('[Globe] Failed to load data:', err));
   }, []);
 
-  // Convert to CardViewModel and apply filters/sorting
-  const getDisplayCards = (): CardViewModel[] => {
-    let cards: CardViewModel[] = [];
-
-    // Build cards from both sources
-    const claimCards = claims.map(mapClaimToCard);
-    const osintCards = osint.map(mapOsintToCard);
-
-    // Filter by tab FIRST - this is critical for proper type separation
+  const getDisplayItems = () => {
     if (currentTab === 'claims') {
-      // Claims tab: ONLY show cards where type === 'claim'
-      cards = claimCards.filter(c => c.type === 'claim');
-    } else if (currentTab === 'osint') {
-      // OSINT tab: ONLY show cards where type === 'osint'
-      cards = osintCards.filter(c => c.type === 'osint');
+      let filtered = claims;
+      if (activeFilter === 'high-confidence') {
+        filtered = claims.filter(c => c.confidence >= 75);
+      } else if (activeFilter === 'verified') {
+        filtered = claims.filter(c => c.status === 'verified');
+      }
+      return filtered;
     } else {
-      // All tab: show both
-      cards = [...claimCards, ...osintCards];
+      return osint;
     }
-
-    // Apply filters
-    cards = filterCards(cards, {
-      category: selectedCategory,
-      timeWindow,
-    });
-
-    // Apply search
-    if (searchQuery.trim()) {
-      const query = searchQuery.toLowerCase();
-      cards = cards.filter(c =>
-        c.title.toLowerCase().includes(query) ||
-        c.authorName.toLowerCase().includes(query)
-      );
-    }
-
-    // Apply sorting
-    cards = sortCards(cards, sortBy);
-
-    return cards;
   };
 
-  const displayCards = getDisplayCards();
+  const displayItems = getDisplayItems();
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-[#0A0A0F] via-[#111118] to-[#0A0A0F]">
+    <>
       <Script
         src="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js"
         strategy="beforeInteractive"
       />
 
-      {/* ProofLocker Header */}
-      <header className="fixed top-0 left-0 right-0 h-14 bg-gradient-to-r from-[#0A0A0F] via-[#111118] to-[#0A0A0F] backdrop-blur-[20px] border-b border-purple-500/20 z-[1000] shadow-[0_0_30px_rgba(91,33,182,0.15)]">
-        <div className="flex items-center justify-between px-3 md:px-6 h-full">
-          <div className="flex items-center gap-2 md:gap-6">
-            <a href="/" className="flex items-center transition-transform hover:scale-105">
-              <img src="/logos/prooflocker-logo-dark.svg" alt="ProofLocker" className="h-6 md:h-8 w-auto" />
+      <style jsx global>{`
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+        :root {
+          --bg-primary: #0f172a;
+          --bg-secondary: #1e293b;
+          --bg-overlay: rgba(15, 23, 42, 0.95);
+          --text-primary: #f8fafc;
+          --text-secondary: #94a3b8;
+          --text-muted: #64748b;
+
+          --claim-accent: #8b5cf6;
+          --claim-bg: rgba(139, 92, 246, 0.1);
+          --claim-border: rgba(139, 92, 246, 0.3);
+
+          --osint-accent: #ef4444;
+          --osint-bg: rgba(239, 68, 68, 0.1);
+          --osint-border: rgba(239, 68, 68, 0.3);
+
+          --color-verified: #14b8a6;
+          --color-disputed: #ef4444;
+          --color-pending: #f59e0b;
+          --color-neutral: #6b7280;
+
+          --border-subtle: rgba(148, 163, 184, 0.1);
+          --border-medium: rgba(148, 163, 184, 0.2);
+        }
+
+        body {
+          font-family: 'Inter', system-ui, -apple-system, sans-serif !important;
+        }
+      `}</style>
+
+      <div className="min-h-screen bg-black">
+        {/* Header */}
+        <header className="fixed top-0 left-0 right-0 h-14 bg-[rgba(15,23,42,0.95)] backdrop-blur-[20px] border-b border-[rgba(148,163,184,0.1)] z-[1000] flex items-center justify-between px-6">
+          <div className="flex items-center gap-8">
+            <a href="/" className="flex items-center">
+              <img src="/logos/prooflocker-logo-dark.svg" alt="ProofLocker" className="h-9 w-auto" />
             </a>
-            <span className="text-[10px] md:text-[12px] font-medium text-purple-300/70 tracking-wider hidden sm:block">
+            <span className="text-[13px] font-medium text-[#94a3b8] tracking-wide hidden lg:block">
               Verifiable Claims Worldwide
             </span>
           </div>
 
-          <div className="flex items-center gap-1 md:gap-2">
+          <div className="flex items-center gap-6 text-[13px] text-[#94a3b8]">
+            <div className="flex items-center gap-2">
+              <svg className="w-[18px] h-[18px]" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              <span className="font-semibold text-[#f8fafc]">{claims.length}</span> Claims
+            </div>
+            <div className="flex items-center gap-2">
+              <svg className="w-[18px] h-[18px]" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                <circle cx="12" cy="12" r="3" />
+                <path d="M12 1v6m0 6v6M1 12h6m6 0h6" />
+              </svg>
+              <span className="font-semibold text-[#f8fafc]">{osint.length}</span> OSINT
+            </div>
+          </div>
+
+          <div className="flex items-center gap-3">
             <a
               href="/app"
-              className="group flex items-center gap-1 px-2 md:px-3 py-2 text-[11px] md:text-[12px] font-semibold text-gray-400 hover:text-white transition-all hover:bg-purple-500/10 rounded-lg border border-transparent hover:border-purple-500/20"
-              title="View Feed"
+              className="flex items-center gap-2 px-4 py-2 rounded-lg text-[13px] font-semibold text-[#94a3b8] border border-[rgba(148,163,184,0.2)] hover:text-[#f8fafc] hover:border-[#14b8a6] hover:bg-[rgba(20,184,166,0.1)] transition-all"
             >
-              <svg className="w-3.5 md:w-4 h-3.5 md:h-4 group-hover:text-purple-400 transition-colors" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                 <rect x="3" y="3" width="7" height="7" rx="1" />
                 <rect x="14" y="3" width="7" height="7" rx="1" />
                 <rect x="14" y="14" width="7" height="7" rx="1" />
                 <rect x="3" y="14" width="7" height="7" rx="1" />
               </svg>
-              <span className="hidden md:inline">Feed</span>
+              Feed
             </a>
-
             <a
               href="/lock"
-              className="flex items-center gap-1.5 px-3 md:px-5 py-1.5 md:py-2 bg-gradient-to-r from-[#5B21B6] to-[#2E5CFF] hover:from-[#6B31C6] hover:to-[#3D6CFF] text-white rounded-lg text-[11px] md:text-[13px] font-bold transition-all shadow-[0_0_20px_rgba(91,33,182,0.4)] hover:shadow-[0_0_30px_rgba(91,33,182,0.6)]"
+              className="flex items-center gap-2 px-4 py-2 rounded-lg text-[13px] font-semibold bg-[#14b8a6] text-[#0f172a] hover:bg-[#0d9488] transition-all"
             >
-              <svg className="w-3.5 md:w-4 h-3.5 md:h-4" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
               </svg>
-              <span>Submit</span>
+              Submit
             </a>
           </div>
-        </div>
-      </header>
+        </header>
 
-      <div className="pt-14 h-screen flex">
         {/* Map Container */}
-        <div className="flex-1 relative">
+        <div className="fixed top-14 left-0 right-[360px] bottom-0">
           <GlobeMapbox claims={claims} osint={osint} />
         </div>
 
-        {/* Right Panel: Feed-lite */}
-        <aside className="w-[420px] h-[calc(100vh-56px)] bg-gradient-to-b from-[#0A0A0F]/98 via-[#111118]/98 to-[#0A0A0F]/98 backdrop-blur-[30px] border-l border-purple-500/20 flex flex-col overflow-hidden">
-          {/* Control Bar */}
-          <div className="p-4 space-y-3 border-b border-purple-500/20">
+        {/* Right Sidebar */}
+        <aside className="fixed top-14 right-0 w-[360px] h-[calc(100vh-56px)] bg-[rgba(15,23,42,0.95)] backdrop-blur-[20px] border-l border-[rgba(148,163,184,0.1)] z-[950] flex flex-col">
+          {/* Sidebar Header */}
+          <div className="p-5 border-b border-[rgba(148,163,184,0.1)]">
             {/* Tabs */}
-            <div className="flex gap-2">
-              <button
-                onClick={() => setCurrentTab('all')}
-                className={`flex-1 px-4 py-2 rounded-lg text-xs font-bold transition-all ${
-                  currentTab === 'all'
-                    ? 'bg-gradient-to-r from-purple-600 to-purple-700 text-white shadow-[0_0_20px_rgba(168,85,247,0.3)]'
-                    : 'bg-transparent text-gray-400 border border-purple-500/20 hover:bg-purple-500/10'
-                }`}
-              >
-                All ({displayCards.length})
-              </button>
+            <div className="flex gap-2 mb-4">
               <button
                 onClick={() => setCurrentTab('claims')}
-                className={`flex-1 px-4 py-2 rounded-lg text-xs font-bold transition-all ${
+                className={`flex-1 px-4 py-2 rounded-lg text-[13px] font-semibold transition-all border ${
                   currentTab === 'claims'
-                    ? 'bg-gradient-to-r from-purple-600 to-purple-700 text-white shadow-[0_0_20px_rgba(168,85,247,0.3)]'
-                    : 'bg-transparent text-gray-400 border border-purple-500/20 hover:bg-purple-500/10'
+                    ? 'bg-[#8b5cf6] text-white border-[#8b5cf6]'
+                    : 'bg-transparent text-[#94a3b8] border-[rgba(148,163,184,0.2)] hover:text-[#f8fafc] hover:border-[#8b5cf6]'
                 }`}
               >
                 Claims ({claims.length})
               </button>
               <button
                 onClick={() => setCurrentTab('osint')}
-                className={`flex-1 px-4 py-2 rounded-lg text-xs font-bold transition-all ${
+                className={`flex-1 px-4 py-2 rounded-lg text-[13px] font-semibold transition-all border ${
                   currentTab === 'osint'
-                    ? 'bg-gradient-to-r from-red-600 to-red-700 text-white shadow-[0_0_20px_rgba(239,68,68,0.3)]'
-                    : 'bg-transparent text-gray-400 border border-purple-500/20 hover:bg-red-500/10'
+                    ? 'bg-[#ef4444] text-white border-[#ef4444]'
+                    : 'bg-transparent text-[#94a3b8] border-[rgba(148,163,184,0.2)] hover:text-[#f8fafc] hover:border-[#ef4444]'
                 }`}
               >
                 OSINT ({osint.length})
               </button>
             </div>
 
-            {/* Search */}
-            <div className="relative">
-              <input
-                type="text"
-                placeholder="Search..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full px-3 py-2 pl-9 bg-white/5 border border-purple-500/20 rounded-lg text-sm text-white placeholder-gray-500 focus:outline-none focus:border-purple-500/40"
-              />
-              <svg className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-              </svg>
-            </div>
-
-            {/* Sort & Time Window */}
-            <div className="flex items-center gap-2">
-              {/* Sort dropdown */}
-              <div className="relative flex-1">
+            {/* Filters */}
+            {currentTab === 'claims' && (
+              <div className="flex gap-2 flex-wrap">
                 <button
-                  onClick={() => setShowSortMenu(!showSortMenu)}
-                  className="w-full flex items-center justify-between gap-2 px-3 py-2 bg-white/5 border border-purple-500/20 rounded-lg text-xs font-medium text-gray-300 hover:bg-white/10"
-                >
-                  <span>
-                    {sortBy === 'new' && 'New'}
-                    {sortBy === 'trust' && 'Highest Trust'}
-                    {sortBy === 'upvotes' && 'Most Upvoted'}
-                    {sortBy === 'evidence' && 'Best Evidence'}
-                  </span>
-                  <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                  </svg>
-                </button>
-
-                {showSortMenu && (
-                  <>
-                    <div className="fixed inset-0 z-40" onClick={() => setShowSortMenu(false)} />
-                    <div className="absolute left-0 top-full mt-1 w-full bg-[#1a1a1a] border border-purple-500/30 rounded-lg shadow-lg z-50 py-1">
-                      {[
-                        { value: 'new' as SortOption, label: 'New' },
-                        { value: 'trust' as SortOption, label: 'Highest Trust' },
-                        { value: 'upvotes' as SortOption, label: 'Most Upvoted' },
-                        { value: 'evidence' as SortOption, label: 'Best Evidence' },
-                      ].map((option) => (
-                        <button
-                          key={option.value}
-                          onClick={() => { setSortBy(option.value); setShowSortMenu(false); }}
-                          className={`w-full px-3 py-2 text-left text-xs transition-all ${
-                            sortBy === option.value ? 'text-purple-300 bg-purple-500/20' : 'text-gray-300 hover:bg-white/10'
-                          }`}
-                        >
-                          {option.label}
-                        </button>
-                      ))}
-                    </div>
-                  </>
-                )}
-              </div>
-
-              {/* Time window */}
-              <select
-                value={timeWindow}
-                onChange={(e) => setTimeWindow(e.target.value as TimeWindow)}
-                className="px-3 py-2 bg-white/5 border border-purple-500/20 rounded-lg text-xs font-medium text-gray-300 hover:bg-white/10 focus:outline-none focus:border-purple-500/40"
-              >
-                <option value="24h">24h</option>
-                <option value="7d">7d</option>
-                <option value="30d">30d</option>
-                <option value="all">All</option>
-              </select>
-            </div>
-
-            {/* Category chips */}
-            <div className="flex gap-1.5 overflow-x-auto no-scrollbar pb-1">
-              {categories.map((cat) => (
-                <button
-                  key={cat}
-                  onClick={() => setSelectedCategory(cat)}
-                  className={`px-2.5 py-1 text-[10px] font-bold rounded-full whitespace-nowrap transition-all ${
-                    selectedCategory === cat
-                      ? 'bg-gradient-to-r from-purple-600 to-purple-700 text-white border border-purple-500/40 shadow-[0_0_15px_rgba(168,85,247,0.3)]'
-                      : 'bg-white/5 border border-purple-500/20 text-gray-400 hover:text-white hover:bg-purple-500/10'
+                  onClick={() => setActiveFilter('all')}
+                  className={`px-3 py-1.5 rounded-2xl text-[12px] font-medium transition-all border ${
+                    activeFilter === 'all'
+                      ? 'bg-[rgba(139,92,246,0.1)] text-[#8b5cf6] border-[rgba(139,92,246,0.3)]'
+                      : 'bg-transparent text-[#94a3b8] border-[rgba(148,163,184,0.2)] hover:bg-[rgba(139,92,246,0.1)] hover:text-[#8b5cf6]'
                   }`}
                 >
-                  {cat === 'all' ? 'All' : cat}
+                  All
                 </button>
-              ))}
-            </div>
+                <button
+                  onClick={() => setActiveFilter('high-confidence')}
+                  className={`px-3 py-1.5 rounded-2xl text-[12px] font-medium transition-all border ${
+                    activeFilter === 'high-confidence'
+                      ? 'bg-[rgba(139,92,246,0.1)] text-[#8b5cf6] border-[rgba(139,92,246,0.3)]'
+                      : 'bg-transparent text-[#94a3b8] border-[rgba(148,163,184,0.2)] hover:bg-[rgba(139,92,246,0.1)] hover:text-[#8b5cf6]'
+                  }`}
+                >
+                  High Confidence
+                </button>
+                <button
+                  onClick={() => setActiveFilter('verified')}
+                  className={`px-3 py-1.5 rounded-2xl text-[12px] font-medium transition-all border ${
+                    activeFilter === 'verified'
+                      ? 'bg-[rgba(139,92,246,0.1)] text-[#8b5cf6] border-[rgba(139,92,246,0.3)]'
+                      : 'bg-transparent text-[#94a3b8] border-[rgba(148,163,184,0.2)] hover:bg-[rgba(139,92,246,0.1)] hover:text-[#8b5cf6]'
+                  }`}
+                >
+                  Verified
+                </button>
+              </div>
+            )}
           </div>
 
-          {/* Cards List */}
+          {/* Sidebar Content */}
           <div className="flex-1 overflow-y-auto p-4 space-y-3">
-            {displayCards.length === 0 ? (
-              <div className="text-center py-12">
-                <p className="text-gray-400 text-sm">No items found</p>
-              </div>
+            {currentTab === 'claims' ? (
+              displayItems.length === 0 ? (
+                <div className="text-center py-12 text-[#94a3b8] text-sm">No claims found</div>
+              ) : (
+                (displayItems as Claim[]).map((claim) => {
+                  // Extract reputation score from rep field
+                  const repScore = claim.rep || 0;
+                  const tierInfo = repScore >= 800 ? { label: 'Elite', color: '#8b5cf6' } :
+                                   repScore >= 700 ? { label: 'Trusted+', color: '#3b82f6' } :
+                                   repScore >= 500 ? { label: 'Trusted', color: '#14b8a6' } :
+                                   repScore >= 300 ? { label: 'Active', color: '#f59e0b' } :
+                                   { label: 'New', color: '#6b7280' };
+
+                  return (
+                    <div
+                      key={claim.id}
+                      className="bg-[#1e293b] border border-[rgba(148,163,184,0.1)] border-l-[3px] border-l-[#8b5cf6] rounded-[10px] p-3.5 cursor-pointer transition-all hover:border-[#8b5cf6] hover:bg-[rgba(139,92,246,0.1)] hover:shadow-[0_0_0_1px_rgba(139,92,246,0.3)]"
+                    >
+                      {/* Header */}
+                      <div className="flex items-center justify-between mb-2.5">
+                        <div className="flex items-center gap-1.5 text-[12px]">
+                          <span className="font-semibold text-[#f8fafc]">{claim.submitter}</span>
+                          <div
+                            className="flex items-center gap-1 px-1.5 py-0.5 rounded-[10px] text-[11px] font-semibold"
+                            style={{
+                              background: `${tierInfo.color}1a`,
+                              color: tierInfo.color
+                            }}
+                          >
+                            <svg className="w-2.5 h-2.5" fill="currentColor" viewBox="0 0 20 20">
+                              <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                            </svg>
+                            {tierInfo.label}
+                          </div>
+                        </div>
+                        <span className={`px-2 py-0.5 rounded-[10px] text-[10px] font-semibold uppercase tracking-wide ${
+                          claim.status === 'verified' ? 'bg-[rgba(20,184,166,0.2)] text-[#14b8a6]' :
+                          claim.status === 'disputed' ? 'bg-[rgba(239,68,68,0.2)] text-[#ef4444]' :
+                          claim.status === 'pending' ? 'bg-[rgba(245,158,11,0.2)] text-[#f59e0b]' :
+                          'bg-[rgba(107,114,128,0.2)] text-[#6b7280]'
+                        }`}>
+                          {claim.status}
+                        </span>
+                      </div>
+
+                      {/* Category Badge */}
+                      {claim.category && (
+                        <div className="mb-2">
+                          <span className="inline-flex px-2 py-0.5 bg-[rgba(139,92,246,0.1)] border border-[rgba(139,92,246,0.2)] text-[#a78bfa] rounded text-[10px] font-medium">
+                            {claim.category}
+                          </span>
+                        </div>
+                      )}
+
+                      {/* Claim Text */}
+                      <p className="text-[13px] leading-[1.5] text-[#f8fafc] mb-2.5 line-clamp-2">
+                        {claim.claim}
+                      </p>
+
+                      {/* Meta */}
+                      <div className="flex items-center justify-between text-[11px] text-[#64748b]">
+                        <span>{claim.lockedDate}</span>
+                        <div className="flex items-center gap-1.5">
+                          <span className="font-semibold text-[#94a3b8]">{claim.confidence}%</span>
+                          <div className="w-10 h-1 bg-[rgba(148,163,184,0.2)] rounded-sm overflow-hidden">
+                            <div
+                              className="h-full bg-[#8b5cf6] rounded-sm"
+                              style={{ width: `${claim.confidence}%` }}
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })
+              )
             ) : (
-              displayCards.slice(0, 50).map((card) => (
-                <UnifiedCard
-                  key={card.id}
-                  card={card}
-                  currentUserId={user?.id}
-                  variant="compact"
-                  onViewOnMap={() => {
-                    // Center map on this card's location
-                    // This would trigger the map to fly to coordinates
-                    console.log('Center map on', card.lat, card.lng);
-                  }}
-                />
-              ))
+              displayItems.length === 0 ? (
+                <div className="text-center py-12 text-[#94a3b8] text-sm">No OSINT signals found</div>
+              ) : (
+                (displayItems as OsintItem[]).map((item) => (
+                  <div
+                    key={item.id}
+                    className="bg-[#1e293b] border border-[rgba(148,163,184,0.1)] border-l-[3px] border-l-[#ef4444] rounded-[10px] p-3.5 cursor-pointer transition-all hover:border-[#ef4444] hover:bg-[rgba(239,68,68,0.1)] hover:shadow-[0_0_0_1px_rgba(239,68,68,0.3)]"
+                  >
+                    {/* Header */}
+                    <div className="flex items-center justify-between mb-2">
+                      <div className="flex items-center gap-1.5 text-[12px]">
+                        <span className="font-semibold text-[#f8fafc]">{item.source}</span>
+                        {item.handle && (
+                          <span className="text-[#ef4444]">{item.handle}</span>
+                        )}
+                      </div>
+                      <span className="text-[11px] text-[#64748b]">{item.timestamp}</span>
+                    </div>
+
+                    {/* Title */}
+                    <p className="text-[13px] leading-[1.5] text-[#f8fafc] mb-2.5 line-clamp-2">
+                      {item.title}
+                    </p>
+
+                    {/* Tags */}
+                    <div className="flex flex-wrap gap-1.5">
+                      {item.tags.slice(0, 3).map((tag, i) => (
+                        <span
+                          key={i}
+                          className="px-2 py-0.5 bg-[rgba(239,68,68,0.1)] border border-[rgba(239,68,68,0.2)] text-[#f87171] rounded text-[10px] font-medium uppercase tracking-wide"
+                        >
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                ))
+              )
             )}
           </div>
         </aside>
       </div>
-    </div>
+    </>
   );
 }
