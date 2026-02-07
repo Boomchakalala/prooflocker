@@ -803,7 +803,7 @@ function AppFeedContent() {
                   )}
 
                   {/* Footer */}
-                  <div className="flex items-center justify-between pt-3 border-t border-slate-600/30">
+                  <div className="flex items-center justify-between pt-3 border-t border-slate-600/30 mb-3">
                     <div className="flex items-center gap-3 text-sm">
                       {prediction.evidence_score !== undefined && prediction.evidence_score > 0 && (
                         <div className="flex items-center gap-1.5">
@@ -830,6 +830,31 @@ function AppFeedContent() {
                         <span className="text-xs">{prediction.upvotesCount}</span>
                       </div>
                     )}
+                  </div>
+
+                  {/* On-Chain Timestamp Extract + View Button */}
+                  <div className="flex items-center justify-between pt-3 border-t border-purple-500/20 bg-gradient-to-r from-purple-900/10 to-transparent rounded-lg px-2 py-2">
+                    <div className="flex items-center gap-1.5">
+                      <svg className="w-3 h-3 text-purple-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+                      </svg>
+                      <span className="text-[10px] text-purple-300/80 font-mono">
+                        Locked: {new Date(prediction.timestamp).toLocaleString('en-US', {
+                          month: 'short',
+                          day: 'numeric',
+                          year: 'numeric',
+                          hour: 'numeric',
+                          minute: '2-digit',
+                          hour12: true
+                        })}
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-1 px-2 py-1 bg-purple-600/20 hover:bg-purple-600/30 border border-purple-500/40 rounded text-[10px] text-purple-300 font-semibold transition-all group-hover:border-purple-400/60">
+                      <span>View</span>
+                      <svg className="w-2.5 h-2.5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7"/>
+                      </svg>
+                    </div>
                   </div>
                 </Link>
               );
