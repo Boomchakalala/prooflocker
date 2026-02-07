@@ -177,7 +177,7 @@ function AppFeedContent() {
           const bResolved = b.outcome === "correct" || b.outcome === "incorrect";
           if (aResolved && !bResolved) return -1;
           if (!aResolved && bResolved) return 1;
-          return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+          return new Date(b.createdAt || b.timestamp).getTime() - new Date(a.createdAt || a.timestamp).getTime();
         });
         break;
     }
