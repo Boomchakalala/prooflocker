@@ -126,18 +126,6 @@ export default function LandingHero() {
           </div>
         </div>
 
-        {/* Trust line with blue icons */}
-        <p className="text-sm md:text-base text-[#9CA3AF] font-medium flex items-center justify-center gap-2 flex-wrap mb-16 animate-fade-in-up" style={{ animationDelay: '0.3s' }}>
-          <svg className="w-4 h-4 text-[#2E5CFF]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7"/>
-          </svg>
-          No signup required
-          <span className="text-[#4C1D95]">·</span>
-          Lock in ~10 seconds
-          <span className="text-[#4C1D95]">·</span>
-          Join predictors building track records worth believing
-        </p>
-
         {/* Feature badges - redesigned in a single centered row */}
         <div className="flex items-center justify-center gap-3 flex-wrap animate-fade-in-up" style={{ animationDelay: '0.4s' }}>
           <div className="px-5 py-2.5 rounded-full bg-[#5B21B6]/10 border border-[#5B21B6]/30 text-xs md:text-sm text-[#F8F9FA] backdrop-blur-sm transition-all duration-300 hover:bg-[#5B21B6]/15 hover:scale-105 flex items-center gap-2">
