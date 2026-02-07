@@ -21,7 +21,7 @@ import {
 // CARD VIEW MODEL TYPE
 // ============================================================================
 
-export type CardType = 'prediction' | 'claim' | 'osint';
+export type CardType = 'claim' | 'osint';
 
 export type CardStatus = 'pending' | 'correct' | 'incorrect' | 'verified' | 'disputed' | 'void';
 
@@ -94,7 +94,7 @@ export interface CardViewModel {
 // ============================================================================
 
 /**
- * Map a Prediction (from Feed) to CardViewModel
+ * Map a Prediction (user claim) to CardViewModel
  */
 export function mapPredictionToCard(prediction: Prediction, currentUserId?: string | null): CardViewModel {
   const evidenceGrade = prediction.evidence_score
@@ -109,7 +109,7 @@ export function mapPredictionToCard(prediction: Prediction, currentUserId?: stri
 
   return {
     id: prediction.id,
-    type: 'prediction',
+    type: 'claim',
 
     title: prediction.textPreview,
     textPreview: prediction.textPreview,
