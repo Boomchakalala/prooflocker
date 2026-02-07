@@ -316,9 +316,9 @@ export default function GlobePage() {
                             e.preventDefault();
                             window.location.href = `/proof/${claim.id}`;
                           }}
-                          className="px-3 py-1 bg-gradient-to-r from-[#5B21B6] to-[#2E5CFF] hover:from-[#6B31C6] hover:to-[#3D6CFF] text-white rounded text-[11px] font-semibold transition-all shadow-[0_0_10px_rgba(91,33,182,0.3)]"
+                          className="px-2 py-1 text-[#94a3b8] hover:text-white hover:bg-white/10 rounded text-[11px] font-medium transition-colors"
                         >
-                          Verify
+                          View
                         </button>
                       </div>
                     </a>
