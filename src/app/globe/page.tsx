@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import dynamic from 'next/dynamic';
 import Script from 'next/script';
-import PredictionCard from '@/components/PredictionCard';
+import UnifiedCard from '@/components/UnifiedCard';
 import { Prediction } from '@/lib/storage';
 import { mapClaimToCard, mapOsintToCard, sortCards, filterCards, type CardViewModel } from '@/lib/card-view-model';
 import { useAuth } from '@/contexts/AuthContext';
@@ -70,11 +70,20 @@ export default function GlobePage() {
   const getDisplayCards = (): CardViewModel[] => {
     let cards: CardViewModel[] = [];
 
-    if (currentTab === 'claims' || currentTab === 'all') {
-      cards.push(...claims.map(mapClaimToCard));
-    }
-    if (currentTab === 'osint' || currentTab === 'all') {
-      cards.push(...osint.map(mapOsintToCard));
+    // Build cards from both sources
+    const claimCards = claims.map(mapClaimToCard);
+    const osintCards = osint.map(mapOsintToCard);
+
+    // Filter by tab FIRST - this is critical for proper type separation
+    if (currentTab === 'claims') {
+      // Claims tab: ONLY show cards where type === 'claim'
+      cards = claimCards.filter(c => c.type === 'claim');
+    } else if (currentTab === 'osint') {
+      // OSINT tab: ONLY show cards where type === 'osint'
+      cards = osintCards.filter(c => c.type === 'osint');
+    } else {
+      // All tab: show both
+      cards = [...claimCards, ...osintCards];
     }
 
     // Apply filters
