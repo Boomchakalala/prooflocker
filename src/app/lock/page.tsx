@@ -130,7 +130,27 @@ export default function LockPage() {
               </p>
             </div>
 
-            <div className="glass border border-white/10 rounded-xl p-8">
+            {/* Tip Banner */}
+            <div className="mb-6 bg-gradient-to-r from-cyan-500/10 to-purple-500/10 border border-cyan-500/30 rounded-xl p-4">
+              <div className="flex items-start gap-3">
+                <div className="flex-shrink-0">
+                  <svg className="w-5 h-5 text-cyan-400 mt-0.5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                  </svg>
+                </div>
+                <div className="flex-1">
+                  <h4 className="text-white font-semibold text-sm mb-1">💡 Pro Tip</h4>
+                  <p className="text-slate-300 text-sm">
+                    Claims resolved within 30 days earn 2x multipliers. Add evidence before locking for bonus credibility points.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div className="grid lg:grid-cols-3 gap-6">
+              {/* Main Form - 2 columns */}
+              <div className="lg:col-span-2">
+                <div className="glass border border-white/10 rounded-xl p-8">
               <div className="mb-6">
                 <label
                   htmlFor="prediction-text"
