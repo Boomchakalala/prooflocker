@@ -322,6 +322,15 @@ export default function LockPage() {
                 </div>
               </div>
 
+              {/* Evidence Bundle Uploader */}
+              <div className="mb-6">
+                <h3 className="text-sm font-medium text-white mb-3">Add Evidence (Optional)</h3>
+                <EvidenceBundleUploader
+                  onUpload={(items) => setEvidenceItems(items)}
+                  prefillOsint={prefillOsint}
+                />
+              </div>
+
               {/* Primary CTA */}
               <button
                 onClick={handleLock}
