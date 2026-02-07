@@ -64,7 +64,7 @@ export async function GET(request: Request) {
             .eq('category', category)
             .limit(1);
 
-          categoryMatch = (categoryPredictions && categoryPredictions.length > 0);
+          categoryMatch = !!(categoryPredictions && categoryPredictions.length > 0);
         }
 
         if (!categoryMatch) {
