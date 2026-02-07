@@ -40,14 +40,20 @@ export default function TopSourcesList({ category = 'all' }: TopSourcesListProps
       });
 
       if (!response.ok) {
-        throw new Error(`Failed to fetch top sources: ${response.status}`);
+        // If API fails, show a helpful message instead of erroring
+        console.warn('Top sources API unavailable, showing placeholder');
+        setSources([]);
+        setError(null); // Don't show error, just empty state
+        return;
       }
 
       const data = await response.json();
       setSources(data.sources || []);
     } catch (err) {
       console.error('Error fetching top sources:', err);
-      setError('Failed to load top sources');
+      // Show empty state instead of error
+      setSources([]);
+      setError(null);
     } finally {
       setLoading(false);
     }
