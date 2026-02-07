@@ -267,15 +267,19 @@ export default function GlobePage() {
                   }
 
                   return (
-                    <a
+                    <div
                       key={claim.id}
-                      href={`/proof/${claim.id}`}
-                      className="block bg-[#0A0A0F]/80 border border-purple-500/20 border-l-[3px] border-l-[#8b5cf6] rounded-[10px] p-3.5 cursor-pointer transition-all hover:border-[#8b5cf6] hover:bg-[rgba(139,92,246,0.1)] hover:shadow-[0_0_0_1px_rgba(139,92,246,0.3)]"
+                      className="bg-[#0A0A0F]/80 border border-purple-500/20 border-l-[3px] border-l-[#8b5cf6] rounded-[10px] p-3.5 transition-all hover:border-[#8b5cf6] hover:bg-[rgba(139,92,246,0.1)] hover:shadow-[0_0_0_1px_rgba(139,92,246,0.3)]"
                     >
                       {/* Header */}
                       <div className="flex items-center justify-between mb-2.5">
                         <div className="flex items-center gap-1.5 text-[12px]">
-                          <span className="font-semibold text-[#f8fafc]">{claim.submitter}</span>
+                          <button
+                            onClick={() => router.push(`/user/${claim.id}`)}
+                            className="font-semibold text-[#f8fafc] hover:text-[#a78bfa] transition-colors cursor-pointer"
+                          >
+                            {claim.submitter}
+                          </button>
                           <div
                             className="flex items-center gap-1 px-1.5 py-0.5 rounded-[10px] text-[11px] font-semibold"
                             style={{
@@ -312,16 +316,13 @@ export default function GlobePage() {
                       <div className="flex items-center justify-between text-[11px] text-[#64748b]">
                         <span>{claim.lockedDate}</span>
                         <button
-                          onClick={(e) => {
-                            e.preventDefault();
-                            window.location.href = `/proof/${claim.id}`;
-                          }}
+                          onClick={() => router.push(`/proof/${claim.id}`)}
                           className="px-2 py-1 text-[#94a3b8] hover:text-white hover:bg-white/10 rounded text-[11px] font-medium transition-colors"
                         >
                           View
                         </button>
                       </div>
-                    </a>
+                    </div>
                   );
                 })
               )
