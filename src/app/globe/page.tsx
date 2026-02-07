@@ -307,6 +307,82 @@ export default function GlobePage() {
                   );
                 })
               )
+            ) : currentTab === 'resolutions' ? (
+              resolutions.length === 0 ? (
+                <div className="text-center py-12 text-[#94a3b8] text-sm">No recent resolutions</div>
+              ) : (
+                resolutions.map((res) => (
+                  <div
+                    key={res.id}
+                    className="bg-gradient-to-br from-emerald-900/20 to-slate-900/50 border border-emerald-500/30 border-l-[3px] border-l-emerald-500 rounded-[10px] p-3.5 transition-all hover:border-emerald-500 hover:shadow-[0_0_15px_rgba(16,185,129,0.2)]"
+                  >
+                    {/* Resolution Banner */}
+                    <div className="flex items-center gap-2 mb-2 pb-2 border-b border-emerald-500/20">
+                      <div className="flex items-center gap-1.5">
+                        <svg className="w-3.5 h-3.5 text-emerald-400" fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7"/>
+                        </svg>
+                        <span className="text-emerald-400 font-bold text-[11px]">RESOLVED CORRECT</span>
+                      </div>
+                      <span className="text-[10px] text-slate-500">•</span>
+                      <span className="text-[10px] text-emerald-400 font-semibold">+80 pts</span>
+                    </div>
+
+                    {/* Header */}
+                    <div className="flex items-center justify-between mb-2">
+                      <div className="flex items-center gap-1.5 text-[12px]">
+                        <div className="w-5 h-5 rounded-full bg-gradient-to-br from-emerald-600 to-emerald-800 flex items-center justify-center text-white text-[9px] font-bold">
+                          {res.authorNumber?.toString().slice(-2) || '00'}
+                        </div>
+                        <span className="font-semibold text-white">Anon #{res.authorNumber || 1000}</span>
+                      </div>
+                      <span className="text-[10px] text-slate-500">Just now</span>
+                    </div>
+
+                    {/* Category */}
+                    {res.category && (
+                      <div className="mb-2">
+                        <span className="inline-flex px-2 py-0.5 bg-slate-800/50 text-slate-300 rounded text-[10px] font-medium">
+                          {res.category}
+                        </span>
+                      </div>
+                    )}
+
+                    {/* Claim Text */}
+                    <p className="text-[13px] leading-[1.5] text-white mb-2.5 line-clamp-2">
+                      {res.textPreview}
+                    </p>
+
+                    {/* Stats */}
+                    <div className="flex items-center gap-3 mb-2.5 text-[11px]">
+                      {res.evidence_score && (
+                        <div className="flex items-center gap-1 text-cyan-400">
+                          <svg className="w-3 h-3" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                          </svg>
+                          <span className="font-semibold">{res.evidence_score}/100</span>
+                        </div>
+                      )}
+                      {res.upvotesCount > 0 && (
+                        <div className="flex items-center gap-1 text-indigo-400">
+                          <svg className="w-3 h-3" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M5 15l7-7 7 7"/>
+                          </svg>
+                          <span className="font-semibold">{res.upvotesCount}</span>
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Action */}
+                    <button
+                      onClick={() => router.push(`/proof/${res.publicSlug}`)}
+                      className="w-full px-3 py-1.5 bg-emerald-500/20 hover:bg-emerald-500/30 border border-emerald-500/30 text-emerald-300 hover:text-emerald-200 rounded text-[12px] font-semibold transition-all"
+                    >
+                      View Proof
+                    </button>
+                  </div>
+                ))
+              )
             ) : (
               displayItems.length === 0 ? (
                 <div className="text-center py-12 text-[#94a3b8] text-sm">No OSINT signals found</div>
