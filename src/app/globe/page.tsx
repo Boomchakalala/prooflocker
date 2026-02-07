@@ -20,6 +20,7 @@ interface Claim {
   lng: number;
   status: 'verified' | 'pending' | 'disputed' | 'void';
   submitter: string;
+  anonId?: string; // User's anon_id for profile link
   rep: number;
   confidence: number;
   lockedDate: string;
@@ -277,7 +278,7 @@ export default function GlobePage() {
                       <div className="flex items-center justify-between mb-2.5">
                         <div className="flex items-center gap-1.5 text-[12px]">
                           <button
-                            onClick={() => router.push(`/user/${claim.id}`)}
+                            onClick={() => router.push(`/user/${claim.anonId || claim.id}`)}
                             className="font-semibold text-[#f8fafc] hover:text-[#a78bfa] transition-colors cursor-pointer"
                           >
                             {claim.submitter}
