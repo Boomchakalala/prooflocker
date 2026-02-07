@@ -1,0 +1,180 @@
+"use client";
+
+import { useEffect, useState } from "react";
+import Link from "next/link";
+import { formatRelativeTime } from "@/lib/utils";
+
+interface ResolvedPrediction {
+  id: string;
+  publicSlug: string;
+  textPreview: string;
+  category: string;
+  outcome: string;
+  timestamp: string;
+  authorNumber: number;
+  evidence_score?: number;
+  upvotesCount?: number;
+}
+
+export default function WallOfWins() {
+  const [predictions, setPredictions] = useState<ResolvedPrediction[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [selectedFilter, setSelectedFilter] = useState<string>("All");
+
+  useEffect(() => {
+    fetchResolvedPredictions();
+  }, []);
+
+  const fetchResolvedPredictions = async () => {
+    try {
+      // Fetch recent correct predictions from API
+      const response = await fetch("/api/predictions?outcome=correct&limit=12");
+      if (response.ok) {
+        const data = await response.json();
+        setPredictions(data.predictions || []);
+      }
+    } catch (error) {
+      console.error("Error fetching resolved predictions:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const filters = ["All", "Correct", "Crypto", "Politics", "Tech"];
+
+  const filteredPredictions = predictions.filter((p) => {
+    if (selectedFilter === "All") return true;
+    if (selectedFilter === "Correct") return p.outcome === "correct";
+    return p.category?.toLowerCase() === selectedFilter.toLowerCase();
+  });
+
+  return (
+    <div className="relative z-10 py-20 md:py-28 px-6 bg-gradient-to-b from-[#0a0a0a] via-[#111118] to-[#0a0a0a]">
+      {/* Background glow */}
+      <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-10">
+        <div
+          className="w-[1000px] h-[800px] rounded-full blur-3xl"
+          style={{
+            background: 'radial-gradient(circle, rgba(16, 185, 129, 0.2) 0%, rgba(0, 224, 255, 0.15) 50%, transparent 70%)'
+          }}
+        />
+      </div>
+
+      <div className="max-w-7xl mx-auto relative z-10">
+        {/* Section Header */}
+        <div className="text-center mb-12">
+          <h2 className="text-4xl md:text-6xl font-extrabold mb-4 bg-gradient-to-r from-emerald-400 via-cyan-400 to-emerald-400 bg-clip-text text-transparent" style={{ fontFamily: 'var(--font-montserrat)', filter: 'drop-shadow(0 0 25px rgba(16, 185, 129, 0.3))' }}>
+            Wall of Wins
+          </h2>
+          <p className="text-lg md:text-xl text-white/70 mb-8 max-w-3xl mx-auto">
+            Real Claims. Real Outcomes.
+          </p>
+          <p className="text-base text-slate-400">
+            These predictors put their reputation on the line—and delivered.
+          </p>
+        </div>
+
+        {/* Filter Tabs */}
+        <div className="flex items-center justify-center gap-2 mb-12 flex-wrap">
+          {filters.map((filter) => (
+            <button
+              key={filter}
+              onClick={() => setSelectedFilter(filter)}
+              className={`px-5 py-2.5 rounded-lg font-semibold text-sm transition-all ${
+                selectedFilter === filter
+                  ? "bg-emerald-500/20 border-2 border-emerald-500/50 text-emerald-300"
+                  : "bg-slate-800/50 border border-slate-700 text-slate-400 hover:text-white hover:border-slate-600"
+              }`}
+            >
+              {filter}
+            </button>
+          ))}
+        </div>
+
+        {/* Masonry Grid */}
+        {loading ? (
+          <div className="text-center py-20">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-emerald-500 mx-auto mb-4"></div>
+            <p className="text-slate-400">Loading wins...</p>
+          </div>
+        ) : filteredPredictions.length === 0 ? (
+          <div className="text-center py-20">
+            <p className="text-slate-400">No predictions found for this filter.</p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {filteredPredictions.map((pred) => (
+              <Link
+                key={pred.id}
+                href={`/proof/${pred.publicSlug}`}
+                className="group bg-gradient-to-br from-emerald-600/5 via-emerald-500/5 to-emerald-700/5 border border-emerald-500/20 hover:border-emerald-500/50 rounded-xl p-6 transition-all duration-300 hover:shadow-[0_0_30px_rgba(16,185,129,0.2)] hover:-translate-y-1 cursor-pointer"
+              >
+                {/* Header */}
+                <div className="flex items-center justify-between mb-4">
+                  <div className="flex items-center gap-2">
+                    <div className="w-8 h-8 rounded-full bg-gradient-to-br from-emerald-600 to-emerald-800 flex items-center justify-center text-white text-xs font-bold">
+                      {pred.authorNumber.toString().slice(-2)}
+                    </div>
+                    <div>
+                      <div className="text-sm text-white font-medium">Anon #{pred.authorNumber}</div>
+                      <div className="text-xs text-slate-500">{formatRelativeTime(pred.timestamp)}</div>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-1 px-2 py-1 bg-emerald-500/20 text-emerald-400 text-xs font-semibold rounded">
+                    <svg className="w-3 h-3" fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7"/>
+                    </svg>
+                    Correct
+                  </div>
+                </div>
+
+                {/* Category Badge */}
+                {pred.category && (
+                  <div className="inline-block px-2 py-1 bg-slate-800/50 text-slate-300 text-xs rounded mb-3">
+                    {pred.category}
+                  </div>
+                )}
+
+                {/* Title */}
+                <h3 className="text-white text-base font-medium leading-snug mb-4 line-clamp-3 group-hover:text-emerald-300 transition-colors">
+                  {pred.textPreview}
+                </h3>
+
+                {/* Footer */}
+                <div className="flex items-center justify-between pt-3 border-t border-emerald-500/10">
+                  {pred.evidence_score !== undefined && (
+                    <div className="flex items-center gap-1.5 text-sm">
+                      <svg className="w-4 h-4 text-cyan-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                      </svg>
+                      <span className="text-slate-400 text-xs">Evidence: </span>
+                      <span className="text-cyan-400 font-semibold text-xs">{pred.evidence_score}/100</span>
+                    </div>
+                  )}
+                  {pred.upvotesCount !== undefined && pred.upvotesCount > 0 && (
+                    <div className="flex items-center gap-1 text-sm text-slate-400">
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M5 15l7-7 7 7" />
+                      </svg>
+                      <span className="text-xs">{pred.upvotesCount}</span>
+                    </div>
+                  )}
+                </div>
+              </Link>
+            ))}
+          </div>
+        )}
+
+        {/* Bottom CTA */}
+        <div className="text-center mt-12">
+          <Link
+            href="/app"
+            className="inline-block px-8 py-3 border-2 border-emerald-500/30 hover:border-emerald-500/50 hover:bg-emerald-500/10 text-emerald-300 hover:text-emerald-200 font-semibold rounded-lg transition-all"
+          >
+            View All Predictions
+          </Link>
+        </div>
+      </div>
+    </div>
+  );
+}
