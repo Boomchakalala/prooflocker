@@ -297,9 +297,9 @@ export default function GlobePage() {
               </div>
             ) : (
               displayCards.slice(0, 50).map((card) => (
-                <PredictionCard
+                <UnifiedCard
                   key={card.id}
-                  prediction={card._original as Prediction}
+                  card={card}
                   currentUserId={user?.id}
                   variant="compact"
                   onViewOnMap={() => {
