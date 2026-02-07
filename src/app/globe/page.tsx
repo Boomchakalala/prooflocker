@@ -8,6 +8,7 @@ import { mapClaimToCard, mapOsintToCard, sortCards, filterCards, type CardViewMo
 import { useAuth } from '@/contexts/AuthContext';
 import { getTierInfo } from '@/lib/user-scoring';
 import LinkOsintModal from '@/components/LinkOsintModal';
+import UnifiedHeader from '@/components/UnifiedHeader';
 
 const GlobeMapbox = dynamic(() => import('@/components/GlobeMapbox'), {
   ssr: false,
