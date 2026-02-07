@@ -83,18 +83,20 @@ export default function GlobePage() {
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
         :root {
-          --bg-primary: #0f172a;
-          --bg-secondary: #1e293b;
-          --bg-overlay: rgba(15, 23, 42, 0.95);
+          --bg-primary: #0A0A0F;
+          --bg-secondary: #111118;
+          --bg-overlay: rgba(10, 10, 15, 0.95);
           --text-primary: #f8fafc;
           --text-secondary: #94a3b8;
           --text-muted: #64748b;
 
           --claim-accent: #8b5cf6;
+          --claim-accent-light: #a78bfa;
           --claim-bg: rgba(139, 92, 246, 0.1);
           --claim-border: rgba(139, 92, 246, 0.3);
 
           --osint-accent: #ef4444;
+          --osint-accent-light: #f87171;
           --osint-bg: rgba(239, 68, 68, 0.1);
           --osint-border: rgba(239, 68, 68, 0.3);
 
@@ -103,8 +105,8 @@ export default function GlobePage() {
           --color-pending: #f59e0b;
           --color-neutral: #6b7280;
 
-          --border-subtle: rgba(148, 163, 184, 0.1);
-          --border-medium: rgba(148, 163, 184, 0.2);
+          --border-subtle: rgba(91, 33, 182, 0.2);
+          --border-medium: rgba(91, 33, 182, 0.3);
         }
 
         body {
@@ -112,14 +114,14 @@ export default function GlobePage() {
         }
       `}</style>
 
-      <div className="min-h-screen bg-black">
+      <div className="min-h-screen bg-gradient-to-b from-[#0A0A0F] via-[#111118] to-[#0A0A0F]">
         {/* Header */}
-        <header className="fixed top-0 left-0 right-0 h-14 bg-[rgba(15,23,42,0.95)] backdrop-blur-[20px] border-b border-[rgba(148,163,184,0.1)] z-[1000] flex items-center justify-between px-6">
+        <header className="fixed top-0 left-0 right-0 h-14 bg-gradient-to-r from-[#0A0A0F] via-[#111118] to-[#0A0A0F] backdrop-blur-[20px] border-b border-purple-500/20 z-[1000] flex items-center justify-between px-6 shadow-[0_0_30px_rgba(91,33,182,0.15)]">
           <div className="flex items-center gap-8">
             <a href="/" className="flex items-center">
               <img src="/logos/prooflocker-logo-dark.svg" alt="ProofLocker" className="h-9 w-auto" />
             </a>
-            <span className="text-[13px] font-medium text-[#94a3b8] tracking-wide hidden lg:block">
+            <span className="text-[13px] font-medium text-purple-300/70 tracking-wide hidden lg:block">
               Verifiable Claims Worldwide
             </span>
           </div>
@@ -129,21 +131,21 @@ export default function GlobePage() {
               <svg className="w-[18px] h-[18px]" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
-              <span className="font-semibold text-[#f8fafc]">{claims.length}</span> Claims
+              <span className="font-semibold text-purple-300">{claims.length}</span> Claims
             </div>
             <div className="flex items-center gap-2">
               <svg className="w-[18px] h-[18px]" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                 <circle cx="12" cy="12" r="3" />
                 <path d="M12 1v6m0 6v6M1 12h6m6 0h6" />
               </svg>
-              <span className="font-semibold text-[#f8fafc]">{osint.length}</span> OSINT
+              <span className="font-semibold text-red-300">{osint.length}</span> OSINT
             </div>
           </div>
 
           <div className="flex items-center gap-3">
             <a
               href="/app"
-              className="flex items-center gap-2 px-4 py-2 rounded-lg text-[13px] font-semibold text-[#94a3b8] border border-[rgba(148,163,184,0.2)] hover:text-[#f8fafc] hover:border-[#14b8a6] hover:bg-[rgba(20,184,166,0.1)] transition-all"
+              className="flex items-center gap-2 px-4 py-2 rounded-lg text-[13px] font-semibold text-gray-400 border border-purple-500/20 hover:text-white hover:border-purple-500/40 hover:bg-purple-500/10 transition-all"
             >
               <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                 <rect x="3" y="3" width="7" height="7" rx="1" />
@@ -155,7 +157,7 @@ export default function GlobePage() {
             </a>
             <a
               href="/lock"
-              className="flex items-center gap-2 px-4 py-2 rounded-lg text-[13px] font-semibold bg-[#14b8a6] text-[#0f172a] hover:bg-[#0d9488] transition-all"
+              className="flex items-center gap-2 px-4 py-2 rounded-lg text-[13px] font-semibold bg-gradient-to-r from-[#5B21B6] to-[#2E5CFF] hover:from-[#6B31C6] hover:to-[#3D6CFF] text-white transition-all shadow-[0_0_20px_rgba(91,33,182,0.4)]"
             >
               <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
@@ -171,9 +173,9 @@ export default function GlobePage() {
         </div>
 
         {/* Right Sidebar */}
-        <aside className="fixed top-14 right-0 w-[360px] h-[calc(100vh-56px)] bg-[rgba(15,23,42,0.95)] backdrop-blur-[20px] border-l border-[rgba(148,163,184,0.1)] z-[950] flex flex-col">
+        <aside className="fixed top-14 right-0 w-[360px] h-[calc(100vh-56px)] bg-gradient-to-b from-[#0A0A0F]/98 via-[#111118]/98 to-[#0A0A0F]/98 backdrop-blur-[30px] border-l border-purple-500/20 z-[950] flex flex-col">
           {/* Sidebar Header */}
-          <div className="p-5 border-b border-[rgba(148,163,184,0.1)]">
+          <div className="p-5 border-b border-purple-500/20">
             {/* Tabs */}
             <div className="flex gap-2 mb-4">
               <button
@@ -253,7 +255,7 @@ export default function GlobePage() {
                   return (
                     <div
                       key={claim.id}
-                      className="bg-[#1e293b] border border-[rgba(148,163,184,0.1)] border-l-[3px] border-l-[#8b5cf6] rounded-[10px] p-3.5 cursor-pointer transition-all hover:border-[#8b5cf6] hover:bg-[rgba(139,92,246,0.1)] hover:shadow-[0_0_0_1px_rgba(139,92,246,0.3)]"
+                      className="bg-[#0A0A0F]/80 border border-purple-500/20 border-l-[3px] border-l-[#8b5cf6] rounded-[10px] p-3.5 cursor-pointer transition-all hover:border-[#8b5cf6] hover:bg-[rgba(139,92,246,0.1)] hover:shadow-[0_0_0_1px_rgba(139,92,246,0.3)]"
                     >
                       {/* Header */}
                       <div className="flex items-center justify-between mb-2.5">
@@ -320,7 +322,7 @@ export default function GlobePage() {
                 (displayItems as OsintItem[]).map((item) => (
                   <div
                     key={item.id}
-                    className="bg-[#1e293b] border border-[rgba(148,163,184,0.1)] border-l-[3px] border-l-[#ef4444] rounded-[10px] p-3.5 cursor-pointer transition-all hover:border-[#ef4444] hover:bg-[rgba(239,68,68,0.1)] hover:shadow-[0_0_0_1px_rgba(239,68,68,0.3)]"
+                    className="bg-[#0A0A0F]/80 border border-purple-500/20 border-l-[3px] border-l-[#ef4444] rounded-[10px] p-3.5 cursor-pointer transition-all hover:border-[#ef4444] hover:bg-[rgba(239,68,68,0.1)] hover:shadow-[0_0_0_1px_rgba(239,68,68,0.3)]"
                   >
                     {/* Header */}
                     <div className="flex items-center justify-between mb-2">
