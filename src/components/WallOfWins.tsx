@@ -27,14 +27,14 @@ export default function WallOfWins() {
 
   const fetchResolvedPredictions = async () => {
     try {
-      // Fetch recent correct predictions from API
-      const response = await fetch("/api/predictions?outcome=correct&limit=12");
+      // Fetch all recent predictions (not just correct ones)
+      const response = await fetch("/api/predictions?limit=24");
       if (response.ok) {
         const data = await response.json();
         setPredictions(data.predictions || []);
       }
     } catch (error) {
-      console.error("Error fetching resolved predictions:", error);
+      console.error("Error fetching predictions:", error);
     } finally {
       setLoading(false);
     }

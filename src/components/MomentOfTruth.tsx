@@ -139,7 +139,7 @@ export default function MomentOfTruth() {
                 </div>
 
                 <div className="px-3 py-2 bg-cyan-500/10 border border-cyan-500/30 rounded-lg text-cyan-300 text-xs">
-                  Called it 67 days early
+                  Predicted 67 days before it happened
                 </div>
               </div>
             </div>
