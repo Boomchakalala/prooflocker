@@ -154,13 +154,13 @@ function AppFeedContent() {
     const sorted = [...filtered];
     switch (sortBy) {
       case "new":
-        sorted.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+        sorted.sort((a, b) => new Date(b.createdAt || b.timestamp).getTime() - new Date(a.createdAt || a.timestamp).getTime());
         break;
       case "hot":
         // Hot = recent + engagement (likes, views, etc.) - for now just recent with slight randomization
         sorted.sort((a, b) => {
-          const aTime = new Date(a.createdAt).getTime();
-          const bTime = new Date(b.createdAt).getTime();
+          const aTime = new Date(a.createdAt || a.timestamp).getTime();
+          const bTime = new Date(b.createdAt || b.timestamp).getTime();
           const aScore = aTime + (Math.random() * 86400000); // Add up to 1 day random
           const bScore = bTime + (Math.random() * 86400000);
           return bScore - aScore;
