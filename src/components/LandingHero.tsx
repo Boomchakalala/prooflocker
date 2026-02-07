@@ -113,7 +113,7 @@ export default function LandingHero() {
           <span className="text-[#4C1D95]">·</span>
           Lock in ~10 seconds
           <span className="text-[#4C1D95]">·</span>
-          Full accountability
+          Join predictors building track records worth believing
         </p>
 
         {/* Feature badges - redesigned in a single centered row */}
