@@ -6,6 +6,7 @@ import { getPredictionBySlug as _getPredictionBySlug, type Prediction } from "@/
 import { getDigitalEvidenceFingerprintUrl } from "@/lib/digitalEvidence";
 import { getSiteUrl, getAbsoluteUrl } from "@/lib/config";
 import OutcomeBadge from "@/components/OutcomeBadge";
+import OnChainBadge from "@/components/OnChainBadge";
 import CopyButton from "@/components/CopyButton";
 import EvidenceGradeBadge from "@/components/EvidenceGradeBadge";
 import EvidenceList from "@/components/EvidenceList";
@@ -134,6 +135,9 @@ export default async function ProofPage({ params }: Props) {
               <div className="flex-1">
                 <div className="flex items-center gap-2 mb-3">
                   <span className="text-xs font-semibold text-blue-400 uppercase tracking-wider">Prediction</span>
+                  {prediction.onChainStatus === 'confirmed' && (
+                    <OnChainBadge variant="full" />
+                  )}
                   <div className="h-px flex-1 bg-gradient-to-r from-blue-500/30 to-transparent"></div>
                 </div>
                 <h1 className="text-2xl md:text-3xl leading-relaxed text-white font-semibold break-words">
