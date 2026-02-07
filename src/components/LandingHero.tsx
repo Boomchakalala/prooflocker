@@ -67,16 +67,16 @@ export default function LandingHero() {
       <div className="max-w-5xl mx-auto relative z-10 w-full text-center">
         {/* Massive gradient headline with enhanced animation */}
         <h1
-          className="text-5xl md:text-7xl lg:text-8xl font-black mb-6 tracking-tight leading-[1.1] animate-fade-in-up"
+          className="text-5xl md:text-7xl lg:text-8xl font-black mb-8 tracking-tight leading-[1.05] animate-fade-in-up"
           style={{ fontFamily: 'var(--font-montserrat)' }}
         >
           <span className="block gradient-text-animated font-black">Undeniable Credibility.</span>
-          <span className="block text-[#F8F9FA]/80 font-black">One Claim at a Time.</span>
+          <span className="block text-[#F8F9FA]/80 font-black mt-2">One Claim at a Time.</span>
         </h1>
 
         {/* Subheadline */}
-        <p className="text-xl md:text-2xl font-semibold text-[#F8F9FA]/90 mb-6 leading-relaxed animate-fade-in-up" style={{ fontFamily: 'var(--font-inter)', animationDelay: '0.1s' }}>
-          Lock claims before they happen. Resolve them when they do. Build reputation that opens doors.
+        <p className="text-xl md:text-2xl font-medium text-[#F8F9FA]/85 mb-8 leading-relaxed max-w-4xl mx-auto animate-fade-in-up" style={{ fontFamily: 'var(--font-inter)', animationDelay: '0.1s' }}>
+          Lock predictions before they happen. Resolve them with evidence. Build a track record that speaks for itself.
         </p>
 
         {/* Two big CTAs side-by-side */}
