@@ -89,6 +89,18 @@ export default function PredictionCard({ prediction, card, currentUserId, onOutc
   const isOwner = currentUserId && (data.userId === currentUserId || prediction?.userId === currentUserId);
   const isResolved = data.status === 'correct' || data.status === 'incorrect' || (data.outcome === "correct" || data.outcome === "incorrect");
 
+  // Reputation impact data (would come from API in real implementation)
+  const reputationImpact = isResolved && prediction?.outcome === 'correct' ? {
+    pointsEarned: prediction?.evidence_score ? Math.round(50 + (prediction.evidence_score / 100) * 50) : 80,
+    rankChange: 5, // Placeholder - would be calculated
+    streakCount: 3, // Placeholder - would come from user data
+  } : null;
+
+  // Calculate days early (if resolved correct)
+  const daysEarly = isResolved && prediction?.outcome === 'correct' && prediction?.resolvedAt && prediction?.timestamp
+    ? Math.floor((new Date(prediction.resolvedAt).getTime() - new Date(prediction.timestamp).getTime()) / (1000 * 60 * 60 * 24))
+    : null;
+
   // Fetch vote status on mount if user is authenticated and prediction is resolved
   useEffect(() => {
     if (currentUserId && isResolved && !isPreview) {
@@ -486,6 +498,42 @@ export default function PredictionCard({ prediction, card, currentUserId, onOutc
   ) : (
     <>
       {/* FULL VARIANT - Original Feed card */}
+
+      {/* Reputation Impact Banner - Only for resolved correct predictions */}
+      {reputationImpact && prediction?.outcome === 'correct' && !isPreview && (
+        <div className="bg-gradient-to-r from-emerald-500/10 to-cyan-500/10 border-b border-emerald-500/30 -mx-5 -mt-5 px-5 py-3 mb-4">
+          <div className="flex items-center justify-between flex-wrap gap-2">
+            <div className="flex items-center gap-4">
+              <div className="flex items-center gap-1.5 text-emerald-400">
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/>
+                </svg>
+                <span className="font-bold text-sm">+{reputationImpact.pointsEarned} pts</span>
+              </div>
+              {reputationImpact.rankChange > 0 && (
+                <div className="flex items-center gap-1.5 text-purple-400">
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M5 15l7-7 7 7"/>
+                  </svg>
+                  <span className="font-semibold text-sm">↑{reputationImpact.rankChange} ranks</span>
+                </div>
+              )}
+              {reputationImpact.streakCount > 0 && (
+                <div className="flex items-center gap-1.5 text-orange-400">
+                  <span className="text-sm">🔥</span>
+                  <span className="font-semibold text-sm">{reputationImpact.streakCount}-streak</span>
+                </div>
+              )}
+            </div>
+            {daysEarly && daysEarly > 0 && (
+              <div className="px-2.5 py-1 bg-cyan-500/20 border border-cyan-500/40 rounded text-cyan-300 text-xs font-semibold">
+                Called it {daysEarly}d early
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
       {/* Header - V4 format */}
       <div className="flex items-start justify-between mb-3">
         <div className="flex items-center gap-3">
