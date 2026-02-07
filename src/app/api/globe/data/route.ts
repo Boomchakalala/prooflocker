@@ -191,6 +191,7 @@ export async function GET(request: NextRequest) {
         lng: location.lng,
         status,
         submitter,
+        anonId: prediction.anon_id, // Include anon_id for user profile link
         rep,
         confidence,
         lockedDate: new Date(prediction.created_at).toLocaleDateString('en-US', {

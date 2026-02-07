@@ -336,6 +336,7 @@ export default function GlobePage() {
                   <div
                     key={item.id}
                     className="bg-[#0A0A0F]/80 border border-purple-500/20 border-l-[3px] border-l-[#ef4444] rounded-[10px] p-3.5 cursor-pointer transition-all hover:border-[#ef4444] hover:bg-[rgba(239,68,68,0.1)] hover:shadow-[0_0_0_1px_rgba(239,68,68,0.3)]"
+                    onClick={() => router.push(`/osint/${item.id}`)}
                   >
                     {/* Header */}
                     <div className="flex items-center justify-between mb-2">
