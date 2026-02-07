@@ -758,14 +758,24 @@ function AppFeedContent() {
                         <span className="text-xs text-red-400">{signal.confidenceScore}% confidence</span>
                       )}
                     </div>
-                    <a
-                      href={signal.sourceUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="px-3 py-1.5 text-xs rounded bg-red-600/20 hover:bg-red-600/30 text-red-300 border border-red-500/30 transition-colors"
-                    >
-                      View Source
-                    </a>
+                    <div className="flex gap-2">
+                      <a
+                        href={signal.sourceUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="px-3 py-1.5 text-xs rounded bg-red-600/20 hover:bg-red-600/30 text-red-300 border border-red-500/30 transition-colors"
+                      >
+                        Source
+                      </a>
+                      <button
+                        onClick={() => {
+                          alert('Link this OSINT signal as evidence to one of your existing claims. Feature coming soon!');
+                        }}
+                        className="px-3 py-1.5 text-xs rounded bg-purple-600/20 hover:bg-purple-600/30 text-purple-300 border border-purple-500/30 transition-colors"
+                      >
+                        Use as Evidence
+                      </button>
+                    </div>
                   </div>
                 </div>
               </div>
