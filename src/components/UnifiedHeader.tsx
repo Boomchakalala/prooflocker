@@ -126,7 +126,7 @@ export default function UnifiedHeader({ currentView, onLockClick }: UnifiedHeade
           <div className="relative">
             <button
               onClick={() => setShowUserMenu(!showUserMenu)}
-              className="w-10 h-10 rounded-full bg-gradient-to-br from-purple-600 to-blue-600 flex items-center justify-center text-white font-semibold text-sm hover:from-purple-500 hover:to-blue-500 transition-all"
+              className="w-8 h-8 md:w-10 md:h-10 rounded-full bg-gradient-to-br from-purple-600 to-blue-600 flex items-center justify-center text-white font-semibold text-xs md:text-sm hover:from-purple-500 hover:to-blue-500 transition-all"
             >
               {user?.email?.[0].toUpperCase() || 'A'}
             </button>
