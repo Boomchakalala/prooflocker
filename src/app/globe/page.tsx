@@ -494,7 +494,7 @@ export default function GlobePage() {
               content: '',
               sourceName: selectedOsint.source,
               sourceHandle: selectedOsint.handle,
-              sourceUrl: `https://twitter.com/${selectedOsint.handle}`,
+              sourceUrl: selectedOsint.handle ? `https://twitter.com/${selectedOsint.handle.replace('@', '')}/status/${selectedOsint.id}` : '#',
               geotagLat: selectedOsint.lat,
               geotagLng: selectedOsint.lng,
               tags: selectedOsint.tags,
