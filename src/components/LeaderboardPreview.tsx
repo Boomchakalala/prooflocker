@@ -64,7 +64,7 @@ export default function LeaderboardPreview() {
             Live Leaderboard
           </h2>
           <p className="text-lg md:text-xl text-white/70 mb-2">
-            Top 10 Predictors
+            Top 10 Claim Makers
           </p>
           <p className="text-base text-slate-400">
             Real-time rankings updated with every resolution
@@ -169,7 +169,7 @@ export default function LeaderboardPreview() {
         <div className="flex items-center justify-center gap-8 mb-8 flex-wrap">
           <div className="text-center">
             <div className="text-3xl font-bold text-purple-400 mb-1">{totalUsers.toLocaleString()}</div>
-            <div className="text-sm text-slate-400">predictors competing</div>
+            <div className="text-sm text-slate-400">claim makers competing</div>
           </div>
           <div className="text-center">
             <div className="text-3xl font-bold text-cyan-400 mb-1">{oracleTierCount}</div>
