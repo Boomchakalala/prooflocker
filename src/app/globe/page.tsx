@@ -296,7 +296,7 @@ export default function GlobePage() {
                       <div className="flex items-center justify-between text-[11px] text-[#64748b]">
                         <span>{claim.lockedDate}</span>
                         <button
-                          onClick={() => router.push(`/proof/${claim.id}`)}
+                          onClick={() => router.push(`/proof/${claim.publicSlug}`)}
                           className="px-2 py-1 text-[#94a3b8] hover:text-white hover:bg-white/10 rounded text-[11px] font-medium transition-colors"
                         >
                           View
