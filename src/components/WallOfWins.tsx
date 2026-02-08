@@ -34,15 +34,16 @@ function getStableVoteCounts(predictionId: string, outcome: string) {
   }
 }
 
-// Evidence grade mapper
-function getEvidenceGrade(score?: number): { grade: string; bgColor: string; borderColor: string; textColor: string; shadowColor: string } {
+// Evidence grade mapper (consistent with documented A/B/C/D system)
+function getEvidenceGrade(score?: number): { grade: string; bgColor: string; borderColor: string; textColor: string; shadowColor: string; description: string } {
   if (!score || score < 30) {
     return {
       grade: "D",
       bgColor: "bg-slate-600/20",
       borderColor: "border-slate-500/30",
       textColor: "text-slate-400",
-      shadowColor: "shadow-slate-600/20"
+      shadowColor: "shadow-slate-600/20",
+      description: "No evidence"
     };
   } else if (score < 60) {
     return {
@@ -50,7 +51,8 @@ function getEvidenceGrade(score?: number): { grade: string; bgColor: string; bor
       bgColor: "bg-amber-500/20",
       borderColor: "border-amber-500/40",
       textColor: "text-amber-400",
-      shadowColor: "shadow-amber-500/30"
+      shadowColor: "shadow-amber-500/30",
+      description: "Weak/indirect evidence"
     };
   } else if (score < 80) {
     return {
@@ -58,23 +60,17 @@ function getEvidenceGrade(score?: number): { grade: string; bgColor: string; bor
       bgColor: "bg-cyan-500/20",
       borderColor: "border-cyan-500/40",
       textColor: "text-cyan-400",
-      shadowColor: "shadow-cyan-500/30"
+      shadowColor: "shadow-cyan-500/30",
+      description: "High-quality secondary"
     };
-  } else if (score < 95) {
+  } else {
     return {
       grade: "A",
       bgColor: "bg-emerald-500/20",
       borderColor: "border-emerald-500/40",
       textColor: "text-emerald-400",
-      shadowColor: "shadow-emerald-500/30"
-    };
-  } else {
-    return {
-      grade: "S",
-      bgColor: "bg-purple-500/20",
-      borderColor: "border-purple-500/40",
-      textColor: "text-purple-400",
-      shadowColor: "shadow-purple-500/40"
+      shadowColor: "shadow-emerald-500/30",
+      description: "Primary/authoritative"
     };
   }
 }
@@ -457,7 +453,7 @@ export default function WallOfWins() {
                         {pred.evidence_score !== undefined && pred.evidence_score > 0 && (
                           <div
                             className={`group/evidence relative flex items-center gap-1.5 px-2 py-1 border rounded-lg transition-all hover:scale-105 ${evidenceGrade.bgColor} ${evidenceGrade.borderColor} ${evidenceGrade.shadowColor}`}
-                            title={`Evidence Grade: ${evidenceGrade.grade} (${evidenceSourceCount} sources)`}
+                            title={`Evidence Grade ${evidenceGrade.grade}: ${evidenceGrade.description} (${evidenceSourceCount} sources)`}
                           >
                             <svg className={`w-4 h-4 ${evidenceGrade.textColor}`} fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                               <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
@@ -465,7 +461,7 @@ export default function WallOfWins() {
                             <span className={`text-xs font-bold ${evidenceGrade.textColor}`}>{evidenceGrade.grade}</span>
                             {/* Tooltip on hover */}
                             <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 bg-slate-900 border border-slate-700 rounded text-xs text-white whitespace-nowrap opacity-0 group-hover/evidence:opacity-100 transition-opacity pointer-events-none z-20">
-                              Evidence Grade: {evidenceGrade.grade} ({evidenceSourceCount} sources)
+                              Grade {evidenceGrade.grade}: {evidenceGrade.description}
                             </div>
                           </div>
                         )}
