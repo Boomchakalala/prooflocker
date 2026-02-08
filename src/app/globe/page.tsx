@@ -65,11 +65,17 @@ export default function GlobePage() {
       })
       .catch(err => console.error('[Globe] Failed to load data:', err));
 
-    // Fetch recent resolutions
-    fetch('/api/predictions?outcome=correct&limit=20')
+    // Fetch recent resolutions (both correct and incorrect)
+    fetch('/api/predictions?limit=100')
       .then(res => res.json())
       .then(data => {
-        if (data.predictions) setResolutions(data.predictions);
+        if (data.predictions) {
+          // Filter to only show resolved claims (correct or incorrect)
+          const resolved = data.predictions.filter((p: any) =>
+            p.outcome === 'correct' || p.outcome === 'incorrect'
+          ).slice(0, 20);
+          setResolutions(resolved);
+        }
       })
       .catch(err => console.error('[Globe] Failed to load resolutions:', err));
   }, []);
@@ -250,7 +256,7 @@ export default function GlobePage() {
                   return (
                     <div
                       key={claim.id}
-                      className="bg-[#0A0A0F]/80 border border-purple-500/20 border-l-[3px] border-l-[#8b5cf6] rounded-[10px] p-3.5 transition-all hover:border-[#8b5cf6] hover:bg-[rgba(139,92,246,0.1)] hover:shadow-[0_0_0_1px_rgba(139,92,246,0.3)]"
+                      className="bg-slate-900/80 border border-slate-700/50 border-l-[3px] border-l-[#8b5cf6] rounded-[10px] p-3.5 transition-all hover:border-[#8b5cf6] hover:bg-[rgba(139,92,246,0.1)] hover:shadow-[0_0_15px_rgba(168,85,247,0.15)]"
                     >
                       {/* Header */}
                       <div className="flex items-center justify-between mb-2.5">
@@ -387,14 +393,25 @@ export default function GlobePage() {
               displayItems.length === 0 ? (
                 <div className="text-center py-12 text-[#94a3b8] text-sm">No OSINT signals found</div>
               ) : (
-                (displayItems as OsintItem[]).map((item) => (
+                (displayItems as OsintItem[]).map((item) => {
+                  // Construct Twitter/X URL
+                  const tweetUrl = item.handle ? `https://twitter.com/${item.handle.replace('@', '')}/status/${item.id}` : '#';
+
+                  return (
                   <div
                     key={item.id}
-                    className="bg-[#0A0A0F]/80 border border-purple-500/20 border-l-[3px] border-l-[#ef4444] rounded-[10px] p-3.5 transition-all hover:border-[#ef4444] hover:bg-[rgba(239,68,68,0.1)] hover:shadow-[0_0_0_1px_rgba(239,68,68,0.3)]"
+                    className="bg-slate-900/80 border border-slate-700/50 border-l-[3px] border-l-[#ef4444] rounded-[10px] p-3.5 transition-all hover:border-[#ef4444] hover:bg-[rgba(239,68,68,0.1)] hover:shadow-[0_0_15px_rgba(239,68,68,0.2)]"
                   >
-                    {/* Header */}
+                    {/* Header with X branding */}
                     <div className="flex items-center justify-between mb-2">
-                      <div className="flex items-center gap-1.5 text-[12px]">
+                      <div className="flex items-center gap-2 text-[12px]">
+                        {/* X (Twitter) Logo */}
+                        <div className="flex items-center gap-1 px-2 py-0.5 bg-black border border-slate-700 rounded">
+                          <svg className="w-3 h-3 text-white" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                          </svg>
+                          <span className="text-white font-semibold text-[11px]">𝕏</span>
+                        </div>
                         <span className="font-semibold text-[#f8fafc]">{item.source}</span>
                         {item.handle && (
                           <span className="text-[#ef4444]">{item.handle}</span>
@@ -422,20 +439,33 @@ export default function GlobePage() {
 
                     {/* Action Buttons */}
                     <div className="flex gap-2">
+                      <a
+                        href={tweetUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg text-[12px] font-semibold bg-black hover:bg-slate-900 border border-slate-700 text-white transition-all"
+                        onClick={(e) => e.stopPropagation()}
+                      >
+                        <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="currentColor">
+                          <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                        </svg>
+                        View on 𝕏
+                      </a>
                       <button
                         onClick={() => {
                           setSelectedOsint(item);
                         }}
-                        className="flex-1 flex items-center justify-center gap-2 px-4 py-2 rounded-lg text-[13px] font-semibold bg-gradient-to-r from-red-600 to-purple-600 text-white hover:from-red-500 hover:to-purple-500 transition-all shadow-[0_0_15px_rgba(239,68,68,0.3)]"
+                        className="flex-1 flex items-center justify-center gap-2 px-4 py-2 rounded-lg text-[12px] font-semibold bg-gradient-to-r from-red-600 to-purple-600 text-white hover:from-red-500 hover:to-purple-500 transition-all shadow-[0_0_15px_rgba(239,68,68,0.3)]"
                       >
-                        <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                        <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20">
                           <path fillRule="evenodd" d="M12.586 4.586a2 2 0 112.828 2.828l-3 3a2 2 0 01-2.828 0 1 1 0 00-1.414 1.414 4 4 0 005.656 0l3-3a4 4 0 00-5.656-5.656l-1.5 1.5a1 1 0 101.414 1.414l1.5-1.5zm-5 5a2 2 0 012.828 0 1 1 0 101.414-1.414 4 4 0 00-5.656 0l-3 3a4 4 0 105.656 5.656l1.5-1.5a1 1 0 10-1.414-1.414l-1.5 1.5a2 2 0 11-2.828-2.828l3-3z" clipRule="evenodd" />
                         </svg>
-                        Use as Evidence
+                        Link as Evidence
                       </button>
                     </div>
                   </div>
-                ))
+                );
+                })
               )
             )}
           </div>
