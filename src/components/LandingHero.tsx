@@ -109,7 +109,7 @@ export default function LandingHero() {
         </div>
 
         {/* Trust strip - compact under CTAs */}
-        <div className="flex items-center justify-center gap-4 md:gap-6 mb-6 text-xs md:text-sm text-[#F8F9FA]/70 animate-fade-in-up flex-wrap" style={{ animationDelay: '0.25s' }}>
+        <div className="flex items-center justify-center gap-4 md:gap-6 mb-5 text-xs md:text-sm text-[#F8F9FA]/70 animate-fade-in-up flex-wrap" style={{ animationDelay: '0.25s' }}>
           <div className="flex items-center gap-1.5">
             <svg className="w-3.5 h-3.5 text-purple-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
@@ -130,55 +130,38 @@ export default function LandingHero() {
           </div>
         </div>
 
-        {/* Stats - 3 mini tiles */}
-        <div className="flex items-center justify-center gap-3 md:gap-4 mb-5 animate-fade-in-up" style={{ animationDelay: '0.3s' }}>
+        {/* Stats - 3 mini tiles - more compact */}
+        <div className="flex items-center justify-center gap-3 md:gap-4 mb-4 animate-fade-in-up" style={{ animationDelay: '0.3s' }}>
           {/* Claims settled */}
-          <div className="px-4 py-2.5 bg-slate-900/50 border border-slate-700/50 rounded-lg text-center backdrop-blur-sm">
-            <div className="text-2xl font-bold text-emerald-400 mb-0.5">
+          <div className="px-3 py-2 bg-slate-900/50 border border-slate-700/50 rounded-lg text-center backdrop-blur-sm">
+            <div className="text-xl md:text-2xl font-bold text-emerald-400 mb-0.5">
               {stats.resolvedClaims > 0 ? stats.resolvedClaims : '9'}
             </div>
             <div className="text-xs text-slate-400">Claims settled</div>
           </div>
 
           {/* Claim makers */}
-          <div className="px-4 py-2.5 bg-slate-900/50 border border-slate-700/50 rounded-lg text-center backdrop-blur-sm">
-            <div className="text-2xl font-bold text-cyan-400 mb-0.5">
+          <div className="px-3 py-2 bg-slate-900/50 border border-slate-700/50 rounded-lg text-center backdrop-blur-sm">
+            <div className="text-xl md:text-2xl font-bold text-cyan-400 mb-0.5">
               {stats.totalUsers > 0 ? stats.totalUsers : '2'}
             </div>
             <div className="text-xs text-slate-400">Claim makers</div>
           </div>
 
           {/* Proofs recorded */}
-          <div className="px-4 py-2.5 bg-slate-900/50 border border-slate-700/50 rounded-lg text-center backdrop-blur-sm">
-            <div className="text-2xl font-bold text-purple-400 mb-0.5">
+          <div className="px-3 py-2 bg-slate-900/50 border border-slate-700/50 rounded-lg text-center backdrop-blur-sm">
+            <div className="text-xl md:text-2xl font-bold text-purple-400 mb-0.5">
               {stats.totalClaims > 0 ? stats.totalClaims : '33'}
             </div>
             <div className="text-xs text-slate-400">Proofs recorded</div>
           </div>
         </div>
 
-        {/* Feature chips - 3 smaller, centered */}
-        <div className="flex items-center justify-center gap-2.5 flex-wrap animate-fade-in-up max-w-md mx-auto" style={{ animationDelay: '0.35s' }}>
-          <div className="px-3 py-1.5 rounded-full bg-slate-800/50 border border-slate-700/50 text-xs text-[#F8F9FA]/80 backdrop-blur-sm flex items-center gap-1.5">
-            <svg className="w-3 h-3 text-slate-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
-            </svg>
-            <span className="whitespace-nowrap">Start in ~10 seconds</span>
-          </div>
-
-          <div className="px-3 py-1.5 rounded-full bg-slate-800/50 border border-slate-700/50 text-xs text-[#F8F9FA]/80 backdrop-blur-sm flex items-center gap-1.5">
-            <svg className="w-3 h-3 text-slate-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
-            </svg>
-            <span className="whitespace-nowrap">Proof can't be faked</span>
-          </div>
-
-          <div className="px-3 py-1.5 rounded-full bg-slate-800/50 border border-slate-700/50 text-xs text-[#F8F9FA]/80 backdrop-blur-sm flex items-center gap-1.5">
-            <svg className="w-3 h-3 text-slate-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/>
-            </svg>
-            <span className="whitespace-nowrap">Built for live events</span>
-          </div>
+        {/* Micro-hook line */}
+        <div className="text-center animate-fade-in-up" style={{ animationDelay: '0.35s' }}>
+          <p className="text-sm text-[#F8F9FA]/65">
+            This week: {stats.totalClaims > 0 ? stats.totalClaims : '67'} claims locked, {stats.resolvedClaims > 0 ? stats.resolvedClaims : '9'} settled. Your turn.
+          </p>
         </div>
       </div>
     </div>
