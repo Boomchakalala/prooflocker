@@ -709,11 +709,11 @@ function AppFeedContent() {
                   </div>
                 ) : null}
 
-                {/* Claims Horizontal Scroll */}
+                {/* Claims Vertical Scroll - Grid Layout */}
                 <div className="relative">
-                  {/* Scroll Container */}
-                  <div className="overflow-x-auto overflow-y-visible pb-4 no-scrollbar">
-                    <div className="flex gap-6 min-w-min">
+                  {/* Scroll Container with max height for ~2-3 rows */}
+                  <div className="max-h-[800px] overflow-y-auto overflow-x-hidden pb-4 scrollbar-hide">
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                       {filteredPredictions.slice(0, 12).map((prediction, index) => {
                     const cardStyle = getCardStyle(prediction, selectedCategory);
                     const showEvidence = prediction.linkedOsint && prediction.linkedOsint.length > 0;
@@ -722,7 +722,7 @@ function AppFeedContent() {
                       <Link
                         key={prediction.id}
                         href={`/proof/${prediction.publicSlug}`}
-                        className={`group bg-slate-900/80 border border-slate-700/50 hover:border-slate-600 rounded-2xl p-5 transition-all duration-300 hover:shadow-[0_0_25px_rgba(168,85,247,0.15)] hover:-translate-y-0.5 cursor-pointer fade-in w-[380px] flex-shrink-0`}
+                        className={`group bg-slate-900/80 border border-slate-700/50 hover:border-slate-600 rounded-2xl p-5 transition-all duration-300 hover:shadow-[0_0_25px_rgba(168,85,247,0.15)] hover:-translate-y-0.5 cursor-pointer fade-in`}
                       >
                         {/* User Header - Social Style */}
                         <div className="flex items-center justify-between mb-4">
@@ -885,7 +885,7 @@ function AppFeedContent() {
               {filteredPredictions.length > 12 && (
                 <div className="text-center mt-4">
                   <span className="text-sm text-slate-400">
-                    Showing 12 of {filteredPredictions.length} claims · Scroll horizontally for more
+                    Showing 12 of {filteredPredictions.length} claims · Scroll to see more
                   </span>
                 </div>
               )}
@@ -911,15 +911,15 @@ function AppFeedContent() {
                   </div>
                 ) : null}
 
-                {/* OSINT Horizontal Scroll */}
+                {/* OSINT Vertical Scroll - Grid Layout */}
                 <div className="relative">
-                  {/* Scroll Container */}
-                  <div className="overflow-x-auto overflow-y-visible pb-4 no-scrollbar">
-                    <div className="flex gap-6 min-w-min">
+                  {/* Scroll Container with max height for ~2-3 rows */}
+                  <div className="max-h-[800px] overflow-y-auto overflow-x-hidden pb-4 scrollbar-hide">
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                       {filteredOsint.slice(0, 12).map((signal, index) => (
                       <div
                         key={signal.id}
-                        className="bg-gradient-to-br from-red-950/30 via-orange-950/20 to-red-950/30 border-2 border-red-500/40 rounded-xl p-5 hover:border-red-500/60 hover:shadow-[0_0_30px_rgba(239,68,68,0.2)] transition-all relative overflow-hidden w-[380px] flex-shrink-0"
+                        className="bg-gradient-to-br from-red-950/30 via-orange-950/20 to-red-950/30 border-2 border-red-500/40 rounded-xl p-5 hover:border-red-500/60 hover:shadow-[0_0_30px_rgba(239,68,68,0.2)] transition-all relative overflow-hidden"
                       >
                         {/* Alert Pulse Animation */}
                         <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-red-500 to-transparent animate-pulse"></div>
