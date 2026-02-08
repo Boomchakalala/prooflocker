@@ -49,7 +49,7 @@ export default function GlobePage() {
   const [claims, setClaims] = useState<Claim[]>([]);
   const [osint, setOsint] = useState<OsintItem[]>([]);
   const [resolutions, setResolutions] = useState<any[]>([]);
-  const [currentTab, setCurrentTab] = useState<'claims' | 'osint' | 'resolutions'>('osint'); // Default to OSINT
+  const [currentTab, setCurrentTab] = useState<'claims' | 'osint' | 'resolutions'>('claims'); // Default to Claims
   const [activeFilter, setActiveFilter] = useState<string>('all');
   const [selectedOsint, setSelectedOsint] = useState<OsintItem | null>(null);
   const [showQuickLock, setShowQuickLock] = useState(false);
@@ -175,9 +175,7 @@ export default function GlobePage() {
                     : 'bg-transparent text-[#94a3b8] border-[rgba(148,163,184,0.2)] hover:text-[#f8fafc] hover:border-emerald-500'
                 }`}
               >
-                <span className="flex items-center gap-1">
-                  🎉 Live
-                </span>
+                Resolved
               </button>
             </div>
 
