@@ -719,17 +719,21 @@ function AppFeedContent() {
                       <span className="px-2 py-0.5 bg-purple-500/30 text-purple-200 text-xs font-bold rounded">
                         {filteredPredictions.length}
                       </span>
+                      <span className="px-2 py-0.5 bg-emerald-500/30 text-emerald-200 text-xs font-bold rounded ml-1">
+                        {filteredPredictions.filter(p => p.outcome === 'correct' || p.outcome === 'incorrect').length} resolved
+                      </span>
                     </div>
                     <div className="flex-1 h-px bg-gradient-to-r from-purple-500/40 to-transparent"></div>
                   </div>
                 ) : null}
 
-                {/* Claims Grid - Better Horizontal Scroll */}
-                <div className="relative -mx-4 sm:mx-0">
-                  {/* Scroll Container */}
-                  <div className="overflow-x-auto overflow-y-hidden pb-4 px-4 sm:px-0 scrollbar-hide snap-x snap-mandatory">
-                    <div className="flex gap-4 sm:gap-6">
-                      {filteredPredictions.map((prediction, index) => {
+                {/* Claims Grid - 2 Rows with Synchronized Scroll */}
+                <div className="space-y-4">
+                  {/* First Row */}
+                  <div className="relative -mx-4 sm:mx-0">
+                    <div className="overflow-x-auto overflow-y-hidden pb-2 px-4 sm:px-0 scrollbar-hide snap-x snap-mandatory" id="claims-scroll-row-1">
+                      <div className="flex gap-4 sm:gap-6">
+                        {filteredPredictions.slice(0, Math.ceil(filteredPredictions.length / 2)).map((prediction, index) => {
                     const cardStyle = getCardStyle(prediction, selectedCategory);
                     const showEvidence = prediction.linkedOsint && prediction.linkedOsint.length > 0;
                     const isResolved = prediction.outcome === 'correct' || prediction.outcome === 'incorrect';
