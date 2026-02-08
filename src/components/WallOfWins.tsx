@@ -384,21 +384,43 @@ export default function WallOfWins() {
                     <div className="flex items-center justify-between pt-4 border-t border-slate-700/50 mb-3">
                       {/* Left: Interactions */}
                       <div className="flex items-center gap-4">
-                        {/* Vote Buttons */}
-                        <VoteButtons
-                          predictionId={pred.id}
-                          initialUpvotes={pred.upvotesCount || 0}
-                          initialDownvotes={pred.downvotesCount || 0}
-                          compact={true}
-                        />
-
-                        {/* Evidence Score */}
-                        {pred.evidence_score !== undefined && pred.evidence_score > 0 && (
-                          <div className="flex items-center gap-1.5 text-slate-400">
+                        {/* Vote Display with Counts */}
+                        <div className="flex items-center gap-3">
+                          {/* Upvote */}
+                          <div className="flex items-center gap-1.5 text-emerald-400">
                             <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" d="M5 15l7-7 7 7"/>
+                            </svg>
+                            <span className="text-xs font-semibold">{voteCounts.upvotes}</span>
+                          </div>
+                          {/* Downvote */}
+                          <div className="flex items-center gap-1.5 text-red-400">
+                            <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7"/>
+                            </svg>
+                            <span className="text-xs font-semibold">{voteCounts.downvotes}</span>
+                          </div>
+                        </div>
+
+                        {/* Evidence Grade - Colorful with Tooltip */}
+                        {pred.evidence_score !== undefined && pred.evidence_score > 0 && (
+                          <div
+                            className={`group/evidence relative flex items-center gap-1.5 px-2 py-1 rounded-lg transition-all hover:scale-105 ${evidenceGrade.color} ${evidenceGrade.textColor}`}
+                            style={{
+                              borderWidth: '1px',
+                              borderColor: `${evidenceGrade.textColor.replace('text-', '')}40`,
+                              boxShadow: `0 0 10px ${evidenceGrade.glow.replace('shadow-', '').replace('/10', '10').replace('/30', '30').replace('/40', '40')}`
+                            }}
+                            title={`Evidence Grade: ${evidenceGrade.grade} (${evidenceSourceCount} sources)`}
+                          >
+                            <svg className={`w-4 h-4 ${evidenceGrade.textColor}`} fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                               <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
                             </svg>
-                            <span className="text-xs font-medium">{pred.evidence_score}</span>
+                            <span className={`text-xs font-bold ${evidenceGrade.textColor}`}>{evidenceGrade.grade}</span>
+                            {/* Tooltip on hover */}
+                            <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 bg-slate-900 border border-slate-700 rounded text-xs text-white whitespace-nowrap opacity-0 group-hover/evidence:opacity-100 transition-opacity pointer-events-none z-20">
+                              Evidence Grade: {evidenceGrade.grade} ({evidenceSourceCount} sources)
+                            </div>
                           </div>
                         )}
 
