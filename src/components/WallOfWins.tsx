@@ -300,6 +300,10 @@ export default function WallOfWins() {
             >
               {filteredPredictions.map((pred) => {
                 const cardStyle = getCardStyle(pred);
+                const voteCounts = getStableVoteCounts(pred.id, pred.outcome);
+                const evidenceGrade = getEvidenceGrade(pred.evidence_score);
+                const evidenceSourceCount = pred.evidence_score ? Math.max(1, Math.floor(pred.evidence_score / 30)) : 0;
+
                 return (
                   <div
                     key={pred.id}
