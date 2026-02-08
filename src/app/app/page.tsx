@@ -697,17 +697,38 @@ function AppFeedContent() {
                       </div>
                     </div>
 
-                    {/* Status Badge - Compact */}
-                    <div className={`flex items-center gap-1 px-2 py-1 text-xs font-bold rounded-full ${
+                    {/* Status Badge - Proper with colors */}
+                    <div className={`flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-bold rounded-lg border-2 shadow-lg ${
                       prediction.outcome === "correct"
-                        ? "bg-emerald-500/20 text-emerald-400"
+                        ? "bg-emerald-500/30 border-emerald-400/60 text-emerald-300 shadow-emerald-500/30"
                         : prediction.outcome === "incorrect"
-                        ? "bg-red-500/20 text-red-400"
-                        : "bg-amber-500/20 text-amber-400"
+                        ? "bg-red-500/30 border-red-400/60 text-red-300 shadow-red-500/30"
+                        : "bg-amber-500/30 border-amber-400/60 text-amber-300 shadow-amber-500/30"
                     }`}>
-                      {prediction.outcome === "correct" && "✓"}
-                      {prediction.outcome === "incorrect" && "✕"}
-                      {!prediction.outcome || prediction.outcome === "pending" && "⏱"}
+                      {prediction.outcome === "correct" && (
+                        <>
+                          <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7"/>
+                          </svg>
+                          Correct
+                        </>
+                      )}
+                      {prediction.outcome === "incorrect" && (
+                        <>
+                          <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12"/>
+                          </svg>
+                          Incorrect
+                        </>
+                      )}
+                      {!prediction.outcome || prediction.outcome === "pending" && (
+                        <>
+                          <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                            <circle cx="12" cy="12" r="10"/>
+                          </svg>
+                          Pending
+                        </>
+                      )}
                     </div>
                   </div>
 
@@ -725,11 +746,13 @@ function AppFeedContent() {
                         #{prediction.category}
                       </span>
                     )}
-                    {prediction.deId && (
-                      <span className="px-2 py-1 bg-purple-900/30 text-purple-400 text-xs rounded border border-purple-500/30 font-mono">
-                        ⛓ On-chain
-                      </span>
-                    )}
+                    {/* Locked On-Chain Badge */}
+                    <span className="flex items-center gap-1 px-2 py-1 bg-purple-900/30 text-purple-400 text-xs rounded border border-purple-500/40 font-semibold">
+                      <svg className="w-3 h-3" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+                      </svg>
+                      Locked
+                    </span>
                   </div>
 
                   {/* Evidence Preview - Compact */}
