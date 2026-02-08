@@ -38,7 +38,7 @@ Return JSON with this exact structure:
   "geotag_lat": latitude as number or null,
   "geotag_lng": longitude as number or null,
   "confidence_score": 0-100 (how confident you are in the location),
-  "category": "crypto" | "politics" | "tech" | "markets" | "sports" | "osint" | "culture" | "other"
+  "category": "Crypto" | "Politics" | "Tech" | "Markets" | "Sports" | "Culture" | "Other"
 }
 
 Important:
@@ -91,19 +91,31 @@ Important:
    * Normalize category to match our allowed values
    */
   private normalizeCategory(category: string): string {
-    const allowedCategories = [
-      'crypto',
-      'politics',
-      'tech',
-      'markets',
-      'sports',
-      'osint',
-      'culture',
-      'other',
-    ];
+    const allowedCategories: Record<string, string> = {
+      'crypto': 'Crypto',
+      'bitcoin': 'Crypto',
+      'blockchain': 'Crypto',
+      'politics': 'Politics',
+      'election': 'Politics',
+      'government': 'Politics',
+      'tech': 'Tech',
+      'technology': 'Tech',
+      'ai': 'Tech',
+      'markets': 'Markets',
+      'finance': 'Markets',
+      'stocks': 'Markets',
+      'sports': 'Sports',
+      'football': 'Sports',
+      'basketball': 'Sports',
+      'culture': 'Culture',
+      'entertainment': 'Culture',
+      'osint': 'OSINT',
+      'intelligence': 'OSINT',
+      'other': 'Other',
+    };
 
     const normalized = category?.toLowerCase() || 'other';
-    return allowedCategories.includes(normalized) ? normalized : 'other';
+    return allowedCategories[normalized] || 'Other';
   }
 
   /**
