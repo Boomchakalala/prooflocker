@@ -11,7 +11,18 @@ export async function POST(
 ) {
   try {
     const { id: predictionId } = await params;
+    const { voteType } = await request.json(); // 'upvote' or 'downvote'
     const supabase = createClient(supabaseUrl, supabaseServiceKey);
+
+    // Validate voteType
+    if (voteType !== 'upvote' && voteType !== 'downvote') {
+      return NextResponse.json(
+        { error: 'Invalid vote type. Must be "upvote" or "downvote"' },
+        { status: 400 }
+      );
+    }
+
+    const voteValue = voteType === 'upvote' ? 1 : -1;
 
     // Get current user
     const user = await getCurrentUser();
@@ -37,14 +48,6 @@ export async function POST(
       );
     }
 
-    // Validation: Prediction must be resolved
-    if (prediction.outcome !== 'correct' && prediction.outcome !== 'incorrect') {
-      return NextResponse.json(
-        { error: 'Can only vote on resolved predictions' },
-        { status: 400 }
-      );
-    }
-
     // Validation: Cannot vote on own prediction
     if (prediction.user_id === user.id) {
       return NextResponse.json(
@@ -62,10 +65,11 @@ export async function POST(
 
     const voterReliability = voterStats?.reliability_score || 0;
 
-    // Validation: Voter must have reliability ≥ 300
-    if (voterReliability < 300) {
+    // Validation: Voter must have reliability ≥ 300 for upvotes, ≥ 200 for downvotes
+    const minReliability = voteType === 'upvote' ? 300 : 200;
+    if (voterReliability < minReliability) {
       return NextResponse.json(
-        { error: 'Must have reliability score of at least 300 to vote' },
+        { error: `Must have reliability score of at least ${minReliability} to ${voteType}` },
         { status: 403 }
       );
     }
@@ -73,31 +77,58 @@ export async function POST(
     // Check if user has already voted
     const { data: existingVote } = await supabase
       .from('prediction_votes')
-      .select('id')
+      .select('id, vote_value')
       .eq('prediction_id', predictionId)
       .eq('voter_user_id', user.id)
       .single();
 
     if (existingVote) {
-      // Toggle: Remove the vote
-      const { error: deleteError } = await supabase
-        .from('prediction_votes')
-        .delete()
-        .eq('id', existingVote.id);
+      // If same vote type, remove the vote (toggle off)
+      if (existingVote.vote_value === voteValue) {
+        const { error: deleteError } = await supabase
+          .from('prediction_votes')
+          .delete()
+          .eq('id', existingVote.id);
 
-      if (deleteError) {
-        console.error('Error removing vote:', deleteError);
-        return NextResponse.json(
-          { error: 'Failed to remove vote' },
-          { status: 500 }
-        );
+        if (deleteError) {
+          console.error('Error removing vote:', deleteError);
+          return NextResponse.json(
+            { error: 'Failed to remove vote' },
+            { status: 500 }
+          );
+        }
+
+        return NextResponse.json({
+          success: true,
+          action: 'removed',
+          voteType: null,
+          message: 'Vote removed',
+        });
+      } else {
+        // Different vote type, update the existing vote
+        const { error: updateError } = await supabase
+          .from('prediction_votes')
+          .update({
+            vote_value: voteValue,
+            voter_reliability_score_snapshot: voterReliability,
+          })
+          .eq('id', existingVote.id);
+
+        if (updateError) {
+          console.error('Error updating vote:', updateError);
+          return NextResponse.json(
+            { error: 'Failed to update vote' },
+            { status: 500 }
+          );
+        }
+
+        return NextResponse.json({
+          success: true,
+          action: 'updated',
+          voteType: voteType,
+          message: `Vote changed to ${voteType}`,
+        });
       }
-
-      return NextResponse.json({
-        success: true,
-        voted: false,
-        message: 'Vote removed',
-      });
     } else {
       // Add new vote
       const { error: insertError } = await supabase
@@ -105,7 +136,7 @@ export async function POST(
         .insert({
           prediction_id: predictionId,
           voter_user_id: user.id,
-          vote_value: 1,
+          vote_value: voteValue,
           voter_reliability_score_snapshot: voterReliability,
         });
 
@@ -119,8 +150,9 @@ export async function POST(
 
       return NextResponse.json({
         success: true,
-        voted: true,
-        message: 'Vote added',
+        action: 'added',
+        voteType: voteType,
+        message: `${voteType} added`,
       });
     }
   } catch (error) {
@@ -144,30 +176,45 @@ export async function GET(
     const user = await getCurrentUser();
 
     if (!user) {
+      // Get total upvotes and downvotes
+      const { data: votes } = await supabase
+        .from('prediction_votes')
+        .select('vote_value')
+        .eq('prediction_id', predictionId);
+
+      const upvotes = votes?.filter(v => v.vote_value > 0).length || 0;
+      const downvotes = votes?.filter(v => v.vote_value < 0).length || 0;
+
       return NextResponse.json({
-        voted: false,
-        voteCount: 0,
+        userVote: null,
+        upvotes,
+        downvotes,
+        netScore: upvotes - downvotes,
       });
     }
 
     // Check if current user has voted
     const { data: existingVote } = await supabase
       .from('prediction_votes')
-      .select('id')
+      .select('vote_value')
       .eq('prediction_id', predictionId)
       .eq('voter_user_id', user.id)
       .single();
 
-    // Get vote count for this prediction
-    const { data: prediction } = await supabase
-      .from('predictions')
-      .select('vote_count')
-      .eq('id', predictionId)
-      .single();
+    // Get total upvotes and downvotes
+    const { data: votes } = await supabase
+      .from('prediction_votes')
+      .select('vote_value')
+      .eq('prediction_id', predictionId);
+
+    const upvotes = votes?.filter(v => v.vote_value > 0).length || 0;
+    const downvotes = votes?.filter(v => v.vote_value < 0).length || 0;
 
     return NextResponse.json({
-      voted: !!existingVote,
-      voteCount: prediction?.vote_count || 0,
+      userVote: existingVote ? (existingVote.vote_value > 0 ? 'upvote' : 'downvote') : null,
+      upvotes,
+      downvotes,
+      netScore: upvotes - downvotes,
     });
   } catch (error) {
     console.error('Error checking vote status:', error);
