@@ -6,7 +6,6 @@ import MomentOfTruth from "@/components/MomentOfTruth";
 import HowItWorks from "@/components/HowItWorks";
 import ReputationImpact from "@/components/ReputationImpact";
 import WallOfWins from "@/components/WallOfWins";
-import LeaderboardPreview from "@/components/LeaderboardPreview";
 import DEStatusBanner from "@/components/DEStatusBanner";
 import Footer from "@/components/Footer";
 
