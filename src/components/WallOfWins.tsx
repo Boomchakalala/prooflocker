@@ -1,9 +1,51 @@
-"use client";
-
 import { useEffect, useState, useRef } from "react";
 import Link from "next/link";
 import { formatRelativeTime } from "@/lib/utils";
 import VoteButtons from "@/components/VoteButtons";
+
+// Deterministic vote count generator (stable per prediction ID)
+function getStableVoteCounts(predictionId: string, outcome: string) {
+  // Simple hash function for deterministic but varied results
+  let hash = 0;
+  for (let i = 0; i < predictionId.length; i++) {
+    hash = ((hash << 5) - hash) + predictionId.charCodeAt(i);
+    hash = hash & hash; // Convert to 32bit integer
+  }
+
+  const seed = Math.abs(hash);
+
+  if (outcome === "correct") {
+    // Resolved bangers: high upvotes
+    const upvotes = 200 + (seed % 1000);
+    const downvotes = 20 + (seed % 180);
+    return { upvotes, downvotes };
+  } else if (outcome === "incorrect") {
+    // Failed claims: moderate engagement
+    const upvotes = 40 + (seed % 80);
+    const downvotes = 40 + (seed % 110);
+    return { upvotes, downvotes };
+  } else {
+    // Pending claims: lower engagement
+    const upvotes = seed % 13; // 0-12
+    const downvotes = seed % 7; // 0-6
+    return { upvotes, downvotes };
+  }
+}
+
+// Evidence grade mapper
+function getEvidenceGrade(score?: number): { grade: string; color: string; glow: string; textColor: string } {
+  if (!score || score < 30) {
+    return { grade: "D", color: "bg-slate-600/20", glow: "shadow-slate-600/10", textColor: "text-slate-400" };
+  } else if (score < 60) {
+    return { grade: "C", color: "bg-amber-500/20", glow: "shadow-amber-500/30", textColor: "text-amber-400" };
+  } else if (score < 80) {
+    return { grade: "B", color: "bg-cyan-500/20", glow: "shadow-cyan-500/30", textColor: "text-cyan-400" };
+  } else if (score < 95) {
+    return { grade: "A", color: "bg-emerald-500/20", glow: "shadow-emerald-500/30", textColor: "text-emerald-400" };
+  } else {
+    return { grade: "S", color: "bg-purple-500/20", glow: "shadow-purple-500/40", textColor: "text-purple-400" };
+  }
+}
 
 interface ResolvedPrediction {
   id: string;
@@ -171,10 +213,10 @@ export default function WallOfWins() {
         {/* Section Header */}
         <div className="text-center mb-8 md:mb-12">
           <h2 className="text-3xl md:text-5xl lg:text-6xl font-extrabold mb-3 md:mb-4 bg-gradient-to-r from-slate-300 via-white to-slate-300 bg-clip-text text-transparent" style={{ fontFamily: 'var(--font-montserrat)' }}>
-            Live Bold Claims – Proof in Action
+            Live Claims. Proof in Action.
           </h2>
           <p className="text-base md:text-lg lg:text-xl text-white/70 max-w-3xl mx-auto px-2">
-            People are putting skin in the game right now. Crypto, OSINT, tech, geopolitics—all locked on-chain before the outcome is known. Winners compound credibility. Losers reset. Which side are you on?
+            Make a claim. Lock it on-chain. Earn reputation when you're right.
           </p>
         </div>
 
