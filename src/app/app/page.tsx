@@ -487,6 +487,32 @@ function AppFeedContent() {
                 </button>
               </div>
 
+              {/* Resolved filter - only show for claims */}
+              {contentType === "claims" && (
+                <div className="flex items-center gap-2 p-1.5 bg-slate-900/60 border border-slate-700/50 rounded-xl">
+                  <button
+                    onClick={() => setResolvedOnly(false)}
+                    className={`px-4 py-2 text-sm font-semibold rounded-lg transition-all ${
+                      !resolvedOnly
+                        ? "bg-purple-600 text-white"
+                        : "text-slate-400 hover:text-white hover:bg-slate-800/50"
+                    }`}
+                  >
+                    All
+                  </button>
+                  <button
+                    onClick={() => setResolvedOnly(true)}
+                    className={`px-4 py-2 text-sm font-semibold rounded-lg transition-all ${
+                      resolvedOnly
+                        ? "bg-emerald-600 text-white"
+                        : "text-slate-400 hover:text-white hover:bg-slate-800/50"
+                    }`}
+                  >
+                    Resolved
+                  </button>
+                </div>
+              )}
+
               {/* Category pills - with icons and better styling */}
               <div className="flex items-center gap-2 overflow-x-auto no-scrollbar flex-1 pb-1">
                 {categories.filter(cat => cat !== 'all').map((cat) => {
@@ -709,20 +735,30 @@ function AppFeedContent() {
                   </div>
                 ) : null}
 
-                {/* Claims Vertical Scroll - Grid Layout */}
+                {/* Claims 2-Row Horizontal Scroll - Grid Layout */}
                 <div className="relative">
-                  {/* Scroll Container with max height for ~2-3 rows */}
-                  <div className="max-h-[800px] overflow-y-auto overflow-x-hidden pb-4 scrollbar-hide">
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {/* Scroll Container with 2 rows */}
+                  <div className="overflow-x-auto overflow-y-hidden pb-4 scrollbar-hide">
+                    <div className="grid grid-rows-2 auto-cols-[380px] grid-flow-col gap-6">
                       {filteredPredictions.slice(0, 12).map((prediction, index) => {
                     const cardStyle = getCardStyle(prediction, selectedCategory);
                     const showEvidence = prediction.linkedOsint && prediction.linkedOsint.length > 0;
+                    const isResolved = prediction.outcome === 'correct' || prediction.outcome === 'incorrect';
+                    const isCorrect = prediction.outcome === 'correct';
 
                     return (
                       <Link
                         key={prediction.id}
                         href={`/proof/${prediction.publicSlug}`}
-                        className={`group bg-slate-900/80 border border-slate-700/50 hover:border-slate-600 rounded-2xl p-5 transition-all duration-300 hover:shadow-[0_0_25px_rgba(168,85,247,0.15)] hover:-translate-y-0.5 cursor-pointer fade-in`}
+                        className={`group ${
+                          isResolved
+                            ? `bg-gradient-to-br ${isCorrect ? 'from-emerald-900/20 to-slate-900/50 border-emerald-500/30 border-l-emerald-500' : 'from-red-900/20 to-slate-900/50 border-red-500/30 border-l-red-500'} border border-l-[3px]`
+                            : 'bg-slate-900/80 border border-slate-700/50'
+                        } ${
+                          isResolved
+                            ? isCorrect ? 'hover:border-emerald-500 hover:shadow-[0_0_15px_rgba(16,185,129,0.2)]' : 'hover:border-red-500 hover:shadow-[0_0_15px_rgba(239,68,68,0.2)]'
+                            : 'hover:border-slate-600 hover:shadow-[0_0_25px_rgba(168,85,247,0.15)]'
+                        } rounded-2xl p-5 transition-all duration-300 hover:-translate-y-0.5 cursor-pointer fade-in`}
                       >
                         {/* User Header - Social Style */}
                         <div className="flex items-center justify-between mb-4">
