@@ -879,6 +879,16 @@ function AppFeedContent() {
                   })}
                 </div>
               </div>
+
+              {/* View More */}
+              {filteredPredictions.length > 12 && (
+                <div className="text-center mt-4">
+                  <span className="text-sm text-slate-400">
+                    Showing 12 of {filteredPredictions.length} claims · Scroll horizontally for more
+                  </span>
+                </div>
+              )}
+            </div>
             )}
 
             {/* OSINT / INTEL SECTION */}
@@ -900,9 +910,12 @@ function AppFeedContent() {
                   </div>
                 ) : null}
 
-                {/* OSINT Grid */}
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {filteredOsint.map((signal, index) => (
+                {/* OSINT Horizontal Scroll */}
+                <div className="relative">
+                  {/* Scroll Container */}
+                  <div className="overflow-x-auto overflow-y-visible pb-4 no-scrollbar">
+                    <div className="flex gap-6 min-w-min">
+                      {filteredOsint.slice(0, 12).map((signal, index) => (
                     <div
                       key={signal.id}
                       className={`fade-in stagger-${Math.min(index + 1, 4)}`}
