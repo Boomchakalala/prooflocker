@@ -760,6 +760,30 @@ function AppFeedContent() {
                             : 'hover:border-slate-600 hover:shadow-[0_0_25px_rgba(168,85,247,0.15)]'
                         } rounded-2xl p-5 transition-all duration-300 hover:-translate-y-0.5 cursor-pointer fade-in`}
                       >
+                        {/* Resolution Banner - Only for resolved claims */}
+                        {isResolved && (
+                          <div className={`flex items-center gap-2 mb-3 pb-3 border-b ${isCorrect ? 'border-emerald-500/20' : 'border-red-500/20'}`}>
+                            <div className="flex items-center gap-1.5">
+                              {isCorrect ? (
+                                <svg className="w-3.5 h-3.5 text-emerald-400" fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24">
+                                  <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7"/>
+                                </svg>
+                              ) : (
+                                <svg className="w-3.5 h-3.5 text-red-400" fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24">
+                                  <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12"/>
+                                </svg>
+                              )}
+                              <span className={`${isCorrect ? 'text-emerald-400' : 'text-red-400'} font-bold text-[11px]`}>
+                                {isCorrect ? 'RESOLVED CORRECT' : 'RESOLVED INCORRECT'}
+                              </span>
+                            </div>
+                            <span className="text-[10px] text-slate-500">•</span>
+                            <span className={`text-[10px] ${isCorrect ? 'text-emerald-400' : 'text-red-400'} font-semibold`}>
+                              {isCorrect ? '+80 pts' : '-20 pts'}
+                            </span>
+                          </div>
+                        )}
+
                         {/* User Header - Social Style */}
                         <div className="flex items-center justify-between mb-4">
                           <div className="flex items-center gap-3">
