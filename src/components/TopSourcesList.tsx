@@ -214,6 +214,23 @@ export default function TopSourcesList({ category = 'all' }: TopSourcesListProps
 
   return (
     <div className="space-y-8">
+      {/* Demo Banner - Only show when using mock data */}
+      {isShowingMockData && (
+        <div className="mx-auto max-w-3xl mb-8">
+          <div className="bg-gradient-to-r from-cyan-600/10 to-purple-600/10 border border-cyan-500/30 rounded-xl p-4 text-center">
+            <div className="flex items-center justify-center gap-2 mb-2">
+              <svg className="w-5 h-5 text-cyan-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+              </svg>
+              <span className="text-sm font-semibold text-cyan-300 uppercase tracking-wide">Preview Mode</span>
+            </div>
+            <p className="text-sm text-slate-300">
+              <span className="font-semibold">Reputation points are real and counting.</span> Leaderboard rankings shown below are example data — coming soon as users resolve claims!
+            </p>
+          </div>
+        </div>
+      )}
+
       {/* Header Section */}
       <div className="text-center mb-8">
         <div className="flex items-center justify-center gap-3 mb-4">
@@ -230,27 +247,27 @@ export default function TopSourcesList({ category = 'all' }: TopSourcesListProps
       </div>
 
       {/* Top 3 Podium */}
-      {sources.length >= 3 && (
+      {mockSources.length >= 3 && (
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
           {/* 2nd Place */}
           <div className="md:order-1 order-2">
-            {renderPodiumCard(sources[1], 2)}
+            {renderPodiumCard(mockSources[1], 2)}
           </div>
 
           {/* 1st Place - Taller */}
           <div className="md:order-2 order-1">
-            {renderPodiumCard(sources[0], 1)}
+            {renderPodiumCard(mockSources[0], 1)}
           </div>
 
           {/* 3rd Place */}
           <div className="md:order-3 order-3">
-            {renderPodiumCard(sources[2], 3)}
+            {renderPodiumCard(mockSources[2], 3)}
           </div>
         </div>
       )}
 
       {/* Rest of Leaderboard */}
-      {sources.length > 3 && (
+      {mockSources.length > 3 && (
         <div>
           <div className="flex items-center gap-3 mb-6">
             <div className="h-px flex-1 bg-gradient-to-r from-transparent via-purple-500/40 to-transparent"></div>
@@ -259,7 +276,7 @@ export default function TopSourcesList({ category = 'all' }: TopSourcesListProps
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-            {sources.slice(3).map((source, index) => {
+            {mockSources.slice(3).map((source, index) => {
               const tierInfo = getTierInfo(source.tier);
               const actualRank = index + 4;
 
