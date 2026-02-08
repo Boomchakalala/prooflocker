@@ -178,12 +178,12 @@ export default function LandingPage() {
             <h2 className="text-3xl md:text-5xl lg:text-6xl font-extrabold mb-4 md:mb-6 bg-gradient-to-r from-[#5B21B6] to-[#2E5CFF] bg-clip-text text-transparent" style={{ fontFamily: 'var(--font-montserrat)' }}>
               Start Building Your Reputation
             </h2>
-            <p className="text-base md:text-lg lg:text-xl text-[#F8F9FA]/80 mb-6 md:mb-8 leading-relaxed max-w-3xl mx-auto font-medium px-2">
+            <p className="text-base md:text-lg lg:text-xl text-[#F8F9FA]/80 mb-8 md:mb-10 leading-relaxed max-w-3xl mx-auto font-medium px-2">
               Lock a claim. Prove it. Watch your credibility compound.
             </p>
 
             {/* Primary and Secondary CTAs */}
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-3 md:gap-4 mb-6 md:mb-10">
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-3 md:gap-4">
               <Link
                 href="/lock"
                 className="w-full sm:w-auto px-10 md:px-14 py-4 md:py-5 bg-gradient-to-r from-[#2E5CFF] to-[#5B21B6] hover:from-[#3D6CFF] hover:to-[#6B31C6] text-white text-lg md:text-xl font-bold rounded-xl transition-all shadow-lg hover:shadow-[0_0_40px_rgba(46,92,255,0.5)] hover:scale-[1.05] btn-glow"
@@ -199,40 +199,6 @@ export default function LandingPage() {
                 </svg>
                 Explore Feed
               </Link>
-            </div>
-
-            {/* FOMO stat */}
-            <div className="mb-6 md:mb-8">
-              <p className="text-xs md:text-sm text-slate-400 italic">
-                67 claims locked this week | 19 resolved correct | Top rank gained 340 pts
-              </p>
-            </div>
-
-            {/* Trust Elements */}
-            <div className="flex flex-col items-center gap-3 md:gap-4">
-              {/* User avatars with count */}
-              <div className="flex items-center gap-2 md:gap-3">
-                <div className="flex -space-x-2">
-                  <div className="w-7 h-7 md:w-8 md:h-8 rounded-full bg-gradient-to-br from-purple-600 to-purple-800 border-2 border-[#0a0a0a] flex items-center justify-center text-white text-xs font-bold">
-                    47
-                  </div>
-                  <div className="w-7 h-7 md:w-8 md:h-8 rounded-full bg-gradient-to-br from-blue-600 to-blue-800 border-2 border-[#0a0a0a] flex items-center justify-center text-white text-xs font-bold">
-                    92
-                  </div>
-                  <div className="w-7 h-7 md:w-8 md:h-8 rounded-full bg-gradient-to-br from-cyan-600 to-cyan-800 border-2 border-[#0a0a0a] flex items-center justify-center text-white text-xs font-bold">
-                    13
-                  </div>
-                  <div className="w-7 h-7 md:w-8 md:h-8 rounded-full bg-gradient-to-br from-emerald-600 to-emerald-800 border-2 border-[#0a0a0a] flex items-center justify-center text-white text-xs font-bold">
-                    58
-                  </div>
-                </div>
-                <span className="text-xs md:text-sm text-slate-400">Building credibility together</span>
-              </div>
-
-              {/* Recent activity ticker */}
-              <div className="px-3 md:px-4 py-1.5 md:py-2 bg-slate-900/50 border border-slate-700 rounded-lg text-xs md:text-sm text-slate-300">
-                <span className="text-emerald-400 font-semibold">Live:</span> 3 claims resolved in the last hour
-              </div>
             </div>
           </div>
         </div>
