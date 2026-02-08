@@ -1034,7 +1034,7 @@ function AppFeedContent() {
             </div>
           )}
           </div>
-        )
+        )}
       </main>
 
       {/* Footer */}
