@@ -19,15 +19,6 @@ import { getEvidenceGrade } from "@/lib/evidence-grading";
 
 type SortOption = "new" | "hot" | "top" | "resolved";
 type ContentType = "all" | "claims" | "osint";
-// User reliability tier mapper (based on author number)
-function getUserTier(authorNumber: number) {
-  const score = (authorNumber * 17) % 1000;
-  if (score >= 800) return { label: "Legend", color: "text-purple-400", bg: "bg-purple-500/20", border: "border-purple-500/40" };
-  if (score >= 650) return { label: "Master", color: "text-blue-400", bg: "bg-blue-500/20", border: "border-blue-500/40" };
-  if (score >= 500) return { label: "Expert", color: "text-emerald-400", bg: "bg-emerald-500/20", border: "border-emerald-500/40" };
-  if (score >= 300) return { label: "Trusted", color: "text-amber-400", bg: "bg-amber-500/20", border: "border-amber-500/40" };
-  return { label: "Novice", color: "text-slate-400", bg: "bg-slate-500/20", border: "border-slate-500/40" };
-}
 
 // Helper function to get card styling based on outcome and category
 function getCardStyle(prediction: Prediction, selectedCategory: string) {
