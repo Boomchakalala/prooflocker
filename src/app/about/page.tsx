@@ -1,10 +1,13 @@
 "use client";
 
 import Link from "next/link";
+import UnifiedHeader from '@/components/UnifiedHeader';
 
 export default function AboutPage() {
   return (
-    <div className="min-h-screen gradient-bg text-white relative">
+    <div className="min-h-screen gradient-bg text-white relative pt-16">
+      <UnifiedHeader currentView="about" />
+
       {/* Decorative gradient orbs */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-20 -left-40 w-80 h-80 bg-purple-500/10 rounded-full blur-3xl" />
@@ -13,17 +16,8 @@ export default function AboutPage() {
       </div>
 
       <div className="relative z-10 max-w-4xl mx-auto px-4 py-12">
-        {/* Header */}
+        {/* Page Header */}
         <div className="mb-10">
-          <Link
-            href="/"
-            className="inline-flex items-center text-neutral-400 hover:text-white transition-colors mb-8 text-sm"
-          >
-            <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-            </svg>
-            Back to ProofLocker
-          </Link>
           <h1 className="text-4xl font-bold text-white mb-3 tracking-tight">
             About ProofLocker
           </h1>

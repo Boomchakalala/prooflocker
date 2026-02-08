@@ -1,36 +1,19 @@
 'use client';
 
 import Link from 'next/link';
+import UnifiedHeader from '@/components/UnifiedHeader';
 
 export default function HowScoringWorksPage() {
   return (
     <div className="min-h-screen gradient-bg text-white relative">
+      <UnifiedHeader currentView="about" />
       {/* Decorative gradient orbs */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-20 -left-40 w-80 h-80 bg-blue-500/10 rounded-full blur-3xl" />
         <div className="absolute top-40 -right-40 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl" />
       </div>
 
-      <div className="relative z-10 max-w-4xl mx-auto px-4 py-12">
-        {/* Header */}
-        <div className="mb-10">
-          <Link
-            href="/app"
-            className="inline-flex items-center text-neutral-400 hover:text-white transition-colors mb-8 text-sm"
-          >
-            <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-            </svg>
-            Back to App
-          </Link>
-          <h1 className="text-4xl font-bold text-white mb-3 tracking-tight">
-            How Scoring Works
-          </h1>
-          <p className="text-neutral-400">
-            Three metrics track your prediction quality and contribution
-          </p>
-        </div>
-
+      <div className="relative z-10 max-w-4xl mx-auto px-4 py-12 pt-16">
         {/* Overview Cards - Three boxes at top */}
         <div className="grid md:grid-cols-3 gap-4 mb-12">
           <div className="glass border border-white/10 rounded-xl p-6">

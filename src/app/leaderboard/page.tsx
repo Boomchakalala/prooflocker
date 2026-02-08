@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { LeaderboardResponse, LeaderboardEntry } from "@/lib/insight-types";
 import Link from "next/link";
+import UnifiedHeader from '@/components/UnifiedHeader';
 
 export default function LeaderboardPage() {
   const [leaderboard, setLeaderboard] = useState<LeaderboardResponse | null>(null);
@@ -51,22 +52,11 @@ export default function LeaderboardPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#0a0a0a] text-white py-12 px-6">
-      <div className="max-w-7xl mx-auto">
-        {/* Header */}
-        <div className="text-center mb-12">
-          <h1 className="text-5xl font-bold mb-4" style={{ fontFamily: "var(--font-montserrat)" }}>
-            Global Leaderboard
-          </h1>
-          <p className="text-xl text-gray-400 mb-6">
-            Top Reputation Scorers
-          </p>
-          <p className="text-sm text-gray-500">
-            Anonymous ranks only. Claim predictions for sync & bonuses. Scores update real-time.
-          </p>
-        </div>
-
-        {/* Search */}
+    <>
+      <UnifiedHeader currentView="leaderboard" />
+      <div className="min-h-screen bg-[#0a0a0a] text-white py-12 px-6 pt-16">
+        <div className="max-w-7xl mx-auto">
+          {/* Search */}
         <form onSubmit={handleSearch} className="mb-8 max-w-2xl mx-auto">
           <div className="flex gap-2">
             <input
@@ -239,6 +229,6 @@ export default function LeaderboardPage() {
           </Link>
         </div>
       </div>
-    </div>
+    </>
   );
 }

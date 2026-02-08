@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import BrandLogo from "@/components/BrandLogo";
+import UnifiedHeader from "@/components/UnifiedHeader";
 import EvidenceBundleUploader from "@/components/EvidenceBundleUploader";
 import { getOrCreateUserId, isAnonymousUser } from "@/lib/user";
 import { getSiteUrl } from "@/lib/config";
@@ -101,6 +102,8 @@ export default function LockPage() {
 
   return (
     <div className="min-h-screen gradient-bg text-white relative">
+      <UnifiedHeader currentView="lock" />
+
       {/* Decorative gradient orbs - matching other pages */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-20 -left-40 w-80 h-80 bg-blue-500/10 rounded-full blur-3xl" />
@@ -108,7 +111,7 @@ export default function LockPage() {
       </div>
 
       {/* Main content */}
-      <main className="relative z-10 max-w-4xl mx-auto px-4 py-12">
+      <main className="relative z-10 max-w-4xl mx-auto px-4 py-12 pt-20">
         {!locked ? (
           <>
             {/* Header - matching scoring page style */}

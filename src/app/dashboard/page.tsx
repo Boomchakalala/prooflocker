@@ -5,6 +5,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { InsightScoreResponse } from "@/lib/insight-types";
 import { BADGES, BadgeId } from "@/lib/insight-score";
 import Link from "next/link";
+import UnifiedHeader from '@/components/UnifiedHeader';
 
 export default function DashboardPage() {
   const { user } = useAuth();
@@ -70,6 +71,7 @@ export default function DashboardPage() {
   if (loading) {
     return (
       <div className="min-h-screen bg-[#0a0a0a] text-white flex items-center justify-center">
+        <UnifiedHeader currentView="other" />
         <div className="text-center">
           <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-[#00bfff] mx-auto mb-4"></div>
           <p className="text-gray-400">Loading your Reputation Score...</p>
@@ -81,6 +83,7 @@ export default function DashboardPage() {
   if (error || !scoreData) {
     return (
       <div className="min-h-screen bg-[#0a0a0a] text-white flex items-center justify-center p-6">
+        <UnifiedHeader currentView="other" />
         <div className="max-w-md text-center">
           <h2 className="text-2xl font-bold mb-4">No Reputation Score Yet</h2>
           <p className="text-gray-400 mb-6">
@@ -104,7 +107,8 @@ export default function DashboardPage() {
   const trend = 0; // For now
 
   return (
-    <div className="min-h-screen bg-[#0a0a0a] text-white py-12 px-6">
+    <div className="min-h-screen bg-[#0a0a0a] text-white pt-16 py-12 px-6">
+      <UnifiedHeader currentView="other" />
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="text-center mb-12">
