@@ -689,7 +689,7 @@ function AppFeedContent() {
             </Link>
           </div>
         ) : (
-          <>
+          <div>
             {/* CLAIMS SECTION */}
             {contentType !== "osint" && filteredPredictions.length > 0 && (
               <div className="mb-12">
@@ -1031,7 +1031,7 @@ function AppFeedContent() {
               )}
             </div>
           )}
-          </>
+          </div>
         )
       </main>
 
