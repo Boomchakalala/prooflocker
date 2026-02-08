@@ -94,7 +94,7 @@ export default function LockPage() {
   };
 
   const handleShare = () => {
-    const shareText = `I locked this prediction on-chain with ProofLocker. No edits. No excuses. Verify it yourself: ${getSiteUrl()}/verify?proofId=${proofId}`;
+    const shareText = `I locked this claim on-chain with ProofLocker. No edits. No excuses. Verify it yourself: ${getSiteUrl()}/verify?proofId=${proofId}`;
     navigator.clipboard.writeText(shareText);
     alert("Share message copied to clipboard!");
   };
@@ -123,7 +123,7 @@ export default function LockPage() {
                 Back to App
               </Link>
               <h1 className="text-4xl font-bold text-white mb-3 tracking-tight">
-                Lock your prediction
+                Lock your claim
               </h1>
               <p className="text-neutral-400">
                 Create a timestamped, immutable record on Constellation DAG
@@ -156,7 +156,7 @@ export default function LockPage() {
                   htmlFor="prediction-text"
                   className="block text-sm font-medium text-white mb-3"
                 >
-                  Your prediction or statement
+                  Your claim or statement
                 </label>
                 <textarea
                   id="prediction-text"
@@ -193,7 +193,7 @@ export default function LockPage() {
                   htmlFor="category-select"
                   className="block text-sm font-medium text-white mb-3"
                 >
-                  Category <span className="text-neutral-400 font-normal text-xs">(helps others discover your prediction)</span>
+                  Category <span className="text-neutral-400 font-normal text-xs">(helps others discover your claim)</span>
                 </label>
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
                   {categories.map((cat) => (
@@ -305,7 +305,7 @@ export default function LockPage() {
               <div className="mb-6">
                 <h3 className="text-sm font-medium text-white mb-3">Add Evidence (Optional)</h3>
                 <p className="text-xs text-gray-400 mb-3">
-                  Add links, files, or analysis supporting your prediction. Later, you can add OSINT signals as evidence when they confirm your claim.
+                  Add links, files, or analysis supporting your claim. Later, you can add OSINT signals as evidence when they confirm your claim.
                 </p>
                 <EvidenceBundleUploader
                   onUpload={(items) => setEvidenceItems(items)}
