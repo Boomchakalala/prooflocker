@@ -16,6 +16,7 @@ const GlobeMapbox = dynamic(() => import('@/components/GlobeMapbox'), {
 
 interface Claim {
   id: number;
+  publicSlug: string;
   claim: string;
   category?: string;
   lat: number;
