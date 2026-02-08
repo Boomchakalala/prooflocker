@@ -197,37 +197,45 @@ function AppFeedContent() {
     const osintRow1 = document.getElementById('osint-scroll-row-1');
     const osintRow2 = document.getElementById('osint-scroll-row-2');
 
-    let isScrollingClaims = false;
-    let isScrollingOsint = false;
+    let claimsScrollTimeout: NodeJS.Timeout | null = null;
+    let osintScrollTimeout: NodeJS.Timeout | null = null;
 
     const syncScrollClaims = (e: Event) => {
-      if (!claimsRow1 || !claimsRow2 || isScrollingClaims) return;
-      isScrollingClaims = true;
+      if (!claimsRow1 || !claimsRow2) return;
       const source = e.target as HTMLElement;
       const target = source === claimsRow1 ? claimsRow2 : claimsRow1;
-      target.scrollLeft = source.scrollLeft;
-      requestAnimationFrame(() => {
-        isScrollingClaims = false;
-      });
+
+      // Only update if scrollLeft is different (avoid infinite loop)
+      if (Math.abs(target.scrollLeft - source.scrollLeft) > 1) {
+        if (claimsScrollTimeout) clearTimeout(claimsScrollTimeout);
+        claimsScrollTimeout = setTimeout(() => {
+          target.scrollLeft = source.scrollLeft;
+        }, 0);
+      }
     };
 
     const syncScrollOsint = (e: Event) => {
-      if (!osintRow1 || !osintRow2 || isScrollingOsint) return;
-      isScrollingOsint = true;
+      if (!osintRow1 || !osintRow2) return;
       const source = e.target as HTMLElement;
       const target = source === osintRow1 ? osintRow2 : osintRow1;
-      target.scrollLeft = source.scrollLeft;
-      requestAnimationFrame(() => {
-        isScrollingOsint = false;
-      });
+
+      // Only update if scrollLeft is different (avoid infinite loop)
+      if (Math.abs(target.scrollLeft - source.scrollLeft) > 1) {
+        if (osintScrollTimeout) clearTimeout(osintScrollTimeout);
+        osintScrollTimeout = setTimeout(() => {
+          target.scrollLeft = source.scrollLeft;
+        }, 0);
+      }
     };
 
-    claimsRow1?.addEventListener('scroll', syncScrollClaims);
-    claimsRow2?.addEventListener('scroll', syncScrollClaims);
-    osintRow1?.addEventListener('scroll', syncScrollOsint);
-    osintRow2?.addEventListener('scroll', syncScrollOsint);
+    claimsRow1?.addEventListener('scroll', syncScrollClaims, { passive: true });
+    claimsRow2?.addEventListener('scroll', syncScrollClaims, { passive: true });
+    osintRow1?.addEventListener('scroll', syncScrollOsint, { passive: true });
+    osintRow2?.addEventListener('scroll', syncScrollOsint, { passive: true });
 
     return () => {
+      if (claimsScrollTimeout) clearTimeout(claimsScrollTimeout);
+      if (osintScrollTimeout) clearTimeout(osintScrollTimeout);
       claimsRow1?.removeEventListener('scroll', syncScrollClaims);
       claimsRow2?.removeEventListener('scroll', syncScrollClaims);
       osintRow1?.removeEventListener('scroll', syncScrollOsint);
