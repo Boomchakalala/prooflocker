@@ -933,28 +933,47 @@ function AppFeedContent() {
             {/* OSINT / INTEL SECTION */}
             {contentType !== "claims" && filteredOsint.length > 0 && (
               <div>
-                {/* Section Header - Only show when mixing content or explicitly showing OSINT */}
-                {(contentType === "all" && filteredPredictions.length > 0) || contentType === "osint" ? (
-                  <div className="flex items-center gap-3 mb-6">
+                {/* Section Header with Category Filter */}
+                <div className="mb-6">
+                  <div className="flex items-center gap-3 mb-4">
                     <div className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-red-600/20 to-orange-600/20 border border-red-500/40 rounded-xl shadow-[0_0_20px_rgba(239,68,68,0.2)]">
-                      <svg className="w-5 h-5 text-red-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                      <svg className="w-5 h-5 text-red-400" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6z"/>
                       </svg>
-                      <h2 className="text-xl font-bold text-white">OSINT / News Feed</h2>
+                      <h2 className="text-xl font-bold text-white">OSINT Intelligence</h2>
                       <span className="px-2 py-0.5 bg-red-500/30 text-red-200 text-xs font-bold rounded">
                         {filteredOsint.length}
                       </span>
                     </div>
                     <div className="flex-1 h-px bg-gradient-to-r from-red-500/40 to-transparent"></div>
                   </div>
-                ) : null}
 
-                {/* OSINT Grid - Better Horizontal Scroll */}
-                <div className="relative -mx-4 sm:mx-0">
-                  {/* Scroll Container */}
-                  <div className="overflow-x-auto overflow-y-hidden pb-4 px-4 sm:px-0 scrollbar-hide snap-x snap-mandatory">
-                    <div className="flex gap-4 sm:gap-6">
-                      {filteredOsint.map((signal, index) => (
+                  {/* Category Filter Pills */}
+                  <div className="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-hide">
+                    {osintCategories.map((cat) => (
+                      <button
+                        key={cat}
+                        onClick={() => setOsintCategory(cat)}
+                        className={`flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium transition-all whitespace-nowrap ${
+                          osintCategory === cat
+                            ? "bg-red-600/30 border-2 border-red-500/60 text-red-200 shadow-[0_0_15px_rgba(239,68,68,0.3)]"
+                            : "bg-slate-800/50 border border-slate-700/50 text-slate-400 hover:bg-slate-700/50 hover:border-slate-600/50 hover:text-slate-300"
+                        }`}
+                      >
+                        {getCategoryIcon(cat)}
+                        <span>{cat}</span>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* OSINT Grid - 2 Rows with Horizontal Scroll */}
+                <div className="space-y-4">
+                  {/* First Row */}
+                  <div className="relative -mx-4 sm:mx-0">
+                    <div className="overflow-x-auto overflow-y-hidden pb-2 px-4 sm:px-0 scrollbar-hide snap-x snap-mandatory">
+                      <div className="flex gap-4 sm:gap-6">
+                        {filteredOsint.slice(0, Math.ceil(filteredOsint.length / 2)).map((signal, index) => (
                       <div
                         key={signal.id}
                         className="w-[85vw] sm:w-[360px] md:w-[380px] flex-shrink-0 snap-start bg-gradient-to-br from-red-950/30 via-orange-950/20 to-red-950/30 border-2 border-red-500/40 rounded-xl p-4 sm:p-5 hover:border-red-500/60 hover:shadow-[0_0_30px_rgba(239,68,68,0.2)] transition-all relative overflow-hidden"
