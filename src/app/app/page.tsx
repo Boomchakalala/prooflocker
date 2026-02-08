@@ -15,6 +15,7 @@ import VoteButtons from "@/components/VoteButtons";
 import { Prediction } from "@/lib/storage";
 import { getOrCreateUserId } from "@/lib/user";
 import { useAuth } from "@/contexts/AuthContext";
+import { getEvidenceGrade } from "@/lib/evidence-grading";
 
 type SortOption = "new" | "hot" | "top" | "resolved";
 type ContentType = "all" | "claims" | "osint";

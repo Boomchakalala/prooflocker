@@ -1,0 +1,6 @@
+Need to add to feed cards (around line 822):
+
+1. Add reliability badge after username
+2. Add evidence grade badge for resolved claims
+
+Let me create a small script to add these.
