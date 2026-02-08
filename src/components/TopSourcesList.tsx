@@ -103,7 +103,7 @@ export default function TopSourcesList({ category = 'all' }: TopSourcesListProps
     return (
       <div className="text-center py-20">
         <div className="max-w-3xl mx-auto">
-          <div className="inline-block p-6 glass rounded-2xl glow-purple mb-6">
+          <div className="inline-block p-6 glass rounded-2xl border border-purple-500/30 mb-6">
             <svg
               className="w-20 h-20 text-purple-400 mx-auto"
               fill="none"
@@ -114,19 +114,19 @@ export default function TopSourcesList({ category = 'all' }: TopSourcesListProps
                 strokeLinecap="round"
                 strokeLinejoin="round"
                 strokeWidth={1.5}
-                d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
+                d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"
               />
             </svg>
           </div>
-          <h3 className="text-3xl font-bold text-white mb-4">Leaderboard Coming Soon</h3>
-          <p className="text-gray-400 text-lg mb-8">
-            Start making claims to climb the ranks and earn your spot among top claim makers
+          <h3 className="text-3xl font-bold text-white mb-4">Building Reputation History</h3>
+          <p className="text-gray-400 text-lg mb-8 max-w-2xl mx-auto">
+            The most trusted sources will appear here. Make accurate claims with strong evidence to build your credibility.
           </p>
 
           {/* Mock Leaderboard Visual */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
             {[1, 2, 3].map((rank) => (
-              <div key={rank} className="glass border border-purple-500/30 rounded-xl p-6 text-left">
+              <div key={rank} className="bg-slate-900/60 border border-slate-700/50 rounded-xl p-6 text-left">
                 <div className="flex items-center gap-3 mb-4">
                   <div className={`w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm ${
                     rank === 1 ? 'bg-yellow-500/20 text-yellow-300 ring-2 ring-yellow-500/50' :
@@ -136,14 +136,14 @@ export default function TopSourcesList({ category = 'all' }: TopSourcesListProps
                     #{rank}
                   </div>
                   <div className="flex-1">
-                    <div className="text-white font-semibold">Anon #{1000 + rank}</div>
-                    <div className="text-xs text-slate-400">0 claims</div>
+                    <div className="text-white font-semibold">Awaiting Claims</div>
+                    <div className="text-xs text-slate-400">Be the first</div>
                   </div>
                 </div>
                 <div className="space-y-2 text-sm">
                   <div className="flex justify-between">
-                    <span className="text-slate-400">Points:</span>
-                    <span className="text-purple-400 font-semibold">0</span>
+                    <span className="text-slate-400">Reliability:</span>
+                    <span className="text-purple-400 font-semibold">--</span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-slate-400">Accuracy:</span>
@@ -156,9 +156,9 @@ export default function TopSourcesList({ category = 'all' }: TopSourcesListProps
 
           <Link
             href="/lock"
-            className="inline-flex items-center px-8 py-3 bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-500 hover:to-purple-600 text-white font-semibold rounded-lg transition-all shadow-lg"
+            className="inline-flex items-center px-8 py-4 bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-500 hover:to-purple-600 text-white font-semibold rounded-xl transition-all shadow-lg hover:shadow-[0_0_30px_rgba(168,85,247,0.4)]"
           >
-            Make Your First Claim
+            Start Building Your Reputation
           </Link>
         </div>
       </div>
@@ -166,91 +166,239 @@ export default function TopSourcesList({ category = 'all' }: TopSourcesListProps
   }
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
-      {sources.map((source, index) => {
-        const tierInfo = getTierInfo(source.tier);
-        const evidenceQualityPercent = source.avgEvidenceScore;
+    <div className="space-y-8">
+      {/* Header Section */}
+      <div className="text-center mb-8">
+        <div className="flex items-center justify-center gap-3 mb-4">
+          <div className="flex items-center gap-2 px-5 py-3 bg-gradient-to-r from-purple-600/20 to-cyan-600/20 border border-purple-500/40 rounded-xl shadow-[0_0_25px_rgba(168,85,247,0.2)]">
+            <svg className="w-6 h-6 text-purple-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+            </svg>
+            <h2 className="text-2xl font-bold text-white">Most Trusted Sources</h2>
+          </div>
+        </div>
+        <p className="text-slate-400 text-base max-w-2xl mx-auto">
+          Ranked by reliability score, accuracy, and evidence quality. Build your reputation through proven claims.
+        </p>
+      </div>
 
-        return (
-          <Link
-            key={source.userId}
-            href={`/user/${source.userId}`}
-            className={`group relative glass rounded-xl p-5 transition-all duration-300 flex flex-col h-full overflow-hidden border border-purple-500/20 cursor-pointer hover:-translate-y-1 hover:shadow-2xl hover:border-purple-500/40 fade-in stagger-${Math.min(index + 1, 4)}`}
-          >
-            {/* Rank badge - top-left corner */}
-            <div className="absolute top-3 left-3 w-8 h-8 rounded-full bg-gradient-to-br from-purple-500/20 to-cyan-500/20 border border-purple-500/40 flex items-center justify-center text-xs font-bold text-purple-300">
-              #{index + 1}
-            </div>
+      {/* Top 3 Podium */}
+      {sources.length >= 3 && (
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+          {/* 2nd Place */}
+          <div className="md:order-1 order-2">
+            {renderPodiumCard(sources[1], 2)}
+          </div>
 
-            {/* User info - centered */}
-            <div className="flex flex-col items-center mt-6 mb-4">
-              <div className="w-16 h-16 rounded-full bg-gradient-to-br from-purple-500/15 to-cyan-500/15 flex items-center justify-center text-xl font-bold text-purple-300 border border-purple-500/30 mb-3">
-                {source.displayName.slice(0, 2).toUpperCase()}
-              </div>
-              <h3 className="text-white text-lg font-semibold mb-2 text-center">{source.displayName}</h3>
+          {/* 1st Place - Taller */}
+          <div className="md:order-2 order-1">
+            {renderPodiumCard(sources[0], 1)}
+          </div>
 
-              {/* Tier Badge */}
-              <div className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full ${tierInfo.bgColor} border ${tierInfo.color.replace('text-', 'border-')}/30 mb-3`}>
-                <span className="text-xs">
-                  {source.tier === 'legend' && '⭐'}
-                  {source.tier === 'master' && '👑'}
-                  {source.tier === 'expert' && '💎'}
-                  {source.tier === 'trusted' && '✓'}
-                </span>
-                <span className={`text-xs font-bold uppercase tracking-wide ${tierInfo.color}`}>
-                  {tierInfo.label}
-                </span>
-              </div>
+          {/* 3rd Place */}
+          <div className="md:order-3 order-3">
+            {renderPodiumCard(sources[2], 3)}
+          </div>
+        </div>
+      )}
 
-              {/* Reliability Score - Large */}
-              <div className="text-center mb-4">
-                <div className="text-3xl font-bold text-white mb-1">{source.reliabilityScore}</div>
-                <div className="text-xs text-gray-400">Reliability Score</div>
-              </div>
-            </div>
+      {/* Rest of Leaderboard */}
+      {sources.length > 3 && (
+        <div>
+          <div className="flex items-center gap-3 mb-6">
+            <div className="h-px flex-1 bg-gradient-to-r from-transparent via-purple-500/40 to-transparent"></div>
+            <span className="text-sm text-slate-400 font-semibold">More Trusted Sources</span>
+            <div className="h-px flex-1 bg-gradient-to-r from-transparent via-purple-500/40 to-transparent"></div>
+          </div>
 
-            {/* Stats grid */}
-            <div className="grid grid-cols-2 gap-3 mb-4">
-              {/* Win Rate */}
-              <div className="text-center p-3 bg-black/20 border border-white/10 rounded-lg">
-                <div className="text-lg font-bold text-emerald-400">{source.winRate}%</div>
-                <div className="text-[10px] text-gray-400 uppercase tracking-wide">Win Rate</div>
-              </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+            {sources.slice(3).map((source, index) => {
+              const tierInfo = getTierInfo(source.tier);
+              const actualRank = index + 4;
 
-              {/* Resolved Count */}
-              <div className="text-center p-3 bg-black/20 border border-white/10 rounded-lg">
-                <div className="text-lg font-bold text-cyan-400">{source.resolvedCount}</div>
-                <div className="text-[10px] text-gray-400 uppercase tracking-wide">Resolved</div>
-              </div>
-            </div>
+              return (
+                <Link
+                  key={source.userId}
+                  href={`/user/${source.userId}`}
+                  className={`group bg-slate-900/80 border border-slate-700/50 hover:border-purple-500/50 rounded-xl p-5 transition-all duration-300 hover:shadow-[0_0_25px_rgba(168,85,247,0.15)] hover:-translate-y-1 cursor-pointer fade-in stagger-${Math.min(index + 1, 4)}`}
+                >
+                  {/* Header with rank and tier */}
+                  <div className="flex items-center justify-between mb-4">
+                    <div className="flex items-center gap-3">
+                      <div className="w-8 h-8 rounded-full bg-gradient-to-br from-slate-700 to-slate-800 border border-slate-600/50 flex items-center justify-center text-xs font-bold text-slate-300">
+                        #{actualRank}
+                      </div>
+                      <div>
+                        <div className="text-white font-semibold text-sm">{source.displayName}</div>
+                        <div className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-md ${tierInfo.bgColor} ${tierInfo.color} text-[10px] font-bold uppercase`}>
+                          {source.tier === 'legend' && '⭐'}
+                          {source.tier === 'master' && '👑'}
+                          {source.tier === 'expert' && '💎'}
+                          {source.tier === 'trusted' && '✓'}
+                          <span>{tierInfo.label}</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
 
-            {/* Evidence Quality Bar */}
-            <div className="mt-auto">
-              <div className="flex items-center justify-between mb-1.5">
-                <span className="text-[10px] text-gray-400 uppercase tracking-wide">Evidence Quality</span>
-                <span className="text-xs font-semibold text-white">{source.avgEvidenceScore}/100</span>
-              </div>
-              <div className="w-full h-2 bg-black/40 rounded-full overflow-hidden border border-white/10">
-                <div
-                  className={`h-full rounded-full transition-all ${
-                    evidenceQualityPercent >= 76
-                      ? 'bg-gradient-to-r from-emerald-500 to-teal-500'
-                      : evidenceQualityPercent >= 51
-                      ? 'bg-gradient-to-r from-blue-500 to-cyan-500'
-                      : evidenceQualityPercent >= 26
-                      ? 'bg-gradient-to-r from-yellow-500 to-amber-500'
-                      : 'bg-gradient-to-r from-gray-500 to-gray-600'
-                  }`}
-                  style={{ width: `${evidenceQualityPercent}%` }}
-                />
-              </div>
-            </div>
+                  {/* Stats Grid */}
+                  <div className="grid grid-cols-3 gap-3 mb-4">
+                    <div className="text-center">
+                      <div className="text-lg font-bold text-purple-400">{source.reliabilityScore}</div>
+                      <div className="text-[10px] text-slate-500 uppercase">Score</div>
+                    </div>
+                    <div className="text-center">
+                      <div className="text-lg font-bold text-emerald-400">{source.winRate}%</div>
+                      <div className="text-[10px] text-slate-500 uppercase">Accuracy</div>
+                    </div>
+                    <div className="text-center">
+                      <div className="text-lg font-bold text-cyan-400">{source.resolvedCount}</div>
+                      <div className="text-[10px] text-slate-500 uppercase">Claims</div>
+                    </div>
+                  </div>
 
-            {/* Hover effect indicator */}
-            <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-purple-500 via-cyan-500 to-purple-500 opacity-0 group-hover:opacity-100 transition-opacity" />
-          </Link>
-        );
-      })}
+                  {/* Evidence Quality Bar */}
+                  <div className="pt-3 border-t border-slate-700/50">
+                    <div className="flex items-center justify-between mb-1.5">
+                      <span className="text-[10px] text-slate-500 uppercase tracking-wide">Evidence Quality</span>
+                      <span className="text-xs font-semibold text-slate-400">{source.avgEvidenceScore}/100</span>
+                    </div>
+                    <div className="w-full h-1.5 bg-slate-800/80 rounded-full overflow-hidden border border-slate-700/50">
+                      <div
+                        className={`h-full rounded-full transition-all ${
+                          source.avgEvidenceScore >= 80
+                            ? 'bg-gradient-to-r from-emerald-500 to-teal-500'
+                            : source.avgEvidenceScore >= 60
+                            ? 'bg-gradient-to-r from-blue-500 to-cyan-500'
+                            : source.avgEvidenceScore >= 30
+                            ? 'bg-gradient-to-r from-amber-500 to-yellow-500'
+                            : 'bg-gradient-to-r from-slate-500 to-slate-600'
+                        }`}
+                        style={{ width: `${source.avgEvidenceScore}%` }}
+                      />
+                    </div>
+                  </div>
+                </Link>
+              );
+            })}
+          </div>
+        </div>
+      )}
     </div>
   );
+
+  // Helper function for podium cards
+  function renderPodiumCard(source: TopSource, rank: number) {
+    const tierInfo = getTierInfo(source.tier);
+    const rankColors = {
+      1: {
+        badge: 'bg-gradient-to-br from-yellow-500 to-yellow-600 ring-4 ring-yellow-500/30',
+        text: 'text-yellow-300',
+        border: 'border-yellow-500/50',
+        glow: 'shadow-[0_0_40px_rgba(234,179,8,0.3)]',
+        icon: '👑',
+        label: 'Champion'
+      },
+      2: {
+        badge: 'bg-gradient-to-br from-slate-400 to-slate-500 ring-4 ring-slate-400/30',
+        text: 'text-slate-300',
+        border: 'border-slate-400/50',
+        glow: 'shadow-[0_0_30px_rgba(148,163,184,0.2)]',
+        icon: '🥈',
+        label: 'Elite'
+      },
+      3: {
+        badge: 'bg-gradient-to-br from-orange-600 to-orange-700 ring-4 ring-orange-500/30',
+        text: 'text-orange-300',
+        border: 'border-orange-500/50',
+        glow: 'shadow-[0_0_30px_rgba(249,115,22,0.2)]',
+        icon: '🥉',
+        label: 'Proven'
+      }
+    };
+
+    const colors = rankColors[rank as keyof typeof rankColors];
+
+    return (
+      <Link
+        href={`/user/${source.userId}`}
+        className={`group relative bg-gradient-to-br from-slate-900/90 to-slate-800/90 border-2 ${colors.border} rounded-2xl p-6 transition-all duration-300 hover:-translate-y-2 cursor-pointer ${colors.glow} hover:shadow-[0_0_50px_rgba(168,85,247,0.3)] ${rank === 1 ? 'md:scale-105' : ''}`}
+      >
+        {/* Rank Badge - Centered Top */}
+        <div className="flex justify-center mb-4">
+          <div className={`w-14 h-14 rounded-full ${colors.badge} flex items-center justify-center text-2xl font-bold ${colors.text} shadow-lg`}>
+            {rank}
+          </div>
+        </div>
+
+        {/* User Avatar */}
+        <div className="flex justify-center mb-3">
+          <div className={`w-20 h-20 rounded-full bg-gradient-to-br from-purple-600/30 to-cyan-600/30 border-2 ${colors.border} flex items-center justify-center text-2xl font-bold text-white shadow-xl`}>
+            {source.displayName.slice(0, 2).toUpperCase()}
+          </div>
+        </div>
+
+        {/* Name and Tier */}
+        <div className="text-center mb-4">
+          <h3 className="text-white text-lg font-bold mb-2">{source.displayName}</h3>
+          <div className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full ${tierInfo.bgColor} border ${tierInfo.color.replace('text-', 'border-')}/40`}>
+            <span className="text-sm">
+              {source.tier === 'legend' && '⭐'}
+              {source.tier === 'master' && '👑'}
+              {source.tier === 'expert' && '💎'}
+              {source.tier === 'trusted' && '✓'}
+            </span>
+            <span className={`text-xs font-bold uppercase tracking-wide ${tierInfo.color}`}>
+              {tierInfo.label}
+            </span>
+          </div>
+        </div>
+
+        {/* Reliability Score - Prominent */}
+        <div className="text-center mb-5 py-4 bg-black/30 border border-white/10 rounded-xl">
+          <div className={`text-4xl font-extrabold mb-1 ${colors.text}`}>{source.reliabilityScore}</div>
+          <div className="text-xs text-slate-400 uppercase tracking-wider">Reliability Score</div>
+        </div>
+
+        {/* Stats Grid */}
+        <div className="grid grid-cols-2 gap-3 mb-4">
+          <div className="text-center p-3 bg-black/20 border border-white/10 rounded-lg">
+            <div className="text-xl font-bold text-emerald-400">{source.winRate}%</div>
+            <div className="text-[10px] text-slate-400 uppercase tracking-wide">Accuracy</div>
+          </div>
+          <div className="text-center p-3 bg-black/20 border border-white/10 rounded-lg">
+            <div className="text-xl font-bold text-cyan-400">{source.resolvedCount}</div>
+            <div className="text-[10px] text-slate-400 uppercase tracking-wide">Resolved</div>
+          </div>
+        </div>
+
+        {/* Evidence Quality Bar */}
+        <div className="pt-4 border-t border-slate-700/50">
+          <div className="flex items-center justify-between mb-2">
+            <span className="text-[10px] text-slate-400 uppercase tracking-wide">Evidence Quality</span>
+            <span className="text-xs font-semibold text-white">{source.avgEvidenceScore}/100</span>
+          </div>
+          <div className="w-full h-2 bg-black/40 rounded-full overflow-hidden border border-white/10">
+            <div
+              className={`h-full rounded-full transition-all ${
+                source.avgEvidenceScore >= 80
+                  ? 'bg-gradient-to-r from-emerald-500 to-teal-500'
+                  : source.avgEvidenceScore >= 60
+                  ? 'bg-gradient-to-r from-blue-500 to-cyan-500'
+                  : source.avgEvidenceScore >= 30
+                  ? 'bg-gradient-to-r from-amber-500 to-yellow-500'
+                  : 'bg-gradient-to-r from-slate-500 to-slate-600'
+              }`}
+              style={{ width: `${source.avgEvidenceScore}%` }}
+            />
+          </div>
+        </div>
+
+        {/* Rank Label */}
+        <div className="absolute top-4 right-4 px-2 py-1 bg-black/50 backdrop-blur-sm border border-white/10 rounded-lg">
+          <span className="text-[10px] text-slate-300 uppercase tracking-wider font-bold">{colors.label}</span>
+        </div>
+      </Link>
+    );
+  }
 }
