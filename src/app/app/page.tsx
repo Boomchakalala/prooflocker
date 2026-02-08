@@ -918,10 +918,10 @@ function AppFeedContent() {
             </div>
 
               {/* View More */}
-              {filteredPredictions.length > 12 && (
-                <div className="text-center mt-4">
-                  <span className="text-sm text-slate-400">
-                    Showing 12 of {filteredPredictions.length} claims · Scroll to see more
+              {filteredPredictions.length > 0 && (
+                <div className="text-center mt-4 px-4 sm:px-0">
+                  <span className="text-xs sm:text-sm text-slate-400">
+                    Showing {filteredPredictions.length} claim{filteredPredictions.length !== 1 ? 's' : ''} · Swipe to browse
                   </span>
                 </div>
               )}
@@ -947,15 +947,15 @@ function AppFeedContent() {
                   </div>
                 ) : null}
 
-                {/* OSINT 2-Row Horizontal Scroll - Grid Layout */}
-                <div className="relative">
-                  {/* Scroll Container with 2 rows */}
-                  <div className="overflow-x-auto overflow-y-hidden pb-4 scrollbar-hide">
-                    <div className="grid grid-rows-2 auto-cols-[380px] grid-flow-col gap-6">
-                      {filteredOsint.slice(0, 12).map((signal, index) => (
+                {/* OSINT Grid - Better Horizontal Scroll */}
+                <div className="relative -mx-4 sm:mx-0">
+                  {/* Scroll Container */}
+                  <div className="overflow-x-auto overflow-y-hidden pb-4 px-4 sm:px-0 scrollbar-hide snap-x snap-mandatory">
+                    <div className="flex gap-4 sm:gap-6">
+                      {filteredOsint.map((signal, index) => (
                       <div
                         key={signal.id}
-                        className="bg-gradient-to-br from-red-950/30 via-orange-950/20 to-red-950/30 border-2 border-red-500/40 rounded-xl p-5 hover:border-red-500/60 hover:shadow-[0_0_30px_rgba(239,68,68,0.2)] transition-all relative overflow-hidden"
+                        className="w-[85vw] sm:w-[360px] md:w-[380px] flex-shrink-0 snap-start bg-gradient-to-br from-red-950/30 via-orange-950/20 to-red-950/30 border-2 border-red-500/40 rounded-xl p-4 sm:p-5 hover:border-red-500/60 hover:shadow-[0_0_30px_rgba(239,68,68,0.2)] transition-all relative overflow-hidden"
                       >
                         {/* Alert Pulse Animation */}
                         <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-red-500 to-transparent animate-pulse"></div>
@@ -1053,10 +1053,10 @@ function AppFeedContent() {
             </div>
 
               {/* View More */}
-              {filteredOsint.length > 12 && (
-                <div className="text-center mt-4">
-                  <span className="text-sm text-slate-400">
-                    Showing 12 of {filteredOsint.length} intel items · Scroll to see more
+              {filteredOsint.length > 0 && (
+                <div className="text-center mt-4 px-4 sm:px-0">
+                  <span className="text-xs sm:text-sm text-slate-400">
+                    Showing {filteredOsint.length} intel item{filteredOsint.length !== 1 ? 's' : ''} · Swipe to browse
                   </span>
                 </div>
               )}
