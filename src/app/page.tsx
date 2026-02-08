@@ -1,6 +1,6 @@
 import Link from "next/link";
 import BrandLogo from "@/components/BrandLogo";
-import LandingHeader from "@/components/LandingHeader";
+import UnifiedHeader from "@/components/UnifiedHeader";
 import LandingHero from "@/components/LandingHero";
 import MomentOfTruth from "@/components/MomentOfTruth";
 import HowItWorks from "@/components/HowItWorks";
@@ -14,7 +14,7 @@ export default function LandingPage() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-[#0A0A0F] via-[#111118] to-[#0A0A0F] relative">
       {/* Header */}
-      <LandingHeader />
+      <UnifiedHeader currentView="other" />
 
       {/* Main content */}
       <main className="space-y-0 relative">
