@@ -32,8 +32,9 @@ export default function MomentOfTruth() {
         {/* Before/After Split Screen */}
         <div className="grid md:grid-cols-2 gap-4 md:gap-8 mb-8 md:mb-12">
           {/* BEFORE - Pending State */}
-          <div className="relative">
-            <div className="absolute -top-3 md:-top-4 left-1/2 -translate-x-1/2 z-10">
+          <div>
+            {/* Label above card */}
+            <div className="flex justify-center mb-3">
               <span className="px-3 md:px-4 py-1.5 md:py-2 bg-amber-500/20 border border-amber-500/50 text-amber-300 text-xs md:text-sm font-bold rounded-full">
                 BEFORE
               </span>
@@ -85,8 +86,9 @@ export default function MomentOfTruth() {
           </div>
 
           {/* AFTER - Resolved Correct */}
-          <div className="relative">
-            <div className="absolute -top-3 md:-top-4 left-1/2 -translate-x-1/2 z-10">
+          <div>
+            {/* Label above card */}
+            <div className="flex justify-center mb-3">
               <span className="px-3 md:px-4 py-1.5 md:py-2 bg-emerald-500/20 border border-emerald-500/50 text-emerald-300 text-xs md:text-sm font-bold rounded-full">
                 AFTER
               </span>
