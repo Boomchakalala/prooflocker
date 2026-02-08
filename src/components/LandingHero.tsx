@@ -74,12 +74,12 @@ export default function LandingHero() {
         </h1>
 
         {/* One Claim at a Time subtitle - BIGGER AND WHITE */}
-        <p className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-white mb-10 animate-fade-in-up px-4 tracking-tight" style={{ fontFamily: 'var(--font-montserrat)', animationDelay: '0.05s' }}>
+        <p className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-white mb-6 animate-fade-in-up px-4 tracking-tight" style={{ fontFamily: 'var(--font-montserrat)', animationDelay: '0.05s' }}>
           One Claim at a Time
         </p>
 
         {/* Subheadline - 2 lines, better hierarchy */}
-        <div className="mb-8 animate-fade-in-up max-w-[560px] mx-auto px-4" style={{ animationDelay: '0.1s' }}>
+        <div className="mb-7 animate-fade-in-up max-w-[560px] mx-auto px-4" style={{ animationDelay: '0.1s' }}>
           <p className="text-lg md:text-xl font-medium text-[#F8F9FA]/95 mb-2 leading-[1.45]" style={{ fontFamily: 'var(--font-inter)' }}>
             Track what people say — in real time.
           </p>
@@ -159,32 +159,25 @@ export default function LandingHero() {
 
         {/* Feature chips - 3 smaller, centered */}
         <div className="flex items-center justify-center gap-2.5 flex-wrap animate-fade-in-up max-w-md mx-auto" style={{ animationDelay: '0.35s' }}>
-          <div className="px-5 py-2.5 rounded-full bg-[#5B21B6]/10 border border-[#5B21B6]/30 text-xs md:text-sm text-[#F8F9FA] backdrop-blur-sm transition-all duration-300 hover:bg-[#5B21B6]/15 hover:scale-105 flex items-center gap-2">
-            <svg className="w-4 h-4 text-[#5B21B6]" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7"/>
-            </svg>
-            <span className="font-bold whitespace-nowrap">Start now — zero friction</span>
-          </div>
-
-          <div className="px-5 py-2.5 rounded-full bg-[#2E5CFF]/10 border border-[#2E5CFF]/30 text-xs md:text-sm text-[#F8F9FA] backdrop-blur-sm transition-all duration-300 hover:bg-[#2E5CFF]/15 hover:scale-105 flex items-center gap-2">
-            <svg className="w-4 h-4 text-[#2E5CFF]" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/>
-            </svg>
-            <span className="font-bold whitespace-nowrap">Timestamped on-chain</span>
-          </div>
-
-          <div className="px-5 py-2.5 rounded-full bg-[#5B21B6]/10 border border-[#5B21B6]/30 text-xs md:text-sm text-[#F8F9FA] backdrop-blur-sm transition-all duration-300 hover:bg-[#5B21B6]/15 hover:scale-105 flex items-center gap-2">
-            <svg className="w-4 h-4 text-[#5B21B6]" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
-            </svg>
-            <span className="font-bold whitespace-nowrap">Proof can't be faked</span>
-          </div>
-
-          <div className="px-5 py-2.5 rounded-full bg-[#2E5CFF]/10 border border-[#2E5CFF]/30 text-xs md:text-sm text-[#F8F9FA] backdrop-blur-sm transition-all duration-300 hover:bg-[#2E5CFF]/15 hover:scale-105 flex items-center gap-2">
-            <svg className="w-4 h-4 text-[#2E5CFF]" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+          <div className="px-3 py-1.5 rounded-full bg-slate-800/50 border border-slate-700/50 text-xs text-[#F8F9FA]/80 backdrop-blur-sm flex items-center gap-1.5">
+            <svg className="w-3 h-3 text-slate-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
             </svg>
-            <span className="font-bold whitespace-nowrap">Live in ~10 seconds</span>
+            <span className="whitespace-nowrap">Start in ~10 seconds</span>
+          </div>
+
+          <div className="px-3 py-1.5 rounded-full bg-slate-800/50 border border-slate-700/50 text-xs text-[#F8F9FA]/80 backdrop-blur-sm flex items-center gap-1.5">
+            <svg className="w-3 h-3 text-slate-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+            </svg>
+            <span className="whitespace-nowrap">Proof can't be faked</span>
+          </div>
+
+          <div className="px-3 py-1.5 rounded-full bg-slate-800/50 border border-slate-700/50 text-xs text-[#F8F9FA]/80 backdrop-blur-sm flex items-center gap-1.5">
+            <svg className="w-3 h-3 text-slate-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+            </svg>
+            <span className="whitespace-nowrap">Built for live events</span>
           </div>
         </div>
       </div>
