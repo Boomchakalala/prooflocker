@@ -879,6 +879,7 @@ function AppFeedContent() {
                   })}
                 </div>
               </div>
+            </div>
 
               {/* View More */}
               {filteredPredictions.length > 12 && (
