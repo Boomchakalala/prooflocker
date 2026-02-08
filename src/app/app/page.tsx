@@ -441,122 +441,98 @@ function AppFeedContent() {
             </button>
           </div>
 
-          {/* Filters - only show for "all" tab */}
+          {/* Filters - Mobile-Optimized */}
           {activeTab === "all" && (
-            <div className="flex items-center gap-3 flex-wrap">
-              {/* Claims/OSINT toggle - Prominent and distinctive */}
-              <div className="flex items-center gap-2 p-1.5 bg-slate-900/60 border border-slate-700/50 rounded-xl">
+            <div className="space-y-3">
+              {/* Main Content Type Toggle - Full Width on Mobile */}
+              <div className="flex items-center gap-2 p-1 bg-slate-900/60 border border-slate-700/50 rounded-xl">
                 <button
                   onClick={() => setContentType("claims")}
-                  className={`flex items-center gap-2 px-5 py-2.5 text-sm font-bold rounded-lg transition-all ${
+                  className={`flex-1 flex items-center justify-center gap-1.5 px-3 py-2.5 text-xs sm:text-sm font-bold rounded-lg transition-all ${
                     contentType === "claims"
                       ? "bg-gradient-to-r from-purple-600 to-purple-700 text-white shadow-[0_0_20px_rgba(168,85,247,0.4)]"
                       : "text-slate-400 hover:text-white hover:bg-slate-800/50"
                   }`}
                 >
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                  <svg className="w-3.5 h-3.5 sm:w-4 sm:h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
                   </svg>
-                  Claims
+                  <span className="hidden sm:inline">Claims</span>
                 </button>
                 <button
                   onClick={() => setContentType("all")}
-                  className={`flex items-center gap-2 px-5 py-2.5 text-sm font-bold rounded-lg transition-all ${
+                  className={`flex-1 flex items-center justify-center gap-1.5 px-3 py-2.5 text-xs sm:text-sm font-bold rounded-lg transition-all ${
                     contentType === "all"
                       ? "bg-gradient-to-r from-cyan-600 to-blue-600 text-white shadow-[0_0_20px_rgba(6,182,212,0.4)]"
                       : "text-slate-400 hover:text-white hover:bg-slate-800/50"
                   }`}
                 >
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                  <svg className="w-3.5 h-3.5 sm:w-4 sm:h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16"/>
                   </svg>
-                  All
+                  <span className="hidden sm:inline">All</span>
                 </button>
                 <button
                   onClick={() => setContentType("osint")}
-                  className={`flex items-center gap-2 px-5 py-2.5 text-sm font-bold rounded-lg transition-all ${
+                  className={`flex-1 flex items-center justify-center gap-1.5 px-3 py-2.5 text-xs sm:text-sm font-bold rounded-lg transition-all ${
                     contentType === "osint"
                       ? "bg-gradient-to-r from-red-600 to-orange-600 text-white shadow-[0_0_20px_rgba(239,68,68,0.4)]"
                       : "text-slate-400 hover:text-white hover:bg-slate-800/50"
                   }`}
                 >
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                  <svg className="w-3.5 h-3.5 sm:w-4 sm:h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
                   </svg>
-                  OSINT
+                  <span className="hidden sm:inline">OSINT</span>
                 </button>
               </div>
 
-              {/* Resolved filter - only show for claims */}
+              {/* Secondary Filters - Responsive Layout */}
               {contentType === "claims" && (
-                <div className="flex items-center gap-2 p-1.5 bg-slate-900/60 border border-slate-700/50 rounded-xl">
-                  <button
-                    onClick={() => setResolvedOnly(false)}
-                    className={`px-4 py-2 text-sm font-semibold rounded-lg transition-all ${
-                      !resolvedOnly
-                        ? "bg-purple-600 text-white"
-                        : "text-slate-400 hover:text-white hover:bg-slate-800/50"
-                    }`}
-                  >
-                    All
-                  </button>
-                  <button
-                    onClick={() => setResolvedOnly(true)}
-                    className={`px-4 py-2 text-sm font-semibold rounded-lg transition-all ${
-                      resolvedOnly
-                        ? "bg-emerald-600 text-white"
-                        : "text-slate-400 hover:text-white hover:bg-slate-800/50"
-                    }`}
-                  >
-                    Resolved
-                  </button>
+                <div className="flex items-center gap-2 flex-wrap">
+                  {/* Resolved Filter */}
+                  <div className="flex items-center gap-1 p-0.5 bg-slate-900/60 border border-slate-700/50 rounded-lg">
+                    <button
+                      onClick={() => setResolvedOnly(false)}
+                      className={`px-3 py-1.5 text-xs font-semibold rounded-md transition-all ${
+                        !resolvedOnly
+                          ? "bg-purple-600 text-white"
+                          : "text-slate-400 hover:text-white"
+                      }`}
+                    >
+                      All
+                    </button>
+                    <button
+                      onClick={() => setResolvedOnly(true)}
+                      className={`px-3 py-1.5 text-xs font-semibold rounded-md transition-all ${
+                        resolvedOnly
+                          ? "bg-emerald-600 text-white"
+                          : "text-slate-400 hover:text-white"
+                      }`}
+                    >
+                      Resolved
+                    </button>
+                  </div>
+
+                  {/* Category Pills - Horizontal Scroll */}
+                  <div className="flex-1 overflow-x-auto scrollbar-hide">
+                    <div className="flex items-center gap-2">{categories.filter(cat => cat !== 'all').slice(0, 4).map((cat) => (
+                      <button
+                        key={cat}
+                        onClick={() => setSelectedCategory(selectedCategory === cat ? 'all' : cat)}
+                        className={`flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-medium transition-all whitespace-nowrap ${
+                          selectedCategory === cat
+                            ? "bg-purple-500/20 border border-purple-500/60 text-purple-300"
+                            : "bg-slate-800/50 border border-slate-700/50 text-slate-400 hover:text-white"
+                        }`}
+                      >
+                        {getCategoryIcon(cat)}
+                        <span className="hidden sm:inline">{cat}</span>
+                      </button>
+                    ))}</div>
+                  </div>
                 </div>
               )}
-
-              {/* Category pills - with icons and better styling */}
-              <div className="flex items-center gap-2 overflow-x-auto no-scrollbar flex-1 pb-1">
-                {categories.filter(cat => cat !== 'all').map((cat) => {
-                  const isActive = selectedCategory === cat;
-                  let activeClass = "glass border border-slate-700 text-slate-400 hover:text-white hover:bg-slate-600/30";
-                  let colorClass = "text-slate-400";
-
-                  if (isActive) {
-                    if (cat === "Crypto") {
-                      activeClass = "bg-blue-500/20 border border-blue-500/60 text-blue-300 shadow-[0_0_15px_rgba(59,130,246,0.3)]";
-                      colorClass = "text-blue-300";
-                    } else if (cat === "Politics") {
-                      activeClass = "bg-purple-500/20 border border-purple-500/60 text-purple-300 shadow-[0_0_15px_rgba(168,85,247,0.3)]";
-                      colorClass = "text-purple-300";
-                    } else if (cat === "Tech") {
-                      activeClass = "bg-cyan-500/20 border border-cyan-500/60 text-cyan-300 shadow-[0_0_15px_rgba(6,182,212,0.3)]";
-                      colorClass = "text-cyan-300";
-                    } else if (cat === "OSINT") {
-                      activeClass = "bg-orange-500/20 border border-orange-500/60 text-orange-300 shadow-[0_0_15px_rgba(249,115,22,0.3)]";
-                      colorClass = "text-orange-300";
-                    } else if (cat === "Markets") {
-                      activeClass = "bg-green-500/20 border border-green-500/60 text-green-300 shadow-[0_0_15px_rgba(34,197,94,0.3)]";
-                      colorClass = "text-green-300";
-                    } else if (cat === "Sports") {
-                      activeClass = "bg-yellow-500/20 border border-yellow-500/60 text-yellow-300 shadow-[0_0_15px_rgba(234,179,8,0.3)]";
-                      colorClass = "text-yellow-300";
-                    } else {
-                      activeClass = "bg-slate-600/30 border border-slate-500/60 text-slate-200 shadow-[0_0_15px_rgba(148,163,184,0.2)]";
-                      colorClass = "text-slate-200";
-                    }
-                  }
-
-                  return (
-                    <button
-                      key={cat}
-                      onClick={() => setSelectedCategory(cat)}
-                      className={`flex items-center gap-1.5 px-3 py-2 text-sm font-semibold rounded-lg transition-all whitespace-nowrap ${activeClass}`}
-                    >
-                      <span className={colorClass}>{getCategoryIcon(cat)}</span>
-                      {cat}
-                    </button>
-                  );
-                })}
-              </div>
             </div>
           )}
         </div>
