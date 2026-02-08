@@ -772,13 +772,13 @@ function AppFeedContent() {
                   <div className="flex items-center justify-between pt-4 border-t border-slate-700/50 mb-3">
                     {/* Left: Interactions */}
                     <div className="flex items-center gap-4">
-                      {/* Upvotes */}
-                      <div className="flex items-center gap-1.5 text-slate-400 hover:text-purple-400 transition-colors">
-                        <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" d="M5 15l7-7 7 7" />
-                        </svg>
-                        <span className="text-xs font-medium">{prediction.upvotesCount || 0}</span>
-                      </div>
+                      {/* Vote Buttons */}
+                      <VoteButtons
+                        predictionId={prediction.id}
+                        initialUpvotes={prediction.upvotesCount || 0}
+                        initialDownvotes={prediction.downvotesCount || 0}
+                        compact={true}
+                      />
 
                       {/* Evidence Score */}
                       {prediction.evidence_score !== undefined && prediction.evidence_score > 0 && (
