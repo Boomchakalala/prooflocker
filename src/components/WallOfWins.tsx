@@ -362,7 +362,13 @@ export default function WallOfWins() {
                           {pred.authorNumber?.toString().slice(-2) || "??"}
                         </div>
                         <div>
-                          <div className="text-sm text-white font-semibold">Anon #{pred.authorNumber}</div>
+                          <div className="flex items-center gap-2">
+                            <span className="text-sm text-white font-semibold">Anon #{pred.authorNumber}</span>
+                            {/* Reliability Badge */}
+                            <span className={`px-2 py-0.5 text-[10px] font-bold rounded border ${userTier.bg} ${userTier.border} ${userTier.color}`}>
+                              {userTier.label}
+                            </span>
+                          </div>
                           <div className="text-xs text-slate-500">{formatRelativeTime(pred.timestamp)}</div>
                         </div>
                       </div>
