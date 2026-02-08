@@ -3,6 +3,7 @@
 import { useEffect, useState, useRef } from "react";
 import Link from "next/link";
 import { formatRelativeTime } from "@/lib/utils";
+import { getEvidenceGrade, estimateSourceCount } from "@/lib/evidence-grading";
 import VoteButtons from "@/components/VoteButtons";
 
 // Deterministic vote count generator (stable per prediction ID)
@@ -31,47 +32,6 @@ function getStableVoteCounts(predictionId: string, outcome: string) {
     const upvotes = seed % 13; // 0-12
     const downvotes = seed % 7; // 0-6
     return { upvotes, downvotes };
-  }
-}
-
-// Evidence grade mapper (consistent with documented A/B/C/D system)
-function getEvidenceGrade(score?: number): { grade: string; bgColor: string; borderColor: string; textColor: string; shadowColor: string; description: string } {
-  if (!score || score < 30) {
-    return {
-      grade: "D",
-      bgColor: "bg-slate-600/20",
-      borderColor: "border-slate-500/30",
-      textColor: "text-slate-400",
-      shadowColor: "shadow-slate-600/20",
-      description: "No evidence"
-    };
-  } else if (score < 60) {
-    return {
-      grade: "C",
-      bgColor: "bg-amber-500/20",
-      borderColor: "border-amber-500/40",
-      textColor: "text-amber-400",
-      shadowColor: "shadow-amber-500/30",
-      description: "Weak/indirect evidence"
-    };
-  } else if (score < 80) {
-    return {
-      grade: "B",
-      bgColor: "bg-cyan-500/20",
-      borderColor: "border-cyan-500/40",
-      textColor: "text-cyan-400",
-      shadowColor: "shadow-cyan-500/30",
-      description: "High-quality secondary"
-    };
-  } else {
-    return {
-      grade: "A",
-      bgColor: "bg-emerald-500/20",
-      borderColor: "border-emerald-500/40",
-      textColor: "text-emerald-400",
-      shadowColor: "shadow-emerald-500/30",
-      description: "Primary/authoritative"
-    };
   }
 }
 
@@ -342,7 +302,7 @@ export default function WallOfWins() {
                 const cardStyle = getCardStyle(pred);
                 const voteCounts = getStableVoteCounts(pred.id, pred.outcome);
                 const evidenceGrade = getEvidenceGrade(pred.evidence_score);
-                const evidenceSourceCount = pred.evidence_score ? Math.max(1, Math.floor(pred.evidence_score / 30)) : 0;
+                const evidenceSourceCount = estimateSourceCount(pred.evidence_score || 0);
                 const userTier = getUserTier(pred.authorNumber || 0);
 
                 return (
