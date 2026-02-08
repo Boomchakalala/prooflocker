@@ -79,7 +79,7 @@ export default function LockPage() {
 
         // Check for duplicate fingerprint error
         if (errorData.error === "DUPLICATE_FINGERPRINT") {
-          alert("Already locked — this prediction fingerprint already exists.");
+          alert("Already locked — this claim fingerprint already exists.");
         } else {
           // Show the actual error message from the API (e.g., content filter errors)
           alert(errorData.error || "Failed to lock prediction. Please try again.");

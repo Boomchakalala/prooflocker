@@ -583,7 +583,7 @@ function AppFeedContent() {
                 {predictions.length > 0 ? (
                   <>You have {predictions.length} prediction{predictions.length !== 1 ? 's' : ''} on this device.</>
                 ) : (
-                  <>Your predictions are stored locally on this device only.</>
+                  <>Your claims are stored locally on this device only.</>
                 )}
               </p>
               <div className="bg-white/5 border border-white/10 rounded-xl p-6 mb-6 text-left">
