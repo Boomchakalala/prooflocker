@@ -768,7 +768,7 @@ function AppFeedContent() {
                   )}
 
                   {/* Engagement Footer - Social Media Style */}
-                  <div className="flex items-center justify-between pt-4 border-t border-slate-700/50">
+                  <div className="flex items-center justify-between pt-4 border-t border-slate-700/50 mb-3">
                     {/* Left: Interactions */}
                     <div className="flex items-center gap-4">
                       {/* Upvotes */}
@@ -803,6 +803,32 @@ function AppFeedContent() {
                       <svg className="w-3 h-3" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7"/>
                       </svg>
+                    </div>
+                  </div>
+
+                  {/* Timestamp Snippet - Bottom of Card */}
+                  <div className="pt-2 border-t border-purple-500/20 bg-gradient-to-r from-purple-900/10 to-transparent rounded-lg px-3 py-2">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-1.5">
+                        <svg className="w-3 h-3 text-purple-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                        <span className="text-[10px] text-purple-300/80 font-mono">
+                          {new Date(prediction.timestamp).toLocaleString('en-US', {
+                            month: 'short',
+                            day: 'numeric',
+                            year: 'numeric',
+                            hour: 'numeric',
+                            minute: '2-digit',
+                            hour12: true
+                          })}
+                        </span>
+                      </div>
+                      {prediction.deId && (
+                        <div className="text-[10px] text-purple-400/60 font-mono">
+                          {prediction.deId.slice(0, 8)}...
+                        </div>
+                      )}
                     </div>
                   </div>
                 </Link>
