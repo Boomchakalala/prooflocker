@@ -1030,7 +1030,7 @@ function AppFeedContent() {
                 </div>
               )}
             </div>
-            )}
+          )}
           </>
         )}
       </main>
