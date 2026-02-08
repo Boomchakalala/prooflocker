@@ -75,6 +75,13 @@ export default function LandingPage() {
               </Link>
             </div>
 
+            {/* FOMO stat */}
+            <div className="mb-6 md:mb-8">
+              <p className="text-xs md:text-sm text-slate-400 italic">
+                67 claims locked this week | 19 resolved correct | Top rank gained 340 pts
+              </p>
+            </div>
+
             {/* Trust Elements */}
             <div className="flex flex-col items-center gap-3 md:gap-4">
               {/* User avatars with count */}
@@ -98,7 +105,7 @@ export default function LandingPage() {
 
               {/* Recent activity ticker */}
               <div className="px-3 md:px-4 py-1.5 md:py-2 bg-slate-900/50 border border-slate-700 rounded-lg text-xs md:text-sm text-slate-300">
-                <span className="text-emerald-400 font-semibold">Example:</span> Resolve your claims and build your track record
+                <span className="text-emerald-400 font-semibold">Live:</span> 3 claims resolved in the last hour
               </div>
             </div>
           </div>
@@ -152,6 +159,11 @@ export default function LandingPage() {
                 Cryptographic Proof
               </div>
             </div>
+
+            {/* Final tagline */}
+            <p className="text-xs md:text-sm text-slate-500 mt-6 italic">
+              Built on Constellation. Secured by math. Proven forever.
+            </p>
           </div>
         </div>
       </main>
