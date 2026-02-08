@@ -141,7 +141,7 @@ export default function WallOfWins() {
             Real Claims. Real Outcomes.
           </h2>
           <p className="text-base md:text-lg lg:text-xl text-white/70 max-w-3xl mx-auto px-2">
-            Predictors who put their reputation on the line and delivered results
+            Claim makers who put their reputation on the line and delivered results
           </p>
         </div>
 
