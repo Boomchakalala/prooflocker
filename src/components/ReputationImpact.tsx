@@ -44,6 +44,7 @@ export default function ReputationImpact() {
             </p>
 
             <div className="px-4 py-3 bg-purple-500/10 border border-purple-500/30 rounded-lg">
+              <div className="text-[10px] text-purple-400/60 uppercase tracking-wider mb-2 font-semibold">Example</div>
               <div className="flex items-center justify-between mb-2">
                 <span className="text-xs md:text-sm text-slate-400">Accuracy</span>
                 <span className="text-lg md:text-xl font-bold text-purple-400">85%</span>
@@ -73,6 +74,7 @@ export default function ReputationImpact() {
             </p>
 
             <div className="space-y-2 md:space-y-3">
+              <div className="text-[10px] text-cyan-400/60 uppercase tracking-wider mb-2 font-semibold">Example</div>
               <div className="flex items-center justify-between px-4 py-2 bg-cyan-500/10 border border-cyan-500/30 rounded-lg">
                 <span className="text-xs md:text-sm text-slate-400">Current Rank</span>
                 <span className="text-lg md:text-xl font-bold text-cyan-400">#12</span>
