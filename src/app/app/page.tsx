@@ -219,8 +219,8 @@ function AppFeedContent() {
 
   const fetchOsintSignals = async () => {
     try {
-      // Use mock endpoint for now
-      const response = await fetch("/api/osint/mock");
+      // Fetch LIVE OSINT data from database
+      const response = await fetch("/api/osint?limit=100");
       if (!response.ok) {
         throw new Error(`API returned ${response.status}`);
       }
