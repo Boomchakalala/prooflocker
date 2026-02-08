@@ -156,16 +156,6 @@ export default function GlobePage() {
             {/* Tabs */}
             <div className="flex gap-2 mb-4">
               <button
-                onClick={() => setCurrentTab('claims')}
-                className={`flex-1 px-3 py-2 rounded-lg text-[12px] font-semibold transition-all border ${
-                  currentTab === 'claims'
-                    ? 'bg-[#8b5cf6] text-white border-[#8b5cf6]'
-                    : 'bg-transparent text-[#94a3b8] border-[rgba(148,163,184,0.2)] hover:text-[#f8fafc] hover:border-[#8b5cf6]'
-                }`}
-              >
-                Claims
-              </button>
-              <button
                 onClick={() => setCurrentTab('osint')}
                 className={`flex-1 px-3 py-2 rounded-lg text-[12px] font-semibold transition-all border ${
                   currentTab === 'osint'
@@ -173,7 +163,17 @@ export default function GlobePage() {
                     : 'bg-transparent text-[#94a3b8] border-[rgba(148,163,184,0.2)] hover:text-[#f8fafc] hover:border-[#ef4444]'
                 }`}
               >
-                OSINT
+                OSINT <span className="ml-1 opacity-70">({osint.length})</span>
+              </button>
+              <button
+                onClick={() => setCurrentTab('claims')}
+                className={`flex-1 px-3 py-2 rounded-lg text-[12px] font-semibold transition-all border ${
+                  currentTab === 'claims'
+                    ? 'bg-[#8b5cf6] text-white border-[#8b5cf6]'
+                    : 'bg-transparent text-[#94a3b8] border-[rgba(148,163,184,0.2)] hover:text-[#f8fafc] hover:border-[#8b5cf6]'
+                }`}
+              >
+                Claims <span className="ml-1 opacity-70">({claims.length})</span>
               </button>
               <button
                 onClick={() => setCurrentTab('resolutions')}
@@ -183,7 +183,7 @@ export default function GlobePage() {
                     : 'bg-transparent text-[#94a3b8] border-[rgba(148,163,184,0.2)] hover:text-[#f8fafc] hover:border-emerald-500'
                 }`}
               >
-                Resolved
+                Resolved <span className="ml-1 opacity-70">({resolutions.length})</span>
               </button>
             </div>
 
