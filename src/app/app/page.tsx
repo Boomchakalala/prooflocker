@@ -1068,9 +1068,116 @@ function AppFeedContent() {
                           </div>
                         </div>
                       </div>
-                  ))}
+                    ))}
+                  </div>
                 </div>
               </div>
+
+              {/* Second Row */}
+              {filteredOsint.length > Math.ceil(filteredOsint.length / 2) && (
+                <div className="relative -mx-4 sm:mx-0">
+                  <div className="overflow-x-auto overflow-y-hidden pb-2 px-4 sm:px-0 scrollbar-hide snap-x snap-mandatory">
+                    <div className="flex gap-4 sm:gap-6">
+                      {filteredOsint.slice(Math.ceil(filteredOsint.length / 2)).map((signal, index) => (
+                        <div
+                          key={signal.id}
+                          className="w-[85vw] sm:w-[360px] md:w-[380px] flex-shrink-0 snap-start bg-gradient-to-br from-red-950/30 via-orange-950/20 to-red-950/30 border-2 border-red-500/40 rounded-xl p-4 sm:p-5 hover:border-red-500/60 hover:shadow-[0_0_30px_rgba(239,68,68,0.2)] transition-all relative overflow-hidden"
+                        >
+                          {/* Alert Pulse Animation */}
+                          <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-red-500 to-transparent animate-pulse"></div>
+
+                          {/* Header - Intel Style */}
+                          <div className="flex items-center justify-between mb-3">
+                            <div className="flex items-center gap-2">
+                              {/* OSINT Alert Badge */}
+                              <span className="inline-flex items-center gap-1.5 px-3 py-1 text-xs font-bold rounded-md bg-red-600/30 border border-red-500/50 text-red-200 uppercase tracking-wide shadow-sm">
+                                <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20">
+                                  <path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6z"/>
+                                </svg>
+                                Intel
+                              </span>
+                            </div>
+
+                            {/* Category Tag */}
+                            {signal.category && (
+                              <span className="px-2 py-1 text-[10px] font-semibold rounded bg-red-900/40 border border-red-700/50 text-red-300 uppercase">
+                                {signal.category}
+                              </span>
+                            )}
+                          </div>
+
+                          {/* Source Line - News Style */}
+                          <div className="flex items-center gap-2 mb-3 pb-2 border-b border-red-500/20">
+                            <div className="w-6 h-6 rounded bg-red-600/30 flex items-center justify-center border border-red-500/40">
+                              <svg className="w-3 h-3 text-red-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"/>
+                              </svg>
+                            </div>
+                            <div className="flex-1">
+                              <div className="text-sm text-red-200 font-semibold">{signal.sourceName}</div>
+                              {signal.sourceHandle && (
+                                <div className="text-xs text-red-400/70">{signal.sourceHandle}</div>
+                              )}
+                            </div>
+                            {signal.locationName && (
+                              <div className="flex items-center gap-1 text-xs text-orange-400">
+                                <svg className="w-3 h-3" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                                  <path strokeLinecap="round" strokeLinejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                                  <path strokeLinecap="round" strokeLinejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+                                </svg>
+                                <span>{signal.locationName}</span>
+                              </div>
+                            )}
+                          </div>
+
+                          {/* Title - Breaking News Style */}
+                          <h3 className="text-base font-bold text-red-50 mb-2 leading-tight line-clamp-2">
+                            {signal.title}
+                          </h3>
+
+                          {/* Content preview */}
+                          {signal.content && (
+                            <p className="text-sm text-red-100/70 mb-4 line-clamp-2 leading-relaxed">
+                              {signal.content}
+                            </p>
+                          )}
+
+                          {/* Footer Actions */}
+                          <div className="flex items-center justify-between pt-3 border-t border-red-500/20">
+                            <div className="text-xs text-red-400/60 font-mono">
+                              ID: {signal.id.toString().slice(0, 8)}
+                            </div>
+                            <div className="flex gap-2">
+                              <a
+                                href={signal.sourceUrl}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="px-3 py-1.5 text-xs font-semibold rounded-md bg-red-600/30 hover:bg-red-600/40 text-red-200 border border-red-500/40 transition-all flex items-center gap-1.5"
+                              >
+                                <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                                </svg>
+                                Source
+                              </a>
+                              <button
+                                onClick={() => {
+                                  setSelectedOsint(signal);
+                                }}
+                                className="px-3 py-1.5 text-xs font-semibold rounded-md bg-purple-600/30 hover:bg-purple-600/40 text-purple-200 border border-purple-500/40 transition-all flex items-center gap-1.5"
+                              >
+                                <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20">
+                                  <path fillRule="evenodd" d="M12.586 4.586a2 2 0 112.828 2.828l-3 3a2 2 0 01-2.828 0 1 1 0 00-1.414 1.414 4 4 0 005.656 0l3-3a4 4 0 00-5.656-5.656l-1.5 1.5a1 1 0 101.414 1.414l1.5-1.5zm-5 5a2 2 0 012.828 0 1 1 0 101.414-1.414 4 4 0 00-5.656 0l-3 3a4 4 0 105.656 5.656l1.5-1.5a1 1 0 10-1.414-1.414l-1.5 1.5a2 2 0 11-2.828-2.828l3-3z" clipRule="evenodd" />
+                                </svg>
+                                Link as Evidence
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
 
               {/* View More */}

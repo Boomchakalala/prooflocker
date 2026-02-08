@@ -204,8 +204,44 @@ export async function GET(request: NextRequest) {
       };
     });
 
-    // Generate OSINT data
-    const osint = generateOsintData();
+    // Fetch OSINT signals from database
+    const { data: osintData, error: osintError } = await supabase
+      .from('osint_signals')
+      .select('id, title, source_name, source_handle, source_url, geotag_lat, geotag_lng, location_name, tags, category, created_at, published_at')
+      .eq('status', 'active')
+      .not('geotag_lat', 'is', null)
+      .not('geotag_lng', 'is', null)
+      .order('created_at', { ascending: false })
+      .limit(50);
+
+    if (osintError) {
+      console.error('[Globe API] Error fetching OSINT signals:', osintError);
+      // Fall back to empty array if OSINT fetch fails
+    }
+
+    console.log(`[Globe API] Fetched ${osintData?.length || 0} OSINT signals from database`);
+
+    // Transform OSINT data to globe format
+    const osint = (osintData || []).map((signal: any) => {
+      const now = Date.now();
+      const signalTime = new Date(signal.created_at).getTime();
+      const hoursAgo = Math.floor((now - signalTime) / (1000 * 60 * 60));
+      const timestamp = hoursAgo < 1 ? 'Just now' : hoursAgo < 24 ? `${hoursAgo}h ago` : `${Math.floor(hoursAgo / 24)}d ago`;
+
+      return {
+        id: signal.id,
+        title: signal.title,
+        source: signal.source_name,
+        handle: signal.source_handle,
+        lat: signal.geotag_lat,
+        lng: signal.geotag_lng,
+        timestamp,
+        tags: signal.tags || [],
+        category: signal.category,
+        locationName: signal.location_name,
+        createdAt: signal.created_at,
+      };
+    });
 
     console.log(`[Globe API] Returning ${claims.length} claims and ${osint.length} OSINT signals`);
 
