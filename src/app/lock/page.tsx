@@ -27,7 +27,7 @@ export default function LockPage() {
   const [prefillOsint, setPrefillOsint] = useState<OsintSignal | null>(null);
   const [evidenceItems, setEvidenceItems] = useState<any[]>([]);
 
-  const categories = ["Crypto", "Politics", "Markets", "Tech", "Sports", "Culture", "Personal", "Other"];
+  const categories = ["Crypto", "Politics", "Markets", "Tech", "Sports", "Culture", "OSINT", "Personal", "Other"];
 
   useEffect(() => {
     const id = getOrCreateUserId();
