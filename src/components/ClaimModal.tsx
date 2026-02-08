@@ -148,7 +148,7 @@ export default function ClaimModal({ onClose, onSuccess }: ClaimModalProps) {
             <div className="flex justify-between items-start mb-6">
               <div>
                 <h2 className="text-2xl font-bold text-white mb-2">
-                  Claim my predictions
+                  Claim my claims
                 </h2>
                 <p className="text-white/70 text-sm">
                   Save access across devices

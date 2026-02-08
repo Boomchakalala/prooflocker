@@ -75,7 +75,7 @@ export async function GET() {
                 letterSpacing: "-0.03em",
               }}
             >
-              Predictions locked.
+              Claims locked.
             </div>
             <div
               style={{
