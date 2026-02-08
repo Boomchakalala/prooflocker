@@ -1,7 +1,7 @@
 /**
  * Unified App Header
  *
- * Persistent navigation that works across Globe, Feed, and Lock pages.
+ * Persistent navigation that works across all pages.
  * Includes view switcher, quick actions, and live stats.
  */
 
@@ -13,7 +13,7 @@ import { usePathname } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
 
 interface UnifiedHeaderProps {
-  currentView?: 'globe' | 'feed';
+  currentView?: 'globe' | 'feed' | 'lock' | 'leaderboard' | 'about' | 'other';
   onLockClick?: () => void;
 }
 
@@ -22,9 +22,20 @@ export default function UnifiedHeader({ currentView, onLockClick }: UnifiedHeade
   const { user } = useAuth();
   const [stats, setStats] = useState({ claims: 0, osint: 0 });
   const [showUserMenu, setShowUserMenu] = useState(false);
+  const [showMobileMenu, setShowMobileMenu] = useState(false);
 
   // Determine current view from pathname if not provided
-  const activeView = currentView || (pathname === '/globe' ? 'globe' : 'feed');
+  const getActiveView = () => {
+    if (currentView) return currentView;
+    if (pathname === '/globe') return 'globe';
+    if (pathname === '/app') return 'feed';
+    if (pathname === '/lock') return 'lock';
+    if (pathname === '/leaderboard') return 'leaderboard';
+    if (pathname.startsWith('/about') || pathname.startsWith('/how-scoring')) return 'about';
+    return 'other';
+  };
+
+  const activeView = getActiveView();
 
   useEffect(() => {
     // Fetch live stats
@@ -54,23 +65,23 @@ export default function UnifiedHeader({ currentView, onLockClick }: UnifiedHeade
     <header className="fixed top-0 left-0 right-0 h-16 md:h-16 bg-gradient-to-r from-slate-950 via-slate-900 to-slate-950 backdrop-blur-xl border-b border-purple-500/20 z-[9999] shadow-lg shadow-purple-500/5">
       <div className="h-full max-w-[2000px] mx-auto px-3 md:px-6 flex items-center justify-between">
 
-        {/* Left: Logo + View Switcher */}
-        <div className="flex items-center gap-2 md:gap-6">
+        {/* Left: Logo + Navigation */}
+        <div className="flex items-center gap-2 md:gap-4">
           <Link href="/" className="flex items-center">
             <img src="/logos/prooflocker-logo-dark.svg" alt="ProofLocker" className="h-6 md:h-8 w-auto" />
           </Link>
 
-          {/* View Switcher */}
-          <div className="hidden md:flex items-center gap-2 p-1 glass rounded-lg border border-slate-700">
+          {/* Desktop Navigation */}
+          <nav className="hidden lg:flex items-center gap-1">
             <Link
               href="/globe"
-              className={`flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium transition-all ${
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-medium transition-all ${
                 activeView === 'globe'
-                  ? 'bg-gradient-to-r from-purple-600 to-purple-700 text-white shadow-lg'
+                  ? 'bg-purple-600/20 text-purple-300 border border-purple-500/30'
                   : 'text-gray-400 hover:text-white hover:bg-white/5'
               }`}
             >
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+              <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                 <circle cx="12" cy="12" r="10" />
                 <path d="M2 12h20M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z" />
               </svg>
@@ -78,22 +89,58 @@ export default function UnifiedHeader({ currentView, onLockClick }: UnifiedHeade
             </Link>
             <Link
               href="/app"
-              className={`flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium transition-all ${
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-medium transition-all ${
                 activeView === 'feed'
-                  ? 'bg-gradient-to-r from-purple-600 to-purple-700 text-white shadow-lg'
+                  ? 'bg-purple-600/20 text-purple-300 border border-purple-500/30'
                   : 'text-gray-400 hover:text-white hover:bg-white/5'
               }`}
             >
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+              <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
               </svg>
               Feed
             </Link>
-          </div>
+            <Link
+              href="/leaderboard"
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-medium transition-all ${
+                activeView === 'leaderboard'
+                  ? 'bg-purple-600/20 text-purple-300 border border-purple-500/30'
+                  : 'text-gray-400 hover:text-white hover:bg-white/5'
+              }`}
+            >
+              <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+              </svg>
+              Leaderboard
+            </Link>
+            <Link
+              href="/about"
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-medium transition-all ${
+                pathname.startsWith('/about') || pathname.startsWith('/how-scoring')
+                  ? 'bg-purple-600/20 text-purple-300 border border-purple-500/30'
+                  : 'text-gray-400 hover:text-white hover:bg-white/5'
+              }`}
+            >
+              <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              About
+            </Link>
+          </nav>
+
+          {/* Mobile Menu Button */}
+          <button
+            onClick={() => setShowMobileMenu(!showMobileMenu)}
+            className="lg:hidden p-2 text-gray-400 hover:text-white hover:bg-white/5 rounded-md transition-all"
+          >
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+          </button>
         </div>
 
-        {/* Center: Live Stats */}
-        <div className="hidden lg:flex items-center gap-6 text-sm">
+        {/* Center: Live Stats (only on large screens) */}
+        <div className="hidden xl:flex items-center gap-6 text-sm">
           <div className="flex items-center gap-2 text-gray-400">
             <div className="w-2 h-2 rounded-full bg-purple-500 animate-pulse" />
             <span className="font-semibold text-purple-300">{stats.claims}</span>
@@ -108,7 +155,7 @@ export default function UnifiedHeader({ currentView, onLockClick }: UnifiedHeade
         </div>
 
         {/* Right: Actions */}
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2 md:gap-3">
 
           {/* Lock Claim Button */}
           <button
@@ -118,6 +165,188 @@ export default function UnifiedHeader({ currentView, onLockClick }: UnifiedHeade
             <svg className="w-3.5 h-3.5 md:w-4 md:h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
             </svg>
+            <span className="hidden sm:inline">Lock Claim</span>
+            <span className="sm:hidden">Lock</span>
+          </button>
+
+          {/* User Menu */}
+          <div className="relative">
+            <button
+              onClick={() => setShowUserMenu(!showUserMenu)}
+              className="w-8 h-8 md:w-10 md:h-10 rounded-full bg-gradient-to-br from-purple-600 to-blue-600 flex items-center justify-center text-white font-semibold text-xs md:text-sm hover:from-purple-500 hover:to-blue-500 transition-all"
+            >
+              {user?.email?.[0].toUpperCase() || 'A'}
+            </button>
+
+            {showUserMenu && (
+              <>
+                <div
+                  className="fixed inset-0 z-40"
+                  onClick={() => setShowUserMenu(false)}
+                />
+                <div className="absolute right-0 top-12 w-64 glass border border-slate-700 rounded-lg shadow-2xl z-50 overflow-hidden">
+                  <div className="p-4 border-b border-slate-700">
+                    <div className="text-sm font-medium text-white">
+                      {user?.email || 'Anonymous User'}
+                    </div>
+                    <div className="text-xs text-gray-400 mt-1">
+                      {user ? 'Logged in' : 'Local only'}
+                    </div>
+                  </div>
+                  <div className="p-2">
+                    {user && (
+                      <>
+                        <Link
+                          href="/profile"
+                          className="flex items-center gap-2 px-4 py-2 text-sm text-gray-300 hover:text-white hover:bg-white/5 rounded-md transition-colors"
+                          onClick={() => setShowUserMenu(false)}
+                        >
+                          <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                          </svg>
+                          Profile
+                        </Link>
+                        <Link
+                          href="/dashboard"
+                          className="flex items-center gap-2 px-4 py-2 text-sm text-gray-300 hover:text-white hover:bg-white/5 rounded-md transition-colors"
+                          onClick={() => setShowUserMenu(false)}
+                        >
+                          <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+                          </svg>
+                          Dashboard
+                        </Link>
+                        <div className="my-2 h-px bg-slate-700" />
+                      </>
+                    )}
+                    <Link
+                      href="/app?tab=my"
+                      className="flex items-center gap-2 px-4 py-2 text-sm text-gray-300 hover:text-white hover:bg-white/5 rounded-md transition-colors"
+                      onClick={() => setShowUserMenu(false)}
+                    >
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
+                      </svg>
+                      My Claims
+                    </Link>
+                    <Link
+                      href="/how-scoring-works"
+                      className="flex items-center gap-2 px-4 py-2 text-sm text-gray-300 hover:text-white hover:bg-white/5 rounded-md transition-colors"
+                      onClick={() => setShowUserMenu(false)}
+                    >
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                      </svg>
+                      How Scoring Works
+                    </Link>
+                    {!user && (
+                      <button
+                        onClick={() => {
+                          setShowUserMenu(false);
+                          // TODO: Open claim modal
+                        }}
+                        className="w-full flex items-center gap-2 text-left px-4 py-2 text-sm text-purple-400 hover:text-purple-300 hover:bg-purple-500/10 rounded-md transition-colors"
+                      >
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+                        </svg>
+                        Claim Your Claims
+                      </button>
+                    )}
+                  </div>
+                </div>
+              </>
+            )}
+          </div>
+        </div>
+      </div>
+
+      {/* Mobile Navigation Menu */}
+      {showMobileMenu && (
+        <>
+          <div
+            className="fixed inset-0 bg-black/50 z-40 lg:hidden"
+            onClick={() => setShowMobileMenu(false)}
+          />
+          <div className="fixed top-16 left-0 right-0 glass border-b border-slate-700 shadow-2xl z-50 lg:hidden">
+            <nav className="p-4 space-y-2">
+              <Link
+                href="/globe"
+                className={`flex items-center gap-2 px-4 py-3 rounded-md text-sm font-medium transition-all ${
+                  activeView === 'globe'
+                    ? 'bg-purple-600/20 text-purple-300 border border-purple-500/30'
+                    : 'text-gray-400 hover:text-white hover:bg-white/5'
+                }`}
+                onClick={() => setShowMobileMenu(false)}
+              >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                  <circle cx="12" cy="12" r="10" />
+                </svg>
+                Globe
+              </Link>
+              <Link
+                href="/app"
+                className={`flex items-center gap-2 px-4 py-3 rounded-md text-sm font-medium transition-all ${
+                  activeView === 'feed'
+                    ? 'bg-purple-600/20 text-purple-300 border border-purple-500/30'
+                    : 'text-gray-400 hover:text-white hover:bg-white/5'
+                }`}
+                onClick={() => setShowMobileMenu(false)}
+              >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16" />
+                </svg>
+                Feed
+              </Link>
+              <Link
+                href="/leaderboard"
+                className={`flex items-center gap-2 px-4 py-3 rounded-md text-sm font-medium transition-all ${
+                  activeView === 'leaderboard'
+                    ? 'bg-purple-600/20 text-purple-300 border border-purple-500/30'
+                    : 'text-gray-400 hover:text-white hover:bg-white/5'
+                }`}
+                onClick={() => setShowMobileMenu(false)}
+              >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                </svg>
+                Leaderboard
+              </Link>
+              <Link
+                href="/about"
+                className={`flex items-center gap-2 px-4 py-3 rounded-md text-sm font-medium transition-all ${
+                  pathname.startsWith('/about') || pathname.startsWith('/how-scoring')
+                    ? 'bg-purple-600/20 text-purple-300 border border-purple-500/30'
+                    : 'text-gray-400 hover:text-white hover:bg-white/5'
+                }`}
+                onClick={() => setShowMobileMenu(false)}
+              >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                About
+              </Link>
+              <Link
+                href="/how-scoring-works"
+                className={`flex items-center gap-2 px-4 py-3 rounded-md text-sm font-medium transition-all ${
+                  pathname.startsWith('/how-scoring')
+                    ? 'bg-purple-600/20 text-purple-300 border border-purple-500/30'
+                    : 'text-gray-400 hover:text-white hover:bg-white/5'
+                }`}
+                onClick={() => setShowMobileMenu(false)}
+              >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                </svg>
+                How Scoring Works
+              </Link>
+            </nav>
+          </div>
+        </>
+      )}
+    </header>
+  );
+}
             <span className="hidden sm:inline">Lock Claim</span>
             <span className="sm:hidden">Lock</span>
           </button>
