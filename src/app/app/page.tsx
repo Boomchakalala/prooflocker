@@ -197,18 +197,29 @@ function AppFeedContent() {
     const osintRow1 = document.getElementById('osint-scroll-row-1');
     const osintRow2 = document.getElementById('osint-scroll-row-2');
 
+    let isScrollingClaims = false;
+    let isScrollingOsint = false;
+
     const syncScrollClaims = (e: Event) => {
-      if (!claimsRow1 || !claimsRow2) return;
+      if (!claimsRow1 || !claimsRow2 || isScrollingClaims) return;
+      isScrollingClaims = true;
       const source = e.target as HTMLElement;
       const target = source === claimsRow1 ? claimsRow2 : claimsRow1;
       target.scrollLeft = source.scrollLeft;
+      requestAnimationFrame(() => {
+        isScrollingClaims = false;
+      });
     };
 
     const syncScrollOsint = (e: Event) => {
-      if (!osintRow1 || !osintRow2) return;
+      if (!osintRow1 || !osintRow2 || isScrollingOsint) return;
+      isScrollingOsint = true;
       const source = e.target as HTMLElement;
       const target = source === osintRow1 ? osintRow2 : osintRow1;
       target.scrollLeft = source.scrollLeft;
+      requestAnimationFrame(() => {
+        isScrollingOsint = false;
+      });
     };
 
     claimsRow1?.addEventListener('scroll', syncScrollClaims);
