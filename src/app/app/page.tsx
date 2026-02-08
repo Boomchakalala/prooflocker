@@ -680,7 +680,7 @@ function AppFeedContent() {
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {/* Render Claims */}
+            {/* Render Claims - SOCIAL FEED STYLE */}
             {filteredPredictions.map((prediction, index) => {
               const cardStyle = getCardStyle(prediction, selectedCategory);
               const showEvidence = prediction.linkedOsint && prediction.linkedOsint.length > 0;
@@ -689,169 +689,105 @@ function AppFeedContent() {
                 <Link
                   key={prediction.id}
                   href={`/proof/${prediction.publicSlug}`}
-                  className={`group bg-gradient-to-br ${cardStyle.background} border ${cardStyle.border} rounded-xl p-6 transition-all duration-300 ${cardStyle.shadow} hover:-translate-y-1 cursor-pointer fade-in stagger-${Math.min(index + 1, 4)}`}
+                  className={`group bg-slate-900/80 border border-slate-700/50 hover:border-slate-600 rounded-2xl p-5 transition-all duration-300 hover:shadow-[0_0_25px_rgba(168,85,247,0.15)] hover:-translate-y-0.5 cursor-pointer fade-in stagger-${Math.min(index + 1, 4)}`}
                 >
-                  {/* Header */}
+                  {/* User Header - Social Style */}
                   <div className="flex items-center justify-between mb-4">
-                    <div className="flex items-center gap-2">
-                      <div className="w-8 h-8 rounded-full bg-gradient-to-br from-slate-600 to-slate-800 flex items-center justify-center text-white text-xs font-bold border border-slate-500/30">
+                    <div className="flex items-center gap-3">
+                      {/* User Avatar - Bigger */}
+                      <div className="w-11 h-11 rounded-full bg-gradient-to-br from-purple-600 to-purple-800 flex items-center justify-center text-white text-sm font-bold border-2 border-purple-500/40 shadow-lg">
                         {prediction.authorNumber?.toString().slice(-2) || "??"}
                       </div>
                       <div>
-                        <div className="text-sm text-white font-medium">Anon #{prediction.authorNumber}</div>
-                        <div className="text-xs flex items-center gap-1">
-                          <svg className="w-3 h-3 text-purple-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
-                          </svg>
-                          <span className="text-purple-300 font-medium">
-                            {new Date(prediction.timestamp).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
-                          </span>
+                        <div className="text-sm text-white font-semibold">Anon #{prediction.authorNumber}</div>
+                        <div className="text-xs text-slate-500">
+                          {new Date(prediction.timestamp).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })} ·
+                          <span className="ml-1">{new Date(prediction.timestamp).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })}</span>
                         </div>
                       </div>
                     </div>
-                    {/* Status Badge - Vibrant with glow */}
-                    <div className={`flex items-center gap-1 px-2.5 py-1.5 text-xs font-bold rounded-lg border-2 shadow-lg ${
+
+                    {/* Status Badge - Compact */}
+                    <div className={`flex items-center gap-1 px-2 py-1 text-xs font-bold rounded-full ${
                       prediction.outcome === "correct"
-                        ? "bg-emerald-500/30 border-emerald-400/60 text-emerald-300 shadow-emerald-500/30"
+                        ? "bg-emerald-500/20 text-emerald-400"
                         : prediction.outcome === "incorrect"
-                        ? "bg-red-500/30 border-red-400/60 text-red-300 shadow-red-500/30"
-                        : "bg-amber-500/30 border-amber-400/60 text-amber-300 shadow-amber-500/30"
+                        ? "bg-red-500/20 text-red-400"
+                        : "bg-amber-500/20 text-amber-400"
                     }`}>
-                      {prediction.outcome === "correct" && (
-                        <>
-                          <svg className="w-3 h-3" fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7"/>
-                          </svg>
-                          Correct
-                        </>
-                      )}
-                      {prediction.outcome === "incorrect" && (
-                        <>
-                          <svg className="w-3 h-3" fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12"/>
-                          </svg>
-                          Incorrect
-                        </>
-                      )}
-                      {!prediction.outcome || prediction.outcome === "pending" && (
-                        <>
-                          <svg className="w-3 h-3" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                            <circle cx="12" cy="12" r="10"/>
-                          </svg>
-                          Pending
-                        </>
-                      )}
+                      {prediction.outcome === "correct" && "✓"}
+                      {prediction.outcome === "incorrect" && "✕"}
+                      {!prediction.outcome || prediction.outcome === "pending" && "⏱"}
                     </div>
                   </div>
 
-                  {/* Category Badge */}
-                  {prediction.category && (
-                    <div className="inline-flex items-center gap-1.5 px-2 py-1 bg-slate-800/50 text-slate-300 text-xs rounded mb-3 border border-slate-700/50">
-                      <svg className="w-3 h-3" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"/>
-                      </svg>
-                      {prediction.category}
-                    </div>
-                  )}
+                  {/* Claim Text - Tweet Style */}
+                  <div className="mb-4">
+                    <p className="text-white text-[15px] leading-relaxed line-clamp-4">
+                      {prediction.textPreview}
+                    </p>
+                  </div>
 
-                  {/* On-chain timestamp - discrete indicator */}
-                  {prediction.deId && (
-                    <div className="inline-flex items-center gap-1 px-2 py-1 bg-purple-900/20 border border-purple-500/30 text-purple-300 text-[10px] rounded mb-3 ml-2">
-                      <svg className="w-2.5 h-2.5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/>
-                      </svg>
-                      <span className="font-mono">On-chain: {new Date(prediction.timestamp).toLocaleString('en-US', { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' })}</span>
-                    </div>
-                  )}
-
-                  {/* Title */}
-                  <h3 className={`text-white text-base font-medium leading-snug mb-4 line-clamp-3 group-hover:${cardStyle.accentColor} transition-colors`}>
-                    {prediction.textPreview}
-                  </h3>
-
-                  {/* Timestamped Evidence Section */}
-                  {showEvidence && (
-                    <div className="mb-4 p-3 bg-slate-900/50 border border-slate-700/50 rounded-lg">
-                      <div className="flex items-center gap-1.5 mb-2">
-                        <svg className="w-3.5 h-3.5 text-cyan-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
-                        </svg>
-                        <span className="text-xs text-slate-400 font-semibold">Evidence Chain</span>
-                      </div>
-                      <div className="space-y-1.5">
-                        {prediction.linkedOsint.slice(0, 2).map((evidence: any, idx: number) => (
-                          <div key={idx} className="flex items-start gap-2 text-xs">
-                            <div className="flex-shrink-0 w-1 h-1 rounded-full bg-cyan-400 mt-1.5"></div>
-                            <div className="flex-1 min-w-0">
-                              <div className="text-cyan-300 truncate">{evidence.title || 'Evidence linked'}</div>
-                              <div className="text-slate-500 flex items-center gap-1">
-                                <svg className="w-3 h-3" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                                </svg>
-                                {new Date(evidence.timestamp || evidence.createdAt).toLocaleString('en-US', { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' })}
-                              </div>
-                            </div>
-                          </div>
-                        ))}
-                        {prediction.linkedOsint.length > 2 && (
-                          <div className="text-xs text-slate-500 pl-3">
-                            +{prediction.linkedOsint.length - 2} more
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  )}
-
-                  {/* Footer */}
-                  <div className="flex items-center justify-between pt-3 border-t border-slate-600/30 mb-3">
-                    <div className="flex items-center gap-3 text-sm">
-                      {prediction.evidence_score !== undefined && prediction.evidence_score > 0 && (
-                        <div className="flex items-center gap-1.5">
-                          <svg className="w-4 h-4 text-cyan-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
-                          </svg>
-                          <span className="text-cyan-400 font-semibold text-xs">{prediction.evidence_score}/100</span>
-                        </div>
-                      )}
-                      {prediction.deId && (
-                        <div className="flex items-center gap-1.5">
-                          <svg className="w-4 h-4 text-purple-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/>
-                          </svg>
-                          <span className="text-purple-400 text-xs font-mono">{prediction.deId.slice(0, 8)}...</span>
-                        </div>
-                      )}
-                    </div>
-                    {prediction.upvotesCount !== undefined && prediction.upvotesCount > 0 && (
-                      <div className="flex items-center gap-1 text-sm text-slate-400">
-                        <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" d="M5 15l7-7 7 7" />
-                        </svg>
-                        <span className="text-xs">{prediction.upvotesCount}</span>
-                      </div>
+                  {/* Category & On-Chain Tags */}
+                  <div className="flex items-center gap-2 mb-4 flex-wrap">
+                    {prediction.category && (
+                      <span className="px-2 py-1 bg-slate-800/70 text-slate-400 text-xs rounded border border-slate-700/50">
+                        #{prediction.category}
+                      </span>
+                    )}
+                    {prediction.deId && (
+                      <span className="px-2 py-1 bg-purple-900/30 text-purple-400 text-xs rounded border border-purple-500/30 font-mono">
+                        ⛓ On-chain
+                      </span>
                     )}
                   </div>
 
-                  {/* On-Chain Timestamp Extract + View Button */}
-                  <div className="flex items-center justify-between pt-3 border-t border-purple-500/20 bg-gradient-to-r from-purple-900/10 to-transparent rounded-lg px-2 py-2">
-                    <div className="flex items-center gap-1.5">
-                      <svg className="w-3 h-3 text-purple-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
-                      </svg>
-                      <span className="text-[10px] text-purple-300/80 font-mono">
-                        Locked: {new Date(prediction.timestamp).toLocaleString('en-US', {
-                          month: 'short',
-                          day: 'numeric',
-                          year: 'numeric',
-                          hour: 'numeric',
-                          minute: '2-digit',
-                          hour12: true
-                        })}
-                      </span>
+                  {/* Evidence Preview - Compact */}
+                  {showEvidence && (
+                    <div className="mb-4 px-3 py-2 bg-cyan-500/10 border border-cyan-500/30 rounded-lg">
+                      <div className="flex items-center gap-2 text-xs text-cyan-400">
+                        <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                        </svg>
+                        <span>{prediction.linkedOsint.length} piece{prediction.linkedOsint.length !== 1 ? 's' : ''} of evidence</span>
+                      </div>
                     </div>
-                    <div className="flex items-center gap-1 px-2 py-1 bg-purple-600/20 hover:bg-purple-600/30 border border-purple-500/40 rounded text-[10px] text-purple-300 font-semibold transition-all group-hover:border-purple-400/60">
+                  )}
+
+                  {/* Engagement Footer - Social Media Style */}
+                  <div className="flex items-center justify-between pt-4 border-t border-slate-700/50">
+                    {/* Left: Interactions */}
+                    <div className="flex items-center gap-4">
+                      {/* Upvotes */}
+                      <div className="flex items-center gap-1.5 text-slate-400 hover:text-purple-400 transition-colors">
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M5 15l7-7 7 7" />
+                        </svg>
+                        <span className="text-xs font-medium">{prediction.upvotesCount || 0}</span>
+                      </div>
+
+                      {/* Evidence Score */}
+                      {prediction.evidence_score !== undefined && prediction.evidence_score > 0 && (
+                        <div className="flex items-center gap-1.5 text-slate-400">
+                          <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+                          </svg>
+                          <span className="text-xs font-medium">{prediction.evidence_score}</span>
+                        </div>
+                      )}
+
+                      {/* Share Icon */}
+                      <div className="flex items-center gap-1.5 text-slate-400 hover:text-cyan-400 transition-colors">
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"/>
+                        </svg>
+                      </div>
+                    </div>
+
+                    {/* Right: View Button */}
+                    <div className="flex items-center gap-1 px-3 py-1.5 bg-purple-600/10 hover:bg-purple-600/20 border border-purple-500/30 rounded-lg text-xs text-purple-300 font-semibold transition-all group-hover:border-purple-400/60">
                       <span>View</span>
-                      <svg className="w-2.5 h-2.5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                      <svg className="w-3 h-3" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7"/>
                       </svg>
                     </div>
@@ -860,74 +796,100 @@ function AppFeedContent() {
               );
             })}
 
-            {/* Render OSINT Signals */}
+            {/* Render OSINT Signals - INTEL BRIEFING STYLE */}
             {filteredOsint.map((signal, index) => (
               <div
                 key={signal.id}
                 className={`fade-in stagger-${Math.min(index + 1, 4)}`}
               >
-                <div className="glass rounded-xl p-5 border border-red-500/30 bg-red-500/5 hover:border-red-500/50 hover:shadow-[0_0_20px_rgba(239,68,68,0.15)] transition-all">
-                  {/* OSINT Badge */}
-                  <div className="flex items-center gap-2 mb-3">
-                    <span className="inline-flex items-center gap-1 px-2 py-0.5 text-[10px] font-medium rounded bg-red-500/10 border border-red-400/30 text-red-300">
-                      <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
-                        <path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6z"/>
-                      </svg>
-                      OSINT
-                    </span>
+                <div className="bg-gradient-to-br from-red-950/30 via-orange-950/20 to-red-950/30 border-2 border-red-500/40 rounded-xl p-5 hover:border-red-500/60 hover:shadow-[0_0_30px_rgba(239,68,68,0.2)] transition-all relative overflow-hidden">
+                  {/* Alert Pulse Animation */}
+                  <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-red-500 to-transparent animate-pulse"></div>
+
+                  {/* Header - Intel Style */}
+                  <div className="flex items-center justify-between mb-3">
+                    <div className="flex items-center gap-2">
+                      {/* OSINT Alert Badge */}
+                      <span className="inline-flex items-center gap-1.5 px-3 py-1 text-xs font-bold rounded-md bg-red-600/30 border border-red-500/50 text-red-200 uppercase tracking-wide shadow-sm">
+                        <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20">
+                          <path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6z"/>
+                        </svg>
+                        Intel
+                      </span>
+
+                      {/* Confidence Score */}
+                      {signal.confidenceScore && (
+                        <span className="px-2 py-1 text-[10px] font-bold rounded bg-orange-500/20 border border-orange-500/40 text-orange-300 uppercase">
+                          {signal.confidenceScore}% Conf.
+                        </span>
+                      )}
+                    </div>
+
+                    {/* Category Tag */}
                     {signal.category && (
-                      <span className="px-2 py-0.5 text-[10px] rounded bg-red-900/20 text-red-300">
+                      <span className="px-2 py-1 text-[10px] font-semibold rounded bg-red-900/40 border border-red-700/50 text-red-300 uppercase">
                         {signal.category}
                       </span>
                     )}
                   </div>
 
-                  {/* Source info */}
-                  <div className="flex items-center gap-2 mb-3 text-sm">
-                    <span className="text-red-300 font-medium">{signal.sourceName}</span>
-                    {signal.sourceHandle && (
-                      <span className="text-red-400/70">{signal.sourceHandle}</span>
+                  {/* Source Line - News Style */}
+                  <div className="flex items-center gap-2 mb-3 pb-2 border-b border-red-500/20">
+                    <div className="w-6 h-6 rounded bg-red-600/30 flex items-center justify-center border border-red-500/40">
+                      <svg className="w-3 h-3 text-red-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"/>
+                      </svg>
+                    </div>
+                    <div className="flex-1">
+                      <div className="text-sm text-red-200 font-semibold">{signal.sourceName}</div>
+                      {signal.sourceHandle && (
+                        <div className="text-xs text-red-400/70">{signal.sourceHandle}</div>
+                      )}
+                    </div>
+                    {signal.locationName && (
+                      <div className="flex items-center gap-1 text-xs text-orange-400">
+                        <svg className="w-3 h-3" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+                        </svg>
+                        <span>{signal.locationName}</span>
+                      </div>
                     )}
                   </div>
 
-                  {/* Title */}
-                  <h3 className="text-base font-medium text-red-50 mb-3 line-clamp-2">
+                  {/* Title - Breaking News Style */}
+                  <h3 className="text-base font-bold text-red-50 mb-2 leading-tight line-clamp-2">
                     {signal.title}
                   </h3>
 
                   {/* Content preview */}
                   {signal.content && (
-                    <p className="text-sm text-gray-300 mb-3 line-clamp-2">
+                    <p className="text-sm text-red-100/70 mb-4 line-clamp-2 leading-relaxed">
                       {signal.content}
                     </p>
                   )}
 
-                  {/* Footer */}
-                  <div className="flex items-center justify-between pt-3 border-t border-slate-800">
-                    <div className="flex items-center gap-2">
-                      {signal.locationName && (
-                        <span className="text-xs text-gray-400">{signal.locationName}</span>
-                      )}
-                      {signal.confidenceScore && (
-                        <span className="text-xs text-red-400">{signal.confidenceScore}% confidence</span>
-                      )}
+                  {/* Footer Actions */}
+                  <div className="flex items-center justify-between pt-3 border-t border-red-500/20">
+                    <div className="text-xs text-red-400/60 font-mono">
+                      ID: {signal.id.slice(0, 8)}
                     </div>
                     <div className="flex gap-2">
                       <a
                         href={signal.sourceUrl}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="px-3 py-1.5 text-xs rounded bg-red-600/20 hover:bg-red-600/30 text-red-300 border border-red-500/30 transition-colors"
+                        className="px-3 py-1.5 text-xs font-semibold rounded-md bg-red-600/30 hover:bg-red-600/40 text-red-200 border border-red-500/40 transition-all"
                       >
-                        Source
+                        📄 Source
                       </a>
                       <button
                         onClick={() => {
                           setSelectedOsint(signal);
                         }}
-                        className="px-3 py-1.5 text-xs rounded bg-purple-600/20 hover:bg-purple-600/30 text-purple-300 border border-purple-500/30 transition-colors"
+                        className="px-3 py-1.5 text-xs font-semibold rounded-md bg-purple-600/30 hover:bg-purple-600/40 text-purple-200 border border-purple-500/40 transition-all"
                       >
-                        Use as Evidence
+                        🔗 Link as Evidence
                       </button>
                     </div>
                   </div>
