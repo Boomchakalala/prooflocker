@@ -218,6 +218,11 @@ export default function WallOfWins() {
           <p className="text-base md:text-lg lg:text-xl text-white/70 max-w-3xl mx-auto px-2">
             Make a claim. Lock it on-chain. Earn reputation when you're right.
           </p>
+          <div className="mt-2 md:mt-3">
+            <span className="inline-block px-3 py-1 bg-cyan-500/10 border border-cyan-500/30 text-cyan-300 text-xs font-semibold rounded-full uppercase tracking-wide">
+              Example Scenarios
+            </span>
+          </div>
         </div>
 
         {/* Filter Tabs */}

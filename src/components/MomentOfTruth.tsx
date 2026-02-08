@@ -217,22 +217,12 @@ export default function MomentOfTruth() {
         </div>
 
         {/* Impact Statement */}
-        <div className="text-center mb-6 md:mb-8 px-2">
+        <div className="text-center px-2">
           <div className="inline-block px-4 md:px-6 py-2 md:py-3 bg-gradient-to-r from-purple-600/20 to-emerald-600/20 border border-purple-500/30 rounded-xl">
             <p className="text-sm md:text-lg lg:text-xl text-white font-semibold">
-              This single resolution jumped them <span className="text-emerald-400 font-bold">35 places</span> on the leaderboard and unlocked Master tier
+              One resolved claim. <span className="text-emerald-400 font-bold">Permanent proof</span> of accountability. <span className="text-cyan-400 font-bold">Reputation earned</span> forever.
             </p>
           </div>
-        </div>
-
-        {/* CTA */}
-        <div className="text-center">
-          <a
-            href="/lock"
-            className="inline-block px-8 md:px-12 py-3 md:py-4 bg-gradient-to-r from-emerald-500 to-cyan-500 hover:from-emerald-600 hover:to-cyan-600 text-white text-base md:text-lg font-bold rounded-xl transition-all shadow-lg hover:shadow-[0_0_30px_rgba(16,185,129,0.4)] hover:scale-[1.05]"
-          >
-            Your Turn. Make a Claim.
-          </a>
         </div>
       </div>
     </div>
