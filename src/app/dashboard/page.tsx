@@ -84,13 +84,13 @@ export default function DashboardPage() {
         <div className="max-w-md text-center">
           <h2 className="text-2xl font-bold mb-4">No Reputation Score Yet</h2>
           <p className="text-gray-400 mb-6">
-            {error || "Lock your first prediction to start building your Reputation Score!"}
+            {error || "Lock your first claim to start building your Reputation Score!"}
           </p>
           <Link
             href="/lock"
             className="inline-block px-8 py-3 bg-[#00bfff] hover:bg-[#00a8e6] text-white font-semibold rounded-md transition-all"
           >
-            Lock My First Prediction
+            Lock My First Claim
           </Link>
         </div>
       </div>
