@@ -7,7 +7,6 @@ import HowItWorks from "@/components/HowItWorks";
 import ReputationImpact from "@/components/ReputationImpact";
 import WallOfWins from "@/components/WallOfWins";
 import LeaderboardPreview from "@/components/LeaderboardPreview";
-import ProofCardPreview from "@/components/ProofCardPreview";
 import DEStatusBanner from "@/components/DEStatusBanner";
 import Footer from "@/components/Footer";
 
@@ -25,17 +24,14 @@ export default function LandingPage() {
         {/* The Moment of Truth */}
         <MomentOfTruth />
 
-        {/* Real Proof Section */}
-        <ProofCardPreview />
-
         {/* How It Works - Compact 3-step */}
         <HowItWorks />
 
+        {/* Wall of Wins - Real Claims (Horizontal Scroll) */}
+        <WallOfWins />
+
         {/* Reputation Opens Doors */}
         <ReputationImpact />
-
-        {/* Wall of Wins */}
-        <WallOfWins />
 
         {/* Leaderboard Preview */}
         <LeaderboardPreview />
