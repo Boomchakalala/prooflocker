@@ -293,7 +293,18 @@ function AppFeedContent() {
     const sorted = [...filtered];
     switch (sortBy) {
       case "new":
-        sorted.sort((a, b) => new Date(b.createdAt || b.timestamp).getTime() - new Date(a.createdAt || a.timestamp).getTime());
+        // Resolved claims FIRST (more interesting), then by date
+        sorted.sort((a, b) => {
+          const aResolved = a.outcome === "correct" || a.outcome === "incorrect";
+          const bResolved = b.outcome === "correct" || b.outcome === "incorrect";
+
+          // Resolved claims come first
+          if (aResolved && !bResolved) return -1;
+          if (!aResolved && bResolved) return 1;
+
+          // Within same resolution status, sort by date
+          return new Date(b.createdAt || b.timestamp).getTime() - new Date(a.createdAt || a.timestamp).getTime();
+        });
         break;
       case "hot":
         // Hot = recent + engagement (likes, views, etc.) - for now just recent with slight randomization
