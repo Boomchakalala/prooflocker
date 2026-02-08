@@ -709,9 +709,12 @@ function AppFeedContent() {
                   </div>
                 ) : null}
 
-                {/* Claims Grid */}
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {filteredPredictions.map((prediction, index) => {
+                {/* Claims Horizontal Scroll */}
+                <div className="relative">
+                  {/* Scroll Container */}
+                  <div className="overflow-x-auto overflow-y-visible pb-4 no-scrollbar">
+                    <div className="flex gap-6 min-w-min">
+                      {filteredPredictions.slice(0, 12).map((prediction, index) => {
                     const cardStyle = getCardStyle(prediction, selectedCategory);
                     const showEvidence = prediction.linkedOsint && prediction.linkedOsint.length > 0;
 
@@ -719,7 +722,7 @@ function AppFeedContent() {
                       <Link
                         key={prediction.id}
                         href={`/proof/${prediction.publicSlug}`}
-                        className={`group bg-slate-900/80 border border-slate-700/50 hover:border-slate-600 rounded-2xl p-5 transition-all duration-300 hover:shadow-[0_0_25px_rgba(168,85,247,0.15)] hover:-translate-y-0.5 cursor-pointer fade-in stagger-${Math.min(index + 1, 4)}`}
+                        className={`group bg-slate-900/80 border border-slate-700/50 hover:border-slate-600 rounded-2xl p-5 transition-all duration-300 hover:shadow-[0_0_25px_rgba(168,85,247,0.15)] hover:-translate-y-0.5 cursor-pointer fade-in w-[380px] flex-shrink-0`}
                       >
                         {/* User Header - Social Style */}
                         <div className="flex items-center justify-between mb-4">
