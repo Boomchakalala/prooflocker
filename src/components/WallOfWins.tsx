@@ -1,3 +1,5 @@
+"use client";
+
 import { useEffect, useState, useRef } from "react";
 import Link from "next/link";
 import { formatRelativeTime } from "@/lib/utils";
@@ -435,12 +437,7 @@ export default function WallOfWins() {
                         {/* Evidence Grade - Colorful with Tooltip */}
                         {pred.evidence_score !== undefined && pred.evidence_score > 0 && (
                           <div
-                            className={`group/evidence relative flex items-center gap-1.5 px-2 py-1 rounded-lg transition-all hover:scale-105 ${evidenceGrade.color} ${evidenceGrade.textColor}`}
-                            style={{
-                              borderWidth: '1px',
-                              borderColor: `${evidenceGrade.textColor.replace('text-', '')}40`,
-                              boxShadow: `0 0 10px ${evidenceGrade.glow.replace('shadow-', '').replace('/10', '10').replace('/30', '30').replace('/40', '40')}`
-                            }}
+                            className={`group/evidence relative flex items-center gap-1.5 px-2 py-1 border rounded-lg transition-all hover:scale-105 ${evidenceGrade.bgColor} ${evidenceGrade.borderColor} ${evidenceGrade.shadowColor}`}
                             title={`Evidence Grade: ${evidenceGrade.grade} (${evidenceSourceCount} sources)`}
                           >
                             <svg className={`w-4 h-4 ${evidenceGrade.textColor}`} fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
