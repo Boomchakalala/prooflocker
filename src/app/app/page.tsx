@@ -123,8 +123,10 @@ function AppFeedContent() {
   const [showHidden, setShowHidden] = useState(false);
   const [selectedOsint, setSelectedOsint] = useState<any | null>(null);
   const [showLockModal, setShowLockModal] = useState(false);
+  const [osintCategory, setOsintCategory] = useState<string>("all");
 
   const categories = ["all", "Crypto", "Politics", "Markets", "Tech", "Sports", "OSINT", "Culture", "Personal", "Other"];
+  const osintCategories = ["all", "Politics", "Tech", "Crypto", "Markets", "Sports", "Culture", "Other"];
 
   // Category icons and colors
   const getCategoryIcon = (cat: string) => {
@@ -330,9 +332,9 @@ function AppFeedContent() {
       return []; // No OSINT if showing claims only
     }
 
-    // Category filter
-    if (selectedCategory !== "all") {
-      filtered = filtered.filter(s => s.category === selectedCategory);
+    // Category filter for OSINT
+    if (osintCategory !== "all") {
+      filtered = filtered.filter(s => s.category === osintCategory);
     }
 
     return filtered;
