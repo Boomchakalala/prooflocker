@@ -160,7 +160,7 @@ export default function LandingHero() {
         {/* Micro-hook line */}
         <div className="text-center animate-fade-in-up" style={{ animationDelay: '0.35s' }}>
           <p className="text-sm text-[#F8F9FA]/65">
-            This week: {stats.totalClaims > 0 ? stats.totalClaims : '67'} claims locked, {stats.resolvedClaims > 0 ? stats.resolvedClaims : '9'} settled. Your turn.
+            No signup required · Takes ~10 seconds · Receipts forever
           </p>
         </div>
       </div>
