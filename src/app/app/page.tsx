@@ -1027,7 +1027,7 @@ function AppFeedContent() {
               {filteredOsint.length > 12 && (
                 <div className="text-center mt-4">
                   <span className="text-sm text-slate-400">
-                    Showing 12 of {filteredOsint.length} intel items · Scroll horizontally for more
+                    Showing 12 of {filteredOsint.length} intel items · Scroll to see more
                   </span>
                 </div>
               )}
