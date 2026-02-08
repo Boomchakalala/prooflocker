@@ -17,7 +17,7 @@ export default function ReputationImpact() {
         {/* Section Header */}
         <div className="text-center mb-10 md:mb-16">
           <h2 className="text-3xl md:text-5xl lg:text-6xl font-extrabold mb-3 md:mb-4 bg-gradient-to-r from-[#5B21B6] to-[#2E5CFF] bg-clip-text text-transparent" style={{ fontFamily: 'var(--font-montserrat)' }}>
-            Why Your Reputation Matters
+            Your Reputation Opens Doors
           </h2>
           <p className="text-base md:text-lg lg:text-xl text-white/70 max-w-3xl mx-auto px-2">
             On-chain proof isn't just history—it's your competitive edge
@@ -40,7 +40,7 @@ export default function ReputationImpact() {
             </div>
 
             <p className="text-sm md:text-base text-white/80 leading-relaxed mb-4 md:mb-5">
-              Show clients, investors, and employers your track record with cryptographic proof. No fluff, no claims—just verifiable accuracy.
+              Show clients, investors, employers your track record with cryptographic proof. No fluff—just verifiable accuracy.
             </p>
 
             <div className="px-4 py-3 bg-purple-500/10 border border-purple-500/30 rounded-lg">
@@ -70,7 +70,7 @@ export default function ReputationImpact() {
             </div>
 
             <p className="text-sm md:text-base text-white/80 leading-relaxed mb-4 md:mb-5">
-              Climb the leaderboard. Earn badges. Build streaks. Each correct resolution amplifies your reputation—and your influence.
+              Climb the leaderboard. Earn badges. Build streaks. Each correct resolution amplifies your influence.
             </p>
 
             <div className="space-y-2 md:space-y-3">
@@ -100,7 +100,7 @@ export default function ReputationImpact() {
             </div>
 
             <p className="text-sm md:text-base text-white/80 leading-relaxed mb-4 md:mb-5">
-              Every resolution builds on the last. Streaks multiply points. Consistency unlocks new tiers. Your reputation grows exponentially.
+              Every resolution builds on the last. Streaks multiply points. Consistency unlocks tiers. Credibility grows exponentially.
             </p>
 
             <div className="px-4 py-3 bg-emerald-500/10 border border-emerald-500/30 rounded-lg">
