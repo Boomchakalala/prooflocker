@@ -400,7 +400,7 @@ function AppFeedContent() {
             Real Claims. Real Outcomes.
           </h1>
           <p className="text-lg md:text-xl text-white/70 max-w-3xl mx-auto">
-            Predictions locked on-chain with cryptographic proof and timestamped evidence
+            Claims locked on-chain with cryptographic proof and timestamped evidence
           </p>
         </div>
 
@@ -426,7 +426,7 @@ function AppFeedContent() {
                   : "text-gray-400 hover:text-white hover:bg-white/10"
               }`}
             >
-              My Predictions
+              My Claims
             </button>
             <button
               onClick={() => setActiveTab("leaderboard")}
@@ -627,7 +627,7 @@ function AppFeedContent() {
                 <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
                 </svg>
-                Claim my predictions
+                Claim my claims
               </button>
               <p className="text-xs text-white/50 mt-4">
                 Save access across devices
@@ -653,19 +653,19 @@ function AppFeedContent() {
             </div>
             <h3 className="text-2xl font-bold text-white mb-3">
               {activeTab === "all"
-                ? "No predictions locked yet"
-                : "No predictions"}
+                ? "No claims locked yet"
+                : "No claims"}
             </h3>
             <p className="text-gray-400 mb-8 text-lg">
               {activeTab === "all"
-                ? "No predictions have been locked yet"
-                : "Create your first immutable prediction"}
+                ? "No claims have been locked yet"
+                : "Create your first immutable claim"}
             </p>
             <Link
               href="/lock"
               className="inline-flex items-center px-8 py-4 bg-gradient-to-r from-purple-600/80 to-purple-700/80 hover:from-purple-600 hover:to-purple-700 text-white font-medium rounded-md transition-all shadow-[0_0_20px_rgba(168,85,247,0.3)]"
             >
-              Lock my first prediction
+              Lock my first claim
             </Link>
           </div>
         ) : (
