@@ -829,7 +829,18 @@ function AppFeedContent() {
                               {prediction.authorNumber?.toString().slice(-2) || "??"}
                             </div>
                             <div>
-                              <div className="text-sm text-white font-semibold">Anon #{prediction.authorNumber}</div>
+                              <div className="flex items-center gap-2">
+                                <span className="text-sm text-white font-semibold">Anon #{prediction.authorNumber}</span>
+                                {/* Reliability Badge */}
+                                {(() => {
+                                  const userTier = getUserTier(prediction.authorNumber || 0);
+                                  return (
+                                    <span className={`px-2 py-0.5 text-[10px] font-bold rounded border ${userTier.bg} ${userTier.border} ${userTier.color}`}>
+                                      {userTier.label}
+                                    </span>
+                                  );
+                                })()}
+                              </div>
                               <div className="text-xs text-slate-500">
                                 {new Date(prediction.timestamp).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })} ·
                                 <span className="ml-1">{new Date(prediction.timestamp).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })}</span>
