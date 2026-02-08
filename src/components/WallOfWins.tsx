@@ -33,17 +33,47 @@ function getStableVoteCounts(predictionId: string, outcome: string) {
 }
 
 // Evidence grade mapper
-function getEvidenceGrade(score?: number): { grade: string; color: string; glow: string; textColor: string } {
+function getEvidenceGrade(score?: number): { grade: string; bgColor: string; borderColor: string; textColor: string; shadowColor: string } {
   if (!score || score < 30) {
-    return { grade: "D", color: "bg-slate-600/20", glow: "shadow-slate-600/10", textColor: "text-slate-400" };
+    return {
+      grade: "D",
+      bgColor: "bg-slate-600/20",
+      borderColor: "border-slate-500/30",
+      textColor: "text-slate-400",
+      shadowColor: "shadow-slate-600/20"
+    };
   } else if (score < 60) {
-    return { grade: "C", color: "bg-amber-500/20", glow: "shadow-amber-500/30", textColor: "text-amber-400" };
+    return {
+      grade: "C",
+      bgColor: "bg-amber-500/20",
+      borderColor: "border-amber-500/40",
+      textColor: "text-amber-400",
+      shadowColor: "shadow-amber-500/30"
+    };
   } else if (score < 80) {
-    return { grade: "B", color: "bg-cyan-500/20", glow: "shadow-cyan-500/30", textColor: "text-cyan-400" };
+    return {
+      grade: "B",
+      bgColor: "bg-cyan-500/20",
+      borderColor: "border-cyan-500/40",
+      textColor: "text-cyan-400",
+      shadowColor: "shadow-cyan-500/30"
+    };
   } else if (score < 95) {
-    return { grade: "A", color: "bg-emerald-500/20", glow: "shadow-emerald-500/30", textColor: "text-emerald-400" };
+    return {
+      grade: "A",
+      bgColor: "bg-emerald-500/20",
+      borderColor: "border-emerald-500/40",
+      textColor: "text-emerald-400",
+      shadowColor: "shadow-emerald-500/30"
+    };
   } else {
-    return { grade: "S", color: "bg-purple-500/20", glow: "shadow-purple-500/40", textColor: "text-purple-400" };
+    return {
+      grade: "S",
+      bgColor: "bg-purple-500/20",
+      borderColor: "border-purple-500/40",
+      textColor: "text-purple-400",
+      shadowColor: "shadow-purple-500/40"
+    };
   }
 }
 
