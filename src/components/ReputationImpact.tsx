@@ -104,6 +104,7 @@ export default function ReputationImpact() {
             </p>
 
             <div className="px-4 py-3 bg-emerald-500/10 border border-emerald-500/30 rounded-lg">
+              <div className="text-[10px] text-emerald-400/60 uppercase tracking-wider mb-2 font-semibold">Example</div>
               <div className="flex items-center justify-between mb-3">
                 <span className="text-2xl md:text-3xl font-bold text-slate-600">0</span>
                 <svg className="w-6 h-6 md:w-8 md:h-8 text-emerald-500" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
