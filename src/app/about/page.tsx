@@ -32,13 +32,13 @@ export default function AboutPage() {
             <h2 className="text-2xl font-bold text-white mb-6">Our Mission</h2>
             <div className="space-y-4 text-neutral-300">
               <p className="text-lg leading-relaxed">
-                ProofLocker exists to restore accountability in an era of endless predictions and empty promises. We make it impossible to rewrite history, delete mistakes, or claim credit where none is due.
+                ProofLocker exists to restore accountability in an era of endless claims and empty promises. We make it impossible to rewrite history, delete mistakes, or claim credit where none is due.
               </p>
               <p className="leading-relaxed">
-                Every day, experts make bold claims. Influencers predict market moves. Leaders promise outcomes. Most of it is forgotten. Some of it gets quietly deleted. Almost none of it gets tracked.
+                Every day, analysts make bold claims. Researchers uncover critical intelligence. Content creators stake their reputation on calls. Most of it gets forgotten. Some gets quietly deleted. Almost none gets permanently timestamped.
               </p>
               <p className="leading-relaxed">
-                We believe words should have weight. Predictions should have consequences. And track records should be transparent, permanent, and provable.
+                We believe words should have weight. Claims should have consequences. And track records should be transparent, permanent, and cryptographically provable.
               </p>
             </div>
           </div>
@@ -59,7 +59,7 @@ export default function AboutPage() {
                 <div className="flex-1">
                   <h3 className="text-lg font-semibold text-white mb-2">Anonymous by Default</h3>
                   <p className="text-neutral-400">
-                    No signup required. Make bold predictions without revealing your identity. Claim them later if you want — or stay anonymous forever. Your choice.
+                    No signup required. Lock bold claims without revealing your identity. Claim them later if you want — or stay anonymous forever. Your choice.
                   </p>
                 </div>
               </div>
@@ -72,9 +72,9 @@ export default function AboutPage() {
                   </svg>
                 </div>
                 <div className="flex-1">
-                  <h3 className="text-lg font-semibold text-white mb-2">Immutable On-Chain Storage</h3>
+                  <h3 className="text-lg font-semibold text-white mb-2">Cryptographically Timestamped</h3>
                   <p className="text-neutral-400">
-                    Every claim is hashed and timestamped on Constellation DAG in ~10 seconds. No edits. No deletions. No excuses. What you locked is locked forever.
+                    Every claim is hashed and timestamped on Constellation DAG in ~10 seconds. No edits. No deletions. No backdating. What you locked is locked forever with cryptographic proof.
                   </p>
                 </div>
               </div>
@@ -87,9 +87,24 @@ export default function AboutPage() {
                   </svg>
                 </div>
                 <div className="flex-1">
-                  <h3 className="text-lg font-semibold text-white mb-2">Track Record Over Hype</h3>
+                  <h3 className="text-lg font-semibold text-white mb-2">Track Record That Can't Be Faked</h3>
                   <p className="text-neutral-400">
-                    Build your Reputation Score through consistent accuracy. Earn badges. Climb from Novice to Oracle. Your reputation is transparent, verifiable, and earned through results — not followers.
+                    Build your Reputation Score through consistent accuracy. Earn badges. Climb from Novice to Legend to Oracle. Your reputation is transparent, verifiable, and earned through results — not followers or blue checks.
+                  </p>
+                </div>
+              </div>
+
+              {/* OSINT & Evidence Integration */}
+              <div className="flex items-start gap-4">
+                <div className="w-12 h-12 rounded-lg bg-orange-500/10 border border-orange-500/30 flex items-center justify-center flex-shrink-0">
+                  <svg className="w-6 h-6 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                  </svg>
+                </div>
+                <div className="flex-1">
+                  <h3 className="text-lg font-semibold text-white mb-2">OSINT & Evidence Integration</h3>
+                  <p className="text-neutral-400">
+                    Link geospatial data, social media signals, and open-source intelligence directly to your claims. Build evidence-backed arguments with verifiable sources and timestamps.
                   </p>
                 </div>
               </div>
@@ -104,7 +119,7 @@ export default function AboutPage() {
                 <div className="flex-1">
                   <h3 className="text-lg font-semibold text-white mb-2">Shareable Proof Cards</h3>
                   <p className="text-neutral-400">
-                    When you're right, flex it. Generate beautiful proof cards with your prediction, timestamp, and on-chain verification. Perfect for social media or portfolio flex.
+                    When you're right, prove it. Generate beautiful proof cards with your claim, timestamp, and on-chain verification. Perfect for social media, portfolios, or building credibility.
                   </p>
                 </div>
               </div>
