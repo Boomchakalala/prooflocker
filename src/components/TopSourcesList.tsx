@@ -158,7 +158,7 @@ export default function TopSourcesList({ category = 'all' }: TopSourcesListProps
             href="/lock"
             className="inline-flex items-center px-8 py-3 bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-500 hover:to-purple-600 text-white font-semibold rounded-lg transition-all shadow-lg"
           >
-            Make Your First Prediction
+            Make Your First Claim
           </Link>
         </div>
       </div>

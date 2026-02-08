@@ -289,7 +289,7 @@ export default function DashboardPage() {
 
         {!hasPoints && (
           <div className="bg-[#1e1e1e] border border-gray-800 rounded-xl p-6 mb-8 text-center">
-            <p className="text-gray-400">Lock more predictions to earn your rank!</p>
+            <p className="text-gray-400">Lock more claims to earn your rank!</p>
           </div>
         )}
 
