@@ -92,10 +92,10 @@ export default function WallOfWins() {
         {/* Section Header */}
         <div className="text-center mb-8 md:mb-12">
           <h2 className="text-3xl md:text-5xl lg:text-6xl font-extrabold mb-3 md:mb-4 bg-gradient-to-r from-slate-300 via-white to-slate-300 bg-clip-text text-transparent" style={{ fontFamily: 'var(--font-montserrat)' }}>
-            Real Claims. Real Outcomes.
+            Live Bold Claims – Proof in Action
           </h2>
           <p className="text-base md:text-lg lg:text-xl text-white/70 max-w-3xl mx-auto px-2">
-            Claim makers who put their reputation on the line and delivered results
+            People are putting skin in the game right now. Crypto, OSINT, tech, geopolitics—all locked on-chain before the outcome is known. Winners compound credibility. Losers reset. Which side are you on?
           </p>
         </div>
 

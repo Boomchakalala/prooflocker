@@ -8,7 +8,7 @@ export default function HowItWorks() {
             How It Works
           </h2>
           <p className="text-base md:text-lg lg:text-xl text-white/70 font-semibold max-w-3xl mx-auto px-2">
-            Three steps. From conviction to credibility.
+            Three steps. Conviction to credibility.
           </p>
         </div>
 
@@ -30,7 +30,7 @@ export default function HowItWorks() {
             </div>
 
             <p className="text-sm md:text-base lg:text-lg text-white/75 leading-relaxed mb-4 md:mb-6 text-center">
-              Timestamp your claim on-chain. No signup. Just conviction.
+              Lock your take on-chain. No signup. No excuses. Just conviction.
             </p>
 
             {/* Animation: Clock + Lock */}
@@ -63,7 +63,7 @@ export default function HowItWorks() {
               </div>
 
               <p className="text-sm md:text-base lg:text-lg text-white/80 leading-relaxed mb-3 md:mb-4 text-center">
-                Mark it correct, incorrect, or contested. Your reputation updates instantly.
+                Mark correct, incorrect, or contested. Your score updates instantly.
               </p>
 
               {/* NEW: Resolution = Reputation callout */}
@@ -91,7 +91,7 @@ export default function HowItWorks() {
             </div>
 
             <p className="text-sm md:text-base lg:text-lg text-white/75 leading-relaxed mb-4 md:mb-6 text-center">
-              Streaks multiply your score. Top ranks get visibility. Your track record becomes your advantage.
+              Streaks multiply points. Top ranks get visibility. Your track record = your edge.
             </p>
 
             {/* Stat box: compounding example */}
