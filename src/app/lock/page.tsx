@@ -451,12 +451,12 @@ export default function LockPage() {
               </p>
 
               <p className="text-neutral-400 leading-relaxed max-w-xl mx-auto mb-8">
-                Your prediction is now immutably stored on Constellation DAG with a cryptographic fingerprint. It's public, permanent, and cannot be edited.
+                Your claim is now immutably stored on Constellation DAG with a cryptographic fingerprint. It's public, permanent, and cannot be edited.
               </p>
 
               <div className="bg-white/5 rounded-lg p-5 border border-white/10 mb-8 max-w-xl mx-auto text-left">
                 <label className="block text-[11px] font-semibold text-neutral-500 mb-2 uppercase tracking-wider">
-                  Your Prediction
+                  Your Claim
                 </label>
                 <p className="text-white leading-relaxed">
                   {text}
