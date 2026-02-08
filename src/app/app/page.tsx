@@ -111,6 +111,7 @@ function AppFeedContent() {
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
   const [predictions, setPredictions] = useState<Prediction[]>([]);
   const [osintSignals, setOsintSignals] = useState<any[]>([]);
+  const [userReliability, setUserReliability] = useState<Record<string, any>>({});
   const [loading, setLoading] = useState(true);
   const [anonId, setAnonId] = useState<string>("");
   const [syncing, setSyncing] = useState(false);
@@ -262,6 +263,8 @@ function AppFeedContent() {
 
       const data = await response.json();
       setPredictions(data.predictions || []);
+      // Fetch user reliability stats for all users in the feed
+      await fetchUserReliability(data.predictions || []);
     } catch (error) {
       console.error("Error fetching predictions:", error);
       if (error instanceof Error && error.name === 'AbortError') {
@@ -285,6 +288,48 @@ function AppFeedContent() {
     } catch (error) {
       console.error("Error fetching OSINT signals:", error);
       setOsintSignals([]);
+    }
+  };
+
+  const fetchUserReliability = async (preds: Prediction[]) => {
+    try {
+      // Extract unique user IDs and anon IDs from predictions
+      const userIds = [...new Set(preds.filter(p => p.userId).map(p => p.userId))];
+      const anonIds = [...new Set(preds.filter(p => p.anonId).map(p => p.anonId))];
+
+      if (userIds.length === 0 && anonIds.length === 0) {
+        return;
+      }
+
+      const response = await fetch("/api/user-reliability", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ userIds, anonIds }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`API returned ${response.status}`);
+      }
+
+      const data = await response.json();
+      setUserReliability(data.stats || {});
+    } catch (error) {
+      console.error("Error fetching user reliability:", error);
+      // Fallback to default novice tier for all users
+      const fallback: Record<string, any> = {};
+      predictions.forEach(p => {
+        const id = p.userId || p.anonId;
+        if (id && !fallback[id]) {
+          fallback[id] = {
+            label: "Novice",
+            color: "text-slate-400",
+            bg: "bg-slate-500/20",
+            border: "border-slate-500/40",
+            score: 0,
+          };
+        }
+      });
+      setUserReliability(fallback);
     }
   };
 
