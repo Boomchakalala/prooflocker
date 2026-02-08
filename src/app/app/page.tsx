@@ -711,12 +711,12 @@ function AppFeedContent() {
                   </div>
                 ) : null}
 
-                {/* Claims 2-Row Horizontal Scroll - Grid Layout */}
-                <div className="relative">
-                  {/* Scroll Container with 2 rows */}
-                  <div className="overflow-x-auto overflow-y-hidden pb-4 scrollbar-hide">
-                    <div className="grid grid-rows-2 auto-cols-[380px] grid-flow-col gap-6">
-                      {filteredPredictions.slice(0, 12).map((prediction, index) => {
+                {/* Claims Grid - Better Horizontal Scroll */}
+                <div className="relative -mx-4 sm:mx-0">
+                  {/* Scroll Container */}
+                  <div className="overflow-x-auto overflow-y-hidden pb-4 px-4 sm:px-0 scrollbar-hide snap-x snap-mandatory">
+                    <div className="flex gap-4 sm:gap-6">
+                      {filteredPredictions.map((prediction, index) => {
                     const cardStyle = getCardStyle(prediction, selectedCategory);
                     const showEvidence = prediction.linkedOsint && prediction.linkedOsint.length > 0;
                     const isResolved = prediction.outcome === 'correct' || prediction.outcome === 'incorrect';
@@ -726,7 +726,7 @@ function AppFeedContent() {
                       <Link
                         key={prediction.id}
                         href={`/proof/${prediction.publicSlug}`}
-                        className={`group ${
+                        className={`group w-[85vw] sm:w-[360px] md:w-[380px] flex-shrink-0 snap-start ${
                           isResolved
                             ? `bg-gradient-to-br ${isCorrect ? 'from-emerald-900/20 to-slate-900/50 border-emerald-500/30 border-l-emerald-500' : 'from-red-900/20 to-slate-900/50 border-red-500/30 border-l-red-500'} border border-l-[3px]`
                             : 'bg-slate-900/80 border border-slate-700/50'
@@ -734,7 +734,7 @@ function AppFeedContent() {
                           isResolved
                             ? isCorrect ? 'hover:border-emerald-500 hover:shadow-[0_0_15px_rgba(16,185,129,0.2)]' : 'hover:border-red-500 hover:shadow-[0_0_15px_rgba(239,68,68,0.2)]'
                             : 'hover:border-slate-600 hover:shadow-[0_0_25px_rgba(168,85,247,0.15)]'
-                        } rounded-2xl p-5 transition-all duration-300 hover:-translate-y-0.5 cursor-pointer fade-in`}
+                        } rounded-2xl p-4 sm:p-5 transition-all duration-300 hover:-translate-y-0.5 cursor-pointer fade-in`}
                       >
                         {/* Resolution Banner - Only for resolved claims */}
                         {isResolved && (
