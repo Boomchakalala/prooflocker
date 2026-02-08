@@ -11,6 +11,7 @@ import DEStatusBanner from "@/components/DEStatusBanner";
 import ClaimModal from "@/components/ClaimModal";
 import Footer from "@/components/Footer";
 import LinkOsintModal from "@/components/LinkOsintModal";
+import VoteButtons from "@/components/VoteButtons";
 import { Prediction } from "@/lib/storage";
 import { getOrCreateUserId } from "@/lib/user";
 import { useAuth } from "@/contexts/AuthContext";
