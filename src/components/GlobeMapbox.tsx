@@ -421,28 +421,25 @@ export default function GlobeMapbox({ claims, osint }: GlobeMapboxProps) {
           animation: slideUp 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         `;
       } else {
-        // Desktop: positioned near click
+        // Desktop: centered and positioned below header
         panel.style.cssText = `
           position: fixed;
+          left: 50%;
+          transform: translateX(-50%);
+          top: calc(var(--header-height, 64px) + 16px);
           background: rgba(10, 12, 20, 0.92);
           backdrop-filter: blur(24px);
           border: 1px solid rgba(91,33,182,0.3);
           border-radius: 16px;
-          min-width: 340px;
+          width: 90%;
           max-width: 420px;
-          max-height: 70vh;
+          max-height: calc(100vh - var(--header-height, 64px) - 32px);
           box-shadow: 0 20px 60px rgba(0,0,0,0.7), 0 0 40px rgba(91,33,182,0.2);
           font-family: system-ui, -apple-system, sans-serif;
           overflow: hidden;
           z-index: 1000;
           animation: panelSlideIn 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         `;
-
-        // Position panel - offset from click point, with bounds checking
-        const left = Math.min(point.x + 20, window.innerWidth - 440);
-        const top = Math.min(point.y - 50, window.innerHeight - 600);
-        panel.style.left = `${left}px`;
-        panel.style.top = `${top}px`;
       }
 
       panel.innerHTML = `
@@ -504,7 +501,7 @@ export default function GlobeMapbox({ claims, osint }: GlobeMapboxProps) {
         </div>
 
         <!-- Content -->
-        <div style="max-height: calc(70vh - 80px); overflow-y: auto; padding: 16px;">
+        <div style="max-height: calc(100vh - var(--header-height, 64px) - 180px); overflow-y: auto; padding: 16px;">
           ${claims.length > 0 ? `
             <!-- Claims -->
             <div style="margin-bottom: ${osintItems.length > 0 ? '20px' : '0'};">

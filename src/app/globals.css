@@ -9,6 +9,7 @@
   --secondary: #8b5cf6;
   --accent-cyan: #06b6d4;
   --purple-vibrant: #a855f7;
+  --header-height: 64px;
 }
 
 @theme inline {
