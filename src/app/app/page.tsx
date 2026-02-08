@@ -1020,6 +1020,7 @@ function AppFeedContent() {
                   ))}
                 </div>
               </div>
+            </div>
 
               {/* View More */}
               {filteredOsint.length > 12 && (
