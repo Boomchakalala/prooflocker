@@ -465,21 +465,11 @@ function AppFeedContent() {
                 >
                   OSINT
                 </button>
-                <button
-                  onClick={() => setContentType("all")}
-                  className={`px-4 py-1.5 text-sm font-medium rounded-md transition-all ${
-                    contentType === "all"
-                      ? "bg-slate-600 text-white shadow-sm"
-                      : "text-gray-400 hover:text-white"
-                  }`}
-                >
-                  All
-                </button>
               </div>
 
               {/* Category pills - with icons and better styling */}
               <div className="flex items-center gap-2 overflow-x-auto no-scrollbar flex-1 pb-1">
-                {categories.map((cat) => {
+                {categories.filter(cat => cat !== 'all').map((cat) => {
                   const isActive = selectedCategory === cat;
                   let activeClass = "glass border border-slate-700 text-slate-400 hover:text-white hover:bg-slate-600/30";
                   let colorClass = "text-slate-400";
@@ -516,7 +506,7 @@ function AppFeedContent() {
                       className={`flex items-center gap-1.5 px-3 py-2 text-sm font-semibold rounded-lg transition-all whitespace-nowrap ${activeClass}`}
                     >
                       <span className={colorClass}>{getCategoryIcon(cat)}</span>
-                      {cat === "all" ? "All" : cat}
+                      {cat}
                     </button>
                   );
                 })}
