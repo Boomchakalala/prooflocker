@@ -971,11 +971,11 @@ function AppFeedContent() {
                   </div>
                 ) : null}
 
-                {/* OSINT Vertical Scroll - Grid Layout */}
+                {/* OSINT 2-Row Horizontal Scroll - Grid Layout */}
                 <div className="relative">
-                  {/* Scroll Container with max height for ~2-3 rows */}
-                  <div className="max-h-[800px] overflow-y-auto overflow-x-hidden pb-4 scrollbar-hide">
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {/* Scroll Container with 2 rows */}
+                  <div className="overflow-x-auto overflow-y-hidden pb-4 scrollbar-hide">
+                    <div className="grid grid-rows-2 auto-cols-[380px] grid-flow-col gap-6">
                       {filteredOsint.slice(0, 12).map((signal, index) => (
                       <div
                         key={signal.id}
@@ -994,13 +994,6 @@ function AppFeedContent() {
                               </svg>
                               Intel
                             </span>
-
-                            {/* Confidence Score */}
-                            {signal.confidenceScore && (
-                              <span className="px-2 py-1 text-[10px] font-bold rounded bg-orange-500/20 border border-orange-500/40 text-orange-300 uppercase">
-                                {signal.confidenceScore}% Conf.
-                              </span>
-                            )}
                           </div>
 
                           {/* Category Tag */}
