@@ -1229,7 +1229,7 @@ function AppFeedContent() {
                       </svg>
                       <h2 className="text-xl font-bold text-white">OSINT Intelligence</h2>
                       <span className="px-2 py-0.5 bg-red-500/30 text-red-200 text-xs font-bold rounded">
-                        {filteredOsint.length}
+                        {osintCategory !== "all" ? `${filteredOsint.length} / ${osintSignals.length}` : osintSignals.length}
                       </span>
                     </div>
                     <div className="flex-1 h-px bg-gradient-to-r from-red-500/40 to-transparent"></div>
