@@ -62,7 +62,10 @@ export default function UnifiedHeader({ currentView, onLockClick }: UnifiedHeade
   };
 
   return (
-    <header className="fixed top-0 left-0 right-0 h-16 md:h-16 bg-gradient-to-r from-slate-950 via-slate-900 to-slate-950 backdrop-blur-xl border-b border-purple-500/20 z-[9999] shadow-lg shadow-purple-500/5">
+    <header
+      className="fixed top-0 left-0 right-0 h-16 md:h-16 bg-gradient-to-r from-slate-950 via-slate-900 to-slate-950 backdrop-blur-xl border-b border-purple-500/20 z-[9999] shadow-lg shadow-purple-500/5"
+      style={{ '--header-height': '64px' } as React.CSSProperties}
+    >
       <div className="h-full max-w-[2000px] mx-auto px-3 md:px-6 flex items-center justify-between">
 
         {/* Left: Logo + Navigation */}
