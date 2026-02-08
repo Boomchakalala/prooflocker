@@ -67,7 +67,7 @@ export default function LeaderboardPreview() {
             Top 10 Claim Makers
           </p>
           <p className="text-base text-slate-400">
-            Real-time rankings updated with every resolution
+            Real-time rankings updated with every resolution. Early days—top spot is wide open. Be the legend before everyone else shows up.
           </p>
         </div>
 
@@ -197,7 +197,7 @@ export default function LeaderboardPreview() {
         <div className="mt-12 text-center">
           <div className="inline-block px-6 py-3 bg-gradient-to-r from-purple-600/10 to-blue-600/10 border border-purple-500/30 rounded-xl">
             <p className="text-lg text-white font-semibold">
-              <span className="text-purple-400">You could be here.</span> Start building your track record today.
+              You could be here. Start building your track record today.
             </p>
           </div>
         </div>
