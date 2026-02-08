@@ -916,11 +916,10 @@ function AppFeedContent() {
                   <div className="overflow-x-auto overflow-y-visible pb-4 no-scrollbar">
                     <div className="flex gap-6 min-w-min">
                       {filteredOsint.slice(0, 12).map((signal, index) => (
-                    <div
-                      key={signal.id}
-                      className={`fade-in stagger-${Math.min(index + 1, 4)}`}
-                    >
-                      <div className="bg-gradient-to-br from-red-950/30 via-orange-950/20 to-red-950/30 border-2 border-red-500/40 rounded-xl p-5 hover:border-red-500/60 hover:shadow-[0_0_30px_rgba(239,68,68,0.2)] transition-all relative overflow-hidden">
+                      <div
+                        key={signal.id}
+                        className="bg-gradient-to-br from-red-950/30 via-orange-950/20 to-red-950/30 border-2 border-red-500/40 rounded-xl p-5 hover:border-red-500/60 hover:shadow-[0_0_30px_rgba(239,68,68,0.2)] transition-all relative overflow-hidden w-[380px] flex-shrink-0"
+                      >
                         {/* Alert Pulse Animation */}
                         <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-red-500 to-transparent animate-pulse"></div>
 
@@ -1018,10 +1017,19 @@ function AppFeedContent() {
                           </div>
                         </div>
                       </div>
-                    </div>
                   ))}
                 </div>
               </div>
+
+              {/* View More */}
+              {filteredOsint.length > 12 && (
+                <div className="text-center mt-4">
+                  <span className="text-sm text-slate-400">
+                    Showing 12 of {filteredOsint.length} intel items · Scroll horizontally for more
+                  </span>
+                </div>
+              )}
+            </div>
             )}
           </>
         )}
