@@ -80,7 +80,7 @@ export default function AboutPage() {
                 <div className="flex-1">
                   <h3 className="text-lg font-semibold text-white mb-2">Immutable On-Chain Storage</h3>
                   <p className="text-neutral-400">
-                    Every prediction is hashed and timestamped on Constellation DAG in ~10 seconds. No edits. No deletions. No excuses. What you locked is locked forever.
+                    Every claim is hashed and timestamped on Constellation DAG in ~10 seconds. No edits. No deletions. No excuses. What you locked is locked forever.
                   </p>
                 </div>
               </div>

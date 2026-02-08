@@ -414,13 +414,13 @@ export default async function ProofPage({ params }: Props) {
         {/* Footer */}
         <div className="mt-12 text-center">
           <p className="text-xs text-neutral-500 mb-4">
-            This prediction is immutable and cannot be edited
+            This claim is immutable and cannot be edited
           </p>
           <Link
             href="/app"
             className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white font-semibold rounded-xl transition-all shadow-lg hover:shadow-xl"
           >
-            Explore more predictions
+            Explore more claims
           </Link>
         </div>
       </div>
