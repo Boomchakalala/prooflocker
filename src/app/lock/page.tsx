@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import BrandLogo from "@/components/BrandLogo";
@@ -12,7 +12,7 @@ import { supabase } from "@/lib/supabase";
 import { useToast } from "@/contexts/ToastContext";
 import type { OsintSignal } from "@/lib/osint-types";
 
-export default function LockPage() {
+function LockPageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { showScoreToast } = useToast();
@@ -494,5 +494,20 @@ export default function LockPage() {
         )}
       </main>
     </div>
+  );
+}
+
+export default function LockPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen gradient-bg text-white flex items-center justify-center">
+        <div className="text-center">
+          <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-white mb-4"></div>
+          <p className="text-neutral-400">Loading...</p>
+        </div>
+      </div>
+    }>
+      <LockPageContent />
+    </Suspense>
   );
 }

@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 import { getReliabilityTier } from '@/lib/user-scoring';
 
+export const dynamic = 'force-dynamic';
 export const revalidate = 300; // Cache for 5 minutes
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
