@@ -212,7 +212,7 @@ function AppFeedContent() {
       osintRow1?.removeEventListener('scroll', syncScrollOsint);
       osintRow2?.removeEventListener('scroll', syncScrollOsint);
     };
-  }, [filteredPredictions, filteredOsint]);
+  }, [predictions, osintSignals]); // Depend on data, not filtered
 
   const fetchPredictions = async () => {
     setLoading(true);
