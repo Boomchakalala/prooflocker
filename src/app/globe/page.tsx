@@ -317,27 +317,39 @@ export default function GlobePage() {
               resolutions.length === 0 ? (
                 <div className="text-center py-12 text-[#94a3b8] text-sm">No recent resolutions</div>
               ) : (
-                resolutions.map((res) => (
+                resolutions.map((res) => {
+                  const isCorrect = res.outcome === 'correct';
+                  const statusColor = isCorrect ? 'emerald' : 'red';
+                  const statusText = isCorrect ? 'RESOLVED CORRECT' : 'RESOLVED INCORRECT';
+                  const statusPoints = isCorrect ? '+80 pts' : '-20 pts';
+
+                  return (
                   <div
                     key={res.id}
-                    className="bg-gradient-to-br from-emerald-900/20 to-slate-900/50 border border-emerald-500/30 border-l-[3px] border-l-emerald-500 rounded-[10px] p-3.5 transition-all hover:border-emerald-500 hover:shadow-[0_0_15px_rgba(16,185,129,0.2)]"
+                    className={`bg-gradient-to-br ${isCorrect ? 'from-emerald-900/20 to-slate-900/50 border-emerald-500/30 border-l-emerald-500' : 'from-red-900/20 to-slate-900/50 border-red-500/30 border-l-red-500'} border border-l-[3px] rounded-[10px] p-3.5 transition-all ${isCorrect ? 'hover:border-emerald-500 hover:shadow-[0_0_15px_rgba(16,185,129,0.2)]' : 'hover:border-red-500 hover:shadow-[0_0_15px_rgba(239,68,68,0.2)]'}`}
                   >
                     {/* Resolution Banner */}
-                    <div className="flex items-center gap-2 mb-2 pb-2 border-b border-emerald-500/20">
+                    <div className={`flex items-center gap-2 mb-2 pb-2 border-b ${isCorrect ? 'border-emerald-500/20' : 'border-red-500/20'}`}>
                       <div className="flex items-center gap-1.5">
-                        <svg className="w-3.5 h-3.5 text-emerald-400" fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7"/>
-                        </svg>
-                        <span className="text-emerald-400 font-bold text-[11px]">RESOLVED CORRECT</span>
+                        {isCorrect ? (
+                          <svg className="w-3.5 h-3.5 text-emerald-400" fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7"/>
+                          </svg>
+                        ) : (
+                          <svg className="w-3.5 h-3.5 text-red-400" fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12"/>
+                          </svg>
+                        )}
+                        <span className={`${isCorrect ? 'text-emerald-400' : 'text-red-400'} font-bold text-[11px]`}>{statusText}</span>
                       </div>
                       <span className="text-[10px] text-slate-500">•</span>
-                      <span className="text-[10px] text-emerald-400 font-semibold">+80 pts</span>
+                      <span className={`text-[10px] ${isCorrect ? 'text-emerald-400' : 'text-red-400'} font-semibold`}>{statusPoints}</span>
                     </div>
 
                     {/* Header */}
                     <div className="flex items-center justify-between mb-2">
                       <div className="flex items-center gap-1.5 text-[12px]">
-                        <div className="w-5 h-5 rounded-full bg-gradient-to-br from-emerald-600 to-emerald-800 flex items-center justify-center text-white text-[9px] font-bold">
+                        <div className={`w-5 h-5 rounded-full bg-gradient-to-br ${isCorrect ? 'from-emerald-600 to-emerald-800' : 'from-red-600 to-red-800'} flex items-center justify-center text-white text-[9px] font-bold`}>
                           {res.authorNumber?.toString().slice(-2) || '00'}
                         </div>
                         <span className="font-semibold text-white">Anon #{res.authorNumber || 1000}</span>
@@ -382,12 +394,13 @@ export default function GlobePage() {
                     {/* Action */}
                     <button
                       onClick={() => router.push(`/proof/${res.publicSlug}`)}
-                      className="w-full px-3 py-1.5 bg-emerald-500/20 hover:bg-emerald-500/30 border border-emerald-500/30 text-emerald-300 hover:text-emerald-200 rounded text-[12px] font-semibold transition-all"
+                      className={`w-full px-3 py-1.5 ${isCorrect ? 'bg-emerald-500/20 hover:bg-emerald-500/30 border-emerald-500/30 text-emerald-300 hover:text-emerald-200' : 'bg-red-500/20 hover:bg-red-500/30 border-red-500/30 text-red-300 hover:text-red-200'} border rounded text-[12px] font-semibold transition-all`}
                     >
                       View Proof
                     </button>
                   </div>
-                ))
+                );
+                })
               )
             ) : (
               displayItems.length === 0 ? (
