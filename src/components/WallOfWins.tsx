@@ -79,6 +79,18 @@ function getEvidenceGrade(score?: number): { grade: string; bgColor: string; bor
   }
 }
 
+// User reliability tier mapper (based on author number for demo)
+function getUserTier(authorNumber: number) {
+  // Use author number to deterministically assign tiers
+  const score = (authorNumber * 17) % 1000; // Deterministic pseudo-random score
+
+  if (score >= 800) return { label: "Legend", color: "text-purple-400", bg: "bg-purple-500/20", border: "border-purple-500/40" };
+  if (score >= 650) return { label: "Master", color: "text-blue-400", bg: "bg-blue-500/20", border: "border-blue-500/40" };
+  if (score >= 500) return { label: "Expert", color: "text-emerald-400", bg: "bg-emerald-500/20", border: "border-emerald-500/40" };
+  if (score >= 300) return { label: "Trusted", color: "text-amber-400", bg: "bg-amber-500/20", border: "border-amber-500/40" };
+  return { label: "Novice", color: "text-slate-400", bg: "bg-slate-500/20", border: "border-slate-500/40" };
+}
+
 interface ResolvedPrediction {
   id: string;
   publicSlug: string;
@@ -335,6 +347,7 @@ export default function WallOfWins() {
                 const voteCounts = getStableVoteCounts(pred.id, pred.outcome);
                 const evidenceGrade = getEvidenceGrade(pred.evidence_score);
                 const evidenceSourceCount = pred.evidence_score ? Math.max(1, Math.floor(pred.evidence_score / 30)) : 0;
+                const userTier = getUserTier(pred.authorNumber || 0);
 
                 return (
                   <div
