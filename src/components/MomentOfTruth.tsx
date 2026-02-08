@@ -20,7 +20,7 @@ export default function MomentOfTruth() {
             The Moment of Truth
           </h2>
           <p className="text-base md:text-lg lg:text-xl text-white/70 max-w-3xl mx-auto px-2">
-            This is where predictions become proof. Where conviction becomes credibility.
+            This is where conviction becomes proof. Where a single resolution changes everything.
           </p>
           <div className="mt-2 md:mt-3">
             <span className="inline-block px-3 py-1 bg-cyan-500/10 border border-cyan-500/30 text-cyan-300 text-xs font-semibold rounded-full uppercase tracking-wide">
@@ -218,7 +218,7 @@ export default function MomentOfTruth() {
         <div className="text-center mb-6 md:mb-8 px-2">
           <div className="inline-block px-4 md:px-6 py-2 md:py-3 bg-gradient-to-r from-purple-600/20 to-emerald-600/20 border border-purple-500/30 rounded-xl">
             <p className="text-sm md:text-lg lg:text-xl text-white font-semibold">
-              This single resolution jumped them <span className="text-emerald-400 font-bold">35 places</span> on the leaderboard
+              This single resolution jumped them <span className="text-emerald-400 font-bold">35 places</span> on the leaderboard and unlocked Master tier
             </p>
           </div>
         </div>
