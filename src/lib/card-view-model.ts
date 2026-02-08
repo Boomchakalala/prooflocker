@@ -67,7 +67,9 @@ export interface CardViewModel {
   verifiedCount?: number;
   disputeCount?: number;
   upvotesCount?: number;
+  downvotesCount?: number;
   userHasUpvoted?: boolean;
+  userHasDownvoted?: boolean;
 
   // Computed scores (for sorting/filtering)
   trustScore: number;

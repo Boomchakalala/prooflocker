@@ -57,6 +57,9 @@ export interface Prediction {
   moderationStatus?: "active" | "hidden"; // Moderation status (active = visible, hidden = removed)
   hiddenReason?: string; // Reason for hiding (if hidden)
   hiddenAt?: string; // ISO timestamp when hidden
+  // Voting fields:
+  upvotesCount?: number; // Number of upvotes received
+  downvotesCount?: number; // Number of downvotes received
 }
 
 /**
