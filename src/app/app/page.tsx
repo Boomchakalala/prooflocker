@@ -180,6 +180,40 @@ function AppFeedContent() {
     }
   }, [activeTab, anonId, user, authLoading]);
 
+  // Synchronized scrolling for claims and OSINT rows
+  useEffect(() => {
+    const claimsRow1 = document.getElementById('claims-scroll-row-1');
+    const claimsRow2 = document.getElementById('claims-scroll-row-2');
+    const osintRow1 = document.getElementById('osint-scroll-row-1');
+    const osintRow2 = document.getElementById('osint-scroll-row-2');
+
+    const syncScrollClaims = (e: Event) => {
+      if (!claimsRow1 || !claimsRow2) return;
+      const source = e.target as HTMLElement;
+      const target = source === claimsRow1 ? claimsRow2 : claimsRow1;
+      target.scrollLeft = source.scrollLeft;
+    };
+
+    const syncScrollOsint = (e: Event) => {
+      if (!osintRow1 || !osintRow2) return;
+      const source = e.target as HTMLElement;
+      const target = source === osintRow1 ? osintRow2 : osintRow1;
+      target.scrollLeft = source.scrollLeft;
+    };
+
+    claimsRow1?.addEventListener('scroll', syncScrollClaims);
+    claimsRow2?.addEventListener('scroll', syncScrollClaims);
+    osintRow1?.addEventListener('scroll', syncScrollOsint);
+    osintRow2?.addEventListener('scroll', syncScrollOsint);
+
+    return () => {
+      claimsRow1?.removeEventListener('scroll', syncScrollClaims);
+      claimsRow2?.removeEventListener('scroll', syncScrollClaims);
+      osintRow1?.removeEventListener('scroll', syncScrollOsint);
+      osintRow2?.removeEventListener('scroll', syncScrollOsint);
+    };
+  }, [filteredPredictions, filteredOsint]);
+
   const fetchPredictions = async () => {
     setLoading(true);
     try {
@@ -933,6 +967,181 @@ function AppFeedContent() {
                 </div>
               </div>
             </div>
+
+            {/* Second Row */}
+            {filteredPredictions.length > Math.ceil(filteredPredictions.length / 2) && (
+              <div className="relative -mx-4 sm:mx-0">
+                <div className="overflow-x-auto overflow-y-hidden pb-2 px-4 sm:px-0 scrollbar-hide snap-x snap-mandatory" id="claims-scroll-row-2">
+                  <div className="flex gap-4 sm:gap-6">
+                    {filteredPredictions.slice(Math.ceil(filteredPredictions.length / 2)).map((prediction, index) => {
+                    const cardStyle = getCardStyle(prediction, selectedCategory);
+                    const showEvidence = prediction.linkedOsint && prediction.linkedOsint.length > 0;
+                    const isResolved = prediction.outcome === 'correct' || prediction.outcome === 'incorrect';
+                    const isCorrect = prediction.outcome === 'correct';
+
+                    return (
+                      <Link
+                        key={prediction.id}
+                        href={`/proof/${prediction.publicSlug}`}
+                        className={`group w-[85vw] sm:w-[360px] md:w-[380px] flex-shrink-0 snap-start ${
+                          isResolved
+                            ? `bg-gradient-to-br ${isCorrect ? 'from-emerald-900/20 to-slate-900/50 border-emerald-500/30 border-l-emerald-500' : 'from-red-900/20 to-slate-900/50 border-red-500/30 border-l-red-500'} border border-l-[3px]`
+                            : 'bg-slate-900/80 border border-slate-700/50'
+                        } ${
+                          isResolved
+                            ? isCorrect ? 'hover:border-emerald-500 hover:shadow-[0_0_15px_rgba(16,185,129,0.2)]' : 'hover:border-red-500 hover:shadow-[0_0_15px_rgba(239,68,68,0.2)]'
+                            : 'hover:border-slate-600 hover:shadow-[0_0_25px_rgba(168,85,247,0.15)]'
+                        } rounded-2xl p-4 sm:p-5 transition-all duration-300 hover:-translate-y-0.5 cursor-pointer fade-in`}
+                      >
+                        {/* Same card content as first row - copy from first row */}
+                        {isResolved && (
+                          <div className={`flex items-center gap-2 mb-3 pb-3 border-b ${isCorrect ? 'border-emerald-500/20' : 'border-red-500/20'}`}>
+                            <div className="flex items-center gap-1.5">
+                              {isCorrect ? (
+                                <svg className="w-3.5 h-3.5 text-emerald-400" fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24">
+                                  <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7"/>
+                                </svg>
+                              ) : (
+                                <svg className="w-3.5 h-3.5 text-red-400" fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24">
+                                  <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12"/>
+                                </svg>
+                              )}
+                              <span className={`text-xs font-bold ${isCorrect ? 'text-emerald-400' : 'text-red-400'}`}>
+                                {isCorrect ? 'Correct' : 'Incorrect'}
+                              </span>
+                            </div>
+                          </div>
+                        )}
+
+                        <div className="mb-3">
+                          <div className="flex items-center justify-between mb-2">
+                            <div className="flex items-center gap-2">
+                              <div className="w-8 h-8 rounded-lg bg-purple-600/20 flex items-center justify-center border border-purple-500/40">
+                                <svg className="w-4 h-4 text-purple-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                                  <path strokeLinecap="round" strokeLinejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                                </svg>
+                              </div>
+                              <div>
+                                <div className="text-sm text-purple-300 font-semibold">
+                                  {prediction.pseudonym ? `@${prediction.pseudonym}` : `Anon #${prediction.authorNumber}`}
+                                </div>
+                              </div>
+                            </div>
+                            <div className={`text-xs px-2 py-1 rounded ${cardStyle.badgeBg} ${cardStyle.badgeText} font-semibold`}>
+                              {!prediction.outcome || prediction.outcome === "pending" ? (
+                                <>
+                                  <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                                    <circle cx="12" cy="12" r="10"/>
+                                  </svg>
+                                  Pending
+                                </>
+                              ) : prediction.outcome === "correct" ? (
+                                <>
+                                  <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7"/>
+                                  </svg>
+                                  Correct
+                                </>
+                              ) : (
+                                <>
+                                  <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12"/>
+                                  </svg>
+                                  Incorrect
+                                </>
+                              )}
+                            </div>
+                          </div>
+                        </div>
+
+                        <div className="mb-4">
+                          <p className="text-white text-[15px] leading-relaxed line-clamp-4">
+                            {prediction.textPreview}
+                          </p>
+                        </div>
+
+                        <div className="flex items-center gap-2 mb-4 flex-wrap">
+                          {prediction.category && (
+                            <span className="px-2 py-1 bg-slate-800/70 text-slate-400 text-xs rounded border border-slate-700/50">
+                              #{prediction.category}
+                            </span>
+                          )}
+                          <span className="flex items-center gap-1 px-2 py-1 bg-purple-900/30 text-purple-400 text-xs rounded border border-purple-500/40 font-semibold">
+                            <svg className="w-3 h-3" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+                            </svg>
+                            Locked
+                          </span>
+                        </div>
+
+                        {showEvidence && (
+                          <div className="mb-4 px-3 py-2 bg-cyan-500/10 border border-cyan-500/30 rounded-lg">
+                            <div className="flex items-center gap-2 text-xs text-cyan-400">
+                              <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                              </svg>
+                              <span>{prediction.linkedOsint.length} piece{prediction.linkedOsint.length !== 1 ? 's' : ''} of evidence</span>
+                            </div>
+                          </div>
+                        )}
+
+                        <div className="flex items-center justify-between pt-4 border-t border-slate-700/50 mb-3">
+                          <div className="flex items-center gap-4">
+                            <div className="flex items-center gap-1.5 text-slate-400 hover:text-cyan-400 transition-colors">
+                              <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M5 15l7-7 7 7"/>
+                              </svg>
+                              <span className="text-xs font-medium">{prediction.upvotesCount || 0}</span>
+                            </div>
+
+                            {prediction.evidence_score !== undefined && prediction.evidence_score > 0 && (
+                              <div className="flex items-center gap-1.5 text-slate-400">
+                                <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+                                </svg>
+                                <span className="text-xs font-medium">{prediction.evidence_score}</span>
+                              </div>
+                            )}
+
+                            <div className="flex items-center gap-1.5 text-slate-400 hover:text-cyan-400 transition-colors">
+                              <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"/>
+                              </svg>
+                            </div>
+                          </div>
+
+                          <div className="flex items-center gap-1 px-3 py-1.5 bg-purple-600/10 hover:bg-purple-600/20 border border-purple-500/30 rounded-lg text-xs text-purple-300 font-semibold transition-all group-hover:border-purple-400/60">
+                            <span>View</span>
+                            <svg className="w-3 h-3" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7"/>
+                            </svg>
+                          </div>
+                        </div>
+
+                        <div className="pt-2 border-t border-purple-500/20 bg-gradient-to-r from-purple-900/10 to-transparent rounded-lg px-3 py-2">
+                          <div className="flex items-center justify-between">
+                            <div className="flex items-center gap-1.5">
+                              <svg className="w-3 h-3 text-purple-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                              </svg>
+                              <span className="text-[10px] text-purple-300/80 font-mono">
+                                {new Date(prediction.timestamp).toLocaleString('en-US', {
+                                  month: 'short',
+                                  day: 'numeric',
+                                  year: 'numeric',
+                                })}
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                      </Link>
+                    );
+                  })}
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
 
               {/* View More */}
               {filteredPredictions.length > 0 && (
