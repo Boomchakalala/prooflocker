@@ -51,7 +51,7 @@ export default function GlobePage() {
   const [claims, setClaims] = useState<Claim[]>([]);
   const [osint, setOsint] = useState<OsintItem[]>([]);
   const [resolutions, setResolutions] = useState<any[]>([]);
-  const [currentTab, setCurrentTab] = useState<'claims' | 'osint' | 'resolutions'>('claims'); // Default to Claims
+  const [currentTab, setCurrentTab] = useState<'claims' | 'osint' | 'resolutions'>('osint'); // Default to OSINT - more interesting!
   const [activeFilter, setActiveFilter] = useState<string>('all');
   const [selectedOsint, setSelectedOsint] = useState<OsintItem | null>(null);
   const [showQuickLock, setShowQuickLock] = useState(false);
