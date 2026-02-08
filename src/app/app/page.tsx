@@ -333,6 +333,21 @@ function AppFeedContent() {
     }
   };
 
+  // Get user reliability tier for display
+  const getUserTier = (prediction: Prediction) => {
+    const userId = prediction.userId || prediction.anonId;
+    if (!userId || !userReliability[userId]) {
+      // Default to Novice if not loaded yet
+      return {
+        label: "Novice",
+        color: "text-slate-400",
+        bg: "bg-slate-500/20",
+        border: "border-slate-500/40",
+      };
+    }
+    return userReliability[userId];
+  };
+
   const handleHidePrediction = (id: string) => {
     const newHidden = new Set(hiddenPredictions);
     newHidden.add(id);
@@ -888,7 +903,7 @@ function AppFeedContent() {
                                 <span className="text-sm text-white font-semibold">Anon #{prediction.authorNumber}</span>
                                 {/* Reliability Badge */}
                                 {(() => {
-                                  const userTier = getUserTier(prediction.authorNumber || 0);
+                                  const userTier = getUserTier(prediction);
                                   return (
                                     <span className={`px-2 py-0.5 text-[10px] font-bold rounded border ${userTier.bg} ${userTier.border} ${userTier.color}`}>
                                       {userTier.label}
