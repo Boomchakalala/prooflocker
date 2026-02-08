@@ -132,16 +132,16 @@ export default function AboutPage() {
           <div className="glass border border-white/10 rounded-xl p-8">
             <h2 className="text-2xl font-bold text-white mb-6">Who Uses ProofLocker</h2>
             <div className="grid md:grid-cols-2 gap-6">
-              {/* Market Analysts */}
+              {/* OSINT Researchers */}
               <div className="bg-white/5 rounded-lg p-6 border border-white/10">
                 <div className="flex items-center gap-3 mb-3">
-                  <svg className="w-6 h-6 text-[#2E5CFF]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+                  <svg className="w-6 h-6 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
                   </svg>
-                  <h3 className="text-lg font-semibold text-white">Market Analysts</h3>
+                  <h3 className="text-lg font-semibold text-white">OSINT Researchers</h3>
                 </div>
                 <p className="text-neutral-400 text-sm">
-                  Lock price targets, macro calls, and market predictions. Build a verifiable track record separate from your employer.
+                  Lock geospatial intelligence, verify timestamps on social signals, and build evidence chains. Prove you identified events before mainstream coverage.
                 </p>
               </div>
 
@@ -154,33 +154,59 @@ export default function AboutPage() {
                   <h3 className="text-lg font-semibold text-white">Content Creators</h3>
                 </div>
                 <p className="text-neutral-400 text-sm">
-                  Make bold predictions on camera. Lock them on-chain. Prove you called it before anyone else. Undeniable timestamps.
+                  Make bold calls on camera. Lock them on-chain. Prove you called it before anyone else. Build undeniable credibility with cryptographic timestamps.
                 </p>
               </div>
 
-              {/* Personal Goals */}
+              {/* Investigative Journalists */}
+              <div className="bg-white/5 rounded-lg p-6 border border-white/10">
+                <div className="flex items-center gap-3 mb-3">
+                  <svg className="w-6 h-6 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"/>
+                  </svg>
+                  <h3 className="text-lg font-semibold text-white">Investigative Journalists</h3>
+                </div>
+                <p className="text-neutral-400 text-sm">
+                  Timestamp breaking stories and investigative leads. Establish priority on discoveries. Protect source timelines with immutable, verifiable proof.
+                </p>
+              </div>
+
+              {/* Market Analysts */}
               <div className="bg-white/5 rounded-lg p-6 border border-white/10">
                 <div className="flex items-center gap-3 mb-3">
                   <svg className="w-6 h-6 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
                   </svg>
-                  <h3 className="text-lg font-semibold text-white">Personal Commitments</h3>
+                  <h3 className="text-lg font-semibold text-white">Market Analysts</h3>
                 </div>
                 <p className="text-neutral-400 text-sm">
-                  Lock your goals. Marathon times. Business milestones. Fitness targets. Hold yourself accountable with immutable proof.
+                  Lock price targets, macro calls, and market analysis. Build a verifiable track record independent of your employer or public persona.
                 </p>
               </div>
 
-              {/* Business Leaders */}
+              {/* Security Researchers */}
+              <div className="bg-white/5 rounded-lg p-6 border border-white/10">
+                <div className="flex items-center gap-3 mb-3">
+                  <svg className="w-6 h-6 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+                  </svg>
+                  <h3 className="text-lg font-semibold text-white">Security Researchers</h3>
+                </div>
+                <p className="text-neutral-400 text-sm">
+                  Document vulnerability disclosures, threat intelligence, and security advisories. Establish discovery timelines with tamper-proof timestamps.
+                </p>
+              </div>
+
+              {/* Independent Researchers */}
               <div className="bg-white/5 rounded-lg p-6 border border-white/10">
                 <div className="flex items-center gap-3 mb-3">
                   <svg className="w-6 h-6 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>
                   </svg>
-                  <h3 className="text-lg font-semibold text-white">Business Leaders</h3>
+                  <h3 className="text-lg font-semibold text-white">Independent Researchers</h3>
                 </div>
                 <p className="text-neutral-400 text-sm">
-                  Lock revenue targets, product launches, and strategic commitments. Public accountability for stakeholders and teams.
+                  Lock hypotheses, research findings, and analytical frameworks. Establish intellectual property and priority on discoveries anonymously.
                 </p>
               </div>
             </div>
@@ -218,17 +244,20 @@ export default function AboutPage() {
           <div className="glass border border-white/10 rounded-xl p-8">
             <h2 className="text-2xl font-bold text-white mb-6">Our Philosophy</h2>
             <div className="space-y-4 text-neutral-300">
-              <p className="leading-relaxed">
+              <p className="text-lg leading-relaxed font-semibold text-white">
                 We don't care who you are. We care what you said and whether you were right.
               </p>
               <p className="leading-relaxed">
-                ProofLocker isn't about building a social network. It's about building a truth layer. A permanent record where words have consequences and track records matter more than follower counts.
+                ProofLocker isn't about building a social network. It's about building a truth layer — a permanent record where words have consequences and track records matter more than follower counts.
               </p>
               <p className="leading-relaxed">
-                We believe the best ideas come from everywhere — not just verified accounts with blue checks. Anonymous predictions, transparent outcomes, and verifiable proof level the playing field.
+                In a world of deepfakes, AI-generated content, and endless information warfare, cryptographic timestamps become the ultimate arbiters of truth. When did you say it? Can you prove it? Is there evidence?
+              </p>
+              <p className="leading-relaxed">
+                We believe the best intelligence comes from everywhere — not just verified accounts or institutional gatekeepers. Anonymous claims, transparent outcomes, and cryptographic proof level the playing field.
               </p>
               <p className="text-lg font-semibold text-white mt-6">
-                Say it now. Prove it later. Own the outcome.
+                Lock it now. Prove it later. Own the outcome.
               </p>
             </div>
           </div>
