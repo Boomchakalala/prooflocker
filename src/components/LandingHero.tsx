@@ -81,10 +81,10 @@ export default function LandingHero() {
         {/* Subheadline - 2 lines, better hierarchy */}
         <div className="mb-7 animate-fade-in-up max-w-[560px] mx-auto px-4" style={{ animationDelay: '0.1s' }}>
           <p className="text-lg md:text-xl font-medium text-[#F8F9FA]/95 mb-2 leading-[1.45]" style={{ fontFamily: 'var(--font-inter)' }}>
-            Track what people say — in real time.
+            Build your reputation in real time.
           </p>
           <p className="text-lg md:text-xl font-medium text-[#F8F9FA]/75 leading-[1.45]" style={{ fontFamily: 'var(--font-inter)' }}>
-            Lock the claim on-chain. Settle it with receipts.
+            Lock claims on-chain. Settle with receipts.
           </p>
         </div>
 
