@@ -94,12 +94,12 @@ export default function LandingPage() {
                     58
                   </div>
                 </div>
-                <span className="text-xs md:text-sm text-slate-400">Join <span className="font-semibold text-white">1,247</span> predictors</span>
+                <span className="text-xs md:text-sm text-slate-400">Building credibility together</span>
               </div>
 
               {/* Recent activity ticker */}
               <div className="px-3 md:px-4 py-1.5 md:py-2 bg-slate-900/50 border border-slate-700 rounded-lg text-xs md:text-sm text-slate-300">
-                <span className="text-emerald-400 font-semibold">Sarah</span> just resolved her 10th correct claim
+                <span className="text-emerald-400 font-semibold">Example:</span> Resolve your claims and build your track record
               </div>
             </div>
           </div>

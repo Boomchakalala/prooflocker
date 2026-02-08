@@ -51,13 +51,13 @@ export default function UnifiedHeader({ currentView, onLockClick }: UnifiedHeade
   };
 
   return (
-    <header className="fixed top-0 left-0 right-0 h-16 bg-gradient-to-r from-slate-950 via-slate-900 to-slate-950 backdrop-blur-xl border-b border-purple-500/20 z-[9999] shadow-lg shadow-purple-500/5">
-      <div className="h-full max-w-[2000px] mx-auto px-6 flex items-center justify-between">
+    <header className="fixed top-0 left-0 right-0 h-16 md:h-16 bg-gradient-to-r from-slate-950 via-slate-900 to-slate-950 backdrop-blur-xl border-b border-purple-500/20 z-[9999] shadow-lg shadow-purple-500/5">
+      <div className="h-full max-w-[2000px] mx-auto px-3 md:px-6 flex items-center justify-between">
 
         {/* Left: Logo + View Switcher */}
-        <div className="flex items-center gap-6">
+        <div className="flex items-center gap-2 md:gap-6">
           <Link href="/" className="flex items-center">
-            <img src="/logos/prooflocker-logo-dark.svg" alt="ProofLocker" className="h-8 w-auto" />
+            <img src="/logos/prooflocker-logo-dark.svg" alt="ProofLocker" className="h-6 md:h-8 w-auto" />
           </Link>
 
           {/* View Switcher */}
@@ -113,13 +113,13 @@ export default function UnifiedHeader({ currentView, onLockClick }: UnifiedHeade
           {/* Lock Claim Button */}
           <button
             onClick={onLockClick || (() => window.location.href = '/lock')}
-            className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 text-white transition-all shadow-lg shadow-purple-500/25"
+            className="flex items-center gap-1.5 md:gap-2 px-3 md:px-4 py-1.5 md:py-2 rounded-lg text-xs md:text-sm font-semibold bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 text-white transition-all shadow-lg shadow-purple-500/25"
           >
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+            <svg className="w-3.5 h-3.5 md:w-4 md:h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
             </svg>
-            <span className="hidden md:inline">Lock Claim</span>
-            <span className="md:hidden">Lock</span>
+            <span className="hidden sm:inline">Lock Claim</span>
+            <span className="sm:hidden">Lock</span>
           </button>
 
           {/* User Menu */}
