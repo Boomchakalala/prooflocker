@@ -444,26 +444,45 @@ function AppFeedContent() {
           {/* Filters - only show for "all" tab */}
           {activeTab === "all" && (
             <div className="flex items-center gap-3 flex-wrap">
-              {/* Claims/OSINT toggle - Clean and simple */}
-              <div className="flex items-center gap-1 p-1 glass rounded-lg">
+              {/* Claims/OSINT toggle - Prominent and distinctive */}
+              <div className="flex items-center gap-2 p-1.5 bg-slate-900/60 border border-slate-700/50 rounded-xl">
                 <button
                   onClick={() => setContentType("claims")}
-                  className={`px-4 py-1.5 text-sm font-medium rounded-md transition-all ${
+                  className={`flex items-center gap-2 px-5 py-2.5 text-sm font-bold rounded-lg transition-all ${
                     contentType === "claims"
-                      ? "bg-purple-600 text-white shadow-sm"
-                      : "text-gray-400 hover:text-white"
+                      ? "bg-gradient-to-r from-purple-600 to-purple-700 text-white shadow-[0_0_20px_rgba(168,85,247,0.4)]"
+                      : "text-slate-400 hover:text-white hover:bg-slate-800/50"
                   }`}
                 >
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+                  </svg>
                   Claims
                 </button>
                 <button
-                  onClick={() => setContentType("osint")}
-                  className={`px-4 py-1.5 text-sm font-medium rounded-md transition-all ${
-                    contentType === "osint"
-                      ? "bg-red-600 text-white shadow-sm"
-                      : "text-gray-400 hover:text-white"
+                  onClick={() => setContentType("all")}
+                  className={`flex items-center gap-2 px-5 py-2.5 text-sm font-bold rounded-lg transition-all ${
+                    contentType === "all"
+                      ? "bg-gradient-to-r from-cyan-600 to-blue-600 text-white shadow-[0_0_20px_rgba(6,182,212,0.4)]"
+                      : "text-slate-400 hover:text-white hover:bg-slate-800/50"
                   }`}
                 >
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16"/>
+                  </svg>
+                  All
+                </button>
+                <button
+                  onClick={() => setContentType("osint")}
+                  className={`flex items-center gap-2 px-5 py-2.5 text-sm font-bold rounded-lg transition-all ${
+                    contentType === "osint"
+                      ? "bg-gradient-to-r from-red-600 to-orange-600 text-white shadow-[0_0_20px_rgba(239,68,68,0.4)]"
+                      : "text-slate-400 hover:text-white hover:bg-slate-800/50"
+                  }`}
+                >
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                  </svg>
                   OSINT
                 </button>
               </div>
