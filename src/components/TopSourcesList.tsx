@@ -99,7 +99,85 @@ export default function TopSourcesList({ category = 'all' }: TopSourcesListProps
     );
   }
 
-  if (sources.length === 0) {
+  // Mock data for demo purposes
+  const mockSources: TopSource[] = sources.length === 0 ? [
+    {
+      userId: "demo-user-1",
+      displayName: "Anon #2847",
+      reliabilityScore: 1247,
+      tier: 'legend',
+      winRate: 94,
+      resolvedCount: 47,
+      avgEvidenceScore: 92,
+    },
+    {
+      userId: "demo-user-2",
+      displayName: "Anon #5192",
+      reliabilityScore: 1089,
+      tier: 'master',
+      winRate: 91,
+      resolvedCount: 38,
+      avgEvidenceScore: 88,
+    },
+    {
+      userId: "demo-user-3",
+      displayName: "Anon #1203",
+      reliabilityScore: 943,
+      tier: 'master',
+      winRate: 87,
+      resolvedCount: 34,
+      avgEvidenceScore: 85,
+    },
+    {
+      userId: "demo-user-4",
+      displayName: "Anon #8741",
+      reliabilityScore: 812,
+      tier: 'expert',
+      winRate: 84,
+      resolvedCount: 29,
+      avgEvidenceScore: 81,
+    },
+    {
+      userId: "demo-user-5",
+      displayName: "Anon #3492",
+      reliabilityScore: 756,
+      tier: 'expert',
+      winRate: 82,
+      resolvedCount: 27,
+      avgEvidenceScore: 78,
+    },
+    {
+      userId: "demo-user-6",
+      displayName: "Anon #9124",
+      reliabilityScore: 689,
+      tier: 'expert',
+      winRate: 79,
+      resolvedCount: 24,
+      avgEvidenceScore: 74,
+    },
+    {
+      userId: "demo-user-7",
+      displayName: "Anon #4567",
+      reliabilityScore: 621,
+      tier: 'trusted',
+      winRate: 76,
+      resolvedCount: 21,
+      avgEvidenceScore: 71,
+    },
+    {
+      userId: "demo-user-8",
+      displayName: "Anon #7823",
+      reliabilityScore: 578,
+      tier: 'trusted',
+      winRate: 73,
+      resolvedCount: 19,
+      avgEvidenceScore: 68,
+    },
+  ] : sources;
+
+  const isShowingMockData = sources.length === 0;
+
+  if (isShowingMockData && mockSources.length === 0) {
     return (
       <div className="text-center py-20">
         <div className="max-w-3xl mx-auto">
@@ -122,37 +200,6 @@ export default function TopSourcesList({ category = 'all' }: TopSourcesListProps
           <p className="text-gray-400 text-lg mb-8 max-w-2xl mx-auto">
             The most trusted sources will appear here. Make accurate claims with strong evidence to build your credibility.
           </p>
-
-          {/* Mock Leaderboard Visual */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-            {[1, 2, 3].map((rank) => (
-              <div key={rank} className="bg-slate-900/60 border border-slate-700/50 rounded-xl p-6 text-left">
-                <div className="flex items-center gap-3 mb-4">
-                  <div className={`w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm ${
-                    rank === 1 ? 'bg-yellow-500/20 text-yellow-300 ring-2 ring-yellow-500/50' :
-                    rank === 2 ? 'bg-slate-400/20 text-slate-300 ring-2 ring-slate-400/50' :
-                    'bg-orange-500/20 text-orange-300 ring-2 ring-orange-500/50'
-                  }`}>
-                    #{rank}
-                  </div>
-                  <div className="flex-1">
-                    <div className="text-white font-semibold">Awaiting Claims</div>
-                    <div className="text-xs text-slate-400">Be the first</div>
-                  </div>
-                </div>
-                <div className="space-y-2 text-sm">
-                  <div className="flex justify-between">
-                    <span className="text-slate-400">Reliability:</span>
-                    <span className="text-purple-400 font-semibold">--</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-slate-400">Accuracy:</span>
-                    <span className="text-white">--%</span>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
 
           <Link
             href="/lock"
