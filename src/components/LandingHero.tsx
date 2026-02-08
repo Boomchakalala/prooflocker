@@ -78,15 +78,18 @@ export default function LandingHero() {
           One Claim at a Time
         </p>
 
-        {/* Subheadline */}
-        <p className="text-lg sm:text-xl md:text-2xl font-medium text-[#F8F9FA]/85 mb-10 leading-relaxed max-w-4xl mx-auto animate-fade-in-up px-4" style={{ fontFamily: 'var(--font-inter)', animationDelay: '0.1s' }}>
-          Lock bold calls before they happen.<br />
-          Prove them with evidence.<br />
-          Build credibility that compounds forever.
-        </p>
+        {/* Subheadline - 2 lines, better hierarchy */}
+        <div className="mb-8 animate-fade-in-up max-w-[560px] mx-auto px-4" style={{ animationDelay: '0.1s' }}>
+          <p className="text-lg md:text-xl font-medium text-[#F8F9FA]/95 mb-2 leading-[1.45]" style={{ fontFamily: 'var(--font-inter)' }}>
+            Track what people say — in real time.
+          </p>
+          <p className="text-lg md:text-xl font-medium text-[#F8F9FA]/75 leading-[1.45]" style={{ fontFamily: 'var(--font-inter)' }}>
+            Lock the claim on-chain. Settle it with receipts.
+          </p>
+        </div>
 
         {/* Two big CTAs side-by-side */}
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-6 animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-5 animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
           <Link
             href="/lock"
             className="w-full sm:w-auto px-12 py-4 bg-gradient-to-r from-[#2E5CFF] to-[#5B21B6] hover:from-[#3D6CFF] hover:to-[#6B31C6] text-white text-lg font-bold rounded-xl transition-all shadow-lg hover:shadow-[0_0_30px_rgba(46,92,255,0.4)] hover:scale-[1.05] btn-glow"
