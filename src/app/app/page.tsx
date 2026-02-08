@@ -549,7 +549,7 @@ function AppFeedContent() {
           </div>
         )}
 
-        {/* Feed */}
+        {/* Feed Layout */}
         {loading ? (
           <div className="flex items-center justify-center py-20">
             <div className="relative">
