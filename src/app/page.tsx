@@ -50,10 +50,10 @@ export default function LandingPage() {
 
           <div className="max-w-6xl mx-auto text-center relative z-10">
             <h2 className="text-3xl md:text-5xl lg:text-6xl font-extrabold mb-4 md:mb-6 bg-gradient-to-r from-[#5B21B6] to-[#2E5CFF] bg-clip-text text-transparent" style={{ fontFamily: 'var(--font-montserrat)' }}>
-              Your First Prediction Could Change Everything
+              Start Building Your Reputation
             </h2>
             <p className="text-base md:text-lg lg:text-xl text-[#F8F9FA]/80 mb-6 md:mb-8 leading-relaxed max-w-3xl mx-auto font-medium px-2">
-              Lock a claim. Prove it. Watch your reputation compound.
+              Lock a claim. Prove it. Watch your credibility compound.
             </p>
 
             {/* Primary and Secondary CTAs */}
@@ -72,7 +72,7 @@ export default function LandingPage() {
                   <circle cx="12" cy="12" r="10" />
                   <path d="M2 12h20M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z" />
                 </svg>
-                See The Globe
+                Explore The Globe
               </Link>
             </div>
 
@@ -99,29 +99,60 @@ export default function LandingPage() {
 
               {/* Recent activity ticker */}
               <div className="px-3 md:px-4 py-1.5 md:py-2 bg-slate-900/50 border border-slate-700 rounded-lg text-xs md:text-sm text-slate-300">
-                <span className="text-emerald-400 font-semibold">Sarah</span> just resolved her 10th correct prediction
+                <span className="text-emerald-400 font-semibold">Sarah</span> just resolved her 10th correct claim
               </div>
             </div>
           </div>
         </div>
 
-        {/* Constellation DAG Section - Footer */}
-        <div className="relative z-10 py-8 md:py-12 px-4 md:px-6 bg-[#0A0A0F]/95 border-t border-slate-800/50">
-          <div className="max-w-4xl mx-auto text-center">
-            <div className="flex items-center justify-center gap-3 md:gap-4 mb-3 md:mb-4">
-              <svg className="w-6 h-6 md:w-8 md:h-8 text-purple-400" fill="none" stroke="currentColor" strokeWidth="1" viewBox="0 0 100 100">
-                <circle cx="50" cy="30" r="4" fill="currentColor"/>
-                <circle cx="30" cy="50" r="4" fill="currentColor"/>
-                <circle cx="70" cy="50" r="4" fill="currentColor"/>
-                <circle cx="50" cy="70" r="4" fill="currentColor"/>
-                <line x1="50" y1="30" x2="30" y2="50" stroke="currentColor" strokeWidth="1" opacity="0.3"/>
-                <line x1="50" y1="30" x2="70" y2="50" stroke="currentColor" strokeWidth="1" opacity="0.3"/>
-                <line x1="30" y1="50" x2="50" y2="70" stroke="currentColor" strokeWidth="1" opacity="0.3"/>
-                <line x1="70" y1="50" x2="50" y2="70" stroke="currentColor" strokeWidth="1" opacity="0.3"/>
+        {/* Constellation DAG Section - Trust Anchor */}
+        <div className="relative z-10 py-12 md:py-16 px-4 md:px-6 bg-[#0A0A0F]/95 border-t border-slate-800/50">
+          <div className="max-w-5xl mx-auto text-center">
+            {/* DAG Visual */}
+            <div className="flex items-center justify-center mb-6 md:mb-8">
+              <svg className="w-32 h-24 md:w-40 md:h-32 text-purple-500/60" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 200 150">
+                {/* Nodes */}
+                <circle cx="100" cy="40" r="6" fill="currentColor" className="text-purple-400"/>
+                <circle cx="60" cy="75" r="6" fill="currentColor" className="text-cyan-400"/>
+                <circle cx="140" cy="75" r="6" fill="currentColor" className="text-blue-400"/>
+                <circle cx="100" cy="110" r="6" fill="currentColor" className="text-purple-500"/>
+                <circle cx="40" cy="110" r="5" fill="currentColor" className="text-purple-300" opacity="0.6"/>
+                <circle cx="160" cy="110" r="5" fill="currentColor" className="text-blue-300" opacity="0.6"/>
+
+                {/* Edges */}
+                <line x1="100" y1="40" x2="60" y2="75" stroke="currentColor" strokeWidth="1.5" opacity="0.4" className="text-purple-400"/>
+                <line x1="100" y1="40" x2="140" y2="75" stroke="currentColor" strokeWidth="1.5" opacity="0.4" className="text-purple-400"/>
+                <line x1="60" y1="75" x2="100" y2="110" stroke="currentColor" strokeWidth="1.5" opacity="0.4" className="text-cyan-400"/>
+                <line x1="140" y1="75" x2="100" y2="110" stroke="currentColor" strokeWidth="1.5" opacity="0.4" className="text-blue-400"/>
+                <line x1="60" y1="75" x2="40" y2="110" stroke="currentColor" strokeWidth="1" opacity="0.3" className="text-purple-300"/>
+                <line x1="140" y1="75" x2="160" y2="110" stroke="currentColor" strokeWidth="1" opacity="0.3" className="text-blue-300"/>
+
+                {/* Glow effects */}
+                <circle cx="100" cy="40" r="8" fill="none" stroke="currentColor" strokeWidth="0.5" opacity="0.2" className="text-purple-400"/>
+                <circle cx="100" cy="110" r="8" fill="none" stroke="currentColor" strokeWidth="0.5" opacity="0.2" className="text-purple-500"/>
               </svg>
-              <span className="text-xs md:text-sm text-slate-400">Secured by Constellation DAG</span>
             </div>
-            <p className="text-xs md:text-sm text-slate-500">All predictions are cryptographically timestamped and stored immutably on-chain</p>
+
+            {/* Text */}
+            <h3 className="text-xl md:text-2xl font-bold text-white mb-3 md:mb-4" style={{ fontFamily: 'var(--font-montserrat)' }}>
+              Secured by Constellation Network
+            </h3>
+            <p className="text-sm md:text-base text-slate-400 max-w-2xl mx-auto leading-relaxed px-2">
+              All claims are cryptographically timestamped and stored immutably on-chain using Constellation's DAG architecture. Your proof is permanent, verifiable, and tamper-proof.
+            </p>
+
+            {/* Tech badges */}
+            <div className="flex items-center justify-center gap-3 md:gap-4 mt-6 md:mt-8 flex-wrap">
+              <div className="px-4 py-2 bg-purple-500/10 border border-purple-500/30 rounded-lg text-xs md:text-sm text-purple-300 font-semibold">
+                DAG Architecture
+              </div>
+              <div className="px-4 py-2 bg-cyan-500/10 border border-cyan-500/30 rounded-lg text-xs md:text-sm text-cyan-300 font-semibold">
+                Immutable Timestamps
+              </div>
+              <div className="px-4 py-2 bg-blue-500/10 border border-blue-500/30 rounded-lg text-xs md:text-sm text-blue-300 font-semibold">
+                Cryptographic Proof
+              </div>
+            </div>
           </div>
         </div>
       </main>
