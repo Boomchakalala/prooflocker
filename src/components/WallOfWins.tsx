@@ -23,24 +23,103 @@ export default function WallOfWins() {
   const [selectedFilter, setSelectedFilter] = useState<string>("All");
   const scrollContainerRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    fetchResolvedPredictions();
-  }, []);
+  // Static mock claims for landing page
+  const mockClaims: ResolvedPrediction[] = [
+    {
+      id: "mock-1",
+      publicSlug: "btc-150k-2026",
+      textPreview: "BTC breaks $150k by Dec 2026 — supply shock + institutional FOMO finally converge",
+      category: "Crypto",
+      outcome: "correct",
+      timestamp: "2026-01-12T10:00:00Z",
+      authorNumber: 2847,
+      evidence_score: 92,
+      upvotesCount: 184,
+    },
+    {
+      id: "mock-2",
+      publicSlug: "solana-tvl-flip",
+      textPreview: "Solana TVL flips Ethereum L2s by Q3 2026 — speed + cost = inevitable",
+      category: "Crypto",
+      outcome: "correct",
+      timestamp: "2026-02-01T14:30:00Z",
+      authorNumber: 5192,
+      evidence_score: 88,
+      upvotesCount: 156,
+    },
+    {
+      id: "mock-3",
+      publicSlug: "china-taiwan-escalation",
+      textPreview: "China-Taiwan escalation visible via satellite troop buildup — conflict escalates within 6 months",
+      category: "OSINT",
+      outcome: "correct",
+      timestamp: "2025-11-18T08:15:00Z",
+      authorNumber: 1203,
+      evidence_score: 96,
+      upvotesCount: 267,
+    },
+    {
+      id: "mock-4",
+      publicSlug: "confidential-compute-ai",
+      textPreview: "Confidential compute becomes default for AI training by mid-2026 — privacy regulations force the shift",
+      category: "Tech",
+      outcome: "correct",
+      timestamp: "2025-12-05T16:45:00Z",
+      authorNumber: 6741,
+      evidence_score: 85,
+      upvotesCount: 142,
+    },
+    {
+      id: "mock-5",
+      publicSlug: "base-arbitrum-users",
+      textPreview: "Base surpasses Arbitrum in daily active users by May 2026 — Coinbase distribution too strong",
+      category: "Crypto",
+      outcome: "pending",
+      timestamp: "2026-01-30T12:00:00Z",
+      authorNumber: 3928,
+      evidence_score: 45,
+      upvotesCount: 89,
+    },
+    {
+      id: "mock-6",
+      publicSlug: "us-midterms-crypto",
+      textPreview: "US midterms flip House control — crypto deregulation bill passes Q1 2026",
+      category: "Politics",
+      outcome: "correct",
+      timestamp: "2025-10-22T09:30:00Z",
+      authorNumber: 8174,
+      evidence_score: 91,
+      upvotesCount: 203,
+    },
+    {
+      id: "mock-7",
+      publicSlug: "cyberattack-power-grid",
+      textPreview: "Major cyberattack takes down US power grid within 90 days",
+      category: "OSINT",
+      outcome: "incorrect",
+      timestamp: "2025-12-01T11:20:00Z",
+      authorNumber: 4512,
+      evidence_score: 28,
+      upvotesCount: 42,
+    },
+    {
+      id: "mock-8",
+      publicSlug: "openai-gpt5-launch",
+      textPreview: "OpenAI releases GPT-5 by Feb 2026 — AGI rumors force early launch",
+      category: "Tech",
+      outcome: "correct",
+      timestamp: "2025-11-08T15:10:00Z",
+      authorNumber: 9203,
+      evidence_score: 82,
+      upvotesCount: 178,
+    },
+  ];
 
-  const fetchResolvedPredictions = async () => {
-    try {
-      // Fetch all recent predictions (not just correct ones)
-      const response = await fetch("/api/predictions?limit=24");
-      if (response.ok) {
-        const data = await response.json();
-        setPredictions(data.predictions || []);
-      }
-    } catch (error) {
-      console.error("Error fetching predictions:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
+  useEffect(() => {
+    // Use mock data for landing page
+    setPredictions(mockClaims);
+    setLoading(false);
+  }, []);
 
   const filters = ["All", "Correct", "Crypto", "Politics", "Tech", "OSINT"];
 
