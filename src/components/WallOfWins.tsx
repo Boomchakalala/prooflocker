@@ -50,66 +50,19 @@ export default function WallOfWins() {
     return p.category?.toLowerCase() === selectedFilter.toLowerCase();
   });
 
-  // Get card styling based on filter and outcome
+  // Get card styling - uniform styling to match feed cards
   const getCardStyle = (pred: ResolvedPrediction) => {
     const isCorrect = pred.outcome === "correct";
+    const isIncorrect = pred.outcome === "incorrect";
 
-    // For "Correct" filter or when showing correct outcomes, use green
-    if (selectedFilter === "Correct" || (isCorrect && selectedFilter !== "All")) {
-      return {
-        background: "from-emerald-600/5 via-emerald-500/5 to-emerald-700/5",
-        border: "border-emerald-500/20 hover:border-emerald-500/50",
-        shadow: "hover:shadow-[0_0_30px_rgba(16,185,129,0.2)]",
-        badgeBg: "bg-emerald-500/20",
-        badgeText: "text-emerald-400",
-      };
-    }
-
-    // For "All" filter, use neutral slate/gray
-    if (selectedFilter === "All") {
-      return {
-        background: "from-slate-700/5 via-slate-600/5 to-slate-700/5",
-        border: "border-slate-600/20 hover:border-slate-500/40",
-        shadow: "hover:shadow-[0_0_20px_rgba(148,163,184,0.15)]",
-        badgeBg: isCorrect ? "bg-emerald-500/20" : pred.outcome === "incorrect" ? "bg-red-500/20" : "bg-slate-500/20",
-        badgeText: isCorrect ? "text-emerald-400" : pred.outcome === "incorrect" ? "text-red-400" : "text-slate-400",
-      };
-    }
-
-    // For category filters, use category-specific colors
-    const categoryColors: Record<string, any> = {
-      crypto: {
-        background: "from-blue-600/5 via-blue-500/5 to-blue-700/5",
-        border: "border-blue-500/20 hover:border-blue-500/50",
-        shadow: "hover:shadow-[0_0_30px_rgba(59,130,246,0.2)]",
-        badgeBg: isCorrect ? "bg-emerald-500/20" : "bg-blue-500/20",
-        badgeText: isCorrect ? "text-emerald-400" : "text-blue-400",
-      },
-      politics: {
-        background: "from-purple-600/5 via-purple-500/5 to-purple-700/5",
-        border: "border-purple-500/20 hover:border-purple-500/50",
-        shadow: "hover:shadow-[0_0_30px_rgba(168,85,247,0.2)]",
-        badgeBg: isCorrect ? "bg-emerald-500/20" : "bg-purple-500/20",
-        badgeText: isCorrect ? "text-emerald-400" : "text-purple-400",
-      },
-      tech: {
-        background: "from-cyan-600/5 via-cyan-500/5 to-cyan-700/5",
-        border: "border-cyan-500/20 hover:border-cyan-500/50",
-        shadow: "hover:shadow-[0_0_30px_rgba(6,182,212,0.2)]",
-        badgeBg: isCorrect ? "bg-emerald-500/20" : "bg-cyan-500/20",
-        badgeText: isCorrect ? "text-emerald-400" : "text-cyan-400",
-      },
-      osint: {
-        background: "from-orange-600/5 via-orange-500/5 to-orange-700/5",
-        border: "border-orange-500/20 hover:border-orange-500/50",
-        shadow: "hover:shadow-[0_0_30px_rgba(249,115,22,0.2)]",
-        badgeBg: isCorrect ? "bg-emerald-500/20" : "bg-orange-500/20",
-        badgeText: isCorrect ? "text-emerald-400" : "text-orange-400",
-      },
+    // Use consistent neutral styling for all cards
+    return {
+      background: "from-slate-800/40 via-slate-700/30 to-slate-800/40",
+      border: "border-slate-700/40 hover:border-slate-600/60",
+      shadow: "hover:shadow-[0_0_20px_rgba(148,163,184,0.1)]",
+      badgeBg: isCorrect ? "bg-emerald-500/20" : isIncorrect ? "bg-red-500/20" : "bg-slate-500/20",
+      badgeText: isCorrect ? "text-emerald-400" : isIncorrect ? "text-red-400" : "text-slate-400",
     };
-
-    const categoryKey = pred.category?.toLowerCase() || "crypto";
-    return categoryColors[categoryKey] || categoryColors.crypto;
   };
 
   const scroll = (direction: 'left' | 'right') => {
