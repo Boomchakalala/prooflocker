@@ -120,7 +120,7 @@ export default function TopSourcesList({ category = 'all' }: TopSourcesListProps
           </div>
           <h3 className="text-3xl font-bold text-white mb-4">Leaderboard Coming Soon</h3>
           <p className="text-gray-400 text-lg mb-8">
-            Start making predictions to climb the ranks and earn your spot among top predictors
+            Start making claims to climb the ranks and earn your spot among top claim makers
           </p>
 
           {/* Mock Leaderboard Visual */}
@@ -137,7 +137,7 @@ export default function TopSourcesList({ category = 'all' }: TopSourcesListProps
                   </div>
                   <div className="flex-1">
                     <div className="text-white font-semibold">Anon #{1000 + rank}</div>
-                    <div className="text-xs text-slate-400">0 predictions</div>
+                    <div className="text-xs text-slate-400">0 claims</div>
                   </div>
                 </div>
                 <div className="space-y-2 text-sm">
