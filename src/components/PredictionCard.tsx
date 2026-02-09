@@ -409,7 +409,8 @@ export default function PredictionCard({ prediction, card, currentUserId, onOutc
                 Anon #{authorNumber}
               </button>
             )}
-            {authorTierInfo && (
+            {/* Author tier badge - Only for Claims (not OSINT) */}
+            {!isOsint && authorTierInfo && (
               <span className={`px-1.5 py-0.5 text-[10px] font-semibold rounded ${authorTierInfo.bgColor} ${authorTierInfo.color}`}>
                 {authorTierInfo.label}
               </span>
@@ -558,7 +559,8 @@ export default function PredictionCard({ prediction, card, currentUserId, onOutc
                   Anon #{authorNumber}
                 </button>
               )}
-              {authorTierInfo && (
+              {/* Author tier badge - Only for Claims (not OSINT) */}
+              {!isOsint && authorTierInfo && (
                 <span className={`px-2 py-0.5 text-xs font-medium rounded-md ${authorTierInfo.bgColor} ${authorTierInfo.color}`}>
                   {authorTierInfo.label}
                 </span>
