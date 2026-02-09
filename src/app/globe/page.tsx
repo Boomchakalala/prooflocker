@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import dynamic from 'next/dynamic';
 import Script from 'next/script';
+import Head from 'next/head';
 import { mapClaimToCard, mapOsintToCard, sortCards, filterCards, type CardViewModel } from '@/lib/card-view-model';
 import { useAuth } from '@/contexts/AuthContext';
 import { getTierInfo } from '@/lib/user-scoring';
@@ -233,6 +234,12 @@ export default function GlobePage() {
 
   return (
     <>
+      <Head>
+        <link
+          href="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css"
+          rel="stylesheet"
+        />
+      </Head>
       <Script
         src="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js"
         strategy="beforeInteractive"
