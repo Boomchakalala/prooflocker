@@ -480,7 +480,7 @@ export default function GlobePage() {
               <div>
                 <div className="text-[9px] text-[#94a3b8] font-semibold uppercase mb-1.5">Category</div>
                 <div className="flex gap-1.5 flex-wrap">
-                  {['all', 'crypto', 'politics', 'tech', 'other'].map((cat) => (
+                  {uniqueCategories.map((cat) => (
                     <button
                       key={cat}
                       onClick={() => setCategoryFilter(cat)}
