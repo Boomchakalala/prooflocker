@@ -21,15 +21,15 @@ export async function GET(request: Request) {
       .from('user_stats')
       .select(`
         user_id,
-        reliability_score,
+        reputation_score,
         total_predictions,
         resolved_predictions,
         correct_predictions,
         incorrect_predictions,
         avg_evidence_score
       `)
-      .gte('reliability_score', 300)
-      .order('reliability_score', { ascending: false })
+      .gte('reputation_score', 300)
+      .order('reputation_score', { ascending: false })
       .limit(limit);
 
     const { data: userStats, error } = await query;
@@ -53,7 +53,7 @@ export async function GET(request: Request) {
           : 0;
 
         // Get tier
-        const tier = getReliabilityTier(stats.reliability_score);
+        const tier = getReliabilityTier(stats.reputation_score);
 
         // If filtering by category, check if user has predictions in that category
         let categoryMatch = true;
@@ -75,7 +75,7 @@ export async function GET(request: Request) {
         return {
           userId: stats.user_id,
           displayName: userData?.user?.email?.split('@')[0] || `Anon #${stats.user_id.slice(-4)}`,
-          reliabilityScore: stats.reliability_score,
+          reliabilityScore: stats.reputation_score,
           tier,
           winRate,
           resolvedCount: stats.resolved_predictions,

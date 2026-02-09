@@ -17,7 +17,7 @@ interface Claim {
   id: string;
   user_id: string;
   pseudonym: string;
-  reliability_score: number;
+  reputation_score: number;
   text_preview: string;
   status: string;
   category: string;
@@ -165,7 +165,7 @@ export default function GlobeSidePanel({ hotspot, onClose }: GlobeSidePanelProps
           </div>
         ) : (
           claims.map((claim) => {
-            const badge = getReliabilityBadge(claim.reliability_score);
+            const badge = getReliabilityBadge(claim.reputation_score);
             return (
               <Link
                 key={claim.id}
@@ -197,7 +197,7 @@ export default function GlobeSidePanel({ hotspot, onClose }: GlobeSidePanelProps
                   </span>
                   <span className="text-sm text-slate-400">{claim.pseudonym}</span>
                   <span className="text-xs text-slate-500">
-                    (Rel: {claim.reliability_score})
+                    (Rel: {claim.reputation_score})
                   </span>
                 </div>
 

@@ -35,7 +35,7 @@ export async function GET(request: NextRequest) {
         *,
         users:user_id (
           pseudonym,
-          reliability_score
+          reputation_score
         )
       `)
       .gte('geotag_lat', latMin)
@@ -69,7 +69,7 @@ export async function GET(request: NextRequest) {
     // Sort claims
     let sortedClaims = [...predictions];
     if (sort === 'reliability') {
-      sortedClaims.sort((a, b) => (b.reliability_score || 0) - (a.reliability_score || 0));
+      sortedClaims.sort((a, b) => (b.reputation_score || 0) - (a.reputation_score || 0));
     } else if (sort === 'evidence') {
       sortedClaims.sort((a, b) => (b.evidence_score || 0) - (a.evidence_score || 0));
     } else if (sort === 'recent') {
@@ -89,7 +89,7 @@ export async function GET(request: NextRequest) {
         id: claim.id,
         user_id: claim.user_id,
         pseudonym: claim.users?.pseudonym || `Anon #${claim.user_id.slice(0, 8)}`,
-        reliability_score: claim.reliability_score || 0,
+        reputation_score: claim.reputation_score || 0,
         text_preview: claim.text_preview,
         status: claim.status,
         category: claim.category,

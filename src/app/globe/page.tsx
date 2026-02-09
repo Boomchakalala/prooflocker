@@ -315,7 +315,7 @@ export default function GlobePage() {
                   // Extract reputation score from rep field
                   const repScore = claim.rep || 0;
 
-                  // Correct reliability tiers from /how-scoring-works
+                  // Correct reputation tiers from /how-scoring-works
                   const tierInfo = repScore >= 800 ? { label: 'Legend', color: '#a78bfa', bgColor: 'rgba(167, 139, 250, 0.1)' } :
                                    repScore >= 650 ? { label: 'Master', color: '#60a5fa', bgColor: 'rgba(96, 165, 250, 0.1)' } :
                                    repScore >= 500 ? { label: 'Expert', color: '#4ade80', bgColor: 'rgba(74, 222, 128, 0.1)' } :

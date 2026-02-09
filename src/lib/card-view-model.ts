@@ -60,8 +60,8 @@ export interface CardViewModel {
   // Evidence & Scoring
   evidence_score?: number; // 0-100
   evidenceGrade?: EvidenceGrade;
-  author_reliability_tier?: ReliabilityTier;
-  author_reliability_score?: number;
+  author_reputation_tier?: ReliabilityTier;
+  author_reputation_score?: number;
 
   // Verification metrics
   verifiedCount?: number;
@@ -105,7 +105,7 @@ export function mapPredictionToCard(prediction: Prediction, currentUserId?: stri
 
   const trustScore = calculateTrustScore({
     evidenceScore: prediction.evidence_score,
-    authorReliabilityScore: prediction.author_reliability_score,
+    authorReliabilityScore: prediction.author_reputation_score,
     upvotesCount: prediction.upvotesCount || 0,
   });
 
@@ -141,8 +141,8 @@ export function mapPredictionToCard(prediction: Prediction, currentUserId?: stri
 
     evidence_score: prediction.evidence_score,
     evidenceGrade,
-    author_reliability_tier: prediction.author_reliability_tier,
-    author_reliability_score: prediction.author_reliability_score,
+    author_reputation_tier: prediction.author_reputation_tier,
+    author_reputation_score: prediction.author_reputation_score,
 
     upvotesCount: prediction.upvotesCount || 0,
     userHasUpvoted: false, // Will be fetched separately if needed
@@ -190,13 +190,13 @@ export function mapClaimToCard(claim: {
   const evidence_score = claim.confidence || 0;
   const evidenceGrade = getEvidenceGrade(evidence_score);
 
-  // Infer reliability tier from rep
-  const author_reliability_score = claim.rep || 0;
-  const author_reliability_tier = getReliabilityTier(author_reliability_score);
+  // Infer reputation tier from rep
+  const author_reputation_score = claim.rep || 0;
+  const author_reputation_tier = getReliabilityTier(author_reputation_score);
 
   const trustScore = calculateTrustScore({
     evidenceScore: evidence_score,
-    authorReliabilityScore: author_reliability_score,
+    authorReliabilityScore: author_reputation_score,
   });
 
   // Generate a pseudo-hash for claims
@@ -217,8 +217,8 @@ export function mapClaimToCard(claim: {
     anonId: `claim-submitter-${claim.id}`,
     userId: null,
     evidence_score,
-    author_reliability_tier,
-    author_reliability_score,
+    author_reputation_tier,
+    author_reputation_score,
     geotag_lat: claim.lat,
     geotag_lng: claim.lng,
     upvotesCount: 0,
@@ -248,8 +248,8 @@ export function mapClaimToCard(claim: {
 
     evidence_score,
     evidenceGrade,
-    author_reliability_tier,
-    author_reliability_score,
+    author_reputation_tier,
+    author_reputation_score,
 
     confidence: claim.confidence,
 

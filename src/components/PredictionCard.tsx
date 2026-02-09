@@ -28,7 +28,7 @@ interface PredictionCardProps {
     adminNote?: string;
     resolvedBy?: string;
     evidence_score?: number; // New evidence score field (0-100)
-    author_reliability_tier?: ReliabilityTier; // Author's reliability tier
+    author_reputation_tier?: ReliabilityTier; // Author's reputation tier
   };
   card?: CardViewModel; // New: accept CardViewModel for Globe/unified rendering
   currentUserId?: string | null; // Current authenticated user ID
@@ -66,7 +66,7 @@ export default function PredictionCard({ prediction, card, currentUserId, onOutc
     status: (prediction?.outcome === 'correct' ? 'correct' : prediction?.outcome === 'incorrect' ? 'incorrect' : 'pending') as any,
     outcome: prediction?.outcome,
     evidence_score: prediction?.evidence_score,
-    author_reliability_tier: prediction?.author_reliability_tier,
+    author_reputation_tier: prediction?.author_reputation_tier,
     upvotesCount: prediction?.upvotesCount || 0,
     hash: prediction?.hash || '',
     publicSlug: prediction?.publicSlug || '',
@@ -361,9 +361,9 @@ export default function PredictionCard({ prediction, card, currentUserId, onOutc
       prediction.evidence_score >= 26 ? 'basic' : 'unverified'
     ) : null;
 
-  // Get author reliability tier info
-  const authorTierInfo = prediction.author_reliability_tier ?
-    getTierInfo(prediction.author_reliability_tier) : null;
+  // Get author reputation tier info
+  const authorTierInfo = prediction.author_reputation_tier ?
+    getTierInfo(prediction.author_reputation_tier) : null;
 
   // Handler for view button click
   const handleViewClick = (e: React.MouseEvent) => {

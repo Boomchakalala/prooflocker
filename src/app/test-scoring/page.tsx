@@ -95,7 +95,7 @@ export default function TestScoringPage() {
 
         {/* Test 4: Different Tiers Grid */}
         <div className="glass border border-white/10 rounded-xl p-6 mb-6">
-          <h2 className="text-xl font-semibold text-white mb-4">4. All Reliability Tiers</h2>
+          <h2 className="text-xl font-semibold text-white mb-4">4. All Reputation Tiers</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {[
               { score: 950, label: 'Legend', color: 'text-yellow-400' },

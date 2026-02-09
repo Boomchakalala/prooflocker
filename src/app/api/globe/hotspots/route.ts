@@ -83,7 +83,7 @@ export async function GET(request: NextRequest) {
           city: pred.geotag_city,
           country: pred.geotag_country,
           claims: [],
-          reliability_scores: [],
+          reputation_scores: [],
           pending_count: 0,
           resolved_count: 0,
           correct_count: 0,
@@ -97,7 +97,7 @@ export async function GET(request: NextRequest) {
 
       const hotspot = hotspotMap.get(key)!;
       hotspot.claims.push(pred);
-      hotspot.reliability_scores.push(pred.reliability_score || 0);
+      hotspot.reputation_scores.push(pred.reputation_score || 0);
       hotspot.text_previews.push(pred.text_preview);
 
       if (pred.status === 'pending') hotspot.pending_count++;
@@ -118,7 +118,7 @@ export async function GET(request: NextRequest) {
     // Convert to array and calculate aggregates
     const hotspots = Array.from(hotspotMap.values())
       .map((h) => {
-        const avgReliability = h.reliability_scores.reduce((a: number, b: number) => a + b, 0) / h.reliability_scores.length;
+        const avgReliability = h.reputation_scores.reduce((a: number, b: number) => a + b, 0) / h.reputation_scores.length;
         const avgEvidence = h.evidence_scores.length > 0
           ? h.evidence_scores.reduce((a: number, b: number) => a + b, 0) / h.evidence_scores.length
           : 0;

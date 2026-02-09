@@ -82,8 +82,8 @@ export default function ProfilePage() {
           statsData?.resolved_predictions > 0
             ? statsData.correct_predictions / statsData.resolved_predictions
             : 0,
-        reliabilityScore: statsData?.reliability_score || 0,
-        tier: getReliabilityTier(statsData?.reliability_score || 0),
+        reliabilityScore: statsData?.reputation_score || 0,
+        tier: getReliabilityTier(statsData?.reputation_score || 0),
       };
 
       setStats(userStats);
@@ -271,12 +271,12 @@ export default function ProfilePage() {
           </div>
         </div>
 
-        {/* Reliability Score Hero Section */}
+        {/* Reputation Score Hero Section */}
         {stats && (
           <div className="mb-8">
             <div className="glass border border-white/10 rounded-xl p-8">
               <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6 mb-6">
-                {/* Left: Reliability Score */}
+                {/* Left: Reputation Score */}
                 <div className="flex-1">
                   <div className="flex items-center gap-3 mb-2">
                     <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-purple-500/20 to-blue-500/20 border border-purple-500/30 flex items-center justify-center">
@@ -296,7 +296,7 @@ export default function ProfilePage() {
                     </div>
                     <div>
                       <div className="text-xs text-neutral-500 uppercase tracking-wider">
-                        Reliability Score
+                        Reputation Score
                       </div>
                       <div className="flex items-baseline gap-2">
                         <div className="text-5xl font-bold text-white">

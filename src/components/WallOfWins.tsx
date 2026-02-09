@@ -35,7 +35,7 @@ function getStableVoteCounts(predictionId: string, outcome: string) {
   }
 }
 
-// User reliability tier mapper (based on author number for demo)
+// User reputation tier mapper (based on author number for demo)
 function getUserTier(authorNumber: number) {
   // Use author number to deterministically assign tiers
   const score = (authorNumber * 17) % 1000; // Deterministic pseudo-random score

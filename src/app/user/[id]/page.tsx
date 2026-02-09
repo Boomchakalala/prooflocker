@@ -87,8 +87,8 @@ export default function PublicProfilePage() {
           statsData?.resolved_predictions > 0
             ? statsData.correct_predictions / statsData.resolved_predictions
             : 0,
-        reliabilityScore: statsData?.reliability_score || 0,
-        tier: getReliabilityTier(statsData?.reliability_score || 0),
+        reliabilityScore: statsData?.reputation_score || 0,
+        tier: getReliabilityTier(statsData?.reputation_score || 0),
       };
 
       setStats(userStats);
@@ -206,11 +206,11 @@ export default function PublicProfilePage() {
             </button>
           </div>
 
-          {/* Reliability Score Hero Section */}
+          {/* Reputation Score Hero Section */}
           {stats && tier && (
             <div className="mb-6">
               <div className="flex items-center gap-3 mb-3">
-                <h2 className="text-lg font-semibold text-neutral-300">Reliability Score</h2>
+                <h2 className="text-lg font-semibold text-neutral-300">Reputation Score</h2>
                 <div className={`px-3 py-1 rounded-full text-xs font-bold ${tier.bgColor} ${tier.color} border border-white/20`}>
                   {tier.label}
                 </div>

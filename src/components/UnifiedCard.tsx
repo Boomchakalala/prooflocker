@@ -25,7 +25,7 @@ export default function UnifiedCard({ card, variant = "full", currentUserId, onV
   const isCompact = variant === "compact";
   const isOsint = card.type === "osint";
   const isClaim = card.type === "claim";
-  const authorTierInfo = card.author_reliability_tier ? getTierInfo(card.author_reliability_tier) : null;
+  const authorTierInfo = card.author_reputation_tier ? getTierInfo(card.author_reputation_tier) : null;
 
   // Truncate title
   const MAX_TITLE_LENGTH = isCompact ? 100 : 150;

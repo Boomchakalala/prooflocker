@@ -333,7 +333,7 @@ function AppFeedContent() {
     }
   };
 
-  // Get user reliability tier for display
+  // Get user reputation tier for display
   const getUserTier = (prediction: Prediction) => {
     const userId = prediction.userId || prediction.anonId;
     if (!userId || !userReliability[userId]) {

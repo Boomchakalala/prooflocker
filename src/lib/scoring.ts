@@ -59,7 +59,7 @@ export const RELIABILITY_TIERS = {
 } as const;
 
 /**
- * Reliability Score Formula
+ * Reputation Score Formula
  * SOURCE: /how-scoring-works - "Example Calculation" section
  *
  * Formula: (Accuracy × 500) + (Evidence Quality × 300) + (Activity bonus up to 200)
