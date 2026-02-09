@@ -5,13 +5,20 @@ import { getCurrentUser } from '@/lib/auth';
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
 
+// Calculate vote weight based on reputation score
+// Formula: 1 + floor(repScore / 250), capped at 5
+function calculateVoteWeight(repScore: number): number {
+  return Math.min(5, 1 + Math.floor(repScore / 250));
+}
+
 export async function POST(
   request: Request,
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const { id: predictionId } = await params;
-    const { voteType } = await request.json(); // 'upvote' or 'downvote'
+    const body = await request.json();
+    const { voteType, evidenceLink, note } = body; // 'upvote' or 'downvote'
     const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
     // Validate voteType
@@ -22,14 +29,12 @@ export async function POST(
       );
     }
 
-    const voteValue = voteType === 'upvote' ? 1 : -1;
-
     // Get current user
     const user = await getCurrentUser();
 
     if (!user) {
       return NextResponse.json(
-        { error: 'Unauthorized' },
+        { error: 'Unauthorized. You must be logged in to vote.' },
         { status: 401 }
       );
     }
@@ -37,13 +42,13 @@ export async function POST(
     // Get prediction details
     const { data: prediction, error: predError } = await supabase
       .from('predictions')
-      .select('id, user_id, outcome, resolved_at')
+      .select('id, user_id, outcome, resolved_at, dispute_window_end, is_finalized')
       .eq('id', predictionId)
       .single();
 
     if (predError || !prediction) {
       return NextResponse.json(
-        { error: 'Prediction not found' },
+        { error: 'Claim not found' },
         { status: 404 }
       );
     }
@@ -51,42 +56,79 @@ export async function POST(
     // Validation: Cannot vote on own prediction
     if (prediction.user_id === user.id) {
       return NextResponse.json(
-        { error: 'Cannot vote on your own prediction' },
+        { error: 'Cannot vote on your own claim' },
         { status: 403 }
       );
     }
 
-    // Get voter's current reliability score
+    // Validation: Prediction must be resolved
+    if (!prediction.resolved_at) {
+      return NextResponse.json(
+        { error: 'Can only vote on resolved claims' },
+        { status: 400 }
+      );
+    }
+
+    // Validation: Cannot vote on finalized predictions
+    if (prediction.is_finalized) {
+      return NextResponse.json(
+        { error: 'Cannot vote on finalized claims' },
+        { status: 400 }
+      );
+    }
+
+    // Validation: Check if dispute window has ended (but not finalized yet)
+    const now = new Date();
+    const disputeEnd = prediction.dispute_window_end ? new Date(prediction.dispute_window_end) : null;
+
+    if (disputeEnd && now < disputeEnd) {
+      // Within normal 7-day dispute window - proceed
+    } else if (disputeEnd && now >= disputeEnd) {
+      // Past 7 days but not finalized - check if we're still within 14-day timeout
+      const finalizationDeadline = new Date(prediction.resolved_at);
+      finalizationDeadline.setDate(finalizationDeadline.getDate() + 14);
+
+      if (now >= finalizationDeadline) {
+        return NextResponse.json(
+          { error: 'Voting period has ended (14 days after resolution)' },
+          { status: 400 }
+        );
+      }
+    }
+
+    // Get voter's current reputation score
     const { data: voterStats, error: statsError } = await supabase
       .from('user_stats')
-      .select('reliability_score')
+      .select('reputation_score')
       .eq('user_id', user.id)
       .single();
 
-    const voterReliability = voterStats?.reliability_score || 0;
+    const voterReputation = voterStats?.reputation_score || 0;
 
-    // Validation: Voter must have reliability ≥ 300 for upvotes, ≥ 200 for downvotes
-    const minReliability = voteType === 'upvote' ? 300 : 200;
-    if (voterReliability < minReliability) {
+    // Validation: Voter must have reputation ≥ 150
+    if (voterReputation < 150) {
       return NextResponse.json(
-        { error: `Must have reliability score of at least ${minReliability} to ${voteType}` },
+        { error: 'Must have Reputation Score of at least 150 to vote on claim resolutions' },
         { status: 403 }
       );
     }
 
+    // Calculate vote weight
+    const voteWeight = calculateVoteWeight(voterReputation);
+
     // Check if user has already voted
     const { data: existingVote } = await supabase
-      .from('prediction_votes')
-      .select('id, vote_value')
+      .from('resolution_votes')
+      .select('id, vote_type')
       .eq('prediction_id', predictionId)
-      .eq('voter_user_id', user.id)
+      .eq('user_id', user.id)
       .single();
 
     if (existingVote) {
       // If same vote type, remove the vote (toggle off)
-      if (existingVote.vote_value === voteValue) {
+      if (existingVote.vote_type === voteType) {
         const { error: deleteError } = await supabase
-          .from('prediction_votes')
+          .from('resolution_votes')
           .delete()
           .eq('id', existingVote.id);
 
@@ -102,15 +144,19 @@ export async function POST(
           success: true,
           action: 'removed',
           voteType: null,
+          voteWeight: 0,
           message: 'Vote removed',
         });
       } else {
         // Different vote type, update the existing vote
         const { error: updateError } = await supabase
-          .from('prediction_votes')
+          .from('resolution_votes')
           .update({
-            vote_value: voteValue,
-            voter_reliability_score_snapshot: voterReliability,
+            vote_type: voteType,
+            vote_weight: voteWeight,
+            reputation_score: voterReputation,
+            evidence_link: evidenceLink || null,
+            note: note || null,
           })
           .eq('id', existingVote.id);
 
@@ -126,18 +172,22 @@ export async function POST(
           success: true,
           action: 'updated',
           voteType: voteType,
+          voteWeight: voteWeight,
           message: `Vote changed to ${voteType}`,
         });
       }
     } else {
       // Add new vote
       const { error: insertError } = await supabase
-        .from('prediction_votes')
+        .from('resolution_votes')
         .insert({
           prediction_id: predictionId,
-          voter_user_id: user.id,
-          vote_value: voteValue,
-          voter_reliability_score_snapshot: voterReliability,
+          user_id: user.id,
+          vote_type: voteType,
+          vote_weight: voteWeight,
+          reputation_score: voterReputation,
+          evidence_link: evidenceLink || null,
+          note: note || null,
         });
 
       if (insertError) {
@@ -152,7 +202,8 @@ export async function POST(
         success: true,
         action: 'added',
         voteType: voteType,
-        message: `${voteType} added`,
+        voteWeight: voteWeight,
+        message: `${voteType} added (weight: ${voteWeight})`,
       });
     }
   } catch (error) {
@@ -175,46 +226,39 @@ export async function GET(
     // Get current user (optional for GET)
     const user = await getCurrentUser();
 
+    // Get weighted vote totals from prediction
+    const { data: prediction } = await supabase
+      .from('predictions')
+      .select('weighted_upvotes, weighted_downvotes, weighted_net, is_finalized')
+      .eq('id', predictionId)
+      .single();
+
     if (!user) {
-      // Get total upvotes and downvotes
-      const { data: votes } = await supabase
-        .from('prediction_votes')
-        .select('vote_value')
-        .eq('prediction_id', predictionId);
-
-      const upvotes = votes?.filter(v => v.vote_value > 0).length || 0;
-      const downvotes = votes?.filter(v => v.vote_value < 0).length || 0;
-
       return NextResponse.json({
         userVote: null,
-        upvotes,
-        downvotes,
-        netScore: upvotes - downvotes,
+        userVoteWeight: 0,
+        weightedUpvotes: prediction?.weighted_upvotes || 0,
+        weightedDownvotes: prediction?.weighted_downvotes || 0,
+        weightedNet: prediction?.weighted_net || 0,
+        isFinalized: prediction?.is_finalized || false,
       });
     }
 
     // Check if current user has voted
     const { data: existingVote } = await supabase
-      .from('prediction_votes')
-      .select('vote_value')
+      .from('resolution_votes')
+      .select('vote_type, vote_weight')
       .eq('prediction_id', predictionId)
-      .eq('voter_user_id', user.id)
+      .eq('user_id', user.id)
       .single();
 
-    // Get total upvotes and downvotes
-    const { data: votes } = await supabase
-      .from('prediction_votes')
-      .select('vote_value')
-      .eq('prediction_id', predictionId);
-
-    const upvotes = votes?.filter(v => v.vote_value > 0).length || 0;
-    const downvotes = votes?.filter(v => v.vote_value < 0).length || 0;
-
     return NextResponse.json({
-      userVote: existingVote ? (existingVote.vote_value > 0 ? 'upvote' : 'downvote') : null,
-      upvotes,
-      downvotes,
-      netScore: upvotes - downvotes,
+      userVote: existingVote?.vote_type || null,
+      userVoteWeight: existingVote?.vote_weight || 0,
+      weightedUpvotes: prediction?.weighted_upvotes || 0,
+      weightedDownvotes: prediction?.weighted_downvotes || 0,
+      weightedNet: prediction?.weighted_net || 0,
+      isFinalized: prediction?.is_finalized || false,
     });
   } catch (error) {
     console.error('Error checking vote status:', error);
