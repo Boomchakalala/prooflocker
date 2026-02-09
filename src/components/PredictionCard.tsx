@@ -16,6 +16,7 @@ import StatusBadge from "./StatusBadge";
 import OnChainBadge from "./OnChainBadge";
 import { getTierInfo, type ReliabilityTier } from "@/lib/user-scoring";
 import { getTierInfo as getEvidenceTierInfo } from "@/lib/evidence-scoring";
+import { getEvidenceGrade } from "@/lib/evidence-grading";
 
 interface PredictionCardProps {
   prediction?: Prediction & {
@@ -448,7 +449,8 @@ export default function PredictionCard({ prediction, card, currentUserId, onOutc
             Pending
           </span>
         )}
-        {evidenceTier && isResolved && (
+        {/* Evidence tier badge - Only for Claims (not OSINT) */}
+        {!isOsint && evidenceTier && isResolved && (
           <span className={`px-2 py-0.5 text-[10px] font-semibold rounded ${evidenceTier.bgColor} ${evidenceTier.color}`}>
             {evidenceTier.label}
           </span>
@@ -656,12 +658,20 @@ export default function PredictionCard({ prediction, card, currentUserId, onOutc
           </div>
         )}
 
-        {/* Evidence Score - V4 format: "Evidence 94/100" */}
-        {prediction.evidence_score !== undefined && prediction.evidence_score !== null && isResolved && (
-          <div className="flex items-center gap-2 text-sm text-slate-400">
-            <span>Evidence</span>
-            <span className="font-semibold text-white">{prediction.evidence_score}/100</span>
-          </div>
+        {/* Evidence Grade - Only for Claims (not OSINT) */}
+        {!isOsint && prediction.evidence_score !== undefined && prediction.evidence_score !== null && isResolved && (
+          (() => {
+            const evidenceInfo = getEvidenceGrade(prediction.evidence_score);
+            return (
+              <div className={`flex items-center gap-2 px-3 py-1.5 rounded-lg ${evidenceInfo.bgColor} ${evidenceInfo.borderColor} border`}>
+                <span className="text-xs text-slate-400">Evidence</span>
+                <div className="flex items-center gap-1.5">
+                  <span className={`text-sm font-bold ${evidenceInfo.textColor}`}>Grade {evidenceInfo.grade}</span>
+                  <span className="text-[10px] text-slate-500">({evidenceInfo.description})</span>
+                </div>
+              </div>
+            );
+          })()
         )}
       </div>
 
