@@ -8,9 +8,10 @@ import VoteButtons from "@/components/VoteButtons";
 import { Prediction } from "@/lib/storage";
 import { useAuth } from "@/contexts/AuthContext";
 import { getEvidenceGrade } from "@/lib/scoring";
+import { formatRelativeTime } from "@/lib/utils";
 
 type ContentFilter = "all" | "osint" | "claims";
-type QuickFilter = "all" | "pending" | "verified" | "disproven" | "politics" | "conflict" | "finance";
+type QuickFilter = "all" | "pending" | "verified" | "disproven" | "crypto" | "politics" | "markets" | "tech" | "sports" | "culture" | "osint-cat" | "personal" | "other";
 
 export default function AppFeedPage() {
   const { user } = useAuth();
@@ -94,9 +95,15 @@ export default function AppFeedPage() {
     if (quickFilter === "pending" && p.outcome !== "pending") return false;
     if (quickFilter === "verified" && p.outcome !== "correct") return false;
     if (quickFilter === "disproven" && p.outcome !== "incorrect") return false;
+    if (quickFilter === "crypto" && p.category?.toLowerCase() !== "crypto") return false;
     if (quickFilter === "politics" && p.category?.toLowerCase() !== "politics") return false;
-    if (quickFilter === "conflict" && !["politics", "other"].includes(p.category?.toLowerCase() || "")) return false;
-    if (quickFilter === "finance" && !["crypto", "markets"].includes(p.category?.toLowerCase() || "")) return false;
+    if (quickFilter === "markets" && p.category?.toLowerCase() !== "markets") return false;
+    if (quickFilter === "tech" && p.category?.toLowerCase() !== "tech") return false;
+    if (quickFilter === "sports" && p.category?.toLowerCase() !== "sports") return false;
+    if (quickFilter === "culture" && p.category?.toLowerCase() !== "culture") return false;
+    if (quickFilter === "osint-cat" && p.category?.toLowerCase() !== "osint") return false;
+    if (quickFilter === "personal" && p.category?.toLowerCase() !== "personal") return false;
+    if (quickFilter === "other" && p.category?.toLowerCase() !== "other") return false;
     if (searchQuery) {
       return p.text?.toLowerCase().includes(searchQuery.toLowerCase()) ||
              p.category?.toLowerCase().includes(searchQuery.toLowerCase());
@@ -119,29 +126,11 @@ export default function AppFeedPage() {
   const pendingClaims = predictions.filter(p => !p.outcome || p.outcome === "pending").length;
 
   const getUserTier = (repScore: number) => {
-    if (repScore >= 800) return { label: 'Legend', color: 'text-yellow-400', bg: 'bg-yellow-500/10', border: 'border-yellow-500/30' };
-    if (repScore >= 650) return { label: 'Master', color: 'text-purple-400', bg: 'bg-purple-500/10', border: 'border-purple-500/30' };
-    if (repScore >= 500) return { label: 'Expert', color: 'text-blue-400', bg: 'bg-blue-500/10', border: 'border-blue-500/30' };
-    if (repScore >= 300) return { label: 'Trusted', color: 'text-green-400', bg: 'bg-green-500/10', border: 'border-green-500/30' };
-    return { label: 'Novice', color: 'text-gray-400', bg: 'bg-gray-500/10', border: 'border-gray-500/30' };
-  };
-
-  const formatDate = (dateString: string | undefined) => {
-    if (!dateString) return 'Invalid date';
-    try {
-      const date = new Date(dateString);
-      if (isNaN(date.getTime())) return 'Invalid date';
-      return date.toLocaleString('en-US', {
-        month: 'short',
-        day: 'numeric',
-        year: 'numeric',
-        hour: 'numeric',
-        minute: '2-digit',
-        hour12: true
-      });
-    } catch {
-      return 'Invalid date';
-    }
+    if (repScore >= 800) return { label: 'Legend', color: 'text-purple-400', bg: 'bg-purple-500/20', border: 'border-purple-500/40' };
+    if (repScore >= 650) return { label: 'Master', color: 'text-blue-400', bg: 'bg-blue-500/20', border: 'border-blue-500/40' };
+    if (repScore >= 500) return { label: 'Expert', color: 'text-emerald-400', bg: 'bg-emerald-500/20', border: 'border-emerald-500/40' };
+    if (repScore >= 300) return { label: 'Trusted', color: 'text-amber-400', bg: 'bg-amber-500/20', border: 'border-amber-500/40' };
+    return { label: 'Novice', color: 'text-slate-400', bg: 'bg-slate-500/20', border: 'border-slate-500/40' };
   };
 
   return (
@@ -309,9 +298,12 @@ export default function AppFeedPage() {
                 { id: 'pending', label: 'Pending' },
                 { id: 'verified', label: 'Verified' },
                 { id: 'disproven', label: 'Disproven' },
+                { id: 'crypto', label: 'Crypto' },
                 { id: 'politics', label: 'Politics' },
-                { id: 'conflict', label: 'Conflict' },
-                { id: 'finance', label: 'Finance' },
+                { id: 'markets', label: 'Markets' },
+                { id: 'tech', label: 'Tech' },
+                { id: 'sports', label: 'Sports' },
+                { id: 'culture', label: 'Culture' },
               ].map(filter => (
                 <button
                   key={filter.id}
@@ -351,89 +343,88 @@ export default function AppFeedPage() {
                 </div>
 
                 {filteredPredictions.length > 0 ? (
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
                     {filteredPredictions.map((claim) => {
                       const isCorrect = claim.outcome === "correct";
                       const isIncorrect = claim.outcome === "incorrect";
                       const isPending = !claim.outcome || claim.outcome === "pending";
                       const isResolved = isCorrect || isIncorrect;
                       const userTier = getUserTier(claim.author_reputation_score || 0);
+                      const evidenceGrade = getEvidenceGrade(claim.evidence_score);
 
                       return (
                         <Link
                           key={claim.id}
                           href={`/proof/${claim.publicSlug || claim.id}`}
-                          className={`group bg-gradient-to-br from-purple-950/30 via-purple-900/20 to-purple-950/30 rounded-xl hover:shadow-[0_0_30px_rgba(168,85,247,0.3)] transition-all relative overflow-hidden cursor-pointer ${
-                            isCorrect
-                              ? 'p-6 border-4 border-green-500 shadow-[0_0_40px_rgba(34,197,94,0.5)]'
-                              : isIncorrect
-                              ? 'p-6 border-4 border-red-500 shadow-[0_0_40px_rgba(239,68,68,0.5)]'
-                              : 'p-4 border-2 border-purple-500/40'
-                          }`}
+                          className="group bg-slate-900/80 border border-slate-700/50 hover:border-slate-600 rounded-2xl p-5 transition-all duration-300 hover:shadow-[0_0_25px_rgba(168,85,247,0.15)] hover:-translate-y-0.5"
                         >
-                          <div className="mb-3">
-                            <div className="flex items-center justify-between mb-2">
-                              <div className="flex items-center gap-2">
-                                <div className="w-7 h-7 rounded-lg flex items-center justify-center border bg-purple-600/20 border-purple-500/40">
-                                  <svg className="w-3.5 h-3.5 text-purple-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
-                                  </svg>
-                                </div>
-                                <div>
-                                  <div className="flex items-center gap-2">
-                                    <span className="text-sm font-semibold text-purple-300">
-                                      {claim.pseudonym || `Anon #${claim.authorNumber || '1000'}`}
-                                    </span>
-                                    <span className={`px-2 py-0.5 text-[10px] font-bold rounded border ${userTier.bg} ${userTier.border} ${userTier.color}`}>
-                                      {userTier.label}
-                                    </span>
-                                  </div>
-                                </div>
+                          {/* User Header */}
+                          <div className="flex items-center justify-between mb-4">
+                            <div className="flex items-center gap-3">
+                              <div className="w-11 h-11 rounded-full bg-gradient-to-br from-purple-600 to-purple-800 flex items-center justify-center text-white text-sm font-bold border-2 border-purple-500/40 shadow-lg">
+                                {claim.authorNumber?.toString().slice(-2) || "??"}
                               </div>
-
-                              {isResolved ? (
-                                <div className={`flex items-center gap-1 px-2 py-0.5 rounded ${
-                                  isCorrect
-                                    ? 'bg-green-500/10 text-green-400 border border-green-500/30'
-                                    : 'bg-red-500/10 text-red-400 border border-red-500/30'
-                                }`}>
-                                  {isCorrect ? (
-                                    <svg className="w-3 h-3" fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24">
-                                      <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7"/>
-                                    </svg>
-                                  ) : (
-                                    <svg className="w-3 h-3" fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24">
-                                      <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12"/>
-                                    </svg>
-                                  )}
-                                  <span className="text-[10px] font-bold uppercase">
-                                    {isCorrect ? 'Correct' : 'Incorrect'}
+                              <div>
+                                <div className="flex items-center gap-2">
+                                  <span className="text-sm text-white font-semibold">Anon #{claim.authorNumber}</span>
+                                  <span className={`px-2 py-0.5 text-[10px] font-bold rounded border ${userTier.bg} ${userTier.border} ${userTier.color}`}>
+                                    {userTier.label}
                                   </span>
                                 </div>
-                              ) : (
-                                <div className="flex items-center gap-1 px-2 py-0.5 rounded bg-yellow-500/10 text-yellow-400 border border-yellow-500/30">
-                                  <svg className="w-3 h-3" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                <div className="text-xs text-slate-500">{formatRelativeTime(claim.createdAt)}</div>
+                              </div>
+                            </div>
+
+                            {/* Status Badge */}
+                            <div className={`flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-bold rounded-lg border-2 shadow-lg ${
+                              isCorrect
+                                ? "bg-emerald-500/30 border-emerald-400/60 text-emerald-300 shadow-emerald-500/30"
+                                : isIncorrect
+                                ? "bg-red-500/30 border-red-400/60 text-red-300 shadow-red-500/30"
+                                : "bg-amber-500/30 border-amber-400/60 text-amber-300 shadow-amber-500/30"
+                            }`}>
+                              {isCorrect && (
+                                <>
+                                  <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7"/>
                                   </svg>
-                                  <span className="text-[10px] font-bold uppercase">Pending</span>
-                                </div>
+                                  Correct
+                                </>
+                              )}
+                              {isIncorrect && (
+                                <>
+                                  <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12"/>
+                                  </svg>
+                                  Incorrect
+                                </>
+                              )}
+                              {isPending && (
+                                <>
+                                  <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                                    <circle cx="12" cy="12" r="10"/>
+                                  </svg>
+                                  Pending
+                                </>
                               )}
                             </div>
                           </div>
 
-                          <div className="mb-3 h-[44px]">
-                            <p className="text-[15px] leading-snug line-clamp-2 text-white">
+                          {/* Claim Text */}
+                          <div className="mb-4">
+                            <p className="text-white text-[15px] leading-relaxed line-clamp-4">
                               {claim.text}
                             </p>
                           </div>
 
-                          <div className="flex items-center gap-2 mb-3 flex-wrap">
+                          {/* Category & Tags */}
+                          <div className="flex items-center gap-2 mb-4 flex-wrap">
                             {claim.category && (
-                              <span className="px-2 py-0.5 text-xs rounded border bg-slate-800/70 text-slate-400 border-slate-700/50">
+                              <span className="px-2 py-1 bg-slate-800/70 text-slate-400 text-xs rounded border border-slate-700/50">
                                 #{claim.category}
                               </span>
                             )}
-                            <span className="flex items-center gap-1 px-2 py-0.5 text-xs rounded border font-semibold bg-purple-900/30 text-purple-400 border-purple-500/40">
+                            <span className="flex items-center gap-1 px-2 py-1 bg-purple-900/30 text-purple-400 text-xs rounded border border-purple-500/40 font-semibold">
                               <svg className="w-3 h-3" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
                               </svg>
@@ -441,61 +432,51 @@ export default function AppFeedPage() {
                             </span>
                           </div>
 
-                          <div className="flex items-center justify-between pt-3 border-t border-slate-700/50 mb-2">
-                            <div className="flex items-center gap-3">
-                              <div onClick={(e) => e.preventDefault()}>
-                                <VoteButtons
-                                  predictionId={claim.id}
-                                  initialUpvotes={claim.upvotesCount || 0}
-                                  initialDownvotes={claim.downvotesCount || 0}
-                                  compact={true}
-                                />
+                          {/* Engagement Footer */}
+                          <div className="flex items-center justify-between pt-4 border-t border-slate-700/50 mb-3">
+                            <div className="flex items-center gap-4">
+                              {/* Vote Display */}
+                              <div className="flex items-center gap-3">
+                                <div className="flex items-center gap-1.5 text-emerald-400">
+                                  <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="M5 15l7-7 7 7"/>
+                                  </svg>
+                                  <span className="text-xs font-semibold">{claim.upvotesCount || 0}</span>
+                                </div>
+                                <div className="flex items-center gap-1.5 text-red-400">
+                                  <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7"/>
+                                  </svg>
+                                  <span className="text-xs font-semibold">{claim.downvotesCount || 0}</span>
+                                </div>
                               </div>
 
-                              {isResolved && claim.evidence_score !== undefined && claim.evidence_score > 0 && (() => {
-                                const evidenceGrade = getEvidenceGrade(claim.evidence_score);
-                                return (
-                                  <div className={`flex items-center gap-1 px-2 py-0.5 border rounded transition-all ${evidenceGrade.bgColor} ${evidenceGrade.borderColor}`}>
-                                    <svg className={`w-3.5 h-3.5 ${evidenceGrade.textColor}`} fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                                      <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
-                                    </svg>
-                                    <span className={`text-xs font-bold ${evidenceGrade.textColor}`}>{evidenceGrade.grade}</span>
-                                  </div>
-                                );
-                              })()}
+                              {/* Evidence Grade */}
+                              {claim.evidence_score !== undefined && claim.evidence_score > 0 && (
+                                <div
+                                  className={`flex items-center gap-1.5 px-2 py-1 border rounded-lg transition-all hover:scale-105 ${evidenceGrade.bgColor} ${evidenceGrade.borderColor} ${evidenceGrade.shadowColor}`}
+                                >
+                                  <svg className={`w-4 h-4 ${evidenceGrade.textColor}`} fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+                                  </svg>
+                                  <span className={`text-xs font-bold ${evidenceGrade.textColor}`}>{evidenceGrade.grade}</span>
+                                </div>
+                              )}
 
-                              <div className="flex items-center gap-1 text-slate-400">
-                                <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                                  <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
-                                  <path strokeLinecap="round" strokeLinejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                              {/* Share Icon */}
+                              <div className="flex items-center gap-1.5 text-slate-400 hover:text-cyan-400 transition-colors">
+                                <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                                  <path strokeLinecap="round" strokeLinejoin="round" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"/>
                                 </svg>
-                                <span className="text-xs">{claim.viewCount || 0}</span>
                               </div>
                             </div>
 
-                            <div className="flex items-center gap-1 px-2 py-1 rounded text-xs font-semibold transition-all border bg-purple-600/10 hover:bg-purple-600/20 border-purple-500/30 text-purple-300 group-hover:border-purple-400/60">
+                            {/* View Button */}
+                            <div className="flex items-center gap-1 px-3 py-1.5 bg-purple-600/10 hover:bg-purple-600/20 border border-purple-500/30 rounded-lg text-xs text-purple-300 font-semibold transition-all group-hover:border-purple-400/60">
                               <span>View</span>
                               <svg className="w-3 h-3" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7"/>
                               </svg>
-                            </div>
-                          </div>
-
-                          <div className="pt-2 border-t rounded px-2 py-1.5 border-purple-500/20 bg-gradient-to-r from-purple-900/10 to-transparent">
-                            <div className="flex items-center justify-between text-[10px]">
-                              {claim.hash && (
-                                <div className="font-mono text-purple-400/60">
-                                  {claim.hash.slice(0, 8)}...
-                                </div>
-                              )}
-                              <div className="flex items-center gap-1">
-                                <svg className="w-3 h-3 text-purple-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                                </svg>
-                                <span className="font-mono text-purple-300/80">
-                                  {formatDate(claim.createdAt)}
-                                </span>
-                              </div>
                             </div>
                           </div>
                         </Link>
@@ -525,7 +506,7 @@ export default function AppFeedPage() {
                 </div>
 
                 {filteredOsint.length > 0 ? (
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
                     {filteredOsint.map((signal) => (
                       <div
                         key={signal.id}
