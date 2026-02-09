@@ -21,9 +21,9 @@ export default function HowScoringWorksPage() {
               <svg className="w-5 h-5 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
-              <div className="text-xs font-semibold text-neutral-400 uppercase tracking-wider">Evidence Score</div>
+              <div className="text-xs font-semibold text-neutral-400 uppercase tracking-wider">Evidence Grade</div>
             </div>
-            <div className="text-3xl font-bold text-white mb-2">0-100</div>
+            <div className="text-3xl font-bold text-white mb-2">A-D</div>
             <p className="text-sm text-neutral-400">Quality of proof when resolving</p>
           </div>
 
@@ -260,70 +260,66 @@ export default function HowScoringWorksPage() {
                 </svg>
               </div>
               <div>
-                <h2 className="text-2xl font-bold text-white">Evidence Score (0-100)</h2>
-                <p className="text-sm text-neutral-400">Quality of proof when resolving</p>
+                <h2 className="text-2xl font-bold text-white">Evidence Grade (A-D)</h2>
+                <p className="text-sm text-neutral-400">Quality of proof when resolving Claims</p>
               </div>
             </div>
 
-            <div className="grid md:grid-cols-2 gap-3">
+            <div className="grid md:grid-cols-4 gap-3">
               <div className="bg-green-500/5 rounded-lg p-4 border border-green-500/20">
                 <div className="flex items-center gap-3 mb-2">
-                  <div className="w-8 h-8 rounded-full bg-green-500/10 border border-green-500/30 flex items-center justify-center flex-shrink-0">
-                    <svg className="w-4 h-4 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                    </svg>
+                  <div className="w-10 h-10 rounded-lg bg-green-500/10 border border-green-500/30 flex items-center justify-center flex-shrink-0 text-green-400 font-bold text-lg">
+                    A
                   </div>
                   <div className="flex-1">
-                    <div className="text-green-400 font-semibold">Strong</div>
-                    <div className="text-xs text-neutral-500">76-100 points</div>
+                    <div className="text-green-400 font-semibold">Grade A</div>
+                    <div className="text-xs text-neutral-500">Authoritative</div>
                   </div>
                 </div>
-                <p className="text-sm text-neutral-400">Multiple sources + screenshots</p>
+                <p className="text-sm text-neutral-400">Official docs, court records, on-chain transactions</p>
+                <div className="text-xs text-green-400 font-semibold mt-2">1.6x multiplier</div>
               </div>
 
               <div className="bg-blue-500/5 rounded-lg p-4 border border-blue-500/20">
                 <div className="flex items-center gap-3 mb-2">
-                  <div className="w-8 h-8 rounded-full bg-blue-500/10 border border-blue-500/30 flex items-center justify-center flex-shrink-0">
-                    <svg className="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
+                  <div className="w-10 h-10 rounded-lg bg-blue-500/10 border border-blue-500/30 flex items-center justify-center flex-shrink-0 text-blue-400 font-bold text-lg">
+                    B
                   </div>
                   <div className="flex-1">
-                    <div className="text-blue-400 font-semibold">Solid</div>
-                    <div className="text-xs text-neutral-500">51-75 points</div>
+                    <div className="text-blue-400 font-semibold">Grade B</div>
+                    <div className="text-xs text-neutral-500">High-Quality</div>
                   </div>
                 </div>
-                <p className="text-sm text-neutral-400">Good sources or multiple items</p>
+                <p className="text-sm text-neutral-400">Reputable outlets, multiple credible sources</p>
+                <div className="text-xs text-blue-400 font-semibold mt-2">1.3x multiplier</div>
               </div>
 
               <div className="bg-yellow-500/5 rounded-lg p-4 border border-yellow-500/20">
                 <div className="flex items-center gap-3 mb-2">
-                  <div className="w-8 h-8 rounded-full bg-yellow-500/10 border border-yellow-500/30 flex items-center justify-center flex-shrink-0">
-                    <svg className="w-4 h-4 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-                    </svg>
+                  <div className="w-10 h-10 rounded-lg bg-yellow-500/10 border border-yellow-500/30 flex items-center justify-center flex-shrink-0 text-yellow-400 font-bold text-lg">
+                    C
                   </div>
                   <div className="flex-1">
-                    <div className="text-yellow-400 font-semibold">Basic</div>
-                    <div className="text-xs text-neutral-500">26-50 points</div>
+                    <div className="text-yellow-400 font-semibold">Grade C</div>
+                    <div className="text-xs text-neutral-500">Weak/Indirect</div>
                   </div>
                 </div>
-                <p className="text-sm text-neutral-400">Some evidence but limited</p>
+                <p className="text-sm text-neutral-400">Screenshots, single-source, social media posts</p>
+                <div className="text-xs text-yellow-400 font-semibold mt-2">0.8x multiplier</div>
               </div>
 
               <div className="bg-orange-500/5 rounded-lg p-4 border border-orange-500/20">
                 <div className="flex items-center gap-3 mb-2">
-                  <div className="w-8 h-8 rounded-full bg-orange-500/10 border border-orange-500/30 flex items-center justify-center flex-shrink-0">
-                    <svg className="w-4 h-4 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                    </svg>
+                  <div className="w-10 h-10 rounded-lg bg-orange-500/10 border border-orange-500/30 flex items-center justify-center flex-shrink-0 text-orange-400 font-bold text-lg">
+                    D
                   </div>
                   <div className="flex-1">
-                    <div className="text-orange-400 font-semibold">Unverified</div>
-                    <div className="text-xs text-neutral-500">0-25 points</div>
+                    <div className="text-orange-400 font-semibold">Grade D</div>
+                    <div className="text-xs text-neutral-500">No Evidence</div>
                   </div>
                 </div>
-                <p className="text-sm text-neutral-400">Minimal or no evidence</p>
+                <p className="text-sm text-neutral-400">Minimal or no supporting evidence provided</p>
+                <div className="text-xs text-orange-400 font-semibold mt-2">0.3x multiplier</div>
               </div>
             </div>
           </div>
