@@ -51,6 +51,7 @@ export default function GlobePage() {
   const [claims, setClaims] = useState<Claim[]>([]);
   const [osint, setOsint] = useState<OsintItem[]>([]);
   const [resolutions, setResolutions] = useState<any[]>([]);
+  const [totalResolutions, setTotalResolutions] = useState(0);
   const [currentTab, setCurrentTab] = useState<'claims' | 'osint' | 'resolutions'>('osint'); // Default to OSINT - more interesting!
   const [activeFilter, setActiveFilter] = useState<string>('all');
   const [selectedOsint, setSelectedOsint] = useState<OsintItem | null>(null);
@@ -73,8 +74,9 @@ export default function GlobePage() {
           // Filter to only show resolved claims (correct or incorrect)
           const resolved = data.predictions.filter((p: any) =>
             p.outcome === 'correct' || p.outcome === 'incorrect'
-          ).slice(0, 20);
-          setResolutions(resolved);
+          );
+          setTotalResolutions(resolved.length);
+          setResolutions(resolved.slice(0, 20)); // Show first 20
         }
       })
       .catch(err => console.error('[Globe] Failed to load resolutions:', err));
@@ -183,7 +185,7 @@ export default function GlobePage() {
                     : 'bg-transparent text-[#94a3b8] border-[rgba(148,163,184,0.2)] hover:text-[#f8fafc] hover:border-emerald-500'
                 }`}
               >
-                Resolved <span className="ml-1 opacity-70">({resolutions.length})</span>
+                Resolved <span className="ml-1 opacity-70">({totalResolutions})</span>
               </button>
             </div>
 
