@@ -121,14 +121,25 @@ SQL migration to update database schema:
   - get_reputation_tier(score) → TEXT
 ```
 
-### 6. New API Route
+### 6. API Routes Updated
 **File:** `/src/app/api/user-reputation/route.ts` (NEW)
 
-Renamed and updated from `/api/user-reliability`:
-- Fetches user reputation scores
-- Calculates tier badges
+New primary endpoint for reputation:
+- Fetches user reputation scores directly from `user_stats` table
+- Uses new reputation system functions (`getReputationTier`, `REPUTATION_TIERS`)
 - Supports both authenticated users and anonymous users
 - Returns: tier, label, score, color, bg, border, stats
+
+**File:** `/src/app/api/user-reliability/route.ts` (UPDATED - DEPRECATED)
+
+Updated for backward compatibility:
+- Now uses same logic as `/api/user-reputation`
+- Marked as @deprecated
+- Kept to avoid breaking external clients
+
+**File:** `/src/app/app/page.tsx` (UPDATED)
+
+- Updated to call `/api/user-reputation` instead of `/api/user-reliability`
 
 ---
 
