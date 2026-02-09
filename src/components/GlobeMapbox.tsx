@@ -402,8 +402,12 @@ export default function GlobeMapbox({ claims, osint }: GlobeMapboxProps) {
       });
     });
 
-    // Unified click handler for Stack Panel
+    // Unified click handler for Stack Panel with single-flight guard
     map.current.on('click', (e: any) => {
+      // Increment request ID to invalidate any pending requests
+      clickRequestId.current += 1;
+      const currentRequestId = clickRequestId.current;
+
       const bbox = [
         [e.point.x - 10, e.point.y - 10],
         [e.point.x + 10, e.point.y + 10]
@@ -419,44 +423,89 @@ export default function GlobeMapbox({ claims, osint }: GlobeMapboxProps) {
 
       if (claimFeatures.length === 0 && osintFeatures.length === 0) return;
 
-      // Collect all items
-      const claimsList: any[] = [];
-      const osintList: any[] = [];
+      // Use Maps for deduplication
+      const claimsMap = new Map<number, any>();
+      const osintMap = new Map<number, any>();
+      let pending = 0;
 
       // Process claims
       claimFeatures.slice(0, 3).forEach((feature: any) => {
         if (feature.properties.cluster) {
           // Handle cluster - get leaves
+          pending++;
           const clusterId = feature.properties.cluster_id;
-          map.current.getSource('claims').getClusterLeaves(clusterId, 3, 0, (err: any, features: any) => {
-            if (!err && features) {
-              features.forEach((f: any) => claimsList.push(f.properties));
+          map.current.getSource('claims').getClusterLeaves(clusterId, 10, 0, (err: any, features: any) => {
+            pending--;
+            if (!err && features && currentRequestId === clickRequestId.current) {
+              features.forEach((f: any) => {
+                // Dedupe by ID
+                if (f.properties.id && !claimsMap.has(f.properties.id)) {
+                  claimsMap.set(f.properties.id, f.properties);
+                }
+              });
+            }
+            // Check if all done
+            if (pending === 0 && currentRequestId === clickRequestId.current) {
+              finalizePanel();
             }
           });
         } else {
-          claimsList.push(feature.properties);
+          // Single point
+          if (feature.properties.id && !claimsMap.has(feature.properties.id)) {
+            claimsMap.set(feature.properties.id, feature.properties);
+          }
         }
       });
 
       // Process OSINT
       osintFeatures.slice(0, 3).forEach((feature: any) => {
         if (feature.properties.cluster) {
+          pending++;
           const clusterId = feature.properties.cluster_id;
-          map.current.getSource('osint').getClusterLeaves(clusterId, 3, 0, (err: any, features: any) => {
-            if (!err && features) {
-              features.forEach((f: any) => osintList.push(f.properties));
+          map.current.getSource('osint').getClusterLeaves(clusterId, 10, 0, (err: any, features: any) => {
+            pending--;
+            if (!err && features && currentRequestId === clickRequestId.current) {
+              features.forEach((f: any) => {
+                // Dedupe by ID
+                if (f.properties.id && !osintMap.has(f.properties.id)) {
+                  osintMap.set(f.properties.id, f.properties);
+                }
+              });
+            }
+            // Check if all done
+            if (pending === 0 && currentRequestId === clickRequestId.current) {
+              finalizePanel();
             }
           });
         } else {
-          osintList.push(feature.properties);
+          // Single point
+          if (feature.properties.id && !osintMap.has(feature.properties.id)) {
+            osintMap.set(feature.properties.id, feature.properties);
+          }
         }
       });
 
-      // Wait a bit for async cluster data
-      setTimeout(() => {
+      // Finalize and show panel
+      function finalizePanel() {
+        // Guard: Only show if this is still the current request
+        if (currentRequestId !== clickRequestId.current) {
+          console.log('[Globe] Click request stale, ignoring');
+          return;
+        }
+
+        const claimsList = Array.from(claimsMap.values()).slice(0, 5);
+        const osintList = Array.from(osintMap.values()).slice(0, 5);
+
         if (claimsList.length === 0 && osintList.length === 0) return;
+
+        console.log('[Globe] Showing panel:', claimsList.length, 'claims,', osintList.length, 'osint');
         showStackPanel(e.point, claimsList, osintList);
-      }, 100);
+      }
+
+      // If no pending async, show immediately
+      if (pending === 0) {
+        setTimeout(finalizePanel, 50);
+      }
     });
 
     function showStackPanel(point: any, claims: any[], osintItems: any[]) {
