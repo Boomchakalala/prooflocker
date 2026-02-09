@@ -267,8 +267,8 @@ export default function GlobeMapbox({ claims, osint, mapMode = 'both', viewMode 
     const claimsVisible = mapMode === 'both' || mapMode === 'claims';
     const osintVisible = mapMode === 'both' || mapMode === 'osint';
 
-    if (map.current.getLayer('claims-circles')) {
-      map.current.setLayoutProperty('claims-circles', 'visibility', claimsVisible ? 'visible' : 'none');
+    if (map.current.getLayer('claims-points')) {
+      map.current.setLayoutProperty('claims-points', 'visibility', claimsVisible ? 'visible' : 'none');
     }
     if (map.current.getLayer('claims-clusters')) {
       map.current.setLayoutProperty('claims-clusters', 'visibility', claimsVisible ? 'visible' : 'none');
@@ -276,8 +276,8 @@ export default function GlobeMapbox({ claims, osint, mapMode = 'both', viewMode 
     if (map.current.getLayer('claims-cluster-count')) {
       map.current.setLayoutProperty('claims-cluster-count', 'visibility', claimsVisible ? 'visible' : 'none');
     }
-    if (map.current.getLayer('osint-circles')) {
-      map.current.setLayoutProperty('osint-circles', 'visibility', osintVisible ? 'visible' : 'none');
+    if (map.current.getLayer('osint-points')) {
+      map.current.setLayoutProperty('osint-points', 'visibility', osintVisible ? 'visible' : 'none');
     }
     if (map.current.getLayer('osint-clusters')) {
       map.current.setLayoutProperty('osint-clusters', 'visibility', osintVisible ? 'visible' : 'none');
