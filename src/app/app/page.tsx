@@ -163,136 +163,105 @@ export default function AppFeedPage() {
             </div>
           </div>
         ) : (
-          <div className="space-y-8">
+          <>
+            {/* Unified Feed - Chronological */}
+            {unifiedFeed.length > 0 ? (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {unifiedFeed.map((item) => {
+                  if (item.type === 'osint') {
+                    const signal = item.data;
+                    return (
+                      <div
+                        key={`osint-${signal.id}`}
+                        className="bg-gradient-to-br from-red-950/30 via-orange-950/20 to-red-950/30 border-2 border-red-500/40 rounded-xl p-5 hover:border-red-500/60 hover:shadow-[0_0_30px_rgba(239,68,68,0.2)] transition-all relative overflow-hidden"
+                      >
+                        {/* Alert Pulse */}
+                        <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-red-500 to-transparent animate-pulse"></div>
 
-            {/* OSINT SIGNALS */}
-            {contentFilter !== "claims" && filteredOsint.length > 0 && (
-              <div>
-                <div className="flex items-center gap-3 mb-6">
-                  <div className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-red-600/20 to-orange-600/20 border border-red-500/40 rounded-xl shadow-[0_0_20px_rgba(239,68,68,0.2)]">
-                    <svg className="w-5 h-5 text-red-400" fill="currentColor" viewBox="0 0 20 20">
-                      <path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6z"/>
-                    </svg>
-                    <h2 className="text-xl font-bold text-white">OSINT Signals</h2>
-                    <span className="px-2 py-0.5 bg-red-500/30 text-red-200 text-xs font-bold rounded">
-                      {filteredOsint.length}
-                    </span>
-                  </div>
-                  <div className="flex-1 h-px bg-gradient-to-r from-red-500/40 to-transparent"></div>
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                  {filteredOsint.map((signal) => (
-                    <div
-                      key={signal.id}
-                      className="bg-gradient-to-br from-red-950/30 via-orange-950/20 to-red-950/30 border-2 border-red-500/40 rounded-xl p-5 hover:border-red-500/60 hover:shadow-[0_0_30px_rgba(239,68,68,0.2)] transition-all relative overflow-hidden"
-                    >
-                      {/* Alert Pulse */}
-                      <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-red-500 to-transparent animate-pulse"></div>
-
-                      {/* Header */}
-                      <div className="flex items-center justify-between mb-3">
-                        <span className="inline-flex items-center gap-1.5 px-3 py-1 text-xs font-bold rounded-md bg-red-600/30 border border-red-500/50 text-red-200 uppercase tracking-wide">
-                          <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20">
-                            <path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6z"/>
-                          </svg>
-                          OSINT
-                        </span>
-                        {signal.category && (
-                          <span className="px-2 py-1 text-[10px] font-semibold rounded bg-red-900/40 border border-red-700/50 text-red-300 uppercase">
-                            {signal.category}
-                          </span>
-                        )}
-                      </div>
-
-                      {/* Source Line */}
-                      <div className="flex items-center gap-2 mb-3 pb-2 border-b border-red-500/20">
-                        <div className="w-6 h-6 rounded bg-red-600/30 flex items-center justify-center border border-red-500/40">
-                          <svg className="w-3 h-3 text-red-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"/>
-                          </svg>
-                        </div>
-                        <div className="flex-1">
-                          <div className="text-sm text-red-200 font-semibold">{signal.source_name || "Unknown Source"}</div>
-                          {signal.source_handle && (
-                            <div className="text-xs text-red-400/70">@{signal.source_handle}</div>
-                          )}
-                        </div>
-                        {signal.location && (
-                          <div className="flex items-center gap-1 text-xs text-orange-400">
-                            <svg className="w-3 h-3" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
-                              <path strokeLinecap="round" strokeLinejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+                        {/* Header */}
+                        <div className="flex items-center justify-between mb-3">
+                          <span className="inline-flex items-center gap-1.5 px-3 py-1 text-xs font-bold rounded-md bg-red-600/30 border border-red-500/50 text-red-200 uppercase tracking-wide">
+                            <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20">
+                              <path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6z"/>
                             </svg>
-                            <span>{signal.location}</span>
-                          </div>
-                        )}
-                      </div>
-
-                      {/* Title */}
-                      <h3 className="text-base font-bold text-red-50 mb-2 leading-tight line-clamp-2">
-                        {signal.title || "Untitled Signal"}
-                      </h3>
-
-                      {/* Content */}
-                      {signal.summary && (
-                        <p className="text-sm text-red-100/70 mb-4 line-clamp-2 leading-relaxed">
-                          {signal.summary}
-                        </p>
-                      )}
-
-                      {/* Footer */}
-                      <div className="flex items-center justify-between pt-3 border-t border-red-500/20">
-                        <div className="text-xs text-red-400/60 font-mono">
-                          {new Date(signal.published_at || signal.created_at).toLocaleDateString()}
-                        </div>
-                        <div className="flex gap-2">
-                          {signal.url && (
-                            <a
-                              href={signal.url}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="px-3 py-1.5 text-xs font-semibold rounded-md bg-red-600/30 hover:bg-red-600/40 text-red-200 border border-red-500/40 transition-all flex items-center gap-1.5"
-                            >
-                              <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
-                              </svg>
-                              Source
-                            </a>
+                            OSINT
+                          </span>
+                          {signal.category && (
+                            <span className="px-2 py-1 text-[10px] font-semibold rounded bg-red-900/40 border border-red-700/50 text-red-300 uppercase">
+                              {signal.category}
+                            </span>
                           )}
                         </div>
+
+                        {/* Source Line */}
+                        <div className="flex items-center gap-2 mb-3 pb-2 border-b border-red-500/20">
+                          <div className="w-6 h-6 rounded bg-red-600/30 flex items-center justify-center border border-red-500/40">
+                            <svg className="w-3 h-3 text-red-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"/>
+                            </svg>
+                          </div>
+                          <div className="flex-1">
+                            <div className="text-sm text-red-200 font-semibold">{signal.source_name || "Unknown Source"}</div>
+                            {signal.source_handle && (
+                              <div className="text-xs text-red-400/70">@{signal.source_handle}</div>
+                            )}
+                          </div>
+                          {signal.location && (
+                            <div className="flex items-center gap-1 text-xs text-orange-400">
+                              <svg className="w-3 h-3" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+                              </svg>
+                              <span>{signal.location}</span>
+                            </div>
+                          )}
+                        </div>
+
+                        {/* Title */}
+                        <h3 className="text-base font-bold text-red-50 mb-2 leading-tight line-clamp-2">
+                          {signal.title || "Untitled Signal"}
+                        </h3>
+
+                        {/* Content */}
+                        {signal.summary && (
+                          <p className="text-sm text-red-100/70 mb-4 line-clamp-2 leading-relaxed">
+                            {signal.summary}
+                          </p>
+                        )}
+
+                        {/* Footer */}
+                        <div className="flex items-center justify-between pt-3 border-t border-red-500/20">
+                          <div className="text-xs text-red-400/60 font-mono">
+                            {new Date(signal.published_at || signal.created_at).toLocaleDateString()}
+                          </div>
+                          <div className="flex gap-2">
+                            {signal.url && (
+                              <a
+                                href={signal.url}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="px-3 py-1.5 text-xs font-semibold rounded-md bg-red-600/30 hover:bg-red-600/40 text-red-200 border border-red-500/40 transition-all flex items-center gap-1.5"
+                              >
+                                <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                                  <path strokeLinecap="round" strokeLinejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
+                                </svg>
+                                Source
+                              </a>
+                            )}
+                          </div>
+                        </div>
                       </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {/* CLAIMS */}
-            {contentFilter !== "osint" && filteredPredictions.length > 0 && (
-              <div>
-                <div className="flex items-center gap-3 mb-6">
-                  <div className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-purple-600/20 to-purple-700/20 border border-purple-500/40 rounded-xl shadow-[0_0_20px_rgba(168,85,247,0.2)]">
-                    <svg className="w-5 h-5 text-purple-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
-                    </svg>
-                    <h2 className="text-xl font-bold text-white">Verified Claims</h2>
-                    <span className="px-2 py-0.5 bg-purple-500/30 text-purple-200 text-xs font-bold rounded">
-                      {filteredPredictions.length}
-                    </span>
-                  </div>
-                  <div className="flex-1 h-px bg-gradient-to-r from-purple-500/40 to-transparent"></div>
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                  {filteredPredictions.map((claim) => {
+                    );
+                  } else {
+                    // Claim card
+                    const claim = item.data;
                     const isCorrect = claim.outcome === "correct";
                     const isIncorrect = claim.outcome === "incorrect";
                     const isPending = !claim.outcome || claim.outcome === "pending";
 
                     return (
                       <Link
-                        key={claim.id}
+                        key={`claim-${claim.id}`}
                         href={`/proof/${claim.slug}`}
                         className="bg-gradient-to-br from-purple-950/30 via-purple-900/20 to-purple-950/30 border-2 border-purple-500/40 rounded-xl p-5 hover:border-purple-500/60 hover:shadow-[0_0_30px_rgba(168,85,247,0.2)] transition-all relative overflow-hidden cursor-pointer"
                       >
@@ -402,13 +371,10 @@ export default function AppFeedPage() {
                         </div>
                       </Link>
                     );
-                  })}
-                </div>
+                  }
+                })}
               </div>
-            )}
-
-            {/* Empty State */}
-            {filteredPredictions.length === 0 && filteredOsint.length === 0 && (
+            ) : (
               <div className="text-center py-20">
                 <div className="inline-block p-6 bg-white/5 rounded-2xl border border-white/10 mb-6">
                   <svg className="w-16 h-16 text-neutral-500 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -421,7 +387,7 @@ export default function AppFeedPage() {
                 </p>
               </div>
             )}
-          </div>
+          </>
         )}
       </main>
 
