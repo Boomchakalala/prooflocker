@@ -14,7 +14,31 @@ export class OsintIngestionService {
     const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
     const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || '';
 
-    this.supabase = createClient(supabaseUrl, supabaseKey);
+    // During build time, env vars might not be available - create placeholder
+    if (!supabaseUrl || !supabaseKey) {
+      console.warn('[OsintIngestion] Supabase credentials not available (build time)');
+      // Create a dummy client that will fail gracefully if used
+      this.supabase = null as any;
+    } else {
+      this.supabase = createClient(supabaseUrl, supabaseKey);
+    }
+  }
+
+  /**
+   * Get Supabase client, initializing if needed
+   */
+  private getSupabase() {
+    if (!this.supabase) {
+      const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
+      const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || '';
+
+      if (!supabaseUrl || !supabaseKey) {
+        throw new Error('Supabase credentials not configured');
+      }
+
+      this.supabase = createClient(supabaseUrl, supabaseKey);
+    }
+    return this.supabase;
   }
 
   /**
@@ -35,7 +59,7 @@ export class OsintIngestionService {
 
       // Step 2: Check for existing articles (deduplication)
       const hashes = articles.map((a) => a.content_hash);
-      const { data: existing } = await this.supabase
+      const { data: existing } = await this.getSupabase()
         .from('osint_signals')
         .select('content_hash')
         .in('content_hash', hashes);
@@ -95,7 +119,7 @@ export class OsintIngestionService {
       }
 
       // Step 6: Insert into database
-      const { data, error } = await this.supabase.from('osint_signals').insert(validRecords);
+      const { data, error } = await this.getSupabase().from('osint_signals').insert(validRecords);
 
       if (error) {
         console.error('[OsintIngestion] Insert error:', error);
@@ -158,7 +182,7 @@ export class OsintIngestionService {
     const sevenDaysAgo = new Date();
     sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
 
-    const { error } = await this.supabase
+    const { error } = await this.getSupabase()
       .from('osint_signals')
       .delete()
       .lt('created_at', sevenDaysAgo.toISOString());
