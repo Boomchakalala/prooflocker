@@ -77,6 +77,25 @@ export default function AppFeedPage() {
     return { label: 'Novice', color: 'text-gray-400', bg: 'bg-gray-500/10', border: 'border-gray-500/30' };
   };
 
+  // Format date helper
+  const formatDate = (dateString: string | undefined) => {
+    if (!dateString) return 'Invalid date';
+    try {
+      const date = new Date(dateString);
+      if (isNaN(date.getTime())) return 'Invalid date';
+      return date.toLocaleString('en-US', {
+        month: 'short',
+        day: 'numeric',
+        year: 'numeric',
+        hour: 'numeric',
+        minute: '2-digit',
+        hour12: true
+      });
+    } catch {
+      return 'Invalid date';
+    }
+  };
+
   return (
     <div className="min-h-screen gradient-bg text-white">
       <UnifiedHeader currentView="feed" />
@@ -122,26 +141,26 @@ export default function AppFeedPage() {
             <div className="text-xs text-green-400 mt-1">Verified claims</div>
           </div>
 
-          <div className="bg-gradient-to-br from-red-950/40 via-red-900/20 to-red-950/40 border border-red-500/30 rounded-xl p-4">
+          <div className="bg-gradient-to-br from-orange-950/40 via-orange-900/20 to-orange-950/40 border border-orange-500/30 rounded-xl p-4">
             <div className="flex items-center gap-2 mb-2">
-              <svg className="w-4 h-4 text-red-400" fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24">
+              <svg className="w-4 h-4 text-orange-400" fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12"/>
               </svg>
-              <span className="text-xs font-semibold text-red-300 uppercase">Incorrect</span>
+              <span className="text-xs font-semibold text-orange-300 uppercase">Incorrect</span>
             </div>
             <div className="text-2xl font-bold text-white">{resolvedIncorrect}</div>
-            <div className="text-xs text-red-400 mt-1">Disproven claims</div>
+            <div className="text-xs text-orange-400 mt-1">Disproven claims</div>
           </div>
 
-          <div className="bg-gradient-to-br from-orange-950/40 via-red-900/20 to-orange-950/40 border border-red-500/30 rounded-xl p-4">
+          <div className="bg-gradient-to-br from-amber-950/40 via-amber-900/20 to-amber-950/40 border border-amber-500/30 rounded-xl p-4">
             <div className="flex items-center gap-2 mb-2">
-              <svg className="w-4 h-4 text-red-400" fill="currentColor" viewBox="0 0 20 20">
+              <svg className="w-4 h-4 text-amber-400" fill="currentColor" viewBox="0 0 20 20">
                 <path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6z"/>
               </svg>
-              <span className="text-xs font-semibold text-red-300 uppercase">OSINT</span>
+              <span className="text-xs font-semibold text-amber-300 uppercase">OSINT</span>
             </div>
             <div className="text-2xl font-bold text-white">{osintSignals.length}</div>
-            <div className="text-xs text-red-400 mt-1">Intelligence signals</div>
+            <div className="text-xs text-amber-400 mt-1">Intelligence signals</div>
           </div>
         </div>
 
@@ -173,8 +192,8 @@ export default function AppFeedPage() {
                 onClick={() => setContentFilter("osint")}
                 className={`px-4 py-2 rounded-md font-medium text-sm transition-all ${
                   contentFilter === "osint"
-                    ? "bg-red-500/20 text-red-400 border border-red-500/40"
-                    : "text-neutral-400 hover:text-red-400 hover:bg-red-500/10"
+                    ? "bg-amber-500/20 text-amber-400 border border-amber-500/40"
+                    : "text-neutral-400 hover:text-amber-400 hover:bg-amber-500/10"
                 }`}
               >
                 OSINT
@@ -224,6 +243,9 @@ export default function AppFeedPage() {
             {contentFilter !== "osint" && (
               <section>
                 <div className="flex items-center gap-3 mb-6">
+                  <svg className="w-6 h-6 text-purple-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+                  </svg>
                   <h2 className="text-2xl font-bold text-white">Locked Claims</h2>
                   <div className="flex-1 h-px bg-gradient-to-r from-purple-500/40 to-transparent"></div>
                   <span className="text-sm text-purple-400">{filteredPredictions.length} total</span>
@@ -246,7 +268,7 @@ export default function AppFeedPage() {
                             isCorrect
                               ? 'from-green-950/30 via-green-900/20 to-green-950/30 border-2 border-green-500/60'
                               : isIncorrect
-                              ? 'from-red-950/30 via-red-900/20 to-red-950/30 border-2 border-red-500/60'
+                              ? 'from-orange-950/30 via-orange-900/20 to-orange-950/30 border-2 border-orange-500/60'
                               : 'from-purple-950/30 via-purple-900/20 to-purple-950/30 border-2 border-purple-500/40'
                           } rounded-xl p-5 hover:shadow-[0_0_30px_rgba(168,85,247,0.3)] transition-all relative overflow-hidden cursor-pointer ${
                             isResolved ? 'shadow-[0_0_20px_rgba(168,85,247,0.2)]' : ''
@@ -257,14 +279,14 @@ export default function AppFeedPage() {
                             isCorrect
                               ? "from-transparent via-green-500 to-transparent animate-pulse"
                               : isIncorrect
-                              ? "from-transparent via-red-500 to-transparent animate-pulse"
+                              ? "from-transparent via-orange-500 to-transparent animate-pulse"
                               : "from-transparent via-purple-500 to-transparent"
                           }`}></div>
 
                           {/* Resolution Banner (for resolved claims) */}
                           {isResolved && (
                             <div className={`flex items-center gap-2 mb-3 pb-3 border-b ${
-                              isCorrect ? 'border-green-500/20' : 'border-red-500/20'
+                              isCorrect ? 'border-green-500/20' : 'border-orange-500/20'
                             }`}>
                               <div className="flex items-center gap-1.5">
                                 {isCorrect ? (
@@ -272,11 +294,11 @@ export default function AppFeedPage() {
                                     <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7"/>
                                   </svg>
                                 ) : (
-                                  <svg className="w-3.5 h-3.5 text-red-400" fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24">
+                                  <svg className="w-3.5 h-3.5 text-orange-400" fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24">
                                     <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12"/>
                                   </svg>
                                 )}
-                                <span className={`text-xs font-bold ${isCorrect ? 'text-green-400' : 'text-red-400'}`}>
+                                <span className={`text-xs font-bold ${isCorrect ? 'text-green-400' : 'text-orange-400'}`}>
                                   {isCorrect ? 'RESOLVED CORRECT' : 'RESOLVED INCORRECT'}
                                 </span>
                               </div>
@@ -289,11 +311,11 @@ export default function AppFeedPage() {
                               <div className="flex items-center gap-2">
                                 <div className={`w-8 h-8 rounded-lg flex items-center justify-center border ${
                                   isCorrect ? 'bg-green-600/20 border-green-500/40' :
-                                  isIncorrect ? 'bg-red-600/20 border-red-500/40' :
+                                  isIncorrect ? 'bg-orange-600/20 border-orange-500/40' :
                                   'bg-purple-600/20 border-purple-500/40'
                                 }`}>
                                   <svg className={`w-4 h-4 ${
-                                    isCorrect ? 'text-green-400' : isIncorrect ? 'text-red-400' : 'text-purple-400'
+                                    isCorrect ? 'text-green-400' : isIncorrect ? 'text-orange-400' : 'text-purple-400'
                                   }`} fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                                     <path strokeLinecap="round" strokeLinejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
                                   </svg>
@@ -301,7 +323,7 @@ export default function AppFeedPage() {
                                 <div>
                                   <div className="flex items-center gap-2">
                                     <span className={`text-sm font-semibold ${
-                                      isCorrect ? 'text-green-300' : isIncorrect ? 'text-red-300' : 'text-purple-300'
+                                      isCorrect ? 'text-green-300' : isIncorrect ? 'text-orange-300' : 'text-purple-300'
                                     }`}>
                                       {claim.pseudonym || `Anon #${claim.authorNumber || '1000'}`}
                                     </span>
@@ -321,10 +343,10 @@ export default function AppFeedPage() {
                             </div>
                           </div>
 
-                          {/* Claim Text */}
-                          <div className="mb-4">
+                          {/* Claim Text - FIXED TO 2 LINES */}
+                          <div className="mb-4 h-[48px]">
                             <p className={`text-[15px] leading-relaxed line-clamp-2 ${
-                              isCorrect ? 'text-green-50' : isIncorrect ? 'text-red-50' : 'text-white'
+                              isCorrect ? 'text-green-50' : isIncorrect ? 'text-orange-50' : 'text-white'
                             }`}>
                               {claim.text}
                             </p>
@@ -335,7 +357,7 @@ export default function AppFeedPage() {
                             {claim.category && (
                               <span className={`px-2 py-1 text-xs rounded border ${
                                 isCorrect ? 'bg-green-800/30 text-green-400 border-green-700/50' :
-                                isIncorrect ? 'bg-red-800/30 text-red-400 border-red-700/50' :
+                                isIncorrect ? 'bg-orange-800/30 text-orange-400 border-orange-700/50' :
                                 'bg-slate-800/70 text-slate-400 border-slate-700/50'
                               }`}>
                                 #{claim.category}
@@ -343,7 +365,7 @@ export default function AppFeedPage() {
                             )}
                             <span className={`flex items-center gap-1 px-2 py-1 text-xs rounded border font-semibold ${
                               isCorrect ? 'bg-green-900/30 text-green-400 border-green-500/40' :
-                              isIncorrect ? 'bg-red-900/30 text-red-400 border-red-500/40' :
+                              isIncorrect ? 'bg-orange-900/30 text-orange-400 border-orange-500/40' :
                               'bg-purple-900/30 text-purple-400 border-purple-500/40'
                             }`}>
                               <svg className="w-3 h-3" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
@@ -355,7 +377,7 @@ export default function AppFeedPage() {
 
                           {/* Engagement Footer */}
                           <div className={`flex items-center justify-between pt-4 border-t mb-3 ${
-                            isCorrect ? 'border-green-700/50' : isIncorrect ? 'border-red-700/50' : 'border-slate-700/50'
+                            isCorrect ? 'border-green-700/50' : isIncorrect ? 'border-orange-700/50' : 'border-slate-700/50'
                           }`}>
                             <div className="flex items-center gap-4">
                               {/* Vote Buttons */}
@@ -383,22 +405,24 @@ export default function AppFeedPage() {
                                 );
                               })()}
 
-                              {/* Share */}
-                              <div className={`flex items-center gap-1.5 transition-colors ${
-                                isCorrect ? 'text-green-400 hover:text-green-300' :
-                                isIncorrect ? 'text-red-400 hover:text-red-300' :
-                                'text-slate-400 hover:text-cyan-400'
-                              }`} onClick={(e) => e.preventDefault()}>
+                              {/* View Count */}
+                              <div className={`flex items-center gap-1.5 ${
+                                isCorrect ? 'text-green-400' :
+                                isIncorrect ? 'text-orange-400' :
+                                'text-slate-400'
+                              }`}>
                                 <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                                  <path strokeLinecap="round" strokeLinejoin="round" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"/>
+                                  <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                                  <path strokeLinecap="round" strokeLinejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
                                 </svg>
+                                <span className="text-xs">{claim.viewCount || 0}</span>
                               </div>
                             </div>
 
                             {/* View Button */}
                             <div className={`flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all border ${
                               isCorrect ? 'bg-green-600/10 hover:bg-green-600/20 border-green-500/30 text-green-300 group-hover:border-green-400/60' :
-                              isIncorrect ? 'bg-red-600/10 hover:bg-red-600/20 border-red-500/30 text-red-300 group-hover:border-red-400/60' :
+                              isIncorrect ? 'bg-orange-600/10 hover:bg-orange-600/20 border-orange-500/30 text-orange-300 group-hover:border-orange-400/60' :
                               'bg-purple-600/10 hover:bg-purple-600/20 border-purple-500/30 text-purple-300 group-hover:border-purple-400/60'
                             }`}>
                               <span>View</span>
@@ -408,39 +432,34 @@ export default function AppFeedPage() {
                             </div>
                           </div>
 
-                          {/* Timestamp Footer */}
+                          {/* Timestamp Footer - SWAPPED: Hash left, Date right */}
                           <div className={`pt-2 border-t rounded-lg px-3 py-2 ${
                             isCorrect ? 'border-green-500/20 bg-gradient-to-r from-green-900/10 to-transparent' :
-                            isIncorrect ? 'border-red-500/20 bg-gradient-to-r from-red-900/10 to-transparent' :
+                            isIncorrect ? 'border-orange-500/20 bg-gradient-to-r from-orange-900/10 to-transparent' :
                             'border-purple-500/20 bg-gradient-to-r from-purple-900/10 to-transparent'
                           }`}>
                             <div className="flex items-center justify-between">
-                              <div className="flex items-center gap-1.5">
-                                <svg className={`w-3 h-3 ${
-                                  isCorrect ? 'text-green-400' : isIncorrect ? 'text-red-400' : 'text-purple-400'
-                                }`} fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                                </svg>
-                                <span className={`text-[10px] font-mono ${
-                                  isCorrect ? 'text-green-300/80' : isIncorrect ? 'text-red-300/80' : 'text-purple-300/80'
-                                }`}>
-                                  {new Date(claim.createdAt).toLocaleString('en-US', {
-                                    month: 'short',
-                                    day: 'numeric',
-                                    year: 'numeric',
-                                    hour: 'numeric',
-                                    minute: '2-digit',
-                                    hour12: true
-                                  })}
-                                </span>
-                              </div>
+                              {/* Hash on LEFT */}
                               {claim.hash && (
                                 <div className={`text-[10px] font-mono ${
-                                  isCorrect ? 'text-green-400/60' : isIncorrect ? 'text-red-400/60' : 'text-purple-400/60'
+                                  isCorrect ? 'text-green-400/60' : isIncorrect ? 'text-orange-400/60' : 'text-purple-400/60'
                                 }`}>
                                   {claim.hash.slice(0, 8)}...
                                 </div>
                               )}
+                              {/* Date on RIGHT */}
+                              <div className="flex items-center gap-1.5">
+                                <svg className={`w-3 h-3 ${
+                                  isCorrect ? 'text-green-400' : isIncorrect ? 'text-orange-400' : 'text-purple-400'
+                                }`} fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                </svg>
+                                <span className={`text-[10px] font-mono ${
+                                  isCorrect ? 'text-green-300/80' : isIncorrect ? 'text-orange-300/80' : 'text-purple-300/80'
+                                }`}>
+                                  {formatDate(claim.createdAt)}
+                                </span>
+                              </div>
                             </div>
                           </div>
                         </Link>
@@ -458,13 +477,16 @@ export default function AppFeedPage() {
               </section>
             )}
 
-            {/* OSINT SECTION */}
+            {/* OSINT SECTION - CHANGED TO AMBER/ORANGE THEME */}
             {contentFilter !== "claims" && (
               <section>
                 <div className="flex items-center gap-3 mb-6">
+                  <svg className="w-6 h-6 text-amber-400" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6z"/>
+                  </svg>
                   <h2 className="text-2xl font-bold text-white">OSINT Intelligence</h2>
-                  <div className="flex-1 h-px bg-gradient-to-r from-red-500/40 to-transparent"></div>
-                  <span className="text-sm text-red-400">{filteredOsint.length} signals</span>
+                  <div className="flex-1 h-px bg-gradient-to-r from-amber-500/40 to-transparent"></div>
+                  <span className="text-sm text-amber-400">{filteredOsint.length} signals</span>
                 </div>
 
                 {filteredOsint.length > 0 ? (
@@ -472,15 +494,15 @@ export default function AppFeedPage() {
                     {filteredOsint.map((signal) => (
                       <div
                         key={signal.id}
-                        className="bg-gradient-to-br from-red-950/30 via-orange-950/20 to-red-950/30 border-2 border-red-500/40 rounded-xl p-5 hover:border-red-500/60 hover:shadow-[0_0_30px_rgba(239,68,68,0.2)] transition-all relative overflow-hidden"
+                        className="bg-gradient-to-br from-amber-950/30 via-amber-900/20 to-amber-950/30 border-2 border-amber-500/40 rounded-xl p-5 hover:border-amber-500/60 hover:shadow-[0_0_30px_rgba(251,191,36,0.2)] transition-all relative overflow-hidden"
                       >
                         {/* Alert Pulse */}
-                        <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-red-500 to-transparent animate-pulse"></div>
+                        <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-amber-500 to-transparent animate-pulse"></div>
 
                         {/* Header */}
                         <div className="flex items-center justify-between mb-3">
                           <div className="flex items-center gap-2">
-                            <span className="inline-flex items-center gap-1.5 px-3 py-1 text-xs font-bold rounded-md bg-red-600/30 border border-red-500/50 text-red-200 uppercase tracking-wide shadow-sm">
+                            <span className="inline-flex items-center gap-1.5 px-3 py-1 text-xs font-bold rounded-md bg-amber-600/30 border border-amber-500/50 text-amber-200 uppercase tracking-wide shadow-sm">
                               <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20">
                                 <path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6z"/>
                               </svg>
@@ -489,27 +511,27 @@ export default function AppFeedPage() {
                           </div>
 
                           {signal.category && (
-                            <span className="px-2 py-1 text-[10px] font-semibold rounded bg-red-900/40 border border-red-700/50 text-red-300 uppercase">
+                            <span className="px-2 py-1 text-[10px] font-semibold rounded bg-amber-900/40 border border-amber-700/50 text-amber-300 uppercase">
                               {signal.category}
                             </span>
                           )}
                         </div>
 
                         {/* Source Line */}
-                        <div className="flex items-center gap-2 mb-3 pb-2 border-b border-red-500/20">
-                          <div className="w-6 h-6 rounded bg-red-600/30 flex items-center justify-center border border-red-500/40">
-                            <svg className="w-3 h-3 text-red-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                        <div className="flex items-center gap-2 mb-3 pb-2 border-b border-amber-500/20">
+                          <div className="w-6 h-6 rounded bg-amber-600/30 flex items-center justify-center border border-amber-500/40">
+                            <svg className="w-3 h-3 text-amber-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                               <path strokeLinecap="round" strokeLinejoin="round" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"/>
                             </svg>
                           </div>
                           <div className="flex-1">
-                            <div className="text-sm text-red-200 font-semibold">{signal.source_name || "Unknown Source"}</div>
+                            <div className="text-sm text-amber-200 font-semibold">{signal.source_name || "Unknown Source"}</div>
                             {signal.source_handle && (
-                              <div className="text-xs text-red-400/70">{signal.source_handle}</div>
+                              <div className="text-xs text-amber-400/70">{signal.source_handle}</div>
                             )}
                           </div>
                           {signal.location && (
-                            <div className="flex items-center gap-1 text-xs text-orange-400">
+                            <div className="flex items-center gap-1 text-xs text-amber-400">
                               <svg className="w-3 h-3" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
                                 <path strokeLinecap="round" strokeLinejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
@@ -519,21 +541,25 @@ export default function AppFeedPage() {
                           )}
                         </div>
 
-                        {/* Title */}
-                        <h3 className="text-base font-bold text-red-50 mb-2 leading-tight line-clamp-2">
-                          {signal.title || "Untitled Signal"}
-                        </h3>
+                        {/* Title - FIXED TO 2 LINES */}
+                        <div className="mb-2 h-[44px]">
+                          <h3 className="text-base font-bold text-amber-50 leading-tight line-clamp-2">
+                            {signal.title || "Untitled Signal"}
+                          </h3>
+                        </div>
 
-                        {/* Content */}
+                        {/* Content - FIXED TO 2 LINES */}
                         {signal.summary && (
-                          <p className="text-sm text-red-100/70 mb-4 line-clamp-2 leading-relaxed">
-                            {signal.summary}
-                          </p>
+                          <div className="mb-4 h-[40px]">
+                            <p className="text-sm text-amber-100/70 line-clamp-2 leading-relaxed">
+                              {signal.summary}
+                            </p>
+                          </div>
                         )}
 
                         {/* Footer */}
-                        <div className="flex items-center justify-between pt-3 border-t border-red-500/20">
-                          <div className="text-xs text-red-400/60 font-mono">
+                        <div className="flex items-center justify-between pt-3 border-t border-amber-500/20">
+                          <div className="text-xs text-amber-400/60 font-mono">
                             ID: {signal.id.toString().slice(0, 8)}
                           </div>
                           <div className="flex gap-2">
@@ -542,7 +568,7 @@ export default function AppFeedPage() {
                                 href={signal.url}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="px-3 py-1.5 text-xs font-semibold rounded-md bg-red-600/30 hover:bg-red-600/40 text-red-200 border border-red-500/40 transition-all flex items-center gap-1.5"
+                                className="px-3 py-1.5 text-xs font-semibold rounded-md bg-amber-600/30 hover:bg-amber-600/40 text-amber-200 border border-amber-500/40 transition-all flex items-center gap-1.5"
                                 onClick={(e) => e.stopPropagation()}
                               >
                                 <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
