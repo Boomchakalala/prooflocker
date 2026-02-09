@@ -362,7 +362,7 @@ export default function AppFeedPage() {
                       return (
                         <Link
                           key={claim.id}
-                          href={`/proof/${claim.slug}`}
+                          href={`/proof/${claim.publicSlug || claim.id}`}
                           className={`group bg-gradient-to-br from-purple-950/30 via-purple-900/20 to-purple-950/30 rounded-xl hover:shadow-[0_0_30px_rgba(168,85,247,0.3)] transition-all relative overflow-hidden cursor-pointer ${
                             isCorrect
                               ? 'p-5 border-[3px] border-green-500/80 shadow-[0_0_35px_rgba(34,197,94,0.4)]'
