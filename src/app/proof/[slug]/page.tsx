@@ -55,7 +55,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     title,
     description,
     openGraph: {
-      title: "ProofLocker - Immutable Prediction Proof",
+      title: "ProofLocker - Immutable Claim Proof",
       description: `Locked ${dateStr} • Proof ${shortProofId}`,
       url: pageUrl,
       type: "website",
@@ -63,7 +63,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     },
     twitter: {
       card: "summary_large_image",
-      title: "ProofLocker - Immutable Prediction Proof",
+      title: "ProofLocker - Immutable Claim Proof",
       description: `Locked ${dateStr} • Proof ${shortProofId}`,
     },
   };
@@ -134,7 +134,7 @@ export default async function ProofPage({ params }: Props) {
             <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4 mb-4">
               <div className="flex-1">
                 <div className="flex items-center gap-2 mb-3">
-                  <span className="text-xs font-semibold text-blue-400 uppercase tracking-wider">Prediction</span>
+                  <span className="text-xs font-semibold text-blue-400 uppercase tracking-wider">Claim</span>
                   {prediction.onChainStatus === 'confirmed' && (
                     <OnChainBadge variant="full" />
                   )}
@@ -211,7 +211,7 @@ export default async function ProofPage({ params }: Props) {
                 </div>
                 <div>
                   <h2 className="text-xl font-bold text-white">Resolution & Evidence</h2>
-                  <p className="text-xs text-neutral-400">How this prediction was verified</p>
+                  <p className="text-xs text-neutral-400">How this claim was verified</p>
                 </div>
               </div>
 
@@ -238,8 +238,8 @@ export default async function ProofPage({ params }: Props) {
                     <span className="text-lg font-bold text-purple-400">1</span>
                   </div>
                   <div className="flex-1">
-                    <h3 className="text-xl font-bold text-white mb-1">Prediction Locked</h3>
-                    <p className="text-sm text-neutral-400">Permanently timestamped on-chain</p>
+                    <h3 className="text-xl font-bold text-white mb-1">Claim Locked</h3>
+                    <p className="text-sm text-neutral-400">Only cryptographic hashes are stored on-chain</p>
                   </div>
                   <div className="px-3 py-1 rounded-full bg-purple-500/10 border border-purple-500/30">
                     <span className="text-xs font-semibold text-purple-400">Verified</span>
@@ -325,8 +325,8 @@ export default async function ProofPage({ params }: Props) {
                     <span className="text-lg font-bold text-green-400">2</span>
                   </div>
                   <div className="flex-1">
-                    <h3 className="text-xl font-bold text-white mb-1">Prediction Resolved</h3>
-                    <p className="text-sm text-neutral-400">Outcome recorded on-chain</p>
+                    <h3 className="text-xl font-bold text-white mb-1">Claim Resolved</h3>
+                    <p className="text-sm text-neutral-400">Resolution hash recorded on-chain</p>
                   </div>
                   <div className="px-3 py-1 rounded-full bg-green-500/10 border border-green-500/30">
                     <span className="text-xs font-semibold text-green-400">Verified</span>
