@@ -258,8 +258,46 @@ export default function GlobePage() {
                   return (
                     <div
                       key={claim.id}
-                      className="bg-slate-900/80 border border-slate-700/50 border-l-[3px] border-l-[#8b5cf6] rounded-[10px] p-3.5 transition-all hover:border-[#8b5cf6] hover:bg-[rgba(139,92,246,0.1)] hover:shadow-[0_0_15px_rgba(168,85,247,0.15)]"
+                      className={`bg-gradient-to-br ${
+                        claim.outcome === 'correct'
+                          ? 'from-emerald-900/20 to-slate-900/50 border-emerald-500/30 border-l-emerald-500'
+                          : claim.outcome === 'incorrect'
+                          ? 'from-red-900/20 to-slate-900/50 border-red-500/30 border-l-red-500'
+                          : 'from-slate-900/80 to-slate-900/80 border-slate-700/50 border-l-[#8b5cf6]'
+                      } border border-l-[3px] rounded-[10px] p-3.5 transition-all ${
+                        claim.outcome === 'correct'
+                          ? 'hover:border-emerald-500 hover:shadow-[0_0_15px_rgba(16,185,129,0.2)]'
+                          : claim.outcome === 'incorrect'
+                          ? 'hover:border-red-500 hover:shadow-[0_0_15px_rgba(239,68,68,0.2)]'
+                          : 'hover:border-[#8b5cf6] hover:bg-[rgba(139,92,246,0.1)] hover:shadow-[0_0_15px_rgba(168,85,247,0.15)]'
+                      }`}
                     >
+                      {/* Resolution Banner - Only show if resolved */}
+                      {(claim.outcome === 'correct' || claim.outcome === 'incorrect') && (
+                        <div className={`flex items-center gap-2 mb-2 pb-2 border-b ${
+                          claim.outcome === 'correct' ? 'border-emerald-500/20' : 'border-red-500/20'
+                        }`}>
+                          <div className="flex items-center gap-1.5">
+                            {claim.outcome === 'correct' ? (
+                              <svg className="w-3.5 h-3.5 text-emerald-400" fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7"/>
+                              </svg>
+                            ) : (
+                              <svg className="w-3.5 h-3.5 text-red-400" fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12"/>
+                              </svg>
+                            )}
+                            <span className={`${claim.outcome === 'correct' ? 'text-emerald-400' : 'text-red-400'} font-bold text-[11px]`}>
+                              {claim.outcome === 'correct' ? 'RESOLVED CORRECT' : 'RESOLVED INCORRECT'}
+                            </span>
+                          </div>
+                          <span className="text-[10px] text-slate-500">•</span>
+                          <span className={`text-[10px] ${claim.outcome === 'correct' ? 'text-emerald-400' : 'text-red-400'} font-semibold`}>
+                            {claim.outcome === 'correct' ? '+80 pts' : '-20 pts'}
+                          </span>
+                        </div>
+                      )}
+
                       {/* Header */}
                       <div className="flex items-center justify-between mb-2.5">
                         <div className="flex items-center gap-1.5 text-[12px]">
@@ -282,9 +320,11 @@ export default function GlobePage() {
                             {tierInfo.label}
                           </div>
                         </div>
-                        <span className={`px-2 py-0.5 rounded-[10px] text-[10px] font-semibold uppercase tracking-wide ${statusColor}`}>
-                          {displayStatus}
-                        </span>
+                        {!(claim.outcome === 'correct' || claim.outcome === 'incorrect') && (
+                          <span className={`px-2 py-0.5 rounded-[10px] text-[10px] font-semibold uppercase tracking-wide ${statusColor}`}>
+                            {displayStatus}
+                          </span>
+                        )}
                       </div>
 
                       {/* Category Badge */}
