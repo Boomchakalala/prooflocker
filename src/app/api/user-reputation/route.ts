@@ -71,29 +71,46 @@ export async function POST(request: NextRequest) {
 
     // Fetch stats for anonymous users
     if (anonIds.length > 0) {
-      const { data: anonStats } = await supabase
-        .from('user_stats')
-        .select('user_id, reputation_score, total_predictions, resolved_predictions, correct_predictions')
-        .in('user_id', anonIds); // anon_ids are also stored as user_id in user_stats
+      const { data: anonPredictions } = await supabase
+        .from('predictions')
+        .select('anon_id, outcome, evidence_score')
+        .in('anon_id', anonIds)
+        .not('anon_id', 'is', null);
 
-      if (anonStats) {
+      if (anonPredictions) {
         for (const anonId of anonIds) {
-          const anonStat = anonStats.find(s => s.user_id === anonId);
-          const reputationScore = anonStat?.reputation_score || 100; // Default starting reputation
+          const anonPreds = anonPredictions.filter(p => p.anon_id === anonId);
+          const resolved = anonPreds.filter(p => p.outcome === 'correct' || p.outcome === 'incorrect');
+          const correct = anonPreds.filter(p => p.outcome === 'correct');
 
-          const tierData = getReputationTier(reputationScore);
+          // Calculate average evidence score (convert to grade points)
+          const avgEvidence = resolved.length > 0
+            ? resolved.reduce((sum, p) => {
+                const grade = convertEvidenceScoreToGrade(p.evidence_score || 0);
+                return sum + evidenceGradeToPoints(grade);
+              }, 0) / resolved.length
+            : 0;
+
+          // Calculate weighted reputation
+          const reputationCalc = calculateWeightedReputation({
+            correctResolutions: correct.length,
+            totalResolved: resolved.length,
+            averageEvidenceScore: avgEvidence,
+          });
+
+          const tierData = getReputationTier(reputationCalc.total);
           const tierInfo = REPUTATION_TIERS.find(t => t.name === tierData.name) || REPUTATION_TIERS[0];
 
           stats[anonId] = {
             tier: tierData.name,
             label: tierData.name,
-            score: reputationScore,
+            score: reputationCalc.total,
             color: tierInfo.textColor,
             bg: tierInfo.bgColor,
             border: tierInfo.borderColor,
-            totalPredictions: anonStat?.total_predictions || 0,
-            resolvedPredictions: anonStat?.resolved_predictions || 0,
-            correctPredictions: anonStat?.correct_predictions || 0,
+            totalPredictions: anonPreds.length,
+            resolvedPredictions: resolved.length,
+            correctPredictions: correct.length,
           };
         }
       }

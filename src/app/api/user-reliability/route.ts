@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
-import { getReputationTier, REPUTATION_TIERS } from '@/lib/user-scoring';
+import { getReputationTier, REPUTATION_TIERS, calculateWeightedReputation, convertEvidenceScoreToGrade, evidenceGradeToPoints } from '@/lib/reputation-scoring';
 
 export const dynamic = 'force-dynamic';
 export const maxDuration = 10;
