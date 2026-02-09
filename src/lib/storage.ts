@@ -146,6 +146,7 @@ function rowToPrediction(row: PredictionRow): Prediction {
     moderationStatus: row.moderation_status,
     hiddenReason: row.hidden_reason || undefined,
     hiddenAt: row.hidden_at || undefined,
+    createdAt: row.created_at, // Map created_at from database
   };
 }
 
