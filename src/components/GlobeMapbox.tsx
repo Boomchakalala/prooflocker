@@ -40,6 +40,7 @@ interface GlobeMapboxProps {
 export default function GlobeMapbox({ claims, osint }: GlobeMapboxProps) {
   const mapContainer = useRef<HTMLDivElement>(null);
   const map = useRef<any>(null);
+  const initAttempted = useRef(false); // Guard against double-init
   const [claimsLayerVisible, setClaimsLayerVisible] = useState(true);
   const [osintLayerVisible, setOsintLayerVisible] = useState(true);
   const [heatmapVisible, setHeatmapVisible] = useState(false);
