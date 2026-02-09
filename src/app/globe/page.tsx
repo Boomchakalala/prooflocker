@@ -631,21 +631,17 @@ export default function GlobePage() {
                     statusColor = 'bg-[rgba(239,68,68,0.2)] text-[#ef4444]';
                   }
 
+                  const canResolve = user && user.id === claim.anonId && claim.outcome === null;
+
                   return (
                     <div
                       key={claim.id}
-                      className={`bg-gradient-to-br ${
+                      className={`bg-slate-900/80 border rounded-xl transition-all duration-300 hover:shadow-[0_0_25px_rgba(168,85,247,0.15)] hover:-translate-y-0.5 ${
                         claim.outcome === 'correct'
-                          ? 'from-emerald-900/20 to-slate-900/50 border-emerald-500/30 border-l-emerald-500'
+                          ? 'border-4 border-emerald-500/60 p-4'
                           : claim.outcome === 'incorrect'
-                          ? 'from-red-900/20 to-slate-900/50 border-red-500/30 border-l-red-500'
-                          : 'from-slate-900/80 to-slate-900/80 border-slate-700/50 border-l-[#8b5cf6]'
-                      } border border-l-[3px] rounded-[10px] p-3.5 transition-all ${
-                        claim.outcome === 'correct'
-                          ? 'hover:border-emerald-500 hover:shadow-[0_0_15px_rgba(16,185,129,0.2)]'
-                          : claim.outcome === 'incorrect'
-                          ? 'hover:border-red-500 hover:shadow-[0_0_15px_rgba(239,68,68,0.2)]'
-                          : 'hover:border-[#8b5cf6] hover:bg-[rgba(139,92,246,0.1)] hover:shadow-[0_0_15px_rgba(168,85,247,0.15)]'
+                          ? 'border-4 border-red-500/60 p-4'
+                          : 'border border-slate-700/50 p-3.5'
                       }`}
                     >
                       {/* Resolution Banner - Only show if resolved */}
