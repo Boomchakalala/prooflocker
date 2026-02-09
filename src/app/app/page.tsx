@@ -356,7 +356,11 @@ export default function AppFeedPage() {
                         <Link
                           key={claim.id}
                           href={`/proof/${claim.publicSlug || claim.id}`}
-                          className="group bg-slate-900/80 border border-slate-700/50 hover:border-slate-600 rounded-2xl p-5 transition-all duration-300 hover:shadow-[0_0_25px_rgba(168,85,247,0.15)] hover:-translate-y-0.5"
+                          className={`group bg-slate-900/80 border hover:border-slate-600 rounded-2xl transition-all duration-300 hover:shadow-[0_0_25px_rgba(168,85,247,0.15)] hover:-translate-y-0.5 ${
+                            isResolved
+                              ? 'border-4 border-slate-700/50 p-6'
+                              : 'border border-slate-700/50 p-5'
+                          }`}
                         >
                           {/* User Header */}
                           <div className="flex items-center justify-between mb-4">
@@ -415,6 +419,21 @@ export default function AppFeedPage() {
                             <p className="text-white text-[15px] leading-relaxed line-clamp-4">
                               {claim.text}
                             </p>
+                          </div>
+
+                          {/* Hash Snippet and Timestamp */}
+                          <div className="flex items-center justify-between mb-4 pb-3 border-b border-slate-700/50">
+                            <div className="flex items-center gap-2 min-w-0 flex-1">
+                              <svg className="w-3.5 h-3.5 text-slate-500 flex-shrink-0" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M7 20l4-16m2 16l4-16M6 9h14M4 15h14"/>
+                              </svg>
+                              <span className="text-xs font-mono text-slate-400 truncate">
+                                {claim.hash?.slice(0, 16) || claim.id}...
+                              </span>
+                            </div>
+                            <div className="text-xs text-slate-500 flex-shrink-0 ml-2">
+                              {formatRelativeTime(claim.createdAt)}
+                            </div>
                           </div>
 
                           {/* Category & Tags */}
