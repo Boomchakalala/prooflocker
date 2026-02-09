@@ -317,5 +317,29 @@ COMMENT ON COLUMN user_stats.lifetime_points IS 'Cumulative points, never decrea
 COMMENT ON COLUMN user_stats.reputation_score IS 'Reputation score, can go up or down (used for voting weight)';
 
 -- ============================================================
+-- PART 12: FUNCTION to apply overruled penalty
+-- ============================================================
+
+CREATE OR REPLACE FUNCTION apply_overruled_penalty(
+  p_user_id UUID,
+  p_penalty INTEGER DEFAULT 25
+)
+RETURNS VOID
+LANGUAGE plpgsql
+SECURITY DEFINER
+AS $$
+BEGIN
+  -- Decrease reputation score (but never below 0)
+  UPDATE user_stats
+  SET reputation_score = GREATEST(0, reputation_score - p_penalty)
+  WHERE user_id = p_user_id;
+
+  -- Note: Lifetime points are NOT affected by penalties
+END;
+$$;
+
+COMMENT ON FUNCTION apply_overruled_penalty IS 'Apply reputation penalty when a resolution is overruled by community vote';
+
+-- ============================================================
 -- DONE
 -- ============================================================
