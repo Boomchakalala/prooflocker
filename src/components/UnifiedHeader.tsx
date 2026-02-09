@@ -48,13 +48,13 @@ export default function UnifiedHeader({ currentView, onLockClick }: UnifiedHeade
     try {
       const [claimsRes, osintRes] = await Promise.all([
         fetch('/api/predictions'),
-        fetch('/api/osint/mock'),
+        fetch('/api/osint'),
       ]);
       const claims = await claimsRes.json();
       const osint = await osintRes.json();
       setStats({
         claims: claims.predictions?.length || 0,
-        osint: osint?.length || 0,
+        osint: osint.signals?.length || 0,
       });
     } catch (error) {
       console.error('Error fetching stats:', error);
