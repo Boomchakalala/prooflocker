@@ -236,14 +236,22 @@ export default function AppFeedPage() {
                         <Link
                           key={claim.id}
                           href={`/proof/${claim.slug}`}
-                          className={`bg-gradient-to-br from-purple-950/30 via-purple-900/20 to-purple-950/30 rounded-xl p-5 hover:shadow-[0_0_30px_rgba(168,85,247,0.3)] transition-all relative overflow-hidden cursor-pointer ${
-                            isResolved
-                              ? "border-2 border-purple-500/60 shadow-[0_0_20px_rgba(168,85,247,0.2)]"
-                              : "border-2 border-purple-500/40"
+                          className={`rounded-xl p-5 transition-all relative overflow-hidden cursor-pointer ${
+                            isCorrect
+                              ? "bg-gradient-to-br from-green-950/30 via-green-900/20 to-green-950/30 border-2 border-green-500/60 shadow-[0_0_20px_rgba(34,197,94,0.25)] hover:shadow-[0_0_30px_rgba(34,197,94,0.4)] hover:border-green-500/80"
+                              : isIncorrect
+                              ? "bg-gradient-to-br from-red-950/30 via-red-900/20 to-red-950/30 border-2 border-red-500/60 shadow-[0_0_20px_rgba(239,68,68,0.25)] hover:shadow-[0_0_30px_rgba(239,68,68,0.4)] hover:border-red-500/80"
+                              : "bg-gradient-to-br from-purple-950/30 via-purple-900/20 to-purple-950/30 border-2 border-purple-500/40 hover:shadow-[0_0_30px_rgba(168,85,247,0.3)] hover:border-purple-500/60"
                           }`}
                         >
-                          {/* Alert Pulse - Stronger for resolved */}
-                          <div className={`absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-purple-500 to-transparent ${isResolved ? 'animate-pulse' : ''}`}></div>
+                          {/* Alert Pulse - Color coded by status */}
+                          <div className={`absolute top-0 left-0 w-full h-1 bg-gradient-to-r ${
+                            isCorrect
+                              ? "from-transparent via-green-500 to-transparent animate-pulse"
+                              : isIncorrect
+                              ? "from-transparent via-red-500 to-transparent animate-pulse"
+                              : "from-transparent via-purple-500 to-transparent"
+                          }`}></div>
 
                           {/* Header with Badges */}
                           <div className="flex items-center justify-between mb-3">
