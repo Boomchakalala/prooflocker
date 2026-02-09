@@ -20,7 +20,6 @@ interface UnifiedHeaderProps {
 export default function UnifiedHeader({ currentView, onLockClick }: UnifiedHeaderProps) {
   const pathname = usePathname();
   const { user } = useAuth();
-  const [stats, setStats] = useState({ claims: 0, osint: 0 });
   const [showUserMenu, setShowUserMenu] = useState(false);
   const [showMobileMenu, setShowMobileMenu] = useState(false);
 
@@ -36,30 +35,6 @@ export default function UnifiedHeader({ currentView, onLockClick }: UnifiedHeade
   };
 
   const activeView = getActiveView();
-
-  useEffect(() => {
-    // Fetch live stats
-    fetchStats();
-    const interval = setInterval(fetchStats, 30000); // Update every 30s
-    return () => clearInterval(interval);
-  }, []);
-
-  const fetchStats = async () => {
-    try {
-      const [claimsRes, osintRes] = await Promise.all([
-        fetch('/api/predictions'),
-        fetch('/api/osint'),
-      ]);
-      const claims = await claimsRes.json();
-      const osint = await osintRes.json();
-      setStats({
-        claims: claims.predictions?.length || 0,
-        osint: osint.signals?.length || 0,
-      });
-    } catch (error) {
-      console.error('Error fetching stats:', error);
-    }
-  };
 
   return (
     <header
@@ -140,21 +115,6 @@ export default function UnifiedHeader({ currentView, onLockClick }: UnifiedHeade
               <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
             </svg>
           </button>
-        </div>
-
-        {/* Center: Live Stats (only on large screens) */}
-        <div className="hidden xl:flex items-center gap-6 text-sm">
-          <div className="flex items-center gap-2 text-gray-400">
-            <div className="w-2 h-2 rounded-full bg-purple-500 animate-pulse" />
-            <span className="font-semibold text-purple-300">{stats.claims}</span>
-            <span>Claims</span>
-          </div>
-          <div className="w-px h-4 bg-slate-700" />
-          <div className="flex items-center gap-2 text-gray-400">
-            <div className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
-            <span className="font-semibold text-red-300">{stats.osint}</span>
-            <span>OSINT</span>
-          </div>
         </div>
 
         {/* Right: Actions */}
