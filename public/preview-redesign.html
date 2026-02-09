@@ -1,0 +1,945 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ProofLocker - Unified Feed Redesign Preview</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', sans-serif;
+      background: #0a0a0f;
+      color: #e5e7eb;
+      overflow-x: hidden;
+    }
+
+    /* Header */
+    .header {
+      background: linear-gradient(135deg, #111118 0%, #1a1a2e 100%);
+      border-bottom: 1px solid rgba(139, 92, 246, 0.2);
+      padding: 1rem 1.5rem;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 4px 20px rgba(139, 92, 246, 0.1);
+    }
+
+    .header-content {
+      max-width: 1400px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 2rem;
+    }
+
+    .logo {
+      font-size: 1.5rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, #06b6d4 0%, #8b5cf6 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      white-space: nowrap;
+    }
+
+    .user-stats-center {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 2rem;
+    }
+
+    .stat-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 1rem;
+      background: rgba(139, 92, 246, 0.1);
+      border: 1px solid rgba(139, 92, 246, 0.3);
+      border-radius: 12px;
+    }
+
+    .stat-label {
+      font-size: 0.75rem;
+      color: #9ca3af;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .stat-value {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #06b6d4;
+    }
+
+    .rank-badge {
+      padding: 0.5rem 1rem;
+      background: linear-gradient(135deg, #8b5cf6 0%, #06b6d4 100%);
+      border-radius: 12px;
+      font-weight: 600;
+      font-size: 0.875rem;
+      box-shadow: 0 0 20px rgba(139, 92, 246, 0.4);
+    }
+
+    .streak-badge {
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+      padding: 0.5rem 1rem;
+      background: rgba(249, 115, 22, 0.1);
+      border: 1px solid rgba(249, 115, 22, 0.3);
+      border-radius: 12px;
+      font-size: 0.875rem;
+    }
+
+    .lock-claim-btn {
+      padding: 0.75rem 1.5rem;
+      background: linear-gradient(135deg, #06b6d4 0%, #8b5cf6 100%);
+      border: none;
+      border-radius: 12px;
+      color: white;
+      font-weight: 600;
+      font-size: 0.95rem;
+      cursor: pointer;
+      box-shadow: 0 4px 20px rgba(139, 92, 246, 0.3);
+      transition: all 0.3s ease;
+      white-space: nowrap;
+    }
+
+    .lock-claim-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 30px rgba(139, 92, 246, 0.5);
+    }
+
+    /* Tab Bar */
+    .tab-bar {
+      background: #111118;
+      border-bottom: 1px solid rgba(139, 92, 246, 0.2);
+      padding: 0 1.5rem;
+      position: sticky;
+      top: 73px;
+      z-index: 99;
+    }
+
+    .tab-bar-content {
+      max-width: 1400px;
+      margin: 0 auto;
+      display: flex;
+      gap: 0;
+      overflow-x: auto;
+    }
+
+    .tab {
+      padding: 1rem 1.5rem;
+      color: #9ca3af;
+      font-weight: 500;
+      border-bottom: 2px solid transparent;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      white-space: nowrap;
+    }
+
+    .tab:hover {
+      color: #06b6d4;
+    }
+
+    .tab.active {
+      color: #06b6d4;
+      border-bottom-color: #06b6d4;
+      box-shadow: 0 4px 20px rgba(6, 182, 212, 0.2);
+    }
+
+    /* Main Layout */
+    .main-container {
+      max-width: 1400px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 250px 1fr;
+      gap: 1.5rem;
+      padding: 1.5rem;
+    }
+
+    @media (max-width: 1024px) {
+      .main-container {
+        grid-template-columns: 1fr;
+      }
+      .sidebar {
+        display: none;
+      }
+    }
+
+    /* Sidebar with Mini Globe */
+    .sidebar {
+      position: sticky;
+      top: 160px;
+      height: fit-content;
+    }
+
+    .mini-globe-container {
+      background: linear-gradient(135deg, #111118 0%, #1a1a2e 100%);
+      border: 1px solid rgba(139, 92, 246, 0.2);
+      border-radius: 16px;
+      padding: 1rem;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    }
+
+    .mini-globe-title {
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: #9ca3af;
+      margin-bottom: 1rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .mini-globe {
+      width: 100%;
+      aspect-ratio: 1;
+      background: radial-gradient(circle at 30% 30%, rgba(6, 182, 212, 0.15), rgba(139, 92, 246, 0.15));
+      border-radius: 12px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .globe-pin {
+      position: absolute;
+      width: 8px;
+      height: 8px;
+      background: #06b6d4;
+      border-radius: 50%;
+      box-shadow: 0 0 10px rgba(6, 182, 212, 0.8);
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.5); opacity: 0.7; }
+    }
+
+    .globe-pin:nth-child(1) { top: 20%; left: 30%; animation-delay: 0s; }
+    .globe-pin:nth-child(2) { top: 45%; left: 60%; animation-delay: 0.5s; }
+    .globe-pin:nth-child(3) { top: 70%; left: 25%; animation-delay: 1s; }
+    .globe-pin:nth-child(4) { top: 35%; left: 75%; animation-delay: 1.5s; }
+
+    /* Feed Container */
+    .feed-container {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    /* Event Card */
+    .event-card {
+      background: linear-gradient(135deg, #111118 0%, #1a1a2e 100%);
+      border: 1px solid rgba(139, 92, 246, 0.2);
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+      transition: all 0.3s ease;
+    }
+
+    .event-card:hover {
+      border-color: rgba(139, 92, 246, 0.4);
+      box-shadow: 0 8px 30px rgba(139, 92, 246, 0.2);
+    }
+
+    .event-header {
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+      padding: 1.5rem;
+      padding-bottom: 1rem;
+    }
+
+    .event-thumbnail {
+      width: 120px;
+      height: 120px;
+      border-radius: 12px;
+      object-fit: cover;
+      flex-shrink: 0;
+      border: 1px solid rgba(139, 92, 246, 0.2);
+    }
+
+    .event-content {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .event-source {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.25rem 0.75rem;
+      background: rgba(6, 182, 212, 0.1);
+      border: 1px solid rgba(6, 182, 212, 0.3);
+      border-radius: 6px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: #06b6d4;
+      margin-bottom: 0.75rem;
+    }
+
+    .event-headline {
+      font-size: 1.125rem;
+      font-weight: 700;
+      color: #e5e7eb;
+      margin-bottom: 0.5rem;
+      line-height: 1.4;
+    }
+
+    .event-summary {
+      font-size: 0.875rem;
+      color: #9ca3af;
+      line-height: 1.6;
+      margin-bottom: 0.75rem;
+    }
+
+    .event-meta {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .location-tag {
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+      font-size: 0.75rem;
+      color: #9ca3af;
+    }
+
+    .link-evidence-btn {
+      padding: 0.5rem 1rem;
+      background: rgba(139, 92, 246, 0.1);
+      border: 1px solid rgba(139, 92, 246, 0.3);
+      border-radius: 8px;
+      color: #8b5cf6;
+      font-size: 0.75rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .link-evidence-btn:hover {
+      background: rgba(139, 92, 246, 0.2);
+      border-color: rgba(139, 92, 246, 0.5);
+    }
+
+    /* Related Claims Section */
+    .related-claims {
+      border-top: 1px solid rgba(139, 92, 246, 0.2);
+      padding: 1rem 1.5rem;
+      background: rgba(0, 0, 0, 0.2);
+    }
+
+    .related-claims-header {
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: #9ca3af;
+      margin-bottom: 1rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .claim-item {
+      background: rgba(139, 92, 246, 0.05);
+      border: 1px solid rgba(139, 92, 246, 0.2);
+      border-radius: 12px;
+      padding: 1rem;
+      margin-bottom: 0.75rem;
+      transition: all 0.3s ease;
+    }
+
+    .claim-item:last-child {
+      margin-bottom: 0;
+    }
+
+    .claim-item:hover {
+      background: rgba(139, 92, 246, 0.1);
+      border-color: rgba(139, 92, 246, 0.3);
+    }
+
+    .claim-header {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 0.75rem;
+      flex-wrap: wrap;
+    }
+
+    .claim-user {
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: #e5e7eb;
+    }
+
+    .tier-badge {
+      padding: 0.25rem 0.5rem;
+      background: rgba(6, 182, 212, 0.1);
+      border: 1px solid rgba(6, 182, 212, 0.3);
+      border-radius: 6px;
+      font-size: 0.625rem;
+      font-weight: 600;
+      color: #06b6d4;
+      text-transform: uppercase;
+    }
+
+    .tier-badge.expert {
+      background: rgba(139, 92, 246, 0.1);
+      border-color: rgba(139, 92, 246, 0.3);
+      color: #8b5cf6;
+    }
+
+    .points-change {
+      padding: 0.25rem 0.5rem;
+      border-radius: 6px;
+      font-size: 0.75rem;
+      font-weight: 700;
+    }
+
+    .points-change.positive {
+      background: rgba(34, 197, 94, 0.1);
+      color: #22c55e;
+      box-shadow: 0 0 10px rgba(34, 197, 94, 0.3);
+    }
+
+    .points-change.negative {
+      background: rgba(239, 68, 68, 0.1);
+      color: #ef4444;
+      box-shadow: 0 0 10px rgba(239, 68, 68, 0.3);
+    }
+
+    .status-badge {
+      padding: 0.25rem 0.75rem;
+      border-radius: 6px;
+      font-size: 0.625rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .status-badge.correct {
+      background: rgba(34, 197, 94, 0.1);
+      border: 1px solid rgba(34, 197, 94, 0.3);
+      color: #22c55e;
+      box-shadow: 0 0 10px rgba(34, 197, 94, 0.3);
+    }
+
+    .status-badge.incorrect {
+      background: rgba(239, 68, 68, 0.1);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      color: #ef4444;
+      box-shadow: 0 0 10px rgba(239, 68, 68, 0.3);
+    }
+
+    .status-badge.pending {
+      background: rgba(251, 191, 36, 0.1);
+      border: 1px solid rgba(251, 191, 36, 0.3);
+      color: #fbbf24;
+    }
+
+    .claim-text {
+      font-size: 0.875rem;
+      color: #e5e7eb;
+      line-height: 1.5;
+      margin-bottom: 0.75rem;
+    }
+
+    .claim-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .claim-meta {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .category-tag {
+      font-size: 0.75rem;
+      color: #8b5cf6;
+      font-weight: 600;
+    }
+
+    .claim-timestamp {
+      font-size: 0.75rem;
+      color: #6b7280;
+    }
+
+    .view-btn {
+      padding: 0.375rem 0.75rem;
+      background: rgba(6, 182, 212, 0.1);
+      border: 1px solid rgba(6, 182, 212, 0.3);
+      border-radius: 6px;
+      color: #06b6d4;
+      font-size: 0.75rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .view-btn:hover {
+      background: rgba(6, 182, 212, 0.2);
+      border-color: rgba(6, 182, 212, 0.5);
+    }
+
+    /* Lock Claim Action */
+    .lock-claim-action {
+      padding: 1rem 1.5rem;
+      border-top: 1px solid rgba(139, 92, 246, 0.2);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .lock-claim-action-text {
+      font-size: 0.875rem;
+      color: #9ca3af;
+    }
+
+    .lock-claim-action-btn {
+      padding: 0.5rem 1.25rem;
+      background: linear-gradient(135deg, #06b6d4 0%, #8b5cf6 100%);
+      border: none;
+      border-radius: 8px;
+      color: white;
+      font-weight: 600;
+      font-size: 0.875rem;
+      cursor: pointer;
+      box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3);
+      transition: all 0.3s ease;
+    }
+
+    .lock-claim-action-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 25px rgba(139, 92, 246, 0.5);
+    }
+
+    /* Evidence Grade Badge */
+    .evidence-grade {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.25rem 0.75rem;
+      border-radius: 6px;
+      font-size: 0.75rem;
+      font-weight: 700;
+    }
+
+    .evidence-grade.grade-a {
+      background: rgba(34, 197, 94, 0.1);
+      border: 1px solid rgba(34, 197, 94, 0.3);
+      color: #22c55e;
+    }
+
+    .evidence-grade.grade-b {
+      background: rgba(6, 182, 212, 0.1);
+      border: 1px solid rgba(6, 182, 212, 0.3);
+      color: #06b6d4;
+    }
+
+    .evidence-grade.grade-c {
+      background: rgba(251, 191, 36, 0.1);
+      border: 1px solid rgba(251, 191, 36, 0.3);
+      color: #fbbf24;
+    }
+
+    /* Mobile Responsive */
+    @media (max-width: 768px) {
+      .header-content {
+        flex-direction: column;
+        gap: 1rem;
+      }
+
+      .user-stats-center {
+        flex-wrap: wrap;
+        gap: 0.75rem;
+      }
+
+      .stat-item {
+        padding: 0.375rem 0.75rem;
+      }
+
+      .stat-value {
+        font-size: 1rem;
+      }
+
+      .event-header {
+        flex-direction: column;
+      }
+
+      .event-thumbnail {
+        width: 100%;
+        height: 200px;
+      }
+
+      .main-container {
+        padding: 1rem;
+        gap: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <div class="header">
+    <div class="header-content">
+      <div class="logo">⛓️ ProofLocker</div>
+
+      <div class="user-stats-center">
+        <div class="stat-item">
+          <div>
+            <div class="stat-label">Total Points</div>
+            <div class="stat-value">2,847</div>
+          </div>
+        </div>
+
+        <div class="rank-badge">Expert Analyst</div>
+
+        <div class="streak-badge">
+          🔥 7 Day Streak
+        </div>
+
+        <div class="stat-item">
+          <div>
+            <div class="stat-label">Claims</div>
+            <div class="stat-value">27</div>
+          </div>
+        </div>
+      </div>
+
+      <button class="lock-claim-btn">+ Lock Claim</button>
+    </div>
+  </div>
+
+  <!-- Tab Bar -->
+  <div class="tab-bar">
+    <div class="tab-bar-content">
+      <div class="tab">All My Claims</div>
+      <div class="tab">Leaderboard</div>
+      <div class="tab active">Claims</div>
+      <div class="tab">All OSINT</div>
+    </div>
+  </div>
+
+  <!-- Main Container -->
+  <div class="main-container">
+    <!-- Sidebar with Mini Globe -->
+    <aside class="sidebar">
+      <div class="mini-globe-container">
+        <div class="mini-globe-title">Live Events</div>
+        <div class="mini-globe">
+          <div class="globe-pin"></div>
+          <div class="globe-pin"></div>
+          <div class="globe-pin"></div>
+          <div class="globe-pin"></div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Feed Container -->
+    <main class="feed-container">
+
+      <!-- Event Card 1 - Crypto Market -->
+      <article class="event-card">
+        <div class="event-header">
+          <img src="https://images.unsplash.com/photo-1622630998477-20aa696ecb05?w=400&h=400&fit=crop" alt="Bitcoin chart" class="event-thumbnail">
+          <div class="event-content">
+            <div class="event-source">
+              📊 CoinDesk
+            </div>
+            <h2 class="event-headline">Bitcoin Surges Past $98K Amid ETF Approval Speculation</h2>
+            <p class="event-summary">Bitcoin reached a new all-time high of $98,400 following reports that the SEC may approve multiple spot Bitcoin ETFs this month, marking a major milestone for institutional adoption.</p>
+            <div class="event-meta">
+              <div class="location-tag">📍 New York, USA</div>
+              <button class="link-evidence-btn">Link as Evidence</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="related-claims">
+          <div class="related-claims-header">Related Claims (3)</div>
+
+          <div class="claim-item">
+            <div class="claim-header">
+              <span class="claim-user">Anon #9496</span>
+              <span class="tier-badge expert">Expert Analyst</span>
+              <span class="points-change positive">+120 pts</span>
+              <span class="status-badge correct">✓ Resolved Correct</span>
+              <span class="evidence-grade grade-a">Grade A</span>
+            </div>
+            <p class="claim-text">"Bitcoin will break $95,000 before February 15, 2026 due to institutional ETF demand surge"</p>
+            <div class="claim-footer">
+              <div class="claim-meta">
+                <span class="category-tag">#Crypto</span>
+                <span class="claim-timestamp">Jan 24, 2026</span>
+              </div>
+              <button class="view-btn">View</button>
+            </div>
+          </div>
+
+          <div class="claim-item">
+            <div class="claim-header">
+              <span class="claim-user">@CryptoWhale</span>
+              <span class="tier-badge">Novice</span>
+              <span class="status-badge pending">Pending</span>
+            </div>
+            <p class="claim-text">"BTC will reach $100K by end of February 2026 following SEC approval wave"</p>
+            <div class="claim-footer">
+              <div class="claim-meta">
+                <span class="category-tag">#Crypto</span>
+                <span class="claim-timestamp">Feb 8, 2026</span>
+              </div>
+              <button class="view-btn">View</button>
+            </div>
+          </div>
+
+          <div class="claim-item">
+            <div class="claim-header">
+              <span class="claim-user">Anon #2347</span>
+              <span class="tier-badge">Analyst</span>
+              <span class="points-change negative">-30 pts</span>
+              <span class="status-badge incorrect">✗ Resolved Incorrect</span>
+            </div>
+            <p class="claim-text">"Bitcoin will crash below $80K in early February due to regulatory uncertainty"</p>
+            <div class="claim-footer">
+              <div class="claim-meta">
+                <span class="category-tag">#Crypto</span>
+                <span class="claim-timestamp">Jan 28, 2026</span>
+              </div>
+              <button class="view-btn">View</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="lock-claim-action">
+          <span class="lock-claim-action-text">Have a prediction about this event?</span>
+          <button class="lock-claim-action-btn">Lock Claim</button>
+        </div>
+      </article>
+
+      <!-- Event Card 2 - Geopolitics -->
+      <article class="event-card">
+        <div class="event-header">
+          <img src="https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=400&h=400&fit=crop" alt="Tokyo skyline" class="event-thumbnail">
+          <div class="event-content">
+            <div class="event-source">
+              🌐 BBC World
+            </div>
+            <h2 class="event-headline">Japan Announces Major Defense Budget Increase Amid Regional Tensions</h2>
+            <p class="event-summary">Japanese Prime Minister announces 15% increase in defense spending for 2026, citing rising security concerns in the Indo-Pacific region and strengthening alliances.</p>
+            <div class="event-meta">
+              <div class="location-tag">📍 Tokyo, Japan</div>
+              <button class="link-evidence-btn">Link as Evidence</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="related-claims">
+          <div class="related-claims-header">Related Claims (2)</div>
+
+          <div class="claim-item">
+            <div class="claim-header">
+              <span class="claim-user">@GlobalAnalyst</span>
+              <span class="tier-badge expert">Expert Analyst</span>
+              <span class="status-badge pending">Pending</span>
+            </div>
+            <p class="claim-text">"Japan will increase defense spending by at least 10% in 2026 budget announcement"</p>
+            <div class="claim-footer">
+              <div class="claim-meta">
+                <span class="category-tag">#Geopolitics</span>
+                <span class="claim-timestamp">Jan 15, 2026</span>
+              </div>
+              <button class="view-btn">View</button>
+            </div>
+          </div>
+
+          <div class="claim-item">
+            <div class="claim-header">
+              <span class="claim-user">Anon #7834</span>
+              <span class="tier-badge">Analyst</span>
+              <span class="points-change positive">+95 pts</span>
+              <span class="status-badge correct">✓ Resolved Correct</span>
+              <span class="evidence-grade grade-b">Grade B</span>
+            </div>
+            <p class="claim-text">"Japan will announce significant military investment before Q1 2026 ends"</p>
+            <div class="claim-footer">
+              <div class="claim-meta">
+                <span class="category-tag">#Geopolitics</span>
+                <span class="claim-timestamp">Dec 20, 2025</span>
+              </div>
+              <button class="view-btn">View</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="lock-claim-action">
+          <span class="lock-claim-action-text">Have a prediction about this event?</span>
+          <button class="lock-claim-action-btn">Lock Claim</button>
+        </div>
+      </article>
+
+      <!-- Event Card 3 - Tech/AI -->
+      <article class="event-card">
+        <div class="event-header">
+          <img src="https://images.unsplash.com/photo-1677442136019-21780ecad995?w=400&h=400&fit=crop" alt="AI visualization" class="event-thumbnail">
+          <div class="event-content">
+            <div class="event-source">
+              🤖 TechCrunch
+            </div>
+            <h2 class="event-headline">OpenAI Unveils GPT-5 with Breakthrough Reasoning Capabilities</h2>
+            <p class="event-summary">OpenAI announces GPT-5, featuring advanced multi-step reasoning, improved factual accuracy, and native integration with real-time data sources. Early tests show 40% improvement over GPT-4.</p>
+            <div class="event-meta">
+              <div class="location-tag">📍 San Francisco, USA</div>
+              <button class="link-evidence-btn">Link as Evidence</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="related-claims">
+          <div class="related-claims-header">Related Claims (4)</div>
+
+          <div class="claim-item">
+            <div class="claim-header">
+              <span class="claim-user">@TechOracle</span>
+              <span class="tier-badge expert">Expert Analyst</span>
+              <span class="points-change positive">+145 pts</span>
+              <span class="status-badge correct">✓ Resolved Correct</span>
+              <span class="evidence-grade grade-a">Grade A</span>
+            </div>
+            <p class="claim-text">"OpenAI will release GPT-5 in Q1 2026 with significant reasoning improvements"</p>
+            <div class="claim-footer">
+              <div class="claim-meta">
+                <span class="category-tag">#Tech</span>
+                <span class="claim-timestamp">Nov 12, 2025</span>
+              </div>
+              <button class="view-btn">View</button>
+            </div>
+          </div>
+
+          <div class="claim-item">
+            <div class="claim-header">
+              <span class="claim-user">Anon #4521</span>
+              <span class="tier-badge">Analyst</span>
+              <span class="status-badge pending">Pending</span>
+            </div>
+            <p class="claim-text">"GPT-5 will achieve AGI-level performance on complex reasoning tasks"</p>
+            <div class="claim-footer">
+              <div class="claim-meta">
+                <span class="category-tag">#Tech</span>
+                <span class="claim-timestamp">Feb 9, 2026</span>
+              </div>
+              <button class="view-btn">View</button>
+            </div>
+          </div>
+
+          <div class="claim-item">
+            <div class="claim-header">
+              <span class="claim-user">@AIWatcher</span>
+              <span class="tier-badge">Novice</span>
+              <span class="status-badge pending">Pending</span>
+            </div>
+            <p class="claim-text">"GPT-5 will lead to major market disruption in knowledge work sectors by Q2 2026"</p>
+            <div class="claim-footer">
+              <div class="claim-meta">
+                <span class="category-tag">#Tech</span>
+                <span class="claim-timestamp">Feb 8, 2026</span>
+              </div>
+              <button class="view-btn">View</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="lock-claim-action">
+          <span class="lock-claim-action-text">Have a prediction about this event?</span>
+          <button class="lock-claim-action-btn">Lock Claim</button>
+        </div>
+      </article>
+
+      <!-- Event Card 4 - Climate/Weather -->
+      <article class="event-card">
+        <div class="event-header">
+          <img src="https://images.unsplash.com/photo-1564053489984-317bbd824340?w=400&h=400&fit=crop" alt="Satellite weather" class="event-thumbnail">
+          <div class="event-content">
+            <div class="event-source">
+              🌍 NASA Earth Observatory
+            </div>
+            <h2 class="event-headline">Antarctic Ice Shelf Shows Accelerated Melting in Latest Satellite Data</h2>
+            <p class="event-summary">NASA reports Thwaites Glacier showing unprecedented warming patterns, with melt rates increasing 35% faster than 2024 models predicted, raising concerns about sea level impact.</p>
+            <div class="event-meta">
+              <div class="location-tag">📍 Antarctica</div>
+              <button class="link-evidence-btn">Link as Evidence</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="related-claims">
+          <div class="related-claims-header">Related Claims (1)</div>
+
+          <div class="claim-item">
+            <div class="claim-header">
+              <span class="claim-user">@ClimateScientist</span>
+              <span class="tier-badge expert">Expert Analyst</span>
+              <span class="status-badge pending">Pending</span>
+            </div>
+            <p class="claim-text">"Thwaites Glacier will show >30% acceleration in melt rate by February 2026"</p>
+            <div class="claim-footer">
+              <div class="claim-meta">
+                <span class="category-tag">#Climate</span>
+                <span class="claim-timestamp">Dec 5, 2025</span>
+              </div>
+              <button class="view-btn">View</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="lock-claim-action">
+          <span class="lock-claim-action-text">Have a prediction about this event?</span>
+          <button class="lock-claim-action-btn">Lock Claim</button>
+        </div>
+      </article>
+
+    </main>
+  </div>
+
+  <script>
+    // Simple scroll animation
+    const cards = document.querySelectorAll('.event-card');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.style.opacity = '1';
+          entry.target.style.transform = 'translateY(0)';
+        }
+      });
+    }, { threshold: 0.1 });
+
+    cards.forEach(card => {
+      card.style.opacity = '0';
+      card.style.transform = 'translateY(20px)';
+      card.style.transition = 'all 0.5s ease';
+      observer.observe(card);
+    });
+
+    // Tab switching
+    document.querySelectorAll('.tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+      });
+    });
+  </script>
+</body>
+</html>
