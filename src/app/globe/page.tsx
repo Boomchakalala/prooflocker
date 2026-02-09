@@ -644,84 +644,88 @@ export default function GlobePage() {
                           : 'border border-slate-700/50 p-3.5'
                       }`}
                     >
-                      {/* Resolution Banner - Only show if resolved */}
-                      {(claim.outcome === 'correct' || claim.outcome === 'incorrect') && (
-                        <div className={`flex items-center gap-2 mb-2 pb-2 border-b ${
-                          claim.outcome === 'correct' ? 'border-emerald-500/20' : 'border-red-500/20'
+                      {/* User Header */}
+                      <div className="flex items-center justify-between mb-3">
+                        <div className="flex items-center gap-2.5">
+                          <div className="w-10 h-10 rounded-full bg-gradient-to-br from-purple-600 to-purple-800 flex items-center justify-center text-white text-sm font-bold border-2 border-purple-500/40 shadow-lg">
+                            {claim.submitter?.match(/\d+/)?.[0]?.slice(-2) || "??"}
+                          </div>
+                          <div>
+                            <div className="flex items-center gap-1.5">
+                              <span className="text-sm text-white font-semibold">{claim.submitter}</span>
+                              <span className={`px-2 py-0.5 text-[10px] font-bold rounded border ${tierInfo.bg} ${tierInfo.border} ${tierInfo.color}`}>
+                                {tierInfo.label}
+                              </span>
+                            </div>
+                            <div className="text-[10px] text-slate-500">{claim.lockedDate}</div>
+                          </div>
+                        </div>
+
+                        {/* Status Badge */}
+                        <div className={`flex items-center gap-1 px-2.5 py-1 text-[10px] font-bold rounded-lg border-2 shadow-lg ${
+                          claim.outcome === 'correct'
+                            ? "bg-emerald-500/30 border-emerald-400/60 text-emerald-300 shadow-emerald-500/30"
+                            : claim.outcome === 'incorrect'
+                            ? "bg-red-500/30 border-red-400/60 text-red-300 shadow-red-500/30"
+                            : "bg-amber-500/30 border-amber-400/60 text-amber-300 shadow-amber-500/30"
                         }`}>
-                          <div className="flex items-center gap-1.5">
-                            {claim.outcome === 'correct' ? (
-                              <svg className="w-3.5 h-3.5 text-emerald-400" fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24">
+                          {claim.outcome === 'correct' && (
+                            <>
+                              <svg className="w-3 h-3" fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7"/>
                               </svg>
-                            ) : (
-                              <svg className="w-3.5 h-3.5 text-red-400" fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24">
+                              Correct
+                            </>
+                          )}
+                          {claim.outcome === 'incorrect' && (
+                            <>
+                              <svg className="w-3 h-3" fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12"/>
                               </svg>
-                            )}
-                            <span className={`${claim.outcome === 'correct' ? 'text-emerald-400' : 'text-red-400'} font-bold text-[11px]`}>
-                              {claim.outcome === 'correct' ? 'RESOLVED CORRECT' : 'RESOLVED INCORRECT'}
-                            </span>
-                          </div>
-                          <span className="text-[10px] text-slate-500">•</span>
-                          <span className={`text-[10px] ${claim.outcome === 'correct' ? 'text-emerald-400' : 'text-red-400'} font-semibold`}>
-                            {claim.outcome === 'correct' ? '+80 pts' : '-20 pts'}
-                          </span>
+                              Incorrect
+                            </>
+                          )}
+                          {!claim.outcome && (
+                            <>
+                              <svg className="w-3 h-3" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                                <circle cx="12" cy="12" r="10"/>
+                              </svg>
+                              Pending
+                            </>
+                          )}
                         </div>
-                      )}
-
-                      {/* Header */}
-                      <div className="flex items-center justify-between mb-2.5">
-                        <div className="flex items-center gap-1.5 text-[12px]">
-                          <button
-                            onClick={() => router.push(`/user/${claim.anonId || claim.id}`)}
-                            className="font-semibold text-[#f8fafc] hover:text-[#a78bfa] transition-colors cursor-pointer"
-                          >
-                            {claim.submitter}
-                          </button>
-                          <div
-                            className="flex items-center gap-1 px-1.5 py-0.5 rounded-[10px] text-[11px] font-semibold"
-                            style={{
-                              background: tierInfo.bgColor,
-                              color: tierInfo.color
-                            }}
-                          >
-                            <svg className="w-2.5 h-2.5" fill="currentColor" viewBox="0 0 20 20">
-                              <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                            </svg>
-                            {tierInfo.label}
-                          </div>
-                        </div>
-                        {!(claim.outcome === 'correct' || claim.outcome === 'incorrect') && (
-                          <span className={`px-2 py-0.5 rounded-[10px] text-[10px] font-semibold uppercase tracking-wide ${statusColor}`}>
-                            {displayStatus}
-                          </span>
-                        )}
                       </div>
 
-                      {/* Category Badge */}
-                      {claim.category && (
-                        <div className="mb-2">
-                          <span className="inline-flex px-2 py-0.5 bg-[rgba(139,92,246,0.1)] border border-[rgba(139,92,246,0.2)] text-[#a78bfa] rounded text-[10px] font-medium">
-                            {claim.category}
-                          </span>
-                        </div>
-                      )}
-
                       {/* Claim Text */}
-                      <p className="text-[13px] leading-[1.5] text-[#f8fafc] mb-2.5 line-clamp-2">
+                      <p className="text-white text-sm leading-relaxed mb-3 line-clamp-3">
                         {claim.claim}
                       </p>
 
-                      {/* Meta */}
-                      <div className="flex items-center justify-between text-[11px] text-[#64748b]">
-                        <span>{claim.lockedDate}</span>
+                      {/* Category Badge */}
+                      {claim.category && (
+                        <div className="mb-3">
+                          <span className="inline-flex px-2 py-0.5 bg-slate-800/70 text-slate-400 text-xs rounded border border-slate-700/50">
+                            #{claim.category}
+                          </span>
+                        </div>
+                      )}
+
+                      {/* Footer Actions */}
+                      <div className="flex items-center gap-2 pt-3 border-t border-slate-700/50">
                         <button
                           onClick={() => router.push(`/proof/${claim.publicSlug}`)}
-                          className="px-2 py-1 text-[#94a3b8] hover:text-white hover:bg-white/10 rounded text-[11px] font-medium transition-colors"
+                          className="flex-1 px-3 py-1.5 bg-purple-600/10 hover:bg-purple-600/20 border border-purple-500/30 rounded-lg text-xs text-purple-300 font-semibold transition-all"
                         >
                           View
                         </button>
+                        {canResolve && (
+                          <button
+                            onClick={() => router.push(`/resolve/${claim.id}`)}
+                            className="flex-1 px-3 py-1.5 bg-emerald-600/10 hover:bg-emerald-600/20 border border-emerald-500/30 rounded-lg text-xs text-emerald-300 font-semibold transition-all"
+                          >
+                            Resolve
+                          </button>
+                        )}
                       </div>
                     </div>
                   );
