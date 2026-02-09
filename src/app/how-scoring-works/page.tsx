@@ -35,7 +35,7 @@ export default function HowScoringWorksPage() {
               <div className="text-xs font-semibold text-neutral-400 uppercase tracking-wider">Reliability Score</div>
             </div>
             <div className="text-3xl font-bold text-white mb-2">0-1000</div>
-            <p className="text-sm text-neutral-400">Your reputation as a forecaster</p>
+            <p className="text-sm text-neutral-400">Your reputation as an author</p>
           </div>
 
           <div className="glass border border-white/10 rounded-xl p-6">
@@ -61,7 +61,7 @@ export default function HowScoringWorksPage() {
               </div>
               <div>
                 <h2 className="text-2xl font-bold text-white">Reliability Score (0-1000)</h2>
-                <p className="text-sm text-neutral-400">Your reputation as a forecaster</p>
+                <p className="text-sm text-neutral-400">Your reputation as an author</p>
               </div>
             </div>
 
@@ -120,7 +120,7 @@ export default function HowScoringWorksPage() {
                   </div>
                   <span className="text-blue-400 font-semibold">50%</span>
                 </div>
-                <p className="text-sm text-neutral-400 ml-11">Get predictions right to boost your reputation</p>
+                <p className="text-sm text-neutral-400 ml-11">Get claims right to boost your reputation</p>
               </div>
 
               <div className="bg-white/5 rounded-lg p-4 border border-white/10">
@@ -181,7 +181,7 @@ export default function HowScoringWorksPage() {
                     </svg>
                   </div>
                   <div className="flex-1">
-                    <div className="text-white font-medium">Lock prediction</div>
+                    <div className="text-white font-medium">Lock claim</div>
                   </div>
                   <div className="text-purple-400 font-bold text-lg">+10</div>
                 </div>
