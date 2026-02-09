@@ -10,6 +10,7 @@ import Link from "next/link";
 import ResolveModal from "./ResolveModal";
 import ResolutionModalWithEvidence from "./ResolutionModalWithEvidence";
 import ContestModal from "./ContestModal";
+import LinkOsintModal from "./LinkOsintModal";
 import OutcomeBadge from "./OutcomeBadge";
 import EvidenceGradeBadge from "./EvidenceGradeBadge";
 import StatusBadge from "./StatusBadge";
@@ -44,6 +45,7 @@ export default function PredictionCard({ prediction, card, currentUserId, onOutc
   const [linkCopied, setLinkCopied] = useState(false);
   const [showResolveModal, setShowResolveModal] = useState(false);
   const [showContestModal, setShowContestModal] = useState(false);
+  const [showLinkOsintModal, setShowLinkOsintModal] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
   const [showReportMenu, setShowReportMenu] = useState(false);
   const [hasVoted, setHasVoted] = useState(false);
@@ -715,6 +717,22 @@ export default function PredictionCard({ prediction, card, currentUserId, onOutc
           >
             View
           </button>
+          {/* "Use as evidence" button for OSINT items */}
+          {isOsint && !isPreview && (
+            <button
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                setShowLinkOsintModal(true);
+              }}
+              className="flex items-center gap-1.5 px-4 py-1.5 bg-blue-500/10 text-blue-400 hover:bg-blue-500/20 hover:text-blue-300 rounded-lg transition-colors text-sm font-medium"
+            >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
+              </svg>
+              Use as evidence
+            </button>
+          )}
         </div>
         <div className="flex items-center gap-3">
           {/* "Cited as evidence" indicator - placeholder, would need backend support */}
@@ -754,6 +772,19 @@ export default function PredictionCard({ prediction, card, currentUserId, onOutc
             setShowContestModal(false);
             onOutcomeUpdate?.();
           }}
+        />
+      )}
+
+      {/* Link OSINT Modal */}
+      {showLinkOsintModal && isOsint && data._original && (
+        <LinkOsintModal
+          osintSignal={data._original as any}
+          onClose={() => setShowLinkOsintModal(false)}
+          onLinked={() => {
+            setShowLinkOsintModal(false);
+            onOutcomeUpdate?.();
+          }}
+          currentUserId={currentUserId}
         />
       )}
     </>
