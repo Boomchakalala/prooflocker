@@ -256,3 +256,37 @@ export function calculateReliabilityScore(stats: {
   const totalScore = accuracyScore + evidenceScore + volumeScore + consistencyBonus;
   return Math.min(Math.round(totalScore), 1000);
 }
+
+// @deprecated - For backward compatibility only
+export function getScoreBreakdown(stats: {
+  correctPredictions: number;
+  incorrectPredictions: number;
+  resolvedPredictions: number;
+  avgEvidenceScore: number;
+}): Array<{ label: string; value: number; maxValue: number }> {
+  const { correctPredictions, resolvedPredictions, avgEvidenceScore } = stats;
+
+  if (resolvedPredictions === 0) {
+    return [];
+  }
+
+  const winRate = correctPredictions / resolvedPredictions;
+  const accuracyScore = Math.round(winRate * 400);
+  const evidenceScore = Math.round((avgEvidenceScore / 100) * 300);
+
+  let volumeScore = 0;
+  if (resolvedPredictions <= 5) {
+    volumeScore = resolvedPredictions * 40;
+  } else if (resolvedPredictions <= 20) {
+    volumeScore = 200 + (resolvedPredictions - 5) * 5;
+  } else {
+    volumeScore = 275 + Math.min((resolvedPredictions - 20) * 2, 125);
+  }
+  volumeScore = Math.min(volumeScore, 200);
+
+  return [
+    { label: 'Accuracy', value: accuracyScore, maxValue: 400 },
+    { label: 'Evidence Quality', value: evidenceScore, maxValue: 300 },
+    { label: 'Volume', value: volumeScore, maxValue: 200 },
+  ];
+}
