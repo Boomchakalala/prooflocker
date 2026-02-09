@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import dynamic from 'next/dynamic';
@@ -70,6 +70,26 @@ export default function GlobePage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedArea, setSelectedArea] = useState<{claims: Claim[], osint: OsintItem[], name: string} | null>(null);
   const [viewMode, setViewMode] = useState<'points' | 'heatmap'>('points');
+
+  // Compute unique categories from current data
+  const uniqueCategories = useMemo(() => {
+    const cats = new Set<string>();
+    if (currentTab === 'claims') {
+      claims.forEach(c => {
+        if (c.category) cats.add(c.category.toLowerCase());
+      });
+    } else if (currentTab === 'osint') {
+      osint.forEach(o => {
+        // Get category from tags if available
+        o.tags?.forEach(tag => cats.add(tag.toLowerCase()));
+      });
+    } else {
+      resolutions.forEach(r => {
+        if (r.category) cats.add(r.category.toLowerCase());
+      });
+    }
+    return ['all', ...Array.from(cats).sort()];
+  }, [currentTab, claims, osint, resolutions]);
 
   // Fetch data from unified activity API
   const fetchActivity = async (showLoading = false) => {
