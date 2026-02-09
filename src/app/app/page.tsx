@@ -61,25 +61,30 @@ export default function AppFeedPage() {
     return true;
   });
 
+  // Merge and sort feed items chronologically
+  const unifiedFeed = [
+    ...filteredOsint.map(o => ({ type: 'osint' as const, data: o, timestamp: new Date(o.published_at || o.created_at).getTime() })),
+    ...filteredPredictions.map(p => ({ type: 'claim' as const, data: p, timestamp: new Date(p.createdAt).getTime() }))
+  ].sort((a, b) => b.timestamp - a.timestamp);
+
   return (
     <div className="min-h-screen gradient-bg text-white">
       <UnifiedHeader currentView="feed" />
 
       <main className="max-w-7xl mx-auto px-4 pt-24 pb-12">
 
-        {/* Intel Feed Header - Breaking News Vibe */}
+        {/* ProofLocker Monitoring Header */}
         <div className="mb-8">
-          <div className="flex items-center gap-3 mb-4">
-            <div className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-red-600/20 to-orange-600/20 border border-red-500/40 rounded-xl shadow-[0_0_20px_rgba(239,68,68,0.2)]">
-              <svg className="w-5 h-5 text-red-400" fill="currentColor" viewBox="0 0 20 20">
-                <path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6z"/>
-              </svg>
-              <h1 className="text-2xl font-bold text-white">Intelligence Feed</h1>
+          <div className="flex items-center gap-3 mb-3">
+            <h1 className="text-3xl font-bold text-white">ProofLocker Feed</h1>
+            <div className="flex-1 h-px bg-gradient-to-r from-white/20 to-transparent"></div>
+            <div className="flex items-center gap-2 px-3 py-1.5 bg-red-600/10 border border-red-500/30 rounded-lg">
+              <div className="w-2 h-2 bg-red-500 rounded-full animate-pulse shadow-[0_0_8px_rgba(239,68,68,0.6)]"></div>
+              <span className="text-xs font-bold text-red-400 uppercase tracking-wide">Live</span>
             </div>
-            <div className="flex-1 h-px bg-gradient-to-r from-red-500/40 to-transparent"></div>
           </div>
-          <p className="text-sm text-neutral-400 max-w-3xl">
-            Real-time OSINT signals and verifiable claims — monitoring breaking developments worldwide. All claims timestamped and backed by evidence.
+          <p className="text-neutral-400 leading-relaxed">
+            <span className="text-white font-semibold">Monitoring the situation.</span> Real-time OSINT intelligence + verifiable claims, timestamped and backed by evidence. Lock claims, stake reputation, and track resolution with proof.
           </p>
         </div>
 
