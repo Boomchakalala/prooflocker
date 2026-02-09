@@ -66,29 +66,71 @@ export default function GlobeMapbox({ claims, osint }: GlobeMapboxProps) {
     })),
   });
 
-  // Initialize map
+  // Initialize map - ROBUST VERSION with container size check
   useEffect(() => {
-    console.log('[Globe] useEffect triggered');
-
-    // @ts-ignore
-    if (!window.mapboxgl || !mapContainer.current || map.current) {
-      console.log('[Globe] Waiting... mapbox:', !!window.mapboxgl, 'container:', !!mapContainer.current, 'map exists:', !!map.current);
-
-      // Retry if mapbox not loaded yet
-      // @ts-ignore
-      if (!window.mapboxgl && !map.current) {
-        const timer = setTimeout(() => {
-          console.log('[Globe] Retry init...');
-        }, 500);
-        return () => clearTimeout(timer);
-      }
+    // Guard: Prevent double-init (React StrictMode protection)
+    if (initAttempted.current) {
+      console.log('[Globe] Init already attempted, skipping');
       return;
     }
 
+    // Guard: Check if mapbox loaded
+    // @ts-ignore
+    if (!window.mapboxgl) {
+      console.log('[Globe] Mapbox not loaded yet, retrying...');
+      const timer = setTimeout(() => {
+        // Force re-render to retry
+        setError(null);
+      }, 500);
+      return () => clearTimeout(timer);
+    }
+
+    // Guard: Check container exists
+    if (!mapContainer.current) {
+      console.log('[Globe] Container ref not ready');
+      return;
+    }
+
+    // CRITICAL: Wait for container to have non-zero dimensions
+    const waitForContainer = () => {
+      if (!mapContainer.current) return false;
+      const { width, height } = mapContainer.current.getBoundingClientRect();
+      console.log('[Globe] Container size:', width, 'x', height);
+      return width > 0 && height > 0;
+    };
+
+    if (!waitForContainer()) {
+      console.log('[Globe] Container has zero size, waiting...');
+      let attempts = 0;
+      const checkSize = setInterval(() => {
+        attempts++;
+        if (waitForContainer()) {
+          clearInterval(checkSize);
+          // Trigger re-render after container is ready
+          setError(null);
+        } else if (attempts > 20) {
+          // Timeout after 2 seconds
+          clearInterval(checkSize);
+          setError('Container failed to initialize');
+        }
+      }, 100);
+      return () => clearInterval(checkSize);
+    }
+
+    // Mark as attempted to prevent double-init
+    initAttempted.current = true;
     console.log('[Globe] Starting initialization...');
+
     // @ts-ignore
     const mapboxgl = window.mapboxgl;
-    mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_TOKEN || 'pk.eyJ1IjoicHJvb2Zsb2NrZXIiLCJhIjoiY21sYjBxcTAwMGVoYzNlczI4YWlzampqZyJ9.nY-yqSucTzvNyK1qDCq9rQ';
+    const token = process.env.NEXT_PUBLIC_MAPBOX_TOKEN || 'pk.eyJ1IjoicHJvb2Zsb2NrZXIiLCJhIjoiY21sYjBxcTAwMGVoYzNlczI4YWlzampqZyJ9.nY-yqSucTzvNyK1qDCq9rQ';
+
+    if (!token || token === 'undefined') {
+      setError('Mapbox token missing');
+      return;
+    }
+
+    mapboxgl.accessToken = token;
 
     try {
       map.current = new mapboxgl.Map({
@@ -102,8 +144,15 @@ export default function GlobeMapbox({ claims, osint }: GlobeMapboxProps) {
 
       console.log('[Globe] Map created');
 
+      // Handle load event
       map.current.on('load', () => {
         console.log('[Globe] ✅ MAP LOADED!');
+
+        // CRITICAL: Resize after load to ensure proper dimensions
+        if (map.current) {
+          map.current.resize();
+          console.log('[Globe] Map resized');
+        }
 
         try {
           map.current.setFog({
@@ -152,24 +201,45 @@ export default function GlobeMapbox({ claims, osint }: GlobeMapboxProps) {
         });
       });
 
+      // Handle errors
       map.current.on('error', (e: any) => {
         console.error('[Globe] ❌ Map error:', e);
         setError(`Map error: ${e.error?.message || 'Unknown'}`);
       });
 
+      // Handle style load errors
+      map.current.on('styleimagemissing', (e: any) => {
+        console.warn('[Globe] Style image missing:', e.id);
+      });
+
     } catch (error) {
       console.error('[Globe] ❌ Failed to create map:', error);
       setError(error instanceof Error ? error.message : 'Failed to initialize');
+      initAttempted.current = false; // Allow retry on error
     }
 
+    // Cleanup function
     return () => {
+      console.log('[Globe] Cleanup triggered');
       if (map.current) {
-        console.log('[Globe] Cleanup');
-        map.current.remove();
+        try {
+          // Remove event listeners
+          map.current.off('load');
+          map.current.off('error');
+          map.current.off('idle');
+          map.current.off('styleimagemissing');
+
+          // Remove map
+          map.current.remove();
+          console.log('[Globe] Map removed');
+        } catch (e) {
+          console.error('[Globe] Cleanup error:', e);
+        }
         map.current = null;
       }
+      // Don't reset initAttempted here - let it stay true to prevent re-init
     };
-  }, []);
+  }, []); // Empty deps - run once on mount
 
   // Update data when it changes
   useEffect(() => {
