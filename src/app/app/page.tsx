@@ -526,7 +526,11 @@ export default function AppFeedPage() {
 
                 {filteredOsint.length > 0 ? (
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-                    {filteredOsint.map((signal) => (
+                    {filteredOsint.map((signal) => {
+                      // Build proper source URL
+                      const sourceUrl = signal.url || (signal.source_handle ? `https://twitter.com/${signal.source_handle.replace('@', '')}` : '#');
+
+                      return (
                       <div
                         key={signal.id}
                         className="bg-[#0a0a0a] border-2 border-red-600/80 rounded-xl p-5 hover:border-red-500 hover:shadow-[0_0_20px_rgba(239,68,68,0.3)] transition-all"
@@ -549,26 +553,31 @@ export default function AppFeedPage() {
                         {/* Source and Location Row */}
                         <div className="flex items-center justify-between mb-4">
                           <div className="flex items-center gap-2">
-                            <div className="w-6 h-6 rounded bg-red-600/80 flex items-center justify-center">
+                            <div className="w-6 h-6 rounded bg-red-600/80 flex items-center justify-center flex-shrink-0">
                               <svg className="w-3.5 h-3.5 text-white" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"/>
                               </svg>
                             </div>
-                            <span className="text-sm text-red-500 font-bold">{signal.source_name || "Unknown Source"}</span>
+                            <div className="flex-1 min-w-0">
+                              <div className="text-sm text-red-500 font-bold truncate">{signal.source_name || "Unknown Source"}</div>
+                              {signal.source_handle && (
+                                <div className="text-xs text-red-400/70 truncate">{signal.source_handle}</div>
+                              )}
+                            </div>
                           </div>
                           {signal.location && (
-                            <div className="flex items-center gap-1.5">
+                            <div className="flex items-center gap-1.5 flex-shrink-0 ml-2">
                               <svg className="w-3.5 h-3.5 text-orange-500" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
                                 <path strokeLinecap="round" strokeLinejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
                               </svg>
-                              <span className="text-xs text-orange-500 font-medium">{signal.location}</span>
+                              <span className="text-xs text-orange-500 font-medium truncate max-w-[120px]">{signal.location}</span>
                             </div>
                           )}
                         </div>
 
                         {/* Title */}
-                        <h3 className="text-lg font-bold text-white leading-tight mb-3">
+                        <h3 className="text-lg font-bold text-white leading-tight mb-3 line-clamp-2">
                           {signal.title || "Untitled Signal"}
                         </h3>
 
@@ -585,16 +594,16 @@ export default function AppFeedPage() {
                             ID: {signal.id.toString().slice(0, 8)}
                           </span>
                           <div className="flex-1 flex items-center gap-2">
-                            {signal.url && (
+                            {sourceUrl && sourceUrl !== '#' && (
                               <a
-                                href={signal.url}
+                                href={sourceUrl}
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold rounded bg-red-900/60 hover:bg-red-900/80 text-red-200 border border-red-700/60 transition-all"
                                 onClick={(e) => e.stopPropagation()}
                               >
                                 <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                                  <path strokeLinecap="round" strokeLinejoin="round" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"/>
+                                  <path strokeLinecap="round" strokeLinejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
                                 </svg>
                                 Source
                               </a>
@@ -614,7 +623,8 @@ export default function AppFeedPage() {
                           </div>
                         </div>
                       </div>
-                    ))}
+                    );
+                    })}
                   </div>
                 ) : (
                   <div className="text-center py-12 bg-white/5 rounded-xl border border-white/10">
