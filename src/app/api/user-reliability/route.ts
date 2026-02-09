@@ -5,12 +5,12 @@ import { calculateReliabilityScore, getReliabilityTier, RELIABILITY_TIERS } from
 export const dynamic = 'force-dynamic';
 export const maxDuration = 10;
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
-const supabase = createClient(supabaseUrl, supabaseKey);
-
 export async function POST(request: NextRequest) {
   try {
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+    const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
+    const supabase = createClient(supabaseUrl, supabaseKey);
+
     const body = await request.json();
     const { userIds = [], anonIds = [] } = body;
 
