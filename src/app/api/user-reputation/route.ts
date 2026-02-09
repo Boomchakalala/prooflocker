@@ -1,12 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
-import { getReputationTier, REPUTATION_TIERS, type ReputationTier } from '@/lib/user-scoring';
+import { getReputationTier, REPUTATION_TIERS, calculateWeightedReputation, convertEvidenceScoreToGrade, evidenceGradeToPoints } from '@/lib/reputation-scoring';
 
 export const dynamic = 'force-dynamic';
 export const maxDuration = 10;
 
 // API route: /api/user-reputation
-// Fetches user reputation scores and tiers from database
+// Calculates user reputation scores using weighted formula
 export async function POST(request: NextRequest) {
   try {
     const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
@@ -24,29 +24,46 @@ export async function POST(request: NextRequest) {
 
     // Fetch stats for authenticated users
     if (userIds.length > 0) {
-      const { data: userStats } = await supabase
-        .from('user_stats')
-        .select('user_id, reputation_score, total_predictions, resolved_predictions, correct_predictions')
-        .in('user_id', userIds);
+      const { data: userPredictions } = await supabase
+        .from('predictions')
+        .select('user_id, outcome, evidence_score')
+        .in('user_id', userIds)
+        .not('user_id', 'is', null);
 
-      if (userStats) {
+      if (userPredictions) {
         for (const userId of userIds) {
-          const userStat = userStats.find(s => s.user_id === userId);
-          const reputationScore = userStat?.reputation_score || 100; // Default starting reputation
+          const userPreds = userPredictions.filter(p => p.user_id === userId);
+          const resolved = userPreds.filter(p => p.outcome === 'correct' || p.outcome === 'incorrect');
+          const correct = userPreds.filter(p => p.outcome === 'correct');
 
-          const tierData = getReputationTier(reputationScore);
+          // Calculate average evidence score (convert to grade points)
+          const avgEvidence = resolved.length > 0
+            ? resolved.reduce((sum, p) => {
+                const grade = convertEvidenceScoreToGrade(p.evidence_score || 0);
+                return sum + evidenceGradeToPoints(grade);
+              }, 0) / resolved.length
+            : 0;
+
+          // Calculate weighted reputation
+          const reputationCalc = calculateWeightedReputation({
+            correctResolutions: correct.length,
+            totalResolved: resolved.length,
+            averageEvidenceScore: avgEvidence,
+          });
+
+          const tierData = getReputationTier(reputationCalc.total);
           const tierInfo = REPUTATION_TIERS.find(t => t.name === tierData.name) || REPUTATION_TIERS[0];
 
           stats[userId] = {
             tier: tierData.name,
             label: tierData.name,
-            score: reputationScore,
+            score: reputationCalc.total,
             color: tierInfo.textColor,
             bg: tierInfo.bgColor,
             border: tierInfo.borderColor,
-            totalPredictions: userStat?.total_predictions || 0,
-            resolvedPredictions: userStat?.resolved_predictions || 0,
-            correctPredictions: userStat?.correct_predictions || 0,
+            totalPredictions: userPreds.length,
+            resolvedPredictions: resolved.length,
+            correctPredictions: correct.length,
           };
         }
       }
