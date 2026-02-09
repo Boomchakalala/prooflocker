@@ -529,98 +529,88 @@ export default function AppFeedPage() {
                     {filteredOsint.map((signal) => (
                       <div
                         key={signal.id}
-                        className="bg-gradient-to-br from-red-950/30 via-orange-950/20 to-red-950/30 border-2 border-red-500/40 rounded-xl p-5 hover:border-red-500/60 hover:shadow-[0_0_30px_rgba(239,68,68,0.2)] transition-all relative overflow-hidden"
+                        className="bg-[#0a0a0a] border-2 border-red-600/80 rounded-xl p-5 hover:border-red-500 hover:shadow-[0_0_20px_rgba(239,68,68,0.3)] transition-all"
                       >
-                        <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-red-500 to-transparent animate-pulse"></div>
-
-                        {/* Header */}
+                        {/* Header Row */}
                         <div className="flex items-center justify-between mb-3">
-                          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 text-[10px] font-bold rounded-md bg-red-600/30 border border-red-500/50 text-red-200 uppercase tracking-wide">
+                          <span className="inline-flex items-center gap-1.5 px-3 py-1 text-xs font-bold rounded bg-red-600/90 text-white uppercase tracking-wide">
                             <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
                               <path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6z"/>
                             </svg>
-                            OSINT Intel
+                            INTEL
                           </span>
                           {signal.category && (
-                            <span className="px-2 py-1 text-[10px] font-semibold rounded bg-red-900/40 border border-red-700/50 text-red-300 uppercase">
+                            <span className="px-3 py-1 text-xs font-bold rounded bg-red-900/80 border border-red-700/60 text-red-300 uppercase">
                               {signal.category}
                             </span>
                           )}
                         </div>
 
-                        {/* Title - 2 lines */}
-                        <h3 className="text-base font-bold text-red-50 leading-tight line-clamp-2 mb-3">
+                        {/* Source and Location Row */}
+                        <div className="flex items-center justify-between mb-4">
+                          <div className="flex items-center gap-2">
+                            <div className="w-6 h-6 rounded bg-red-600/80 flex items-center justify-center">
+                              <svg className="w-3.5 h-3.5 text-white" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"/>
+                              </svg>
+                            </div>
+                            <span className="text-sm text-red-500 font-bold">{signal.source_name || "Unknown Source"}</span>
+                          </div>
+                          {signal.location && (
+                            <div className="flex items-center gap-1.5">
+                              <svg className="w-3.5 h-3.5 text-orange-500" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+                              </svg>
+                              <span className="text-xs text-orange-500 font-medium">{signal.location}</span>
+                            </div>
+                          )}
+                        </div>
+
+                        {/* Title */}
+                        <h3 className="text-lg font-bold text-white leading-tight mb-3">
                           {signal.title || "Untitled Signal"}
                         </h3>
 
-                        {/* Preview Text */}
+                        {/* Summary */}
                         {signal.summary && (
-                          <p className="text-sm text-red-100/70 mb-3 line-clamp-2 leading-relaxed">
+                          <p className="text-sm text-gray-400 mb-4 line-clamp-2 leading-relaxed">
                             {signal.summary}
                           </p>
                         )}
 
-                        {/* Source Info */}
-                        <div className="flex items-center gap-2 mb-3 pb-3 border-b border-red-500/20">
-                          <div className="w-7 h-7 rounded-full bg-red-600/30 flex items-center justify-center border border-red-500/40">
-                            <svg className="w-3.5 h-3.5 text-red-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"/>
-                            </svg>
-                          </div>
-                          <div className="flex-1 min-w-0">
-                            <div className="text-sm text-red-200 font-semibold truncate">{signal.source_name || "Unknown Source"}</div>
-                            {signal.source_handle && (
-                              <div className="text-xs text-red-400/70 truncate">{signal.source_handle}</div>
+                        {/* Footer with ID and Action Buttons */}
+                        <div className="flex items-center gap-3">
+                          <span className="text-xs text-red-500 font-mono">
+                            ID: {signal.id.toString().slice(0, 8)}
+                          </span>
+                          <div className="flex-1 flex items-center gap-2">
+                            {signal.url && (
+                              <a
+                                href={signal.url}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold rounded bg-red-900/60 hover:bg-red-900/80 text-red-200 border border-red-700/60 transition-all"
+                                onClick={(e) => e.stopPropagation()}
+                              >
+                                <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                                  <path strokeLinecap="round" strokeLinejoin="round" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"/>
+                                </svg>
+                                Source
+                              </a>
                             )}
-                          </div>
-                        </div>
-
-                        {/* Location */}
-                        {signal.location && (
-                          <div className="flex items-center gap-2 mb-4 px-3 py-2 bg-red-900/20 border border-red-700/30 rounded-lg">
-                            <svg className="w-4 h-4 text-orange-400 flex-shrink-0" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
-                              <path strokeLinecap="round" strokeLinejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
-                            </svg>
-                            <span className="text-sm text-orange-300 font-medium">{signal.location}</span>
-                          </div>
-                        )}
-
-                        {/* Action Buttons */}
-                        <div className="flex gap-2">
-                          {signal.url && (
-                            <a
-                              href={signal.url}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="flex-1 px-3 py-2 text-xs font-semibold rounded-md bg-red-600/30 hover:bg-red-600/40 text-red-200 border border-red-500/40 transition-all flex items-center justify-center gap-1.5"
-                              onClick={(e) => e.stopPropagation()}
+                            <button
+                              className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold rounded bg-purple-700/60 hover:bg-purple-700/80 text-purple-200 border border-purple-600/60 transition-all"
+                              onClick={(e) => {
+                                e.preventDefault();
+                                console.log('Add as evidence:', signal.id);
+                              }}
                             >
                               <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/>
                               </svg>
-                              Source
-                            </a>
-                          )}
-                          <button
-                            className="flex-1 px-3 py-2 text-xs font-semibold rounded-md bg-purple-600/30 hover:bg-purple-600/40 text-purple-200 border border-purple-500/40 transition-all flex items-center justify-center gap-1.5"
-                            onClick={(e) => {
-                              e.preventDefault();
-                              // TODO: Implement add as evidence modal
-                              console.log('Add as evidence:', signal.id);
-                            }}
-                          >
-                            <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4"/>
-                            </svg>
-                            Add Evidence
-                          </button>
-                        </div>
-
-                        {/* Signal ID Footer */}
-                        <div className="mt-3 pt-3 border-t border-red-500/20">
-                          <div className="text-xs text-red-400/60 font-mono text-center">
-                            Signal #{signal.id.toString().slice(0, 8)}
+                              Link as Evidence
+                            </button>
                           </div>
                         </div>
                       </div>
