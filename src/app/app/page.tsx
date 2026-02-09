@@ -363,12 +363,12 @@ export default function AppFeedPage() {
                         <Link
                           key={claim.id}
                           href={`/proof/${claim.slug}`}
-                          className={`group bg-gradient-to-br from-purple-950/30 via-purple-900/20 to-purple-950/30 rounded-xl p-4 hover:shadow-[0_0_30px_rgba(168,85,247,0.3)] transition-all relative overflow-hidden cursor-pointer ${
+                          className={`group bg-gradient-to-br from-purple-950/30 via-purple-900/20 to-purple-950/30 rounded-xl hover:shadow-[0_0_30px_rgba(168,85,247,0.3)] transition-all relative overflow-hidden cursor-pointer ${
                             isCorrect
-                              ? 'border-2 border-green-500/60 shadow-[0_0_20px_rgba(34,197,94,0.2)]'
+                              ? 'p-5 border-[3px] border-green-500/80 shadow-[0_0_35px_rgba(34,197,94,0.4)]'
                               : isIncorrect
-                              ? 'border-2 border-red-500/60 shadow-[0_0_20px_rgba(239,68,68,0.2)]'
-                              : 'border-2 border-purple-500/40'
+                              ? 'p-5 border-[3px] border-red-500/80 shadow-[0_0_35px_rgba(239,68,68,0.4)]'
+                              : 'p-4 border-2 border-purple-500/40'
                           }`}
                         >
                           <div className="mb-3">
