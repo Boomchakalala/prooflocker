@@ -301,7 +301,7 @@ function AppFeedContent() {
         return;
       }
 
-      const response = await fetch("/api/user-reliability", {
+      const response = await fetch("/api/user-reputation", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ userIds, anonIds }),

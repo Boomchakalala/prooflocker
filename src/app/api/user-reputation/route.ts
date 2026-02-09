@@ -1,12 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
-import { calculateReliabilityScore, getReliabilityTier, RELIABILITY_TIERS } from '@/lib/user-scoring';
+import { getReputationTier, REPUTATION_TIERS, type ReputationTier } from '@/lib/user-scoring';
 
 export const dynamic = 'force-dynamic';
 export const maxDuration = 10;
 
-// API route: /api/user-reputation (renamed from user-reliability)
-// Calculates and returns user reputation scores and tiers
+// API route: /api/user-reputation
+// Fetches user reputation scores and tiers from database
 export async function POST(request: NextRequest) {
   try {
     const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
@@ -24,41 +24,29 @@ export async function POST(request: NextRequest) {
 
     // Fetch stats for authenticated users
     if (userIds.length > 0) {
-      const { data: userPredictions } = await supabase
-        .from('predictions')
-        .select('user_id, outcome, evidence_score')
-        .in('user_id', userIds)
-        .not('user_id', 'is', null);
+      const { data: userStats } = await supabase
+        .from('user_stats')
+        .select('user_id, reputation_score, total_predictions, resolved_predictions, correct_predictions')
+        .in('user_id', userIds);
 
-      if (userPredictions) {
+      if (userStats) {
         for (const userId of userIds) {
-          const userPreds = userPredictions.filter(p => p.user_id === userId);
-          const resolved = userPreds.filter(p => p.outcome === 'correct' || p.outcome === 'incorrect');
-          const correct = userPreds.filter(p => p.outcome === 'correct');
-          const avgEvidence = resolved.length > 0
-            ? resolved.reduce((sum, p) => sum + (p.evidence_score || 0), 0) / resolved.length
-            : 0;
+          const userStat = userStats.find(s => s.user_id === userId);
+          const reputationScore = userStat?.reputation_score || 100; // Default starting reputation
 
-          const reputationScore = calculateReliabilityScore({
-            correctPredictions: correct.length,
-            incorrectPredictions: resolved.length - correct.length,
-            resolvedPredictions: resolved.length,
-            avgEvidenceScore: avgEvidence,
-          });
-
-          const tier = getReliabilityTier(reputationScore);
-          const tierInfo = RELIABILITY_TIERS[tier];
+          const tierData = getReputationTier(reputationScore);
+          const tierInfo = REPUTATION_TIERS.find(t => t.name === tierData.name) || REPUTATION_TIERS[0];
 
           stats[userId] = {
-            tier: tier,
-            label: tierInfo.label,
+            tier: tierData.name,
+            label: tierData.name,
             score: reputationScore,
-            color: tierInfo.color,
+            color: tierInfo.textColor,
             bg: tierInfo.bgColor,
-            border: `border-${tierInfo.color.replace('text-', '')}`,
-            totalPredictions: userPreds.length,
-            resolvedPredictions: resolved.length,
-            correctPredictions: correct.length,
+            border: tierInfo.borderColor,
+            totalPredictions: userStat?.total_predictions || 0,
+            resolvedPredictions: userStat?.resolved_predictions || 0,
+            correctPredictions: userStat?.correct_predictions || 0,
           };
         }
       }
@@ -66,41 +54,29 @@ export async function POST(request: NextRequest) {
 
     // Fetch stats for anonymous users
     if (anonIds.length > 0) {
-      const { data: anonPredictions } = await supabase
-        .from('predictions')
-        .select('anon_id, outcome, evidence_score')
-        .in('anon_id', anonIds)
-        .not('anon_id', 'is', null);
+      const { data: anonStats } = await supabase
+        .from('user_stats')
+        .select('user_id, reputation_score, total_predictions, resolved_predictions, correct_predictions')
+        .in('user_id', anonIds); // anon_ids are also stored as user_id in user_stats
 
-      if (anonPredictions) {
+      if (anonStats) {
         for (const anonId of anonIds) {
-          const anonPreds = anonPredictions.filter(p => p.anon_id === anonId);
-          const resolved = anonPreds.filter(p => p.outcome === 'correct' || p.outcome === 'incorrect');
-          const correct = anonPreds.filter(p => p.outcome === 'correct');
-          const avgEvidence = resolved.length > 0
-            ? resolved.reduce((sum, p) => sum + (p.evidence_score || 0), 0) / resolved.length
-            : 0;
+          const anonStat = anonStats.find(s => s.user_id === anonId);
+          const reputationScore = anonStat?.reputation_score || 100; // Default starting reputation
 
-          const reputationScore = calculateReliabilityScore({
-            correctPredictions: correct.length,
-            incorrectPredictions: resolved.length - correct.length,
-            resolvedPredictions: resolved.length,
-            avgEvidenceScore: avgEvidence,
-          });
-
-          const tier = getReliabilityTier(reputationScore);
-          const tierInfo = RELIABILITY_TIERS[tier];
+          const tierData = getReputationTier(reputationScore);
+          const tierInfo = REPUTATION_TIERS.find(t => t.name === tierData.name) || REPUTATION_TIERS[0];
 
           stats[anonId] = {
-            tier: tier,
-            label: tierInfo.label,
+            tier: tierData.name,
+            label: tierData.name,
             score: reputationScore,
-            color: tierInfo.color,
+            color: tierInfo.textColor,
             bg: tierInfo.bgColor,
-            border: `border-${tierInfo.color.replace('text-', '')}`,
-            totalPredictions: anonPreds.length,
-            resolvedPredictions: resolved.length,
-            correctPredictions: correct.length,
+            border: tierInfo.borderColor,
+            totalPredictions: anonStat?.total_predictions || 0,
+            resolvedPredictions: anonStat?.resolved_predictions || 0,
+            correctPredictions: anonStat?.correct_predictions || 0,
           };
         }
       }
