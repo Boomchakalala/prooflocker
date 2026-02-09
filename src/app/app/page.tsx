@@ -480,18 +480,6 @@ export default function AppFeedPage() {
                                 </div>
                               </div>
 
-                              {/* Evidence Grade */}
-                              {claim.evidence_score !== undefined && claim.evidence_score > 0 && (
-                                <div
-                                  className={`flex items-center gap-1.5 px-2 py-1 border rounded-lg transition-all hover:scale-105 ${evidenceGrade.bgColor} ${evidenceGrade.borderColor} ${evidenceGrade.shadowColor}`}
-                                >
-                                  <svg className={`w-4 h-4 ${evidenceGrade.textColor}`} fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
-                                  </svg>
-                                  <span className={`text-xs font-bold ${evidenceGrade.textColor}`}>{evidenceGrade.grade}</span>
-                                </div>
-                              )}
-
                               {/* Share Icon */}
                               <div className="flex items-center gap-1.5 text-slate-400 hover:text-cyan-400 transition-colors">
                                 <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
