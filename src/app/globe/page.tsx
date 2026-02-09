@@ -57,30 +57,72 @@ export default function GlobePage() {
   const [selectedOsint, setSelectedOsint] = useState<OsintItem | null>(null);
   const [showQuickLock, setShowQuickLock] = useState(false);
 
-  useEffect(() => {
-    fetch('/api/globe/data')
-      .then(res => res.json())
-      .then(data => {
-        if (data.claims) setClaims(data.claims);
-        if (data.osint) setOsint(data.osint);
-      })
-      .catch(err => console.error('[Globe] Failed to load data:', err));
+  // NEW: Metadata for live updates
+  const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
+  const [isUpdating, setIsUpdating] = useState(false);
+  const [counts, setCounts] = useState({ total: 0, claims: 0, osint: 0, resolved: 0 });
 
-    // Fetch recent resolutions (both correct and incorrect)
-    fetch('/api/predictions?limit=100')
-      .then(res => res.json())
-      .then(data => {
-        if (data.predictions) {
-          // Filter to only show resolved claims (correct or incorrect)
-          const resolved = data.predictions.filter((p: any) =>
-            p.outcome === 'correct' || p.outcome === 'incorrect'
-          );
-          setTotalResolutions(resolved.length);
-          setResolutions(resolved.slice(0, 20)); // Show first 20
-        }
-      })
-      .catch(err => console.error('[Globe] Failed to load resolutions:', err));
+  // Fetch data from unified activity API
+  const fetchActivity = async (showLoading = false) => {
+    if (showLoading) setIsUpdating(true);
+
+    try {
+      const response = await fetch('/api/globe/activity?window=24h');
+      const data = await response.json();
+
+      if (data.meta && data.claims && data.osint) {
+        // Dedupe on client as safety net (server already dedupes)
+        const dedupeByKey = (items: any[]) => {
+          const seen = new Map();
+          items.forEach(item => {
+            if (item.key && !seen.has(item.key)) {
+              seen.set(item.key, item);
+            }
+          });
+          return Array.from(seen.values());
+        };
+
+        setClaims(dedupeByKey(data.claims));
+        setOsint(dedupeByKey(data.osint));
+        setResolutions(dedupeByKey(data.resolved || []));
+        setLastUpdated(new Date(data.meta.asOf));
+        setCounts(data.meta.counts);
+        setTotalResolutions(data.meta.counts.resolved);
+
+        console.log('[Globe] Activity updated:', data.meta.counts);
+      }
+    } catch (err) {
+      console.error('[Globe] Failed to load activity:', err);
+    } finally {
+      setIsUpdating(false);
+    }
+  };
+
+  // Initial load
+  useEffect(() => {
+    fetchActivity(true);
   }, []);
+
+  // Polling: Update every 60 seconds
+  useEffect(() => {
+    const interval = setInterval(() => {
+      console.log('[Globe] Polling for updates...');
+      fetchActivity(false); // Silent update (no loading indicator)
+    }, 60000); // 60 seconds
+
+    return () => clearInterval(interval);
+  }, []);
+
+  // Format "last updated" time
+  const getTimeSinceUpdate = () => {
+    if (!lastUpdated) return 'Never';
+    const seconds = Math.floor((Date.now() - lastUpdated.getTime()) / 1000);
+    if (seconds < 60) return `${seconds}s ago`;
+    const minutes = Math.floor(seconds / 60);
+    if (minutes < 60) return `${minutes}m ago`;
+    const hours = Math.floor(minutes / 60);
+    return `${hours}h ago`;
+  };
 
   const getDisplayItems = () => {
     if (currentTab === 'claims') {
@@ -155,6 +197,33 @@ export default function GlobePage() {
         <aside className="hidden md:flex fixed top-16 right-0 w-[360px] h-[calc(100vh-64px)] bg-gradient-to-b from-[#0A0A0F]/98 via-[#111118]/98 to-[#0A0A0F]/98 backdrop-blur-[30px] border-l border-purple-500/20 z-[950] flex-col">
           {/* Sidebar Header */}
           <div className="p-5 border-b border-purple-500/20">
+            {/* Last Updated Indicator */}
+            <div className="flex items-center justify-between mb-3 px-1">
+              <div className="flex items-center gap-2 text-[11px] text-[#94a3b8]">
+                <svg
+                  className={`w-3 h-3 ${isUpdating ? 'animate-spin' : ''}`}
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+                  />
+                </svg>
+                <span>Updated {getTimeSinceUpdate()}</span>
+              </div>
+              <button
+                onClick={() => fetchActivity(true)}
+                disabled={isUpdating}
+                className="text-[11px] text-[#8b5cf6] hover:text-[#a78bfa] disabled:opacity-50 disabled:cursor-not-allowed font-semibold"
+              >
+                Refresh
+              </button>
+            </div>
+
             {/* Tabs */}
             <div className="flex gap-2 mb-4">
               <button
