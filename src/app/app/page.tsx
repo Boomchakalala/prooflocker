@@ -357,8 +357,10 @@ export default function AppFeedPage() {
                           key={claim.id}
                           href={`/proof/${claim.publicSlug || claim.id}`}
                           className={`group bg-slate-900/80 border hover:border-slate-600 rounded-2xl transition-all duration-300 hover:shadow-[0_0_25px_rgba(168,85,247,0.15)] hover:-translate-y-0.5 ${
-                            isResolved
-                              ? 'border-4 border-slate-700/50 p-6'
+                            isCorrect
+                              ? 'border-4 border-emerald-500/60 p-6'
+                              : isIncorrect
+                              ? 'border-4 border-red-500/60 p-6'
                               : 'border border-slate-700/50 p-5'
                           }`}
                         >
