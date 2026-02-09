@@ -8,6 +8,7 @@ export default function HowScoringWorksPage() {
     <div className="min-h-screen gradient-bg text-white relative">
       <UnifiedHeader currentView="about" />
 
+      {/* Decorative gradient orbs */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-20 -left-40 w-80 h-80 bg-blue-500/10 rounded-full blur-3xl" />
         <div className="absolute top-40 -right-40 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl" />
@@ -15,264 +16,301 @@ export default function HowScoringWorksPage() {
 
       <div className="relative z-10 max-w-4xl mx-auto px-4 py-12 pt-16">
 
-        <div className="mb-8">
+        {/* Page Header */}
+        <div className="mb-12">
           <h1 className="text-4xl font-bold text-white mb-4">How Scoring Works</h1>
-          <p className="text-lg text-neutral-300">
-            ProofLocker tracks two scores: Reliability Score (0-1000, measures reputation and trust) and XP (uncapped, measures engagement and never decreases).
+          <p className="text-lg text-neutral-300 leading-relaxed">
+            ProofLocker uses two separate scoring systems: Reputation Score tracks your reputation and trustworthiness, while XP measures your overall engagement and progression.
           </p>
         </div>
 
-        {/* Quick Reference Table */}
+        {/* Overview Cards - Two boxes at top */}
+        <div className="grid md:grid-cols-2 gap-6 mb-12">
+
+          {/* Reputation Score Card */}
+          <div className="glass border border-white/10 rounded-xl p-8">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-12 h-12 rounded-lg bg-blue-500/10 border border-blue-500/30 flex items-center justify-center">
+                <svg className="w-6 h-6 text-blue-400" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" />
+                </svg>
+              </div>
+              <div>
+                <h2 className="text-2xl font-bold text-white">Reputation Score</h2>
+                <p className="text-sm text-neutral-400">0-1000, capped</p>
+              </div>
+            </div>
+            <p className="text-neutral-300 mb-4">
+              Your reputation and trustworthiness as a predictor. Measures accuracy, evidence quality, and timely resolution. Can go up or down based on performance.
+            </p>
+            <div className="bg-white/5 rounded-lg p-3 border border-white/10">
+              <div className="text-xs text-neutral-400 mb-2">Starting Score</div>
+              <div className="text-2xl font-bold text-blue-400">100</div>
+            </div>
+          </div>
+
+          {/* XP Card */}
+          <div className="glass border border-white/10 rounded-xl p-8">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-12 h-12 rounded-lg bg-purple-500/10 border border-purple-500/30 flex items-center justify-center">
+                <svg className="w-6 h-6 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+                </svg>
+              </div>
+              <div>
+                <h2 className="text-2xl font-bold text-white">XP</h2>
+                <p className="text-sm text-neutral-400">Uncapped, never decreases</p>
+              </div>
+            </div>
+            <p className="text-neutral-300 mb-4">
+              Your total experience and engagement. Rewards all activity and always increases. Unlocks milestones, badges, and exclusive features.
+            </p>
+            <div className="bg-white/5 rounded-lg p-3 border border-white/10">
+              <div className="text-xs text-neutral-400 mb-2">Starting XP</div>
+              <div className="text-2xl font-bold text-purple-400">0</div>
+            </div>
+          </div>
+
+        </div>
+
+        {/* Reputation Score Section */}
         <section className="mb-12">
           <div className="glass border border-white/10 rounded-xl p-8">
-            <h2 className="text-2xl font-bold text-white mb-6">Quick Reference</h2>
-            <div className="overflow-x-auto">
-              <table className="w-full text-sm">
-                <thead>
-                  <tr className="border-b border-white/10">
-                    <th className="text-left py-3 px-4 text-white font-semibold">Action</th>
-                    <th className="text-right py-3 px-4 text-purple-400 font-semibold">XP</th>
-                    <th className="text-right py-3 px-4 text-blue-400 font-semibold">Reliability</th>
-                  </tr>
-                </thead>
-                <tbody className="text-neutral-300">
-                  <tr className="border-b border-white/5">
-                    <td className="py-3 px-4">Lock claim (no evidence)</td>
-                    <td className="text-right py-3 px-4 text-purple-400 font-bold">+10</td>
-                    <td className="text-right py-3 px-4 text-neutral-500">—</td>
-                  </tr>
-                  <tr className="border-b border-white/5">
-                    <td className="py-3 px-4">Lock claim + Grade A initial evidence</td>
-                    <td className="text-right py-3 px-4 text-purple-400 font-bold">+30</td>
-                    <td className="text-right py-3 px-4 text-neutral-500">—</td>
-                  </tr>
-                  <tr className="border-b border-white/5">
-                    <td className="py-3 px-4">Lock claim + Grade B initial evidence</td>
-                    <td className="text-right py-3 px-4 text-purple-400 font-bold">+25</td>
-                    <td className="text-right py-3 px-4 text-neutral-500">—</td>
-                  </tr>
-                  <tr className="border-b border-white/5">
-                    <td className="py-3 px-4">Lock claim + Grade C initial evidence</td>
-                    <td className="text-right py-3 px-4 text-purple-400 font-bold">+20</td>
-                    <td className="text-right py-3 px-4 text-neutral-500">—</td>
-                  </tr>
-                  <tr className="border-b border-white/5">
-                    <td className="py-3 px-4">Resolve any claim (base)</td>
-                    <td className="text-right py-3 px-4 text-purple-400 font-bold">+50</td>
-                    <td className="text-right py-3 px-4 text-neutral-500">—</td>
-                  </tr>
-                  <tr className="border-b border-white/5">
-                    <td className="py-3 px-4">Correct resolution bonus</td>
-                    <td className="text-right py-3 px-4 text-purple-400 font-bold">+100</td>
-                    <td className="text-right py-3 px-4 text-neutral-500">—</td>
-                  </tr>
-                  <tr className="border-b border-white/5">
-                    <td className="py-3 px-4">On-time closure bonus</td>
-                    <td className="text-right py-3 px-4 text-purple-400 font-bold">+20</td>
-                    <td className="text-right py-3 px-4 text-neutral-500">—</td>
-                  </tr>
-                  <tr className="border-b border-white/5 bg-green-500/5">
-                    <td className="py-3 px-4">Correct + Grade A resolution evidence</td>
-                    <td className="text-right py-3 px-4 text-neutral-500">—</td>
-                    <td className="text-right py-3 px-4 text-green-400 font-bold">+40</td>
-                  </tr>
-                  <tr className="border-b border-white/5 bg-green-500/5">
-                    <td className="py-3 px-4">Correct + Grade B resolution evidence</td>
-                    <td className="text-right py-3 px-4 text-neutral-500">—</td>
-                    <td className="text-right py-3 px-4 text-green-400 font-bold">+32</td>
-                  </tr>
-                  <tr className="border-b border-white/5 bg-green-500/5">
-                    <td className="py-3 px-4">Correct + Grade C resolution evidence</td>
-                    <td className="text-right py-3 px-4 text-neutral-500">—</td>
-                    <td className="text-right py-3 px-4 text-green-400 font-bold">+25</td>
-                  </tr>
-                  <tr className="border-b border-white/5 bg-green-500/5">
-                    <td className="py-3 px-4">Correct + Grade D resolution evidence</td>
-                    <td className="text-right py-3 px-4 text-neutral-500">—</td>
-                    <td className="text-right py-3 px-4 text-green-400 font-bold">+15</td>
-                  </tr>
-                  <tr className="border-b border-white/5 bg-red-500/5">
-                    <td className="py-3 px-4">Incorrect + Grade A resolution evidence</td>
-                    <td className="text-right py-3 px-4 text-neutral-500">—</td>
-                    <td className="text-right py-3 px-4 text-red-400 font-bold">-30</td>
-                  </tr>
-                  <tr className="border-b border-white/5 bg-red-500/5">
-                    <td className="py-3 px-4">Incorrect + Grade B resolution evidence</td>
-                    <td className="text-right py-3 px-4 text-neutral-500">—</td>
-                    <td className="text-right py-3 px-4 text-red-400 font-bold">-35</td>
-                  </tr>
-                  <tr className="border-b border-white/5 bg-red-500/5">
-                    <td className="py-3 px-4">Incorrect + Grade C resolution evidence</td>
-                    <td className="text-right py-3 px-4 text-neutral-500">—</td>
-                    <td className="text-right py-3 px-4 text-red-400 font-bold">-38</td>
-                  </tr>
-                  <tr className="border-b border-white/5 bg-red-500/5">
-                    <td className="py-3 px-4">Incorrect + Grade D or no evidence</td>
-                    <td className="text-right py-3 px-4 text-neutral-500">—</td>
-                    <td className="text-right py-3 px-4 text-red-400 font-bold">-42</td>
-                  </tr>
-                  <tr className="border-b border-white/5 bg-orange-500/5">
-                    <td className="py-3 px-4">Resolution overruled by community</td>
-                    <td className="text-right py-3 px-4 text-neutral-500">—</td>
-                    <td className="text-right py-3 px-4 text-orange-400 font-bold">-20</td>
-                  </tr>
-                  <tr className="border-b border-white/5 bg-red-500/5">
-                    <td className="py-3 px-4">Claim becomes overdue</td>
-                    <td className="text-right py-3 px-4 text-neutral-500">—</td>
-                    <td className="text-right py-3 px-4 text-red-400 font-bold">-10</td>
-                  </tr>
-                  <tr className="bg-red-500/5">
-                    <td className="py-3 px-4">Auto-archive (2× timeframe, no extension)</td>
-                    <td className="text-right py-3 px-4 text-neutral-500">—</td>
-                    <td className="text-right py-3 px-4 text-red-400 font-bold">-20</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-            <div className="mt-4 text-xs text-neutral-400">
-              Maximum overdue penalty: -50 Reliability total per month across all claims
-            </div>
-          </div>
-        </section>
-
-        {/* Reliability Score */}
-        <section className="mb-10">
-          <div className="glass border border-white/10 rounded-xl p-6">
-            <h2 className="text-xl font-bold text-white mb-4">Reliability Score (0-1000, starts at 100)</h2>
-
-            <div className="mb-4">
-              <h3 className="text-sm font-bold text-white mb-2">Tiers</h3>
-              <ul className="text-sm text-neutral-300 space-y-1 ml-4">
-                <li>• Novice: 0-299</li>
-                <li>• Trusted: 300-499</li>
-                <li>• Expert: 500-649</li>
-                <li>• Master: 650-799</li>
-                <li>• Legend: 800-1000</li>
-              </ul>
+            <div className="flex items-center gap-3 mb-6">
+              <div className="w-10 h-10 rounded-lg bg-blue-500/10 border border-blue-500/30 flex items-center justify-center">
+                <svg className="w-5 h-5 text-blue-400" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" />
+                </svg>
+              </div>
+              <div>
+                <h2 className="text-2xl font-bold text-white">Reputation Score (0-1000)</h2>
+                <p className="text-sm text-neutral-400">Your trust and reputation</p>
+              </div>
             </div>
 
-            <div className="mb-4">
-              <h3 className="text-sm font-bold text-white mb-2">Correct Resolutions</h3>
-              <ul className="text-sm text-neutral-300 space-y-1 ml-4">
-                <li>• Grade A (official docs, court records, on-chain): +40</li>
-                <li>• Grade B (reputable sources, credible data): +32</li>
-                <li>• Grade C (reasonable but subjective): +25</li>
-                <li>• Grade D (weak or no evidence): +15</li>
-              </ul>
+            {/* Tier Badges */}
+            <div className="mb-6">
+              <h3 className="text-sm font-semibold text-neutral-400 uppercase tracking-wider mb-4">Reputation Tiers</h3>
+              <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
+                <div className="bg-gray-500/5 rounded-lg p-3 border border-gray-500/20 text-center">
+                  <div className="text-xs text-neutral-500 mb-1">0-299</div>
+                  <div className="text-sm font-bold text-gray-400">Novice</div>
+                </div>
+                <div className="bg-green-500/5 rounded-lg p-3 border border-green-500/20 text-center">
+                  <div className="text-xs text-neutral-500 mb-1">300-499</div>
+                  <div className="text-sm font-bold text-green-400">Trusted</div>
+                </div>
+                <div className="bg-blue-500/5 rounded-lg p-3 border border-blue-500/20 text-center">
+                  <div className="text-xs text-neutral-500 mb-1">500-649</div>
+                  <div className="text-sm font-bold text-blue-400">Expert</div>
+                </div>
+                <div className="bg-purple-500/5 rounded-lg p-3 border border-purple-500/20 text-center">
+                  <div className="text-xs text-neutral-500 mb-1">650-799</div>
+                  <div className="text-sm font-bold text-purple-400">Master</div>
+                </div>
+                <div className="bg-yellow-500/5 rounded-lg p-3 border border-yellow-500/20 text-center">
+                  <div className="text-xs text-neutral-500 mb-1">800-1000</div>
+                  <div className="text-sm font-bold text-yellow-400">Legend</div>
+                </div>
+              </div>
             </div>
 
-            <div className="mb-4">
-              <h3 className="text-sm font-bold text-white mb-2">Incorrect Resolutions</h3>
-              <ul className="text-sm text-neutral-300 space-y-1 ml-4">
-                <li>• Grade A (strong evidence accepting error): -30</li>
-                <li>• Grade B (reasonable explanation): -35</li>
-                <li>• Grade C (weak explanation): -38</li>
-                <li>• Grade D or no evidence: -42</li>
-              </ul>
+            {/* Correct/Incorrect Grid */}
+            <div className="grid md:grid-cols-2 gap-6 mb-6">
+              <div>
+                <h3 className="text-base font-bold text-white mb-3">Correct Resolutions</h3>
+                <div className="space-y-2">
+                  <div className="bg-green-500/5 rounded-lg p-3 border border-green-500/20 flex items-center justify-between">
+                    <span className="text-sm text-neutral-300">Grade A</span>
+                    <span className="text-lg font-bold text-green-400">+40</span>
+                  </div>
+                  <div className="bg-blue-500/5 rounded-lg p-3 border border-blue-500/20 flex items-center justify-between">
+                    <span className="text-sm text-neutral-300">Grade B</span>
+                    <span className="text-lg font-bold text-blue-400">+32</span>
+                  </div>
+                  <div className="bg-yellow-500/5 rounded-lg p-3 border border-yellow-500/20 flex items-center justify-between">
+                    <span className="text-sm text-neutral-300">Grade C</span>
+                    <span className="text-lg font-bold text-yellow-400">+25</span>
+                  </div>
+                  <div className="bg-orange-500/5 rounded-lg p-3 border border-orange-500/20 flex items-center justify-between">
+                    <span className="text-sm text-neutral-300">Grade D</span>
+                    <span className="text-lg font-bold text-orange-400">+15</span>
+                  </div>
+                </div>
+              </div>
+
+              <div>
+                <h3 className="text-base font-bold text-white mb-3">Incorrect Resolutions</h3>
+                <div className="space-y-2">
+                  <div className="bg-red-500/5 rounded-lg p-3 border border-red-500/20 flex items-center justify-between">
+                    <span className="text-sm text-neutral-300">Grade A</span>
+                    <span className="text-lg font-bold text-red-400">-30</span>
+                  </div>
+                  <div className="bg-red-500/5 rounded-lg p-3 border border-red-500/20 flex items-center justify-between">
+                    <span className="text-sm text-neutral-300">Grade B</span>
+                    <span className="text-lg font-bold text-red-400">-35</span>
+                  </div>
+                  <div className="bg-red-500/5 rounded-lg p-3 border border-red-500/20 flex items-center justify-between">
+                    <span className="text-sm text-neutral-300">Grade C</span>
+                    <span className="text-lg font-bold text-red-400">-38</span>
+                  </div>
+                  <div className="bg-red-500/5 rounded-lg p-3 border border-red-500/20 flex items-center justify-between">
+                    <span className="text-sm text-neutral-300">Grade D / None</span>
+                    <span className="text-lg font-bold text-red-400">-42</span>
+                  </div>
+                </div>
+              </div>
             </div>
 
-            <div>
-              <h3 className="text-sm font-bold text-white mb-2">Overdue & Extensions</h3>
-              <ul className="text-sm text-neutral-300 space-y-1 ml-4">
+            {/* Overdue */}
+            <div className="bg-orange-500/5 rounded-lg p-4 border border-orange-500/20">
+              <h3 className="text-sm font-bold text-white mb-2">Overdue Penalties</h3>
+              <ul className="text-sm text-neutral-300 space-y-1">
                 <li>• Overdue (no extension): -10 per claim, max -50/month</li>
                 <li>• Auto-archive (2× timeframe): -20 additional</li>
-                <li>• One-time extension available for long-term claims (prevents penalties)</li>
+                <li>• One-time extension available for long-term claims</li>
               </ul>
             </div>
 
-            <div className="mt-4 bg-green-500/5 rounded-lg p-4 border border-green-500/20">
-              <p className="text-sm text-neutral-300"><strong className="text-white">Example:</strong> Alice locks a Bitcoin claim with Grade B initial evidence (+25 XP). Three months later, she resolves correctly with Grade A evidence (on-chain data). She earns +150 XP (resolve), +20 XP (on-time), and +40 Reliability. Total: +195 XP, +40 Reliability.</p>
-            </div>
           </div>
         </section>
 
-        {/* XP */}
-        <section className="mb-10">
-          <div className="glass border border-white/10 rounded-xl p-6">
-            <h2 className="text-xl font-bold text-white mb-4">XP (Uncapped, Never Decreases)</h2>
-
-            <div className="mb-4">
-              <h3 className="text-sm font-bold text-white mb-2">Earning XP</h3>
-              <ul className="text-sm text-neutral-300 space-y-1 ml-4">
-                <li>• Lock claim: +10</li>
-                <li>• Lock with Grade A initial evidence: +20 bonus (total +30)</li>
-                <li>• Lock with Grade B initial evidence: +15 bonus (total +25)</li>
-                <li>• Lock with Grade C initial evidence: +10 bonus (total +20)</li>
-                <li>• Resolve any claim: +50</li>
-                <li>• Correct resolution: +100 bonus (total +150)</li>
-                <li>• On-time closure: +20 bonus</li>
-                <li>• Maximum (correct + on-time + Grade A lock): +180 XP</li>
-              </ul>
+        {/* XP Section */}
+        <section className="mb-12">
+          <div className="glass border border-white/10 rounded-xl p-8">
+            <div className="flex items-center gap-3 mb-6">
+              <div className="w-10 h-10 rounded-lg bg-purple-500/10 border border-purple-500/30 flex items-center justify-center">
+                <svg className="w-5 h-5 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+                </svg>
+              </div>
+              <div>
+                <h2 className="text-2xl font-bold text-white">XP System</h2>
+                <p className="text-sm text-neutral-400">Uncapped, never decreases</p>
+              </div>
             </div>
 
-            <div>
-              <h3 className="text-sm font-bold text-white mb-2">Milestones</h3>
-              <ul className="text-sm text-neutral-300 space-y-1 ml-4">
-                <li>• 1,000 XP: Special profile badge</li>
-                <li>• 5,000 XP: Priority claim visibility</li>
-                <li>• 10,000 XP: Custom profile theme + contest entry</li>
-                <li>• 25,000 XP: Veteran Predictor title</li>
-                <li>• 50,000+ XP: Leaderboard recognition + premium rewards</li>
-              </ul>
+            <div className="grid md:grid-cols-2 gap-6 mb-6">
+              <div>
+                <h3 className="text-base font-bold text-white mb-3">Earning XP</h3>
+                <div className="space-y-2">
+                  <div className="bg-white/5 rounded-lg p-3 border border-white/10 flex items-center justify-between">
+                    <span className="text-sm text-neutral-300">Lock claim</span>
+                    <span className="text-lg font-bold text-purple-400">+10</span>
+                  </div>
+                  <div className="bg-white/5 rounded-lg p-3 border border-white/10 flex items-center justify-between">
+                    <span className="text-sm text-neutral-300">+ Grade A evidence</span>
+                    <span className="text-lg font-bold text-green-400">+20</span>
+                  </div>
+                  <div className="bg-white/5 rounded-lg p-3 border border-white/10 flex items-center justify-between">
+                    <span className="text-sm text-neutral-300">Resolve claim</span>
+                    <span className="text-lg font-bold text-purple-400">+50</span>
+                  </div>
+                  <div className="bg-green-500/5 rounded-lg p-3 border border-green-500/20 flex items-center justify-between">
+                    <span className="text-sm text-neutral-300">Correct bonus</span>
+                    <span className="text-lg font-bold text-green-400">+100</span>
+                  </div>
+                  <div className="bg-blue-500/5 rounded-lg p-3 border border-blue-500/20 flex items-center justify-between">
+                    <span className="text-sm text-neutral-300">On-time bonus</span>
+                    <span className="text-lg font-bold text-blue-400">+20</span>
+                  </div>
+                </div>
+              </div>
+
+              <div>
+                <h3 className="text-base font-bold text-white mb-3">Milestones</h3>
+                <div className="space-y-2">
+                  <div className="bg-purple-500/5 rounded-lg p-3 border border-purple-500/20">
+                    <div className="text-sm font-bold text-white">1,000 XP</div>
+                    <div className="text-xs text-neutral-400">Special profile badge</div>
+                  </div>
+                  <div className="bg-blue-500/5 rounded-lg p-3 border border-blue-500/20">
+                    <div className="text-sm font-bold text-white">5,000 XP</div>
+                    <div className="text-xs text-neutral-400">Priority claim visibility</div>
+                  </div>
+                  <div className="bg-green-500/5 rounded-lg p-3 border border-green-500/20">
+                    <div className="text-sm font-bold text-white">10,000 XP</div>
+                    <div className="text-xs text-neutral-400">Custom profile theme</div>
+                  </div>
+                  <div className="bg-yellow-500/5 rounded-lg p-3 border border-yellow-500/20">
+                    <div className="text-sm font-bold text-white">25,000 XP</div>
+                    <div className="text-xs text-neutral-400">Veteran Predictor title</div>
+                  </div>
+                  <div className="bg-orange-500/5 rounded-lg p-3 border border-orange-500/20">
+                    <div className="text-sm font-bold text-white">50,000+ XP</div>
+                    <div className="text-xs text-neutral-400">Leaderboard recognition</div>
+                  </div>
+                </div>
+              </div>
             </div>
 
-            <div className="mt-4 bg-red-500/5 rounded-lg p-4 border border-red-500/20">
-              <p className="text-sm text-neutral-300"><strong className="text-white">Example:</strong> Bob locks a claim with no initial evidence (+10 XP). He resolves incorrectly but provides Grade B evidence explaining his error (news article). He earns +50 XP (resolve), +20 XP (on-time), and -35 Reliability. Total: +80 XP, -35 Reliability. XP still grows; owning the error with evidence reduces the penalty compared to no evidence (-42).</p>
-            </div>
           </div>
         </section>
 
         {/* Evidence Grades */}
-        <section className="mb-10">
-          <div className="glass border border-white/10 rounded-xl p-6">
-            <h2 className="text-xl font-bold text-white mb-4">Evidence Grade (A-D)</h2>
-            <p className="text-sm text-neutral-300 mb-4">Initial evidence affects XP only. Resolution evidence determines Reliability changes.</p>
-            <ul className="text-sm text-neutral-300 space-y-2 ml-4">
-              <li>• <strong className="text-green-400">Grade A:</strong> Official documents, court records, on-chain transactions, government data</li>
-              <li>• <strong className="text-blue-400">Grade B:</strong> Reputable news outlets, multiple credible sources, expert analysis</li>
-              <li>• <strong className="text-yellow-400">Grade C:</strong> Screenshots, single-source claims, social media posts, anecdotal evidence</li>
-              <li>• <strong className="text-orange-400">Grade D:</strong> Minimal or no evidence, personal opinion, vibes-based assessment</li>
-            </ul>
-          </div>
-        </section>
+        <section className="mb-12">
+          <div className="glass border border-white/10 rounded-xl p-8">
+            <h2 className="text-2xl font-bold text-white mb-4">Evidence Grade (A-D)</h2>
+            <p className="text-sm text-neutral-300 mb-6">Initial evidence affects XP only. Resolution evidence determines Reputation changes.</p>
 
-        {/* Timeframes */}
-        <section className="mb-10">
-          <div className="glass border border-white/10 rounded-xl p-6">
-            <h2 className="text-xl font-bold text-white mb-4">Claim Timeframes & Extensions</h2>
-            <ul className="text-sm text-neutral-300 space-y-1 ml-4">
-              <li>• Short-term: &lt;6 months</li>
-              <li>• Medium-term: 6-24 months</li>
-              <li>• Long-term: &gt;24 months</li>
-              <li>• One-time extension available for long-term claims (provide brief justification before overdue)</li>
-            </ul>
+            <div className="grid md:grid-cols-4 gap-3">
+              <div className="bg-green-500/5 rounded-lg p-4 border border-green-500/20">
+                <div className="w-10 h-10 rounded-lg bg-green-500/10 border border-green-500/30 flex items-center justify-center text-green-400 font-bold text-lg mb-2">
+                  A
+                </div>
+                <div className="text-green-400 font-semibold text-sm mb-1">Authoritative</div>
+                <p className="text-xs text-neutral-400">Official docs, court records, on-chain</p>
+              </div>
+
+              <div className="bg-blue-500/5 rounded-lg p-4 border border-blue-500/20">
+                <div className="w-10 h-10 rounded-lg bg-blue-500/10 border border-blue-500/30 flex items-center justify-center text-blue-400 font-bold text-lg mb-2">
+                  B
+                </div>
+                <div className="text-blue-400 font-semibold text-sm mb-1">High-Quality</div>
+                <p className="text-xs text-neutral-400">Reputable sources, credible data</p>
+              </div>
+
+              <div className="bg-yellow-500/5 rounded-lg p-4 border border-yellow-500/20">
+                <div className="w-10 h-10 rounded-lg bg-yellow-500/10 border border-yellow-500/30 flex items-center justify-center text-yellow-400 font-bold text-lg mb-2">
+                  C
+                </div>
+                <div className="text-yellow-400 font-semibold text-sm mb-1">Weak/Indirect</div>
+                <p className="text-xs text-neutral-400">Screenshots, single-source, social media</p>
+              </div>
+
+              <div className="bg-orange-500/5 rounded-lg p-4 border border-orange-500/20">
+                <div className="w-10 h-10 rounded-lg bg-orange-500/10 border border-orange-500/30 flex items-center justify-center text-orange-400 font-bold text-lg mb-2">
+                  D
+                </div>
+                <div className="text-orange-400 font-semibold text-sm mb-1">No Evidence</div>
+                <p className="text-xs text-neutral-400">Minimal or no proof, opinion</p>
+              </div>
+            </div>
           </div>
         </section>
 
         {/* Contested Resolutions */}
-        <section className="mb-10">
-          <div className="glass border border-white/10 rounded-xl p-6">
-            <h2 className="text-xl font-bold text-white mb-4">Contested Resolutions</h2>
-            <ul className="text-sm text-neutral-300 space-y-2 ml-4">
-              <li>• 7-day dispute window after resolution</li>
-              <li>• Users with Reliability ≥200 can vote (one vote per user)</li>
-              <li>• Simple majority determines outcome; ties keep original resolution</li>
-              <li>• Only finalized resolutions affect your Reliability and accuracy</li>
-              <li>• Overruled resolutions: -20 additional penalty on top of incorrect penalty</li>
-            </ul>
-          </div>
-        </section>
-
-        {/* Key Principles */}
         <section className="mb-12">
-          <div className="glass border border-white/10 rounded-xl p-6">
-            <h2 className="text-xl font-bold text-white mb-4">Key Principles</h2>
-            <ul className="text-sm text-neutral-300 space-y-2 ml-4">
-              <li>• <strong className="text-white">Evidence quality matters:</strong> Resolution evidence determines Reliability changes. Strong evidence when correct earns maximum rewards. Good evidence when incorrect reduces penalties.</li>
-              <li>• <strong className="text-white">Close claims on time:</strong> On-time resolution earns bonus XP and avoids overdue penalties. Use extensions when needed.</li>
-              <li>• <strong className="text-white">XP always grows:</strong> XP rewards engagement and never decreases, unlocking milestones and exclusive perks.</li>
-              <li>• <strong className="text-white">Community verifies outcomes:</strong> Simple majority voting ensures fair and transparent resolutions.</li>
-            </ul>
+          <div className="glass border border-white/10 rounded-xl p-8">
+            <h2 className="text-2xl font-bold text-white mb-4">Contested Resolutions</h2>
+            <div className="grid md:grid-cols-2 gap-4">
+              <div className="bg-white/5 rounded-lg p-4 border border-white/10">
+                <h3 className="text-sm font-bold text-white mb-2">7-Day Dispute Window</h3>
+                <p className="text-xs text-neutral-400">Users with Reputation ≥200 can vote (one vote per user)</p>
+              </div>
+              <div className="bg-white/5 rounded-lg p-4 border border-white/10">
+                <h3 className="text-sm font-bold text-white mb-2">Simple Majority</h3>
+                <p className="text-xs text-neutral-400">Outcome determined by majority; ties keep original resolution</p>
+              </div>
+              <div className="bg-white/5 rounded-lg p-4 border border-white/10">
+                <h3 className="text-sm font-bold text-white mb-2">Only Finalized Count</h3>
+                <p className="text-xs text-neutral-400">Only finalized resolutions affect Reputation and accuracy</p>
+              </div>
+              <div className="bg-orange-500/5 rounded-lg p-4 border border-orange-500/20">
+                <h3 className="text-sm font-bold text-white mb-2">Overruled Penalty</h3>
+                <p className="text-xs text-neutral-400">-20 additional penalty on top of incorrect penalty</p>
+              </div>
+            </div>
           </div>
         </section>
 
