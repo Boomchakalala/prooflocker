@@ -260,6 +260,33 @@ export default function GlobeMapbox({ claims, osint, mapMode = 'both', viewMode 
     }
   }, [claims, osint, mapReady]);
 
+  // Toggle layers based on mapMode
+  useEffect(() => {
+    if (!map.current || !mapReady) return;
+
+    const claimsVisible = mapMode === 'both' || mapMode === 'claims';
+    const osintVisible = mapMode === 'both' || mapMode === 'osint';
+
+    if (map.current.getLayer('claims-circles')) {
+      map.current.setLayoutProperty('claims-circles', 'visibility', claimsVisible ? 'visible' : 'none');
+    }
+    if (map.current.getLayer('claims-clusters')) {
+      map.current.setLayoutProperty('claims-clusters', 'visibility', claimsVisible ? 'visible' : 'none');
+    }
+    if (map.current.getLayer('claims-cluster-count')) {
+      map.current.setLayoutProperty('claims-cluster-count', 'visibility', claimsVisible ? 'visible' : 'none');
+    }
+    if (map.current.getLayer('osint-circles')) {
+      map.current.setLayoutProperty('osint-circles', 'visibility', osintVisible ? 'visible' : 'none');
+    }
+    if (map.current.getLayer('osint-clusters')) {
+      map.current.setLayoutProperty('osint-clusters', 'visibility', osintVisible ? 'visible' : 'none');
+    }
+    if (map.current.getLayer('osint-cluster-count')) {
+      map.current.setLayoutProperty('osint-cluster-count', 'visibility', osintVisible ? 'visible' : 'none');
+    }
+  }, [mapMode, mapReady]);
+
   const addLayers = () => {
     if (!map.current) return;
 
