@@ -66,7 +66,7 @@ export default function GlobePage() {
   const [mapMode, setMapMode] = useState<'both' | 'claims' | 'osint'>('both');
   const [categoryFilter, setCategoryFilter] = useState<string>('all');
   const [statusFilter, setStatusFilter] = useState<string[]>(['all']);
-  const [timeFilter, setTimeFilter] = useState<'24h' | '7d' | '30d' | 'all'>('24h');
+  const [timeFilter, setTimeFilter] = useState<'24h' | '7d' | '30d' | 'all'>('all');
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedArea, setSelectedArea] = useState<{claims: Claim[], osint: OsintItem[], name: string} | null>(null);
   const [viewMode, setViewMode] = useState<'points' | 'heatmap'>('points');
@@ -394,7 +394,7 @@ export default function GlobePage() {
                     : 'bg-transparent text-[#94a3b8] border-[rgba(148,163,184,0.2)] hover:text-[#f8fafc] hover:border-[#ef4444]'
                 }`}
               >
-                OSINT <span className="ml-1 opacity-70">({counts.osint})</span>
+                OSINT
               </button>
               <button
                 onClick={() => setCurrentTab('claims')}
@@ -404,7 +404,7 @@ export default function GlobePage() {
                     : 'bg-transparent text-[#94a3b8] border-[rgba(148,163,184,0.2)] hover:text-[#f8fafc] hover:border-[#8b5cf6]'
                 }`}
               >
-                Claims <span className="ml-1 opacity-70">({counts.claims})</span>
+                Claims
               </button>
               <button
                 onClick={() => setCurrentTab('resolutions')}
@@ -414,7 +414,7 @@ export default function GlobePage() {
                     : 'bg-transparent text-[#94a3b8] border-[rgba(148,163,184,0.2)] hover:text-[#f8fafc] hover:border-emerald-500'
                 }`}
               >
-                Resolved <span className="ml-1 opacity-70">({counts.resolved})</span>
+                Resolved
               </button>
             </div>
 
