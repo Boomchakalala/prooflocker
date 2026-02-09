@@ -2,15 +2,30 @@
  * User Scoring System
  *
  * Two parallel systems:
- * 1. Total Points (cumulative, never decreases) - for airdrops
- * 2. Reliability Score (0-1000, recalculated) - for reputation
+ * 1. XP (uncapped, never decreases) - for progression and milestones
+ * 2. Reputation Score (0-1000, changes with performance) - for trust and voting rights
  */
 
-export interface UserStats {
-  // Points (cumulative)
-  totalPoints: number;
+import {
+  getReputationTier,
+  REPUTATION_TIERS,
+  type ReputationTier,
+  calculateReputationChange,
+  calculateLockXP,
+  calculateResolveXP,
+  applyReputationChange,
+  REPUTATION_STARTING,
+  REPUTATION_OVERDUE_PENALTY,
+  REPUTATION_AUTO_ARCHIVE_PENALTY,
+  REPUTATION_OVERRULED_PENALTY,
+  type EvidenceGrade,
+} from './reputation-scoring';
 
-  // Reliability Score components
+export interface UserStats {
+  // XP (cumulative, never decreases)
+  totalXP: number;
+
+  // Reputation Score components
   totalPredictions: number;
   resolvedPredictions: number;
   correctPredictions: number;
@@ -19,184 +34,130 @@ export interface UserStats {
 
   // Calculated
   winRate: number;
-  reliabilityScore: number;
-  tier: ReliabilityTier;
+  reputationScore: number;
+  tier: ReputationTier;
 }
 
-export type ReliabilityTier = 'novice' | 'trusted' | 'expert' | 'master' | 'legend';
+// Re-export reputation types
+export type { ReputationTier, EvidenceGrade };
+export { REPUTATION_TIERS, getReputationTier };
 
 /**
- * Points awarded for actions
+ * Points awarded for actions (XP System)
  */
-export const POINTS_CONFIG = {
-  // Lock prediction
+export const XP_CONFIG = {
+  // Lock claim
   LOCK_BASE: 10,
-  LOCK_EARLY_BONUS: 5, // >30 days before resolution
 
-  // Resolve prediction
-  RESOLVE_CORRECT_BASE: 50,
-  RESOLVE_INCORRECT_PENALTY: -30,
-  RESOLVE_ONCHAIN_BONUS: 20,
+  // Initial evidence bonuses
+  LOCK_EVIDENCE_A: 20,
+  LOCK_EVIDENCE_B: 15,
+  LOCK_EVIDENCE_C: 10,
+  LOCK_EVIDENCE_D: 0,
 
-  // Evidence multiplier applied to RESOLVE_CORRECT_BASE
-  // evidence_score (0-100) converted to multiplier (0.5x - 1.5x)
+  // Resolve claim
+  RESOLVE_BASE: 50,
+  RESOLVE_CORRECT_BONUS: 100,
+  RESOLVE_ONTIME_BONUS: 20,
 };
 
 /**
- * Reliability Score tiers
+ * Get tier info for display
  */
-export const RELIABILITY_TIERS = {
-  legend: { min: 800, label: 'Legend', color: 'text-purple-400', bgColor: 'bg-purple-500/10' },
-  master: { min: 650, label: 'Master', color: 'text-blue-400', bgColor: 'bg-blue-500/10' },
-  expert: { min: 500, label: 'Expert', color: 'text-green-400', bgColor: 'bg-green-500/10' },
-  trusted: { min: 300, label: 'Trusted', color: 'text-yellow-400', bgColor: 'bg-yellow-500/10' },
-  novice: { min: 0, label: 'Novice', color: 'text-neutral-400', bgColor: 'bg-neutral-500/10' },
-};
-
-/**
- * Calculate points for locking a prediction
- */
-export function calculateLockPoints(isEarlyPrediction: boolean): number {
-  let points = POINTS_CONFIG.LOCK_BASE;
-
-  if (isEarlyPrediction) {
-    points += POINTS_CONFIG.LOCK_EARLY_BONUS;
-  }
-
-  return points;
+export function getTierInfo(tier: ReputationTier) {
+  return REPUTATION_TIERS.find((t) => t.name === tier) || REPUTATION_TIERS[0];
 }
 
 /**
- * Calculate points for resolving a prediction
- * Returns separate values for lifetime points and reputation impact
+ * Calculate XP for locking a claim
+ */
+export function calculateLockPoints(evidenceGrade?: EvidenceGrade): number {
+  return calculateLockXP(evidenceGrade);
+}
+
+/**
+ * Calculate points and reputation for resolving a claim
  */
 export function calculateResolvePoints(
   isCorrect: boolean,
-  evidenceScore: number,
-  isOnChain: boolean
+  evidenceGrade: EvidenceGrade,
+  onTime: boolean
 ): {
-  lifetimePoints: number;  // Always >= 0, never decreases total
-  reputationChange: number; // Can be negative
+  xpEarned: number;
+  reputationChange: number;
 } {
-  if (!isCorrect) {
-    return {
-      lifetimePoints: 0,  // No lifetime points for incorrect
-      reputationChange: POINTS_CONFIG.RESOLVE_INCORRECT_PENALTY  // -30 reputation penalty
-    };
-  }
-
-  // Evidence multiplier: 0.5x (score=0) to 1.5x (score=100)
-  const evidenceMultiplier = (evidenceScore / 100) + 0.5;
-
-  let points = POINTS_CONFIG.RESOLVE_CORRECT_BASE * evidenceMultiplier;
-
-  if (isOnChain) {
-    points += POINTS_CONFIG.RESOLVE_ONCHAIN_BONUS;
-  }
-
-  const roundedPoints = Math.round(points);
+  const xpEarned = calculateResolveXP(isCorrect, onTime);
+  const reputationChange = calculateReputationChange(isCorrect, evidenceGrade);
 
   return {
-    lifetimePoints: roundedPoints,  // Add to lifetime total
-    reputationChange: roundedPoints  // Also add to reputation
+    xpEarned,
+    reputationChange,
   };
 }
 
 /**
  * Calculate penalty for overruled resolution
- * Returns reputation penalty only - does NOT affect lifetime points
  */
 export function calculateOverruledPenalty(): {
-  lifetimePoints: number;  // Always 0, no change to lifetime
-  reputationChange: number; // -25 reputation penalty
+  xpEarned: number;
+  reputationChange: number;
 } {
   return {
-    lifetimePoints: 0,  // Lifetime points never decrease
-    reputationChange: -25  // Reputation penalty for being overruled
+    xpEarned: 0,
+    reputationChange: REPUTATION_OVERRULED_PENALTY,
   };
 }
 
 /**
- * Calculate Reliability Score (0-1000)
+ * Calculate overdue penalty
  */
-export function calculateReliabilityScore(stats: {
-  correctPredictions: number;
-  incorrectPredictions: number;
-  resolvedPredictions: number;
-  avgEvidenceScore: number;
-}): number {
-  const { correctPredictions, incorrectPredictions, resolvedPredictions, avgEvidenceScore } = stats;
-
-  if (resolvedPredictions === 0) {
-    return 0;
-  }
-
-  // 1. Accuracy Score (40% weight) - 0-400 points
-  const winRate = correctPredictions / resolvedPredictions;
-  const accuracyScore = winRate * 400;
-
-  // 2. Evidence Quality (30% weight) - 0-300 points
-  const evidenceScore = (avgEvidenceScore / 100) * 300;
-
-  // 3. Volume Multiplier (20% weight) - 0-200 points
-  let volumeScore = 0;
-  if (resolvedPredictions <= 5) {
-    volumeScore = resolvedPredictions * 40;
-  } else if (resolvedPredictions <= 20) {
-    volumeScore = 200 + (resolvedPredictions - 5) * 5;
-  } else {
-    volumeScore = 275 + Math.min((resolvedPredictions - 20) * 2, 125);
-  }
-  volumeScore = Math.min(volumeScore, 200);
-
-  // 4. Consistency Bonus (10% weight) - 0-100 points
-  // Award points for having balanced evidence + accuracy
-  const hasGoodEvidence = avgEvidenceScore >= 50;
-  const hasGoodAccuracy = winRate >= 0.6;
-  let consistencyBonus = 0;
-  if (hasGoodEvidence && hasGoodAccuracy && resolvedPredictions >= 5) {
-    consistencyBonus = Math.min(resolvedPredictions * 5, 100);
-  }
-
-  const totalScore = accuracyScore + evidenceScore + volumeScore + consistencyBonus;
-
-  return Math.min(Math.round(totalScore), 1000);
+export function calculateOverduePenalty(): {
+  xpEarned: number;
+  reputationChange: number;
+} {
+  return {
+    xpEarned: 0,
+    reputationChange: REPUTATION_OVERDUE_PENALTY,
+  };
 }
 
 /**
- * Get reliability tier from score
+ * Calculate auto-archive penalty
  */
-export function getReliabilityTier(score: number): ReliabilityTier {
-  if (score >= RELIABILITY_TIERS.legend.min) return 'legend';
-  if (score >= RELIABILITY_TIERS.master.min) return 'master';
-  if (score >= RELIABILITY_TIERS.expert.min) return 'expert';
-  if (score >= RELIABILITY_TIERS.trusted.min) return 'trusted';
-  return 'novice';
+export function calculateAutoArchivePenalty(): {
+  xpEarned: number;
+  reputationChange: number;
+} {
+  return {
+    xpEarned: 0,
+    reputationChange: REPUTATION_AUTO_ARCHIVE_PENALTY,
+  };
 }
 
 /**
- * Get tier info for display
+ * Apply reputation change to current score
  */
-export function getTierInfo(tier: ReliabilityTier) {
-  return RELIABILITY_TIERS[tier];
+export function applyReputationUpdate(
+  currentReputation: number,
+  change: number
+): number {
+  return applyReputationChange(currentReputation, change);
 }
 
 /**
  * Get next tier milestone
  */
 export function getNextTierMilestone(currentScore: number): {
-  nextTier: ReliabilityTier | null;
+  nextTier: ReputationTier | null;
   pointsNeeded: number;
-  tierInfo: typeof RELIABILITY_TIERS[ReliabilityTier] | null;
+  tierInfo: typeof REPUTATION_TIERS[number] | null;
 } {
-  const tiers = Object.entries(RELIABILITY_TIERS).sort((a, b) => b[1].min - a[1].min);
-
-  for (const [tierKey, tierData] of tiers) {
-    if (currentScore < tierData.min) {
+  for (const tier of REPUTATION_TIERS) {
+    if (currentScore < tier.min) {
       return {
-        nextTier: tierKey as ReliabilityTier,
-        pointsNeeded: tierData.min - currentScore,
-        tierInfo: tierData,
+        nextTier: tier,
+        pointsNeeded: tier.min - currentScore,
+        tierInfo: tier,
       };
     }
   }
@@ -209,30 +170,71 @@ export function getNextTierMilestone(currentScore: number): {
 }
 
 /**
- * Format points with commas
+ * Format points/XP with commas or k suffix
  */
 export function formatPoints(points: number): string {
+  if (points >= 1000) {
+    return `${(points / 1000).toFixed(1)}k`;
+  }
   return points.toLocaleString();
 }
 
 /**
- * Get score breakdown for transparency
+ * Get reputation display text
  */
-export function getScoreBreakdown(stats: {
+export function getReputationDisplay(reputation: number): {
+  score: number;
+  tier: ReputationTier;
+  tierInfo: typeof REPUTATION_TIERS[number];
+} {
+  const tier = getReputationTier(reputation);
+  const tierInfo = getTierInfo(tier.name);
+
+  return {
+    score: Math.round(reputation),
+    tier: tier.name,
+    tierInfo,
+  };
+}
+
+// LEGACY COMPATIBILITY - Deprecated, use reputation functions instead
+export type ReliabilityTier = 'Novice' | 'Trusted' | 'Expert' | 'Master' | 'Legend';
+
+export const RELIABILITY_TIERS = {
+  Legend: { min: 800, label: 'Legend', color: 'text-yellow-400', bgColor: 'bg-yellow-500/10' },
+  Master: { min: 650, label: 'Master', color: 'text-purple-400', bgColor: 'bg-purple-500/10' },
+  Expert: { min: 500, label: 'Expert', color: 'text-blue-400', bgColor: 'bg-blue-500/10' },
+  Trusted: { min: 300, label: 'Trusted', color: 'text-green-400', bgColor: 'bg-green-500/10' },
+  Novice: { min: 0, label: 'Novice', color: 'text-gray-400', bgColor: 'bg-gray-500/10' },
+};
+
+// @deprecated Use getReputationTier instead
+export function getReliabilityTier(score: number): ReliabilityTier {
+  if (score >= 800) return 'Legend';
+  if (score >= 650) return 'Master';
+  if (score >= 500) return 'Expert';
+  if (score >= 300) return 'Trusted';
+  return 'Novice';
+}
+
+// @deprecated Use calculateReputationChange instead
+export function calculateReliabilityScore(stats: {
   correctPredictions: number;
   incorrectPredictions: number;
   resolvedPredictions: number;
   avgEvidenceScore: number;
-}): Array<{ label: string; value: number; maxValue: number }> {
+}): number {
+  // Simplified calculation for backward compatibility
+  // In new system, reputation is tracked directly, not calculated from stats
   const { correctPredictions, resolvedPredictions, avgEvidenceScore } = stats;
 
   if (resolvedPredictions === 0) {
-    return [];
+    return REPUTATION_STARTING;
   }
 
   const winRate = correctPredictions / resolvedPredictions;
-  const accuracyScore = Math.round(winRate * 400);
-  const evidenceScore = Math.round((avgEvidenceScore / 100) * 300);
+  const accuracyScore = winRate * 400;
+  const evidenceScore = (avgEvidenceScore / 100) * 300;
 
   let volumeScore = 0;
   if (resolvedPredictions <= 5) {
@@ -244,9 +246,13 @@ export function getScoreBreakdown(stats: {
   }
   volumeScore = Math.min(volumeScore, 200);
 
-  return [
-    { label: 'Accuracy', value: accuracyScore, maxValue: 400 },
-    { label: 'Evidence Quality', value: evidenceScore, maxValue: 300 },
-    { label: 'Volume', value: volumeScore, maxValue: 200 },
-  ];
+  const hasGoodEvidence = avgEvidenceScore >= 50;
+  const hasGoodAccuracy = winRate >= 0.6;
+  let consistencyBonus = 0;
+  if (hasGoodEvidence && hasGoodAccuracy && resolvedPredictions >= 5) {
+    consistencyBonus = Math.min(resolvedPredictions * 5, 100);
+  }
+
+  const totalScore = accuracyScore + evidenceScore + volumeScore + consistencyBonus;
+  return Math.min(Math.round(totalScore), 1000);
 }
