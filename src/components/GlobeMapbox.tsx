@@ -35,9 +35,11 @@ interface OsintItem {
 interface GlobeMapboxProps {
   claims: Claim[];
   osint: OsintItem[];
+  mapMode?: 'both' | 'claims' | 'osint';
+  viewMode?: 'points' | 'heatmap';
 }
 
-export default function GlobeMapbox({ claims, osint }: GlobeMapboxProps) {
+export default function GlobeMapbox({ claims, osint, mapMode = 'both', viewMode = 'points' }: GlobeMapboxProps) {
   const mapContainer = useRef<HTMLDivElement>(null);
   const map = useRef<any>(null);
   const initAttempted = useRef(false); // Guard against double-init

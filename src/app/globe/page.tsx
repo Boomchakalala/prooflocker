@@ -453,6 +453,129 @@ export default function GlobePage() {
                 </button>
               </div>
             )}
+
+            {/* Enhanced Filter Chips */}
+            <div className="mt-3 space-y-3">
+              {/* Category Filter */}
+              <div>
+                <div className="text-[10px] text-[#94a3b8] font-semibold uppercase mb-2">Category</div>
+                <div className="flex gap-2 flex-wrap">
+                  {['all', 'crypto', 'politics', 'tech', 'other'].map((cat) => (
+                    <button
+                      key={cat}
+                      onClick={() => setCategoryFilter(cat)}
+                      className={`px-3 py-1.5 rounded-2xl text-[11px] font-medium transition-all border ${
+                        categoryFilter === cat
+                          ? 'bg-[rgba(139,92,246,0.1)] text-[#8b5cf6] border-[rgba(139,92,246,0.3)]'
+                          : 'bg-transparent text-[#94a3b8] border-[rgba(148,163,184,0.2)] hover:bg-[rgba(139,92,246,0.1)] hover:text-[#8b5cf6]'
+                      }`}
+                    >
+                      {cat.charAt(0).toUpperCase() + cat.slice(1)}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Status Filter (Claims only) */}
+              {currentTab === 'claims' && (
+                <div>
+                  <div className="text-[10px] text-[#94a3b8] font-semibold uppercase mb-2">Status</div>
+                  <div className="flex gap-2 flex-wrap">
+                    {[
+                      { value: 'all', label: 'All' },
+                      { value: 'pending', label: 'Pending' },
+                      { value: 'correct', label: 'Correct' },
+                      { value: 'incorrect', label: 'Incorrect' },
+                    ].map(({ value, label }) => (
+                      <button
+                        key={value}
+                        onClick={() => {
+                          if (value === 'all') {
+                            setStatusFilter(['all']);
+                          } else {
+                            const isSelected = statusFilter.includes(value);
+                            if (isSelected) {
+                              const newFilters = statusFilter.filter(f => f !== value);
+                              setStatusFilter(newFilters.length === 0 ? ['all'] : newFilters.filter(f => f !== 'all'));
+                            } else {
+                              setStatusFilter([...statusFilter.filter(f => f !== 'all'), value]);
+                            }
+                          }
+                        }}
+                        className={`px-3 py-1.5 rounded-2xl text-[11px] font-medium transition-all border ${
+                          statusFilter.includes(value)
+                            ? value === 'correct'
+                              ? 'bg-[rgba(20,184,166,0.1)] text-[#14b8a6] border-[rgba(20,184,166,0.3)]'
+                              : value === 'incorrect'
+                              ? 'bg-[rgba(239,68,68,0.1)] text-[#ef4444] border-[rgba(239,68,68,0.3)]'
+                              : 'bg-[rgba(245,158,11,0.1)] text-[#f59e0b] border-[rgba(245,158,11,0.3)]'
+                            : 'bg-transparent text-[#94a3b8] border-[rgba(148,163,184,0.2)] hover:bg-white/5'
+                        }`}
+                      >
+                        {label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Time Filter */}
+              <div>
+                <div className="text-[10px] text-[#94a3b8] font-semibold uppercase mb-2">Time Range</div>
+                <div className="flex gap-2">
+                  {[
+                    { value: '24h' as const, label: '24h' },
+                    { value: '7d' as const, label: '7d' },
+                    { value: '30d' as const, label: '30d' },
+                    { value: 'all' as const, label: 'All' },
+                  ].map(({ value, label }) => (
+                    <button
+                      key={value}
+                      onClick={() => setTimeFilter(value)}
+                      className={`flex-1 px-3 py-1.5 rounded-2xl text-[11px] font-medium transition-all border ${
+                        timeFilter === value
+                          ? 'bg-[rgba(139,92,246,0.1)] text-[#8b5cf6] border-[rgba(139,92,246,0.3)]'
+                          : 'bg-transparent text-[#94a3b8] border-[rgba(148,163,184,0.2)] hover:bg-[rgba(139,92,246,0.1)] hover:text-[#8b5cf6]'
+                      }`}
+                    >
+                      {label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Search Input */}
+              <div>
+                <div className="text-[10px] text-[#94a3b8] font-semibold uppercase mb-2">Search</div>
+                <div className="relative">
+                  <svg
+                    className="absolute left-3 top-1/2 transform -translate-y-1/2 w-3.5 h-3.5 text-[#94a3b8]"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                  </svg>
+                  <input
+                    type="text"
+                    placeholder="Search keyword or place..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="w-full pl-9 pr-3 py-2 bg-white/5 border border-white/10 rounded-lg text-[12px] text-white placeholder-[#64748b] focus:outline-none focus:border-[#8b5cf6]/40 transition-colors"
+                  />
+                  {searchQuery && (
+                    <button
+                      onClick={() => setSearchQuery('')}
+                      className="absolute right-2 top-1/2 transform -translate-y-1/2 text-[#94a3b8] hover:text-white"
+                    >
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                      </svg>
+                    </button>
+                  )}
+                </div>
+              </div>
+            </div>
           </div>
 
           {/* Sidebar Content */}
