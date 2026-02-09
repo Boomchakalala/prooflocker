@@ -422,6 +422,147 @@ export default function HowScoringWorksPage() {
         </section>
 
         {/* CTA */}
+        <div className="mb-12">
+          <div className="glass border border-white/10 rounded-xl p-8">
+            <div className="flex items-center gap-3 mb-6">
+              <div className="w-10 h-10 rounded-lg bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center">
+                <svg className="w-5 h-5 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              </div>
+              <div>
+                <h2 className="text-2xl font-bold text-white">What Gets Scored?</h2>
+                <p className="text-sm text-neutral-400">Understanding what counts toward your reputation</p>
+              </div>
+            </div>
+
+            <div className="space-y-4">
+              <div className="bg-white/5 rounded-lg p-4 border border-white/10">
+                <div className="flex items-start gap-3">
+                  <div className="w-8 h-8 rounded-lg bg-green-500/10 border border-green-500/30 flex items-center justify-center flex-shrink-0 mt-0.5">
+                    <svg className="w-4 h-4 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                    </svg>
+                  </div>
+                  <div className="flex-1">
+                    <div className="text-white font-semibold mb-1">Claims ARE Scored</div>
+                    <p className="text-sm text-neutral-400">Your Claims (predictions you lock on-chain) are scored based on Reputation, Accuracy, Evidence Grade, and Activity. These directly impact your Reliability Score and Total Points.</p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="bg-white/5 rounded-lg p-4 border border-white/10">
+                <div className="flex items-start gap-3">
+                  <div className="w-8 h-8 rounded-lg bg-orange-500/10 border border-orange-500/30 flex items-center justify-center flex-shrink-0 mt-0.5">
+                    <svg className="w-4 h-4 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                  </div>
+                  <div className="flex-1">
+                    <div className="text-white font-semibold mb-1">OSINT/News NOT Scored</div>
+                    <p className="text-sm text-neutral-400">OSINT and News items are informational sources that can be used as evidence when resolving Claims, but they are not graded or scored. They do not contribute to anyone's reputation.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Contested Resolutions Section */}
+        <section className="mb-12">
+          <div className="glass border border-white/10 rounded-xl p-8">
+            <div className="flex items-center gap-3 mb-6">
+              <div className="w-10 h-10 rounded-lg bg-orange-500/10 border border-orange-500/30 flex items-center justify-center">
+                <svg className="w-5 h-5 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                </svg>
+              </div>
+              <div>
+                <h2 className="text-2xl font-bold text-white">Contested Resolutions</h2>
+                <p className="text-sm text-neutral-400">Community-verified truth through weighted voting</p>
+              </div>
+            </div>
+
+            <div className="space-y-4">
+              <div className="bg-white/5 rounded-lg p-4 border border-white/10">
+                <div className="flex items-start gap-3 mb-3">
+                  <div className="w-8 h-8 rounded-lg bg-blue-500/10 border border-blue-500/30 flex items-center justify-center flex-shrink-0">
+                    <svg className="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                  </div>
+                  <div className="flex-1">
+                    <div className="text-white font-semibold mb-1">7-Day Dispute Window</div>
+                    <p className="text-sm text-neutral-400">After a Claim is resolved, the community has 7 days to vote on whether the resolution is accurate. Only users with Reputation Score ≥ 150 can vote.</p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="bg-white/5 rounded-lg p-4 border border-white/10">
+                <div className="flex items-start gap-3 mb-3">
+                  <div className="w-8 h-8 rounded-lg bg-purple-500/10 border border-purple-500/30 flex items-center justify-center flex-shrink-0">
+                    <svg className="w-4 h-4 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 006.001 0M18 7l3 9m-3-9l-6-2m0-2v2m0 16V5m0 16H9m3 0h3" />
+                    </svg>
+                  </div>
+                  <div className="flex-1">
+                    <div className="text-white font-semibold mb-1">Weighted Voting by Reputation</div>
+                    <p className="text-sm text-neutral-400 mb-2">Your vote weight is calculated as: <span className="font-mono text-purple-400">1 + floor(repScore / 250)</span>, capped at 5. Higher reputation = more voting power.</p>
+                    <div className="text-xs text-neutral-500 space-y-1">
+                      <div>• Rep 0-249: 1 vote weight</div>
+                      <div>• Rep 250-499: 2 vote weight</div>
+                      <div>• Rep 500-749: 3 vote weight</div>
+                      <div>• Rep 750-999: 4 vote weight</div>
+                      <div>• Rep 1000+: 5 vote weight (max)</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="bg-white/5 rounded-lg p-4 border border-white/10">
+                <div className="flex items-start gap-3 mb-3">
+                  <div className="w-8 h-8 rounded-lg bg-green-500/10 border border-green-500/30 flex items-center justify-center flex-shrink-0">
+                    <svg className="w-4 h-4 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                  </div>
+                  <div className="flex-1">
+                    <div className="text-white font-semibold mb-1">Finalization Thresholds</div>
+                    <p className="text-sm text-neutral-400 mb-2">After 7 days:</p>
+                    <div className="text-xs text-neutral-500 space-y-1">
+                      <div>• <span className="text-green-400 font-semibold">Weighted net ≥ +12</span> → Finalized (resolution stands)</div>
+                      <div>• <span className="text-red-400 font-semibold">Weighted net ≤ -12</span> → Contested (resolution disputed)</div>
+                      <div>• <span className="text-yellow-400 font-semibold">Between -11 and +11</span> → Remains contested, voting continues</div>
+                    </div>
+                    <p className="text-sm text-neutral-400 mt-2">If voting continues past 14 days without reaching threshold, the resolution finalizes to whichever side has more weighted votes.</p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="bg-white/5 rounded-lg p-4 border border-white/10">
+                <div className="flex items-start gap-3 mb-3">
+                  <div className="w-8 h-8 rounded-lg bg-red-500/10 border border-red-500/30 flex items-center justify-center flex-shrink-0">
+                    <svg className="w-4 h-4 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                    </svg>
+                  </div>
+                  <div className="flex-1">
+                    <div className="text-white font-semibold mb-1">Reputation Impact</div>
+                    <p className="text-sm text-neutral-400 mb-2">Only <span className="text-white font-semibold">Finalized</span> outcomes count toward your accuracy and reputation:</p>
+                    <div className="text-xs text-neutral-500 space-y-1">
+                      <div>• <span className="text-green-400">Finalized Correct</span> → Full points + reputation boost</div>
+                      <div>• <span className="text-red-400">Finalized Incorrect</span> → Normal incorrect penalty</div>
+                      <div>• <span className="text-yellow-400">Contested (not finalized)</span> → No reputation impact until finalized</div>
+                      <div>• <span className="text-orange-400">Overruled Resolution</span> → -25 rep penalty if your resolution is flipped by community vote</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* CTA */}
         <div className="text-center">
           <Link
             href="/lock"
