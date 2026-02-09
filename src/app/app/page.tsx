@@ -298,20 +298,40 @@ export default function AppFeedPage() {
                           </div>
 
                           {/* Author Line */}
-                          <div className="flex items-center gap-2 mb-3 pb-2 border-b border-purple-500/20">
-                            <div className="w-6 h-6 rounded bg-purple-600/30 flex items-center justify-center border border-purple-500/40">
-                              <svg className="w-3 h-3 text-purple-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                          <div className={`flex items-center gap-2 mb-3 pb-2 ${
+                            isCorrect
+                              ? "border-b border-green-500/20"
+                              : isIncorrect
+                              ? "border-b border-red-500/20"
+                              : "border-b border-purple-500/20"
+                          }`}>
+                            <div className={`w-6 h-6 rounded flex items-center justify-center ${
+                              isCorrect
+                                ? "bg-green-600/30 border border-green-500/40"
+                                : isIncorrect
+                                ? "bg-red-600/30 border border-red-500/40"
+                                : "bg-purple-600/30 border border-purple-500/40"
+                            }`}>
+                              <svg className={`w-3 h-3 ${
+                                isCorrect ? "text-green-400" : isIncorrect ? "text-red-400" : "text-purple-400"
+                              }`} fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
                               </svg>
                             </div>
                             <div className="flex-1">
-                              <div className="text-sm text-purple-200 font-semibold">{claim.pseudonym || "Anonymous"}</div>
+                              <div className={`text-sm font-semibold ${
+                                isCorrect ? "text-green-200" : isIncorrect ? "text-red-200" : "text-purple-200"
+                              }`}>{claim.pseudonym || "Anonymous"}</div>
                               {claim.author_reputation_score !== undefined && (
-                                <div className="text-xs text-purple-400/70">Rep: {claim.author_reputation_score}</div>
+                                <div className={`text-xs ${
+                                  isCorrect ? "text-green-400/70" : isIncorrect ? "text-red-400/70" : "text-purple-400/70"
+                                }`}>Rep: {claim.author_reputation_score}</div>
                               )}
                             </div>
                             {claim.location && (
-                              <div className="flex items-center gap-1 text-xs text-purple-300">
+                              <div className={`flex items-center gap-1 text-xs ${
+                                isCorrect ? "text-green-300" : isIncorrect ? "text-red-300" : "text-purple-300"
+                              }`}>
                                 <svg className="w-3 h-3" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                                   <path strokeLinecap="round" strokeLinejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
                                   <path strokeLinecap="round" strokeLinejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
@@ -322,24 +342,42 @@ export default function AppFeedPage() {
                           </div>
 
                           {/* Title */}
-                          <h3 className="text-base font-bold text-purple-50 mb-2 leading-tight line-clamp-2">
+                          <h3 className={`text-base font-bold mb-2 leading-tight line-clamp-2 ${
+                            isCorrect ? "text-green-50" : isIncorrect ? "text-red-50" : "text-purple-50"
+                          }`}>
                             {claim.text || "Untitled Claim"}
                           </h3>
 
                           {/* Content Preview */}
                           {claim.description && (
-                            <p className="text-sm text-purple-100/70 mb-4 line-clamp-2 leading-relaxed">
+                            <p className={`text-sm mb-4 line-clamp-2 leading-relaxed ${
+                              isCorrect ? "text-green-100/70" : isIncorrect ? "text-red-100/70" : "text-purple-100/70"
+                            }`}>
                               {claim.description}
                             </p>
                           )}
 
                           {/* Footer */}
-                          <div className="flex items-center justify-between pt-3 border-t border-purple-500/20">
-                            <div className="text-xs text-purple-400/60 font-mono">
+                          <div className={`flex items-center justify-between pt-3 ${
+                            isCorrect
+                              ? "border-t border-green-500/20"
+                              : isIncorrect
+                              ? "border-t border-red-500/20"
+                              : "border-t border-purple-500/20"
+                          }`}>
+                            <div className={`text-xs font-mono ${
+                              isCorrect ? "text-green-400/60" : isIncorrect ? "text-red-400/60" : "text-purple-400/60"
+                            }`}>
                               ID: {claim.id.slice(0, 8)}
                             </div>
                             <div className="flex gap-2">
-                              <div className="px-3 py-1.5 text-xs font-semibold rounded-md bg-purple-600/30 hover:bg-purple-600/40 text-purple-200 border border-purple-500/40 transition-all flex items-center gap-1.5">
+                              <div className={`px-3 py-1.5 text-xs font-semibold rounded-md transition-all flex items-center gap-1.5 ${
+                                isCorrect
+                                  ? "bg-green-600/30 hover:bg-green-600/40 text-green-200 border border-green-500/40"
+                                  : isIncorrect
+                                  ? "bg-red-600/30 hover:bg-red-600/40 text-red-200 border border-red-500/40"
+                                  : "bg-purple-600/30 hover:bg-purple-600/40 text-purple-200 border border-purple-500/40"
+                              }`}>
                                 <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                                   <path strokeLinecap="round" strokeLinejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
                                 </svg>
