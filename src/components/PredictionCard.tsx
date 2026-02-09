@@ -489,6 +489,19 @@ export default function PredictionCard({ prediction, card, currentUserId, onOutc
           >
             View
           </button>
+          {/* "Use as evidence" button for OSINT - compact */}
+          {isOsint && !isPreview && (
+            <button
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                setShowLinkOsintModal(true);
+              }}
+              className="px-2 py-1 bg-blue-500/10 text-blue-400 hover:bg-blue-500/20 rounded text-[11px] font-medium transition-colors"
+            >
+              Use as evidence
+            </button>
+          )}
           {onViewOnMap && (
             <button
               onClick={(e) => { e.preventDefault(); e.stopPropagation(); onViewOnMap(); }}
