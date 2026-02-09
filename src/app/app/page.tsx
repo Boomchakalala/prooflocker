@@ -323,7 +323,7 @@ export default function AppFeedPage() {
 
                           {/* Claim Text */}
                           <div className="mb-4">
-                            <p className={`text-[15px] leading-relaxed line-clamp-4 ${
+                            <p className={`text-[15px] leading-relaxed line-clamp-2 ${
                               isCorrect ? 'text-green-50' : isIncorrect ? 'text-red-50' : 'text-white'
                             }`}>
                               {claim.text}
