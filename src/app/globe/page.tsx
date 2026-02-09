@@ -62,6 +62,15 @@ export default function GlobePage() {
   const [isUpdating, setIsUpdating] = useState(false);
   const [counts, setCounts] = useState({ total: 0, claims: 0, osint: 0, resolved: 0 });
 
+  // New filter states
+  const [mapMode, setMapMode] = useState<'both' | 'claims' | 'osint'>('both');
+  const [categoryFilter, setCategoryFilter] = useState<string>('all');
+  const [statusFilter, setStatusFilter] = useState<string[]>(['all']);
+  const [timeFilter, setTimeFilter] = useState<'24h' | '7d' | '30d' | 'all'>('24h');
+  const [searchQuery, setSearchQuery] = useState('');
+  const [selectedArea, setSelectedArea] = useState<{claims: Claim[], osint: OsintItem[], name: string} | null>(null);
+  const [viewMode, setViewMode] = useState<'points' | 'heatmap'>('points');
+
   // Fetch data from unified activity API
   const fetchActivity = async (showLoading = false) => {
     if (showLoading) setIsUpdating(true);
@@ -135,19 +144,69 @@ export default function GlobePage() {
   };
 
   const getDisplayItems = () => {
+    let items: any[] = [];
+
     if (currentTab === 'claims') {
-      let filtered = claims;
+      items = claims;
+    } else if (currentTab === 'osint') {
+      items = osint;
+    } else {
+      items = resolutions;
+    }
+
+    // Apply category filter
+    if (categoryFilter !== 'all') {
+      items = items.filter(item => {
+        const cat = item.category?.toLowerCase() || 'other';
+        return cat === categoryFilter.toLowerCase();
+      });
+    }
+
+    // Apply status filter for claims
+    if (currentTab === 'claims' && !statusFilter.includes('all')) {
+      items = items.filter(item => {
+        const status = item.outcome || 'pending';
+        return statusFilter.includes(status);
+      });
+    }
+
+    // Apply time filter
+    if (timeFilter !== 'all') {
+      const now = Date.now();
+      const windowMs = {
+        '24h': 24 * 60 * 60 * 1000,
+        '7d': 7 * 24 * 60 * 60 * 1000,
+        '30d': 30 * 24 * 60 * 60 * 1000,
+      }[timeFilter];
+
+      items = items.filter(item => {
+        const itemDate = new Date(item.lockedDate || item.createdAt || item.timestamp).getTime();
+        return (now - itemDate) <= windowMs;
+      });
+    }
+
+    // Apply search filter
+    if (searchQuery.trim()) {
+      const query = searchQuery.toLowerCase();
+      items = items.filter(item => {
+        const text = (item.claim || item.title || '').toLowerCase();
+        const category = (item.category || '').toLowerCase();
+        return text.includes(query) || category.includes(query);
+      });
+    }
+
+    // Apply existing filters for claims tab
+    if (currentTab === 'claims') {
+      let filtered = items;
       if (activeFilter === 'high-confidence') {
-        filtered = claims.filter(c => c.confidence >= 75);
+        filtered = items.filter((c: Claim) => c.confidence >= 75);
       } else if (activeFilter === 'verified') {
-        filtered = claims.filter(c => c.status === 'verified');
+        filtered = items.filter((c: Claim) => c.status === 'verified');
       }
       return filtered;
-    } else if (currentTab === 'osint') {
-      return osint;
-    } else {
-      return resolutions;
     }
+
+    return items;
   };
 
   const displayItems = getDisplayItems();
