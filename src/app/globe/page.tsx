@@ -113,6 +113,16 @@ export default function GlobePage() {
     return () => clearInterval(interval);
   }, []);
 
+  // Live timer: Update "Xs ago" display every second
+  const [, setTick] = useState(0);
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setTick(t => t + 1); // Force re-render every second
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, []);
+
   // Format "last updated" time
   const getTimeSinceUpdate = () => {
     if (!lastUpdated) return 'Never';
@@ -234,7 +244,7 @@ export default function GlobePage() {
                     : 'bg-transparent text-[#94a3b8] border-[rgba(148,163,184,0.2)] hover:text-[#f8fafc] hover:border-[#ef4444]'
                 }`}
               >
-                OSINT <span className="ml-1 opacity-70">({osint.length})</span>
+                OSINT <span className="ml-1 opacity-70">({counts.osint})</span>
               </button>
               <button
                 onClick={() => setCurrentTab('claims')}
@@ -244,7 +254,7 @@ export default function GlobePage() {
                     : 'bg-transparent text-[#94a3b8] border-[rgba(148,163,184,0.2)] hover:text-[#f8fafc] hover:border-[#8b5cf6]'
                 }`}
               >
-                Claims <span className="ml-1 opacity-70">({claims.length})</span>
+                Claims <span className="ml-1 opacity-70">({counts.claims})</span>
               </button>
               <button
                 onClick={() => setCurrentTab('resolutions')}
@@ -254,7 +264,7 @@ export default function GlobePage() {
                     : 'bg-transparent text-[#94a3b8] border-[rgba(148,163,184,0.2)] hover:text-[#f8fafc] hover:border-emerald-500'
                 }`}
               >
-                Resolved <span className="ml-1 opacity-70">({totalResolutions})</span>
+                Resolved <span className="ml-1 opacity-70">({counts.resolved})</span>
               </button>
             </div>
 
