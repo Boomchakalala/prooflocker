@@ -96,7 +96,7 @@ export default function GlobePage() {
     if (showLoading) setIsUpdating(true);
 
     try {
-      const response = await fetch('/api/globe/activity?window=24h');
+      const response = await fetch('/api/globe/activity?window=30d');
       const data = await response.json();
 
       if (data.meta && data.claims && data.osint) {
