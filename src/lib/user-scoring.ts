@@ -68,14 +68,21 @@ export function calculateLockPoints(isEarlyPrediction: boolean): number {
 
 /**
  * Calculate points for resolving a prediction
+ * Returns separate values for lifetime points and reputation impact
  */
 export function calculateResolvePoints(
   isCorrect: boolean,
   evidenceScore: number,
   isOnChain: boolean
-): number {
+): {
+  lifetimePoints: number;  // Always >= 0, never decreases total
+  reputationChange: number; // Can be negative
+} {
   if (!isCorrect) {
-    return POINTS_CONFIG.RESOLVE_INCORRECT_PENALTY;
+    return {
+      lifetimePoints: 0,  // No lifetime points for incorrect
+      reputationChange: POINTS_CONFIG.RESOLVE_INCORRECT_PENALTY  // -30 reputation penalty
+    };
   }
 
   // Evidence multiplier: 0.5x (score=0) to 1.5x (score=100)
@@ -87,7 +94,26 @@ export function calculateResolvePoints(
     points += POINTS_CONFIG.RESOLVE_ONCHAIN_BONUS;
   }
 
-  return Math.round(points);
+  const roundedPoints = Math.round(points);
+
+  return {
+    lifetimePoints: roundedPoints,  // Add to lifetime total
+    reputationChange: roundedPoints  // Also add to reputation
+  };
+}
+
+/**
+ * Calculate penalty for overruled resolution
+ * Returns reputation penalty only - does NOT affect lifetime points
+ */
+export function calculateOverruledPenalty(): {
+  lifetimePoints: number;  // Always 0, no change to lifetime
+  reputationChange: number; // -25 reputation penalty
+} {
+  return {
+    lifetimePoints: 0,  // Lifetime points never decrease
+    reputationChange: -25  // Reputation penalty for being overruled
+  };
 }
 
 /**
