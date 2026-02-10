@@ -929,11 +929,10 @@ export default function GlobeMapbox({ claims, osint, mapMode = 'both', viewMode 
       />
 
       {!mapReady && !error && (
-        <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-b from-[#0A0A0F]/95 via-[#111118]/95 to-[#0A0A0F]/95 z-10">
+        <div className="absolute inset-0 flex items-center justify-center bg-[#0A0A0F]/95 z-10">
           <div className="text-center">
             <div className="relative mb-4 mx-auto w-16 h-16">
               <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-purple-500" />
-              <div className="absolute inset-0 rounded-full bg-purple-500/30 blur-2xl animate-pulse" />
             </div>
             <p className="text-purple-300 font-semibold text-lg">Loading Globe...</p>
             <p className="text-gray-500 text-sm mt-2">Initializing Mapbox</p>
@@ -942,84 +941,19 @@ export default function GlobeMapbox({ claims, osint, mapMode = 'both', viewMode 
       )}
 
       {error && (
-        <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-b from-[#0A0A0F]/95 via-[#111118]/95 to-[#0A0A0F]/95 z-10">
+        <div className="absolute inset-0 flex items-center justify-center bg-[#0A0A0F]/95 z-10">
           <div className="text-center max-w-md px-6">
-            <div className="text-red-500 text-6xl mb-4">⚠️</div>
             <p className="text-white text-xl font-bold mb-2">Failed to Load Globe</p>
             <p className="text-gray-400 text-sm mb-6">{error}</p>
             <button
               onClick={() => window.location.reload()}
-              className="px-8 py-3 bg-gradient-to-r from-[#5B21B6] to-[#2E5CFF] hover:from-[#6B31C6] hover:to-[#3D6CFF] text-white rounded-lg text-sm font-bold shadow-[0_0_20px_rgba(91,33,182,0.4)] hover:shadow-[0_0_30px_rgba(91,33,182,0.6)] transition-all"
+              className="px-8 py-3 bg-gradient-to-r from-[#5B21B6] to-[#2E5CFF] hover:from-[#6B31C6] hover:to-[#3D6CFF] text-white rounded-lg text-sm font-bold shadow-[0_0_20px_rgba(91,33,182,0.4)] transition-all"
             >
               Reload Page
             </button>
           </div>
         </div>
       )}
-
-      {/* Controls - Position adjusted for new parent-controlled sidebar */}
-      <div className="fixed z-[100] flex gap-2
-        md:top-[76px] md:right-[440px] md:flex-col
-        top-[68px] left-3 flex-row">
-        <button
-          onClick={() => toggleLayer('claims')}
-          className={`rounded-xl flex items-center justify-center transition-all
-            md:w-[44px] md:h-[44px] w-10 h-10
-            ${
-            claimsLayerVisible
-              ? 'bg-gradient-to-br from-[#5B21B6] to-[#2E5CFF] text-white shadow-[0_0_25px_rgba(91,33,182,0.5)] scale-105'
-              : 'bg-[#0A0A0F]/95 text-gray-400 border border-purple-500/20 hover:bg-purple-500/10 hover:border-purple-500/40'
-          }`}
-          title="Toggle Claims Layer"
-        >
-          <svg className="md:w-[20px] md:h-[20px] w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-          </svg>
-        </button>
-
-        <button
-          onClick={() => toggleLayer('osint')}
-          className={`rounded-xl flex items-center justify-center transition-all
-            md:w-[44px] md:h-[44px] w-10 h-10
-            ${
-            osintLayerVisible
-              ? 'bg-gradient-to-br from-red-600 to-red-700 text-white shadow-[0_0_25px_rgba(239,68,68,0.5)] scale-105'
-              : 'bg-[#0A0A0F]/95 text-gray-400 border border-purple-500/20 hover:bg-red-500/10 hover:border-red-500/40'
-          }`}
-          title="Toggle OSINT Layer"
-        >
-          <svg className="md:w-[20px] md:h-[20px] w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
-          </svg>
-        </button>
-
-        <button
-          onClick={() => toggleLayer('heatmap')}
-          className={`rounded-xl flex items-center justify-center transition-all
-            md:w-[44px] md:h-[44px] w-10 h-10
-            ${
-            heatmapVisible
-              ? 'bg-gradient-to-br from-[#5B21B6] to-[#2E5CFF] text-white shadow-[0_0_25px_rgba(91,33,182,0.5)] scale-105'
-              : 'bg-[#0A0A0F]/95 text-gray-400 border border-purple-500/20 hover:bg-purple-500/10 hover:border-purple-500/40'
-          }`}
-          title="Toggle Heatmap"
-        >
-          <svg className="md:w-[20px] md:h-[20px] w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" d="M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.656 7.343A7.975 7.975 0 0120 13a7.975 7.975 0 01-2.343 5.657z" />
-          </svg>
-        </button>
-
-        <button
-          onClick={resetView}
-          className="rounded-xl flex items-center justify-center transition-all bg-[#0A0A0F]/95 text-gray-400 border border-purple-500/20 hover:border-purple-500/60 hover:text-purple-300 hover:bg-purple-500/10 hover:scale-105
-            md:w-[44px] md:h-[44px] w-10 h-10"
-          title="Reset View"
-        >
-          <svg className="md:w-[20px] md:h-[20px] w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-          </svg>
-        </button>
-      </div>
     </div>
   );
 }
