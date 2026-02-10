@@ -48,3 +48,11 @@ Tue Feb 10 22:37:34 UTC 2026: Running intel ingestion...
 📡 Fetching: Al Jazeera - Breaking
   News
    Found 25 items
+   ✅ Inserted 0 new items
+
+📡 Fetching: Bellingcat - Latest
+   Found 10 items
+   ✅ Inserted 0 new items
+
+✅ Ingestion complete! Total items in DB: 60
+Tue Feb 10 22:37:50 UTC 2026: Sleeping for 10 minutes...
