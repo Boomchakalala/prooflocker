@@ -141,7 +141,7 @@ export default function GlobePage() {
     const interval = setInterval(() => {
       console.log('[Globe] Polling for updates...');
       fetchActivity(false); // Silent update (no loading indicator)
-    }, 60000); // 60 seconds
+    }, 30000); // 30 seconds
 
     return () => clearInterval(interval);
   }, []);

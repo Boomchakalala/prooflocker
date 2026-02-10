@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState, useCallback } from 'react';
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 
@@ -28,6 +28,11 @@ interface OsintItem {
   lng: number;
   timestamp: string;
   tags: string[];
+}
+
+interface AreaDetail {
+  claims: Claim[];
+  osint: OsintItem[];
 }
 
 interface GlobeMapboxProps {
@@ -71,14 +76,57 @@ function toOsintGeoJSON(osint: OsintItem[]) {
   };
 }
 
+function haversineDistance(lat1: number, lng1: number, lat2: number, lng2: number) {
+  const R = 6371;
+  const dLat = (lat2 - lat1) * Math.PI / 180;
+  const dLng = (lng2 - lng1) * Math.PI / 180;
+  const a = Math.sin(dLat / 2) ** 2 + Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * Math.sin(dLng / 2) ** 2;
+  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+}
+
 export default function GlobeMapbox({ claims, osint, mapMode = 'both', viewMode = 'points' }: GlobeMapboxProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<mapboxgl.Map | null>(null);
   const readyRef = useRef(false);
   const claimsRef = useRef(claims);
   const osintRef = useRef(osint);
+  const [areaDetail, setAreaDetail] = useState<AreaDetail | null>(null);
   claimsRef.current = claims;
   osintRef.current = osint;
+
+  const closeDetail = useCallback(() => setAreaDetail(null), []);
+
+  // Find all claims and OSINT near a coordinate
+  const findNearbyItems = useCallback((lng: number, lat: number, zoom: number) => {
+    // Radius in km based on zoom: zoomed out = wider radius
+    const radiusKm = zoom < 2 ? 2000 : zoom < 3 ? 1200 : zoom < 4 ? 600 : zoom < 5 ? 300 : 100;
+    const nearbyClaims: Claim[] = [];
+    const nearbyOsint: OsintItem[] = [];
+    const seenClaims = new Set<string>();
+    const seenOsint = new Set<string>();
+
+    claimsRef.current.forEach((c) => {
+      if (haversineDistance(lat, lng, c.lat, c.lng) <= radiusKm) {
+        const key = String(c.id);
+        if (!seenClaims.has(key)) {
+          seenClaims.add(key);
+          nearbyClaims.push(c);
+        }
+      }
+    });
+
+    osintRef.current.forEach((o) => {
+      if (haversineDistance(lat, lng, o.lat, o.lng) <= radiusKm) {
+        const key = String(o.id);
+        if (!seenOsint.has(key)) {
+          seenOsint.add(key);
+          nearbyOsint.push(o);
+        }
+      }
+    });
+
+    return { claims: nearbyClaims, osint: nearbyOsint };
+  }, []);
 
   // Create map once
   useEffect(() => {
@@ -132,105 +180,20 @@ export default function GlobeMapbox({ claims, osint, mapMode = 'both', viewMode 
         map.on('mouseleave', l, () => { map.getCanvas().style.cursor = ''; });
       });
 
-      // Helper: render a claim card HTML
-      const claimCardHTML = (p: any) => {
-        const sc = p.status === 'verified' ? '#8b5cf6' : p.status === 'disputed' ? '#ef4444' : p.status === 'void' ? '#6b7280' : '#f59e0b';
-        const res = p.outcome === 'correct' || p.outcome === 'incorrect';
-        return `<div style="padding:8px 0;border-bottom:1px solid rgba(148,163,184,0.08);">
-          <div style="font-size:13px;font-weight:600;line-height:1.4;color:#f8fafc;margin-bottom:6px;">${p.claim}</div>
-          <div style="display:flex;align-items:center;gap:6px;margin-bottom:4px;">
-            <span style="font-size:11px;font-weight:600;color:#e2e8f0;">${p.submitter}</span>
-            <span style="font-size:9px;padding:2px 6px;background:${sc}22;border-radius:6px;color:${sc};font-weight:700;text-transform:uppercase;">${res ? p.outcome : p.status}</span>
-            <span style="font-size:9px;padding:2px 6px;background:rgba(139,92,246,0.15);border-radius:6px;color:#a78bfa;font-weight:600;">Rep ${p.rep}</span>
-          </div>
-          <div style="display:flex;align-items:center;gap:6px;">
-            <div style="flex:1;height:4px;background:rgba(148,163,184,0.15);border-radius:2px;overflow:hidden;">
-              <div style="height:100%;width:${p.confidence}%;background:${sc};border-radius:2px;"></div>
-            </div>
-            <span style="font-size:11px;font-weight:700;color:${sc};">${p.confidence}%</span>
-          </div>
-        </div>`;
+      // Cluster click → centered modal with ALL nearby claims + OSINT
+      const handleClusterClick = (e: mapboxgl.MapMouseEvent & { features?: mapboxgl.MapboxGeoJSONFeature[] }) => {
+        if (!e.features?.length) return;
+        const coords = (e.features[0].geometry as any).coordinates;
+        const zoom = map.getZoom();
+        const nearby = findNearbyItems(coords[0], coords[1], zoom);
+        if (nearby.claims.length > 0 || nearby.osint.length > 0) {
+          setAreaDetail(nearby);
+          map.easeTo({ center: coords, zoom: Math.min(zoom + 1.5, 6), duration: 800 });
+        }
       };
 
-      // Helper: render an OSINT card HTML
-      const osintCardHTML = (p: any) => {
-        let tags: string[] = [];
-        try { tags = JSON.parse(p.tags || '[]'); } catch {}
-        return `<div style="padding:8px 0;border-bottom:1px solid rgba(148,163,184,0.08);">
-          <div style="display:flex;align-items:center;gap:6px;margin-bottom:4px;">
-            <span style="font-size:8px;font-weight:800;color:#ef4444;text-transform:uppercase;letter-spacing:0.5px;">INTEL</span>
-            <span style="font-size:11px;font-weight:600;color:#f87171;">${p.source}</span>
-            <span style="font-size:10px;color:#64748b;">${p.timestamp}</span>
-          </div>
-          <div style="font-size:13px;font-weight:600;line-height:1.4;color:#f8fafc;margin-bottom:4px;">${p.title}</div>
-          <div style="display:flex;gap:4px;flex-wrap:wrap;">
-            ${tags.map((t: string) => `<span style="padding:1px 6px;background:rgba(239,68,68,0.15);border-radius:6px;font-size:9px;font-weight:600;color:#ef4444;text-transform:uppercase;">${t}</span>`).join('')}
-          </div>
-        </div>`;
-      };
-
-      // Claims cluster click → show all claims in area
-      map.on('click', 'claims-clusters-core', (e) => {
-        if (!e.features?.length) return;
-        const feature = e.features[0];
-        const clusterId = feature.properties?.cluster_id;
-        const pointCount = feature.properties?.point_count || 0;
-        const coords = (feature.geometry as any).coordinates.slice();
-        const src = map.getSource('claims') as mapboxgl.GeoJSONSource;
-
-        src.getClusterLeaves(clusterId, Math.min(pointCount, 20), 0, (err: any, leaves: any) => {
-          if (err || !leaves?.length) return;
-          // Deduplicate by id
-          const seen = new Set<string>();
-          const unique = leaves.filter((f: any) => {
-            const id = String(f.properties?.id);
-            if (seen.has(id)) return false;
-            seen.add(id);
-            return true;
-          });
-          const items = unique.map((f: any) => claimCardHTML(f.properties)).join('');
-          const header = `<div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;padding-bottom:8px;border-bottom:1px solid rgba(139,92,246,0.2);">
-            <div style="width:8px;height:8px;border-radius:50%;background:#8b5cf6;box-shadow:0 0 6px rgba(139,92,246,0.6);"></div>
-            <span style="font-size:12px;font-weight:700;color:#a78bfa;text-transform:uppercase;letter-spacing:0.5px;">${unique.length} Claim${unique.length !== 1 ? 's' : ''} in Area</span>
-            ${pointCount > 20 ? `<span style="font-size:10px;color:#64748b;">(${pointCount} total)</span>` : ''}
-          </div>`;
-          new mapboxgl.Popup({ offset: 25, maxWidth: '400px', closeButton: true })
-            .setLngLat(coords)
-            .setHTML(`<div style="padding:4px;max-height:350px;overflow-y:auto;">${header}${items}</div>`)
-            .addTo(map);
-        });
-      });
-
-      // OSINT cluster click → show all OSINT in area
-      map.on('click', 'osint-clusters-core', (e) => {
-        if (!e.features?.length) return;
-        const feature = e.features[0];
-        const clusterId = feature.properties?.cluster_id;
-        const pointCount = feature.properties?.point_count || 0;
-        const coords = (feature.geometry as any).coordinates.slice();
-        const src = map.getSource('osint') as mapboxgl.GeoJSONSource;
-
-        src.getClusterLeaves(clusterId, Math.min(pointCount, 20), 0, (err: any, leaves: any) => {
-          if (err || !leaves?.length) return;
-          const seen = new Set<string>();
-          const unique = leaves.filter((f: any) => {
-            const id = String(f.properties?.id);
-            if (seen.has(id)) return false;
-            seen.add(id);
-            return true;
-          });
-          const items = unique.map((f: any) => osintCardHTML(f.properties)).join('');
-          const header = `<div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;padding-bottom:8px;border-bottom:1px solid rgba(239,68,68,0.2);">
-            <div style="width:8px;height:8px;border-radius:50%;background:#ef4444;box-shadow:0 0 6px rgba(239,68,68,0.6);"></div>
-            <span style="font-size:12px;font-weight:700;color:#f87171;text-transform:uppercase;letter-spacing:0.5px;">${unique.length} Intel Signal${unique.length !== 1 ? 's' : ''} in Area</span>
-            ${pointCount > 20 ? `<span style="font-size:10px;color:#64748b;">(${pointCount} total)</span>` : ''}
-          </div>`;
-          new mapboxgl.Popup({ offset: 25, maxWidth: '400px', closeButton: true })
-            .setLngLat(coords)
-            .setHTML(`<div style="padding:4px;max-height:350px;overflow-y:auto;">${header}${items}</div>`)
-            .addTo(map);
-        });
-      });
+      map.on('click', 'claims-clusters-core', handleClusterClick);
+      map.on('click', 'osint-clusters-core', handleClusterClick);
 
       // Individual claim popup
       map.on('click', 'claims-points-core', (e) => {
@@ -299,7 +262,7 @@ export default function GlobeMapbox({ claims, osint, mapMode = 'both', viewMode 
         map.rotateTo(map.getBearing() + 15, { duration: 120000 });
       }
     });
-  }, []);
+  }, [findNearbyItems]);
 
   // Update data
   useEffect(() => {
@@ -329,6 +292,12 @@ export default function GlobeMapbox({ claims, osint, mapMode = 'both', viewMode 
     try { if (m.getLayer('claims-heatmap')) m.setLayoutProperty('claims-heatmap', 'visibility', viewMode === 'heatmap' ? 'visible' : 'none'); } catch {}
   }, [viewMode]);
 
+  const statusColor = (s: string, outcome?: string | null) => {
+    if (outcome === 'correct') return '#22c55e';
+    if (outcome === 'incorrect') return '#ef4444';
+    return s === 'verified' ? '#8b5cf6' : s === 'disputed' ? '#ef4444' : s === 'void' ? '#6b7280' : '#f59e0b';
+  };
+
   return (
     <>
       <style jsx global>{`
@@ -340,6 +309,128 @@ export default function GlobeMapbox({ claims, osint, mapMode = 'both', viewMode 
       `}</style>
       <div className="relative w-full h-full" style={{ minHeight: 400 }}>
         <div ref={containerRef} style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }} />
+
+        {/* Area Detail Modal — centered overlay */}
+        {areaDetail && (
+          <div
+            className="fixed inset-0 z-[500] flex items-center justify-center"
+            onClick={closeDetail}
+            style={{ background: 'rgba(0,0,0,0.6)', backdropFilter: 'blur(4px)' }}
+          >
+            <div
+              className="relative w-[90vw] max-w-[520px] max-h-[75vh] overflow-hidden rounded-2xl border border-purple-500/30"
+              onClick={(e) => e.stopPropagation()}
+              style={{
+                background: 'rgba(10,10,20,0.97)',
+                boxShadow: '0 20px 60px rgba(0,0,0,0.8), 0 0 40px rgba(139,92,246,0.15)',
+              }}
+            >
+              {/* Header */}
+              <div className="flex items-center justify-between px-5 py-4 border-b border-purple-500/20">
+                <div className="flex items-center gap-3">
+                  <div className="w-2.5 h-2.5 rounded-full bg-purple-500 shadow-[0_0_8px_rgba(139,92,246,0.6)]" />
+                  <span className="text-[13px] font-bold text-white tracking-wide uppercase">
+                    Area Intelligence
+                  </span>
+                  <span className="text-[11px] text-slate-400">
+                    {areaDetail.claims.length + areaDetail.osint.length} items
+                  </span>
+                </div>
+                <button
+                  onClick={closeDetail}
+                  className="w-7 h-7 rounded-lg flex items-center justify-center text-slate-400 hover:text-white hover:bg-white/10 transition-all"
+                >
+                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="2">
+                    <path d="M1 1l12 12M13 1L1 13" />
+                  </svg>
+                </button>
+              </div>
+
+              {/* Counts bar */}
+              <div className="flex gap-4 px-5 py-3 border-b border-slate-700/30">
+                {areaDetail.claims.length > 0 && (
+                  <div className="flex items-center gap-2">
+                    <div className="w-2 h-2 rounded-full bg-[#8b5cf6]" />
+                    <span className="text-[11px] font-semibold text-[#a78bfa]">{areaDetail.claims.length} Claims</span>
+                  </div>
+                )}
+                {areaDetail.osint.length > 0 && (
+                  <div className="flex items-center gap-2">
+                    <div className="w-2 h-2 rounded-full bg-[#ef4444]" />
+                    <span className="text-[11px] font-semibold text-[#f87171]">{areaDetail.osint.length} Intel Signals</span>
+                  </div>
+                )}
+              </div>
+
+              {/* Scrollable content */}
+              <div className="overflow-y-auto" style={{ maxHeight: 'calc(75vh - 110px)' }}>
+                {/* Claims section */}
+                {areaDetail.claims.length > 0 && (
+                  <div className="px-5 pt-3 pb-1">
+                    <div className="text-[10px] font-bold text-[#a78bfa] uppercase tracking-wider mb-2">Claims</div>
+                    {areaDetail.claims.map((c) => {
+                      const sc = statusColor(c.status);
+                      const res = c.outcome === 'correct' || c.outcome === 'incorrect';
+                      return (
+                        <div key={c.id} className="py-3 border-b border-slate-700/20 last:border-0">
+                          <div className="text-[13px] font-semibold text-white leading-snug mb-2">{c.claim}</div>
+                          <div className="flex items-center gap-2 mb-2">
+                            <span className="text-[11px] font-semibold text-slate-300">{c.submitter}</span>
+                            <span
+                              className="text-[9px] font-bold uppercase px-2 py-0.5 rounded-md"
+                              style={{ background: sc + '22', color: sc }}
+                            >
+                              {res ? c.outcome : c.status}
+                            </span>
+                            <span className="text-[9px] font-semibold px-2 py-0.5 rounded-md bg-purple-500/15 text-purple-300">
+                              Rep {c.rep}
+                            </span>
+                            {c.category && (
+                              <span className="text-[9px] text-purple-400">#{c.category}</span>
+                            )}
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <div className="flex-1 h-1 bg-slate-700/40 rounded-full overflow-hidden">
+                              <div className="h-full rounded-full" style={{ width: `${c.confidence}%`, background: sc }} />
+                            </div>
+                            <span className="text-[11px] font-bold" style={{ color: sc }}>{c.confidence}%</span>
+                            <span className="text-[10px] text-slate-500 ml-1">{c.lockedDate}</span>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
+
+                {/* OSINT section */}
+                {areaDetail.osint.length > 0 && (
+                  <div className="px-5 pt-3 pb-3">
+                    {areaDetail.claims.length > 0 && (
+                      <div className="border-t border-slate-700/30 mb-3" />
+                    )}
+                    <div className="text-[10px] font-bold text-[#f87171] uppercase tracking-wider mb-2">Intel Signals</div>
+                    {areaDetail.osint.map((o) => (
+                      <div key={o.id} className="py-3 border-b border-slate-700/20 last:border-0">
+                        <div className="flex items-center gap-2 mb-1.5">
+                          <span className="text-[11px] font-semibold text-red-400">{o.source}</span>
+                          <span className="text-[10px] text-slate-500">{o.timestamp}</span>
+                        </div>
+                        <div className="text-[13px] font-semibold text-white leading-snug mb-2">{o.title}</div>
+                        <div className="flex gap-1.5 flex-wrap">
+                          {o.tags.map((t, i) => (
+                            <span key={i} className="px-2 py-0.5 text-[9px] font-bold uppercase rounded-md bg-red-500/15 text-red-400">
+                              {t}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </>
   );
