@@ -93,23 +93,6 @@ export default function TopSourcesList({ category = 'all' }: TopSourcesListProps
 
   return (
     <div className="space-y-8">
-      {/* Demo Banner */}
-      {isShowingMockData && (
-        <div className="mx-auto max-w-3xl">
-          <div className="bg-slate-900/60 border border-slate-700/50 rounded-xl p-4 text-center">
-            <div className="flex items-center justify-center gap-2 mb-1">
-              <svg className="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
-              </svg>
-              <span className="text-xs font-medium text-slate-400 uppercase tracking-wide">Preview Data</span>
-            </div>
-            <p className="text-xs text-slate-400">
-              Reputation scores are real and accumulating. Registry shown below uses example data — live registry populates as users resolve claims with evidence.
-            </p>
-          </div>
-        </div>
-      )}
-
       {/* Header Section */}
       <div className="text-center mb-10">
         <div className="flex items-center justify-center gap-3 mb-4">
@@ -139,7 +122,7 @@ export default function TopSourcesList({ category = 'all' }: TopSourcesListProps
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-700/50">
-              {mockSources.map((source, index) => {
+              {sources.map((source, index) => {
                 const tierInfo = getReputationTier(source.reliabilityScore);
 
                 return (
