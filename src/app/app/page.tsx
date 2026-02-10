@@ -458,7 +458,7 @@ export default function AppFeedPage() {
                 {filteredOsint.length > 0 ? (
                   <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
                     {filteredOsint.map((signal) => {
-                      const sourceUrl = signal.url || (signal.source_handle ? `https://twitter.com/${signal.source_handle.replace('@', '')}` : '#');
+                      const sourceUrl = signal.sourceUrl || signal.url || (signal.sourceHandle || signal.source_handle ? `https://twitter.com/${(signal.sourceHandle || signal.source_handle || '').replace('@', '')}` : '#');
 
                       return (
                       <div
@@ -482,7 +482,7 @@ export default function AppFeedPage() {
                           <span className="bg-red-600 text-white text-[9px] font-bold px-2 py-0.5 rounded uppercase">
                             Intel
                           </span>
-                          <span className="text-xs text-red-400 font-semibold truncate flex-1">{signal.source_name || "Unknown"}</span>
+                          <span className="text-xs text-red-400 font-semibold truncate flex-1">{signal.sourceName || signal.source_name || "Unknown"}</span>
                           {signal.location && (
                             <span className="text-[10px] text-orange-400/70 truncate max-w-[100px]">{signal.location}</span>
                           )}
@@ -507,9 +507,12 @@ export default function AppFeedPage() {
                               href={sourceUrl}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="px-2.5 py-1 text-[10px] font-medium rounded bg-red-500/10 hover:bg-red-500/20 text-red-300 transition-colors"
+                              className="px-2.5 py-1 text-[10px] font-medium rounded bg-red-500/10 hover:bg-red-500/20 text-red-300 transition-colors flex items-center gap-1"
                               onClick={(e) => e.stopPropagation()}
                             >
+                              <svg className="w-3 h-3" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
+                              </svg>
                               Source
                             </a>
                           )}
@@ -521,13 +524,6 @@ export default function AppFeedPage() {
                           >
                             Use as Evidence
                           </button>
-                          <Link
-                            href={`/lock?prefill=${encodeURIComponent(signal.title || '')}`}
-                            className="px-2.5 py-1 text-[10px] font-medium rounded bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-300 transition-colors"
-                            onClick={(e) => e.stopPropagation()}
-                          >
-                            Lock as Claim
-                          </Link>
                           <span className="ml-auto text-[10px] text-slate-600">
                             {signal.created_at ? formatRelativeTime(signal.created_at) : ''}
                           </span>
