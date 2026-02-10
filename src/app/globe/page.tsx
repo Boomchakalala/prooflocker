@@ -720,10 +720,16 @@ export default function GlobePage() {
                 ) : (
                   resolutions.map((res) => {
                     const evidenceGrade = getEvidenceGrade(res.evidence_score);
+                    const repTier = getReputationTier(res.rep || 0);
                     return (
                     <div key={res.id} className={`p-3 bg-slate-900/60 border rounded-xl ${res.outcome === 'correct' ? 'border-emerald-500/40' : 'border-red-500/40'}`}>
                       <div className="flex items-center justify-between mb-2">
-                        <span className="text-xs text-slate-400">{res.submitter}</span>
+                        <div className="flex items-center gap-1.5">
+                          <span className="text-xs text-slate-400">{res.submitter}</span>
+                          <span className={`text-[8px] font-bold px-1 py-0.5 rounded ${repTier.bgColor} ${repTier.textColor}`}>
+                            {repTier.name}
+                          </span>
+                        </div>
                         <div className="flex items-center gap-1.5">
                           <span className={`text-[9px] font-bold px-1.5 py-0.5 rounded ${evidenceGrade.bgColor} ${evidenceGrade.textColor}`}>
                             {evidenceGrade.grade}
