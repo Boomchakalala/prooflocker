@@ -540,8 +540,8 @@ export default function GlobePage() {
           </Link>
         </div>
 
-        {/* Right Sidebar - Hidden on Mobile, Show on MD+ */}
-        <aside className="hidden md:flex fixed top-16 right-0 w-[360px] h-[calc(100vh-64px)] bg-[rgba(10,10,15,0.98)] backdrop-blur-[30px] border-l border-purple-500/20 z-[200] flex-col">
+        {/* Right Sidebar - Now responsive with mobile toggle */}
+        <aside className={`fixed top-16 ${showMobileFeed ? 'right-0' : 'right-[-360px] md:right-0'} w-[360px] h-[calc(100vh-64px)] bg-[rgba(10,10,15,0.98)] backdrop-blur-[30px] border-l border-purple-500/20 z-[200] flex flex-col transition-all duration-300 ease-in-out shadow-2xl md:shadow-none`}>
           {/* Sidebar Header - Compact */}
           <div className="p-3 border-b border-purple-500/20 flex-shrink-0">
             {/* Tabs Row */}
@@ -967,6 +967,20 @@ export default function GlobePage() {
             currentUserId={user?.id}
           />
         )}
+
+        {/* Mobile Feed Toggle Button */}
+        <button
+          onClick={() => setShowMobileFeed(!showMobileFeed)}
+          className="md:hidden fixed top-20 right-4 z-[210] w-12 h-12 rounded-full bg-purple-600/90 hover:bg-purple-500 shadow-xl flex items-center justify-center text-white transition-all"
+        >
+          <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+            {showMobileFeed ? (
+              <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+            ) : (
+              <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+            )}
+          </svg>
+        </button>
 
         {/* Floating Action Button */}
         <button
