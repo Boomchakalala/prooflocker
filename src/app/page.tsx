@@ -43,38 +43,126 @@ export default function LandingPage() {
               </p>
             </div>
 
-            {/* Globe visual placeholder with stats overlay */}
+            {/* Globe visual - Enhanced 3D sphere */}
             <div className="relative bg-gradient-to-br from-slate-900/90 to-slate-800/60 border border-slate-700/50 rounded-2xl md:rounded-3xl overflow-hidden mb-8 shadow-2xl shadow-cyan-500/5">
               <div className="aspect-[16/9] md:aspect-[21/9] flex items-center justify-center relative">
-                {/* Globe illustration */}
+                {/* 3D Globe illustration */}
                 <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="w-48 h-48 md:w-72 md:h-72 rounded-full border border-cyan-500/20 relative" style={{ background: 'radial-gradient(circle at 35% 35%, rgba(0, 224, 255, 0.08) 0%, rgba(91, 33, 182, 0.05) 50%, transparent 70%)' }}>
-                    {/* Orbit rings */}
-                    <div className="absolute inset-0 rounded-full border border-cyan-500/10 scale-[1.3] rotate-12" />
-                    <div className="absolute inset-0 rounded-full border border-purple-500/10 scale-[1.6] -rotate-6" />
-                    {/* Pulse dots */}
-                    <div className="absolute top-[20%] left-[30%] w-2 h-2 bg-red-500 rounded-full animate-ping" />
-                    <div className="absolute top-[45%] right-[25%] w-2 h-2 bg-cyan-400 rounded-full animate-ping" style={{ animationDelay: '0.5s' }} />
-                    <div className="absolute bottom-[30%] left-[55%] w-2 h-2 bg-emerald-400 rounded-full animate-ping" style={{ animationDelay: '1s' }} />
-                    <div className="absolute top-[60%] left-[20%] w-1.5 h-1.5 bg-purple-400 rounded-full animate-ping" style={{ animationDelay: '1.5s' }} />
+                  {/* Main globe sphere */}
+                  <div className="relative w-64 h-64 md:w-96 md:h-96">
+                    {/* Globe sphere with 3D lighting */}
+                    <div
+                      className="absolute inset-0 rounded-full"
+                      style={{
+                        background: 'radial-gradient(circle at 30% 30%, rgba(0, 224, 255, 0.15) 0%, rgba(46, 92, 255, 0.12) 25%, rgba(91, 33, 182, 0.08) 50%, rgba(10, 10, 30, 0.3) 70%, rgba(0, 0, 0, 0.5) 100%)',
+                        boxShadow: 'inset -20px -20px 60px rgba(0, 0, 0, 0.8), inset 10px 10px 30px rgba(0, 224, 255, 0.1), 0 0 80px rgba(0, 224, 255, 0.15)'
+                      }}
+                    >
+                      {/* Latitude lines */}
+                      <div className="absolute inset-0">
+                        <div className="absolute top-[15%] left-[5%] right-[5%] h-px bg-gradient-to-r from-transparent via-cyan-500/20 to-transparent" />
+                        <div className="absolute top-[30%] left-[8%] right-[8%] h-px bg-gradient-to-r from-transparent via-cyan-500/25 to-transparent" />
+                        <div className="absolute top-[50%] left-[10%] right-[10%] h-px bg-gradient-to-r from-transparent via-cyan-500/30 to-transparent" />
+                        <div className="absolute top-[70%] left-[8%] right-[8%] h-px bg-gradient-to-r from-transparent via-cyan-500/25 to-transparent" />
+                        <div className="absolute top-[85%] left-[5%] right-[5%] h-px bg-gradient-to-r from-transparent via-cyan-500/20 to-transparent" />
+                      </div>
+
+                      {/* Longitude lines */}
+                      <div className="absolute inset-0">
+                        <svg className="w-full h-full" viewBox="0 0 100 100">
+                          {/* Vertical longitude lines as ellipses */}
+                          <ellipse cx="50" cy="50" rx="2" ry="48" fill="none" stroke="rgba(0, 224, 255, 0.15)" strokeWidth="0.3" />
+                          <ellipse cx="50" cy="50" rx="8" ry="48" fill="none" stroke="rgba(0, 224, 255, 0.2)" strokeWidth="0.3" />
+                          <ellipse cx="50" cy="50" rx="16" ry="48" fill="none" stroke="rgba(0, 224, 255, 0.25)" strokeWidth="0.3" />
+                          <ellipse cx="50" cy="50" rx="26" ry="48" fill="none" stroke="rgba(0, 224, 255, 0.3)" strokeWidth="0.3" />
+                          <ellipse cx="50" cy="50" rx="36" ry="48" fill="none" stroke="rgba(0, 224, 255, 0.25)" strokeWidth="0.3" />
+                          <ellipse cx="50" cy="50" rx="42" ry="48" fill="none" stroke="rgba(0, 224, 255, 0.2)" strokeWidth="0.3" />
+                          <ellipse cx="50" cy="50" rx="46" ry="48" fill="none" stroke="rgba(0, 224, 255, 0.15)" strokeWidth="0.3" />
+                        </svg>
+                      </div>
+
+                      {/* Simplified continents overlay */}
+                      <svg className="absolute inset-0 w-full h-full opacity-20" viewBox="0 0 100 100">
+                        {/* Stylized landmasses */}
+                        <path d="M 25 35 Q 28 32 32 35 L 35 38 Q 37 40 35 43 L 32 45 Q 28 46 26 43 Z" fill="rgba(0, 224, 255, 0.4)" />
+                        <path d="M 42 28 Q 46 26 50 28 L 54 32 Q 56 36 53 40 L 48 43 Q 44 44 42 40 Z" fill="rgba(0, 224, 255, 0.35)" />
+                        <path d="M 60 45 Q 63 43 66 46 L 68 50 Q 69 54 66 57 L 62 59 Q 58 58 58 54 Z" fill="rgba(0, 224, 255, 0.3)" />
+                        <path d="M 30 55 Q 34 53 38 56 L 41 60 Q 42 64 39 67 L 35 69 Q 31 68 30 64 Z" fill="rgba(0, 224, 255, 0.35)" />
+                      </svg>
+
+                      {/* Animated rotation glow overlay */}
+                      <div
+                        className="absolute inset-0 rounded-full opacity-30 animate-spin-slow"
+                        style={{
+                          background: 'linear-gradient(120deg, transparent 30%, rgba(0, 224, 255, 0.1) 45%, rgba(0, 224, 255, 0.2) 50%, rgba(0, 224, 255, 0.1) 55%, transparent 70%)',
+                          animationDuration: '20s'
+                        }}
+                      />
+
+                      {/* Live data points with glow */}
+                      <div className="absolute top-[25%] left-[35%] w-3 h-3 rounded-full bg-red-500 shadow-[0_0_15px_rgba(239,68,68,0.8)] animate-ping" />
+                      <div className="absolute top-[25%] left-[35%] w-3 h-3 rounded-full bg-red-500" />
+
+                      <div className="absolute top-[48%] right-[28%] w-3 h-3 rounded-full bg-cyan-400 shadow-[0_0_15px_rgba(34,211,238,0.8)] animate-ping" style={{ animationDelay: '0.5s' }} />
+                      <div className="absolute top-[48%] right-[28%] w-3 h-3 rounded-full bg-cyan-400" />
+
+                      <div className="absolute bottom-[32%] left-[58%] w-2.5 h-2.5 rounded-full bg-emerald-400 shadow-[0_0_12px_rgba(52,211,153,0.8)] animate-ping" style={{ animationDelay: '1s' }} />
+                      <div className="absolute bottom-[32%] left-[58%] w-2.5 h-2.5 rounded-full bg-emerald-400" />
+
+                      <div className="absolute top-[62%] left-[22%] w-2 h-2 rounded-full bg-purple-400 shadow-[0_0_10px_rgba(192,132,252,0.8)] animate-ping" style={{ animationDelay: '1.5s' }} />
+                      <div className="absolute top-[62%] left-[22%] w-2 h-2 rounded-full bg-purple-400" />
+
+                      <div className="absolute top-[38%] left-[68%] w-2 h-2 rounded-full bg-amber-400 shadow-[0_0_10px_rgba(251,191,36,0.8)] animate-ping" style={{ animationDelay: '2s' }} />
+                      <div className="absolute top-[38%] left-[68%] w-2 h-2 rounded-full bg-amber-400" />
+                    </div>
+
+                    {/* Outer orbit rings for depth */}
+                    <div
+                      className="absolute inset-0 rounded-full border border-cyan-500/10 animate-pulse"
+                      style={{
+                        transform: 'scale(1.25) rotateX(60deg) rotateZ(12deg)',
+                        animationDuration: '3s'
+                      }}
+                    />
+                    <div
+                      className="absolute inset-0 rounded-full border border-purple-500/8 animate-pulse"
+                      style={{
+                        transform: 'scale(1.45) rotateX(65deg) rotateZ(-8deg)',
+                        animationDuration: '4s',
+                        animationDelay: '1s'
+                      }}
+                    />
+                    <div
+                      className="absolute inset-0 rounded-full border border-blue-500/6 animate-pulse"
+                      style={{
+                        transform: 'scale(1.65) rotateX(70deg) rotateZ(5deg)',
+                        animationDuration: '5s',
+                        animationDelay: '2s'
+                      }}
+                    />
                   </div>
                 </div>
 
                 {/* Floating stat cards */}
-                <div className="absolute top-4 md:top-6 left-4 md:left-6 bg-slate-900/90 border border-red-500/30 rounded-lg px-3 py-2 backdrop-blur-sm">
+                <div className="absolute top-4 md:top-6 left-4 md:left-6 bg-slate-900/95 border border-red-500/40 rounded-xl px-4 py-3 backdrop-blur-md shadow-[0_0_20px_rgba(239,68,68,0.15)]">
                   <div className="flex items-center gap-2">
-                    <div className="w-1.5 h-1.5 bg-red-500 rounded-full animate-pulse" />
-                    <span className="text-[10px] md:text-xs font-bold text-red-400 uppercase">Breaking</span>
+                    <div className="w-2 h-2 bg-red-500 rounded-full animate-pulse shadow-[0_0_8px_rgba(239,68,68,0.8)]" />
+                    <span className="text-[11px] md:text-xs font-bold text-red-400 uppercase tracking-wider">Breaking Intel</span>
                   </div>
-                  <p className="text-xs md:text-sm text-white/80 mt-1 max-w-[180px]">New intel signals arriving</p>
+                  <p className="text-xs md:text-sm text-white/90 mt-1.5 max-w-[200px] font-medium">Live signals streaming</p>
                 </div>
 
-                <div className="absolute bottom-4 md:bottom-6 right-4 md:right-6 bg-slate-900/90 border border-emerald-500/30 rounded-lg px-3 py-2 backdrop-blur-sm">
+                <div className="absolute bottom-4 md:bottom-6 right-4 md:right-6 bg-slate-900/95 border border-emerald-500/40 rounded-xl px-4 py-3 backdrop-blur-md shadow-[0_0_20px_rgba(52,211,153,0.15)]">
                   <div className="flex items-center gap-2">
-                    <div className="w-1.5 h-1.5 bg-emerald-400 rounded-full" />
-                    <span className="text-[10px] md:text-xs font-bold text-emerald-400 uppercase">Claims</span>
+                    <div className="w-2 h-2 bg-emerald-400 rounded-full shadow-[0_0_8px_rgba(52,211,153,0.8)]" />
+                    <span className="text-[11px] md:text-xs font-bold text-emerald-400 uppercase tracking-wider">On-Chain</span>
                   </div>
-                  <p className="text-xs md:text-sm text-white/80 mt-1">Locked & timestamped on-chain</p>
+                  <p className="text-xs md:text-sm text-white/90 mt-1.5 font-medium">Locked & timestamped</p>
+                </div>
+
+                <div className="absolute top-1/2 -translate-y-1/2 left-4 md:left-8 bg-slate-900/95 border border-cyan-500/40 rounded-xl px-3 py-2 backdrop-blur-md shadow-[0_0_20px_rgba(34,211,238,0.15)]">
+                  <div className="text-2xl md:text-3xl font-bold text-cyan-400">47</div>
+                  <div className="text-[10px] text-cyan-300/70 uppercase tracking-wide">Active Claims</div>
                 </div>
               </div>
             </div>
