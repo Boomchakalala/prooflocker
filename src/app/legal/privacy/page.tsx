@@ -273,14 +273,14 @@ export default function PrivacyPage() {
                   </div>
                 </div>
                 <p className="mt-4 text-sm">
-                  To exercise these rights, contact us at <span className="text-purple-400 font-mono">privacy@prooflocker.io</span>. Note that blockchain data is technically impossible to delete due to distributed ledger technology.
+                  To exercise these rights, contact us at <span className="text-purple-400 font-mono">contact@prooflocker.io</span>. Note that blockchain data is technically impossible to delete due to distributed ledger technology.
                 </p>
               </section>
 
               <section>
                 <h2 className="text-2xl font-bold text-white mb-4 border-b border-slate-700/50 pb-2">9. Children's Privacy</h2>
                 <p>
-                  ProofLocker is <strong>not intended for users under 18 years of age</strong>. We do not knowingly collect personal information from children. If you believe we have inadvertently collected information from a minor, please contact us immediately at <span className="text-purple-400 font-mono">privacy@prooflocker.io</span> and we will take prompt steps to delete such data from our systems (excluding immutable blockchain records).
+                  ProofLocker is <strong>not intended for users under 18 years of age</strong>. We do not knowingly collect personal information from children. If you believe we have inadvertently collected information from a minor, please contact us immediately at <span className="text-purple-400 font-mono">contact@prooflocker.io</span> and we will take prompt steps to delete such data from our systems (excluding immutable blockchain records).
                 </p>
               </section>
 
