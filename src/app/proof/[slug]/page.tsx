@@ -12,6 +12,7 @@ import EvidenceGradeBadge from "@/components/EvidenceGradeBadge";
 import EvidenceList from "@/components/EvidenceList";
 import EvidenceScoreMeter from "@/components/EvidenceScoreMeter";
 import { LEGACY_GRADE_SCORES } from "@/lib/evidence-scoring";
+import ProofResolveActions from "@/components/ProofResolveActions";
 
 // Cache the prediction fetch to avoid duplicate queries
 const getPredictionBySlug = cache(_getPredictionBySlug);
@@ -208,6 +209,9 @@ export default async function ProofPage({ params }: Props) {
             </div>
           </div>
         </div>
+
+        {/* Resolve Actions for Owner */}
+        <ProofResolveActions prediction={prediction} />
 
         {/* Resolution & Evidence */}
         {isResolved && prediction.resolvedAt && (
