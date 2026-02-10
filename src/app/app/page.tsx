@@ -12,7 +12,7 @@ import { getEvidenceGrade, getEvidenceGradeInfo } from "@/lib/scoring";
 import { formatRelativeTime } from "@/lib/utils";
 
 type ContentFilter = "all" | "osint" | "claims";
-type QuickFilter = "all" | "pending" | "verified" | "disproven" | "crypto" | "politics" | "markets" | "tech" | "sports" | "culture" | "osint-cat" | "personal" | "other";
+type QuickFilter = "all" | "pending" | "verified" | "disproven" | "crypto" | "politics" | "markets" | "tech" | "sports" | "culture" | "osint-cat" | "personal" | "other" | "my-claims";
 
 export default function AppFeedPage() {
   const { user } = useAuth();
