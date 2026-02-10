@@ -51,33 +51,41 @@ export default function LandingHero() {
           className="text-5xl sm:text-7xl md:text-8xl lg:text-9xl font-black mb-4 tracking-tighter leading-[0.95] animate-fade-in-up px-4"
           style={{ fontFamily: 'var(--font-montserrat)' }}
         >
-          <span className="gradient-text-animated font-black inline-block">Monitor. Claim. Prove.</span>
+          <span className="gradient-text-animated font-black inline-block">Build your reputation,</span>
+          <br />
+          <span className="gradient-text-animated font-black inline-block">one claim at a time.</span>
         </h1>
 
         {/* Subheadline */}
-        <div className="mb-7 animate-fade-in-up max-w-[620px] mx-auto px-4" style={{ animationDelay: '0.1s' }}>
+        <div className="mb-4 animate-fade-in-up max-w-[620px] mx-auto px-4" style={{ animationDelay: '0.1s' }}>
           <p className="text-lg md:text-xl font-medium text-[#F8F9FA]/85 leading-[1.45]" style={{ fontFamily: 'var(--font-inter)' }}>
-            OSINT signals mapped in real time. Lock your claims on-chain. Resolve with receipts. Build a reputation that speaks for itself.
+            Lock claims on-chain. Resolve with receipts. Your track record is permanent, evidence-graded, and cryptographically provable.
+          </p>
+        </div>
+
+        {/* Supporting line - Proof of Reputational Observation */}
+        <div className="mb-7 animate-fade-in-up" style={{ animationDelay: '0.15s' }}>
+          <p className="text-sm md:text-base font-semibold text-purple-400/90 tracking-wide">
+            Proof of Reputational Observation — powered by Constellation DAG.
           </p>
         </div>
 
         {/* Two big CTAs side-by-side */}
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-5 animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
           <Link
-            href="/globe"
+            href="/lock"
             className="w-full sm:w-auto px-12 py-4 bg-gradient-to-r from-[#2E5CFF] to-[#5B21B6] hover:from-[#3D6CFF] hover:to-[#6B31C6] text-white text-lg font-bold rounded-xl transition-all shadow-lg hover:shadow-[0_0_30px_rgba(46,92,255,0.4)] hover:scale-[1.05] btn-glow flex items-center justify-center gap-2"
           >
             <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-              <circle cx="12" cy="12" r="10" />
-              <path d="M2 12h20M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z" />
+              <path strokeLinecap="round" strokeLinejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
             </svg>
-            Open the Globe
+            Lock a Claim
           </Link>
           <Link
-            href="/lock"
+            href="/app"
             className="w-full sm:w-auto px-12 py-4 border-2 border-[#2E5CFF]/40 hover:border-[#2E5CFF] hover:bg-[#2E5CFF]/10 text-white text-lg font-bold rounded-xl transition-all backdrop-blur-sm hover:scale-[1.05]"
           >
-            Lock a Claim
+            Explore the Live Feed
           </Link>
         </div>
 
