@@ -126,7 +126,8 @@ export default function UnifiedHeader({ currentView, onLockClick }: UnifiedHeade
             className="lg:hidden p-2 text-white hover:bg-white/10 rounded-md transition-all border border-slate-600/50"
           >
             <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+              <circle cx="12" cy="12" r="10" />
+              <path d="M2 12h20M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z" />
             </svg>
           </button>
         </div>
