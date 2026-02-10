@@ -131,6 +131,8 @@ export default function PredictionCard({ prediction, card, currentUserId, onOutc
     try {
       const response = await fetch(`/api/predictions/${prediction.id}/vote`, {
         method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ voteType: hasVoted ? 'remove' : 'upvote' }),
       });
 
       if (!response.ok) {
@@ -140,13 +142,14 @@ export default function PredictionCard({ prediction, card, currentUserId, onOutc
       }
 
       const data = await response.json();
-      setHasVoted(data.voted);
+      const wasRemoved = data.action === 'removed';
+      setHasVoted(!wasRemoved);
 
       // Update vote count locally
-      if (data.voted) {
-        setVoteCount(prev => prev + 1);
-      } else {
+      if (wasRemoved) {
         setVoteCount(prev => Math.max(0, prev - 1));
+      } else {
+        setVoteCount(prev => prev + 1);
       }
     } catch (error) {
       console.error('Error voting:', error);
