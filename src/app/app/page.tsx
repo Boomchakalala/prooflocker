@@ -393,6 +393,14 @@ export default function AppFeedPage() {
                               }`}>
                                 {isCorrect ? 'Correct' : isIncorrect ? 'Incorrect' : 'Pending'}
                               </span>
+                              {(() => {
+                                const badge = getFreshnessBadge(claim.createdAt || claim.timestamp);
+                                return badge ? (
+                                  <span className={`text-[9px] font-bold px-1.5 py-0.5 rounded ${badge.className}`}>
+                                    {badge.label}
+                                  </span>
+                                ) : null;
+                              })()}
                             </div>
                             <span className="text-[10px] text-slate-500">
                               {formatRelativeTime(claim.createdAt)}
@@ -412,7 +420,7 @@ export default function AppFeedPage() {
                               </span>
                             )}
                             <span className="text-purple-400 bg-purple-500/10 px-1.5 py-0.5 rounded font-medium">
-                              On-chain
+                              Locked
                             </span>
                             {isResolved && evidenceGradeInfo && (
                               <span className={`px-1.5 py-0.5 rounded font-bold ${evidenceGradeInfo.bgColor} ${evidenceGradeInfo.color}`}>
@@ -442,7 +450,7 @@ export default function AppFeedPage() {
             {contentFilter !== "claims" && (
               <section>
                 <div className="flex items-center gap-3 mb-4">
-                  <h2 className="text-lg font-semibold text-white">OSINT Intelligence</h2>
+                  <h2 className="text-lg font-semibold text-white">Intelligence Stream</h2>
                   <div className="flex-1 h-px bg-slate-700/40"></div>
                   <span className="text-xs text-slate-400">{filteredOsint.length} signals</span>
                 </div>
