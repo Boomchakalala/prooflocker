@@ -89,7 +89,7 @@ export default function AboutPage() {
                 <div className="flex-1">
                   <h3 className="text-lg font-semibold text-white mb-2">Track Record That Can't Be Faked</h3>
                   <p className="text-neutral-400">
-                    Build your Reputation Score through consistent accuracy. Earn badges. Climb from Novice to Legend to Oracle. Your reputation is transparent, verifiable, and earned through results — not followers or blue checks.
+                    Build your Reputation Score through consistent accuracy. Earn badges. Climb from Novice to Master to Legend. Your reputation is transparent, verifiable, and earned through results — not followers or blue checks.
                   </p>
                 </div>
               </div>
