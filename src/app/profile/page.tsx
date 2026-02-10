@@ -264,9 +264,9 @@ export default function ProfilePage() {
         <div className="mb-10">
           <Link
             href="/"
-            className="inline-flex items-center text-neutral-400 hover:text-white transition-colors mb-8 text-sm"
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-slate-800/60 border border-slate-700/50 text-slate-300 hover:text-white hover:bg-slate-700/60 hover:border-slate-600/60 transition-all text-sm font-medium group backdrop-blur-sm mb-8"
           >
-            <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="w-4 h-4 group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
             </svg>
             Back to ProofLocker

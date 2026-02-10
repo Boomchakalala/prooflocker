@@ -332,13 +332,10 @@ export default function AppFeedPage() {
 
             {contentFilter !== "osint" && (
               <section>
-                <div className="flex items-center gap-3 mb-5">
-                  <svg className="w-5 h-5 text-purple-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
-                  </svg>
-                  <h2 className="text-xl font-bold text-white">Locked Claims</h2>
-                  <div className="flex-1 h-px bg-gradient-to-r from-purple-500/40 to-transparent"></div>
-                  <span className="text-sm text-purple-400">{filteredPredictions.length} total</span>
+                <div className="flex items-center gap-3 mb-4">
+                  <h2 className="text-lg font-semibold text-white">Locked Claims</h2>
+                  <div className="flex-1 h-px bg-slate-700/40"></div>
+                  <span className="text-xs text-slate-400">{filteredPredictions.length} total</span>
                 </div>
 
                 {filteredPredictions.length > 0 ? (
@@ -472,13 +469,10 @@ export default function AppFeedPage() {
 
             {contentFilter !== "claims" && (
               <section>
-                <div className="flex items-center gap-3 mb-5">
-                  <svg className="w-5 h-5 text-red-400" fill="currentColor" viewBox="0 0 20 20">
-                    <path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6z"/>
-                  </svg>
-                  <h2 className="text-xl font-bold text-white">OSINT Intelligence</h2>
-                  <div className="flex-1 h-px bg-gradient-to-r from-red-500/40 to-transparent"></div>
-                  <span className="text-sm text-red-400">{filteredOsint.length} signals</span>
+                <div className="flex items-center gap-3 mb-4">
+                  <h2 className="text-lg font-semibold text-white">OSINT Intelligence</h2>
+                  <div className="flex-1 h-px bg-slate-700/40"></div>
+                  <span className="text-xs text-slate-400">{filteredOsint.length} signals</span>
                 </div>
 
                 {filteredOsint.length > 0 ? (
