@@ -32,7 +32,7 @@ export default function Footer() {
               href="/how-scoring-works"
               className="text-white/60 hover:text-[#2E5CFF] transition-colors duration-200"
             >
-              Scoring
+              Reputation
             </Link>
             <Link
               href="/legal/privacy"

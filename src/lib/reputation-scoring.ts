@@ -220,11 +220,12 @@ export function getEvidenceGradeInfo(grade: EvidenceGrade): EvidenceGradeInfo {
 
 /**
  * Convert numeric evidence score (0-100) to letter grade (A-D)
+ * Matches evidence-grading.ts thresholds: A>=80, B>=60, C>=30, D<30
  */
 export function convertEvidenceScoreToGrade(score: number): EvidenceGrade {
-  if (score >= 85) return 'A';
-  if (score >= 70) return 'B';
-  if (score >= 50) return 'C';
+  if (score >= 80) return 'A';
+  if (score >= 60) return 'B';
+  if (score >= 30) return 'C';
   return 'D';
 }
 
