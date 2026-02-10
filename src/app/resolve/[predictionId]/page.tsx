@@ -236,14 +236,14 @@ export default function ResolvePage({ params }: Props) {
           <div className="glass border border-white/10 rounded-2xl overflow-hidden mb-6 shadow-2xl">
             <div className="p-6 md:p-8 bg-gradient-to-br from-blue-500/5 via-purple-500/5 to-transparent">
               <div className="flex items-center gap-2 mb-3">
-                <span className="text-xs font-semibold text-blue-400 uppercase tracking-wider">Resolve Prediction</span>
+                <span className="text-xs font-semibold text-blue-400 uppercase tracking-wider">Resolve Claim</span>
                 <div className="h-px flex-1 bg-gradient-to-r from-blue-500/30 to-transparent"></div>
               </div>
               <h1 className="text-2xl md:text-3xl leading-relaxed text-white font-semibold break-words mb-4">
                 {prediction.text_preview || prediction.text}
               </h1>
               <p className="text-sm text-neutral-400">
-                Provide evidence and mark the outcome. Your credibility score depends on evidence quality.
+                Submit evidence and mark the outcome. Your reputation score shifts based on evidence quality.
               </p>
             </div>
           </div>
@@ -261,7 +261,7 @@ export default function ResolvePage({ params }: Props) {
                 </div>
                 <div>
                   <h2 className="text-xl font-bold text-white">Outcome</h2>
-                  <p className="text-xs text-neutral-400">Select how the prediction turned out</p>
+                  <p className="text-xs text-neutral-400">Select how the claim turned out</p>
                 </div>
               </div>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
