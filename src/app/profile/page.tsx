@@ -557,13 +557,21 @@ export default function ProfilePage() {
 
         {/* Predictions list */}
         <div className="mb-8">
-          <h2 className="text-xl font-semibold text-white mb-4">Your Predictions</h2>
+          <h2 className="text-lg font-semibold text-white mb-4">Your Locked Claims</h2>
           {predictions.length === 0 ? (
-            <div className="text-center py-12 glass border border-white/10 rounded-lg">
-              <p className="text-neutral-400 mb-4 text-sm">You haven't locked any claims yet.</p>
+            <div className="text-center py-16 glass border border-white/10 rounded-xl">
+              <div className="flex justify-center mb-4">
+                <div className="w-14 h-14 rounded-full bg-slate-800/80 border border-slate-700/40 flex items-center justify-center">
+                  <svg className="w-7 h-7 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                  </svg>
+                </div>
+              </div>
+              <p className="text-slate-400 mb-1 text-sm font-medium">You haven&apos;t locked any claims yet.</p>
+              <p className="text-slate-500 mb-6 text-xs">Lock your first prediction to start building your track record.</p>
               <Link
                 href="/lock"
-                className="inline-block px-5 py-2 bg-neutral-800 hover:bg-neutral-700 text-white font-medium rounded-md transition-colors border border-white/20"
+                className="inline-block px-6 py-2.5 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 text-white font-semibold rounded-lg transition-all shadow-lg hover:shadow-purple-500/20"
               >
                 Lock my first prediction
               </Link>

@@ -328,7 +328,7 @@ export default function AppFeedPage() {
             ))}
           </div>
         ) : (
-          <div className="space-y-10">
+          <div className="space-y-8">
 
             {contentFilter !== "osint" && (
               <section>
@@ -575,11 +575,11 @@ export default function AppFeedPage() {
                     })}
                   </div>
                 ) : (
-                  <div className="text-center py-12 bg-white/5 rounded-xl border border-white/10">
-                    <svg className="w-12 h-12 text-neutral-500 mx-auto mb-3" fill="currentColor" viewBox="0 0 20 20">
+                  <div className="flex flex-col items-center justify-center py-16">
+                    <svg className="w-10 h-10 text-slate-600 mb-3" fill="currentColor" viewBox="0 0 20 20">
                       <path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6z"/>
                     </svg>
-                    <p className="text-neutral-400">No OSINT signals found</p>
+                    <p className="text-slate-500 text-sm">No OSINT signals found</p>
                   </div>
                 )}
               </section>
