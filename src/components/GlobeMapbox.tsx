@@ -39,22 +39,37 @@ export default function GlobeMapbox({ claims, osint, mapMode = 'both', viewMode 
   const layersAdded = useRef(false);
 
   useEffect(() => {
+    // Already initialized (React strict mode remount) — just reuse
+    if (map.current) return;
+
     const loadMapbox = async () => {
       // @ts-ignore
       if (typeof window !== 'undefined' && !window.mapboxgl) {
-        const link = document.createElement('link');
-        link.href = 'https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css';
-        link.rel = 'stylesheet';
-        document.head.appendChild(link);
+        // Only add CSS if not already present
+        if (!document.querySelector('link[href*="mapbox-gl.css"]')) {
+          const link = document.createElement('link');
+          link.href = 'https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css';
+          link.rel = 'stylesheet';
+          document.head.appendChild(link);
+        }
 
-        const script = document.createElement('script');
-        script.src = 'https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js';
-        script.async = true;
-        document.head.appendChild(script);
+        // Only add script if not already present
+        if (!document.querySelector('script[src*="mapbox-gl.js"]')) {
+          const script = document.createElement('script');
+          script.src = 'https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js';
+          script.async = true;
+          document.head.appendChild(script);
 
-        await new Promise((resolve) => {
-          script.onload = resolve;
-        });
+          await new Promise((resolve) => {
+            script.onload = resolve;
+          });
+        } else {
+          // Script exists but may still be loading
+          // @ts-ignore
+          while (!window.mapboxgl) {
+            await new Promise((r) => setTimeout(r, 100));
+          }
+        }
       }
 
       initializeMap();
@@ -62,13 +77,8 @@ export default function GlobeMapbox({ claims, osint, mapMode = 'both', viewMode 
 
     loadMapbox();
 
-    return () => {
-      if (map.current) {
-        map.current.remove();
-        map.current = null;
-        layersAdded.current = false;
-      }
-    };
+    // Do NOT destroy map on unmount — React strict mode will remount
+    // and we want to keep the map alive
   }, []);
 
   // Update sources when data changes
@@ -122,8 +132,11 @@ export default function GlobeMapbox({ claims, osint, mapMode = 'both', viewMode 
       attributionControl: false,
     });
 
-    map.current.on('style.load', () => {
-      map.current.setFog({
+    map.current.on('load', () => {
+      if (!map.current) return;
+
+      try {
+        map.current.setFog({
         range: [0.5, 10],
         color: '#000000',
         'horizon-blend': 0.05,
@@ -131,6 +144,7 @@ export default function GlobeMapbox({ claims, osint, mapMode = 'both', viewMode 
         'space-color': '#000000',
         'star-intensity': 0.2,
       });
+      } catch {}
 
       addMapLayers();
     });
