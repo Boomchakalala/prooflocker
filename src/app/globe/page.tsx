@@ -405,233 +405,92 @@ export default function GlobePage() {
         </div>
 
         {/* Right Sidebar - Hidden on Mobile, Show on MD+ */}
-        <aside className="hidden md:flex fixed top-16 right-0 w-[360px] h-[calc(100vh-64px)] bg-gradient-to-b from-[#0A0A0F]/98 via-[#111118]/98 to-[#0A0A0F]/98 backdrop-blur-[30px] border-l border-purple-500/20 z-[200] flex-col">
-          {/* Sidebar Header */}
-          <div className="p-5 border-b border-purple-500/20">
-            {/* Last Updated Indicator */}
-            <div className="flex items-center justify-between mb-3 px-1">
-              <div className="flex items-center gap-2 text-[11px] text-[#94a3b8]">
-                <svg
-                  className={`w-3 h-3 ${isUpdating ? 'animate-spin' : ''}`}
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
-                  />
+        <aside className="hidden md:flex fixed top-16 right-0 w-[360px] h-[calc(100vh-64px)] bg-[rgba(10,10,15,0.98)] backdrop-blur-[30px] border-l border-purple-500/20 z-[200] flex-col">
+          {/* Sidebar Header - Compact */}
+          <div className="p-3 border-b border-purple-500/20 flex-shrink-0">
+            {/* Tabs Row */}
+            <div className="flex gap-1.5 mb-2">
+              <button
+                onClick={() => setCurrentTab('osint')}
+                className={`flex-1 px-2 py-1.5 rounded-lg text-[11px] font-semibold transition-all ${
+                  currentTab === 'osint'
+                    ? 'bg-[#ef4444] text-white'
+                    : 'text-[#94a3b8] hover:text-white hover:bg-white/5'
+                }`}
+              >
+                OSINT ({osint.length})
+              </button>
+              <button
+                onClick={() => setCurrentTab('claims')}
+                className={`flex-1 px-2 py-1.5 rounded-lg text-[11px] font-semibold transition-all ${
+                  currentTab === 'claims'
+                    ? 'bg-[#8b5cf6] text-white'
+                    : 'text-[#94a3b8] hover:text-white hover:bg-white/5'
+                }`}
+              >
+                Claims ({claims.length})
+              </button>
+              <button
+                onClick={() => setCurrentTab('resolutions')}
+                className={`flex-1 px-2 py-1.5 rounded-lg text-[11px] font-semibold transition-all ${
+                  currentTab === 'resolutions'
+                    ? 'bg-emerald-500 text-white'
+                    : 'text-[#94a3b8] hover:text-white hover:bg-white/5'
+                }`}
+              >
+                Resolved ({resolutions.length})
+              </button>
+            </div>
+
+            {/* Inline filters: time + search */}
+            <div className="flex gap-1.5 items-center">
+              <div className="flex gap-0.5 bg-white/5 rounded-lg p-0.5">
+                {(['24h', '7d', '30d', 'all'] as const).map((t) => (
+                  <button
+                    key={t}
+                    onClick={() => setTimeFilter(t)}
+                    className={`px-2 py-1 rounded-md text-[10px] font-medium transition-all ${
+                      timeFilter === t
+                        ? 'bg-purple-500/30 text-purple-300'
+                        : 'text-[#64748b] hover:text-white'
+                    }`}
+                  >
+                    {t === 'all' ? 'All' : t}
+                  </button>
+                ))}
+              </div>
+              <div className="flex-1 relative">
+                <svg className="absolute left-2 top-1/2 -translate-y-1/2 w-3 h-3 text-[#64748b]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                 </svg>
+                <input
+                  type="text"
+                  placeholder="Search..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="w-full pl-7 pr-2 py-1.5 bg-white/5 border border-white/10 rounded-lg text-[10px] text-white placeholder-[#64748b] focus:outline-none focus:border-[#8b5cf6]/40"
+                />
+              </div>
+            </div>
+
+            {/* Live update indicator */}
+            <div className="flex items-center justify-between mt-2 text-[10px] text-[#64748b]">
+              <div className="flex items-center gap-1.5">
+                <div className={`w-1.5 h-1.5 rounded-full ${isUpdating ? 'bg-amber-400 animate-pulse' : 'bg-emerald-400'}`} />
                 <span>Updated {getTimeSinceUpdate()}</span>
               </div>
               <button
                 onClick={() => fetchActivity(true)}
                 disabled={isUpdating}
-                className="text-[11px] text-[#8b5cf6] hover:text-[#a78bfa] disabled:opacity-50 disabled:cursor-not-allowed font-semibold"
+                className="text-[#8b5cf6] hover:text-[#a78bfa] disabled:opacity-50 font-semibold"
               >
                 Refresh
               </button>
             </div>
-
-            {/* Tabs */}
-            <div className="flex gap-2 mb-4">
-              <button
-                onClick={() => setCurrentTab('osint')}
-                className={`flex-1 px-3 py-2 rounded-lg text-[12px] font-semibold transition-all border ${
-                  currentTab === 'osint'
-                    ? 'bg-[#ef4444] text-white border-[#ef4444]'
-                    : 'bg-transparent text-[#94a3b8] border-[rgba(148,163,184,0.2)] hover:text-[#f8fafc] hover:border-[#ef4444]'
-                }`}
-              >
-                OSINT
-              </button>
-              <button
-                onClick={() => setCurrentTab('claims')}
-                className={`flex-1 px-3 py-2 rounded-lg text-[12px] font-semibold transition-all border ${
-                  currentTab === 'claims'
-                    ? 'bg-[#8b5cf6] text-white border-[#8b5cf6]'
-                    : 'bg-transparent text-[#94a3b8] border-[rgba(148,163,184,0.2)] hover:text-[#f8fafc] hover:border-[#8b5cf6]'
-                }`}
-              >
-                Claims
-              </button>
-              <button
-                onClick={() => setCurrentTab('resolutions')}
-                className={`flex-1 px-3 py-2 rounded-lg text-[12px] font-semibold transition-all border ${
-                  currentTab === 'resolutions'
-                    ? 'bg-emerald-500 text-white border-emerald-500'
-                    : 'bg-transparent text-[#94a3b8] border-[rgba(148,163,184,0.2)] hover:text-[#f8fafc] hover:border-emerald-500'
-                }`}
-              >
-                Resolved
-              </button>
-            </div>
-
-            {/* Filters */}
-            {currentTab === 'claims' && (
-              <div className="flex gap-2 flex-wrap">
-                <button
-                  onClick={() => setActiveFilter('all')}
-                  className={`px-3 py-1.5 rounded-2xl text-[12px] font-medium transition-all border ${
-                    activeFilter === 'all'
-                      ? 'bg-[rgba(139,92,246,0.1)] text-[#8b5cf6] border-[rgba(139,92,246,0.3)]'
-                      : 'bg-transparent text-[#94a3b8] border-[rgba(148,163,184,0.2)] hover:bg-[rgba(139,92,246,0.1)] hover:text-[#8b5cf6]'
-                  }`}
-                >
-                  All
-                </button>
-                <button
-                  onClick={() => setActiveFilter('high-confidence')}
-                  className={`px-3 py-1.5 rounded-2xl text-[12px] font-medium transition-all border ${
-                    activeFilter === 'high-confidence'
-                      ? 'bg-[rgba(139,92,246,0.1)] text-[#8b5cf6] border-[rgba(139,92,246,0.3)]'
-                      : 'bg-transparent text-[#94a3b8] border-[rgba(148,163,184,0.2)] hover:bg-[rgba(139,92,246,0.1)] hover:text-[#8b5cf6]'
-                  }`}
-                >
-                  High Confidence
-                </button>
-                <button
-                  onClick={() => setActiveFilter('verified')}
-                  className={`px-3 py-1.5 rounded-2xl text-[12px] font-medium transition-all border ${
-                    activeFilter === 'verified'
-                      ? 'bg-[rgba(139,92,246,0.1)] text-[#8b5cf6] border-[rgba(139,92,246,0.3)]'
-                      : 'bg-transparent text-[#94a3b8] border-[rgba(148,163,184,0.2)] hover:bg-[rgba(139,92,246,0.1)] hover:text-[#8b5cf6]'
-                  }`}
-                >
-                  Verified
-                </button>
-              </div>
-            )}
-
-            {/* Enhanced Filter Chips */}
-            <div className="mt-3 space-y-2">
-              {/* Category Filter */}
-              <div>
-                <div className="text-[9px] text-[#94a3b8] font-semibold uppercase mb-1.5">Category</div>
-                <div className="flex gap-1.5 flex-wrap">
-                  {uniqueCategories.map((cat) => (
-                    <button
-                      key={cat}
-                      onClick={() => setCategoryFilter(cat)}
-                      className={`px-2.5 py-1 rounded-lg text-[10px] font-medium transition-all border ${
-                        categoryFilter === cat
-                          ? 'bg-[rgba(139,92,246,0.1)] text-[#8b5cf6] border-[rgba(139,92,246,0.3)]'
-                          : 'bg-transparent text-[#94a3b8] border-[rgba(148,163,184,0.2)] hover:bg-[rgba(139,92,246,0.1)] hover:text-[#8b5cf6]'
-                      }`}
-                    >
-                      {cat.charAt(0).toUpperCase() + cat.slice(1)}
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              {/* Status Filter (Claims only) */}
-              {currentTab === 'claims' && (
-                <div>
-                  <div className="text-[9px] text-[#94a3b8] font-semibold uppercase mb-1.5">Status</div>
-                  <div className="flex gap-1.5 flex-wrap">
-                    {[
-                      { value: 'all', label: 'All' },
-                      { value: 'pending', label: 'Pending' },
-                      { value: 'correct', label: 'Correct' },
-                      { value: 'incorrect', label: 'Incorrect' },
-                    ].map(({ value, label }) => (
-                      <button
-                        key={value}
-                        onClick={() => {
-                          if (value === 'all') {
-                            setStatusFilter(['all']);
-                          } else {
-                            const isSelected = statusFilter.includes(value);
-                            if (isSelected) {
-                              const newFilters = statusFilter.filter(f => f !== value);
-                              setStatusFilter(newFilters.length === 0 ? ['all'] : newFilters.filter(f => f !== 'all'));
-                            } else {
-                              setStatusFilter([...statusFilter.filter(f => f !== 'all'), value]);
-                            }
-                          }
-                        }}
-                        className={`px-2.5 py-1 rounded-lg text-[10px] font-medium transition-all border ${
-                          statusFilter.includes(value)
-                            ? value === 'correct'
-                              ? 'bg-[rgba(20,184,166,0.1)] text-[#14b8a6] border-[rgba(20,184,166,0.3)]'
-                              : value === 'incorrect'
-                              ? 'bg-[rgba(239,68,68,0.1)] text-[#ef4444] border-[rgba(239,68,68,0.3)]'
-                              : 'bg-[rgba(245,158,11,0.1)] text-[#f59e0b] border-[rgba(245,158,11,0.3)]'
-                            : 'bg-transparent text-[#94a3b8] border-[rgba(148,163,184,0.2)] hover:bg-white/5'
-                        }`}
-                      >
-                        {label}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              {/* Time Filter */}
-              <div>
-                <div className="text-[9px] text-[#94a3b8] font-semibold uppercase mb-1.5">Time Range</div>
-                <div className="flex gap-1.5">
-                  {[
-                    { value: '24h' as const, label: '24h' },
-                    { value: '7d' as const, label: '7d' },
-                    { value: '30d' as const, label: '30d' },
-                    { value: 'all' as const, label: 'All' },
-                  ].map(({ value, label }) => (
-                    <button
-                      key={value}
-                      onClick={() => setTimeFilter(value)}
-                      className={`flex-1 px-2.5 py-1 rounded-lg text-[10px] font-medium transition-all border ${
-                        timeFilter === value
-                          ? 'bg-[rgba(139,92,246,0.1)] text-[#8b5cf6] border-[rgba(139,92,246,0.3)]'
-                          : 'bg-transparent text-[#94a3b8] border-[rgba(148,163,184,0.2)] hover:bg-[rgba(139,92,246,0.1)] hover:text-[#8b5cf6]'
-                      }`}
-                    >
-                      {label}
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              {/* Search Input */}
-              <div>
-                <div className="text-[9px] text-[#94a3b8] font-semibold uppercase mb-1.5">Search</div>
-                <div className="relative">
-                  <svg
-                    className="absolute left-3 top-1/2 transform -translate-y-1/2 w-3.5 h-3.5 text-[#94a3b8]"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                  </svg>
-                  <input
-                    type="text"
-                    placeholder="Search keyword or place..."
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    className="w-full pl-9 pr-3 py-1.5 bg-white/5 border border-white/10 rounded-lg text-[11px] text-white placeholder-[#64748b] focus:outline-none focus:border-[#8b5cf6]/40 transition-colors"
-                  />
-                  {searchQuery && (
-                    <button
-                      onClick={() => setSearchQuery('')}
-                      className="absolute right-2 top-1/2 transform -translate-y-1/2 text-[#94a3b8] hover:text-white"
-                    >
-                      <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                      </svg>
-                    </button>
-                  )}
-                </div>
-              </div>
-            </div>
           </div>
 
-          {/* Sidebar Content */}
-          <div className="flex-1 overflow-y-auto p-3 space-y-2">
-            {currentTab === 'claims' ? (
+          {/* Sidebar Content - Scrollable Feed */}
+          <div className="flex-1 overflow-y-auto p-2.5 space-y-2">{currentTab === 'claims' ? (
               displayItems.length === 0 ? (
                 <div className="text-center py-8 text-[#94a3b8] text-sm">No claims found</div>
               ) : (
