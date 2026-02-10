@@ -67,13 +67,13 @@ export default function AppFeedPage() {
   };
 
   const getTickerItems = () => {
-    const items = [];
+    const items: { type: string; text: string; location: string; time: string }[] = [];
     osintSignals.slice(0, 3).forEach(signal => {
       items.push({
-        type: 'OSINT',
+        type: 'INTEL',
         text: signal.title || 'Intelligence Signal',
         location: signal.location,
-        time: 'Just now'
+        time: signal.created_at ? formatRelativeTime(signal.created_at) : 'Just now'
       });
     });
     predictions.slice(0, 2).forEach(claim => {
@@ -81,7 +81,7 @@ export default function AppFeedPage() {
         type: 'CLAIM',
         text: claim.text?.slice(0, 80) + '...',
         location: claim.category,
-        time: 'Just now'
+        time: claim.timestamp ? formatRelativeTime(claim.timestamp) : 'Just now'
       });
     });
     return items.slice(0, 5);
@@ -132,9 +132,9 @@ export default function AppFeedPage() {
       <main className="max-w-7xl mx-auto px-4 pt-20 pb-12">
 
         <div className="mb-6">
-          <h1 className="text-2xl font-bold text-white mb-1">ProofLocker Feed</h1>
+          <h1 className="text-2xl font-bold text-white mb-1">Live Feed</h1>
           <p className="text-sm text-slate-400">
-            Live OSINT signals + locked claims -- resolve with receipts, earn reputation.
+            Breaking intelligence and locked claims in real time. Spot it early, lock it on-chain, resolve with receipts.
           </p>
         </div>
 
