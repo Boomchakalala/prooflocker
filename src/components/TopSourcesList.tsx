@@ -211,7 +211,7 @@ export default function TopSourcesList({ category = 'all' }: TopSourcesListProps
                     </td>
                     <td className="px-6 py-4 text-center">
                       <div className="text-lg font-bold text-purple-400">{source.reliabilityScore}</div>
-                      <div className="text-[10px] text-slate-500 uppercase">Score</div>
+                      <div className="text-[10px] text-slate-500 uppercase">/ 1000</div>
                     </td>
                     <td className="px-6 py-4 text-center">
                       <div className={`text-lg font-bold ${
