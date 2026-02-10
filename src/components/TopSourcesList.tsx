@@ -2,13 +2,13 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { getTierInfo, type ReliabilityTier } from "@/lib/user-scoring";
+import { getReputationTier } from "@/lib/user-scoring";
 
 interface TopSource {
   userId: string;
   displayName: string;
   reliabilityScore: number;
-  tier: ReliabilityTier;
+  tier: string;
   winRate: number;
   resolvedCount: number;
   avgEvidenceScore: number;
@@ -192,7 +192,7 @@ export default function TopSourcesList({ category = 'all' }: TopSourcesListProps
             </thead>
             <tbody className="divide-y divide-slate-700/50">
               {mockSources.map((source, index) => {
-                const tierInfo = getTierInfo(source.tier);
+                const tierInfo = getReputationTier(source.reliabilityScore);
 
                 return (
                   <tr key={source.userId} className="hover:bg-slate-800/40 transition-colors">
