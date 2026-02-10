@@ -174,25 +174,30 @@ export default function AppFeedPage() {
           </p>
         </div>
 
-        <div className="mb-4 bg-slate-900/40 backdrop-blur-xl border border-slate-700/30 rounded-xl px-4 py-2.5 overflow-hidden">
-          <div className="flex items-center gap-3">
-            <span className={`inline-flex items-center gap-1.5 px-2 py-0.5 text-[10px] font-bold rounded-md uppercase tracking-wide ${
-              currentTickerItem.type === 'INTEL'
-                ? 'bg-red-600/30 border border-red-500/50 text-red-200'
-                : 'bg-purple-600/30 border border-purple-500/50 text-purple-200'
-            }`}>
-              {currentTickerItem.type}
-            </span>
-            <span className="text-sm text-white font-medium flex-1 truncate">
-              {currentTickerItem.text}
-            </span>
-            {currentTickerItem.location && (
-              <>
-                <span className="text-neutral-500">•</span>
-                <span className="text-xs text-neutral-400">{currentTickerItem.location}</span>
-              </>
-            )}
-            <span className="text-xs text-neutral-500">{currentTickerItem.time}</span>
+        <div className="mb-4 bg-slate-900/40 backdrop-blur-xl border border-slate-700/30 rounded-xl overflow-hidden">
+          <div className="relative h-9 flex items-center">
+            <div className="animate-marquee whitespace-nowrap flex items-center gap-6 px-4">
+              {tickerItems.concat(tickerItems).map((item, idx) => (
+                <div key={idx} className="inline-flex items-center gap-2 shrink-0">
+                  <span className={`inline-flex items-center gap-1 px-1.5 py-0.5 text-[9px] font-bold rounded uppercase tracking-wide ${
+                    item.type === 'INTEL'
+                      ? 'bg-red-600/30 border border-red-500/50 text-red-200'
+                      : 'bg-purple-600/30 border border-purple-500/50 text-purple-200'
+                  }`}>
+                    {item.type}
+                  </span>
+                  <span className="text-xs text-white font-medium">
+                    {item.text}
+                  </span>
+                  {item.location && (
+                    <>
+                      <span className="text-neutral-500 text-xs">•</span>
+                      <span className="text-[10px] text-neutral-400">{item.location}</span>
+                    </>
+                  )}
+                </div>
+              ))}
+            </div>
           </div>
         </div>
 
