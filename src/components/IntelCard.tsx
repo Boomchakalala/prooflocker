@@ -151,6 +151,9 @@ export default function IntelCard({ item, compact = false }: IntelCardProps) {
           <span className={`text-[10px] font-bold px-2 py-1 rounded uppercase shrink-0 ${getSourceBadgeColor()}`}>
             Intel
           </span>
+          <span className="text-[10px] font-semibold px-2 py-1 rounded bg-slate-700/50 text-slate-300 uppercase shrink-0">
+            {category}
+          </span>
           <span className="text-xs text-red-400 font-semibold truncate">
             {item.source_name}
           </span>
