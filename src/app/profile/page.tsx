@@ -254,25 +254,17 @@ export default function ProfilePage() {
   }
 
   return (
-    <div className="min-h-screen gradient-bg text-white relative">
+    <div className="min-h-screen bg-gradient-to-b from-[#0A0A0F] via-[#111118] to-[#0A0A0F] text-white relative pt-16">
+      <UnifiedHeader currentView="other" />
       {/* Decorative gradient orbs */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-20 -left-40 w-80 h-80 bg-blue-500/10 rounded-full blur-3xl" />
         <div className="absolute top-40 -right-40 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl" />
       </div>
 
-      <div className="relative z-10 max-w-4xl mx-auto px-4 py-12">
+      <div className="relative z-10 max-w-4xl mx-auto px-4 py-8">
         {/* Header */}
         <div className="mb-10">
-          <Link
-            href="/"
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-slate-800/60 border border-slate-700/50 text-slate-300 hover:text-white hover:bg-slate-700/60 hover:border-slate-600/60 transition-all text-sm font-medium group backdrop-blur-sm mb-8"
-          >
-            <svg className="w-4 h-4 group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-            </svg>
-            Back to ProofLocker
-          </Link>
           <div className="flex items-center justify-between mb-6">
             <div>
               <h1 className="text-4xl font-bold text-white mb-2 tracking-tight">Your Profile</h1>
@@ -295,7 +287,7 @@ export default function ProfilePage() {
           </div>
 
           {/* Pseudonym section */}
-          <div className="glass border border-white/10 rounded-xl p-6">
+          <div className="bg-slate-900/60 border border-slate-700/40 rounded-xl p-6">
             <h3 className="text-xs font-semibold text-neutral-500 uppercase tracking-wider mb-3">Public Identity</h3>
             {pseudonym ? (
               <div>
@@ -349,7 +341,7 @@ export default function ProfilePage() {
         {/* Reputation Score Hero Section */}
         {stats && (
           <div className="mb-8">
-            <div className="glass border border-white/10 rounded-xl p-8">
+            <div className="bg-slate-900/60 border border-slate-700/40 rounded-xl p-8">
               <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6 mb-6">
                 {/* Left: Reputation Score */}
                 <div className="flex-1">
@@ -507,25 +499,25 @@ export default function ProfilePage() {
 
         {/* Detailed Stats grid */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-          <div className="glass border border-white/10 rounded-lg p-6">
+          <div className="bg-slate-900/60 border border-slate-700/40 rounded-lg p-6">
             <div className="text-3xl font-bold text-neutral-200 mb-1">
               {stats?.totalPredictions || totalPredictions}
             </div>
             <div className="text-xs text-neutral-500 uppercase tracking-wider">Total</div>
           </div>
-          <div className="glass border border-white/10 rounded-lg p-6">
+          <div className="bg-slate-900/60 border border-slate-700/40 rounded-lg p-6">
             <div className="text-3xl font-bold text-green-400 mb-1">
               {stats?.correctPredictions || correctCount}
             </div>
             <div className="text-xs text-neutral-500 uppercase tracking-wider">Correct</div>
           </div>
-          <div className="glass border border-white/10 rounded-lg p-6">
+          <div className="bg-slate-900/60 border border-slate-700/40 rounded-lg p-6">
             <div className="text-3xl font-bold text-red-400 mb-1">
               {stats?.incorrectPredictions || incorrectCount}
             </div>
             <div className="text-xs text-neutral-500 uppercase tracking-wider">Incorrect</div>
           </div>
-          <div className="glass border border-white/10 rounded-lg p-6">
+          <div className="bg-slate-900/60 border border-slate-700/40 rounded-lg p-6">
             <div className="text-3xl font-bold text-neutral-200 mb-1">
               {stats && stats.resolvedPredictions > 0
                 ? `${stats.correctPredictions}/${stats.resolvedPredictions}`
@@ -539,7 +531,7 @@ export default function ProfilePage() {
 
         {/* Additional stats */}
         {(pendingCount > 0 || invalidCount > 0) && (
-          <div className="glass border border-white/10 rounded-lg p-6 mb-8">
+          <div className="bg-slate-900/60 border border-slate-700/40 rounded-lg p-6 mb-8">
             <div className="grid grid-cols-2 gap-6">
               {pendingCount > 0 && (
                 <div>
@@ -561,7 +553,7 @@ export default function ProfilePage() {
         <div className="mb-8">
           <h2 className="text-lg font-semibold text-white mb-4">Your Locked Claims</h2>
           {predictions.length === 0 ? (
-            <div className="text-center py-16 glass border border-white/10 rounded-xl">
+            <div className="text-center py-16 bg-slate-900/60 border border-slate-700/40 rounded-xl">
               <div className="flex justify-center mb-4">
                 <div className="w-14 h-14 rounded-full bg-slate-800/80 border border-slate-700/40 flex items-center justify-center">
                   <svg className="w-7 h-7 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -584,7 +576,7 @@ export default function ProfilePage() {
                 <Link
                   key={prediction.id}
                   href={`/proof/${prediction.publicSlug}`}
-                  className="block glass border border-white/10 hover:border-white/20 rounded-lg p-4 transition-all group"
+                  className="block bg-slate-900/60 border border-slate-700/40 hover:border-white/20 rounded-lg p-4 transition-all group"
                 >
                   <div className="flex items-start justify-between gap-4">
                     <div className="flex-1 min-w-0">
