@@ -319,13 +319,12 @@ export default function AppFeedPage() {
                 </div>
 
                 {filteredPredictions.length > 0 ? (
-                  <div className="space-y-4">
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
                     {filteredPredictions.map((claim) => {
                       const isCorrect = claim.outcome === "correct";
                       const isIncorrect = claim.outcome === "incorrect";
                       const isPending = !claim.outcome || claim.outcome === "pending";
                       const isResolved = isCorrect || isIncorrect;
-                      const userTier = getUserTier(0);
                       const evidenceGradeKey = claim.evidence_score ? getEvidenceGrade(claim.evidence_score) : null;
                       const evidenceGradeInfo = evidenceGradeKey ? getEvidenceGradeInfo(evidenceGradeKey) : null;
 
@@ -333,104 +332,57 @@ export default function AppFeedPage() {
                         <Link
                           key={claim.id}
                           href={`/proof/${claim.publicSlug || claim.id}`}
-                          className={`group block bg-slate-900/60 border border-slate-700/40 rounded-xl p-5 hover:border-purple-500/40 hover:shadow-[0_0_20px_rgba(139,92,246,0.1)] transition-all duration-200 ${
+                          className={`group block bg-slate-900/60 border border-slate-700/40 rounded-lg p-4 hover:border-purple-500/40 hover:bg-slate-800/40 transition-all duration-200 ${
                             isCorrect
-                              ? 'border-l-4 border-l-emerald-500'
+                              ? 'border-l-[3px] border-l-emerald-500'
                               : isIncorrect
-                              ? 'border-l-4 border-l-red-500'
-                              : 'border-l-4 border-l-amber-500'
+                              ? 'border-l-[3px] border-l-red-500'
+                              : 'border-l-[3px] border-l-amber-500'
                           }`}
                         >
-                          {/* Top row: Avatar + Author + Tier + Timestamp */}
-                          <div className="flex items-center gap-3 mb-3">
-                            <div className="w-8 h-8 rounded-full bg-gradient-to-br from-purple-600 to-purple-800 flex items-center justify-center text-white text-[11px] font-bold flex-shrink-0">
-                              {claim.authorNumber?.toString().slice(-2) || "??"}
+                          {/* Top row: Author + Status + Time */}
+                          <div className="flex items-center justify-between mb-2">
+                            <div className="flex items-center gap-2">
+                              <div className="w-6 h-6 rounded-full bg-gradient-to-br from-purple-600 to-purple-800 flex items-center justify-center text-white text-[9px] font-bold flex-shrink-0">
+                                {claim.authorNumber?.toString().slice(-2) || "??"}
+                              </div>
+                              <span className="text-xs text-slate-400 font-medium">#{claim.authorNumber}</span>
+                              <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded ${
+                                isCorrect ? "bg-emerald-500/15 text-emerald-400" :
+                                isIncorrect ? "bg-red-500/15 text-red-400" :
+                                "bg-amber-500/15 text-amber-400"
+                              }`}>
+                                {isCorrect ? 'Correct' : isIncorrect ? 'Incorrect' : 'Pending'}
+                              </span>
                             </div>
-                            <span className="text-sm text-white font-medium">Anon #{claim.authorNumber}</span>
-                            <span className={`px-1.5 py-0.5 text-[10px] font-bold rounded ${userTier.bg} ${userTier.color}`}>
-                              {userTier.label}
-                            </span>
-                            <span className="ml-auto text-xs text-slate-500 flex-shrink-0">
+                            <span className="text-[10px] text-slate-500">
                               {formatRelativeTime(claim.createdAt)}
                             </span>
                           </div>
 
-                          {/* Status Badge */}
-                          <div className="mb-3">
-                            <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 text-[11px] font-bold rounded-full ${
-                              isCorrect
-                                ? "bg-emerald-500/15 text-emerald-400"
-                                : isIncorrect
-                                ? "bg-red-500/15 text-red-400"
-                                : "bg-amber-500/15 text-amber-400"
-                            }`}>
-                              {isCorrect && (
-                                <svg className="w-3 h-3" fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24">
-                                  <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7"/>
-                                </svg>
-                              )}
-                              {isIncorrect && (
-                                <svg className="w-3 h-3" fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24">
-                                  <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12"/>
-                                </svg>
-                              )}
-                              {isPending && (
-                                <svg className="w-3 h-3" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                                  <circle cx="12" cy="12" r="10"/>
-                                </svg>
-                              )}
-                              {isCorrect ? 'Correct' : isIncorrect ? 'Incorrect' : 'Pending'}
-                            </span>
-                            {claim.category && (
-                              <span className="ml-2 px-2 py-0.5 text-[11px] text-slate-400 bg-slate-800/50 rounded">
-                                {claim.category}
-                              </span>
-                            )}
-                          </div>
-
                           {/* Claim Text */}
-                          <p className="text-[15px] font-medium text-white leading-relaxed line-clamp-3 mb-4">
+                          <p className="text-sm text-white leading-snug line-clamp-2 mb-2">
                             {claim.text}
                           </p>
 
-                          {/* Bottom row: On-chain + Evidence Grade + View */}
-                          <div className="flex items-center gap-2 pt-3 border-t border-slate-700/30">
-                            <span className="flex items-center gap-1 px-2 py-0.5 text-[10px] font-semibold text-purple-400 bg-purple-500/10 rounded">
-                              <svg className="w-3 h-3" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
-                              </svg>
+                          {/* Bottom row */}
+                          <div className="flex items-center gap-2 text-[10px]">
+                            {claim.category && (
+                              <span className="text-slate-500 bg-slate-800/50 px-1.5 py-0.5 rounded">
+                                {claim.category}
+                              </span>
+                            )}
+                            <span className="text-purple-400 bg-purple-500/10 px-1.5 py-0.5 rounded font-medium">
                               On-chain
                             </span>
                             {isResolved && evidenceGradeInfo && (
-                              <span className={`flex items-center gap-1 px-2 py-0.5 text-[10px] font-bold rounded ${evidenceGradeInfo.bgColor} ${evidenceGradeInfo.color}`}>
-                                <svg className="w-3 h-3" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
-                                </svg>
-                                Grade {evidenceGradeInfo.label}
+                              <span className={`px-1.5 py-0.5 rounded font-bold ${evidenceGradeInfo.bgColor} ${evidenceGradeInfo.color}`}>
+                                {evidenceGradeInfo.label}
                               </span>
                             )}
-
-                            <div className="flex items-center gap-3 ml-auto">
-                              <div className="flex items-center gap-2 text-slate-500">
-                                <span className="flex items-center gap-1 text-xs">
-                                  <svg className="w-3.5 h-3.5 text-emerald-500/70" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" d="M5 15l7-7 7 7"/>
-                                  </svg>
-                                  {claim.upvotesCount || 0}
-                                </span>
-                                <span className="flex items-center gap-1 text-xs">
-                                  <svg className="w-3.5 h-3.5 text-red-500/70" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7"/>
-                                  </svg>
-                                  {claim.downvotesCount || 0}
-                                </span>
-                              </div>
-                              <span className="flex items-center gap-1 px-3 py-1 text-xs font-medium text-purple-300 bg-purple-500/10 rounded-lg group-hover:bg-purple-500/20 transition-colors">
-                                View
-                                <svg className="w-3 h-3" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7"/>
-                                </svg>
-                              </span>
+                            <div className="flex items-center gap-2 ml-auto text-slate-500">
+                              <span>{claim.upvotesCount || 0} up</span>
+                              <span>{claim.downvotesCount || 0} dn</span>
                             </div>
                           </div>
                         </Link>
