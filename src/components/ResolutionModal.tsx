@@ -62,8 +62,8 @@ export default function ResolutionModal({
   };
 
   return (
-    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-lg max-w-lg w-full border border-neutral-300 shadow-xl">
+    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-[500] p-4">
+      <div className="bg-white rounded-lg max-w-lg w-full border border-neutral-300 shadow-xl pb-[env(safe-area-inset-bottom)]">
         <div className="p-6 border-b border-neutral-200">
           <div className="flex justify-between items-start">
             <div>

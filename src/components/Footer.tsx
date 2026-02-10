@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 export default function Footer() {
   return (
     <footer className="relative bg-gradient-to-b from-[#0A0A0F] to-[#050509] border-t border-white/5">
@@ -20,30 +22,30 @@ export default function Footer() {
 
           {/* Center: Navigation Links */}
           <nav className="flex flex-wrap items-center gap-x-6 gap-y-2 text-sm">
-            <a
+            <Link
               href="/about"
               className="text-white/60 hover:text-[#2E5CFF] transition-colors duration-200"
             >
               About
-            </a>
-            <a
+            </Link>
+            <Link
               href="/how-scoring-works"
               className="text-white/60 hover:text-[#2E5CFF] transition-colors duration-200"
             >
               Scoring
-            </a>
-            <a
+            </Link>
+            <Link
               href="/legal/privacy"
               className="text-white/60 hover:text-[#2E5CFF] transition-colors duration-200"
             >
               Privacy
-            </a>
-            <a
+            </Link>
+            <Link
               href="/legal/terms"
               className="text-white/60 hover:text-[#2E5CFF] transition-colors duration-200"
             >
               Terms
-            </a>
+            </Link>
           </nav>
 
           {/* Right: Social Links */}

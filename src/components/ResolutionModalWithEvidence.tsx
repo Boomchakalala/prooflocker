@@ -172,8 +172,8 @@ export default function ResolutionModalWithEvidence({
   const gradeInfo = EvidenceGradeInfo[evidenceGrade];
 
   return (
-    <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50 p-4 overflow-y-auto">
-      <div className="glass border border-white/10 rounded-2xl max-w-3xl w-full shadow-2xl my-8 bg-gradient-to-br from-slate-900/95 to-slate-800/95">
+    <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-[500] p-4 overflow-y-auto">
+      <div className="glass border border-white/10 rounded-2xl max-w-3xl w-full shadow-2xl my-8 bg-gradient-to-br from-slate-900/95 to-slate-800/95 pb-[env(safe-area-inset-bottom)]">
         <div className="p-6 md:p-8 border-b border-white/10">
           <div className="flex justify-between items-start">
             <div>

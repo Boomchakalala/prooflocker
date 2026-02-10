@@ -117,7 +117,7 @@ export default function ResolveModal({
 
   const modalContent = (
     <div
-      className="fixed inset-0 z-[99999] bg-black/90 md:bg-black/60 flex items-center justify-center p-4 pb-[calc(16px+env(safe-area-inset-bottom))] overflow-y-auto"
+      className="fixed inset-0 z-[500] bg-black/90 md:bg-black/60 flex items-center justify-center p-4 pb-[calc(16px+env(safe-area-inset-bottom))] overflow-y-auto"
       onClick={onClose}
     >
       <div className="w-full max-w-[560px] max-h-[85dvh] overflow-y-auto my-auto">

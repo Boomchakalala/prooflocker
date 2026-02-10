@@ -141,8 +141,8 @@ export default function ClaimModal({ onClose, onSuccess }: ClaimModalProps) {
   };
 
   return (
-    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-end sm:items-center justify-center z-50 p-0 sm:p-4">
-      <div className="bg-gradient-to-br from-purple-900/95 via-blue-900/95 to-cyan-900/95 backdrop-blur-md rounded-t-3xl sm:rounded-2xl p-6 sm:p-8 w-full sm:max-w-md sm:w-full border-t sm:border border-white/10 shadow-2xl animate-slide-up sm:animate-none max-h-[90vh] overflow-y-auto">
+    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-end sm:items-center justify-center z-[500] p-0 sm:p-4">
+      <div className="bg-gradient-to-br from-purple-900/95 via-blue-900/95 to-cyan-900/95 backdrop-blur-md rounded-t-3xl sm:rounded-2xl p-6 sm:p-8 w-full sm:max-w-md sm:w-full border-t sm:border border-white/10 shadow-2xl animate-slide-up sm:animate-none max-h-[90vh] overflow-y-auto pb-[env(safe-area-inset-bottom)]">
         {!claiming && !success ? (
           <>
             <div className="flex justify-between items-start mb-6">
