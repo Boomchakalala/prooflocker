@@ -748,8 +748,8 @@ export default function GlobePage() {
                           <div>
                             <div className="flex items-center gap-1.5">
                               <span className="text-sm text-white font-semibold">{claim.submitter}</span>
-                              <span className={`px-2 py-0.5 text-[10px] font-bold rounded border ${tierInfo.bg} ${tierInfo.border} ${tierInfo.color}`}>
-                                {tierInfo.label}
+                              <span className={`px-2 py-0.5 text-[10px] font-bold rounded border ${tierInfo.bgColor} ${tierInfo.borderColor} ${tierInfo.textColor}`}>
+                                {tierInfo.name}
                               </span>
                             </div>
                             <div className="text-[10px] text-slate-500">{claim.lockedDate}</div>
