@@ -100,7 +100,7 @@ export default function FeedCard({
         {/* Left: Category pill + time */}
         <div className="flex items-center gap-2">
           <span className={`${config.pillBg} ${config.pillText} px-2 py-0.5 rounded text-xs font-semibold uppercase tracking-wide`}>
-            {variant === 'osint' ? 'OSINT' : 'CLAIM'}
+            {variant === 'osint' ? 'INTEL' : 'CLAIM'}
           </span>
           <span className="text-xs text-neutral-500">{timeAgo}</span>
         </div>

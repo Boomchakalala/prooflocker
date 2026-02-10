@@ -67,9 +67,9 @@ export default function ResolutionModal({
         <div className="p-6 border-b border-neutral-200">
           <div className="flex justify-between items-start">
             <div>
-              <h2 className="text-xl font-semibold text-black">Resolve Prediction</h2>
+              <h2 className="text-xl font-semibold text-black">Resolve Claim</h2>
               <p className="text-sm text-neutral-600 mt-1">
-                Mark this prediction as resolved. Original text cannot be edited.
+                Mark this claim as resolved. Original text cannot be edited.
               </p>
             </div>
             <button

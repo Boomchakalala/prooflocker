@@ -62,7 +62,7 @@ export default function AdminModerationPage() {
   };
 
   const handleHide = async (id: string) => {
-    const reason = prompt("Enter reason for hiding this prediction:");
+    const reason = prompt("Enter reason for hiding this claim:");
     if (!reason) return;
 
     setActionLoading(id);
@@ -80,14 +80,14 @@ export default function AdminModerationPage() {
         alert(`Failed to hide: ${data.error}`);
       }
     } catch (err) {
-      alert("Failed to hide prediction");
+      alert("Failed to hide claim");
     } finally {
       setActionLoading(null);
     }
   };
 
   const handleUnhide = async (id: string) => {
-    if (!confirm("Unhide this prediction and make it public again?")) return;
+    if (!confirm("Unhide this claim and make it public again?")) return;
 
     setActionLoading(id);
     try {
@@ -104,7 +104,7 @@ export default function AdminModerationPage() {
         alert(`Failed to unhide: ${data.error}`);
       }
     } catch (err) {
-      alert("Failed to unhide prediction");
+      alert("Failed to unhide claim");
     } finally {
       setActionLoading(null);
     }
@@ -166,7 +166,7 @@ export default function AdminModerationPage() {
         ) : (
           <div className="space-y-4">
             <div className="text-sm text-neutral-400 mb-4">
-              Total: {predictions.length} predictions
+              Total: {predictions.length} claims
             </div>
 
             {predictions.map((pred) => (

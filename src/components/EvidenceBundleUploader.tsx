@@ -100,7 +100,7 @@ export default function EvidenceBundleUploader({
       {/* Prefill notice */}
       {prefillOsint && items.length > 0 && items[0].osintSignalId && (
         <div className="p-3 rounded-lg bg-red-950/20 border border-red-800/30">
-          <div className="text-xs text-red-300 mb-1">OSINT Reference Added</div>
+          <div className="text-xs text-red-300 mb-1">Intel Reference Added</div>
           <div className="text-sm text-white">{items[0].title}</div>
         </div>
       )}
@@ -125,7 +125,7 @@ export default function EvidenceBundleUploader({
                 <option value="link">Link</option>
                 <option value="screenshot">Screenshot</option>
                 <option value="file">File</option>
-                <option value="osint_reference">OSINT Reference</option>
+                <option value="osint_reference">Intel Reference</option>
               </select>
 
               {/* Remove button (except for OSINT prefill) */}

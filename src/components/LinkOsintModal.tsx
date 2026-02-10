@@ -125,7 +125,7 @@ export default function LinkOsintModal({
         <div className="p-6 border-b border-slate-800">
           <div className="flex items-start justify-between">
             <div>
-              <h2 className="text-xl font-bold text-white mb-2">Link OSINT as Evidence</h2>
+              <h2 className="text-xl font-bold text-white mb-2">Link Intel as Evidence</h2>
               <p className="text-sm text-gray-400">
                 Select which claim this OSINT signal confirms
               </p>

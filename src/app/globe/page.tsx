@@ -386,7 +386,7 @@ export default function GlobePage() {
               </div>
               <div className="flex items-center gap-1.5">
                 <div className="w-2.5 h-2.5 rounded-full bg-[#ef4444] shadow-[0_0_6px_rgba(239,68,68,0.6)]"></div>
-                <span className="text-white">OSINT</span>
+                <span className="text-white">Intel</span>
               </div>
             </div>
           </div>
@@ -398,7 +398,7 @@ export default function GlobePage() {
             onClick={() => setMapMode(mapMode === 'claims' ? 'both' : mapMode === 'both' ? 'osint' : mapMode === 'osint' ? 'claims' : 'both')}
             className="bg-[rgba(10,10,15,0.92)] backdrop-blur-xl border border-purple-500/20 rounded-xl px-3 py-2 text-[11px] font-semibold text-white shadow-2xl hover:bg-purple-500/10 transition-all"
           >
-            View: {mapMode === 'both' ? 'All' : mapMode === 'claims' ? 'Claims' : 'OSINT'}
+            View: {mapMode === 'both' ? 'All' : mapMode === 'claims' ? 'Claims' : 'Intel'}
           </button>
         </div>
 
@@ -647,7 +647,7 @@ export default function GlobePage() {
             title="Globe"
             itemCount={displayItems.length}
             tabs={[
-              { label: 'OSINT', active: currentTab === 'osint', onClick: () => setCurrentTab('osint') },
+              { label: 'Intel', active: currentTab === 'osint', onClick: () => setCurrentTab('osint') },
               { label: 'Claims', active: currentTab === 'claims', onClick: () => setCurrentTab('claims') },
               { label: 'Resolved', active: currentTab === 'resolutions', onClick: () => setCurrentTab('resolutions') },
             ]}

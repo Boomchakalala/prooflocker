@@ -223,7 +223,7 @@ export default function PredictionCard({ prediction, card, currentUserId, onOutc
       });
       setShowMenu(false);
       setShowReportMenu(false);
-      alert('Thank you for your report. We will review this prediction.');
+      alert('Thank you for your report. We will review this claim.');
     } catch (error) {
       console.error('Error reporting:', error);
       alert('Failed to submit report. Please try again.');
@@ -702,7 +702,7 @@ export default function PredictionCard({ prediction, card, currentUserId, onOutc
               className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg transition-colors text-sm font-medium ${
                 hasVoted ? 'text-indigo-400 bg-indigo-500/10 hover:bg-indigo-500/15' : 'text-slate-400 hover:text-slate-300 hover:bg-slate-800'
               } ${(!currentUserId || isOwner) ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}
-              title={!currentUserId ? 'Sign in to vote' : isOwner ? 'Cannot vote on your own prediction' : hasVoted ? 'Remove upvote' : 'Upvote this prediction'}
+              title={!currentUserId ? 'Sign in to vote' : isOwner ? 'Cannot vote on your own claim' : hasVoted ? 'Remove upvote' : 'Upvote this claim'}
             >
               <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M5 15l7-7 7 7" />

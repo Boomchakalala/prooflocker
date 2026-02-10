@@ -163,7 +163,7 @@ export default function WallOfWins() {
     setLoading(false);
   }, []);
 
-  const filters = ["All", "Correct", "Crypto", "Politics", "Tech", "OSINT"];
+  const filters = ["All", "Correct", "Crypto", "Politics", "Tech", "Intel"];
 
   const filteredPredictions = predictions.filter((p) => {
     if (selectedFilter === "All") return true;
