@@ -88,8 +88,8 @@ export default function AppFeedPage() {
       items.push({
         type: 'INTEL',
         text: signal.title || 'Intelligence Signal',
-        location: signal.location,
-        time: signal.created_at ? formatRelativeTime(signal.created_at) : 'Just now'
+        location: signal.locationName || signal.location,
+        time: signal.createdAt || signal.created_at ? formatRelativeTime(signal.createdAt || signal.created_at) : 'Just now'
       });
     });
     predictions.slice(0, 2).forEach(claim => {
@@ -483,8 +483,8 @@ export default function AppFeedPage() {
                             Intel
                           </span>
                           <span className="text-xs text-red-400 font-semibold truncate flex-1">{signal.sourceName || signal.source_name || "Unknown"}</span>
-                          {signal.location && (
-                            <span className="text-[10px] text-orange-400/70 truncate max-w-[100px]">{signal.location}</span>
+                          {(signal.locationName || signal.location) && (
+                            <span className="text-[10px] text-orange-400/70 truncate max-w-[100px]">{signal.locationName || signal.location}</span>
                           )}
                         </div>
 
