@@ -107,7 +107,8 @@ export default function GlobeMapbox({ claims, osint, mapMode = 'both', viewMode 
 
     map.once('load', () => {
       readyRef.current = true;
-      setDbg('loaded');
+      map.resize();
+      setDbg('loaded | canvas: ' + map.getCanvas().width + 'x' + map.getCanvas().height);
 
       try { map.setFog({ range: [0.5, 10], color: '#000', 'horizon-blend': 0.05, 'high-color': '#0a0a0a', 'space-color': '#000', 'star-intensity': 0.2 }); } catch {}
 
@@ -211,13 +212,11 @@ export default function GlobeMapbox({ claims, osint, mapMode = 'both', viewMode 
         .mapboxgl-popup-close-button:hover { color: #fff !important; background: transparent !important; }
         .mapboxgl-ctrl-attrib { display: none !important; }
       `}</style>
-      <div className="relative w-full h-full bg-[#0A0A0F]">
-        <div ref={containerRef} className="absolute inset-0" />
-        {dbg !== 'loaded' && (
-          <div style={{ position: 'absolute', top: 20, left: 20, zIndex: 9999, color: dbg.startsWith('ERROR') ? '#ef4444' : '#8b5cf6', fontSize: 16, fontWeight: 700, background: 'rgba(0,0,0,0.8)', padding: '12px 20px', borderRadius: 8 }}>
-            GLOBE: {dbg}
-          </div>
-        )}
+      <div className="relative w-full h-full" style={{ border: '3px solid #8b5cf6', minHeight: 400 }}>
+        <div ref={containerRef} style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }} />
+        <div style={{ position: 'absolute', top: 10, left: 10, zIndex: 9999, color: '#8b5cf6', fontSize: 14, fontWeight: 700, background: 'rgba(0,0,0,0.9)', padding: '8px 16px', borderRadius: 8, pointerEvents: 'none' }}>
+          {dbg} | container: {containerRef.current?.offsetWidth || '?'}x{containerRef.current?.offsetHeight || '?'}
+        </div>
       </div>
     </>
   );
