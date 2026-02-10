@@ -173,7 +173,7 @@ export default function TopSourcesList({ category = 'all' }: TopSourcesListProps
           </div>
         </div>
         <p className="text-slate-400 text-base max-w-2xl mx-auto">
-          Track record of accuracy, evidence quality, and verifiable on-chain claims. Credibility earned through proof.
+          Track record of accuracy, evidence quality, and verifiable on-chain claims. Reputation earned through proof.
         </p>
       </div>
 
@@ -184,7 +184,7 @@ export default function TopSourcesList({ category = 'all' }: TopSourcesListProps
             <thead className="bg-slate-900/80 border-b border-slate-700/50">
               <tr>
                 <th className="px-6 py-4 text-left text-xs font-semibold text-slate-400 uppercase tracking-wider">Source</th>
-                <th className="px-6 py-4 text-center text-xs font-semibold text-slate-400 uppercase tracking-wider">Credibility</th>
+                <th className="px-6 py-4 text-center text-xs font-semibold text-slate-400 uppercase tracking-wider">Reputation</th>
                 <th className="px-6 py-4 text-center text-xs font-semibold text-slate-400 uppercase tracking-wider">Accuracy</th>
                 <th className="px-6 py-4 text-center text-xs font-semibold text-slate-400 uppercase tracking-wider">Claims</th>
                 <th className="px-6 py-4 text-left text-xs font-semibold text-slate-400 uppercase tracking-wider">Evidence Quality</th>
