@@ -528,8 +528,8 @@ export default function AppFeedPage() {
                           >
                             Lock as Claim
                           </Link>
-                          <span className="ml-auto text-[10px] text-slate-600 font-mono">
-                            {signal.id.toString().slice(0, 8)}
+                          <span className="ml-auto text-[10px] text-slate-600">
+                            {signal.created_at ? formatRelativeTime(signal.created_at) : ''}
                           </span>
                         </div>
                       </div>
