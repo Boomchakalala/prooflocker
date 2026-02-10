@@ -29,8 +29,8 @@ const jetbrainsMono = JetBrains_Mono({
 const siteUrl = getSiteUrl();
 
 export const metadata: Metadata = {
-  title: "ProofLocker — OSINT & News Monitoring | Lock Claims On-Chain",
-  description: "Monitor events worldwide with OSINT + news mapping. Lock claims on-chain, resolve with evidence, and build reputation through verifiable receipts.",
+  title: "ProofLocker — Lock Claims On-Chain. Prove It With Receipts.",
+  description: "Lock claims on-chain. Resolve with evidence. Build math-backed reputation. Proof of Reputational Observation — powered by Constellation DAG.",
   metadataBase: new URL(siteUrl),
   icons: {
     icon: [
@@ -41,8 +41,8 @@ export const metadata: Metadata = {
     apple: "/favicons/apple-touch-icon.png",
   },
   openGraph: {
-    title: "OSINT & News Monitoring. Claims With Receipts.",
-    description: "Lock claims on-chain, prove with evidence, and build credibility over time.",
+    title: "Build Your Reputation. Claims With Receipts.",
+    description: "Lock claims on-chain. Resolve with evidence. Build math-backed reputation. Proof of Reputational Observation.",
     url: siteUrl,
     type: "website",
     siteName: "ProofLocker",
@@ -57,8 +57,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary",
-    title: "OSINT & News Monitoring. Claims With Receipts.",
-    description: "Lock claims on-chain, prove with evidence, and build credibility over time.",
+    title: "Build Your Reputation. Claims With Receipts.",
+    description: "Lock claims on-chain. Resolve with evidence. Build math-backed reputation. Proof of Reputational Observation.",
     images: [getAbsoluteUrl("/favicons/icon-512.png")],
   },
 };

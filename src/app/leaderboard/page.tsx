@@ -23,7 +23,7 @@ export default function LeaderboardPage() {
             Reputation Leaderboard
           </h1>
           <p className="text-lg md:text-xl text-white/70 max-w-3xl mx-auto">
-            The most trusted sources ranked by accuracy, evidence quality, and proven claims
+            Ranked by accuracy, evidence quality, and resolved claims. Reputation earned through outcomes.
           </p>
         </div>
 

@@ -37,7 +37,7 @@ export default function AboutPage() {
             About ProofLocker
           </h1>
           <p className="text-slate-400 text-lg">
-            Making words mean something again
+            Proof of Reputational Observation
           </p>
         </div>
 
@@ -124,9 +124,9 @@ export default function AboutPage() {
                   </svg>
                 </div>
                 <div className="flex-1">
-                  <h3 className="text-lg font-semibold text-white mb-1">OSINT & Evidence Integration</h3>
+                  <h3 className="text-lg font-semibold text-white mb-1">Intelligence & Evidence Integration</h3>
                   <p className="text-slate-400 text-sm">
-                    Link geospatial data, social media signals, and open-source intelligence directly to your claims. Build evidence-backed arguments with verifiable sources and timestamps.
+                    Link geospatial data, social media signals, and open-source intelligence directly to your claims. Intel signals are a live monitoring layer — only claims are scored.
                   </p>
                 </div>
               </div>
