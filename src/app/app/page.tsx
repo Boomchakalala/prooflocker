@@ -110,6 +110,14 @@ export default function AppFeedPage() {
 
   const filteredPredictions = predictions.filter(p => {
     if (contentFilter === "osint") return false;
+
+    // My Claims filter - show only user's claims
+    if (quickFilter === "my-claims") {
+      const anonId = typeof window !== 'undefined' ? localStorage.getItem("anonId") : null;
+      const isUserClaim = (user && p.userId === user.id) || (anonId && p.anonId === anonId);
+      if (!isUserClaim) return false;
+    }
+
     if (quickFilter === "pending" && p.outcome !== "pending") return false;
     if (quickFilter === "verified" && p.outcome !== "correct") return false;
     if (quickFilter === "disproven" && p.outcome !== "incorrect") return false;
@@ -347,15 +355,22 @@ export default function AppFeedPage() {
                   </svg>
                   My Stats
                 </Link>
-                <Link
-                  href="/profile"
-                  className="px-3 py-1.5 text-xs font-medium text-slate-400 hover:text-white hover:bg-white/5 rounded-lg transition-colors flex items-center gap-1.5"
+                <button
+                  onClick={() => {
+                    setContentFilter("claims");
+                    setQuickFilter("my-claims");
+                  }}
+                  className={`px-3 py-1.5 text-xs font-medium rounded-lg transition-colors flex items-center gap-1.5 ${
+                    quickFilter === "my-claims"
+                      ? "bg-purple-500/20 text-purple-300 border border-purple-500/30"
+                      : "text-slate-400 hover:text-white hover:bg-white/5"
+                  }`}
                 >
                   <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
                   </svg>
                   My Claims
-                </Link>
+                </button>
               </div>
             </div>
 
