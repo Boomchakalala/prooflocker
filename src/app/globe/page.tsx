@@ -400,6 +400,18 @@ export default function GlobePage() {
           >
             View: {mapMode === 'both' ? 'All' : mapMode === 'claims' ? 'Claims' : 'Intel'}
           </button>
+          <Link
+            href="/dashboard"
+            className="bg-[rgba(10,10,15,0.92)] backdrop-blur-xl border border-slate-700/30 rounded-xl px-3 py-2 text-[11px] font-medium text-slate-400 hover:text-white shadow-2xl hover:bg-white/5 transition-all"
+          >
+            My Stats
+          </Link>
+          <Link
+            href="/profile"
+            className="bg-[rgba(10,10,15,0.92)] backdrop-blur-xl border border-slate-700/30 rounded-xl px-3 py-2 text-[11px] font-medium text-slate-400 hover:text-white shadow-2xl hover:bg-white/5 transition-all"
+          >
+            My Claims
+          </Link>
         </div>
 
         {/* Right Sidebar - Hidden on Mobile, Show on MD+ */}
