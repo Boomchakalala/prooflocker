@@ -23,10 +23,10 @@ export default function EvidenceGradeBadge({
   };
 
   const colorClasses = {
-    emerald: "bg-emerald-100 text-emerald-800 border-emerald-300",
-    blue: "bg-blue-100 text-blue-800 border-blue-300",
-    amber: "bg-amber-100 text-amber-800 border-amber-300",
-    gray: "bg-gray-100 text-gray-600 border-gray-300",
+    emerald: "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20",
+    blue: "bg-cyan-500/10 text-cyan-400 border border-cyan-500/20",
+    amber: "bg-amber-500/10 text-amber-400 border border-amber-500/20",
+    gray: "bg-slate-500/10 text-slate-400 border border-slate-500/20",
   };
 
   const getLabel = () => {
@@ -40,7 +40,7 @@ export default function EvidenceGradeBadge({
 
   return (
     <span
-      className={`inline-flex items-center gap-1.5 rounded-full border font-semibold ${sizeClasses[size]} ${
+      className={`inline-flex items-center gap-1.5 rounded-full font-semibold ${sizeClasses[size]} ${
         colorClasses[info.color as keyof typeof colorClasses]
       }`}
       title={info.description}

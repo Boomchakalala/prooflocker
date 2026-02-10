@@ -90,11 +90,11 @@ export default function GlobeSidePanel({ hotspot, onClose }: GlobeSidePanelProps
   };
 
   const getReliabilityBadge = (score: number) => {
-    if (score >= 800) return { label: 'Elite', color: 'bg-[#5B21B6]/20 text-[#a78bfa]' };
-    if (score >= 700) return { label: 'Trusted+', color: 'bg-[#2E5CFF]/20 text-[#60a5fa]' };
-    if (score >= 500) return { label: 'Trusted', color: 'bg-emerald-500/20 text-emerald-400' };
-    if (score >= 300) return { label: 'Active', color: 'bg-amber-500/20 text-amber-400' };
-    return { label: 'New', color: 'bg-slate-500/20 text-slate-400' };
+    if (score >= 800) return { label: 'Legend', color: 'bg-[#5B21B6]/20 text-[#a78bfa]' };
+    if (score >= 700) return { label: 'Master', color: 'bg-[#2E5CFF]/20 text-[#60a5fa]' };
+    if (score >= 500) return { label: 'Expert', color: 'bg-emerald-500/20 text-emerald-400' };
+    if (score >= 300) return { label: 'Trusted', color: 'bg-amber-500/20 text-amber-400' };
+    return { label: 'Novice', color: 'bg-slate-500/20 text-slate-400' };
   };
 
   const formatTimeAgo = (date: string) => {

@@ -378,7 +378,7 @@ export default function GlobePage() {
         </div>
 
         {/* Right Sidebar - Hidden on Mobile, Show on MD+ */}
-        <aside className="hidden md:flex fixed top-16 right-0 w-[360px] h-[calc(100vh-64px)] bg-gradient-to-b from-[#0A0A0F]/98 via-[#111118]/98 to-[#0A0A0F]/98 backdrop-blur-[30px] border-l border-purple-500/20 z-[950] flex-col">
+        <aside className="hidden md:flex fixed top-16 right-0 w-[360px] h-[calc(100vh-64px)] bg-gradient-to-b from-[#0A0A0F]/98 via-[#111118]/98 to-[#0A0A0F]/98 backdrop-blur-[30px] border-l border-purple-500/20 z-[200] flex-col">
           {/* Sidebar Header */}
           <div className="p-5 border-b border-purple-500/20">
             {/* Last Updated Indicator */}
@@ -917,7 +917,7 @@ export default function GlobePage() {
         {/* Floating Action Button */}
         <button
           onClick={() => setShowQuickLock(true)}
-          className="fixed bottom-8 right-8 z-[999] w-16 h-16 rounded-full bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 shadow-2xl shadow-purple-500/50 flex items-center justify-center text-white transition-all hover:scale-110 active:scale-95 group"
+          className="fixed bottom-[calc(2rem+env(safe-area-inset-bottom))] right-8 z-[100] w-16 h-16 rounded-full bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 shadow-2xl shadow-purple-500/50 flex items-center justify-center text-white transition-all hover:scale-110 active:scale-95 group"
           title="Quick Lock (Space)"
         >
           <svg className="w-7 h-7 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
@@ -928,7 +928,7 @@ export default function GlobePage() {
 
         {/* Quick Lock Modal */}
         {showQuickLock && (
-          <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
+          <div className="fixed inset-0 z-[500] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
             <div className="w-full max-w-lg glass border border-purple-500/30 rounded-xl p-6 animate-in fade-in zoom-in duration-200">
               <div className="flex items-center justify-between mb-4">
                 <h3 className="text-xl font-bold text-white">Quick Lock Claim</h3>

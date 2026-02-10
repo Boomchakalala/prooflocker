@@ -954,7 +954,7 @@ export default function GlobeMapbox({ claims, osint, mapMode = 'both', viewMode 
       )}
 
       {/* Controls - Position adjusted for new parent-controlled sidebar */}
-      <div className="fixed z-[900] flex gap-2
+      <div className="fixed z-[100] flex gap-2
         md:top-[76px] md:right-[440px] md:flex-col
         top-[68px] left-3 flex-row">
         <button
