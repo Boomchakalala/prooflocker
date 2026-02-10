@@ -116,8 +116,8 @@ export default function PredictionCard({ prediction, card, currentUserId, onOutc
       const response = await fetch(`/api/predictions/${prediction.id}/vote`);
       if (response.ok) {
         const data = await response.json();
-        setHasVoted(data.voted);
-        setVoteCount(data.voteCount);
+        setHasVoted(!!data.userVote);
+        setVoteCount((data.weightedUpvotes || 0) - (data.weightedDownvotes || 0));
       }
     } catch (error) {
       console.error('Error fetching vote status:', error);
