@@ -39,6 +39,16 @@ export default function UnifiedHeader({ currentView, onLockClick }: UnifiedHeade
 
   const activeView = getActiveView();
 
+  const handleSignOut = async () => {
+    try {
+      await signOut();
+      setShowUserMenu(false);
+      window.location.reload(); // Refresh to update auth state
+    } catch (error) {
+      console.error("Error signing out:", error);
+    }
+  };
+
   return (
     <>
     <header
