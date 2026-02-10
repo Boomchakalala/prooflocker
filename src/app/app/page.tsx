@@ -162,7 +162,27 @@ export default function AppFeedPage() {
   };
 
   return (
-    <div className="min-h-screen gradient-bg text-white">
+    <>
+      <style jsx global>{`
+        @keyframes marquee {
+          0% {
+            transform: translateX(0);
+          }
+          100% {
+            transform: translateX(-50%);
+          }
+        }
+
+        .animate-marquee {
+          animation: marquee 60s linear infinite;
+        }
+
+        .animate-marquee:hover {
+          animation-play-state: paused;
+        }
+      `}</style>
+
+      <div className="min-h-screen gradient-bg text-white">
       <UnifiedHeader currentView="feed" />
 
       <main className="max-w-7xl mx-auto px-4 pt-20 pb-12">
@@ -508,5 +528,6 @@ export default function AppFeedPage() {
         <ClaimModal onClose={() => setShowClaimModal(false)} />
       )}
     </div>
+    </>
   );
 }
