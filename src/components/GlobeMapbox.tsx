@@ -366,60 +366,69 @@ export default function GlobeMapbox({ claims, osint, mapMode = 'both', viewMode 
               <div className="overflow-y-auto" style={{ maxHeight: 'calc(75vh - 110px)' }}>
                 {/* Claims section */}
                 {areaDetail.claims.length > 0 && (
-                  <div className="px-5 pt-3 pb-1">
-                    <div className="text-[10px] font-bold text-[#a78bfa] uppercase tracking-wider mb-2">Claims</div>
-                    {areaDetail.claims.map((c) => {
-                      const sc = statusColor(c.status, c.outcome);
-                      const res = c.outcome === 'correct' || c.outcome === 'incorrect';
-                      const label = res ? c.outcome : c.status;
-                      return (
-                        <div key={c.id} className="py-3 border-b border-slate-700/20 last:border-0">
-                          <div className="text-[13px] font-semibold text-white leading-snug mb-2">{c.claim}</div>
-                          <div className="flex items-center gap-2 flex-wrap">
-                            <span className="text-[11px] font-semibold text-slate-300">{c.submitter}</span>
-                            <span
-                              className="text-[9px] font-bold uppercase px-2 py-0.5 rounded-md"
-                              style={{ background: sc + '22', color: sc }}
-                            >
-                              {label}
-                            </span>
-                            <span className="text-[9px] font-semibold px-2 py-0.5 rounded-md bg-purple-500/15 text-purple-300">
-                              Rep {c.rep}
-                            </span>
-                            {c.category && (
-                              <span className="text-[9px] text-purple-400">#{c.category}</span>
-                            )}
-                            <span className="text-[10px] text-slate-500 ml-auto">{c.lockedDate}</span>
+                  <div className="mx-4 mt-4 mb-2 rounded-xl overflow-hidden border border-purple-500/20" style={{ background: 'rgba(139,92,246,0.04)' }}>
+                    <div className="flex items-center gap-2.5 px-4 py-2.5" style={{ background: 'rgba(139,92,246,0.08)', borderBottom: '1px solid rgba(139,92,246,0.15)' }}>
+                      <div className="w-2 h-2 rounded-full bg-[#8b5cf6] shadow-[0_0_6px_rgba(139,92,246,0.5)]" />
+                      <span className="text-[11px] font-bold text-[#a78bfa] uppercase tracking-wider">Claims</span>
+                      <span className="text-[10px] text-slate-500">{areaDetail.claims.length}</span>
+                    </div>
+                    <div className="px-4">
+                      {areaDetail.claims.map((c) => {
+                        const sc = statusColor(c.status, c.outcome);
+                        const res = c.outcome === 'correct' || c.outcome === 'incorrect';
+                        const label = res ? c.outcome : c.status;
+                        return (
+                          <div key={c.id} className="py-3 border-b border-purple-500/10 last:border-0">
+                            <div className="text-[13px] font-semibold text-white leading-snug mb-2">{c.claim}</div>
+                            <div className="flex items-center gap-2 flex-wrap">
+                              <span className="text-[11px] font-semibold text-slate-300">{c.submitter}</span>
+                              <span
+                                className="text-[9px] font-bold uppercase px-2 py-0.5 rounded-md"
+                                style={{ background: sc + '22', color: sc }}
+                              >
+                                {label}
+                              </span>
+                              <span className="text-[9px] font-semibold px-2 py-0.5 rounded-md bg-purple-500/15 text-purple-300">
+                                Rep {c.rep}
+                              </span>
+                              {c.category && (
+                                <span className="text-[9px] text-purple-400">#{c.category}</span>
+                              )}
+                              <span className="text-[10px] text-slate-500 ml-auto">{c.lockedDate}</span>
+                            </div>
                           </div>
-                        </div>
-                      );
-                    })}
+                        );
+                      })}
+                    </div>
                   </div>
                 )}
 
                 {/* OSINT section */}
                 {areaDetail.osint.length > 0 && (
-                  <div className="px-5 pt-3 pb-3">
-                    {areaDetail.claims.length > 0 && (
-                      <div className="border-t border-slate-700/30 mb-3" />
-                    )}
-                    <div className="text-[10px] font-bold text-[#f87171] uppercase tracking-wider mb-2">Intel Signals</div>
-                    {areaDetail.osint.map((o) => (
-                      <div key={o.id} className="py-3 border-b border-slate-700/20 last:border-0">
-                        <div className="flex items-center gap-2 mb-1.5">
-                          <span className="text-[11px] font-semibold text-red-400">{o.source}</span>
-                          <span className="text-[10px] text-slate-500">{o.timestamp}</span>
+                  <div className="mx-4 mt-3 mb-4 rounded-xl overflow-hidden border border-red-500/20" style={{ background: 'rgba(239,68,68,0.04)' }}>
+                    <div className="flex items-center gap-2.5 px-4 py-2.5" style={{ background: 'rgba(239,68,68,0.08)', borderBottom: '1px solid rgba(239,68,68,0.15)' }}>
+                      <div className="w-2 h-2 rounded-full bg-[#ef4444] shadow-[0_0_6px_rgba(239,68,68,0.5)]" />
+                      <span className="text-[11px] font-bold text-[#f87171] uppercase tracking-wider">Intel Signals</span>
+                      <span className="text-[10px] text-slate-500">{areaDetail.osint.length}</span>
+                    </div>
+                    <div className="px-4">
+                      {areaDetail.osint.map((o) => (
+                        <div key={o.id} className="py-3 border-b border-red-500/10 last:border-0">
+                          <div className="flex items-center gap-2 mb-1.5">
+                            <span className="text-[11px] font-semibold text-red-400">{o.source}</span>
+                            <span className="text-[10px] text-slate-500">{o.timestamp}</span>
+                          </div>
+                          <div className="text-[13px] font-semibold text-white leading-snug mb-2">{o.title}</div>
+                          <div className="flex gap-1.5 flex-wrap">
+                            {o.tags.map((t, i) => (
+                              <span key={i} className="px-2 py-0.5 text-[9px] font-bold uppercase rounded-md bg-red-500/15 text-red-400">
+                                {t}
+                              </span>
+                            ))}
+                          </div>
                         </div>
-                        <div className="text-[13px] font-semibold text-white leading-snug mb-2">{o.title}</div>
-                        <div className="flex gap-1.5 flex-wrap">
-                          {o.tags.map((t, i) => (
-                            <span key={i} className="px-2 py-0.5 text-[9px] font-bold uppercase rounded-md bg-red-500/15 text-red-400">
-                              {t}
-                            </span>
-                          ))}
-                        </div>
-                      </div>
-                    ))}
+                      ))}
+                    </div>
                   </div>
                 )}
               </div>
