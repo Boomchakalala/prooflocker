@@ -107,60 +107,44 @@ export default function DashboardPage() {
   const trend = 0; // For now
 
   return (
-    <div className="min-h-screen bg-[#0a0a0a] text-white pt-16 py-12 px-6">
+    <div className="min-h-screen bg-gradient-to-b from-[#0A0A0F] via-[#111118] to-[#0A0A0F] text-white pt-16 py-12 px-6">
       <UnifiedHeader currentView="other" />
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="text-center mb-12">
-          <h1 className="text-5xl font-bold mb-4" style={{ fontFamily: "var(--font-montserrat)" }}>
+          <h1 className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-slate-300 via-white to-slate-300 bg-clip-text text-transparent" style={{ fontFamily: "var(--font-montserrat)" }}>
             Your Reputation Score
           </h1>
           {user && (
-            <p className="text-[#00bfff]">
-              ✓ Sync enabled — scores saved across devices
+            <p className="text-purple-400 text-sm">
+              Sync enabled -- scores saved across devices
             </p>
           )}
         </div>
 
         {/* Main Score Card */}
-        <div className="bg-gradient-to-br from-[#1e1e1e] to-[#1a0033] border border-[#9370db] rounded-xl shadow-2xl p-12 mb-8 text-center">
+        <div className="bg-slate-900/60 border border-purple-500/30 rounded-xl shadow-2xl p-10 mb-8 text-center">
           <div className="mb-6">
-            <div className="text-7xl font-bold text-[#00bfff] mb-2">
+            <div className="text-6xl font-bold text-purple-400 mb-2">
               {score.totalPoints.toLocaleString()}
             </div>
-            <div className="text-2xl text-[#9370db] font-semibold mb-4">
+            <div className="text-xl text-slate-300 font-semibold mb-4">
               {milestone.name}
             </div>
-            <div className="flex items-center justify-center gap-6 text-lg">
+            <div className="flex items-center justify-center gap-6 text-base">
               <div>
                 Accuracy:{" "}
                 <span
                   className={`font-bold ${
-                    accuracy >= 75 ? "text-green-400" : accuracy >= 60 ? "text-yellow-400" : "text-red-400"
+                    accuracy >= 75 ? "text-emerald-400" : accuracy >= 60 ? "text-amber-400" : "text-red-400"
                   }`}
                 >
                   {accuracy}%
                 </span>{" "}
-                <span className="text-gray-500">
+                <span className="text-slate-500">
                   ({score.correctResolves}/{score.totalResolves})
                 </span>
               </div>
-              {trend !== 0 && (
-                <div className="flex items-center gap-1">
-                  {trend > 0 ? (
-                    <svg className="w-5 h-5 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15l7-7 7 7" />
-                    </svg>
-                  ) : (
-                    <svg className="w-5 h-5 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                    </svg>
-                  )}
-                  <span className={trend > 0 ? "text-green-400" : "text-red-400"}>
-                    {Math.abs(trend)} pts
-                  </span>
-                </div>
-              )}
             </div>
           </div>
         </div>
@@ -247,29 +231,29 @@ export default function DashboardPage() {
         </div>
 
         {/* Stats Grid */}
-        <div className="grid md:grid-cols-4 gap-6 mb-8">
-          <div className="bg-[#1e1e1e] border border-gray-800 rounded-xl p-6">
-            <div className="text-gray-400 text-sm mb-1">Locked</div>
+        <div className="grid md:grid-cols-4 gap-4 mb-8">
+          <div className="bg-slate-900/60 border border-slate-700/40 rounded-xl p-5">
+            <div className="text-slate-400 text-sm mb-1">Locked</div>
             <div className="text-3xl font-bold text-white">{score.locksCount}</div>
           </div>
           {user && (
-            <div className="bg-[#1e1e1e] border border-gray-800 rounded-xl p-6">
-              <div className="text-gray-400 text-sm mb-1">Claimed</div>
-              <div className="text-3xl font-bold text-[#00bfff]">{score.claimsCount}</div>
+            <div className="bg-slate-900/60 border border-slate-700/40 rounded-xl p-5">
+              <div className="text-slate-400 text-sm mb-1">Claimed</div>
+              <div className="text-3xl font-bold text-purple-400">{score.claimsCount}</div>
             </div>
           )}
-          <div className="bg-[#1e1e1e] border border-gray-800 rounded-xl p-6">
-            <div className="text-gray-400 text-sm mb-1">Resolved</div>
+          <div className="bg-slate-900/60 border border-slate-700/40 rounded-xl p-5">
+            <div className="text-slate-400 text-sm mb-1">Resolved</div>
             <div className="text-3xl font-bold">
-              <span className="text-green-400">{score.correctResolves}</span>
-              <span className="text-gray-600">/</span>
+              <span className="text-emerald-400">{score.correctResolves}</span>
+              <span className="text-slate-600">/</span>
               <span className="text-red-400">{score.incorrectResolves}</span>
             </div>
           </div>
-          <div className="bg-[#1e1e1e] border border-gray-800 rounded-xl p-6">
-            <div className="text-gray-400 text-sm mb-1">Streak</div>
-            <div className="text-3xl font-bold text-[#9370db]">
-              {score.currentStreak} 🔥
+          <div className="bg-slate-900/60 border border-slate-700/40 rounded-xl p-5">
+            <div className="text-slate-400 text-sm mb-1">Streak</div>
+            <div className="text-3xl font-bold text-purple-400">
+              {score.currentStreak}
             </div>
           </div>
         </div>
