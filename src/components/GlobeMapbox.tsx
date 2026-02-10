@@ -38,9 +38,15 @@ interface GlobeMapboxProps {
 }
 
 function toClaimGeoJSON(claims: Claim[]) {
+  const seen = new Set<string>();
   return {
     type: 'FeatureCollection' as const,
-    features: claims.map((c) => ({
+    features: claims.filter((c) => {
+      const key = String(c.id);
+      if (seen.has(key)) return false;
+      seen.add(key);
+      return true;
+    }).map((c) => ({
       type: 'Feature' as const,
       geometry: { type: 'Point' as const, coordinates: [c.lng, c.lat] },
       properties: { ...c },
@@ -49,9 +55,15 @@ function toClaimGeoJSON(claims: Claim[]) {
 }
 
 function toOsintGeoJSON(osint: OsintItem[]) {
+  const seen = new Set<string>();
   return {
     type: 'FeatureCollection' as const,
-    features: osint.map((o) => ({
+    features: osint.filter((o) => {
+      const key = String(o.id);
+      if (seen.has(key)) return false;
+      seen.add(key);
+      return true;
+    }).map((o) => ({
       type: 'Feature' as const,
       geometry: { type: 'Point' as const, coordinates: [o.lng, o.lat] },
       properties: { ...o, tags: JSON.stringify(o.tags) },
@@ -120,30 +132,103 @@ export default function GlobeMapbox({ claims, osint, mapMode = 'both', viewMode 
         map.on('mouseleave', l, () => { map.getCanvas().style.cursor = ''; });
       });
 
-      // Cluster click → zoom in
+      // Helper: render a claim card HTML
+      const claimCardHTML = (p: any) => {
+        const sc = p.status === 'verified' ? '#8b5cf6' : p.status === 'disputed' ? '#ef4444' : p.status === 'void' ? '#6b7280' : '#f59e0b';
+        const res = p.outcome === 'correct' || p.outcome === 'incorrect';
+        return `<div style="padding:8px 0;border-bottom:1px solid rgba(148,163,184,0.08);">
+          <div style="font-size:13px;font-weight:600;line-height:1.4;color:#f8fafc;margin-bottom:6px;">${p.claim}</div>
+          <div style="display:flex;align-items:center;gap:6px;margin-bottom:4px;">
+            <span style="font-size:11px;font-weight:600;color:#e2e8f0;">${p.submitter}</span>
+            <span style="font-size:9px;padding:2px 6px;background:${sc}22;border-radius:6px;color:${sc};font-weight:700;text-transform:uppercase;">${res ? p.outcome : p.status}</span>
+            <span style="font-size:9px;padding:2px 6px;background:rgba(139,92,246,0.15);border-radius:6px;color:#a78bfa;font-weight:600;">Rep ${p.rep}</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:6px;">
+            <div style="flex:1;height:4px;background:rgba(148,163,184,0.15);border-radius:2px;overflow:hidden;">
+              <div style="height:100%;width:${p.confidence}%;background:${sc};border-radius:2px;"></div>
+            </div>
+            <span style="font-size:11px;font-weight:700;color:${sc};">${p.confidence}%</span>
+          </div>
+        </div>`;
+      };
+
+      // Helper: render an OSINT card HTML
+      const osintCardHTML = (p: any) => {
+        let tags: string[] = [];
+        try { tags = JSON.parse(p.tags || '[]'); } catch {}
+        return `<div style="padding:8px 0;border-bottom:1px solid rgba(148,163,184,0.08);">
+          <div style="display:flex;align-items:center;gap:6px;margin-bottom:4px;">
+            <span style="font-size:8px;font-weight:800;color:#ef4444;text-transform:uppercase;letter-spacing:0.5px;">INTEL</span>
+            <span style="font-size:11px;font-weight:600;color:#f87171;">${p.source}</span>
+            <span style="font-size:10px;color:#64748b;">${p.timestamp}</span>
+          </div>
+          <div style="font-size:13px;font-weight:600;line-height:1.4;color:#f8fafc;margin-bottom:4px;">${p.title}</div>
+          <div style="display:flex;gap:4px;flex-wrap:wrap;">
+            ${tags.map((t: string) => `<span style="padding:1px 6px;background:rgba(239,68,68,0.15);border-radius:6px;font-size:9px;font-weight:600;color:#ef4444;text-transform:uppercase;">${t}</span>`).join('')}
+          </div>
+        </div>`;
+      };
+
+      // Claims cluster click → show all claims in area
       map.on('click', 'claims-clusters-core', (e) => {
         if (!e.features?.length) return;
         const feature = e.features[0];
         const clusterId = feature.properties?.cluster_id;
-        const coords = (feature.geometry as any).coordinates;
+        const pointCount = feature.properties?.point_count || 0;
+        const coords = (feature.geometry as any).coordinates.slice();
         const src = map.getSource('claims') as mapboxgl.GeoJSONSource;
-        src.getClusterExpansionZoom(clusterId, (err: any, zoom: any) => {
-          if (!err && zoom != null) {
-            map.easeTo({ center: coords, zoom, duration: 800 });
-          }
+
+        src.getClusterLeaves(clusterId, Math.min(pointCount, 20), 0, (err: any, leaves: any) => {
+          if (err || !leaves?.length) return;
+          // Deduplicate by id
+          const seen = new Set<string>();
+          const unique = leaves.filter((f: any) => {
+            const id = String(f.properties?.id);
+            if (seen.has(id)) return false;
+            seen.add(id);
+            return true;
+          });
+          const items = unique.map((f: any) => claimCardHTML(f.properties)).join('');
+          const header = `<div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;padding-bottom:8px;border-bottom:1px solid rgba(139,92,246,0.2);">
+            <div style="width:8px;height:8px;border-radius:50%;background:#8b5cf6;box-shadow:0 0 6px rgba(139,92,246,0.6);"></div>
+            <span style="font-size:12px;font-weight:700;color:#a78bfa;text-transform:uppercase;letter-spacing:0.5px;">${unique.length} Claim${unique.length !== 1 ? 's' : ''} in Area</span>
+            ${pointCount > 20 ? `<span style="font-size:10px;color:#64748b;">(${pointCount} total)</span>` : ''}
+          </div>`;
+          new mapboxgl.Popup({ offset: 25, maxWidth: '400px', closeButton: true })
+            .setLngLat(coords)
+            .setHTML(`<div style="padding:4px;max-height:350px;overflow-y:auto;">${header}${items}</div>`)
+            .addTo(map);
         });
       });
 
+      // OSINT cluster click → show all OSINT in area
       map.on('click', 'osint-clusters-core', (e) => {
         if (!e.features?.length) return;
         const feature = e.features[0];
         const clusterId = feature.properties?.cluster_id;
-        const coords = (feature.geometry as any).coordinates;
+        const pointCount = feature.properties?.point_count || 0;
+        const coords = (feature.geometry as any).coordinates.slice();
         const src = map.getSource('osint') as mapboxgl.GeoJSONSource;
-        src.getClusterExpansionZoom(clusterId, (err: any, zoom: any) => {
-          if (!err && zoom != null) {
-            map.easeTo({ center: coords, zoom, duration: 800 });
-          }
+
+        src.getClusterLeaves(clusterId, Math.min(pointCount, 20), 0, (err: any, leaves: any) => {
+          if (err || !leaves?.length) return;
+          const seen = new Set<string>();
+          const unique = leaves.filter((f: any) => {
+            const id = String(f.properties?.id);
+            if (seen.has(id)) return false;
+            seen.add(id);
+            return true;
+          });
+          const items = unique.map((f: any) => osintCardHTML(f.properties)).join('');
+          const header = `<div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;padding-bottom:8px;border-bottom:1px solid rgba(239,68,68,0.2);">
+            <div style="width:8px;height:8px;border-radius:50%;background:#ef4444;box-shadow:0 0 6px rgba(239,68,68,0.6);"></div>
+            <span style="font-size:12px;font-weight:700;color:#f87171;text-transform:uppercase;letter-spacing:0.5px;">${unique.length} Intel Signal${unique.length !== 1 ? 's' : ''} in Area</span>
+            ${pointCount > 20 ? `<span style="font-size:10px;color:#64748b;">(${pointCount} total)</span>` : ''}
+          </div>`;
+          new mapboxgl.Popup({ offset: 25, maxWidth: '400px', closeButton: true })
+            .setLngLat(coords)
+            .setHTML(`<div style="padding:4px;max-height:350px;overflow-y:auto;">${header}${items}</div>`)
+            .addTo(map);
         });
       });
 
@@ -152,22 +237,22 @@ export default function GlobeMapbox({ claims, osint, mapMode = 'both', viewMode 
         if (!e.features?.length) return;
         const p = e.features[0].properties as any;
         const coords = (e.features[0].geometry as any).coordinates.slice();
-        // Wrap coords for anti-meridian
         while (Math.abs(e.lngLat.lng - coords[0]) > 180) coords[0] += e.lngLat.lng > coords[0] ? 360 : -360;
         const sc = p.status === 'verified' ? '#8b5cf6' : p.status === 'disputed' ? '#ef4444' : p.status === 'void' ? '#6b7280' : '#f59e0b';
         const res = p.outcome === 'correct' || p.outcome === 'incorrect';
-        new mapboxgl.Popup({ offset: 25, maxWidth: '340px', closeButton: true })
+        new mapboxgl.Popup({ offset: 25, maxWidth: '380px', closeButton: true })
           .setLngLat(coords)
           .setHTML(
             `<div style="padding:6px;">
               <div style="font-size:14px;font-weight:600;margin-bottom:10px;line-height:1.4;color:#f8fafc;">${p.claim}</div>
               <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;padding-bottom:10px;border-bottom:1px solid rgba(148,163,184,0.1);">
                 <span style="font-size:12px;font-weight:600;color:#e2e8f0;">${p.submitter}</span>
+                <span style="font-size:11px;padding:3px 8px;background:rgba(139,92,246,0.15);border-radius:10px;color:#a78bfa;font-weight:600;">Rep ${p.rep}</span>
                 <span style="font-size:10px;padding:2px 8px;background:${sc}22;border-radius:8px;color:${sc};font-weight:700;text-transform:uppercase;">${res ? p.outcome : p.status}</span>
               </div>
               <div style="display:flex;justify-content:space-between;font-size:11px;color:#64748b;margin-bottom:8px;">
                 <span>Locked: <b style="color:#f8fafc">${p.lockedDate}</b></span>
-                ${p.category ? '<span>#' + p.category + '</span>' : ''}
+                ${p.category ? '<span style="color:#a78bfa;">#' + p.category + '</span>' : ''}
               </div>
               <div style="display:flex;align-items:center;gap:10px;padding:8px 10px;background:${sc}11;border-radius:8px;">
                 <span style="font-size:10px;color:#94a3b8;text-transform:uppercase;">Confidence</span>
@@ -189,7 +274,7 @@ export default function GlobeMapbox({ claims, osint, mapMode = 'both', viewMode 
         while (Math.abs(e.lngLat.lng - coords[0]) > 180) coords[0] += e.lngLat.lng > coords[0] ? 360 : -360;
         let tags: string[] = [];
         try { tags = JSON.parse(p.tags || '[]'); } catch {}
-        new mapboxgl.Popup({ offset: 25, maxWidth: '340px', closeButton: true })
+        new mapboxgl.Popup({ offset: 25, maxWidth: '380px', closeButton: true })
           .setLngLat(coords)
           .setHTML(
             `<div style="padding:6px;">
