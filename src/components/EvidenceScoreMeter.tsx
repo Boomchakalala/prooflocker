@@ -26,7 +26,6 @@ export default function EvidenceScoreMeter({
           <div className={`w-2 h-2 rounded-full ${tierInfo.bgColor.replace('/10', '')}`} />
           <span className="text-sm font-semibold text-white">{tierInfo.label}</span>
         </div>
-        <span className="text-xs text-neutral-400">{score}/100</span>
       </div>
     );
   }
