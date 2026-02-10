@@ -922,11 +922,10 @@ export default function GlobeMapbox({ claims, osint, mapMode = 'both', viewMode 
   }, []);
 
   return (
-    <div className="relative w-full h-full bg-gradient-to-b from-[#0A0A0F] via-[#111118] to-[#0A0A0F]" style={{ minHeight: '100vh', width: '100%' }}>
+    <div className="relative w-full h-full bg-[#0A0A0F]">
       <div
         ref={mapContainer}
-        className="absolute inset-0 w-full h-full"
-        style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }}
+        className="absolute inset-0"
       />
 
       {!mapReady && !error && (
