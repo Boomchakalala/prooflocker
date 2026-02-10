@@ -141,7 +141,7 @@ export default function LandingHero() {
         {/* Micro-hook line */}
         <div className="text-center animate-fade-in-up" style={{ animationDelay: '0.35s' }}>
           <p className="text-sm text-[#F8F9FA]/65">
-            No signup required · Takes 10 seconds · Receipts forever
+            No signup required · Anonymous by default · Receipts forever
           </p>
         </div>
       </div>
