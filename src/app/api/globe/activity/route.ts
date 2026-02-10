@@ -115,13 +115,11 @@ export async function GET(request: NextRequest) {
       console.error('[Activity API] Error fetching claims:', claimsError);
     }
 
-    // Fetch OSINT signals with deduplication at source
+    // Fetch OSINT signals (no geotag requirement - we'll use fallbacks)
     let osintQuery = supabase
       .from('osint_signals')
       .select('id, title, source_name, source_handle, source_url, geotag_lat, geotag_lng, location_name, tags, category, created_at, published_at, content')
       .eq('status', 'active')
-      .not('geotag_lat', 'is', null)
-      .not('geotag_lng', 'is', null)
       .gte('created_at', windowStart.toISOString())
       .order('created_at', { ascending: false })
       .limit(100);
