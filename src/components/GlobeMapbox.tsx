@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 
@@ -65,6 +65,7 @@ export default function GlobeMapbox({ claims, osint, mapMode = 'both', viewMode 
   const readyRef = useRef(false);
   const claimsRef = useRef(claims);
   const osintRef = useRef(osint);
+  const [dbg, setDbg] = useState('mounted');
   claimsRef.current = claims;
   osintRef.current = osint;
 
@@ -72,20 +73,41 @@ export default function GlobeMapbox({ claims, osint, mapMode = 'both', viewMode 
   useEffect(() => {
     if (mapRef.current || !containerRef.current) return;
 
-    const map = new mapboxgl.Map({
-      container: containerRef.current,
-      style: 'mapbox://styles/mapbox/dark-v11',
-      projection: 'globe',
-      center: [15, 35],
-      zoom: 1.8,
-      attributionControl: false,
-      antialias: true,
-    });
+    // WebGL check
+    try {
+      const canvas = document.createElement('canvas');
+      const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+      if (!gl) { setDbg('ERROR: WebGL not supported'); return; }
+    } catch (e) { setDbg('ERROR: WebGL check failed: ' + e); return; }
+
+    setDbg('creating map...');
+
+    let map: mapboxgl.Map;
+    try {
+      map = new mapboxgl.Map({
+        container: containerRef.current,
+        style: 'mapbox://styles/mapbox/dark-v11',
+        projection: 'globe' as any,
+        center: [15, 35],
+        zoom: 1.8,
+        attributionControl: false,
+        antialias: true,
+      });
+    } catch (e: any) {
+      setDbg('ERROR creating map: ' + (e?.message || e));
+      return;
+    }
 
     mapRef.current = map;
+    setDbg('map created, waiting for load...');
+
+    map.on('error', (e) => {
+      setDbg('MAP ERROR: ' + (e?.error?.message || JSON.stringify(e)));
+    });
 
     map.once('load', () => {
       readyRef.current = true;
+      setDbg('loaded');
 
       try { map.setFog({ range: [0.5, 10], color: '#000', 'horizon-blend': 0.05, 'high-color': '#0a0a0a', 'space-color': '#000', 'star-intensity': 0.2 }); } catch {}
 
