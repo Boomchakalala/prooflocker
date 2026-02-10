@@ -708,11 +708,11 @@ export default function GlobePage() {
                   const repScore = claim.rep || 0;
 
                   // Correct reputation tiers from /how-scoring-works
-                  const tierInfo = repScore >= 800 ? { label: 'Legend', color: '#a78bfa', bgColor: 'rgba(167, 139, 250, 0.1)' } :
-                                   repScore >= 650 ? { label: 'Master', color: '#60a5fa', bgColor: 'rgba(96, 165, 250, 0.1)' } :
-                                   repScore >= 500 ? { label: 'Expert', color: '#4ade80', bgColor: 'rgba(74, 222, 128, 0.1)' } :
-                                   repScore >= 300 ? { label: 'Trusted', color: '#facc15', bgColor: 'rgba(250, 204, 21, 0.1)' } :
-                                   { label: 'Novice', color: '#9ca3af', bgColor: 'rgba(156, 163, 175, 0.1)' };
+                  const tierInfo = repScore >= 800 ? { name: 'Legend', textColor: 'text-purple-400', bgColor: 'bg-purple-500/20', borderColor: 'border-purple-500/40' } :
+                                   repScore >= 650 ? { name: 'Master', textColor: 'text-blue-400', bgColor: 'bg-blue-500/20', borderColor: 'border-blue-500/40' } :
+                                   repScore >= 500 ? { name: 'Expert', textColor: 'text-emerald-400', bgColor: 'bg-emerald-500/20', borderColor: 'border-emerald-500/40' } :
+                                   repScore >= 300 ? { name: 'Trusted', textColor: 'text-amber-400', bgColor: 'bg-amber-500/20', borderColor: 'border-amber-500/40' } :
+                                   { name: 'Novice', textColor: 'text-slate-400', bgColor: 'bg-slate-500/20', borderColor: 'border-slate-500/40' };
 
                   // Map status to correct values (pending, correct, incorrect)
                   let displayStatus = 'pending';
