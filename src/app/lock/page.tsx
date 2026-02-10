@@ -10,6 +10,7 @@ import { getOrCreateUserId, isAnonymousUser } from "@/lib/user";
 import { getSiteUrl } from "@/lib/config";
 import { supabase } from "@/lib/supabase";
 import { useToast } from "@/contexts/ToastContext";
+import { getUserLocation } from "@/lib/geolocation";
 import type { OsintSignal } from "@/lib/osint-types";
 
 function LockPageContent() {
@@ -52,13 +53,36 @@ function LockPageContent() {
         headers["Authorization"] = `Bearer ${session.access_token}`;
       }
 
-      // Prepare geotag data if location selected
-      const geotag = null; // Automatic geolocation happens server-side now
+      // Automatically capture user's location (if consent given)
+      console.log("[Lock] Attempting to capture location...");
+      const location = await getUserLocation(true); // true = try precise location first
+
+      if (location) {
+        console.log("[Lock] ✓ Location captured:", {
+          lat: location.lat.toFixed(4),
+          lng: location.lng.toFixed(4),
+          city: location.city,
+          country: location.country
+        });
+      } else {
+        console.log("[Lock] No location captured (user may have denied permission)");
+      }
 
       const response = await fetch("/api/lock-proof", {
         method: "POST",
         headers,
-        body: JSON.stringify({ text, userId, category }),
+        body: JSON.stringify({
+          text,
+          userId,
+          category,
+          geotag: location ? {
+            lat: location.lat,
+            lng: location.lng,
+            city: location.city,
+            country: location.country,
+            accuracy: location.accuracy
+          } : null
+        }),
       });
 
       if (response.ok) {
