@@ -983,6 +983,104 @@ export default function GlobePage() {
           </div>
         </aside>
 
+        {/* Mobile BottomSheet */}
+        <div className="md:hidden">
+          <BottomSheet
+            title="Globe"
+            itemCount={displayItems.length}
+            tabs={[
+              { label: 'OSINT', active: currentTab === 'osint', onClick: () => setCurrentTab('osint') },
+              { label: 'Claims', active: currentTab === 'claims', onClick: () => setCurrentTab('claims') },
+              { label: 'Resolved', active: currentTab === 'resolutions', onClick: () => setCurrentTab('resolutions') },
+            ]}
+          >
+            {/* Compact category filter chips */}
+            <div className="px-4 pt-3 pb-2">
+              <div className="flex gap-1.5 overflow-x-auto no-scrollbar">
+                {uniqueCategories.map((cat) => (
+                  <button
+                    key={cat}
+                    onClick={() => setCategoryFilter(cat)}
+                    className={`flex-shrink-0 px-2.5 py-1 rounded-lg text-[10px] font-medium transition-all border ${
+                      categoryFilter === cat
+                        ? 'bg-[rgba(139,92,246,0.1)] text-[#8b5cf6] border-[rgba(139,92,246,0.3)]'
+                        : 'bg-transparent text-[#94a3b8] border-[rgba(148,163,184,0.2)] hover:bg-[rgba(139,92,246,0.1)] hover:text-[#8b5cf6]'
+                    }`}
+                  >
+                    {cat.charAt(0).toUpperCase() + cat.slice(1)}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Card list */}
+            <div className="px-4 pb-4 space-y-2">
+              {currentTab === 'claims' ? (
+                displayItems.length === 0 ? (
+                  <div className="text-center py-8 text-[#94a3b8] text-sm">No claims found</div>
+                ) : (
+                  (displayItems as Claim[]).map((claim) => (
+                    <div key={claim.id} className="p-3 bg-slate-900/60 border border-slate-700/40 rounded-xl">
+                      <div className="flex items-center justify-between mb-2">
+                        <span className="text-xs text-slate-400">{claim.submitter}</span>
+                        <span className={`text-[10px] font-semibold px-2 py-0.5 rounded ${
+                          claim.outcome === 'correct' ? 'bg-emerald-500/15 text-emerald-400' :
+                          claim.outcome === 'incorrect' ? 'bg-red-500/15 text-red-400' :
+                          'bg-amber-500/15 text-amber-400'
+                        }`}>
+                          {claim.outcome === 'correct' ? 'Correct' : claim.outcome === 'incorrect' ? 'Incorrect' : 'Pending'}
+                        </span>
+                      </div>
+                      <p className="text-sm text-white line-clamp-2 mb-2">{claim.claim}</p>
+                      <div className="flex items-center justify-between">
+                        <span className="text-[10px] text-slate-500">{claim.lockedDate}</span>
+                        <button onClick={() => router.push(`/proof/${claim.publicSlug}`)} className="text-[11px] text-purple-400 font-medium">View</button>
+                      </div>
+                    </div>
+                  ))
+                )
+              ) : currentTab === 'resolutions' ? (
+                resolutions.length === 0 ? (
+                  <div className="text-center py-8 text-[#94a3b8] text-sm">No recent resolutions</div>
+                ) : (
+                  resolutions.map((res) => (
+                    <div key={res.id} className={`p-3 bg-slate-900/60 border rounded-xl ${res.outcome === 'correct' ? 'border-emerald-500/40' : 'border-red-500/40'}`}>
+                      <div className="flex items-center justify-between mb-2">
+                        <span className="text-xs text-slate-400">Anon #{res.authorNumber || 1000}</span>
+                        <span className={`text-[10px] font-semibold px-2 py-0.5 rounded ${
+                          res.outcome === 'correct' ? 'bg-emerald-500/15 text-emerald-400' : 'bg-red-500/15 text-red-400'
+                        }`}>
+                          {res.outcome === 'correct' ? 'Correct' : 'Incorrect'}
+                        </span>
+                      </div>
+                      <p className="text-sm text-white line-clamp-2 mb-2">{res.textPreview}</p>
+                      <div className="flex items-center justify-between">
+                        <span className="text-[10px] text-slate-500">{res.outcome === 'correct' ? '+80 pts' : '-20 pts'}</span>
+                        <button onClick={() => router.push(`/proof/${res.publicSlug}`)} className="text-[11px] text-purple-400 font-medium">View</button>
+                      </div>
+                    </div>
+                  ))
+                )
+              ) : (
+                displayItems.length === 0 ? (
+                  <div className="text-center py-8 text-[#94a3b8] text-sm">No OSINT signals found</div>
+                ) : (
+                  (displayItems as OsintItem[]).map((item) => (
+                    <div key={item.id} className="p-3 bg-slate-900/60 border border-red-500/30 rounded-xl">
+                      <div className="flex items-center gap-2 mb-1.5">
+                        <span className="text-[10px] font-bold text-red-400 bg-red-600/80 text-white px-2 py-0.5 rounded">INTEL</span>
+                        <span className="text-xs text-red-400 font-semibold truncate">{item.source}</span>
+                      </div>
+                      <p className="text-sm text-white line-clamp-2 mb-2">{item.title}</p>
+                      <span className="text-[10px] text-slate-500">{item.timestamp}</span>
+                    </div>
+                  ))
+                )
+              )}
+            </div>
+          </BottomSheet>
+        </div>
+
         {/* Link OSINT Modal */}
         {selectedOsint && (
           <LinkOsintModal

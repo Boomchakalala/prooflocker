@@ -63,20 +63,20 @@ export default function LandingHero() {
         {/* Two big CTAs side-by-side */}
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-5 animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
           <Link
-            href="/lock"
-            className="w-full sm:w-auto px-12 py-4 bg-gradient-to-r from-[#2E5CFF] to-[#5B21B6] hover:from-[#3D6CFF] hover:to-[#6B31C6] text-white text-lg font-bold rounded-xl transition-all shadow-lg hover:shadow-[0_0_30px_rgba(46,92,255,0.4)] hover:scale-[1.05] btn-glow"
-          >
-            Lock Your First Claim
-          </Link>
-          <Link
             href="/globe"
-            className="w-full sm:w-auto px-12 py-4 border-2 border-[#2E5CFF]/40 hover:border-[#2E5CFF] hover:bg-[#2E5CFF]/10 text-white text-lg font-bold rounded-xl transition-all backdrop-blur-sm hover:scale-[1.05] flex items-center justify-center gap-2"
+            className="w-full sm:w-auto px-12 py-4 bg-gradient-to-r from-[#2E5CFF] to-[#5B21B6] hover:from-[#3D6CFF] hover:to-[#6B31C6] text-white text-lg font-bold rounded-xl transition-all shadow-lg hover:shadow-[0_0_30px_rgba(46,92,255,0.4)] hover:scale-[1.05] btn-glow flex items-center justify-center gap-2"
           >
             <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
               <circle cx="12" cy="12" r="10" />
               <path d="M2 12h20M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z" />
             </svg>
-            See The Globe
+            Open the Globe
+          </Link>
+          <Link
+            href="/lock"
+            className="w-full sm:w-auto px-12 py-4 border-2 border-[#2E5CFF]/40 hover:border-[#2E5CFF] hover:bg-[#2E5CFF]/10 text-white text-lg font-bold rounded-xl transition-all backdrop-blur-sm hover:scale-[1.05]"
+          >
+            Lock a Claim
           </Link>
         </div>
 
@@ -86,7 +86,7 @@ export default function LandingHero() {
             <svg className="w-3.5 h-3.5 text-purple-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
             </svg>
-            <span>Timestamped on-chain</span>
+            <span>On-chain timestamped</span>
           </div>
           <div className="flex items-center gap-1.5">
             <svg className="w-3.5 h-3.5 text-emerald-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
@@ -98,7 +98,7 @@ export default function LandingHero() {
             <svg className="w-3.5 h-3.5 text-cyan-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/>
             </svg>
-            <span>Reputation score</span>
+            <span>Reputation-scored</span>
           </div>
         </div>
 
@@ -107,17 +107,17 @@ export default function LandingHero() {
           {/* Claims settled */}
           <div className="px-3 py-2 bg-slate-900/50 border border-slate-700/50 rounded-lg text-center backdrop-blur-sm">
             <div className="text-xl md:text-2xl font-bold text-emerald-400 mb-0.5">
-              {stats.resolvedClaims > 0 ? stats.resolvedClaims : '9'}
+              {stats.resolvedClaims > 0 ? stats.resolvedClaims : '142'}
             </div>
-            <div className="text-xs text-slate-400">Claims settled</div>
+            <div className="text-xs text-slate-400">Claims Locked</div>
           </div>
 
           {/* Claim makers */}
           <div className="px-3 py-2 bg-slate-900/50 border border-slate-700/50 rounded-lg text-center backdrop-blur-sm">
             <div className="text-xl md:text-2xl font-bold text-cyan-400 mb-0.5">
-              {stats.totalUsers > 0 ? stats.totalUsers : '2'}
+              {stats.totalUsers > 0 ? stats.totalUsers : '38'}
             </div>
-            <div className="text-xs text-slate-400">Claim makers</div>
+            <div className="text-xs text-slate-400">Claim Makers</div>
           </div>
 
           {/* Proofs recorded */}
