@@ -91,8 +91,12 @@ export default function GlobePage() {
       });
     } else if (currentTab === 'osint') {
       osint.forEach(o => {
-        // Get category from tags if available
-        o.tags?.forEach(tag => cats.add(tag.toLowerCase()));
+        // Get category from category field or tags
+        if (o.category) {
+          cats.add(o.category.toLowerCase());
+        } else {
+          o.tags?.forEach(tag => cats.add(tag.toLowerCase()));
+        }
       });
     } else {
       resolutions.forEach(r => {
@@ -367,7 +371,7 @@ export default function GlobePage() {
     // Apply category filter
     if (categoryFilter !== 'all') {
       items = items.filter(item => {
-        const cat = item.tags?.[0]?.toLowerCase() || 'other';
+        const cat = (item.category || item.tags?.[0])?.toLowerCase() || 'other';
         return cat === categoryFilter.toLowerCase();
       });
     }
