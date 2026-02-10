@@ -222,14 +222,14 @@ export async function GET(request: NextRequest) {
       return item;
     });
 
-    // Transform OSINT with stable keys and fallback coordinates
-    const osint = (osintData || []).map((signal: any) => {
+    // Transform intel items with stable keys and fallback coordinates
+    const osint = (intelData || []).map((signal: any) => {
       const hoursAgo = Math.floor((Date.now() - new Date(signal.created_at).getTime()) / 3600000);
       const timestamp = hoursAgo < 1 ? 'Just now' : hoursAgo < 24 ? `${hoursAgo}h ago` : `${Math.floor(hoursAgo / 24)}d ago`;
 
       // Use real geotag data if available, otherwise assign fallback location
-      let lat = signal.geotag_lat;
-      let lng = signal.geotag_lng;
+      let lat = signal.lat;
+      let lng = signal.lon;
 
       if (!lat || !lng) {
         // Use same fallback mechanism as claims
@@ -245,21 +245,32 @@ export async function GET(request: NextRequest) {
         'osint'
       );
 
+      // Determine category from tags if not explicitly set
+      const category = signal.tags && signal.tags.length > 0 ? signal.tags[0] : 'Intel';
+
       return {
         id: signal.id,
         title: signal.title,
         source: signal.source_name,
-        handle: signal.source_handle,
-        url: signal.source_url,
+        source_name: signal.source_name,
+        source_type: signal.source_type,
+        handle: null, // Not applicable for RSS/intel items
+        url: signal.url,
         lat,
         lng,
+        lon: lng, // Alias for compatibility
         timestamp,
         tags: signal.tags || [],
-        category: signal.category || (signal.tags && signal.tags[0]) || 'Intel',
-        locationName: signal.location_name,
-        content: signal.content,
+        category,
+        locationName: signal.place_name || signal.country_code,
+        location_name: signal.place_name || signal.country_code,
+        content: signal.summary,
+        summary: signal.summary,
+        image_url: signal.image_url,
         createdAt: signal.created_at,
+        created_at: signal.created_at,
         publishedAt: signal.published_at,
+        published_at: signal.published_at,
         key, // Stable key for deduplication
       };
     });

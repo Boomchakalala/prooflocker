@@ -12,6 +12,7 @@ import { getEvidenceGrade } from '@/lib/evidence-grading';
 import BottomSheet from '@/components/BottomSheet';
 import LinkOsintModal from '@/components/LinkOsintModal';
 import UnifiedHeader from '@/components/UnifiedHeader';
+import IntelCard from '@/components/IntelCard';
 
 const GlobeMapbox = dynamic(() => import('@/components/GlobeMapbox'), {
   ssr: false,
