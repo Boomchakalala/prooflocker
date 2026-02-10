@@ -170,7 +170,7 @@ export async function GET(request: NextRequest) {
     ];
 
     // Transform claims - use real geodata when available, fallback to distributed locations
-    let fallbackIndex = 0;
+    let fallbackIndex = 0; // Shared counter for both claims and OSINT
     const claims = (predictions || []).map((prediction: any) => {
       // Use real geotag data if available
       let lat = prediction.geotag_lat;
