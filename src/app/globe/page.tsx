@@ -677,17 +677,33 @@ export default function GlobePage() {
                 displayItems.length === 0 ? (
                   <div className="text-center py-8 text-[#94a3b8] text-sm">No claims found</div>
                 ) : (
-                  (displayItems as Claim[]).map((claim) => (
+                  (displayItems as Claim[]).map((claim) => {
+                    const repTier = getReputationTier(claim.rep || 0);
+                    const evidenceGrade = getEvidenceGrade(claim.evidence_score);
+                    const isResolved = claim.outcome === 'correct' || claim.outcome === 'incorrect';
+                    return (
                     <div key={claim.id} className="p-3 bg-slate-900/60 border border-slate-700/40 rounded-xl">
                       <div className="flex items-center justify-between mb-2">
-                        <span className="text-xs text-slate-400">{claim.submitter}</span>
-                        <span className={`text-[10px] font-semibold px-2 py-0.5 rounded ${
-                          claim.outcome === 'correct' ? 'bg-emerald-500/15 text-emerald-400' :
-                          claim.outcome === 'incorrect' ? 'bg-red-500/15 text-red-400' :
-                          'bg-amber-500/15 text-amber-400'
-                        }`}>
-                          {claim.outcome === 'correct' ? 'Correct' : claim.outcome === 'incorrect' ? 'Incorrect' : 'Pending'}
-                        </span>
+                        <div className="flex items-center gap-1.5">
+                          <span className="text-xs text-slate-400">{claim.submitter}</span>
+                          <span className={`text-[8px] font-bold px-1 py-0.5 rounded ${repTier.bgColor} ${repTier.textColor}`}>
+                            {repTier.name}
+                          </span>
+                        </div>
+                        <div className="flex items-center gap-1.5">
+                          {isResolved && (
+                            <span className={`text-[9px] font-bold px-1.5 py-0.5 rounded ${evidenceGrade.bgColor} ${evidenceGrade.textColor}`}>
+                              {evidenceGrade.grade}
+                            </span>
+                          )}
+                          <span className={`text-[10px] font-semibold px-2 py-0.5 rounded ${
+                            claim.outcome === 'correct' ? 'bg-emerald-500/15 text-emerald-400' :
+                            claim.outcome === 'incorrect' ? 'bg-red-500/15 text-red-400' :
+                            'bg-amber-500/15 text-amber-400'
+                          }`}>
+                            {claim.outcome === 'correct' ? 'Correct' : claim.outcome === 'incorrect' ? 'Incorrect' : 'Pending'}
+                          </span>
+                        </div>
                       </div>
                       <p className="text-sm text-white line-clamp-2 mb-2">{claim.claim}</p>
                       <div className="flex items-center justify-between">
@@ -695,7 +711,8 @@ export default function GlobePage() {
                         <button onClick={() => router.push(`/proof/${claim.publicSlug}`)} className="text-[11px] text-purple-400 font-medium">View</button>
                       </div>
                     </div>
-                  ))
+                    );
+                  })
                 )
               ) : currentTab === 'resolutions' ? (
                 resolutions.length === 0 ? (
