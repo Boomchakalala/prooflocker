@@ -72,7 +72,7 @@ export default function ProfilePage() {
 
       // Process stats
       const userStats: UserStats = {
-        totalPoints: statsData?.total_points || 0,
+        totalXP: statsData?.total_points || 0,
         totalPredictions: statsData?.total_predictions || 0,
         resolvedPredictions: statsData?.resolved_predictions || 0,
         correctPredictions: statsData?.correct_predictions || 0,
@@ -82,7 +82,7 @@ export default function ProfilePage() {
           statsData?.resolved_predictions > 0
             ? statsData.correct_predictions / statsData.resolved_predictions
             : 0,
-        reliabilityScore: statsData?.reputation_score || 0,
+        reputationScore: statsData?.reputation_score || 0,
         tier: getReliabilityTier(statsData?.reputation_score || 0),
       };
 
