@@ -82,7 +82,7 @@ export default function ReputationImpact() {
                 <span className="text-lg md:text-xl font-bold text-cyan-400">#12</span>
               </div>
               <div className="flex items-center gap-2 px-4 py-2 bg-orange-500/10 border border-orange-500/30 rounded-lg">
-                <span className="text-lg md:text-xl">🔥</span>
+                <span className="text-lg md:text-xl font-bold text-orange-400">S</span>
                 <span className="text-xs md:text-sm text-slate-300">5-claim streak</span>
               </div>
             </div>

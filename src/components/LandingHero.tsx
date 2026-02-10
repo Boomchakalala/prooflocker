@@ -15,9 +15,10 @@ export default function LandingHero() {
     Promise.all([
       fetch('/api/predictions').then(r => r.json()),
       fetch('/api/leaderboard?limit=1').then(r => r.json()),
-    ]).then(([predictions, leaderboard]) => {
-      const total = predictions?.total || 0;
-      const resolved = predictions?.predictions?.filter((p: any) =>
+    ]).then(([predData, leaderboard]) => {
+      const allPredictions = predData?.predictions || [];
+      const total = allPredictions.length || predData?.count || 0;
+      const resolved = allPredictions.filter((p: any) =>
         p.outcome === 'correct' || p.outcome === 'incorrect'
       ).length || 0;
       const users = leaderboard?.total || 0;

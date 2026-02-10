@@ -150,7 +150,7 @@ export default function LeaderboardPreview() {
                         <td className="px-6 py-4 text-right hidden lg:table-cell">
                           {entry.currentStreak > 0 ? (
                             <span className="text-orange-400 font-semibold flex items-center justify-end gap-1">
-                              {entry.currentStreak} 🔥
+                              {entry.currentStreak}
                             </span>
                           ) : (
                             <span className="text-slate-600">—</span>

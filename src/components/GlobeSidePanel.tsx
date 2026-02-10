@@ -82,10 +82,10 @@ export default function GlobeSidePanel({ hotspot, onClose }: GlobeSidePanelProps
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case 'pending': return '🔴';
-      case 'correct': return '✅';
-      case 'incorrect': return '❌';
-      default: return '⚪';
+      case 'pending': return '--';
+      case 'correct': return 'C';
+      case 'incorrect': return 'X';
+      default: return '--';
     }
   };
 
@@ -160,7 +160,7 @@ export default function GlobeSidePanel({ hotspot, onClose }: GlobeSidePanelProps
           <div className="text-center py-12">
             <p className="text-slate-400 text-sm">No claims in this region yet.</p>
             <p className="text-slate-500 text-xs mt-2">
-              Be the first to lock a geotagged claim here! 🚀
+              Be the first to lock a geotagged claim here.
             </p>
           </div>
         ) : (

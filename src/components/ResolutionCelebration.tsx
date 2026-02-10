@@ -155,7 +155,7 @@ export default function ResolutionCelebration({
                 <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7"/>
               </svg>
             </div>
-            <h2 className="text-3xl font-bold text-emerald-400 mb-2">🎉 CORRECT!</h2>
+            <h2 className="text-3xl font-bold text-emerald-400 mb-2">CORRECT</h2>
             <div className="text-4xl font-black text-white mb-1">+{pointsEarned} Points</div>
             <p className="text-slate-400">Your call was verified</p>
           </div>
@@ -182,7 +182,7 @@ export default function ResolutionCelebration({
                 <div className="flex items-center justify-between">
                   <span className="text-slate-400">Streak:</span>
                   <span className="text-orange-400 font-bold">
-                    {oldStreak} → {newStreak} 🔥 <span className="text-emerald-400">(+{streakBonus} pts bonus)</span>
+                    {oldStreak} to {newStreak} <span className="text-emerald-400">(+{streakBonus} pts bonus)</span>
                   </span>
                 </div>
               )}
@@ -190,7 +190,7 @@ export default function ResolutionCelebration({
                 <div className="flex items-center justify-between">
                   <span className="text-slate-400">Badge:</span>
                   <span className="text-yellow-400 font-bold">
-                    {categoryBadgeUnlocked} unlocked! 🏆
+                    {categoryBadgeUnlocked} unlocked
                   </span>
                 </div>
               )}

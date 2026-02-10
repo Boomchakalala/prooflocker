@@ -181,7 +181,7 @@ export default function ResolveModal({
                     </div>
                     <div className="pt-2">
                       <p className="text-xs text-slate-400">
-                        💡 Tip: Add evidence to increase your bonus multiplier
+                        Tip: Add evidence to increase your bonus multiplier
                       </p>
                     </div>
                   </div>
@@ -197,7 +197,7 @@ export default function ResolveModal({
                     </div>
                     <div className="pt-2">
                       <p className="text-xs text-slate-400">
-                        💪 Accountability builds trust. Keep building your track record.
+                        Accountability builds trust. Keep building your track record.
                       </p>
                     </div>
                   </div>
@@ -207,7 +207,7 @@ export default function ResolveModal({
                 <div className="mt-3 pt-3 border-t border-slate-700">
                   <div className="flex items-center justify-between text-xs">
                     <span className="text-slate-400">Next badge:</span>
-                    <span className="text-purple-400 font-semibold">1 resolve away from "10 Resolves" 🏆</span>
+                    <span className="text-purple-400 font-semibold">1 resolve away from &quot;10 Resolves&quot;</span>
                   </div>
                 </div>
               </div>
