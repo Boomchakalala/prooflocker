@@ -3,6 +3,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { getEvidenceGrade, getEvidenceGradeInfo } from '@/lib/scoring';
 
 interface Hotspot {
   lat: number;
@@ -179,11 +180,15 @@ export default function GlobeSidePanel({ hotspot, onClose }: GlobeSidePanelProps
                     <span className={`text-sm font-medium ${getStatusColor(claim.status)}`}>
                       {claim.status.toUpperCase()}
                     </span>
-                    {claim.evidence_score && (
-                      <span className="text-xs text-slate-400">
-                        (Evidence: {claim.evidence_score})
-                      </span>
-                    )}
+                    {claim.evidence_score && (() => {
+                      const gradeKey = getEvidenceGrade(claim.evidence_score);
+                      const gradeInfo = gradeKey ? getEvidenceGradeInfo(gradeKey) : null;
+                      return gradeInfo ? (
+                        <span className={`text-xs px-1.5 py-0.5 rounded font-semibold ${gradeInfo.bgColor} ${gradeInfo.color}`}>
+                          {gradeInfo.label}
+                        </span>
+                      ) : null;
+                    })()}
                   </div>
                   <span className="text-xs text-slate-500">
                     {formatTimeAgo(claim.created_at)}
