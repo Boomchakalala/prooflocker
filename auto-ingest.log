@@ -404,3 +404,61 @@ Tue Feb 10 23:39:19 UTC 2026: Running intel ingestion...
 
 ✅ Ingestion complete! Total items in DB: 76
 Tue Feb 10 23:39:37 UTC 2026: Sleeping for 10 minutes...
+Tue Feb 10 23:49:37 UTC 2026: Running intel ingestion...
+🚀 Starting intel ingestion...
+
+📊 Processing 11 sources
+
+
+📡 Fetching: Google News - Top      
+  Stories
+   Found 38 items
+   ✅ Inserted 2 new items
+
+📡 Fetching: Google News - World
+   Found 0 items
+   ✅ Inserted 0 new items
+
+📡 Fetching: Google News - OSINT
+   Found 3 items
+   ✅ Inserted 0 new items
+
+📡 Fetching: Google News - Drone
+  Strike
+   Found 46 items
+   ✅ Inserted 0 new items
+
+📡 Fetching: Google News - Missile
+  Attack
+   Found 0 items
+   ✅ Inserted 0 new items
+
+📡 Fetching: Google News -
+  Protests
+   Found 0 items
+   ✅ Inserted 0 new items
+
+📡 Fetching: Google News -
+  Cyberattack
+   Found 2 items
+   ✅ Inserted 0 new items
+
+📡 Fetching: BBC - World News
+   Found 32 items
+   ✅ Inserted 0 new items
+
+📡 Fetching: Reuters - World News
+   Found 0 items
+   ✅ Inserted 0 new items
+
+📡 Fetching: Al Jazeera - Breaking
+  News
+   Found 25 items
+   ✅ Inserted 0 new items
+
+📡 Fetching: Bellingcat - Latest
+   Found 10 items
+   ✅ Inserted 0 new items
+
+✅ Ingestion complete! Total items in DB: 78
+Tue Feb 10 23:49:52 UTC 2026: Sleeping for 10 minutes...
