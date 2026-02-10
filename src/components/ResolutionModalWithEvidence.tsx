@@ -177,9 +177,9 @@ export default function ResolutionModalWithEvidence({
         <div className="p-6 md:p-8 border-b border-white/10">
           <div className="flex justify-between items-start">
             <div>
-              <h2 className="text-2xl font-bold text-white">Resolve Prediction</h2>
+              <h2 className="text-2xl font-bold text-white">Resolve Claim</h2>
               <p className="text-sm text-neutral-400 mt-1">
-                Add evidence to boost your credibility score
+                Add evidence to boost your reputation score
               </p>
             </div>
             <button
@@ -231,7 +231,7 @@ export default function ResolutionModalWithEvidence({
               Evidence Quality Grade
             </label>
             <p className="text-xs text-neutral-400 mb-3">
-              No receipts = no reputation. Evidence boosts credibility.
+              No receipts = no reputation. Evidence boosts your score.
             </p>
             <div className="grid grid-cols-2 gap-2 mb-3">
               {(["A", "B", "C", "D"] as EvidenceGrade[]).map((grade) => {

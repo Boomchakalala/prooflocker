@@ -110,7 +110,7 @@ export default function ContestModal({
 
         {/* Prediction Preview */}
         <div className="mb-6 p-4 bg-white/5 border border-white/10 rounded-lg">
-          <p className="text-xs text-white/50 mb-1">Contesting prediction:</p>
+          <p className="text-xs text-white/50 mb-1">Contesting claim:</p>
           <p className="text-sm text-white/90 font-medium">{predictionText}</p>
         </div>
 

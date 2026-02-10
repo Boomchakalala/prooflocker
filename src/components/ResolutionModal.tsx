@@ -126,7 +126,7 @@ export default function ResolutionModal({
               onChange={(e) => setResolutionNote(e.target.value)}
               maxLength={maxChars}
               rows={3}
-              placeholder="Add context about how this prediction resolved..."
+              placeholder="Add context about how this claim resolved..."
               className="w-full px-3 py-2 border border-neutral-300 rounded text-black placeholder-neutral-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
             />
             <div className="flex justify-end mt-1">

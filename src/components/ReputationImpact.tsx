@@ -101,7 +101,7 @@ export default function ReputationImpact() {
             </div>
 
             <p className="text-sm md:text-base text-white/80 leading-relaxed mb-4 md:mb-5">
-              Streaks multiply your points. High-risk categories earn bonuses. Grade A evidence amplifies everything. Your credibility grows exponentially.
+              Streaks multiply your points. High-risk categories earn bonuses. Grade A evidence amplifies everything. Your reputation grows exponentially.
             </p>
 
             <div className="px-4 py-3 bg-emerald-500/10 border border-emerald-500/30 rounded-lg">

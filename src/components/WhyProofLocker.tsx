@@ -19,7 +19,7 @@ export default function WhyProofLocker() {
             </div>
             <h3 className="text-base md:text-lg font-bold text-white mb-2">Anonymous by Default</h3>
             <p className="text-gray-400 text-sm leading-relaxed flex-grow">
-              Lock claims without exposing your identity, yet build a verifiable Reputation Score over time. Privacy meets credibility.
+              Lock claims without exposing your identity, yet build a verifiable Reputation Score over time. Privacy meets reputation.
             </p>
           </div>
 
