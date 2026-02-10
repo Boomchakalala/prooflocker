@@ -382,7 +382,7 @@ export default function GlobePage() {
         </div>
 
         {/* Map Legend + Controls Overlay */}
-        <div className="hidden md:block fixed top-20 left-4 z-[100]">
+        <div className="hidden md:flex fixed top-20 left-4 z-[100] items-start gap-2">
           {/* Compact Legend */}
           <div className="bg-[rgba(10,10,15,0.92)] backdrop-blur-xl border border-purple-500/20 rounded-xl p-3 shadow-2xl">
             <div className="flex items-center gap-4 text-[11px]">
@@ -394,14 +394,18 @@ export default function GlobePage() {
                 <div className="w-2.5 h-2.5 rounded-full bg-[#ef4444] shadow-[0_0_6px_rgba(239,68,68,0.6)]"></div>
                 <span className="text-white">OSINT</span>
               </div>
-              <div className="flex items-center gap-1.5">
-                <div className="w-3 h-3 rounded-full bg-white/20 flex items-center justify-center">
-                  <span className="text-[7px] text-white font-bold">N</span>
-                </div>
-                <span className="text-[#94a3b8]">Cluster</span>
-              </div>
             </div>
           </div>
+        </div>
+
+        {/* Bottom-left map controls */}
+        <div className="hidden md:flex fixed bottom-6 left-4 z-[100] gap-2">
+          <button
+            onClick={() => setMapMode(mapMode === 'claims' ? 'both' : mapMode === 'both' ? 'osint' : mapMode === 'osint' ? 'claims' : 'both')}
+            className="bg-[rgba(10,10,15,0.92)] backdrop-blur-xl border border-purple-500/20 rounded-xl px-3 py-2 text-[11px] font-semibold text-white shadow-2xl hover:bg-purple-500/10 transition-all"
+          >
+            View: {mapMode === 'both' ? 'All' : mapMode === 'claims' ? 'Claims' : 'OSINT'}
+          </button>
         </div>
 
         {/* Right Sidebar - Hidden on Mobile, Show on MD+ */}
