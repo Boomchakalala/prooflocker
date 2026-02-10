@@ -246,15 +246,15 @@ export default async function ProofPage({ params }: Props) {
               <div className="p-6 md:p-8">
                 {/* Step Header */}
                 <div className="flex items-center gap-4 mb-6">
-                  <div className="flex items-center justify-center w-12 h-12 rounded-xl bg-gradient-to-br from-purple-500/20 to-blue-500/20 border border-purple-500/30">
-                    <span className="text-lg font-bold text-purple-400">1</span>
+                  <div className="flex items-center justify-center w-12 h-12 rounded-xl bg-gradient-to-br from-cyan-500/20 to-teal-500/20 border border-cyan-500/30">
+                    <span className="text-lg font-bold text-cyan-400">1</span>
                   </div>
                   <div className="flex-1">
                     <h3 className="text-xl font-bold text-white mb-1">Claim Locked</h3>
                     <p className="text-sm text-neutral-400">Only cryptographic hashes are stored on-chain</p>
                   </div>
-                  <div className="px-3 py-1 rounded-full bg-purple-500/10 border border-purple-500/30">
-                    <span className="text-xs font-semibold text-purple-400">Verified</span>
+                  <div className="px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/30">
+                    <span className="text-xs font-semibold text-cyan-400">Verified</span>
                   </div>
                 </div>
 
