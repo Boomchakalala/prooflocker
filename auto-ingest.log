@@ -114,3 +114,25 @@ Tue Feb 10 22:47:50 UTC 2026: Running intel ingestion...
 
 ✅ Ingestion complete! Total items in DB: 63
 Tue Feb 10 22:48:07 UTC 2026: Sleeping for 10 minutes...
+Tue Feb 10 22:58:07 UTC 2026: Running intel ingestion...
+🚀 Starting intel ingestion...
+
+📊 Processing 11 sources
+
+
+📡 Fetching: Google News - Top      
+  Stories
+   Found 35 items
+   ✅ Inserted 0 new items
+
+📡 Fetching: Google News - World
+   Found 0 items
+   ✅ Inserted 0 new items
+
+📡 Fetching: Google News - OSINT
+   Found 0 items
+   ✅ Inserted 0 new items
+
+📡 Fetching: Google News - Drone
+  Strike
+   Found 49 items
