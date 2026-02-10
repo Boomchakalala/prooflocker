@@ -70,11 +70,11 @@ export default function DashboardPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#0a0a0a] text-white flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-b from-[#0A0A0F] via-[#111118] to-[#0A0A0F] text-white flex items-center justify-center">
         <UnifiedHeader currentView="other" />
         <div className="text-center">
-          <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-[#00bfff] mx-auto mb-4"></div>
-          <p className="text-gray-400">Loading your Reputation Score...</p>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-500 mx-auto mb-4"></div>
+          <p className="text-slate-400">Loading your Reputation Score...</p>
         </div>
       </div>
     );
@@ -82,16 +82,16 @@ export default function DashboardPage() {
 
   if (error || !scoreData) {
     return (
-      <div className="min-h-screen bg-[#0a0a0a] text-white flex items-center justify-center p-6">
+      <div className="min-h-screen bg-gradient-to-b from-[#0A0A0F] via-[#111118] to-[#0A0A0F] text-white flex items-center justify-center p-6">
         <UnifiedHeader currentView="other" />
         <div className="max-w-md text-center">
-          <h2 className="text-2xl font-bold mb-4">No Reputation Score Yet</h2>
-          <p className="text-gray-400 mb-6">
-            {error || "Lock your first claim to start building your Reputation Score!"}
+          <h2 className="text-2xl font-bold mb-4 text-white">No Reputation Score Yet</h2>
+          <p className="text-slate-400 mb-6">
+            {error || "Lock your first claim to start building your Reputation Score."}
           </p>
           <Link
             href="/lock"
-            className="inline-block px-8 py-3 bg-[#00bfff] hover:bg-[#00a8e6] text-white font-semibold rounded-md transition-all"
+            className="inline-block px-8 py-3 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 text-white font-semibold rounded-xl transition-all shadow-lg"
           >
             Lock My First Claim
           </Link>
@@ -223,9 +223,8 @@ export default function DashboardPage() {
             </div>
           ) : (
             <div className="text-center">
-              <div className="text-3xl mb-2">👑</div>
-              <p className="text-purple-400 font-bold text-xl mb-2">Legend Tier Achieved!</p>
-              <p className="text-sm text-slate-400">You're in the top tier of predictors</p>
+              <p className="text-purple-400 font-bold text-xl mb-2">Legend Tier Achieved</p>
+              <p className="text-sm text-slate-400">You are in the top tier</p>
             </div>
           )}
         </div>
