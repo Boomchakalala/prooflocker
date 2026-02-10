@@ -57,10 +57,10 @@ export async function GET(request: NextRequest) {
     const windowMs = window === '24h' ? 24 * 3600000 : window === '7d' ? 7 * 86400000 : 30 * 86400000;
     const windowStart = new Date(Date.now() - windowMs);
 
-    // Fetch claims (predictions) with deduplication at source
+    // Fetch claims (predictions) with geotag data
     let claimsQuery = supabase
       .from('predictions')
-      .select('id, text, author_number, pseudonym, created_at, outcome, status, anon_id, category, public_slug, user_id')
+      .select('id, text, author_number, pseudonym, created_at, outcome, status, anon_id, category, public_slug, user_id, geotag_lat, geotag_lng, geotag_city, geotag_country, evidence_score')
       .eq('moderation_status', 'active')
       .gte('created_at', windowStart.toISOString())
       .order('created_at', { ascending: false })
@@ -119,9 +119,22 @@ export async function GET(request: NextRequest) {
       { lat: -15.8267, lng: -47.9218, city: 'Brasília, Brazil' },
     ];
 
-    // Transform claims with stable keys
-    const claims = (predictions || []).map((prediction: any, index: number) => {
-      const location = globalLocations[index % globalLocations.length];
+    // Transform claims - use real geodata when available, fallback to distributed locations
+    let fallbackIndex = 0;
+    const claims = (predictions || []).map((prediction: any) => {
+      // Use real geotag data if available
+      let lat = prediction.geotag_lat;
+      let lng = prediction.geotag_lng;
+
+      if (!lat || !lng) {
+        // Fallback: distribute across global locations
+        const location = globalLocations[fallbackIndex % globalLocations.length];
+        // Add small random offset to avoid exact overlap
+        lat = location.lat + (Math.random() - 0.5) * 2;
+        lng = location.lng + (Math.random() - 0.5) * 2;
+        fallbackIndex++;
+      }
+
       const submitter = prediction.pseudonym
         ? `@${prediction.pseudonym}`
         : `Anon #${prediction.author_number}`;
@@ -131,10 +144,10 @@ export async function GET(request: NextRequest) {
 
       if (prediction.outcome === 'correct') {
         status = 'verified';
-        outcome = 'true';
+        outcome = 'correct';
       } else if (prediction.outcome === 'incorrect') {
         status = 'disputed';
-        outcome = 'false';
+        outcome = 'incorrect';
       } else if (prediction.outcome === 'invalid') {
         status = 'void';
         outcome = 'void';
@@ -145,13 +158,13 @@ export async function GET(request: NextRequest) {
         publicSlug: prediction.public_slug,
         claim: prediction.text,
         category: prediction.category || 'Other',
-        lat: location.lat,
-        lng: location.lng,
+        lat,
+        lng,
         status,
         submitter,
         anonId: prediction.anon_id,
         userId: prediction.user_id,
-        rep: 75, // TODO: Get from user_stats
+        rep: 75,
         confidence: 80,
         lockedDate: new Date(prediction.created_at).toLocaleDateString('en-US', {
           year: 'numeric',
@@ -160,7 +173,8 @@ export async function GET(request: NextRequest) {
         }),
         outcome,
         createdAt: prediction.created_at,
-        key: `claim:${prediction.id}`, // Stable key for deduplication
+        evidence_score: prediction.evidence_score,
+        key: `claim:${prediction.id}`,
       };
 
       return item;
@@ -201,7 +215,7 @@ export async function GET(request: NextRequest) {
     const dedupedOsint = dedupeByKey(osint);
 
     // Filter resolved claims
-    const resolved = dedupedClaims.filter((c) => c.outcome === 'true' || c.outcome === 'false');
+    const resolved = dedupedClaims.filter((c) => c.outcome === 'correct' || c.outcome === 'incorrect');
 
     // Response with metadata
     const response = {
