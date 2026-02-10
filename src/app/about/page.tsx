@@ -141,7 +141,7 @@ export default function AboutPage() {
                 <div className="flex-1">
                   <h3 className="text-lg font-semibold text-white mb-1">Shareable Proof Cards</h3>
                   <p className="text-slate-400 text-sm">
-                    When you're right, prove it. Generate proof cards with your claim, timestamp, and on-chain verification. Perfect for social media, portfolios, or building credibility.
+                    When you're right, prove it. Generate proof cards with your claim, timestamp, and on-chain verification. Perfect for social media, portfolios, or building reputation.
                   </p>
                 </div>
               </div>
@@ -222,7 +222,7 @@ export default function AboutPage() {
                   <h3 className="text-base font-semibold text-white">Content Creators</h3>
                 </div>
                 <p className="text-slate-400 text-sm">
-                  Make bold calls on camera. Lock them on-chain. Prove you called it before anyone else. Build undeniable credibility with cryptographic timestamps.
+                  Make bold calls on camera. Lock them on-chain. Prove you called it before anyone else. Build undeniable reputation with cryptographic timestamps.
                 </p>
               </div>
 

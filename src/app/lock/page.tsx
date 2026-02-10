@@ -144,7 +144,7 @@ function LockPageContent() {
                 <div className="flex-1">
                   <h4 className="text-white font-semibold text-sm mb-1">Pro Tip</h4>
                   <p className="text-slate-300 text-sm">
-                    Claims resolved within 30 days earn 2x multipliers. Add evidence before locking for bonus credibility points.
+                    Claims resolved within 30 days earn 2x multipliers. Add evidence before locking for bonus reputation points.
                   </p>
                 </div>
               </div>

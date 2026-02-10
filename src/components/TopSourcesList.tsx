@@ -131,9 +131,9 @@ export default function TopSourcesList({ category = 'all' }: TopSourcesListProps
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
             </svg>
           </div>
-          <h3 className="text-3xl font-bold text-white mb-4">Credibility Registry</h3>
+          <h3 className="text-3xl font-bold text-white mb-4">Reputation Registry</h3>
           <p className="text-slate-400 text-lg mb-8 max-w-2xl mx-auto">
-            Build credibility through accurate claims backed by verifiable evidence. Your track record speaks for itself.
+            Build reputation through accurate claims backed by verifiable evidence. Your track record speaks for itself.
           </p>
           <Link href="/lock" className="inline-flex items-center px-8 py-4 bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-500 hover:to-purple-600 text-white font-semibold rounded-xl transition-all shadow-lg hover:shadow-[0_0_30px_rgba(168,85,247,0.4)]">
             Lock Your First Claim
@@ -169,7 +169,7 @@ export default function TopSourcesList({ category = 'all' }: TopSourcesListProps
             <svg className="w-6 h-6 text-purple-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
             </svg>
-            <h2 className="text-2xl font-bold text-white">Credibility Registry</h2>
+            <h2 className="text-2xl font-bold text-white">Reputation Registry</h2>
           </div>
         </div>
         <p className="text-slate-400 text-base max-w-2xl mx-auto">

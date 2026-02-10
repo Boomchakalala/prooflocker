@@ -174,7 +174,7 @@ export default function LandingPage() {
                 </div>
                 <h3 className="text-lg md:text-xl font-bold text-white mb-2">Reputation Layer</h3>
                 <p className="text-sm text-white/65 leading-relaxed">
-                  When you resolve a claim with evidence, the outcome feeds your weighted reputation score. Accuracy (50%) + Evidence Quality (30%) + Activity (20%) = math-backed credibility.
+                  When you resolve a claim with evidence, the outcome feeds your weighted reputation score. Accuracy (50%) + Evidence Quality (30%) + Activity (20%) = math-backed reputation.
                 </p>
               </div>
             </div>

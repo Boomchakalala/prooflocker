@@ -522,7 +522,7 @@ export default function ResolvePage({ params }: Props) {
                 )}
               </button>
               <p className="text-xs text-neutral-500 text-center">
-                This resolution is public and permanent. Your credibility score will be updated.
+                This resolution is public and permanent. Your reputation score will be updated.
               </p>
             </div>
           </div>

@@ -20,7 +20,7 @@ export default function HowScoringWorksPage() {
         <div className="mb-12">
           <h1 className="text-4xl font-bold text-white mb-4">How Reputation Works</h1>
           <p className="text-lg text-neutral-300 leading-relaxed">
-            Your reputation is calculated from accuracy, evidence quality, and consistency. Only claims are scored — intel signals are a monitoring layer, not a scoring input. This is proof of reputational observation: math-backed credibility from outcomes, not opinions.
+            Your reputation is calculated from accuracy, evidence quality, and consistency. Only claims are scored — intel signals are a monitoring layer, not a scoring input. This is proof of reputational observation: math-backed reputation from outcomes, not opinions.
           </p>
         </div>
 

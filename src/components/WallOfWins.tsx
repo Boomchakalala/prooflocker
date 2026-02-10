@@ -93,7 +93,7 @@ export default function WallOfWins() {
       id: "mock-3",
       publicSlug: "china-taiwan-escalation",
       textPreview: "China-Taiwan escalation visible via satellite troop buildup — conflict escalates within 6 months",
-      category: "OSINT",
+      category: "Intel",
       outcome: "correct",
       timestamp: "2025-11-18T08:15:00Z",
       authorNumber: 1203,
@@ -137,7 +137,7 @@ export default function WallOfWins() {
       id: "mock-7",
       publicSlug: "cyberattack-power-grid",
       textPreview: "Major cyberattack takes down US power grid within 90 days",
-      category: "OSINT",
+      category: "Intel",
       outcome: "incorrect",
       timestamp: "2025-12-01T11:20:00Z",
       authorNumber: 4512,
@@ -168,7 +168,7 @@ export default function WallOfWins() {
   const filteredPredictions = predictions.filter((p) => {
     if (selectedFilter === "All") return true;
     if (selectedFilter === "Correct") return p.outcome === "correct";
-    if (selectedFilter === "OSINT") return p.category?.toLowerCase() === "osint";
+    if (selectedFilter === "Intel") return p.category?.toLowerCase() === "osint" || p.category?.toLowerCase() === "intel";
     return p.category?.toLowerCase() === selectedFilter.toLowerCase();
   });
 
