@@ -55,7 +55,7 @@ export default function LandingHero() {
           <br />
           <span className="gradient-text-animated font-black inline-block">Reputation</span>
           <br />
-          <span className="text-white font-black inline-block text-5xl sm:text-6xl md:text-7xl lg:text-8xl mt-1 md:mt-2">One Claim at a Time.</span>
+          <span className="text-white font-black inline-block text-4xl sm:text-5xl md:text-6xl lg:text-7xl mt-1 md:mt-2">One Claim at a Time.</span>
         </h1>
 
         {/* Subheadline */}
