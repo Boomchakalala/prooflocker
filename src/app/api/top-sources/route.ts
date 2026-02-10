@@ -164,6 +164,12 @@ export async function GET(request: Request) {
     return NextResponse.json({
       sources: filteredSources,
       count: filteredSources.length,
+    }, {
+      headers: {
+        'Cache-Control': 'no-store, no-cache, must-revalidate, max-age=0',
+        'Pragma': 'no-cache',
+        'Expires': '0',
+      }
     });
   } catch (error) {
     console.error('Error in top-sources API:', error);
