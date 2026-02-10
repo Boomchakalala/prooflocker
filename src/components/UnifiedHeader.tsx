@@ -56,7 +56,7 @@ export default function UnifiedHeader({ currentView, onLockClick }: UnifiedHeade
               className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-medium transition-all ${
                 activeView === 'globe'
                   ? 'bg-purple-600/20 text-purple-300 border border-purple-500/30'
-                  : 'text-gray-400 hover:text-white hover:bg-white/5'
+                  : 'text-slate-300 hover:text-white hover:bg-white/5'
               }`}
             >
               <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
@@ -70,7 +70,7 @@ export default function UnifiedHeader({ currentView, onLockClick }: UnifiedHeade
               className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-medium transition-all ${
                 activeView === 'feed'
                   ? 'bg-purple-600/20 text-purple-300 border border-purple-500/30'
-                  : 'text-gray-400 hover:text-white hover:bg-white/5'
+                  : 'text-slate-300 hover:text-white hover:bg-white/5'
               }`}
             >
               <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
@@ -83,7 +83,7 @@ export default function UnifiedHeader({ currentView, onLockClick }: UnifiedHeade
               className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-medium transition-all ${
                 activeView === 'leaderboard'
                   ? 'bg-purple-600/20 text-purple-300 border border-purple-500/30'
-                  : 'text-gray-400 hover:text-white hover:bg-white/5'
+                  : 'text-slate-300 hover:text-white hover:bg-white/5'
               }`}
             >
               <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
@@ -96,7 +96,7 @@ export default function UnifiedHeader({ currentView, onLockClick }: UnifiedHeade
               className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-medium transition-all ${
                 pathname.startsWith('/about') || pathname.startsWith('/how-scoring')
                   ? 'bg-purple-600/20 text-purple-300 border border-purple-500/30'
-                  : 'text-gray-400 hover:text-white hover:bg-white/5'
+                  : 'text-slate-300 hover:text-white hover:bg-white/5'
               }`}
             >
               <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
