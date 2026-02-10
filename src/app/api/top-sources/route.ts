@@ -16,20 +16,23 @@ export async function GET(request: Request) {
 
     const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
-    // Build query to get top sources with minimum reliability 300
+    // Build query to get top sources
     let query = supabase
       .from('user_stats')
       .select(`
         user_id,
-        reputation_score,
-        total_predictions,
-        resolved_predictions,
-        correct_predictions,
-        incorrect_predictions,
-        avg_evidence_score
+        credibility_score,
+        total_resolved,
+        total_correct,
+        total_incorrect,
+        accuracy_rate,
+        evidence_a_count,
+        evidence_b_count,
+        evidence_c_count,
+        evidence_d_count
       `)
-      .gte('reputation_score', 300)
-      .order('reputation_score', { ascending: false })
+      .gte('credibility_score', 30)
+      .order('credibility_score', { ascending: false })
       .limit(limit);
 
     const { data: userStats, error } = await query;
@@ -48,12 +51,17 @@ export async function GET(request: Request) {
         const { data: userData } = await supabase.auth.admin.getUserById(stats.user_id);
 
         // Calculate win rate
-        const winRate = stats.resolved_predictions > 0
-          ? Math.round((stats.correct_predictions / stats.resolved_predictions) * 100)
+        const resolved = stats.total_resolved || 0;
+        const correct = stats.total_correct || 0;
+        const winRate = resolved > 0
+          ? Math.round((correct / resolved) * 100)
           : 0;
 
+        // Map credibility_score (0-100) to reputation score (0-1000)
+        const reputationScore = Math.min(Math.round((stats.credibility_score || 0) * 10), 1000);
+
         // Get tier
-        const tier = getReliabilityTier(stats.reputation_score);
+        const tier = getReliabilityTier(reputationScore);
 
         // If filtering by category, check if user has predictions in that category
         let categoryMatch = true;
@@ -75,11 +83,11 @@ export async function GET(request: Request) {
         return {
           userId: stats.user_id,
           displayName: userData?.user?.email?.split('@')[0] || `Anon #${stats.user_id.slice(-4)}`,
-          reliabilityScore: stats.reputation_score,
+          reliabilityScore: reputationScore,
           tier,
           winRate,
-          resolvedCount: stats.resolved_predictions,
-          avgEvidenceScore: Math.round(stats.avg_evidence_score || 0),
+          resolvedCount: resolved,
+          avgEvidenceScore: Math.round(stats.accuracy_rate || 0),
         };
       })
     );
