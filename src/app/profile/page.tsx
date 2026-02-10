@@ -298,7 +298,7 @@ export default function ProfilePage() {
                   </span>
                 </div>
                 <p className="text-xs text-neutral-500">
-                  This pseudonym identifies you publicly on all your predictions. It cannot be changed.
+                  This pseudonym identifies you publicly on all your claims. It cannot be changed.
                 </p>
               </div>
             ) : (
