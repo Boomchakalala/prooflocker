@@ -134,7 +134,7 @@ export default function AppFeedPage() {
     if (searchQuery) {
       return o.title?.toLowerCase().includes(searchQuery.toLowerCase()) ||
              o.summary?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-             o.location?.toLowerCase().includes(searchQuery.toLowerCase());
+             o.place_name?.toLowerCase().includes(searchQuery.toLowerCase());
     }
     return true;
   });
