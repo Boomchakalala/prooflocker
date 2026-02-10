@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 
@@ -65,22 +65,12 @@ export default function GlobeMapbox({ claims, osint, mapMode = 'both', viewMode 
   const readyRef = useRef(false);
   const claimsRef = useRef(claims);
   const osintRef = useRef(osint);
-  const [dbg, setDbg] = useState('mounted');
   claimsRef.current = claims;
   osintRef.current = osint;
 
   // Create map once
   useEffect(() => {
     if (mapRef.current || !containerRef.current) return;
-
-    // WebGL check
-    try {
-      const canvas = document.createElement('canvas');
-      const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
-      if (!gl) { setDbg('ERROR: WebGL not supported'); return; }
-    } catch (e) { setDbg('ERROR: WebGL check failed: ' + e); return; }
-
-    setDbg('creating map...');
 
     let map: mapboxgl.Map;
     try {
@@ -93,22 +83,15 @@ export default function GlobeMapbox({ claims, osint, mapMode = 'both', viewMode 
         attributionControl: false,
         antialias: true,
       });
-    } catch (e: any) {
-      setDbg('ERROR creating map: ' + (e?.message || e));
+    } catch {
       return;
     }
 
     mapRef.current = map;
-    setDbg('map created, waiting for load...');
-
-    map.on('error', (e) => {
-      setDbg('MAP ERROR: ' + (e?.error?.message || JSON.stringify(e)));
-    });
 
     map.once('load', () => {
       readyRef.current = true;
       map.resize();
-      setDbg('loaded | canvas: ' + map.getCanvas().width + 'x' + map.getCanvas().height);
 
       try { map.setFog({ range: [0.5, 10], color: '#000', 'horizon-blend': 0.05, 'high-color': '#0a0a0a', 'space-color': '#000', 'star-intensity': 0.2 }); } catch {}
 
@@ -131,39 +114,97 @@ export default function GlobeMapbox({ claims, osint, mapMode = 'both', viewMode 
       map.addLayer({ id: 'claims-points-core', type: 'circle', source: 'claims', filter: ['!', ['has', 'point_count']], paint: { 'circle-color': ['match', ['get', 'status'], 'verified', '#8b5cf6', 'disputed', '#ef4444', 'void', '#6b7280', '#f59e0b'], 'circle-radius': 8, 'circle-opacity': 0.95, 'circle-stroke-width': 2, 'circle-stroke-color': '#f8fafc', 'circle-stroke-opacity': 0.9 } });
       map.addLayer({ id: 'claims-heatmap', type: 'heatmap', source: 'claims', maxzoom: 9, layout: { visibility: 'none' }, paint: { 'heatmap-weight': ['interpolate', ['linear'], ['get', 'confidence'], 0, 0, 100, 1], 'heatmap-intensity': ['interpolate', ['linear'], ['zoom'], 0, 1, 9, 3], 'heatmap-color': ['interpolate', ['linear'], ['heatmap-density'], 0, 'rgba(139,92,246,0)', 0.2, 'rgba(139,92,246,0.2)', 0.4, 'rgba(139,92,246,0.4)', 0.6, 'rgba(245,158,11,0.5)', 0.8, 'rgba(239,68,68,0.6)', 1, 'rgba(239,68,68,0.8)'], 'heatmap-radius': ['interpolate', ['linear'], ['zoom'], 0, 15, 9, 30], 'heatmap-opacity': 0.7 } });
 
-      // Interactions
+      // Cursor interactions
       ['claims-clusters-core', 'claims-points-core', 'osint-clusters-core', 'osint-points-core'].forEach((l) => {
         map.on('mouseenter', l, () => { map.getCanvas().style.cursor = 'pointer'; });
         map.on('mouseleave', l, () => { map.getCanvas().style.cursor = ''; });
       });
 
+      // Cluster click → zoom in
       map.on('click', 'claims-clusters-core', (e) => {
-        const cid = (e.features![0].properties as any).cluster_id;
-        (map.getSource('claims') as mapboxgl.GeoJSONSource).getClusterExpansionZoom(cid, (err, zoom) => {
-          if (!err) map.easeTo({ center: (e.features![0].geometry as any).coordinates, zoom: zoom!, duration: 800 });
+        if (!e.features?.length) return;
+        const feature = e.features[0];
+        const clusterId = feature.properties?.cluster_id;
+        const coords = (feature.geometry as any).coordinates;
+        const src = map.getSource('claims') as mapboxgl.GeoJSONSource;
+        src.getClusterExpansionZoom(clusterId, (err: any, zoom: any) => {
+          if (!err && zoom != null) {
+            map.easeTo({ center: coords, zoom, duration: 800 });
+          }
         });
       });
 
       map.on('click', 'osint-clusters-core', (e) => {
-        const cid = (e.features![0].properties as any).cluster_id;
-        (map.getSource('osint') as mapboxgl.GeoJSONSource).getClusterExpansionZoom(cid, (err, zoom) => {
-          if (!err) map.easeTo({ center: (e.features![0].geometry as any).coordinates, zoom: zoom!, duration: 800 });
+        if (!e.features?.length) return;
+        const feature = e.features[0];
+        const clusterId = feature.properties?.cluster_id;
+        const coords = (feature.geometry as any).coordinates;
+        const src = map.getSource('osint') as mapboxgl.GeoJSONSource;
+        src.getClusterExpansionZoom(clusterId, (err: any, zoom: any) => {
+          if (!err && zoom != null) {
+            map.easeTo({ center: coords, zoom, duration: 800 });
+          }
         });
       });
 
+      // Individual claim popup
       map.on('click', 'claims-points-core', (e) => {
-        const p = e.features![0].properties as any;
-        const coords = (e.features![0].geometry as any).coordinates.slice();
+        if (!e.features?.length) return;
+        const p = e.features[0].properties as any;
+        const coords = (e.features[0].geometry as any).coordinates.slice();
+        // Wrap coords for anti-meridian
+        while (Math.abs(e.lngLat.lng - coords[0]) > 180) coords[0] += e.lngLat.lng > coords[0] ? 360 : -360;
         const sc = p.status === 'verified' ? '#8b5cf6' : p.status === 'disputed' ? '#ef4444' : p.status === 'void' ? '#6b7280' : '#f59e0b';
         const res = p.outcome === 'correct' || p.outcome === 'incorrect';
-        new mapboxgl.Popup({ offset: 25, maxWidth: '340px' }).setLngLat(coords).setHTML(`<div style="padding:6px;"><div style="font-size:14px;font-weight:600;margin-bottom:10px;line-height:1.4;color:#f8fafc;">${p.claim}</div><div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;padding-bottom:10px;border-bottom:1px solid rgba(148,163,184,0.1);"><span style="font-size:12px;font-weight:600;color:#e2e8f0;">${p.submitter}</span><span style="font-size:10px;padding:2px 8px;background:${sc}22;border-radius:8px;color:${sc};font-weight:700;text-transform:uppercase;">${res ? p.outcome : p.status}</span></div><div style="display:flex;justify-content:space-between;font-size:11px;color:#64748b;margin-bottom:8px;"><span>Locked: <b style="color:#f8fafc">${p.lockedDate}</b></span>${p.category ? '<span>#' + p.category + '</span>' : ''}</div><div style="display:flex;align-items:center;gap:10px;padding:8px 10px;background:${sc}11;border-radius:8px;"><span style="font-size:10px;color:#94a3b8;text-transform:uppercase;">Confidence</span><div style="flex:1;height:5px;background:rgba(148,163,184,0.15);border-radius:3px;overflow:hidden;"><div style="height:100%;width:${p.confidence}%;background:${sc};border-radius:3px;"></div></div><span style="font-size:13px;font-weight:700;color:${sc};">${p.confidence}%</span></div></div>`).addTo(map);
+        new mapboxgl.Popup({ offset: 25, maxWidth: '340px', closeButton: true })
+          .setLngLat(coords)
+          .setHTML(
+            `<div style="padding:6px;">
+              <div style="font-size:14px;font-weight:600;margin-bottom:10px;line-height:1.4;color:#f8fafc;">${p.claim}</div>
+              <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;padding-bottom:10px;border-bottom:1px solid rgba(148,163,184,0.1);">
+                <span style="font-size:12px;font-weight:600;color:#e2e8f0;">${p.submitter}</span>
+                <span style="font-size:10px;padding:2px 8px;background:${sc}22;border-radius:8px;color:${sc};font-weight:700;text-transform:uppercase;">${res ? p.outcome : p.status}</span>
+              </div>
+              <div style="display:flex;justify-content:space-between;font-size:11px;color:#64748b;margin-bottom:8px;">
+                <span>Locked: <b style="color:#f8fafc">${p.lockedDate}</b></span>
+                ${p.category ? '<span>#' + p.category + '</span>' : ''}
+              </div>
+              <div style="display:flex;align-items:center;gap:10px;padding:8px 10px;background:${sc}11;border-radius:8px;">
+                <span style="font-size:10px;color:#94a3b8;text-transform:uppercase;">Confidence</span>
+                <div style="flex:1;height:5px;background:rgba(148,163,184,0.15);border-radius:3px;overflow:hidden;">
+                  <div style="height:100%;width:${p.confidence}%;background:${sc};border-radius:3px;"></div>
+                </div>
+                <span style="font-size:13px;font-weight:700;color:${sc};">${p.confidence}%</span>
+              </div>
+            </div>`
+          )
+          .addTo(map);
       });
 
+      // Individual OSINT popup
       map.on('click', 'osint-points-core', (e) => {
-        const p = e.features![0].properties as any;
-        const coords = (e.features![0].geometry as any).coordinates.slice();
-        let tags: string[] = []; try { tags = JSON.parse(p.tags || '[]'); } catch {}
-        new mapboxgl.Popup({ offset: 25, maxWidth: '340px' }).setLngLat(coords).setHTML(`<div style="padding:6px;"><div style="font-size:9px;font-weight:800;color:#ef4444;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;">Intel Signal</div><div style="font-size:14px;font-weight:600;margin-bottom:10px;line-height:1.4;color:#f8fafc;">${p.title}</div><div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;padding-bottom:8px;border-bottom:1px solid rgba(148,163,184,0.1);"><span style="font-size:12px;font-weight:600;color:#f87171;">${p.source}</span><span style="font-size:11px;color:#64748b;">${p.timestamp}</span></div><div style="display:flex;gap:6px;flex-wrap:wrap;">${tags.map((t) => `<span style="padding:2px 8px;background:rgba(239,68,68,0.15);border-radius:8px;font-size:10px;font-weight:600;color:#ef4444;text-transform:uppercase;">${t}</span>`).join('')}</div></div>`).addTo(map);
+        if (!e.features?.length) return;
+        const p = e.features[0].properties as any;
+        const coords = (e.features[0].geometry as any).coordinates.slice();
+        while (Math.abs(e.lngLat.lng - coords[0]) > 180) coords[0] += e.lngLat.lng > coords[0] ? 360 : -360;
+        let tags: string[] = [];
+        try { tags = JSON.parse(p.tags || '[]'); } catch {}
+        new mapboxgl.Popup({ offset: 25, maxWidth: '340px', closeButton: true })
+          .setLngLat(coords)
+          .setHTML(
+            `<div style="padding:6px;">
+              <div style="font-size:9px;font-weight:800;color:#ef4444;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;">Intel Signal</div>
+              <div style="font-size:14px;font-weight:600;margin-bottom:10px;line-height:1.4;color:#f8fafc;">${p.title}</div>
+              <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;padding-bottom:8px;border-bottom:1px solid rgba(148,163,184,0.1);">
+                <span style="font-size:12px;font-weight:600;color:#f87171;">${p.source}</span>
+                <span style="font-size:11px;color:#64748b;">${p.timestamp}</span>
+              </div>
+              <div style="display:flex;gap:6px;flex-wrap:wrap;">
+                ${tags.map((t) => `<span style="padding:2px 8px;background:rgba(239,68,68,0.15);border-radius:8px;font-size:10px;font-weight:600;color:#ef4444;text-transform:uppercase;">${t}</span>`).join('')}
+              </div>
+            </div>`
+          )
+          .addTo(map);
       });
     });
 
@@ -208,15 +249,12 @@ export default function GlobeMapbox({ claims, osint, mapMode = 'both', viewMode 
       <style jsx global>{`
         .mapboxgl-popup-content { background: rgba(10,10,20,0.96) !important; border: 1px solid rgba(139,92,246,0.3) !important; border-radius: 12px !important; box-shadow: 0 8px 40px rgba(0,0,0,0.7), 0 0 20px rgba(139,92,246,0.15) !important; backdrop-filter: blur(16px) !important; color: #e2e8f0 !important; padding: 12px !important; }
         .mapboxgl-popup-tip { border-top-color: rgba(10,10,20,0.96) !important; border-bottom-color: rgba(10,10,20,0.96) !important; }
-        .mapboxgl-popup-close-button { color: #94a3b8 !important; font-size: 18px !important; }
+        .mapboxgl-popup-close-button { color: #94a3b8 !important; font-size: 18px !important; padding: 4px 8px !important; }
         .mapboxgl-popup-close-button:hover { color: #fff !important; background: transparent !important; }
         .mapboxgl-ctrl-attrib { display: none !important; }
       `}</style>
-      <div className="relative w-full h-full" style={{ border: '3px solid #8b5cf6', minHeight: 400 }}>
+      <div className="relative w-full h-full" style={{ minHeight: 400 }}>
         <div ref={containerRef} style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }} />
-        <div style={{ position: 'absolute', top: 10, left: 10, zIndex: 9999, color: '#8b5cf6', fontSize: 14, fontWeight: 700, background: 'rgba(0,0,0,0.9)', padding: '8px 16px', borderRadius: 8, pointerEvents: 'none' }}>
-          {dbg} | container: {containerRef.current?.offsetWidth || '?'}x{containerRef.current?.offsetHeight || '?'}
-        </div>
       </div>
     </>
   );
