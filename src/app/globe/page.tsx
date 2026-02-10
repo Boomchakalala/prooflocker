@@ -330,19 +330,6 @@ export default function GlobePage() {
 
   return (
     <>
-      <link
-        href="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css"
-        rel="stylesheet"
-      />
-      <Script
-        src="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js"
-        strategy="afterInteractive"
-        onReady={() => {
-          console.log('[Globe] Mapbox GL JS loaded');
-          setMapboxReady(true);
-        }}
-      />
-
       <style jsx global>{`
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
@@ -384,7 +371,7 @@ export default function GlobePage() {
 
         {/* Map Container - Mobile-First Responsive */}
         <div className="fixed top-16 left-0 right-0 md:right-[360px] bottom-0 md:bottom-0">
-          <GlobeMapbox claims={filteredClaimsForMap} osint={filteredOsintForMap} mapMode={mapMode} viewMode={viewMode} mapboxReady={mapboxReady} />
+          <GlobeMapbox claims={filteredClaimsForMap} osint={filteredOsintForMap} mapMode={mapMode} viewMode={viewMode} />
         </div>
 
         {/* Map Legend + Controls Overlay */}
