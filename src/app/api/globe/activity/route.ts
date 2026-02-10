@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { supabase } from '@/lib/supabase';
 import { createClient } from '@supabase/supabase-js';
 
 export const dynamic = 'force-dynamic';
@@ -69,21 +70,10 @@ export async function GET(request: NextRequest) {
     const category = searchParams.get('category'); // Optional filter
     const since = searchParams.get('since'); // ISO timestamp for incremental updates
 
+    // Use service role for user_stats lookup
     const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-    const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-
-    if (!supabaseUrl || !supabaseKey) {
-      return NextResponse.json(
-        { error: 'Server configuration error' },
-        { status: 500 }
-      );
-    }
-
-    const supabase = createClient(supabaseUrl, supabaseKey);
-
-    // Also use service role for user_stats lookup
     const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
-    const adminSupabase = serviceKey ? createClient(supabaseUrl, serviceKey) : supabase;
+    const adminSupabase = (serviceKey && supabaseUrl) ? createClient(supabaseUrl, serviceKey) : supabase;
 
     const now = new Date();
     const asOf = now.toISOString();
