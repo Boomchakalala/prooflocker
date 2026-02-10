@@ -213,6 +213,11 @@ export default function GlobeMapbox({ claims, osint, mapMode = 'both', viewMode 
       `}</style>
       <div className="relative w-full h-full bg-[#0A0A0F]">
         <div ref={containerRef} className="absolute inset-0" />
+        {dbg !== 'loaded' && (
+          <div style={{ position: 'absolute', top: 20, left: 20, zIndex: 9999, color: dbg.startsWith('ERROR') ? '#ef4444' : '#8b5cf6', fontSize: 16, fontWeight: 700, background: 'rgba(0,0,0,0.8)', padding: '12px 20px', borderRadius: 8 }}>
+            GLOBE: {dbg}
+          </div>
+        )}
       </div>
     </>
   );
