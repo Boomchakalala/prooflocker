@@ -168,8 +168,81 @@ export default function ProfilePage() {
 
   if (authLoading || loading) {
     return (
-      <div className="min-h-screen gradient-bg flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-2 border-neutral-500 border-t-transparent"></div>
+      <div className="min-h-screen gradient-bg text-white relative">
+        <div className="fixed inset-0 overflow-hidden pointer-events-none">
+          <div className="absolute top-20 -left-40 w-80 h-80 bg-blue-500/10 rounded-full blur-3xl" />
+          <div className="absolute top-40 -right-40 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl" />
+        </div>
+        <div className="relative z-10 max-w-4xl mx-auto px-4 py-12">
+          {/* Header skeleton */}
+          <div className="mb-10">
+            <div className="h-4 w-32 bg-slate-800 rounded-md animate-pulse mb-8" />
+            <div className="flex items-center justify-between mb-6">
+              <div>
+                <div className="h-9 w-48 bg-slate-800 rounded-lg animate-pulse mb-2" />
+                <div className="h-4 w-36 bg-slate-800/60 rounded-md animate-pulse" />
+              </div>
+              <div className="flex items-center gap-3">
+                <div className="h-10 w-24 bg-slate-800 rounded-lg animate-pulse" />
+                <div className="h-10 w-20 bg-slate-800/60 rounded-md animate-pulse" />
+              </div>
+            </div>
+            <div className="bg-slate-900/40 border border-slate-700/30 rounded-xl p-6">
+              <div className="h-3 w-24 bg-slate-800 rounded animate-pulse mb-4" />
+              <div className="h-5 w-40 bg-slate-800 rounded animate-pulse" />
+            </div>
+          </div>
+
+          {/* KPI cards skeleton */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+            {[...Array(4)].map((_, i) => (
+              <div key={i} className="bg-slate-900/60 border border-slate-700/40 rounded-xl p-4 text-center">
+                <div className="h-7 w-16 bg-slate-800 rounded-md animate-pulse mx-auto mb-2" />
+                <div className="h-3 w-20 bg-slate-800/60 rounded animate-pulse mx-auto" />
+              </div>
+            ))}
+          </div>
+
+          {/* Reputation skeleton */}
+          <div className="bg-slate-900/40 border border-slate-700/30 rounded-xl p-8 mb-8">
+            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6 mb-6">
+              <div className="flex-1">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-12 h-12 bg-slate-800 rounded-xl animate-pulse" />
+                  <div>
+                    <div className="h-3 w-24 bg-slate-800/60 rounded animate-pulse mb-2" />
+                    <div className="h-10 w-20 bg-slate-800 rounded-md animate-pulse" />
+                  </div>
+                </div>
+                <div className="h-8 w-28 bg-slate-800 rounded-lg animate-pulse" />
+              </div>
+              <div className="text-right">
+                <div className="h-3 w-20 bg-slate-800/60 rounded animate-pulse mb-2 ml-auto" />
+                <div className="h-9 w-24 bg-slate-800 rounded-md animate-pulse ml-auto" />
+              </div>
+            </div>
+            <div className="h-2 bg-slate-800 rounded-full animate-pulse" />
+          </div>
+
+          {/* Claims list skeleton */}
+          <div className="mb-8">
+            <div className="h-6 w-36 bg-slate-800 rounded-md animate-pulse mb-4" />
+            <div className="space-y-3">
+              {[...Array(3)].map((_, i) => (
+                <div key={i} className="bg-slate-900/40 border border-slate-700/30 rounded-lg p-4">
+                  <div className="flex items-start justify-between gap-4">
+                    <div className="flex-1">
+                      <div className="h-4 w-full bg-slate-800 rounded animate-pulse mb-2" />
+                      <div className="h-4 w-2/3 bg-slate-800/60 rounded animate-pulse mb-3" />
+                      <div className="h-3 w-32 bg-slate-800/40 rounded animate-pulse" />
+                    </div>
+                    <div className="h-6 w-16 bg-slate-800 rounded-md animate-pulse" />
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
       </div>
     );
   }
@@ -398,7 +471,39 @@ export default function ProfilePage() {
           </div>
         )}
 
-        {/* Stats grid */}
+        {/* KPI Stats Row */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+          <div className="bg-slate-900/60 border border-slate-700/40 rounded-xl p-4 text-center">
+            <div className="text-2xl font-bold text-white">
+              {stats?.reliabilityScore || 0}
+            </div>
+            <div className="text-xs text-slate-400 mt-1">Reputation</div>
+          </div>
+          <div className="bg-slate-900/60 border border-slate-700/40 rounded-xl p-4 text-center">
+            <div className="text-2xl font-bold text-white">
+              {stats?.totalPredictions || totalPredictions}
+            </div>
+            <div className="text-xs text-slate-400 mt-1">Total Claims</div>
+          </div>
+          <div className="bg-slate-900/60 border border-slate-700/40 rounded-xl p-4 text-center">
+            <div className="text-2xl font-bold text-white">
+              {stats && stats.resolvedPredictions > 0
+                ? `${Math.round((stats.correctPredictions / stats.resolvedPredictions) * 100)}%`
+                : resolvedCount > 0
+                ? `${Math.round((correctCount / resolvedCount) * 100)}%`
+                : "--"}
+            </div>
+            <div className="text-xs text-slate-400 mt-1">Accuracy</div>
+          </div>
+          <div className="bg-slate-900/60 border border-slate-700/40 rounded-xl p-4 text-center">
+            <div className="text-2xl font-bold text-white">
+              {stats?.correctPredictions || correctCount}
+            </div>
+            <div className="text-xs text-slate-400 mt-1">Correct Streak</div>
+          </div>
+        </div>
+
+        {/* Detailed Stats grid */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
           <div className="glass border border-white/10 rounded-lg p-6">
             <div className="text-3xl font-bold text-neutral-200 mb-1">
