@@ -141,7 +141,7 @@ export default function AppFeedPage() {
         <div className="mb-4 bg-slate-900/40 backdrop-blur-xl border border-slate-700/30 rounded-xl px-4 py-2.5 overflow-hidden">
           <div className="flex items-center gap-3">
             <span className={`inline-flex items-center gap-1.5 px-2 py-0.5 text-[10px] font-bold rounded-md uppercase tracking-wide ${
-              currentTickerItem.type === 'OSINT'
+              currentTickerItem.type === 'INTEL'
                 ? 'bg-red-600/30 border border-red-500/50 text-red-200'
                 : 'bg-purple-600/30 border border-purple-500/50 text-purple-200'
             }`}>
@@ -185,7 +185,7 @@ export default function AppFeedPage() {
               </div>
 
               <div className="flex items-center gap-1.5">
-                <span className="text-xs text-slate-400">OSINT:</span>
+                <span className="text-xs text-slate-400">Intel:</span>
                 <span className="text-sm font-bold text-red-400">{osintSignals.length}</span>
               </div>
             </div>
@@ -232,7 +232,7 @@ export default function AppFeedPage() {
                       : "text-neutral-400 hover:text-red-300"
                   }`}
                 >
-                  OSINT
+                  Intel
                 </button>
               </div>
 
@@ -248,7 +248,7 @@ export default function AppFeedPage() {
                   </svg>
                   <input
                     type="text"
-                    placeholder="Search claims, signals..."
+                    placeholder="Search claims and intel..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     className="w-full pl-10 pr-4 py-1.5 bg-slate-800/40 border border-slate-700/40 rounded-lg text-sm text-white placeholder-slate-500 focus:outline-none focus:border-purple-500/40 transition-colors"
