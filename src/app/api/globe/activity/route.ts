@@ -230,10 +230,22 @@ export async function GET(request: NextRequest) {
       return item;
     });
 
-    // Transform OSINT with stable keys
+    // Transform OSINT with stable keys and fallback coordinates
     const osint = (osintData || []).map((signal: any) => {
       const hoursAgo = Math.floor((Date.now() - new Date(signal.created_at).getTime()) / 3600000);
       const timestamp = hoursAgo < 1 ? 'Just now' : hoursAgo < 24 ? `${hoursAgo}h ago` : `${Math.floor(hoursAgo / 24)}d ago`;
+
+      // Use real geotag data if available, otherwise assign fallback location
+      let lat = signal.geotag_lat;
+      let lng = signal.geotag_lng;
+
+      if (!lat || !lng) {
+        // Use same fallback mechanism as claims
+        const location = globalLocations[fallbackIndex % globalLocations.length];
+        lat = location.lat + (Math.random() - 0.5) * 2;
+        lng = location.lng + (Math.random() - 0.5) * 2;
+        fallbackIndex++;
+      }
 
       // Create stable key
       const key = getStableKey(
@@ -247,8 +259,8 @@ export async function GET(request: NextRequest) {
         source: signal.source_name,
         handle: signal.source_handle,
         url: signal.source_url,
-        lat: signal.geotag_lat,
-        lng: signal.geotag_lng,
+        lat,
+        lng,
         timestamp,
         tags: signal.tags || [],
         category: signal.category || (signal.tags && signal.tags[0]) || 'Intel',
