@@ -80,9 +80,7 @@ export default function RootLayout({
     <html lang="en" className="dark">
       <head>
         <link rel="manifest" href="/manifest.json" />
-        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-        <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css" />
-        <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css" />
+        <link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css" />
       </head>
       <body
         className={`${interTight.variable} ${montserrat.variable} ${jetbrainsMono.variable} antialiased bg-[#1A0033] text-[#F5F5F5]`}
