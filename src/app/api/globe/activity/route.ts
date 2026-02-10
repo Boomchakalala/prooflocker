@@ -4,6 +4,36 @@ import { createClient } from '@supabase/supabase-js';
 export const dynamic = 'force-dynamic';
 export const maxDuration = 10;
 
+function calculateRepScore(stats: {
+  total_resolved: number;
+  total_correct: number;
+  accuracy_rate: number;
+  evidence_a_count: number;
+  evidence_b_count: number;
+  evidence_c_count: number;
+  evidence_d_count: number;
+}): number {
+  const resolved = stats.total_resolved || 0;
+  const correct = stats.total_correct || 0;
+  if (resolved === 0) return 0;
+  const winRate = correct / resolved;
+  const accuracyScore = Math.round(winRate * 400);
+  const volumeScore = Math.min(Math.round(Math.log2(resolved + 1) * 53), 300);
+  const totalEvidence = (stats.evidence_a_count || 0) + (stats.evidence_b_count || 0) +
+    (stats.evidence_c_count || 0) + (stats.evidence_d_count || 0);
+  let evidenceScore = 0;
+  if (totalEvidence > 0) {
+    const weightedEvidence = (
+      (stats.evidence_a_count || 0) * 1.0 +
+      (stats.evidence_b_count || 0) * 0.75 +
+      (stats.evidence_c_count || 0) * 0.4 +
+      (stats.evidence_d_count || 0) * 0.1
+    ) / totalEvidence;
+    evidenceScore = Math.round(weightedEvidence * 300);
+  }
+  return Math.min(accuracyScore + volumeScore + evidenceScore, 1000);
+}
+
 // Dedupe helper - creates stable key for items
 function getStableKey(item: any, type: 'claim' | 'osint'): string {
   if (type === 'claim') {
@@ -50,6 +80,11 @@ export async function GET(request: NextRequest) {
     }
 
     const supabase = createClient(supabaseUrl, supabaseKey);
+
+    // Also use service role for user_stats lookup
+    const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+    const adminSupabase = serviceKey ? createClient(supabaseUrl, serviceKey) : supabase;
+
     const now = new Date();
     const asOf = now.toISOString();
 
@@ -103,6 +138,23 @@ export async function GET(request: NextRequest) {
 
     if (osintError) {
       console.error('[Activity API] Error fetching OSINT:', osintError);
+    }
+
+    // Batch-fetch reputation scores for all users in predictions
+    const userIds = [...new Set((predictions || []).map((p: any) => p.user_id).filter(Boolean))];
+    const userRepMap = new Map<string, number>();
+
+    if (userIds.length > 0) {
+      const { data: userStats } = await adminSupabase
+        .from('user_stats')
+        .select('user_id, total_resolved, total_correct, accuracy_rate, evidence_a_count, evidence_b_count, evidence_c_count, evidence_d_count')
+        .in('user_id', userIds);
+
+      if (userStats) {
+        for (const stats of userStats) {
+          userRepMap.set(stats.user_id, calculateRepScore(stats));
+        }
+      }
     }
 
     // Global locations for claims (fallback if no geocoding)
@@ -164,7 +216,7 @@ export async function GET(request: NextRequest) {
         submitter,
         anonId: prediction.anon_id,
         userId: prediction.user_id,
-        rep: 75,
+        rep: prediction.user_id ? (userRepMap.get(prediction.user_id) ?? 0) : 0,
         confidence: 80,
         lockedDate: new Date(prediction.created_at).toLocaleDateString('en-US', {
           year: 'numeric',
