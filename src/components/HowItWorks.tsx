@@ -8,7 +8,7 @@ export default function HowItWorks() {
             How It Works
           </h2>
           <p className="text-base md:text-lg lg:text-xl text-white/70 font-semibold max-w-3xl mx-auto px-2">
-            Three steps. Conviction to credibility.
+            Three steps. Conviction to reputation.
           </p>
         </div>
 
@@ -30,7 +30,7 @@ export default function HowItWorks() {
             </div>
 
             <p className="text-sm md:text-base lg:text-lg text-white/75 leading-relaxed mb-4 md:mb-6 text-center">
-              Browse live OSINT signals and news events mapped on the globe.
+              Browse live intel signals and breaking events mapped on the globe. Spot patterns before consensus forms.
             </p>
 
             {/* Animation: Clock + Lock */}
@@ -59,7 +59,7 @@ export default function HowItWorks() {
 
               <div className="text-center mb-3 md:mb-4">
                 <h3 className="text-xl md:text-2xl lg:text-3xl font-bold text-white mb-1 md:mb-2">Lock</h3>
-                <p className="text-xs md:text-sm text-emerald-400 font-semibold">When the world catches up</p>
+                <p className="text-xs md:text-sm text-emerald-400 font-semibold">Timestamp it before anyone else</p>
               </div>
 
               <p className="text-sm md:text-base lg:text-lg text-white/80 leading-relaxed mb-3 md:mb-4 text-center">
@@ -91,7 +91,7 @@ export default function HowItWorks() {
             </div>
 
             <p className="text-sm md:text-base lg:text-lg text-white/75 leading-relaxed mb-4 md:mb-6 text-center">
-              When the outcome is clear, submit evidence. Your claim gets graded and your reputation updates.
+              When the outcome is clear, submit evidence. Your evidence grade determines your reputation shift.
             </p>
 
             {/* Stat box: compounding example */}
