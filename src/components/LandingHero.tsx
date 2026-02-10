@@ -48,14 +48,14 @@ export default function LandingHero() {
       <div className="max-w-5xl mx-auto relative z-10 w-full text-center">
         {/* Massive gradient headline - 3 lines */}
         <h1
-          className="text-5xl sm:text-7xl md:text-8xl lg:text-9xl font-black mb-4 tracking-tighter leading-[0.90] animate-fade-in-up px-4"
+          className="text-6xl sm:text-8xl md:text-9xl lg:text-[10rem] font-black mb-4 tracking-tighter leading-[0.90] animate-fade-in-up px-4"
           style={{ fontFamily: 'var(--font-montserrat)' }}
         >
           <span className="gradient-text-animated font-black inline-block">Build Your</span>
           <br />
           <span className="gradient-text-animated font-black inline-block">Reputation</span>
           <br />
-          <span className="text-white font-black inline-block text-4xl sm:text-5xl md:text-6xl lg:text-7xl mt-1 md:mt-2">One Claim at a Time.</span>
+          <span className="text-white font-black inline-block text-5xl sm:text-6xl md:text-7xl lg:text-8xl mt-1 md:mt-2">One Claim at a Time.</span>
         </h1>
 
         {/* Subheadline */}

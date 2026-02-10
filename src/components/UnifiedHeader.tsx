@@ -148,12 +148,12 @@ export default function UnifiedHeader({ currentView, onLockClick }: UnifiedHeade
 
           {/* User Menu / Sign In */}
           {!user ? (
-            // Not logged in - Show prominent Sign In button
+            // Not logged in - Show Sign In button with icon
             <button
               onClick={() => setShowAuthModal(true)}
-              className="flex items-center gap-2 px-4 md:px-6 py-2 md:py-2.5 rounded-lg text-sm md:text-base font-bold bg-gradient-to-r from-emerald-600 to-cyan-600 hover:from-emerald-500 hover:to-cyan-500 text-white transition-all shadow-lg shadow-emerald-500/25 hover:shadow-emerald-500/40 hover:scale-105"
+              className="flex items-center gap-2 px-4 md:px-5 py-2 rounded-lg text-sm font-semibold bg-slate-800/60 hover:bg-slate-700/60 text-white border border-slate-600/50 hover:border-purple-500/50 transition-all"
             >
-              <svg className="w-4 h-4 md:w-5 md:h-5" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"/>
               </svg>
               <span>Sign In</span>
