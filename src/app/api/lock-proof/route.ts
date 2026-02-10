@@ -6,7 +6,6 @@ import { submitToDigitalEvidence, isDigitalEvidenceEnabled } from "@/lib/digital
 import { validatePredictionContent } from "@/lib/contentFilter";
 import { createClient } from "@supabase/supabase-js";
 import { awardLockPoints } from "@/lib/insight-db";
-import { getClientIP, getCachedLocation } from "@/lib/geolocation";
 
 export const runtime = "nodejs";
 
@@ -180,12 +179,12 @@ export async function POST(request: NextRequest) {
       deSubmittedAt,
       confirmedAt,
       claimedAt: authenticatedUserId ? new Date().toISOString() : undefined, // Mark as claimed if authenticated
-      // Globe View: Automatic geotag from IP detection
-      geotagLat: autoLocation?.lat || null,
-      geotagLng: autoLocation?.lng || null,
-      geotagCity: autoLocation?.city || null,
-      geotagCountry: autoLocation?.country || null,
-      geotagRegion: autoLocation?.region || null,
+      // Globe View: Use client-provided geolocation (browser GPS or IP fallback)
+      geotagLat: geotag?.lat || null,
+      geotagLng: geotag?.lng || null,
+      geotagCity: geotag?.city || null,
+      geotagCountry: geotag?.country || null,
+      geotagRegion: null, // Not collected from client geolocation
     };
 
     // Save prediction to storage (Supabase)
