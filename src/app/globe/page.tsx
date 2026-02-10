@@ -25,11 +25,13 @@ interface Claim {
   lng: number;
   status: 'verified' | 'pending' | 'disputed' | 'void';
   submitter: string;
-  anonId?: string; // User's anon_id for profile link
+  anonId?: string;
   rep: number;
   confidence: number;
   lockedDate: string;
   outcome: string | null;
+  evidence_score?: number;
+  createdAt?: string;
 }
 
 interface OsintItem {
@@ -565,7 +567,7 @@ export default function GlobePage() {
                       }`}
                     >
                       <div className="flex items-center justify-between mb-1.5">
-                        <span className="text-[11px] text-slate-400 font-medium">Anon #{res.authorNumber || 1000}</span>
+                        <span className="text-[11px] text-slate-400 font-medium">{res.submitter}</span>
                         <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded ${
                           isCorrect ? 'bg-emerald-500/20 text-emerald-400' : 'bg-red-500/20 text-red-400'
                         }`}>
@@ -573,11 +575,12 @@ export default function GlobePage() {
                         </span>
                       </div>
                       <p className="text-[13px] text-white leading-snug line-clamp-2 mb-1.5">
-                        {res.textPreview}
+                        {res.claim}
                       </p>
                       <div className="flex items-center gap-2 text-[10px] text-slate-500">
                         {res.category && <span>#{res.category}</span>}
-                        {res.evidence_score && <span>Evidence: {res.evidence_score}/100</span>}
+                        {res.evidence_score != null && <span>Evidence: {res.evidence_score}/100</span>}
+                        <span className="ml-auto">{res.lockedDate}</span>
                       </div>
                     </div>
                   );
@@ -685,16 +688,19 @@ export default function GlobePage() {
                   resolutions.map((res) => (
                     <div key={res.id} className={`p-3 bg-slate-900/60 border rounded-xl ${res.outcome === 'correct' ? 'border-emerald-500/40' : 'border-red-500/40'}`}>
                       <div className="flex items-center justify-between mb-2">
-                        <span className="text-xs text-slate-400">Anon #{res.authorNumber || 1000}</span>
+                        <span className="text-xs text-slate-400">{res.submitter}</span>
                         <span className={`text-[10px] font-semibold px-2 py-0.5 rounded ${
                           res.outcome === 'correct' ? 'bg-emerald-500/15 text-emerald-400' : 'bg-red-500/15 text-red-400'
                         }`}>
                           {res.outcome === 'correct' ? 'Correct' : 'Incorrect'}
                         </span>
                       </div>
-                      <p className="text-sm text-white line-clamp-2 mb-2">{res.textPreview}</p>
+                      <p className="text-sm text-white line-clamp-2 mb-2">{res.claim}</p>
                       <div className="flex items-center justify-between">
-                        <span className="text-[10px] text-slate-500">{res.outcome === 'correct' ? '+80 pts' : '-20 pts'}</span>
+                        <span className="text-[10px] text-slate-500">
+                          {res.category && `#${res.category}`}
+                          {res.evidence_score != null && ` | Evidence: ${res.evidence_score}/100`}
+                        </span>
                         <button onClick={() => router.push(`/proof/${res.publicSlug}`)} className="text-[11px] text-purple-400 font-medium">View</button>
                       </div>
                     </div>
