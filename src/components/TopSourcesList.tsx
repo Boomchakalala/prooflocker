@@ -33,7 +33,14 @@ export default function TopSourcesList({ category = 'all' }: TopSourcesListProps
         ? `/api/top-sources?category=${encodeURIComponent(category)}`
         : '/api/top-sources';
 
-      const response = await fetch(url, { cache: 'no-store' });
+      const response = await fetch(url, {
+        cache: 'no-store',
+        headers: {
+          'Cache-Control': 'no-cache, no-store, must-revalidate',
+          'Pragma': 'no-cache',
+          'Expires': '0'
+        }
+      });
 
       if (!response.ok) {
         console.warn('Top sources API unavailable, showing mock data');
@@ -42,6 +49,7 @@ export default function TopSourcesList({ category = 'all' }: TopSourcesListProps
       }
 
       const data = await response.json();
+      console.log('[TopSourcesList] Fetched sources:', data.sources?.length || 0);
       setSources(data.sources || []);
     } catch (err) {
       console.error('Error fetching top sources:', err);

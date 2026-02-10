@@ -3,7 +3,7 @@ import { createClient } from '@supabase/supabase-js';
 import { getReliabilityTier } from '@/lib/user-scoring';
 
 export const dynamic = 'force-dynamic';
-export const revalidate = 300; // Cache for 5 minutes
+export const revalidate = 0; // No caching - always fresh data
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
