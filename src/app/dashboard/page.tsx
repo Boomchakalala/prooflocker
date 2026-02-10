@@ -27,7 +27,24 @@ export default function DashboardPage() {
       try {
         const anonId = getAnonId();
         if (!anonId && !user) {
-          setError("No user identifier found. Lock a claim to get started!");
+          // No identity yet — show default empty state instead of error
+          setScoreData({
+            score: {
+              totalPoints: 0,
+              correctResolves: 0,
+              incorrectResolves: 0,
+              totalResolves: 0,
+              currentStreak: 0,
+              bestStreak: 0,
+              locksCount: 0,
+              claimsCount: 0,
+              categoryStats: {},
+              badges: [],
+            },
+            totalUsers: 0,
+            accuracy: 0,
+            milestone: { name: 'Novice', min: 0, max: 300 },
+          } as InsightScoreResponse);
           setLoading(false);
           return;
         }
@@ -52,14 +69,51 @@ export default function DashboardPage() {
         });
 
         if (!response.ok) {
-          throw new Error("Failed to fetch insight score");
+          // API failed — show empty state rather than error
+          console.error("Insight API returned", response.status);
+          setScoreData({
+            score: {
+              totalPoints: 0,
+              correctResolves: 0,
+              incorrectResolves: 0,
+              totalResolves: 0,
+              currentStreak: 0,
+              bestStreak: 0,
+              locksCount: 0,
+              claimsCount: 0,
+              categoryStats: {},
+              badges: [],
+            },
+            totalUsers: 0,
+            accuracy: 0,
+            milestone: { name: 'Novice', min: 0, max: 300 },
+          } as InsightScoreResponse);
+          setLoading(false);
+          return;
         }
 
         const data: InsightScoreResponse = await response.json();
         setScoreData(data);
       } catch (err) {
         console.error("Error fetching insight score:", err);
-        setError("Failed to load insight score");
+        // Graceful fallback
+        setScoreData({
+          score: {
+            totalPoints: 0,
+            correctResolves: 0,
+            incorrectResolves: 0,
+            totalResolves: 0,
+            currentStreak: 0,
+            bestStreak: 0,
+            locksCount: 0,
+            claimsCount: 0,
+            categoryStats: {},
+            badges: [],
+          },
+          totalUsers: 0,
+          accuracy: 0,
+          milestone: { name: 'Novice', min: 0, max: 300 },
+        } as InsightScoreResponse);
       } finally {
         setLoading(false);
       }
@@ -113,7 +167,7 @@ export default function DashboardPage() {
         {/* Header */}
         <div className="text-center mb-12">
           <h1 className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-slate-300 via-white to-slate-300 bg-clip-text text-transparent" style={{ fontFamily: "var(--font-montserrat)" }}>
-            Your Reputation Score
+            My Stats
           </h1>
           {user && (
             <p className="text-purple-400 text-sm">
