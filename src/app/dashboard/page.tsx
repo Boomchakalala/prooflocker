@@ -260,43 +260,43 @@ export default function DashboardPage() {
 
         {/* Rank Display */}
         {hasPoints && (
-          <div className="bg-[#1e1e1e] border border-gray-800 rounded-xl p-6 mb-8 text-center">
+          <div className="bg-slate-900/60 border border-slate-700/40 rounded-xl p-5 mb-8 text-center">
             {rank ? (
               <div>
-                <span className="text-gray-400">Your rank: </span>
-                <span className="text-3xl font-bold text-[#00bfff]">
+                <span className="text-slate-400">Your rank: </span>
+                <span className="text-3xl font-bold text-purple-400">
                   #{rank}
                 </span>
-                <span className="text-gray-500"> of {totalUsers} active users</span>
+                <span className="text-slate-500"> of {totalUsers} active users</span>
               </div>
             ) : (
-              <div className="text-gray-400">Keep building your score to rank!</div>
+              <div className="text-slate-400">Keep building your score to rank!</div>
             )}
           </div>
         )}
 
         {!hasPoints && (
-          <div className="bg-[#1e1e1e] border border-gray-800 rounded-xl p-6 mb-8 text-center">
-            <p className="text-gray-400">Lock more claims to earn your rank!</p>
+          <div className="bg-slate-900/60 border border-slate-700/40 rounded-xl p-5 mb-8 text-center">
+            <p className="text-slate-400">Lock more claims to earn your rank!</p>
           </div>
         )}
 
         {/* Badges */}
         {score.badges.length > 0 && (
-          <div className="bg-[#1e1e1e] border border-gray-800 rounded-xl p-8 mb-8">
-            <h2 className="text-2xl font-bold mb-6">Badges Earned</h2>
-            <div className="flex flex-wrap gap-4">
+          <div className="bg-slate-900/60 border border-slate-700/40 rounded-xl p-6 mb-8">
+            <h2 className="text-xl font-bold mb-4 text-white">Badges Earned</h2>
+            <div className="flex flex-wrap gap-3">
               {score.badges.map((badgeId) => {
                 const badge = BADGES[badgeId as BadgeId];
                 if (!badge) return null;
                 return (
                   <div
                     key={badgeId}
-                    className="bg-[#9370db]/10 border border-[#9370db] rounded-lg p-4 min-w-[200px]"
+                    className="bg-purple-500/10 border border-purple-500/30 rounded-lg p-3 min-w-[180px]"
                     title={badge.description}
                   >
-                    <div className="text-xl mb-1">{badge.name}</div>
-                    <div className="text-sm text-gray-400">{badge.description}</div>
+                    <div className="text-base font-semibold text-white mb-1">{badge.name}</div>
+                    <div className="text-xs text-slate-400">{badge.description}</div>
                   </div>
                 );
               })}
@@ -306,22 +306,22 @@ export default function DashboardPage() {
 
         {/* Category Stats */}
         {Object.keys(score.categoryStats).length > 0 && (
-          <div className="bg-[#1e1e1e] border border-gray-800 rounded-xl p-8 mb-8">
-            <h2 className="text-2xl font-bold mb-6">Category Performance</h2>
-            <div className="space-y-4">
+          <div className="bg-slate-900/60 border border-slate-700/40 rounded-xl p-6 mb-8">
+            <h2 className="text-xl font-bold mb-4 text-white">Category Performance</h2>
+            <div className="space-y-3">
               {Object.entries(score.categoryStats).map(([category, stats]) => {
                 const catAccuracy = stats.total > 0 ? Math.round((stats.correct / stats.total) * 100) : 0;
                 return (
                   <div key={category}>
-                    <div className="flex justify-between items-center mb-2">
-                      <span className="font-semibold">{category}</span>
-                      <span className="text-gray-400">
-                        {stats.correct}/{stats.total} ({catAccuracy}%) • {stats.points} pts
+                    <div className="flex justify-between items-center mb-1.5">
+                      <span className="font-medium text-sm text-white">{category}</span>
+                      <span className="text-xs text-slate-400">
+                        {stats.correct}/{stats.total} ({catAccuracy}%) -- {stats.points} pts
                       </span>
                     </div>
-                    <div className="w-full bg-gray-800 rounded-full h-2">
+                    <div className="w-full bg-slate-800 rounded-full h-2">
                       <div
-                        className="bg-[#00bfff] h-2 rounded-full transition-all"
+                        className="bg-gradient-to-r from-purple-600 to-blue-500 h-2 rounded-full transition-all"
                         style={{ width: `${catAccuracy}%` }}
                       ></div>
                     </div>
