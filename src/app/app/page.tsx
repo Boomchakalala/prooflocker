@@ -5,6 +5,7 @@ import Link from "next/link";
 import UnifiedHeader from "@/components/UnifiedHeader";
 import ClaimModal from "@/components/ClaimModal";
 import VoteButtons from "@/components/VoteButtons";
+import IntelCard from "@/components/IntelCard";
 import { Prediction } from "@/lib/storage";
 import { useAuth } from "@/contexts/AuthContext";
 import { getEvidenceGrade, getEvidenceGradeInfo } from "@/lib/scoring";
@@ -46,14 +47,15 @@ export default function AppFeedPage() {
       const predData = await predRes.json();
       const newPredictions = predData.predictions || [];
 
-      const osintRes = await fetch("/api/osint?limit=100");
-      const osintData = await osintRes.json();
-      const newOsint = osintData || [];
+      // Fetch new intel items from unified intel API
+      const intelRes = await fetch("/api/intel?window=24&limit=100");
+      const intelData = await intelRes.json();
+      const newIntel = intelData.items || [];
 
       // Detect new items (skip on first load)
       if (prevCounts.claims > 0 || prevCounts.intel > 0) {
         const newClaimCount = newPredictions.length - prevCounts.claims;
-        const newIntelCount = newOsint.length - prevCounts.intel;
+        const newIntelCount = newIntel.length - prevCounts.intel;
         if (newClaimCount > 0 || newIntelCount > 0) {
           setNewItems({
             claims: Math.max(0, newClaimCount),
@@ -62,9 +64,9 @@ export default function AppFeedPage() {
         }
       }
 
-      setPrevCounts({ claims: newPredictions.length, intel: newOsint.length });
+      setPrevCounts({ claims: newPredictions.length, intel: newIntel.length });
       setPredictions(newPredictions);
-      setOsintSignals(newOsint);
+      setOsintSignals(newIntel);
       setLastUpdated(new Date());
     } catch (error) {
       console.error("Error fetching feed data:", error);
@@ -88,8 +90,8 @@ export default function AppFeedPage() {
       items.push({
         type: 'INTEL',
         text: signal.title || 'Intelligence Signal',
-        location: signal.locationName || signal.location,
-        time: signal.createdAt || signal.created_at ? formatRelativeTime(signal.createdAt || signal.created_at) : 'Just now'
+        location: signal.place_name || signal.country_code || '',
+        time: signal.created_at ? formatRelativeTime(signal.created_at) : 'Just now'
       });
     });
     predictions.slice(0, 2).forEach(claim => {
