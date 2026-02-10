@@ -119,7 +119,7 @@ export default async function ProofPage({ params }: Props) {
         <div className="mb-8">
           <Link
             href="/app"
-            className="inline-flex items-center gap-2 text-neutral-400 hover:text-white transition-colors text-sm group"
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-slate-800/60 border border-slate-700/50 text-slate-300 hover:text-white hover:bg-slate-700/60 hover:border-slate-600/60 transition-all text-sm font-medium group backdrop-blur-sm"
           >
             <svg className="w-4 h-4 group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
@@ -129,7 +129,14 @@ export default async function ProofPage({ params }: Props) {
         </div>
 
         {/* Hero Card - Prediction */}
-        <div className="glass border border-white/10 rounded-2xl overflow-hidden mb-6 shadow-2xl">
+        <div className="glass border border-white/10 rounded-2xl overflow-hidden mb-6 shadow-2xl transition-all duration-300 hover:shadow-[0_0_40px_rgba(168,85,247,0.15)] hover:border-purple-500/20">
+          {/* Outcome accent bar */}
+          {prediction.outcome === "correct" && (
+            <div className="h-1 bg-gradient-to-r from-green-500 via-emerald-400 to-green-500" />
+          )}
+          {prediction.outcome === "incorrect" && (
+            <div className="h-1 bg-gradient-to-r from-red-500 via-rose-400 to-red-500" />
+          )}
           <div className="p-6 md:p-8 bg-gradient-to-br from-blue-500/5 via-purple-500/5 to-transparent">
             <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4 mb-4">
               <div className="flex-1">
@@ -163,8 +170,11 @@ export default async function ProofPage({ params }: Props) {
               </div>
             </div>
 
+            {/* Divider */}
+            <div className="border-b border-slate-700/30 mt-6 mb-6" />
+
             {/* Quick Info */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mt-6">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
               <div className="p-3 bg-white/5 rounded-lg border border-white/10">
                 <div className="text-xs text-neutral-400 mb-1">Locked</div>
                 <div className="text-sm font-medium text-white">
@@ -230,7 +240,9 @@ export default async function ProofPage({ params }: Props) {
         <div className="space-y-6">
           {/* Step 1: Prediction Locked */}
           {prediction.onChainStatus === "confirmed" && prediction.deReference && (
-            <div className="glass border border-white/10 rounded-2xl overflow-hidden shadow-xl">
+            <div className="glass border border-cyan-500/10 rounded-2xl overflow-hidden shadow-xl transition-all duration-300 hover:shadow-[0_0_30px_rgba(6,182,212,0.1)] hover:border-cyan-500/20">
+              {/* Teal accent bar */}
+              <div className="h-0.5 bg-gradient-to-r from-transparent via-cyan-500/60 to-transparent" />
               <div className="p-6 md:p-8">
                 {/* Step Header */}
                 <div className="flex items-center gap-4 mb-6">
