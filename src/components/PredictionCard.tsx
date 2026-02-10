@@ -538,7 +538,6 @@ export default function PredictionCard({ prediction, card, currentUserId, onOutc
               )}
               {reputationImpact.streakCount > 0 && (
                 <div className="flex items-center gap-1.5 text-orange-400">
-                  <span className="text-sm">🔥</span>
                   <span className="font-semibold text-sm">{reputationImpact.streakCount}-streak</span>
                 </div>
               )}

@@ -370,7 +370,7 @@ function LockPageContent() {
           {/* Sidebar - Stats & Recent Resolutions */}
           <div className="lg:col-span-1 space-y-6">
             {/* Your Stats - only show for signed-in users */}
-            {user && (
+            {!isAnonymous && (
               <div className="glass border border-white/10 rounded-xl p-5">
                 <h3 className="text-white font-semibold mb-4 flex items-center gap-2">
                   <svg className="w-4 h-4 text-purple-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
