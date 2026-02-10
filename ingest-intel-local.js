@@ -71,6 +71,36 @@ function hashUrl(url) {
   return crypto.createHash('sha256').update(url).digest('hex');
 }
 
+// Map intel tags to standard categories
+function mapTagsToCategory(tags) {
+  if (!tags || tags.length === 0) return 'other';
+
+  const tagStr = tags.join(' ').toLowerCase();
+
+  // Politics-related
+  if (tagStr.match(/politics|election|government|diplomatic|sanctions|ceasefire|coup/)) return 'politics';
+
+  // Military/Conflict
+  if (tagStr.match(/military|conflict|war|drone|missile|attack|osint|geoint|investigative/)) return 'politics';
+
+  // Cyber/Tech
+  if (tagStr.match(/cyber|tech|data breach|ransomware|disinformation/)) return 'tech';
+
+  // Markets/Economics
+  if (tagStr.match(/markets|economics|crypto|bitcoin/)) return 'markets';
+
+  // Sports
+  if (tagStr.match(/sports|olympics|football|soccer|hockey/)) return 'sports';
+
+  // Culture/General news
+  if (tagStr.match(/culture|entertainment|world|breaking|general/)) return 'culture';
+
+  // Natural disasters
+  if (tagStr.match(/earthquake|wildfire|natural-disaster|disaster/)) return 'other';
+
+  return 'other';
+}
+
 async function ingestFeed(source) {
   console.log(`\n📡 Fetching: ${source.name}`);
 
@@ -94,6 +124,7 @@ async function ingestFeed(source) {
       if (existing) continue;
 
       // Insert new item
+      const category = mapTagsToCategory(source.tags);
       const { error } = await supabase
         .from('intel_items')
         .insert({
@@ -104,7 +135,8 @@ async function ingestFeed(source) {
           url_hash: urlHash,
           published_at: item.published_at,
           summary: item.summary,
-          tags: source.tags || []
+          tags: source.tags || [],
+          country_code: 'US', // Default for now
         });
 
       if (!error) inserted++;
