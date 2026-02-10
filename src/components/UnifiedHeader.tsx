@@ -109,7 +109,7 @@ export default function UnifiedHeader({ currentView, onLockClick }: UnifiedHeade
           {/* Mobile Menu Button */}
           <button
             onClick={() => setShowMobileMenu(!showMobileMenu)}
-            className="lg:hidden p-2 text-gray-400 hover:text-white hover:bg-white/5 rounded-md transition-all"
+            className="lg:hidden p-2 text-white hover:bg-white/10 rounded-md transition-all border border-slate-600/50"
           >
             <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
@@ -231,14 +231,14 @@ export default function UnifiedHeader({ currentView, onLockClick }: UnifiedHeade
             className="fixed inset-0 bg-black/50 z-[290] lg:hidden"
             onClick={() => setShowMobileMenu(false)}
           />
-          <div className="fixed top-16 left-0 right-0 glass border-b border-slate-700 shadow-2xl z-[295] lg:hidden">
+          <div className="fixed top-16 left-0 right-0 bg-slate-900/98 backdrop-blur-xl border-b border-slate-700 shadow-2xl z-[295] lg:hidden">
             <nav className="p-4 space-y-2">
               <Link
                 href="/globe"
                 className={`flex items-center gap-2 px-4 py-3 rounded-md text-sm font-medium transition-all ${
                   activeView === 'globe'
                     ? 'bg-purple-600/20 text-purple-300 border border-purple-500/30'
-                    : 'text-gray-400 hover:text-white hover:bg-white/5'
+                    : 'text-slate-200 hover:text-white hover:bg-white/10'
                 }`}
                 onClick={() => setShowMobileMenu(false)}
               >
@@ -252,7 +252,7 @@ export default function UnifiedHeader({ currentView, onLockClick }: UnifiedHeade
                 className={`flex items-center gap-2 px-4 py-3 rounded-md text-sm font-medium transition-all ${
                   activeView === 'feed'
                     ? 'bg-purple-600/20 text-purple-300 border border-purple-500/30'
-                    : 'text-gray-400 hover:text-white hover:bg-white/5'
+                    : 'text-slate-200 hover:text-white hover:bg-white/10'
                 }`}
                 onClick={() => setShowMobileMenu(false)}
               >
@@ -266,7 +266,7 @@ export default function UnifiedHeader({ currentView, onLockClick }: UnifiedHeade
                 className={`flex items-center gap-2 px-4 py-3 rounded-md text-sm font-medium transition-all ${
                   activeView === 'leaderboard'
                     ? 'bg-purple-600/20 text-purple-300 border border-purple-500/30'
-                    : 'text-gray-400 hover:text-white hover:bg-white/5'
+                    : 'text-slate-200 hover:text-white hover:bg-white/10'
                 }`}
                 onClick={() => setShowMobileMenu(false)}
               >
@@ -280,7 +280,7 @@ export default function UnifiedHeader({ currentView, onLockClick }: UnifiedHeade
                 className={`flex items-center gap-2 px-4 py-3 rounded-md text-sm font-medium transition-all ${
                   pathname.startsWith('/about') || pathname.startsWith('/how-scoring')
                     ? 'bg-purple-600/20 text-purple-300 border border-purple-500/30'
-                    : 'text-gray-400 hover:text-white hover:bg-white/5'
+                    : 'text-slate-200 hover:text-white hover:bg-white/10'
                 }`}
                 onClick={() => setShowMobileMenu(false)}
               >
@@ -294,7 +294,7 @@ export default function UnifiedHeader({ currentView, onLockClick }: UnifiedHeade
                 className={`flex items-center gap-2 px-4 py-3 rounded-md text-sm font-medium transition-all ${
                   pathname.startsWith('/how-scoring')
                     ? 'bg-purple-600/20 text-purple-300 border border-purple-500/30'
-                    : 'text-gray-400 hover:text-white hover:bg-white/5'
+                    : 'text-slate-200 hover:text-white hover:bg-white/10'
                 }`}
                 onClick={() => setShowMobileMenu(false)}
               >
