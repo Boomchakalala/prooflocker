@@ -60,7 +60,7 @@ export const BADGES = {
   // Resolve milestones
   'resolve-5-correct': { name: 'First Wins', description: '5 correct resolves', requirement: { correct_resolves: 5 } },
   'resolve-10-correct': { name: 'Proven Forecaster', description: '10 correct resolves', requirement: { correct_resolves: 10 } },
-  'resolve-25-correct': { name: 'Oracle Path', description: '25 correct resolves', requirement: { correct_resolves: 25 } },
+  'resolve-25-correct': { name: 'Legend Path', description: '25 correct resolves', requirement: { correct_resolves: 25 } },
 
   // Accuracy milestones (minimum 10 resolves)
   'accuracy-60': { name: 'Better Than Chance', description: '60%+ accuracy (min 10 resolves)', requirement: { accuracy: 60, min_resolves: 10 } },
@@ -78,7 +78,7 @@ export const BADGES = {
   'claim-25': { name: 'Signature Move', description: 'Claimed 25 predictions', requirement: { claims_count: 25 } },
 
   // Category mastery (5+ correct in category)
-  'category-crypto-master': { name: 'Crypto Oracle', description: '5+ correct crypto predictions', requirement: { category: 'Crypto', correct: 5 } },
+  'category-crypto-master': { name: 'Crypto Legend', description: '5+ correct crypto predictions', requirement: { category: 'Crypto', correct: 5 } },
   'category-sports-master': { name: 'Sports Sage', description: '5+ correct sports predictions', requirement: { category: 'Sports', correct: 5 } },
   'category-personal-master': { name: 'Goal Crusher', description: '5+ correct personal goals', requirement: { category: 'Personal', correct: 5 } },
   'category-business-master': { name: 'Business Visionary', description: '5+ correct business predictions', requirement: { category: 'Business', correct: 5 } },
@@ -93,9 +93,10 @@ export type BadgeId = keyof typeof BADGES;
  * Get milestone for a given score
  */
 export function getMilestone(points: number): { name: string; min: number; max: number } {
-  if (points >= MILESTONES.ORACLE.min) return MILESTONES.ORACLE;
-  if (points >= MILESTONES.VISIONARY.min) return MILESTONES.VISIONARY;
-  if (points >= MILESTONES.FORECASTER.min) return MILESTONES.FORECASTER;
+  if (points >= MILESTONES.LEGEND.min) return MILESTONES.LEGEND;
+  if (points >= MILESTONES.MASTER.min) return MILESTONES.MASTER;
+  if (points >= MILESTONES.EXPERT.min) return MILESTONES.EXPERT;
+  if (points >= MILESTONES.TRUSTED.min) return MILESTONES.TRUSTED;
   return MILESTONES.NOVICE;
 }
 
