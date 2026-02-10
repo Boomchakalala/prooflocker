@@ -18,9 +18,9 @@ export default function HowScoringWorksPage() {
 
         {/* Page Header */}
         <div className="mb-12">
-          <h1 className="text-4xl font-bold text-white mb-4">How Scoring Works</h1>
+          <h1 className="text-4xl font-bold text-white mb-4">How Reputation Works</h1>
           <p className="text-lg text-neutral-300 leading-relaxed">
-            ProofLocker uses two separate scoring systems: Reputation Score tracks your trustworthiness through weighted performance metrics, while XP measures your overall engagement and progression.
+            Your reputation is calculated from accuracy, evidence quality, and consistency. Only claims are scored — intel signals are a monitoring layer, not a scoring input. This is proof of reputational observation: math-backed credibility from outcomes, not opinions.
           </p>
         </div>
 
