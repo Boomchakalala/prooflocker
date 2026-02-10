@@ -382,92 +382,24 @@ export default function GlobePage() {
         </div>
 
         {/* Map Legend + Controls Overlay */}
-        <div className="hidden md:block fixed top-20 left-4 z-[100] space-y-2">
-          {/* Mode Toggle */}
-          <div className="bg-[rgba(10,10,15,0.95)] backdrop-blur-xl border border-purple-500/20 rounded-xl p-2 shadow-2xl">
-            <div className="text-[10px] text-[#94a3b8] font-semibold uppercase mb-2 px-2">View Mode</div>
-            <div className="flex gap-1">
-              <button
-                onClick={() => setMapMode('both')}
-                className={`px-3 py-1.5 rounded-lg text-[11px] font-semibold transition-all ${
-                  mapMode === 'both'
-                    ? 'bg-white/10 text-white border border-white/20'
-                    : 'text-[#94a3b8] hover:text-white'
-                }`}
-              >
-                Both
-              </button>
-              <button
-                onClick={() => setMapMode('claims')}
-                className={`px-3 py-1.5 rounded-lg text-[11px] font-semibold transition-all ${
-                  mapMode === 'claims'
-                    ? 'bg-[#8b5cf6]/20 text-[#a78bfa] border border-[#8b5cf6]/40'
-                    : 'text-[#94a3b8] hover:text-[#a78bfa]'
-                }`}
-              >
-                Claims
-              </button>
-              <button
-                onClick={() => setMapMode('osint')}
-                className={`px-3 py-1.5 rounded-lg text-[11px] font-semibold transition-all ${
-                  mapMode === 'osint'
-                    ? 'bg-[#ef4444]/20 text-[#f87171] border border-[#ef4444]/40'
-                    : 'text-[#94a3b8] hover:text-[#f87171]'
-                }`}
-              >
-                OSINT
-              </button>
-            </div>
-          </div>
-
-          {/* Legend */}
-          <div className="bg-[rgba(10,10,15,0.95)] backdrop-blur-xl border border-purple-500/20 rounded-xl p-3 shadow-2xl">
-            <div className="text-[10px] text-[#94a3b8] font-semibold uppercase mb-2">Legend</div>
-            <div className="space-y-2">
-              <div className="flex items-center gap-2">
-                <div className="w-3 h-3 rounded-full bg-[#8b5cf6] shadow-[0_0_8px_rgba(139,92,246,0.6)]"></div>
-                <span className="text-[11px] text-white">Claims</span>
+        <div className="hidden md:block fixed top-20 left-4 z-[100]">
+          {/* Compact Legend */}
+          <div className="bg-[rgba(10,10,15,0.92)] backdrop-blur-xl border border-purple-500/20 rounded-xl p-3 shadow-2xl">
+            <div className="flex items-center gap-4 text-[11px]">
+              <div className="flex items-center gap-1.5">
+                <div className="w-2.5 h-2.5 rounded-full bg-[#8b5cf6] shadow-[0_0_6px_rgba(139,92,246,0.6)]"></div>
+                <span className="text-white">Claims</span>
               </div>
-              <div className="flex items-center gap-2">
-                <div className="w-3 h-3 rounded-full bg-[#ef4444] shadow-[0_0_8px_rgba(239,68,68,0.6)]"></div>
-                <span className="text-[11px] text-white">OSINT</span>
+              <div className="flex items-center gap-1.5">
+                <div className="w-2.5 h-2.5 rounded-full bg-[#ef4444] shadow-[0_0_6px_rgba(239,68,68,0.6)]"></div>
+                <span className="text-white">OSINT</span>
               </div>
-              <div className="flex items-center gap-2">
-                <div className="w-4 h-4 rounded-full bg-white/20 flex items-center justify-center">
-                  <span className="text-[9px] text-white font-bold">12</span>
+              <div className="flex items-center gap-1.5">
+                <div className="w-3 h-3 rounded-full bg-white/20 flex items-center justify-center">
+                  <span className="text-[7px] text-white font-bold">N</span>
                 </div>
-                <span className="text-[11px] text-[#94a3b8]">Cluster</span>
+                <span className="text-[#94a3b8]">Cluster</span>
               </div>
-            </div>
-            <div className="mt-3 pt-3 border-t border-white/10">
-              <div className="text-[10px] text-[#94a3b8] mb-2">Size = Volume</div>
-              <div className="text-[10px] text-[#94a3b8]">Glow = Activity</div>
-            </div>
-          </div>
-
-          {/* View Mode Toggle (Points/Heatmap) */}
-          <div className="bg-[rgba(10,10,15,0.95)] backdrop-blur-xl border border-purple-500/20 rounded-xl p-2 shadow-2xl">
-            <div className="flex gap-1">
-              <button
-                onClick={() => setViewMode('points')}
-                className={`flex-1 px-3 py-1.5 rounded-lg text-[11px] font-semibold transition-all ${
-                  viewMode === 'points'
-                    ? 'bg-white/10 text-white'
-                    : 'text-[#94a3b8] hover:text-white'
-                }`}
-              >
-                Points
-              </button>
-              <button
-                onClick={() => setViewMode('heatmap')}
-                className={`flex-1 px-3 py-1.5 rounded-lg text-[11px] font-semibold transition-all ${
-                  viewMode === 'heatmap'
-                    ? 'bg-white/10 text-white'
-                    : 'text-[#94a3b8] hover:text-white'
-                }`}
-              >
-                Heatmap
-              </button>
             </div>
           </div>
         </div>
