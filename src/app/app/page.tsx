@@ -479,81 +479,10 @@ export default function AppFeedPage() {
                 </div>
 
                 {filteredOsint.length > 0 ? (
-                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
-                    {filteredOsint.map((signal) => {
-                      const sourceUrl = signal.sourceUrl || signal.url || (signal.sourceHandle || signal.source_handle ? `https://twitter.com/${(signal.sourceHandle || signal.source_handle || '').replace('@', '')}` : '#');
-
-                      return (
-                      <div
-                        key={signal.id}
-                        className={`bg-slate-900/60 border ${getIntelFreshnessClass(signal.createdAt || signal.created_at)} rounded-lg p-4 hover:border-red-500/50 transition-all duration-200 relative`}
-                      >
-                        {/* Freshness badge for intel */}
-                        {getMinutesAgo(signal.createdAt || signal.created_at) < 60 && (
-                          <div className="absolute top-2 right-2">
-                            <span className={`text-[9px] font-bold px-1.5 py-0.5 rounded ${
-                              getMinutesAgo(signal.createdAt || signal.created_at) < 5
-                                ? 'bg-red-500/30 text-red-200 border border-red-500/50 animate-pulse'
-                                : 'bg-orange-500/20 text-orange-300 border border-orange-500/30'
-                            }`}>
-                              {getMinutesAgo(signal.createdAt || signal.created_at) < 5 ? 'BREAKING' : 'RECENT'}
-                            </span>
-                          </div>
-                        )}
-                        {/* Header */}
-                        <div className="flex items-center gap-2 mb-2">
-                          <span className="bg-red-600 text-white text-[9px] font-bold px-2 py-0.5 rounded uppercase">
-                            Intel
-                          </span>
-                          <span className="text-xs text-red-400 font-semibold truncate flex-1">{signal.sourceName || signal.source_name || "Unknown"}</span>
-                          {(signal.locationName || signal.location) && (
-                            <span className="text-[10px] text-orange-400/70 truncate max-w-[100px]">{signal.locationName || signal.location}</span>
-                          )}
-                        </div>
-
-                        {/* Title */}
-                        <h3 className="text-sm text-white leading-snug mb-2 line-clamp-2">
-                          {signal.title || "Untitled Signal"}
-                        </h3>
-
-                        {/* Summary */}
-                        {signal.summary && (
-                          <p className="text-xs text-slate-400 mb-3 line-clamp-2">
-                            {signal.summary}
-                          </p>
-                        )}
-
-                        {/* Footer */}
-                        <div className="flex items-center gap-2 pt-2 border-t border-red-500/10">
-                          {sourceUrl && sourceUrl !== '#' && (
-                            <a
-                              href={sourceUrl}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="px-2.5 py-1 text-[10px] font-medium rounded bg-red-500/10 hover:bg-red-500/20 text-red-300 transition-colors flex items-center gap-1"
-                              onClick={(e) => e.stopPropagation()}
-                            >
-                              <svg className="w-3 h-3" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
-                              </svg>
-                              Source
-                            </a>
-                          )}
-                          <button
-                            className="px-2.5 py-1 text-[10px] font-medium rounded bg-purple-500/10 hover:bg-purple-500/20 text-purple-300 transition-colors"
-                            onClick={(e) => {
-                              e.preventDefault();
-                            }}
-                          >
-                            Use as Evidence
-                          </button>
-                          <span className="ml-auto text-[10px] text-slate-600">
-                            {signal.createdAt || signal.created_at ? formatRelativeTime(signal.createdAt || signal.created_at) : ''}
-                          </span>
-                        </div>
-                      </div>
-                    );
-                    })}
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                    {filteredOsint.map((signal) => (
+                      <IntelCard key={signal.id} item={signal} />
+                    ))}
                   </div>
                 ) : (
                   <div className="flex flex-col items-center justify-center py-16">
