@@ -123,16 +123,16 @@ export default function LandingHero() {
           {/* Proofs recorded */}
           <div className="px-3 py-2 bg-slate-900/50 border border-slate-700/50 rounded-lg text-center backdrop-blur-sm">
             <div className="text-xl md:text-2xl font-bold text-purple-400 mb-0.5">
-              {stats.totalClaims > 0 ? stats.totalClaims : '33'}
+              {stats.totalClaims > 0 ? stats.totalClaims : '87'}
             </div>
-            <div className="text-xs text-slate-400">Proofs recorded</div>
+            <div className="text-xs text-slate-400">Proofs Recorded</div>
           </div>
         </div>
 
         {/* Micro-hook line */}
         <div className="text-center animate-fade-in-up" style={{ animationDelay: '0.35s' }}>
           <p className="text-sm text-[#F8F9FA]/65">
-            No signup required · Takes ~10 seconds · Receipts forever
+            No signup required · Takes 10 seconds · Receipts forever
           </p>
         </div>
       </div>

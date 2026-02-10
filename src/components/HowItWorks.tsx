@@ -44,7 +44,7 @@ export default function HowItWorks() {
           </div>
 
           {/* Box 2: Prove You Were Right */}
-          <div className="bg-gradient-to-br from-emerald-600/10 via-green-600/8 to-emerald-700/10 border-2 border-emerald-500/40 hover:border-emerald-400/60 rounded-xl md:rounded-2xl p-5 md:p-8 lg:p-10 transition-all duration-300 hover:shadow-[0_0_50px_rgba(16,185,129,0.4)] hover:-translate-y-1 relative overflow-hidden">
+          <div className="bg-gradient-to-br from-emerald-600/10 via-green-600/8 to-emerald-700/10 border border-slate-700/50 hover:border-emerald-400/60 rounded-xl md:rounded-2xl p-5 md:p-8 lg:p-10 transition-all duration-300 hover:shadow-[0_0_50px_rgba(16,185,129,0.4)] hover:-translate-y-1 relative overflow-hidden">
             {/* Spotlight effect */}
             <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/10 to-transparent pointer-events-none" />
 
