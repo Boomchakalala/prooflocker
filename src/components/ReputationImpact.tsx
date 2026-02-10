@@ -114,7 +114,7 @@ export default function ReputationImpact() {
                 </svg>
                 <span className="text-2xl md:text-3xl font-bold text-emerald-400">892</span>
               </div>
-              <div className="text-center text-xs text-slate-500">After 27 resolves</div>
+              <div className="text-center text-xs text-slate-500">After 27 resolutions</div>
             </div>
           </div>
         </div>
@@ -124,12 +124,12 @@ export default function ReputationImpact() {
           <p className="text-sm md:text-base text-white/60 mb-4 md:mb-6 px-2">
             Start building your track record today—every claim compounds
           </p>
-          <a
+          <Link
             href="/lock"
             className="inline-block px-8 md:px-12 py-3 md:py-4 bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-500 hover:to-purple-600 text-white text-base md:text-lg font-bold rounded-xl transition-all shadow-lg hover:shadow-[0_0_30px_rgba(147,51,234,0.4)] hover:scale-105"
           >
-            Lock Your First Claim
-          </a>
+            Start Building Your Record
+          </Link>
         </div>
       </div>
     </div>
