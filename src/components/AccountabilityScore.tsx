@@ -64,9 +64,9 @@ export default function AccountabilityScore() {
                 </svg>
               </div>
             </div>
-            <h3 className="text-lg md:text-xl font-bold text-white mb-3">Credibility Compounds</h3>
+            <h3 className="text-lg md:text-xl font-bold text-white mb-3">Reputation Compounds</h3>
             <p className="text-sm md:text-base text-white/75 leading-relaxed">
-              Every correct prediction strengthens your reputation. Build momentum through consistency and watch your influence grow.
+              Every correct claim strengthens your reputation. Build momentum through consistency and watch your influence grow.
             </p>
           </div>
         </div>

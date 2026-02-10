@@ -57,13 +57,13 @@ export default function CredibilityDisplay({ userId }: CredibilityDisplayProps) 
       {/* Credibility Score */}
       <div className="glass border border-white/10 rounded-xl p-6 text-center">
         <div className="text-xs font-semibold text-neutral-400 uppercase tracking-wide mb-2">
-          Credibility Score
+          Reputation Score
         </div>
         <div className="text-5xl font-bold text-white mb-2">
           {stats.credibilityScore}
         </div>
         <div className="text-sm text-neutral-400">
-          {stats.totalResolved} predictions resolved
+          {stats.totalResolved} claims resolved
         </div>
       </div>
 
@@ -149,7 +149,7 @@ export default function CredibilityDisplay({ userId }: CredibilityDisplayProps) 
 
       {/* Scoring Info */}
       <div className="glass border border-white/10 rounded-xl p-4 bg-blue-500/10">
-        <div className="text-xs font-semibold text-blue-400 mb-2">How Scoring Works</div>
+        <div className="text-xs font-semibold text-blue-400 mb-2">How Reputation Works</div>
         <ul className="text-xs text-neutral-300 space-y-1">
           <li>• Correct + Grade A evidence: +16 pts</li>
           <li>• Correct + Grade B evidence: +13 pts</li>

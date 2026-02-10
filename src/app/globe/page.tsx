@@ -604,7 +604,7 @@ export default function GlobePage() {
               )
             ) : (
               displayItems.length === 0 ? (
-                <div className="text-center py-12 text-[#94a3b8] text-sm">No OSINT signals found</div>
+                <div className="text-center py-12 text-[#94a3b8] text-sm">No intel signals found</div>
               ) : (
                 (displayItems as OsintItem[]).map((item) => (
                   <div
@@ -755,7 +755,7 @@ export default function GlobePage() {
                 )
               ) : (
                 displayItems.length === 0 ? (
-                  <div className="text-center py-8 text-[#94a3b8] text-sm">No OSINT signals found</div>
+                  <div className="text-center py-8 text-[#94a3b8] text-sm">No intel signals found</div>
                 ) : (
                   (displayItems as OsintItem[]).map((item) => (
                     <div key={item.id} className="p-3 bg-slate-900/60 border border-red-500/30 rounded-xl">
