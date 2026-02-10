@@ -211,9 +211,9 @@ export default async function ProofPage({ params }: Props) {
 
         {/* Resolution & Evidence */}
         {isResolved && prediction.resolvedAt && (
-          <div className="glass border border-white/10 rounded-2xl overflow-hidden mb-6 shadow-xl">
+          <div className="glass border border-white/10 rounded-2xl overflow-hidden mb-6 shadow-xl transition-all duration-300 hover:shadow-[0_0_40px_rgba(168,85,247,0.1)]">
             <div className="p-6 md:p-8">
-              <div className="flex items-center gap-3 mb-6">
+              <div className="flex items-center gap-3 mb-4">
                 <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500/20 to-purple-500/20 flex items-center justify-center">
                   <svg className="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
@@ -224,6 +224,9 @@ export default async function ProofPage({ params }: Props) {
                   <p className="text-xs text-neutral-400">How this claim was verified</p>
                 </div>
               </div>
+
+              {/* Divider */}
+              <div className="border-b border-slate-700/30 mb-6" />
 
               <EvidenceList
                 predictionId={prediction.id}
@@ -371,22 +374,25 @@ export default async function ProofPage({ params }: Props) {
                     </div>
                   </div>
                   <div className="p-4 bg-white/5 rounded-xl border border-white/10 text-center">
-                    <svg className="w-6 h-6 text-green-400 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg className="w-6 h-6 text-cyan-400 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
                     <div className="text-xs font-medium text-white">Timestamped</div>
                   </div>
                   <div className="p-4 bg-white/5 rounded-xl border border-white/10 text-center">
-                    <svg className="w-6 h-6 text-green-400 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg className="w-6 h-6 text-cyan-400 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
                     <div className="text-xs font-medium text-white">Immutable</div>
                   </div>
                 </div>
 
+                {/* Divider */}
+                <div className="border-b border-slate-700/30 mb-6" />
+
                 {/* Transaction Details */}
                 <div className="space-y-3">
-                  <div className="p-4 bg-white/5 rounded-xl border border-white/10">
+                  <div className="bg-slate-900/50 rounded-lg p-4 border border-slate-700/30">
                     <div className="text-xs text-neutral-400 mb-2">Resolution Timestamp</div>
                     <div className="text-sm text-white font-medium">
                       {new Date(prediction.resolvedAt).toLocaleString("en-US", {
@@ -401,7 +407,7 @@ export default async function ProofPage({ params }: Props) {
                   </div>
 
                   {prediction.resolutionDeReference && (
-                    <div className="p-4 bg-white/5 rounded-xl border border-white/10">
+                    <div className="bg-slate-900/50 rounded-lg p-3 border border-slate-700/30">
                       <div className="text-xs text-neutral-400 mb-2">Resolution Transaction Hash</div>
                       <div className="flex items-center gap-2">
                         {resolutionExplorerUrl ? (
@@ -409,12 +415,12 @@ export default async function ProofPage({ params }: Props) {
                             href={resolutionExplorerUrl}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="text-xs text-blue-400 hover:text-blue-300 font-mono break-all underline flex-1"
+                            className="font-mono text-xs text-cyan-400 hover:text-cyan-300 break-all underline decoration-cyan-500/30 flex-1"
                           >
                             {prediction.resolutionDeReference}
                           </a>
                         ) : (
-                          <div className="text-xs text-neutral-300 font-mono break-all flex-1">
+                          <div className="font-mono text-xs text-slate-400 break-all flex-1">
                             {prediction.resolutionDeReference}
                           </div>
                         )}
