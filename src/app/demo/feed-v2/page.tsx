@@ -7,7 +7,7 @@ export default function FeedDemoV2() {
       author: "1234",
       tier: "LEGEND",
       time: "2H",
-      category: "OSINT",
+      category: "Intel",
       title: "BTC $100K PREDICTION BY Q1 2025",
       outcome: "correct",
       evidenceScore: 94,

@@ -8,7 +8,7 @@ export default function FeedDemoV3() {
       tier: "Legend",
       tierIcon: "⭐",
       time: "2 hours ago",
-      category: "OSINT",
+      category: "Intel",
       title: "Bitcoin will reach $100K by year-end according to on-chain accumulation metrics showing institutional buying patterns",
       outcome: "correct",
       evidenceGrade: "A+",

@@ -7,7 +7,7 @@ export default function FeedDemoV1() {
       author: "1234",
       tier: "legend",
       time: "2h ago",
-      category: "OSINT",
+      category: "Intel",
       title: "Bitcoin will hit $100K by end of Q1 2025 based on on-chain metrics showing accumulation patterns",
       outcome: "correct",
       evidenceScore: 94,
@@ -58,7 +58,7 @@ export default function FeedDemoV1() {
 
   const getCategoryColor = (category: string) => {
     const colors = {
-      OSINT: "from-indigo-500/20 to-violet-500/20 border-indigo-400/50 text-indigo-300",
+      Intel: "from-indigo-500/20 to-violet-500/20 border-indigo-400/50 text-indigo-300",
       Politics: "from-red-500/20 to-pink-500/20 border-red-400/50 text-red-300",
       Tech: "from-blue-500/20 to-cyan-500/20 border-blue-400/50 text-blue-300",
       Crypto: "from-cyan-500/20 to-teal-500/20 border-cyan-400/50 text-cyan-300",
