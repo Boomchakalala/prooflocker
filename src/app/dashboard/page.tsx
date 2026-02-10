@@ -333,87 +333,79 @@ export default function DashboardPage() {
         )}
 
         {/* Next Badge Goals */}
-        <div className="bg-gradient-to-br from-slate-900/50 to-slate-800/30 border border-slate-700 rounded-xl p-8 mb-8">
-          <h2 className="text-2xl font-bold mb-6">🎯 Next Achievements</h2>
-          <div className="grid md:grid-cols-3 gap-4">
+        <div className="bg-slate-900/60 border border-slate-700/40 rounded-xl p-6 mb-8">
+          <h2 className="text-xl font-bold mb-4 text-white">Next Achievements</h2>
+          <div className="grid md:grid-cols-3 gap-3">
             {score.totalResolves < 25 && (
-              <div className="bg-slate-800/50 border border-slate-700 rounded-lg p-4">
-                <div className="text-3xl mb-2">🏆</div>
-                <div className="text-white font-semibold mb-1">&quot;25 Resolves&quot; badge</div>
-                <div className="text-sm text-slate-400">
+              <div className="bg-slate-800/40 border border-slate-700/30 rounded-lg p-4">
+                <div className="text-white font-semibold mb-1">25 Resolves</div>
+                <div className="text-xs text-slate-400">
                   Resolve {25 - score.totalResolves} more claim{25 - score.totalResolves !== 1 ? 's' : ''}
                 </div>
-                <div className="w-full bg-slate-700 rounded-full h-2 mt-3">
+                <div className="w-full bg-slate-700 rounded-full h-1.5 mt-3">
                   <div
-                    className="bg-purple-500 h-2 rounded-full transition-all"
+                    className="bg-purple-500 h-1.5 rounded-full transition-all"
                     style={{ width: `${(score.totalResolves / 25) * 100}%` }}
                   />
                 </div>
               </div>
             )}
             {score.currentStreak < 5 && (
-              <div className="bg-slate-800/50 border border-slate-700 rounded-lg p-4">
-                <div className="text-3xl mb-2">🔥</div>
-                <div className="text-white font-semibold mb-1">&quot;5-Streak&quot; badge</div>
-                <div className="text-sm text-slate-400">
+              <div className="bg-slate-800/40 border border-slate-700/30 rounded-lg p-4">
+                <div className="text-white font-semibold mb-1">5-Streak</div>
+                <div className="text-xs text-slate-400">
                   {score.currentStreak === 0 ? 'Start a streak' : `Keep streak for ${5 - score.currentStreak} more`}
                 </div>
-                <div className="w-full bg-slate-700 rounded-full h-2 mt-3">
+                <div className="w-full bg-slate-700 rounded-full h-1.5 mt-3">
                   <div
-                    className="bg-orange-500 h-2 rounded-full transition-all"
+                    className="bg-amber-500 h-1.5 rounded-full transition-all"
                     style={{ width: `${(score.currentStreak / 5) * 100}%` }}
                   />
                 </div>
               </div>
             )}
             {Object.keys(score.categoryStats).length < 3 && (
-              <div className="bg-slate-800/50 border border-slate-700 rounded-lg p-4">
-                <div className="text-3xl mb-2">
-                  <svg className="w-8 h-8 text-purple-400 mx-auto" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
-                  </svg>
+              <div className="bg-slate-800/40 border border-slate-700/30 rounded-lg p-4">
+                <div className="text-white font-semibold mb-1">Multi-Category</div>
+                <div className="text-xs text-slate-400">
+                  Lock claims in {3 - Object.keys(score.categoryStats).length} more categor{3 - Object.keys(score.categoryStats).length === 1 ? 'y' : 'ies'}
                 </div>
-                <div className="text-white font-semibold mb-1">&quot;Multi-Category&quot; badge</div>
-                <div className="text-sm text-slate-400">
-                  Predict in {3 - Object.keys(score.categoryStats).length} more categor{3 - Object.keys(score.categoryStats).length === 1 ? 'y' : 'ies'}
-                </div>
-                <div className="w-full bg-slate-700 rounded-full h-2 mt-3">
+                <div className="w-full bg-slate-700 rounded-full h-1.5 mt-3">
                   <div
-                    className="bg-cyan-500 h-2 rounded-full transition-all"
+                    className="bg-cyan-500 h-1.5 rounded-full transition-all"
                     style={{ width: `${(Object.keys(score.categoryStats).length / 3) * 100}%` }}
                   />
                 </div>
               </div>
             )}
             {score.totalResolves >= 25 && score.currentStreak >= 5 && Object.keys(score.categoryStats).length >= 3 && (
-              <div className="col-span-3 text-center py-8">
-                <div className="text-4xl mb-2">🌟</div>
-                <p className="text-xl text-white font-bold mb-2">All near-term goals achieved!</p>
-                <p className="text-slate-400">Keep building your reputation to unlock legendary status</p>
+              <div className="col-span-3 text-center py-6">
+                <p className="text-lg text-white font-bold mb-1">All near-term goals achieved</p>
+                <p className="text-sm text-slate-400">Keep building your reputation to unlock legendary status</p>
               </div>
             )}
           </div>
         </div>
 
         {/* CTAs */}
-        <div className="flex flex-col sm:flex-row gap-4 justify-center">
+        <div className="flex flex-col sm:flex-row gap-3 justify-center">
           <Link
             href="/lock"
-            className="px-8 py-4 bg-[#00bfff] hover:bg-[#00a8e6] text-white font-bold rounded-md transition-all text-center"
+            className="px-8 py-3 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 text-white font-bold rounded-xl transition-all shadow-lg hover:shadow-[0_0_30px_rgba(139,92,246,0.4)] text-center"
           >
-            Lock New Prediction (+10 pts)
+            Lock New Claim (+10 pts)
           </Link>
           <Link
             href="/leaderboard"
-            className="px-8 py-4 border-2 border-[#9370db] hover:bg-[#9370db]/10 text-white font-bold rounded-md transition-all text-center"
+            className="px-8 py-3 border-2 border-purple-500/30 hover:border-purple-500 hover:bg-purple-500/10 text-white font-bold rounded-xl transition-all text-center"
           >
             View Leaderboard
           </Link>
           <Link
             href="/app"
-            className="px-8 py-4 border-2 border-gray-700 hover:bg-gray-800 text-white font-bold rounded-md transition-all text-center"
+            className="px-8 py-3 border-2 border-slate-700 hover:bg-slate-800/50 text-white font-bold rounded-xl transition-all text-center"
           >
-            Browse Predictions
+            Browse Claims
           </Link>
         </div>
       </div>
