@@ -119,8 +119,8 @@ export default function LinkOsintModal({
     : null;
 
   return (
-    <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
-      <div className="w-full max-w-2xl max-h-[90vh] overflow-hidden rounded-xl glass border border-purple-500/30 shadow-2xl flex flex-col">
+    <div className="fixed inset-0 z-[500] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
+      <div className="w-full max-w-2xl max-h-[90vh] overflow-hidden rounded-xl glass border border-purple-500/30 shadow-2xl flex flex-col pb-[env(safe-area-inset-bottom)]">
         {/* Header */}
         <div className="p-6 border-b border-slate-800">
           <div className="flex items-start justify-between">
