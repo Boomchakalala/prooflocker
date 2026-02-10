@@ -134,9 +134,7 @@ export default function AppFeedPage() {
   };
 
   return (
-    <div className="min-h-screen gradient-bg text-white relative overflow-hidden">
-      <div className="fixed left-0 top-16 bottom-0 w-1 bg-gradient-to-b from-purple-500/0 via-purple-500/30 to-purple-500/0 pointer-events-none" />
-
+    <div className="min-h-screen gradient-bg text-white">
       <UnifiedHeader currentView="feed" />
 
       <main className="max-w-7xl mx-auto px-4 pt-20 pb-12">
