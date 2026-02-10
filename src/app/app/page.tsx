@@ -41,16 +41,30 @@ export default function AppFeedPage() {
   }, []);
 
   const fetchData = async () => {
-    setLoading(true);
     try {
       const predRes = await fetch("/api/predictions", { cache: "no-store" });
       const predData = await predRes.json();
-      setPredictions(predData.predictions || []);
+      const newPredictions = predData.predictions || [];
 
       const osintRes = await fetch("/api/osint?limit=100");
       const osintData = await osintRes.json();
-      setOsintSignals(osintData || []);
+      const newOsint = osintData || [];
 
+      // Detect new items (skip on first load)
+      if (prevCounts.claims > 0 || prevCounts.intel > 0) {
+        const newClaimCount = newPredictions.length - prevCounts.claims;
+        const newIntelCount = newOsint.length - prevCounts.intel;
+        if (newClaimCount > 0 || newIntelCount > 0) {
+          setNewItems({
+            claims: Math.max(0, newClaimCount),
+            intel: Math.max(0, newIntelCount),
+          });
+        }
+      }
+
+      setPrevCounts({ claims: newPredictions.length, intel: newOsint.length });
+      setPredictions(newPredictions);
+      setOsintSignals(newOsint);
       setLastUpdated(new Date());
     } catch (error) {
       console.error("Error fetching feed data:", error);
@@ -127,6 +141,24 @@ export default function AppFeedPage() {
   const resolvedIncorrect = predictions.filter(p => p.outcome === "incorrect").length;
   const pendingClaims = predictions.filter(p => !p.outcome || p.outcome === "pending").length;
 
+  // Freshness helpers
+  const getMinutesAgo = (dateStr: string) => {
+    if (!dateStr) return Infinity;
+    return (Date.now() - new Date(dateStr).getTime()) / 60000;
+  };
+  const getFreshnessBadge = (dateStr: string) => {
+    const mins = getMinutesAgo(dateStr);
+    if (mins < 5) return { label: 'NEW', className: 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40' };
+    if (mins < 60) return { label: 'RECENT', className: 'bg-blue-500/15 text-blue-300 border border-blue-500/30' };
+    return null;
+  };
+  const getIntelFreshnessClass = (dateStr: string) => {
+    const mins = getMinutesAgo(dateStr);
+    if (mins < 60) return 'border-red-500/50';
+    if (mins < 360) return 'border-orange-500/30';
+    return 'border-red-500/20';
+  };
+
   return (
     <div className="min-h-screen gradient-bg text-white">
       <UnifiedHeader currentView="feed" />
@@ -161,6 +193,25 @@ export default function AppFeedPage() {
             <span className="text-xs text-neutral-500">{currentTickerItem.time}</span>
           </div>
         </div>
+
+        {/* New items notification pill */}
+        {newItems && (newItems.claims > 0 || newItems.intel > 0) && (
+          <div className="mb-4 flex justify-center animate-fade-in-up">
+            <button
+              onClick={() => {
+                setNewItems(null);
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+              }}
+              className="inline-flex items-center gap-2 px-4 py-2 bg-purple-600/20 border border-purple-500/40 rounded-full text-sm font-medium text-purple-300 hover:bg-purple-600/30 hover:border-purple-500/60 transition-all shadow-lg shadow-purple-500/10"
+            >
+              <div className="w-2 h-2 bg-purple-400 rounded-full animate-pulse" />
+              {newItems.claims > 0 && `${newItems.claims} new claim${newItems.claims > 1 ? 's' : ''}`}
+              {newItems.claims > 0 && newItems.intel > 0 && ' · '}
+              {newItems.intel > 0 && `${newItems.intel} new intel`}
+              <span className="text-purple-400/60">· Dismiss</span>
+            </button>
+          </div>
+        )}
 
         <div className="mb-4 bg-slate-900/40 backdrop-blur-xl border border-slate-700/30 rounded-xl px-4 py-2.5">
           <div className="flex items-center justify-between flex-wrap gap-4">
