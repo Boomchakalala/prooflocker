@@ -256,12 +256,6 @@ export default function AppFeedPage() {
                 </div>
               </div>
 
-              <button
-                onClick={() => setShowClaimModal(true)}
-                className="ml-auto px-4 py-1.5 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 rounded-lg text-sm font-semibold transition-all whitespace-nowrap shadow-lg shadow-purple-500/20"
-              >
-                + Lock Claim
-              </button>
             </div>
 
             <div className="flex items-center gap-1.5 flex-wrap">
