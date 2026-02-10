@@ -310,7 +310,7 @@ export default function PrivacyPage() {
                   <li>Right to non-discrimination for exercising CCPA rights</li>
                 </ul>
                 <p className="mt-3 text-sm">
-                  To exercise CCPA rights, email <span className="text-purple-400 font-mono">privacy@prooflocker.io</span> with "CCPA Request" in the subject line.
+                  To exercise CCPA rights, email <span className="text-purple-400 font-mono">contact@prooflocker.io</span> with "CCPA Request" in the subject line.
                 </p>
               </section>
 
@@ -329,15 +329,15 @@ export default function PrivacyPage() {
                 <div className="space-y-2 text-sm font-mono">
                   <div className="flex items-center gap-2">
                     <span className="text-slate-500">📧 Email:</span>
-                    <span className="text-purple-400">privacy@prooflocker.io</span>
+                    <span className="text-purple-400">contact@prooflocker.io</span>
                   </div>
                   <div className="flex items-center gap-2">
                     <span className="text-slate-500">⚖️ Legal:</span>
-                    <span className="text-purple-400">legal@prooflocker.io</span>
+                    <span className="text-purple-400">contact@prooflocker.io</span>
                   </div>
                   <div className="flex items-center gap-2">
                     <span className="text-slate-500">🔒 Security:</span>
-                    <span className="text-purple-400">security@prooflocker.io</span>
+                    <span className="text-purple-400">contact@prooflocker.io</span>
                   </div>
                 </div>
                 <p className="mt-4 text-xs text-slate-400">
