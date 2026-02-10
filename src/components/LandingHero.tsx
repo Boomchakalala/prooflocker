@@ -104,10 +104,10 @@ export default function LandingHero() {
 
         {/* Stats - 3 mini tiles - more compact */}
         <div className="flex items-center justify-center gap-3 md:gap-4 mb-4 animate-fade-in-up" style={{ animationDelay: '0.3s' }}>
-          {/* Claims settled */}
+          {/* Claims locked */}
           <div className="px-3 py-2 bg-slate-900/50 border border-slate-700/50 rounded-lg text-center backdrop-blur-sm">
             <div className="text-xl md:text-2xl font-bold text-emerald-400 mb-0.5">
-              {stats.resolvedClaims > 0 ? stats.resolvedClaims : '142'}
+              {stats.totalClaims || '--'}
             </div>
             <div className="text-xs text-slate-400">Claims Locked</div>
           </div>
@@ -115,17 +115,17 @@ export default function LandingHero() {
           {/* Claim makers */}
           <div className="px-3 py-2 bg-slate-900/50 border border-slate-700/50 rounded-lg text-center backdrop-blur-sm">
             <div className="text-xl md:text-2xl font-bold text-cyan-400 mb-0.5">
-              {stats.totalUsers > 0 ? stats.totalUsers : '38'}
+              {stats.totalUsers || '--'}
             </div>
             <div className="text-xs text-slate-400">Claim Makers</div>
           </div>
 
-          {/* Proofs recorded */}
+          {/* Resolved */}
           <div className="px-3 py-2 bg-slate-900/50 border border-slate-700/50 rounded-lg text-center backdrop-blur-sm">
             <div className="text-xl md:text-2xl font-bold text-purple-400 mb-0.5">
-              {stats.totalClaims > 0 ? stats.totalClaims : '87'}
+              {stats.resolvedClaims || '--'}
             </div>
-            <div className="text-xs text-slate-400">Proofs Recorded</div>
+            <div className="text-xs text-slate-400">Resolved</div>
           </div>
         </div>
 
