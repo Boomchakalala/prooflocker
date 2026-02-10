@@ -925,7 +925,7 @@ export default function GlobeMapbox({ claims, osint, mapMode = 'both', viewMode 
       />
 
       {!mapReady && !error && (
-        <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-b from-[#0A0A0F]/95 via-[#111118]/95 to-[#0A0A0F]/95 z-[999]">
+        <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-b from-[#0A0A0F]/95 via-[#111118]/95 to-[#0A0A0F]/95 z-10">
           <div className="text-center">
             <div className="relative mb-4 mx-auto w-16 h-16">
               <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-purple-500" />
@@ -938,7 +938,7 @@ export default function GlobeMapbox({ claims, osint, mapMode = 'both', viewMode 
       )}
 
       {error && (
-        <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-b from-[#0A0A0F]/95 via-[#111118]/95 to-[#0A0A0F]/95 z-[999]">
+        <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-b from-[#0A0A0F]/95 via-[#111118]/95 to-[#0A0A0F]/95 z-10">
           <div className="text-center max-w-md px-6">
             <div className="text-red-500 text-6xl mb-4">⚠️</div>
             <p className="text-white text-xl font-bold mb-2">Failed to Load Globe</p>
