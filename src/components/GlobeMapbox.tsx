@@ -37,100 +37,87 @@ interface GlobeMapboxProps {
   osint: OsintItem[];
   mapMode?: 'both' | 'claims' | 'osint';
   viewMode?: 'points' | 'heatmap';
+  mapboxReady?: boolean;
 }
 
-export default function GlobeMapbox({ claims, osint, mapMode = 'both', viewMode = 'points' }: GlobeMapboxProps) {
+export default function GlobeMapbox({ claims, osint, mapMode = 'both', viewMode = 'points', mapboxReady = false }: GlobeMapboxProps) {
   const mapContainer = useRef<HTMLDivElement>(null);
   const map = useRef<any>(null);
-  const initAttempted = useRef(false); // Guard against double-init
-  const clickRequestId = useRef(0); // Single-flight guard for clicks
-  const [claimsLayerVisible, setClaimsLayerVisible] = useState(true);
-  const [osintLayerVisible, setOsintLayerVisible] = useState(true);
-  const [heatmapVisible, setHeatmapVisible] = useState(false);
-  const [mapReady, setMapReady] = useState(false);
+  const clickRequestId = useRef(0);
+  const [mapLoaded, setMapLoaded] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [retryCount, setRetryCount] = useState(0);
 
   // Create GeoJSON
-  const createClaimsGeoJSON = () => ({
+  const createClaimsGeoJSON = useCallback(() => ({
     type: 'FeatureCollection' as const,
     features: claims.map((claim) => ({
       type: 'Feature' as const,
       geometry: { type: 'Point' as const, coordinates: [claim.lng, claim.lat] },
       properties: claim,
     })),
-  });
+  }), [claims]);
 
-  const createOsintGeoJSON = () => ({
+  const createOsintGeoJSON = useCallback(() => ({
     type: 'FeatureCollection' as const,
     features: osint.map((item) => ({
       type: 'Feature' as const,
       geometry: { type: 'Point' as const, coordinates: [item.lng, item.lat] },
       properties: { ...item, tags: JSON.stringify(item.tags) },
     })),
-  });
+  }), [osint]);
 
-  // Initialize map - ROBUST VERSION with container size check
+  // Initialize map when mapboxReady becomes true
   useEffect(() => {
-    // Guard: Prevent double-init (React StrictMode protection)
-    if (initAttempted.current) {
-      console.log('[Globe] Init already attempted, skipping');
-      return;
-    }
+    if (!mapboxReady) return;
+    if (map.current) return; // Already initialized
+    if (!mapContainer.current) return;
 
-    // Guard: Check if mapbox loaded
     // @ts-ignore
-    if (!window.mapboxgl) {
-      console.log('[Globe] Mapbox not loaded yet, retrying... attempt:', retryCount);
-      if (retryCount < 20) {
-        const timer = setTimeout(() => {
-          setRetryCount(c => c + 1);
-        }, 300);
-        return () => clearTimeout(timer);
-      } else {
-        setError('Mapbox GL JS failed to load');
-        return;
-      }
-    }
-
-    // Guard: Check container exists
-    if (!mapContainer.current) {
-      console.log('[Globe] Container ref not ready');
+    const mapboxgl = window.mapboxgl;
+    if (!mapboxgl) {
+      console.error('[Globe] mapboxReady=true but window.mapboxgl is undefined');
+      setError('Mapbox GL JS failed to load');
       return;
     }
 
-    // CRITICAL: Wait for container to have non-zero dimensions
-    const waitForContainer = () => {
-      if (!mapContainer.current) return false;
-      const { width, height } = mapContainer.current.getBoundingClientRect();
-      console.log('[Globe] Container size:', width, 'x', height);
-      return width > 0 && height > 0;
-    };
-
-    if (!waitForContainer()) {
+    // Wait for container to have size
+    const { width, height } = mapContainer.current.getBoundingClientRect();
+    if (width === 0 || height === 0) {
       console.log('[Globe] Container has zero size, waiting...');
       let attempts = 0;
       const checkSize = setInterval(() => {
         attempts++;
-        if (waitForContainer()) {
+        if (!mapContainer.current) { clearInterval(checkSize); return; }
+        const rect = mapContainer.current.getBoundingClientRect();
+        if (rect.width > 0 && rect.height > 0) {
           clearInterval(checkSize);
-          // Trigger re-render after container is ready
-          setError(null);
-        } else if (attempts > 20) {
-          // Timeout after 2 seconds
+          initMap(mapboxgl);
+        } else if (attempts > 30) {
           clearInterval(checkSize);
-          setError('Container failed to initialize');
+          setError('Map container failed to get dimensions');
         }
       }, 100);
       return () => clearInterval(checkSize);
     }
 
-    // Mark as attempted to prevent double-init
-    initAttempted.current = true;
-    console.log('[Globe] Starting initialization...');
+    initMap(mapboxgl);
 
-    // @ts-ignore
-    const mapboxgl = window.mapboxgl;
+    return () => {
+      if (map.current) {
+        try {
+          map.current.remove();
+          console.log('[Globe] Map removed');
+        } catch (e) {
+          console.error('[Globe] Cleanup error:', e);
+        }
+        map.current = null;
+      }
+    };
+  }, [mapboxReady]);
+
+  function initMap(mapboxgl: any) {
+    if (!mapContainer.current || map.current) return;
+
     const token = process.env.NEXT_PUBLIC_MAPBOX_TOKEN || 'pk.eyJ1IjoicHJvb2Zsb2NrZXIiLCJhIjoiY21sYjBxcTAwMGVoYzNlczI4YWlzampqZyJ9.nY-yqSucTzvNyK1qDCq9rQ';
 
     if (!token || token === 'undefined') {
@@ -141,6 +128,7 @@ export default function GlobeMapbox({ claims, osint, mapMode = 'both', viewMode 
     mapboxgl.accessToken = token;
 
     try {
+      console.log('[Globe] Creating map...');
       map.current = new mapboxgl.Map({
         container: mapContainer.current,
         style: 'mapbox://styles/mapbox/dark-v11',
@@ -150,17 +138,9 @@ export default function GlobeMapbox({ claims, osint, mapMode = 'both', viewMode 
         attributionControl: false,
       });
 
-      console.log('[Globe] Map created');
-
-      // Handle load event
       map.current.on('load', () => {
-        console.log('[Globe] ✅ MAP LOADED!');
-
-        // CRITICAL: Resize after load to ensure proper dimensions
-        if (map.current) {
-          map.current.resize();
-          console.log('[Globe] Map resized');
-        }
+        console.log('[Globe] Map loaded!');
+        if (map.current) map.current.resize();
 
         try {
           map.current.setFog({
@@ -192,16 +172,11 @@ export default function GlobeMapbox({ claims, osint, mapMode = 'both', viewMode 
           clusterRadius: 50,
         });
 
-        console.log('[Globe] Sources added');
-
-        // Add layers
         addLayers();
         addInteractions();
+        setMapLoaded(true);
 
-        setMapReady(true);
-        console.log('[Globe] ✅ ALL READY!');
-
-        // Auto-rotate
+        // Gentle auto-rotate at low zoom
         map.current.on('idle', () => {
           if (map.current && map.current.getZoom() < 2.5 && !map.current.isMoving()) {
             map.current.rotateTo(map.current.getBearing() + 15, { duration: 120000 });
@@ -209,93 +184,50 @@ export default function GlobeMapbox({ claims, osint, mapMode = 'both', viewMode 
         });
       });
 
-      // Handle errors
       map.current.on('error', (e: any) => {
-        console.error('[Globe] ❌ Map error:', e);
-        setError(`Map error: ${e.error?.message || 'Unknown'}`);
+        console.error('[Globe] Map error:', e);
       });
 
-      // Handle style load errors
-      map.current.on('styleimagemissing', (e: any) => {
-        console.warn('[Globe] Style image missing:', e.id);
-      });
-
-    } catch (error) {
-      console.error('[Globe] ❌ Failed to create map:', error);
-      setError(error instanceof Error ? error.message : 'Failed to initialize');
-      initAttempted.current = false; // Allow retry on error
+    } catch (err) {
+      console.error('[Globe] Failed to create map:', err);
+      setError(err instanceof Error ? err.message : 'Failed to initialize');
     }
-
-    // Cleanup function
-    return () => {
-      console.log('[Globe] Cleanup triggered');
-      if (map.current) {
-        try {
-          // Remove event listeners
-          map.current.off('load');
-          map.current.off('error');
-          map.current.off('idle');
-          map.current.off('styleimagemissing');
-
-          // Remove map
-          map.current.remove();
-          console.log('[Globe] Map removed');
-        } catch (e) {
-          console.error('[Globe] Cleanup error:', e);
-        }
-        map.current = null;
-      }
-      // Don't reset initAttempted here - let it stay true to prevent re-init
-    };
-  }, [retryCount]); // Re-run when retry triggers
+  }
 
   // Update data when it changes
   useEffect(() => {
-    if (!mapReady || !map.current) return;
+    if (!mapLoaded || !map.current) return;
 
-    console.log('[Globe] Updating map data');
     const claimsSource = map.current.getSource('claims');
     const osintSource = map.current.getSource('osint');
 
-    if (claimsSource) {
-      claimsSource.setData(createClaimsGeoJSON());
-    }
-    if (osintSource) {
-      osintSource.setData(createOsintGeoJSON());
-    }
-  }, [claims, osint, mapReady]);
+    if (claimsSource) claimsSource.setData(createClaimsGeoJSON());
+    if (osintSource) osintSource.setData(createOsintGeoJSON());
+  }, [claims, osint, mapLoaded, createClaimsGeoJSON, createOsintGeoJSON]);
 
   // Toggle layers based on mapMode
   useEffect(() => {
-    if (!map.current || !mapReady) return;
+    if (!map.current || !mapLoaded) return;
 
     const claimsVisible = mapMode === 'both' || mapMode === 'claims';
     const osintVisible = mapMode === 'both' || mapMode === 'osint';
 
-    if (map.current.getLayer('claims-points')) {
-      map.current.setLayoutProperty('claims-points', 'visibility', claimsVisible ? 'visible' : 'none');
-    }
-    if (map.current.getLayer('claims-clusters')) {
-      map.current.setLayoutProperty('claims-clusters', 'visibility', claimsVisible ? 'visible' : 'none');
-    }
-    if (map.current.getLayer('claims-cluster-count')) {
-      map.current.setLayoutProperty('claims-cluster-count', 'visibility', claimsVisible ? 'visible' : 'none');
-    }
-    if (map.current.getLayer('osint-points')) {
-      map.current.setLayoutProperty('osint-points', 'visibility', osintVisible ? 'visible' : 'none');
-    }
-    if (map.current.getLayer('osint-clusters')) {
-      map.current.setLayoutProperty('osint-clusters', 'visibility', osintVisible ? 'visible' : 'none');
-    }
-    if (map.current.getLayer('osint-cluster-count')) {
-      map.current.setLayoutProperty('osint-cluster-count', 'visibility', osintVisible ? 'visible' : 'none');
-    }
-  }, [mapMode, mapReady]);
+    ['claims-points', 'claims-clusters', 'claims-cluster-count'].forEach(layer => {
+      if (map.current.getLayer(layer)) {
+        map.current.setLayoutProperty(layer, 'visibility', claimsVisible ? 'visible' : 'none');
+      }
+    });
+    ['osint-points', 'osint-clusters', 'osint-cluster-count'].forEach(layer => {
+      if (map.current.getLayer(layer)) {
+        map.current.setLayoutProperty(layer, 'visibility', osintVisible ? 'visible' : 'none');
+      }
+    });
+  }, [mapMode, mapLoaded]);
 
-  const addLayers = () => {
+  function addLayers() {
     if (!map.current) return;
 
-    // OSINT layers
+    // OSINT cluster circles
     map.current.addLayer({
       id: 'osint-clusters',
       type: 'circle',
@@ -337,7 +269,7 @@ export default function GlobeMapbox({ claims, osint, mapMode = 'both', viewMode 
       },
     });
 
-    // Claims layers (Purple theme - ProofLocker style)
+    // Claims cluster circles
     map.current.addLayer({
       id: 'claims-clusters',
       type: 'circle',
@@ -377,8 +309,7 @@ export default function GlobeMapbox({ claims, osint, mapMode = 'both', viewMode 
       filter: ['!', ['has', 'point_count']],
       paint: {
         'circle-color': [
-          'match',
-          ['get', 'status'],
+          'match', ['get', 'status'],
           'verified', '#5B21B6',
           'disputed', '#ef4444',
           'void', '#6b7280',
@@ -392,7 +323,7 @@ export default function GlobeMapbox({ claims, osint, mapMode = 'both', viewMode 
       },
     });
 
-    // Heatmap (Purple gradient - ProofLocker style)
+    // Heatmap layer (hidden by default)
     map.current.addLayer({
       id: 'claims-heatmap',
       type: 'heatmap',
@@ -402,9 +333,7 @@ export default function GlobeMapbox({ claims, osint, mapMode = 'both', viewMode 
         'heatmap-weight': 1,
         'heatmap-intensity': ['interpolate', ['linear'], ['zoom'], 0, 1, 9, 3],
         'heatmap-color': [
-          'interpolate',
-          ['linear'],
-          ['heatmap-density'],
+          'interpolate', ['linear'], ['heatmap-density'],
           0, 'rgba(91, 33, 182, 0)',
           0.2, 'rgba(91, 33, 182, 0.2)',
           0.4, 'rgba(139, 92, 246, 0.4)',
@@ -417,537 +346,61 @@ export default function GlobeMapbox({ claims, osint, mapMode = 'both', viewMode 
       },
       layout: { visibility: 'none' },
     });
+  }
 
-    console.log('[Globe] Layers added');
-  };
-
-  const addInteractions = () => {
+  function addInteractions() {
     if (!map.current) return;
-    // @ts-ignore
-    const mapboxgl = window.mapboxgl;
 
-    // Cursor
+    // Cursor change on hover
     ['claims-clusters', 'claims-points', 'osint-clusters', 'osint-points'].forEach((layer) => {
-      map.current.on('mouseenter', layer, () => {
-        map.current.getCanvas().style.cursor = 'pointer';
-      });
-      map.current.on('mouseleave', layer, () => {
-        map.current.getCanvas().style.cursor = '';
-      });
+      map.current.on('mouseenter', layer, () => { map.current.getCanvas().style.cursor = 'pointer'; });
+      map.current.on('mouseleave', layer, () => { map.current.getCanvas().style.cursor = ''; });
     });
 
-    // Unified click handler for Stack Panel with single-flight guard
-    map.current.on('click', (e: any) => {
-      // Increment request ID to invalidate any pending requests
-      clickRequestId.current += 1;
-      const currentRequestId = clickRequestId.current;
-
-      const bbox = [
-        [e.point.x - 10, e.point.y - 10],
-        [e.point.x + 10, e.point.y + 10]
-      ];
-
-      // Query both layers
-      const claimFeatures = map.current.queryRenderedFeatures(bbox, {
-        layers: ['claims-points', 'claims-clusters']
-      });
-      const osintFeatures = map.current.queryRenderedFeatures(bbox, {
-        layers: ['osint-points', 'osint-clusters']
-      });
-
-      if (claimFeatures.length === 0 && osintFeatures.length === 0) return;
-
-      // Use Maps for deduplication
-      const claimsMap = new Map<number, any>();
-      const osintMap = new Map<number, any>();
-      let pending = 0;
-
-      // Process claims
-      claimFeatures.slice(0, 3).forEach((feature: any) => {
-        if (feature.properties.cluster) {
-          // Handle cluster - get leaves
-          pending++;
-          const clusterId = feature.properties.cluster_id;
-          map.current.getSource('claims').getClusterLeaves(clusterId, 10, 0, (err: any, features: any) => {
-            pending--;
-            if (!err && features && currentRequestId === clickRequestId.current) {
-              features.forEach((f: any) => {
-                // Dedupe by ID
-                if (f.properties.id && !claimsMap.has(f.properties.id)) {
-                  claimsMap.set(f.properties.id, f.properties);
-                }
-              });
-            }
-            // Check if all done
-            if (pending === 0 && currentRequestId === clickRequestId.current) {
-              finalizePanel();
-            }
+    // Click to zoom into clusters
+    ['claims-clusters', 'osint-clusters'].forEach((layer) => {
+      const sourceId = layer.startsWith('claims') ? 'claims' : 'osint';
+      map.current.on('click', layer, (e: any) => {
+        const features = map.current.queryRenderedFeatures(e.point, { layers: [layer] });
+        if (!features.length) return;
+        const clusterId = features[0].properties.cluster_id;
+        map.current.getSource(sourceId).getClusterExpansionZoom(clusterId, (err: any, zoom: any) => {
+          if (err) return;
+          map.current.easeTo({
+            center: features[0].geometry.coordinates,
+            zoom: zoom,
           });
-        } else {
-          // Single point
-          if (feature.properties.id && !claimsMap.has(feature.properties.id)) {
-            claimsMap.set(feature.properties.id, feature.properties);
-          }
-        }
+        });
       });
-
-      // Process OSINT
-      osintFeatures.slice(0, 3).forEach((feature: any) => {
-        if (feature.properties.cluster) {
-          pending++;
-          const clusterId = feature.properties.cluster_id;
-          map.current.getSource('osint').getClusterLeaves(clusterId, 10, 0, (err: any, features: any) => {
-            pending--;
-            if (!err && features && currentRequestId === clickRequestId.current) {
-              features.forEach((f: any) => {
-                // Dedupe by ID
-                if (f.properties.id && !osintMap.has(f.properties.id)) {
-                  osintMap.set(f.properties.id, f.properties);
-                }
-              });
-            }
-            // Check if all done
-            if (pending === 0 && currentRequestId === clickRequestId.current) {
-              finalizePanel();
-            }
-          });
-        } else {
-          // Single point
-          if (feature.properties.id && !osintMap.has(feature.properties.id)) {
-            osintMap.set(feature.properties.id, feature.properties);
-          }
-        }
-      });
-
-      // Finalize and show panel
-      function finalizePanel() {
-        // Guard: Only show if this is still the current request
-        if (currentRequestId !== clickRequestId.current) {
-          console.log('[Globe] Click request stale, ignoring');
-          return;
-        }
-
-        const claimsList = Array.from(claimsMap.values()).slice(0, 5);
-        const osintList = Array.from(osintMap.values()).slice(0, 5);
-
-        if (claimsList.length === 0 && osintList.length === 0) return;
-
-        console.log('[Globe] Showing panel:', claimsList.length, 'claims,', osintList.length, 'osint');
-        showStackPanel(e.point, claimsList, osintList);
-      }
-
-      // If no pending async, show immediately
-      if (pending === 0) {
-        setTimeout(finalizePanel, 50);
-      }
     });
-
-    function showStackPanel(point: any, claims: any[], osintItems: any[]) {
-      // Remove any existing panel
-      const existingPanel = document.getElementById('stack-panel');
-      if (existingPanel) {
-        existingPanel.remove();
-      }
-
-      // Check if mobile
-      const isMobile = window.innerWidth < 768;
-
-      // Create panel element
-      const panel = document.createElement('div');
-      panel.id = 'stack-panel';
-
-      if (isMobile) {
-        // Mobile: bottom sheet style
-        panel.style.cssText = `
-          position: fixed;
-          bottom: 0;
-          left: 0;
-          right: 0;
-          background: rgba(10, 12, 20, 0.96);
-          backdrop-filter: blur(24px);
-          border: 1px solid rgba(91,33,182,0.3);
-          border-bottom: none;
-          border-radius: 20px 20px 0 0;
-          max-height: 60vh;
-          box-shadow: 0 -20px 60px rgba(0,0,0,0.7), 0 0 40px rgba(91,33,182,0.2);
-          font-family: system-ui, -apple-system, sans-serif;
-          overflow: hidden;
-          z-index: 1000;
-          animation: slideUp 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        `;
-      } else {
-        // Desktop: centered and positioned below header
-        panel.style.cssText = `
-          position: fixed;
-          left: 50%;
-          transform: translateX(-50%);
-          top: calc(var(--header-height, 64px) + 16px);
-          background: rgba(10, 12, 20, 0.92);
-          backdrop-filter: blur(24px);
-          border: 1px solid rgba(91,33,182,0.3);
-          border-radius: 16px;
-          width: 90%;
-          max-width: 420px;
-          max-height: calc(100vh - var(--header-height, 64px) - 32px);
-          box-shadow: 0 20px 60px rgba(0,0,0,0.7), 0 0 40px rgba(91,33,182,0.2);
-          font-family: system-ui, -apple-system, sans-serif;
-          overflow: hidden;
-          z-index: 1000;
-          animation: panelSlideIn 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        `;
-      }
-
-      panel.innerHTML = `
-        ${isMobile ? `
-          <!-- Mobile drag handle -->
-          <div style="
-            display: flex;
-            justify-content: center;
-            padding: 12px 0;
-            border-bottom: 1px solid rgba(91,33,182,0.2);
-          ">
-            <div style="
-              width: 40px;
-              height: 4px;
-              background: rgba(139,92,246,0.4);
-              border-radius: 2px;
-            "></div>
-          </div>
-        ` : ''}
-
-        <!-- Header -->
-        <div style="
-          padding: ${isMobile ? '12px 16px' : '16px 20px'};
-          border-bottom: 1px solid rgba(91,33,182,0.2);
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-        ">
-          <div>
-            <div style="
-              font-size: ${isMobile ? '13px' : '14px'};
-              font-weight: 700;
-              color: #ffffff;
-            ">Selected Area</div>
-            <div style="
-              font-size: 12px;
-              color: #9ca3af;
-              margin-top: 2px;
-            ">
-              ${claims.length > 0 ? `${claims.length} Claim${claims.length !== 1 ? 's' : ''}` : ''}
-              ${claims.length > 0 && osintItems.length > 0 ? ' • ' : ''}
-              ${osintItems.length > 0 ? `${osintItems.length} OSINT` : ''}
-            </div>
-          </div>
-          <button id="close-panel" style="
-            width: 28px;
-            height: 28px;
-            border-radius: 6px;
-            background: rgba(91, 33, 182, 0.2);
-            border: none;
-            color: white;
-            font-size: 18px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.2s;
-          " onmouseover="this.style.background='rgba(91, 33, 182, 0.4)'; this.style.transform='scale(1.1)'" onmouseout="this.style.background='rgba(91, 33, 182, 0.2)'; this.style.transform='scale(1)'">×</button>
-        </div>
-
-        <!-- Content -->
-        <div style="max-height: calc(100vh - var(--header-height, 64px) - 180px); overflow-y: auto; padding: 16px;">
-          ${claims.length > 0 ? `
-            <!-- Claims -->
-            <div style="margin-bottom: ${osintItems.length > 0 ? '20px' : '0'};">
-              <div style="
-                font-size: 11px;
-                font-weight: 700;
-                text-transform: uppercase;
-                letter-spacing: 1px;
-                color: #8b5cf6;
-                margin-bottom: 12px;
-                display: flex;
-                align-items: center;
-                gap: 6px;
-              ">
-                <svg style="width: 14px; height: 14px; fill: currentColor;" viewBox="0 0 24 24">
-                  <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/>
-                </svg>
-                Claims
-              </div>
-              ${claims.map((claim, idx) => {
-                const statusColor = {
-                  verified: '#8b5cf6',
-                  disputed: '#ef4444',
-                  void: '#6b7280',
-                  pending: '#f59e0b'
-                }[claim.status as 'verified' | 'disputed' | 'void' | 'pending'] || '#f59e0b';
-
-                return `
-                  <div style="
-                    background: rgba(30, 41, 59, 0.5);
-                    border: 1px solid rgba(139,92,246,0.2);
-                    border-left: 3px solid #8b5cf6;
-                    border-radius: 10px;
-                    padding: 12px;
-                    margin-bottom: ${idx < claims.length - 1 ? '10px' : '0'};
-                    display: flex;
-                    gap: 12px;
-                  ">
-                    <!-- Icon -->
-                    <div style="
-                      width: 32px;
-                      height: 32px;
-                      border-radius: 50%;
-                      background: linear-gradient(135deg, #8b5cf6 0%, #6d28d9 100%);
-                      display: flex;
-                      align-items: center;
-                      justify-content: center;
-                      flex-shrink: 0;
-                      box-shadow: 0 4px 12px rgba(139,92,246,0.3);
-                    ">
-                      <svg style="width: 16px; height: 16px; fill: white;" viewBox="0 0 24 24">
-                        <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/>
-                      </svg>
-                    </div>
-
-                    <!-- Content -->
-                    <div style="flex: 1; min-width: 0;">
-                      <!-- Claim text -->
-                      <div style="
-                        font-size: 13px;
-                        font-weight: 600;
-                        line-height: 1.4;
-                        color: #ffffff;
-                        margin-bottom: 8px;
-                        display: -webkit-box;
-                        -webkit-line-clamp: 2;
-                        -webkit-box-orient: vertical;
-                        overflow: hidden;
-                      ">${claim.claim}</div>
-
-                      <!-- Badges -->
-                      <div style="display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 6px;">
-                        <span style="
-                          padding: 2px 8px;
-                          background: rgba(139,92,246,0.2);
-                          border: 1px solid rgba(139,92,246,0.3);
-                          border-radius: 8px;
-                          font-size: 10px;
-                          font-weight: 700;
-                          color: #c4b5fd;
-                          text-transform: uppercase;
-                        ">CLAIM</span>
-                        <span style="
-                          padding: 2px 8px;
-                          background: rgba(${statusColor === '#8b5cf6' ? '139,92,246' : statusColor === '#ef4444' ? '239,68,68' : statusColor === '#6b7280' ? '107,114,128' : '245,158,11'},0.2);
-                          border-radius: 8px;
-                          font-size: 10px;
-                          font-weight: 600;
-                          color: ${statusColor};
-                          text-transform: uppercase;
-                        ">${claim.status}</span>
-                      </div>
-
-                      <!-- Submitter -->
-                      <div style="
-                        font-size: 11px;
-                        color: #9ca3af;
-                      ">${claim.submitter}</div>
-                    </div>
-                  </div>
-                `;
-              }).join('')}
-            </div>
-          ` : ''}
-
-          ${osintItems.length > 0 ? `
-            <!-- OSINT -->
-            <div>
-              <div style="
-                font-size: 11px;
-                font-weight: 700;
-                text-transform: uppercase;
-                letter-spacing: 1px;
-                color: #ef4444;
-                margin-bottom: 12px;
-                display: flex;
-                align-items: center;
-                gap: 6px;
-              ">
-                <svg style="width: 14px; height: 14px; fill: currentColor;" viewBox="0 0 24 24">
-                  <path d="M13 3L4 14h7v7l9-11h-7V3z"/>
-                </svg>
-                OSINT Signals
-              </div>
-              ${osintItems.map((item, idx) => {
-                const tags = typeof item.tags === 'string' ? JSON.parse(item.tags || '[]') : (item.tags || []);
-                return `
-                  <div style="
-                    background: rgba(30, 41, 59, 0.5);
-                    border: 1px solid rgba(239,68,68,0.2);
-                    border-left: 3px solid #ef4444;
-                    border-radius: 10px;
-                    padding: 12px;
-                    margin-bottom: ${idx < osintItems.length - 1 ? '10px' : '0'};
-                    display: flex;
-                    gap: 12px;
-                  ">
-                    <!-- Icon -->
-                    <div style="
-                      width: 32px;
-                      height: 32px;
-                      border-radius: 50%;
-                      background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
-                      display: flex;
-                      align-items: center;
-                      justify-content: center;
-                      flex-shrink: 0;
-                      box-shadow: 0 4px 12px rgba(239,68,68,0.3);
-                    ">
-                      <svg style="width: 16px; height: 16px; fill: white;" viewBox="0 0 24 24">
-                        <path d="M13 3L4 14h7v7l9-11h-7V3z"/>
-                      </svg>
-                    </div>
-
-                    <!-- Content -->
-                    <div style="flex: 1; min-width: 0;">
-                      <!-- Title -->
-                      <div style="
-                        font-size: 13px;
-                        font-weight: 600;
-                        color: #ffffff;
-                        line-height: 1.4;
-                        margin-bottom: 8px;
-                        display: -webkit-box;
-                        -webkit-line-clamp: 2;
-                        -webkit-box-orient: vertical;
-                        overflow: hidden;
-                      ">${item.title}</div>
-
-                      <!-- Badges -->
-                      <div style="display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 6px;">
-                        <span style="
-                          padding: 2px 8px;
-                          background: rgba(239,68,68,0.2);
-                          border: 1px solid rgba(239,68,68,0.3);
-                          border-radius: 8px;
-                          font-size: 10px;
-                          font-weight: 700;
-                          color: #fca5a5;
-                          text-transform: uppercase;
-                        ">OSINT</span>
-                        ${tags.slice(0, 2).map((tag: string) => `
-                          <span style="
-                            padding: 2px 8px;
-                            background: rgba(239,68,68,0.12);
-                            border-radius: 8px;
-                            font-size: 10px;
-                            font-weight: 600;
-                            color: #fca5a5;
-                          ">${tag}</span>
-                        `).join('')}
-                      </div>
-
-                      <!-- Source -->
-                      <div style="
-                        font-size: 11px;
-                        color: #9ca3af;
-                      ">${item.source}</div>
-                    </div>
-                  </div>
-                `;
-              }).join('')}
-            </div>
-          ` : ''}
-        </div>
-      `;
-
-      // Append to map container
-      mapContainer.current?.appendChild(panel);
-
-      // Add close button handler
-      document.getElementById('close-panel')?.addEventListener('click', () => {
-        panel.remove();
-      });
-
-      // Close on click outside
-      const clickOutside = (e: MouseEvent) => {
-        if (!panel.contains(e.target as Node)) {
-          panel.remove();
-          document.removeEventListener('click', clickOutside);
-        }
-      };
-      setTimeout(() => document.addEventListener('click', clickOutside), 100);
-    }
-
-    console.log('[Globe] Interactions added');
-  };
-
-  const flyTo = useCallback((lng: number, lat: number) => {
-    if (map.current) {
-      map.current.flyTo({ center: [lng, lat], zoom: 6, duration: 1000 });
-    }
-  }, []);
-
-  const toggleLayer = useCallback((layerType: 'claims' | 'osint' | 'heatmap') => {
-    if (!map.current) return;
-
-    if (layerType === 'claims') {
-      const newVis = !claimsLayerVisible;
-      setClaimsLayerVisible(newVis);
-      const vis = newVis ? 'visible' : 'none';
-      ['claims-clusters', 'claims-cluster-count', 'claims-points'].forEach((id) => {
-        map.current.setLayoutProperty(id, 'visibility', vis);
-      });
-    } else if (layerType === 'osint') {
-      const newVis = !osintLayerVisible;
-      setOsintLayerVisible(newVis);
-      const vis = newVis ? 'visible' : 'none';
-      ['osint-clusters', 'osint-cluster-count', 'osint-points'].forEach((id) => {
-        map.current.setLayoutProperty(id, 'visibility', vis);
-      });
-    } else if (layerType === 'heatmap') {
-      const newVis = !heatmapVisible;
-      setHeatmapVisible(newVis);
-      map.current.setLayoutProperty('claims-heatmap', 'visibility', newVis ? 'visible' : 'none');
-    }
-  }, [claimsLayerVisible, osintLayerVisible, heatmapVisible]);
-
-  const resetView = useCallback(() => {
-    if (map.current) {
-      map.current.flyTo({ center: [15, 35], zoom: 1.5, pitch: 0, bearing: 0, duration: 1500 });
-    }
-  }, []);
+  }
 
   return (
     <div className="relative w-full h-full bg-[#0A0A0F]">
-      <div
-        ref={mapContainer}
-        className="absolute inset-0"
-      />
+      <div ref={mapContainer} className="absolute inset-0" />
 
-      {!mapReady && !error && (
-        <div className="absolute inset-0 flex items-center justify-center bg-[#0A0A0F]/95 z-10">
+      {!mapLoaded && !error && (
+        <div className="absolute inset-0 flex items-center justify-center bg-[#0A0A0F] z-10">
           <div className="text-center">
             <div className="relative mb-4 mx-auto w-16 h-16">
               <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-purple-500" />
             </div>
             <p className="text-purple-300 font-semibold text-lg">Loading Globe...</p>
-            <p className="text-gray-500 text-sm mt-2">Initializing Mapbox</p>
+            <p className="text-gray-500 text-sm mt-2">
+              {mapboxReady ? 'Rendering map...' : 'Loading Mapbox GL...'}
+            </p>
           </div>
         </div>
       )}
 
       {error && (
-        <div className="absolute inset-0 flex items-center justify-center bg-[#0A0A0F]/95 z-10">
+        <div className="absolute inset-0 flex items-center justify-center bg-[#0A0A0F] z-10">
           <div className="text-center max-w-md px-6">
             <p className="text-white text-xl font-bold mb-2">Failed to Load Globe</p>
             <p className="text-gray-400 text-sm mb-6">{error}</p>
             <button
               onClick={() => window.location.reload()}
-              className="px-8 py-3 bg-gradient-to-r from-[#5B21B6] to-[#2E5CFF] hover:from-[#6B31C6] hover:to-[#3D6CFF] text-white rounded-lg text-sm font-bold shadow-[0_0_20px_rgba(91,33,182,0.4)] transition-all"
+              className="px-8 py-3 bg-gradient-to-r from-[#5B21B6] to-[#2E5CFF] text-white rounded-lg text-sm font-bold transition-all"
             >
               Reload Page
             </button>
