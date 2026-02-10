@@ -373,7 +373,7 @@ export default function ProfilePage() {
                       </div>
                       <div className="flex items-baseline gap-2">
                         <div className="text-5xl font-bold text-white">
-                          {stats.reliabilityScore}
+                          {stats.reputationScore}
                         </div>
                         <div className="text-lg text-neutral-500">/1000</div>
                       </div>
@@ -384,11 +384,11 @@ export default function ProfilePage() {
                   <div className="flex items-center gap-3 mt-4">
                     {(() => {
                       const tierInfo = getTierInfo(stats.tier);
-                      const nextMilestone = getNextTierMilestone(stats.reliabilityScore);
+                      const nextMilestone = getNextTierMilestone(stats.reputationScore);
                       return (
                         <>
                           <div
-                            className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg border ${tierInfo.bgColor} ${tierInfo.color} border-current`}
+                            className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg border ${tierInfo.bgColor} ${tierInfo.textColor} border-current`}
                           >
                             <svg
                               className="w-4 h-4"
@@ -397,13 +397,13 @@ export default function ProfilePage() {
                             >
                               <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" />
                             </svg>
-                            <span className="font-semibold">{tierInfo.label}</span>
+                            <span className="font-semibold">{tierInfo.name}</span>
                           </div>
 
                           {nextMilestone.nextTier && (
                             <div className="text-sm text-neutral-400">
                               {nextMilestone.pointsNeeded} pts to{" "}
-                              {nextMilestone.tierInfo?.label}
+                              {nextMilestone.tierInfo?.name}
                             </div>
                           )}
                         </>
@@ -418,7 +418,7 @@ export default function ProfilePage() {
                     Total Points
                   </div>
                   <div className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-orange-500">
-                    {formatPoints(stats.totalPoints)}
+                    {formatPoints(stats.totalXP)}
                   </div>
                   <div className="text-xs text-neutral-500 mt-1">Lifetime earnings</div>
                 </div>
@@ -428,7 +428,7 @@ export default function ProfilePage() {
               <div className="h-2 bg-neutral-900 rounded-full overflow-hidden">
                 <div
                   className="h-full bg-gradient-to-r from-blue-500 to-purple-500 transition-all duration-500"
-                  style={{ width: `${(stats.reliabilityScore / 1000) * 100}%` }}
+                  style={{ width: `${(stats.reputationScore / 1000) * 100}%` }}
                 />
               </div>
 
@@ -475,7 +475,7 @@ export default function ProfilePage() {
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
           <div className="bg-slate-900/60 border border-slate-700/40 rounded-xl p-4 text-center">
             <div className="text-2xl font-bold text-white">
-              {stats?.reliabilityScore || 0}
+              {stats?.reputationScore || 0}
             </div>
             <div className="text-xs text-slate-400 mt-1">Reputation</div>
           </div>
