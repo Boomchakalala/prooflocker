@@ -881,16 +881,30 @@ export default function GlobePage() {
                 displayItems.length === 0 ? (
                   <div className="text-center py-8 text-[#94a3b8] text-sm">No intel signals found</div>
                 ) : (
-                  (displayItems as OsintItem[]).map((item) => (
-                    <div key={item.id} className="p-3 bg-slate-900/60 border border-red-500/30 rounded-xl">
+                  (displayItems as OsintItem[]).map((item) => {
+                    const freshnessBadge = getFreshnessBadge(item.createdAt || '');
+                    const freshnessClass = getIntelFreshnessClass(item.createdAt || '');
+                    const category = item.tags?.[0] || 'Intel';
+
+                    return (
+                    <div key={item.id} className={`p-3 bg-slate-900/60 border ${freshnessClass} rounded-xl`}>
                       <div className="flex items-center gap-2 mb-1.5">
-                        <span className="text-[10px] font-bold text-red-400 bg-red-600/80 text-white px-2 py-0.5 rounded">INTEL</span>
-                        <span className="text-xs text-red-400 font-semibold truncate">{item.source}</span>
+                        <span className="text-[10px] font-bold text-white bg-red-600/80 px-2 py-0.5 rounded">INTEL</span>
+                        {freshnessBadge && (
+                          <span className={`text-[9px] font-bold px-1.5 py-0.5 rounded ${freshnessBadge.className}`}>
+                            {freshnessBadge.label}
+                          </span>
+                        )}
+                        <span className="text-xs text-red-400 font-semibold truncate flex-1">{item.source}</span>
+                        <span className="text-[10px] text-slate-500 bg-slate-800/50 px-1.5 py-0.5 rounded">
+                          #{category}
+                        </span>
                       </div>
                       <p className="text-sm text-white line-clamp-2 mb-2">{item.title}</p>
                       <span className="text-[10px] text-slate-500">{item.timestamp}</span>
                     </div>
-                  ))
+                    );
+                  })
                 )
               )}
             </div>
