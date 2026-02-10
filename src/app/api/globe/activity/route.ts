@@ -253,7 +253,7 @@ export async function GET(request: NextRequest) {
         lng: signal.geotag_lng,
         timestamp,
         tags: signal.tags || [],
-        category: signal.category,
+        category: signal.category || (signal.tags && signal.tags[0]) || 'Intel',
         locationName: signal.location_name,
         content: signal.content,
         createdAt: signal.created_at,

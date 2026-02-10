@@ -45,6 +45,7 @@ interface OsintItem {
   timestamp: string;
   createdAt?: string;
   tags: string[];
+  category?: string;
 }
 
 type SortOption = 'new' | 'trust' | 'upvotes' | 'evidence';
@@ -719,7 +720,7 @@ export default function GlobePage() {
                 (displayItems as OsintItem[]).map((item) => {
                   const freshnessBadge = getFreshnessBadge(item.createdAt || '');
                   const freshnessClass = getIntelFreshnessClass(item.createdAt || '');
-                  const category = item.tags?.[0] || 'Intel';
+                  const category = item.category || item.tags?.[0] || 'Intel';
 
                   return (
                   <div
@@ -908,7 +909,7 @@ export default function GlobePage() {
                   (displayItems as OsintItem[]).map((item) => {
                     const freshnessBadge = getFreshnessBadge(item.createdAt || '');
                     const freshnessClass = getIntelFreshnessClass(item.createdAt || '');
-                    const category = item.tags?.[0] || 'Intel';
+                    const category = item.category || item.tags?.[0] || 'Intel';
 
                     return (
                     <div key={item.id} className={`p-3 bg-slate-900/60 border ${freshnessClass} rounded-xl`}>
