@@ -4,10 +4,10 @@ import { useState, useEffect, useMemo, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import dynamic from 'next/dynamic';
-import Script from 'next/script';
 import { mapClaimToCard, mapOsintToCard, sortCards, filterCards, type CardViewModel } from '@/lib/card-view-model';
 import { useAuth } from '@/contexts/AuthContext';
 import { getTierInfo } from '@/lib/user-scoring';
+import { getEvidenceGrade } from '@/lib/evidence-grading';
 import BottomSheet from '@/components/BottomSheet';
 import LinkOsintModal from '@/components/LinkOsintModal';
 import UnifiedHeader from '@/components/UnifiedHeader';
@@ -73,7 +73,6 @@ export default function GlobePage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedArea, setSelectedArea] = useState<{claims: Claim[], osint: OsintItem[], name: string} | null>(null);
   const [viewMode, setViewMode] = useState<'points' | 'heatmap'>('points');
-  const [mapboxReady, setMapboxReady] = useState(false);
 
   // Compute unique categories from current data
   const uniqueCategories = useMemo(() => {

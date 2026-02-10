@@ -37,13 +37,13 @@ interface GlobeMapboxProps {
   osint: OsintItem[];
   mapMode?: 'both' | 'claims' | 'osint';
   viewMode?: 'points' | 'heatmap';
-  mapboxReady?: boolean;
 }
 
-export default function GlobeMapbox({ claims, osint, mapMode = 'both', viewMode = 'points', mapboxReady = false }: GlobeMapboxProps) {
+export default function GlobeMapbox({ claims, osint, mapMode = 'both', viewMode = 'points' }: GlobeMapboxProps) {
   const mapContainer = useRef<HTMLDivElement>(null);
   const map = useRef<any>(null);
   const clickRequestId = useRef(0);
+  const [scriptLoaded, setScriptLoaded] = useState(false);
   const [mapLoaded, setMapLoaded] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -66,16 +66,64 @@ export default function GlobeMapbox({ claims, osint, mapMode = 'both', viewMode 
     })),
   }), [osint]);
 
-  // Initialize map when mapboxReady becomes true
+  // Load Mapbox GL JS script and CSS via DOM injection
   useEffect(() => {
-    if (!mapboxReady) return;
+    // If already loaded from a previous navigation, mark as ready immediately
+    if (window.mapboxgl) {
+      console.log('[Globe] mapboxgl already available on window');
+      setScriptLoaded(true);
+      return;
+    }
+
+    // Inject CSS if not already present
+    const existingLink = document.querySelector('link[href*="mapbox-gl.css"]');
+    if (!existingLink) {
+      const link = document.createElement('link');
+      link.rel = 'stylesheet';
+      link.href = 'https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css';
+      document.head.appendChild(link);
+      console.log('[Globe] Injected Mapbox GL CSS');
+    }
+
+    // Inject JS if not already present
+    const existingScript = document.querySelector('script[src*="mapbox-gl.js"]');
+    if (existingScript) {
+      // Script tag exists but maybe still loading -- listen for load
+      existingScript.addEventListener('load', () => {
+        console.log('[Globe] Existing script finished loading');
+        setScriptLoaded(true);
+      });
+      // In case it already loaded
+      if (window.mapboxgl) {
+        setScriptLoaded(true);
+      }
+      return;
+    }
+
+    const script = document.createElement('script');
+    script.src = 'https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js';
+    script.async = true;
+    script.onload = () => {
+      console.log('[Globe] Mapbox GL JS script loaded');
+      setScriptLoaded(true);
+    };
+    script.onerror = () => {
+      console.error('[Globe] Failed to load Mapbox GL JS script');
+      setError('Failed to load Mapbox GL JS');
+    };
+    document.head.appendChild(script);
+    console.log('[Globe] Injected Mapbox GL JS script');
+  }, []);
+
+  // Initialize map when script is loaded
+  useEffect(() => {
+    if (!scriptLoaded) return;
     if (map.current) return; // Already initialized
     if (!mapContainer.current) return;
 
-    // @ts-ignore
     const mapboxgl = window.mapboxgl;
     if (!mapboxgl) {
-      console.error('[Globe] mapboxReady=true but window.mapboxgl is undefined');
+      console.error('[Globe] scriptLoaded=true but window.mapboxgl is undefined');
       setError('Mapbox GL JS failed to load');
       return;
     }
@@ -113,7 +161,7 @@ export default function GlobeMapbox({ claims, osint, mapMode = 'both', viewMode 
         map.current = null;
       }
     };
-  }, [mapboxReady]);
+  }, [scriptLoaded]);
 
   function initMap(mapboxgl: any) {
     if (!mapContainer.current || map.current) return;
@@ -387,7 +435,7 @@ export default function GlobeMapbox({ claims, osint, mapMode = 'both', viewMode 
             </div>
             <p className="text-purple-300 font-semibold text-lg">Loading Globe...</p>
             <p className="text-gray-500 text-sm mt-2">
-              {mapboxReady ? 'Rendering map...' : 'Loading Mapbox GL...'}
+              {scriptLoaded ? 'Rendering map...' : 'Loading Mapbox GL...'}
             </p>
           </div>
         </div>
