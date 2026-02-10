@@ -40,12 +40,15 @@ interface GlobeMapboxProps {
 
 const MAPBOX_TOKEN = process.env.NEXT_PUBLIC_MAPBOX_TOKEN || 'pk.eyJ1IjoicHJvb2Zsb2NrZXIiLCJhIjoiY21sYjBxcTAwMGVoYzNlczI4YWlzampqZyJ9.nY-yqSucTzvNyK1qDCq9rQ';
 
+// Singleton: create map once, never clean up between React re-renders
+let globalMap: any = null;
+let globalMapContainer: HTMLDivElement | null = null;
+
 export default function GlobeMapbox({ claims, osint, mapMode = 'both', viewMode = 'points' }: GlobeMapboxProps) {
   const mapContainer = useRef<HTMLDivElement>(null);
-  const map = useRef<any>(null);
-  const [mapLoaded, setMapLoaded] = useState(false);
+  const [mapReady, setMapReady] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [status, setStatus] = useState('Waiting for Mapbox GL...');
+  const [status, setStatus] = useState('Initializing...');
 
   const createClaimsGeoJSON = useCallback(() => ({
     type: 'FeatureCollection' as const,
@@ -65,43 +68,52 @@ export default function GlobeMapbox({ claims, osint, mapMode = 'both', viewMode 
     })),
   }), [osint]);
 
-  // Poll for window.mapboxgl and initialize
   useEffect(() => {
-    if (map.current) return;
+    // If map already exists from a previous render, just reuse it
+    if (globalMap && mapContainer.current) {
+      if (globalMapContainer !== mapContainer.current) {
+        // Container changed, need to move the map's canvas
+        // Just destroy and recreate
+        try { globalMap.remove(); } catch (e) {}
+        globalMap = null;
+        globalMapContainer = null;
+      } else {
+        // Same container, map still alive
+        setMapReady(true);
+        setStatus('Map ready (reused)');
+        return; // No cleanup needed - we keep the map alive
+      }
+    }
 
-    let cancelled = false;
     let pollCount = 0;
+    let loadTimeout: ReturnType<typeof setTimeout>;
 
     function tryInit() {
-      if (cancelled) return;
       pollCount++;
-
       const mapboxgl = window.mapboxgl;
+
       if (!mapboxgl) {
         if (pollCount > 100) {
-          setError('Mapbox GL JS failed to load after 10s');
-          setStatus('Script load timeout');
+          setError('Mapbox GL JS script failed to load');
           return;
         }
-        setStatus(`Waiting for Mapbox GL... (${pollCount})`);
+        setStatus(`Loading Mapbox GL... (${pollCount})`);
         setTimeout(tryInit, 100);
         return;
       }
 
       if (!mapContainer.current) {
-        setStatus('Waiting for container...');
         setTimeout(tryInit, 100);
         return;
       }
 
-      // Check container has dimensions
       const rect = mapContainer.current.getBoundingClientRect();
       if (rect.width === 0 || rect.height === 0) {
-        if (pollCount > 50) {
-          setError('Map container has no dimensions');
+        if (pollCount > 60) {
+          setError('Container has no size');
           return;
         }
-        setStatus('Waiting for container size...');
+        setStatus('Waiting for layout...');
         setTimeout(tryInit, 100);
         return;
       }
@@ -117,13 +129,24 @@ export default function GlobeMapbox({ claims, osint, mapMode = 'both', viewMode 
           center: [15, 35],
           zoom: 1.5,
           attributionControl: false,
+          failIfMajorPerformanceCaveat: false,
         });
 
-        map.current = m;
+        globalMap = m;
+        globalMapContainer = mapContainer.current;
         setStatus('Map created, loading tiles...');
 
+        // Fallback: if load event doesn't fire in 8s, show map anyway
+        loadTimeout = setTimeout(() => {
+          if (!mapReady) {
+            setStatus('Forcing display (tiles may still be loading)...');
+            try { setupLayers(m); } catch (e) {}
+            setMapReady(true);
+          }
+        }, 8000);
+
         m.on('load', () => {
-          if (cancelled) return;
+          clearTimeout(loadTimeout);
           setStatus('Map loaded!');
           m.resize();
 
@@ -136,160 +159,114 @@ export default function GlobeMapbox({ claims, osint, mapMode = 'both', viewMode 
               'space-color': '#0A0A0F',
               'star-intensity': 0.4,
             });
-          } catch (e) { /* fog not supported */ }
+          } catch (e) {}
 
-          m.addSource('osint', {
-            type: 'geojson',
-            data: createOsintGeoJSON(),
-            cluster: true,
-            clusterMaxZoom: 5,
-            clusterRadius: 60,
-          });
-
-          m.addSource('claims', {
-            type: 'geojson',
-            data: createClaimsGeoJSON(),
-            cluster: true,
-            clusterMaxZoom: 5,
-            clusterRadius: 50,
-          });
-
-          // OSINT layers
-          m.addLayer({
-            id: 'osint-clusters', type: 'circle', source: 'osint',
-            filter: ['has', 'point_count'],
-            paint: {
-              'circle-color': '#ef4444',
-              'circle-radius': ['step', ['get', 'point_count'], 20, 5, 30, 10, 40],
-              'circle-opacity': 0.8, 'circle-stroke-width': 2, 'circle-stroke-color': '#fff',
-            },
-          });
-          m.addLayer({
-            id: 'osint-cluster-count', type: 'symbol', source: 'osint',
-            filter: ['has', 'point_count'],
-            layout: { 'text-field': '{point_count}', 'text-font': ['DIN Offc Pro Medium', 'Arial Unicode MS Bold'], 'text-size': 12 },
-            paint: { 'text-color': '#fff' },
-          });
-          m.addLayer({
-            id: 'osint-points', type: 'circle', source: 'osint',
-            filter: ['!', ['has', 'point_count']],
-            paint: { 'circle-color': '#ef4444', 'circle-radius': 8, 'circle-opacity': 0.9, 'circle-stroke-width': 2, 'circle-stroke-color': '#fff' },
-          });
-
-          // Claims layers
-          m.addLayer({
-            id: 'claims-clusters', type: 'circle', source: 'claims',
-            filter: ['has', 'point_count'],
-            paint: {
-              'circle-color': '#5B21B6',
-              'circle-radius': ['step', ['get', 'point_count'], 20, 5, 32, 10, 44],
-              'circle-opacity': 0.9, 'circle-stroke-width': 3, 'circle-stroke-color': '#2E5CFF', 'circle-blur': 0.15,
-            },
-          });
-          m.addLayer({
-            id: 'claims-cluster-count', type: 'symbol', source: 'claims',
-            filter: ['has', 'point_count'],
-            layout: { 'text-field': '{point_count}', 'text-font': ['DIN Offc Pro Medium', 'Arial Unicode MS Bold'], 'text-size': 13 },
-            paint: { 'text-color': '#fff', 'text-halo-color': 'rgba(91, 33, 182, 0.5)', 'text-halo-width': 1.5 },
-          });
-          m.addLayer({
-            id: 'claims-points', type: 'circle', source: 'claims',
-            filter: ['!', ['has', 'point_count']],
-            paint: {
-              'circle-color': ['match', ['get', 'status'], 'verified', '#5B21B6', 'disputed', '#ef4444', 'void', '#6b7280', '#f59e0b'],
-              'circle-radius': 8, 'circle-opacity': 0.95, 'circle-stroke-width': 2.5, 'circle-stroke-color': '#fff', 'circle-blur': 0.1,
-            },
-          });
-          m.addLayer({
-            id: 'claims-heatmap', type: 'heatmap', source: 'claims', maxzoom: 9,
-            paint: {
-              'heatmap-weight': 1,
-              'heatmap-intensity': ['interpolate', ['linear'], ['zoom'], 0, 1, 9, 3],
-              'heatmap-color': ['interpolate', ['linear'], ['heatmap-density'], 0, 'rgba(91,33,182,0)', 0.2, 'rgba(91,33,182,0.2)', 0.4, 'rgba(139,92,246,0.4)', 0.6, 'rgba(46,92,255,0.6)', 0.8, 'rgba(139,92,246,0.8)', 1, 'rgba(91,33,182,1)'],
-              'heatmap-radius': ['interpolate', ['linear'], ['zoom'], 0, 20, 9, 40],
-              'heatmap-opacity': ['interpolate', ['linear'], ['zoom'], 7, 0.8, 9, 0],
-            },
-            layout: { visibility: 'none' },
-          });
-
-          // Interactions
-          ['claims-clusters', 'claims-points', 'osint-clusters', 'osint-points'].forEach((layer) => {
-            m.on('mouseenter', layer, () => { m.getCanvas().style.cursor = 'pointer'; });
-            m.on('mouseleave', layer, () => { m.getCanvas().style.cursor = ''; });
-          });
-          ['claims-clusters', 'osint-clusters'].forEach((layer) => {
-            const sourceId = layer.startsWith('claims') ? 'claims' : 'osint';
-            m.on('click', layer, (e: any) => {
-              const features = m.queryRenderedFeatures(e.point, { layers: [layer] });
-              if (!features.length) return;
-              const clusterId = features[0].properties.cluster_id;
-              m.getSource(sourceId).getClusterExpansionZoom(clusterId, (err: any, zoom: any) => {
-                if (err) return;
-                m.easeTo({ center: features[0].geometry.coordinates, zoom });
-              });
-            });
-          });
-
-          setMapLoaded(true);
-
-          // Auto-rotate
-          m.on('idle', () => {
-            if (m.getZoom() < 2.5 && !m.isMoving()) {
-              m.rotateTo(m.getBearing() + 15, { duration: 120000 });
-            }
-          });
+          setupLayers(m);
+          setMapReady(true);
         });
 
         m.on('error', (e: any) => {
           console.error('[Globe] Map error:', e);
-          setStatus(`Map error: ${e?.error?.message || JSON.stringify(e)}`);
         });
 
       } catch (err: any) {
-        console.error('[Globe] Init failed:', err);
+        console.error('[Globe] Init error:', err);
         setError(err?.message || 'Failed to create map');
-        setStatus(`Init error: ${err?.message}`);
       }
+    }
+
+    function setupLayers(m: any) {
+      // Check if sources already exist (from fallback timeout race)
+      if (m.getSource('osint')) return;
+
+      m.addSource('osint', {
+        type: 'geojson',
+        data: createOsintGeoJSON(),
+        cluster: true, clusterMaxZoom: 5, clusterRadius: 60,
+      });
+      m.addSource('claims', {
+        type: 'geojson',
+        data: createClaimsGeoJSON(),
+        cluster: true, clusterMaxZoom: 5, clusterRadius: 50,
+      });
+
+      // OSINT layers
+      m.addLayer({ id: 'osint-clusters', type: 'circle', source: 'osint', filter: ['has', 'point_count'], paint: { 'circle-color': '#ef4444', 'circle-radius': ['step', ['get', 'point_count'], 20, 5, 30, 10, 40], 'circle-opacity': 0.8, 'circle-stroke-width': 2, 'circle-stroke-color': '#fff' } });
+      m.addLayer({ id: 'osint-cluster-count', type: 'symbol', source: 'osint', filter: ['has', 'point_count'], layout: { 'text-field': '{point_count}', 'text-font': ['DIN Offc Pro Medium', 'Arial Unicode MS Bold'], 'text-size': 12 }, paint: { 'text-color': '#fff' } });
+      m.addLayer({ id: 'osint-points', type: 'circle', source: 'osint', filter: ['!', ['has', 'point_count']], paint: { 'circle-color': '#ef4444', 'circle-radius': 8, 'circle-opacity': 0.9, 'circle-stroke-width': 2, 'circle-stroke-color': '#fff' } });
+
+      // Claims layers
+      m.addLayer({ id: 'claims-clusters', type: 'circle', source: 'claims', filter: ['has', 'point_count'], paint: { 'circle-color': '#5B21B6', 'circle-radius': ['step', ['get', 'point_count'], 20, 5, 32, 10, 44], 'circle-opacity': 0.9, 'circle-stroke-width': 3, 'circle-stroke-color': '#2E5CFF', 'circle-blur': 0.15 } });
+      m.addLayer({ id: 'claims-cluster-count', type: 'symbol', source: 'claims', filter: ['has', 'point_count'], layout: { 'text-field': '{point_count}', 'text-font': ['DIN Offc Pro Medium', 'Arial Unicode MS Bold'], 'text-size': 13 }, paint: { 'text-color': '#fff', 'text-halo-color': 'rgba(91, 33, 182, 0.5)', 'text-halo-width': 1.5 } });
+      m.addLayer({ id: 'claims-points', type: 'circle', source: 'claims', filter: ['!', ['has', 'point_count']], paint: { 'circle-color': ['match', ['get', 'status'], 'verified', '#5B21B6', 'disputed', '#ef4444', 'void', '#6b7280', '#f59e0b'], 'circle-radius': 8, 'circle-opacity': 0.95, 'circle-stroke-width': 2.5, 'circle-stroke-color': '#fff', 'circle-blur': 0.1 } });
+      m.addLayer({ id: 'claims-heatmap', type: 'heatmap', source: 'claims', maxzoom: 9, paint: { 'heatmap-weight': 1, 'heatmap-intensity': ['interpolate', ['linear'], ['zoom'], 0, 1, 9, 3], 'heatmap-color': ['interpolate', ['linear'], ['heatmap-density'], 0, 'rgba(91,33,182,0)', 0.2, 'rgba(91,33,182,0.2)', 0.4, 'rgba(139,92,246,0.4)', 0.6, 'rgba(46,92,255,0.6)', 0.8, 'rgba(139,92,246,0.8)', 1, 'rgba(91,33,182,1)'], 'heatmap-radius': ['interpolate', ['linear'], ['zoom'], 0, 20, 9, 40], 'heatmap-opacity': ['interpolate', ['linear'], ['zoom'], 7, 0.8, 9, 0] }, layout: { visibility: 'none' } });
+
+      // Interactions
+      ['claims-clusters', 'claims-points', 'osint-clusters', 'osint-points'].forEach((layer) => {
+        m.on('mouseenter', layer, () => { m.getCanvas().style.cursor = 'pointer'; });
+        m.on('mouseleave', layer, () => { m.getCanvas().style.cursor = ''; });
+      });
+      ['claims-clusters', 'osint-clusters'].forEach((layer) => {
+        const sourceId = layer.startsWith('claims') ? 'claims' : 'osint';
+        m.on('click', layer, (e: any) => {
+          const features = m.queryRenderedFeatures(e.point, { layers: [layer] });
+          if (!features.length) return;
+          const clusterId = features[0].properties.cluster_id;
+          m.getSource(sourceId).getClusterExpansionZoom(clusterId, (err: any, zoom: any) => {
+            if (err) return;
+            m.easeTo({ center: features[0].geometry.coordinates, zoom });
+          });
+        });
+      });
+
+      // Auto-rotate
+      m.on('idle', () => {
+        if (m.getZoom() < 2.5 && !m.isMoving()) {
+          m.rotateTo(m.getBearing() + 15, { duration: 120000 });
+        }
+      });
     }
 
     tryInit();
 
+    // IMPORTANT: No cleanup! We keep the map alive across React strict mode re-renders.
+    // The map is stored in globalMap and reused.
     return () => {
-      cancelled = true;
-      if (map.current) {
-        try { map.current.remove(); } catch (e) { /* ignore */ }
-        map.current = null;
-      }
+      clearTimeout(loadTimeout);
     };
   }, []);
 
   // Update data
   useEffect(() => {
-    if (!mapLoaded || !map.current) return;
-    const cs = map.current.getSource('claims');
-    const os = map.current.getSource('osint');
-    if (cs) cs.setData(createClaimsGeoJSON());
-    if (os) os.setData(createOsintGeoJSON());
-  }, [claims, osint, mapLoaded, createClaimsGeoJSON, createOsintGeoJSON]);
+    if (!mapReady || !globalMap) return;
+    try {
+      const cs = globalMap.getSource('claims');
+      const os = globalMap.getSource('osint');
+      if (cs) cs.setData(createClaimsGeoJSON());
+      if (os) os.setData(createOsintGeoJSON());
+    } catch (e) {}
+  }, [claims, osint, mapReady, createClaimsGeoJSON, createOsintGeoJSON]);
 
   // Toggle layers
   useEffect(() => {
-    if (!map.current || !mapLoaded) return;
-    const cv = mapMode === 'both' || mapMode === 'claims';
-    const ov = mapMode === 'both' || mapMode === 'osint';
-    ['claims-points', 'claims-clusters', 'claims-cluster-count'].forEach(l => {
-      if (map.current.getLayer(l)) map.current.setLayoutProperty(l, 'visibility', cv ? 'visible' : 'none');
-    });
-    ['osint-points', 'osint-clusters', 'osint-cluster-count'].forEach(l => {
-      if (map.current.getLayer(l)) map.current.setLayoutProperty(l, 'visibility', ov ? 'visible' : 'none');
-    });
-  }, [mapMode, mapLoaded]);
+    if (!globalMap || !mapReady) return;
+    try {
+      const cv = mapMode === 'both' || mapMode === 'claims';
+      const ov = mapMode === 'both' || mapMode === 'osint';
+      ['claims-points', 'claims-clusters', 'claims-cluster-count'].forEach(l => {
+        if (globalMap.getLayer(l)) globalMap.setLayoutProperty(l, 'visibility', cv ? 'visible' : 'none');
+      });
+      ['osint-points', 'osint-clusters', 'osint-cluster-count'].forEach(l => {
+        if (globalMap.getLayer(l)) globalMap.setLayoutProperty(l, 'visibility', ov ? 'visible' : 'none');
+      });
+    } catch (e) {}
+  }, [mapMode, mapReady]);
 
   return (
     <div className="relative w-full h-full bg-[#0A0A0F]">
       <div ref={mapContainer} className="absolute inset-0" />
 
-      {!mapLoaded && !error && (
+      {!mapReady && !error && (
         <div className="absolute inset-0 flex items-center justify-center bg-[#0A0A0F] z-10">
           <div className="text-center">
             <div className="relative mb-4 mx-auto w-16 h-16">
@@ -311,7 +288,7 @@ export default function GlobeMapbox({ claims, osint, mapMode = 'both', viewMode 
               onClick={() => window.location.reload()}
               className="px-8 py-3 bg-gradient-to-r from-[#5B21B6] to-[#2E5CFF] text-white rounded-lg text-sm font-bold transition-all"
             >
-              Reload Page
+              Reload
             </button>
           </div>
         </div>
