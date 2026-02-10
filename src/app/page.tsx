@@ -268,24 +268,24 @@ export default function LandingPage() {
             </div>
 
             {/* Visual flow diagram */}
-            <div className="bg-gradient-to-r from-slate-900/80 via-slate-800/40 to-slate-900/80 border border-slate-700/40 rounded-xl p-6 md:p-8">
+            <div className="bg-gradient-to-r from-slate-900/80 via-slate-800/40 to-slate-900/80 border border-slate-700/40 rounded-xl p-4 md:p-8">
               <div className="flex flex-col md:flex-row items-center justify-between gap-4 md:gap-6">
-                {/* Step flow */}
-                <div className="flex items-center gap-3 text-sm">
-                  <div className="px-3 py-1.5 bg-blue-500/15 border border-blue-500/30 rounded-lg text-blue-400 font-bold">Claim</div>
-                  <svg className="w-4 h-4 text-slate-600" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7"/></svg>
-                  <div className="px-3 py-1.5 bg-blue-500/15 border border-blue-500/30 rounded-lg text-blue-400 font-bold">SHA-256</div>
-                  <svg className="w-4 h-4 text-slate-600" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7"/></svg>
-                  <div className="px-3 py-1.5 bg-purple-500/15 border border-purple-500/30 rounded-lg text-purple-400 font-bold">DAG</div>
-                  <svg className="w-4 h-4 text-slate-600" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7"/></svg>
-                  <div className="px-3 py-1.5 bg-emerald-500/15 border border-emerald-500/30 rounded-lg text-emerald-400 font-bold">Reputation</div>
+                {/* Step flow - responsive wrapping */}
+                <div className="flex flex-wrap items-center justify-center gap-2 md:gap-3 text-xs md:text-sm">
+                  <div className="px-2 md:px-3 py-1 md:py-1.5 bg-blue-500/15 border border-blue-500/30 rounded-lg text-blue-400 font-bold">Claim</div>
+                  <svg className="w-3 h-3 md:w-4 md:h-4 text-slate-600" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7"/></svg>
+                  <div className="px-2 md:px-3 py-1 md:py-1.5 bg-blue-500/15 border border-blue-500/30 rounded-lg text-blue-400 font-bold">SHA-256</div>
+                  <svg className="w-3 h-3 md:w-4 md:h-4 text-slate-600" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7"/></svg>
+                  <div className="px-2 md:px-3 py-1 md:py-1.5 bg-purple-500/15 border border-purple-500/30 rounded-lg text-purple-400 font-bold">DAG</div>
+                  <svg className="w-3 h-3 md:w-4 md:h-4 text-slate-600" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7"/></svg>
+                  <div className="px-2 md:px-3 py-1 md:py-1.5 bg-emerald-500/15 border border-emerald-500/30 rounded-lg text-emerald-400 font-bold whitespace-nowrap">Reputation</div>
                 </div>
 
                 {/* Powered by */}
-                <div className="flex items-center gap-3 text-xs text-slate-500">
+                <div className="flex flex-wrap items-center justify-center gap-2 md:gap-3 text-[10px] md:text-xs text-slate-500">
                   <span>Powered by</span>
                   <a href="https://constellationnetwork.io/" target="_blank" rel="noopener noreferrer" className="text-blue-400 hover:text-blue-300 font-semibold transition-colors">
-                    Constellation Network
+                    Constellation
                   </a>
                   <span>·</span>
                   <a href="https://digitalevidence.constellationnetwork.io/get-started" target="_blank" rel="noopener noreferrer" className="text-purple-400 hover:text-purple-300 font-semibold transition-colors">

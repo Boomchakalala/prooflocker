@@ -60,7 +60,7 @@ export default function LandingHero() {
 
         {/* Subheadline */}
         <div className="mb-4 animate-fade-in-up max-w-[620px] mx-auto px-4" style={{ animationDelay: '0.1s' }}>
-          <p className="text-lg md:text-xl font-medium text-[#F8F9FA]/85 leading-[1.45]" style={{ fontFamily: 'var(--font-inter)' }}>
+          <p className="text-base md:text-xl font-medium text-[#F8F9FA]/85 leading-[1.45]" style={{ fontFamily: 'var(--font-inter)' }}>
             Lock claims on-chain. Resolve with receipts. Your track record is permanent, evidence-graded, and cryptographically provable.
           </p>
         </div>
