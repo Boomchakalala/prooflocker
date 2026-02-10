@@ -80,8 +80,7 @@ export default function RootLayout({
     <html lang="en" className="dark">
       <head>
         <link rel="manifest" href="/manifest.json" />
-        <link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css" />
-        <script src="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js" async></script>
+        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
       </head>
       <body
         className={`${interTight.variable} ${montserrat.variable} ${jetbrainsMono.variable} antialiased bg-[#1A0033] text-[#F5F5F5]`}
