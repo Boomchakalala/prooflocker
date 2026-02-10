@@ -677,6 +677,19 @@ export default function PredictionCard({ prediction, card, currentUserId, onOutc
           </div>
         )}
 
+        {/* Resolve button for pending claims owned by current user */}
+        {canResolve && !isPreview && (
+          <button
+            onClick={(e) => { e.preventDefault(); e.stopPropagation(); handleResolveClick(); }}
+            className="flex items-center gap-1.5 px-3 py-1.5 bg-purple-500/15 hover:bg-purple-500/25 text-purple-400 text-sm font-medium rounded-lg transition-colors border border-purple-500/30"
+          >
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            </svg>
+            Resolve
+          </button>
+        )}
+
         {/* Evidence Grade - Only for Claims (not OSINT) */}
         {!isOsint && prediction.evidence_score !== undefined && prediction.evidence_score !== null && isResolved && (
           (() => {
