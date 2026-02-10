@@ -240,7 +240,7 @@ export default function WallOfWins() {
                 activeClass = "bg-purple-500/20 border-2 border-purple-500/50 text-purple-300";
               } else if (filter === "Tech") {
                 activeClass = "bg-cyan-500/20 border-2 border-cyan-500/50 text-cyan-300";
-              } else if (filter === "OSINT") {
+              } else if (filter === "Intel") {
                 activeClass = "bg-orange-500/20 border-2 border-orange-500/50 text-orange-300";
               } else {
                 activeClass = "bg-slate-600/30 border-2 border-slate-500/50 text-slate-200";
