@@ -562,12 +562,12 @@ export default function ProfilePage() {
                 </div>
               </div>
               <p className="text-slate-400 mb-1 text-sm font-medium">You haven&apos;t locked any claims yet.</p>
-              <p className="text-slate-500 mb-6 text-xs">Lock your first prediction to start building your track record.</p>
+              <p className="text-slate-500 mb-6 text-xs">Lock your first claim to start building your track record.</p>
               <Link
                 href="/lock"
                 className="inline-block px-6 py-2.5 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 text-white font-semibold rounded-lg transition-all shadow-lg hover:shadow-purple-500/20"
               >
-                Lock my first prediction
+                Lock My First Claim
               </Link>
             </div>
           ) : (

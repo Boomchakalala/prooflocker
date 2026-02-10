@@ -264,8 +264,8 @@ export default function ResolvePage({ params }: Props) {
                   <p className="text-xs text-neutral-400">Select how the claim turned out</p>
                 </div>
               </div>
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-                {["correct", "incorrect", "invalid", "pending"].map((o) => {
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                {["correct", "incorrect", "invalid"].map((o) => {
                   const isSelected = outcome === o;
                   const colors = {
                     correct: "bg-green-500/15 border-green-500/50 text-green-300 ring-green-500/30",
@@ -303,7 +303,7 @@ export default function ResolvePage({ params }: Props) {
                 </div>
                 <div>
                   <h2 className="text-xl font-bold text-white">Evidence</h2>
-                  <p className="text-xs text-neutral-400">Add evidence to increase your credibility score</p>
+                  <p className="text-xs text-neutral-400">Add evidence to strengthen your reputation impact</p>
                 </div>
               </div>
 
