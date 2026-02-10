@@ -75,6 +75,12 @@ export default function GlobePage() {
   const [selectedArea, setSelectedArea] = useState<{claims: Claim[], osint: OsintItem[], name: string} | null>(null);
   const [viewMode, setViewMode] = useState<'points' | 'heatmap'>('points');
 
+  // Ticker state for live news rotation
+  const [tickerIndex, setTickerIndex] = useState(0);
+
+  // Mobile feed toggle state
+  const [showMobileFeed, setShowMobileFeed] = useState(true);
+
   // Compute unique categories from current data
   const uniqueCategories = useMemo(() => {
     const cats = new Set<string>();
@@ -156,6 +162,14 @@ export default function GlobePage() {
     return () => clearInterval(timer);
   }, []);
 
+  // Ticker rotation: rotate through 5 items every 4 seconds
+  useEffect(() => {
+    const tickerInterval = setInterval(() => {
+      setTickerIndex(prev => (prev + 1) % 5);
+    }, 4000);
+    return () => clearInterval(tickerInterval);
+  }, []);
+
   // Format "last updated" time
   const getTimeSinceUpdate = () => {
     if (!lastUpdated) return 'Never';
@@ -165,6 +179,61 @@ export default function GlobePage() {
     if (minutes < 60) return `${minutes}m ago`;
     const hours = Math.floor(minutes / 60);
     return `${hours}h ago`;
+  };
+
+  // Ticker helper: get top 5 items (3 intel + 2 claims)
+  const getTickerItems = () => {
+    const items: { type: string; text: string; location: string; time: string }[] = [];
+
+    // Add top 3 OSINT items
+    osint.slice(0, 3).forEach(signal => {
+      items.push({
+        type: 'INTEL',
+        text: signal.title,
+        location: signal.tags?.[0] || '',
+        time: signal.timestamp
+      });
+    });
+
+    // Add top 2 claims
+    claims.slice(0, 2).forEach(claim => {
+      items.push({
+        type: 'CLAIM',
+        text: claim.claim.slice(0, 80) + '...',
+        location: claim.category || '',
+        time: claim.lockedDate
+      });
+    });
+
+    return items.slice(0, 5);
+  };
+
+  const tickerItems = getTickerItems();
+  const currentTickerItem = tickerItems[tickerIndex] || {
+    type: 'CLAIM',
+    text: 'Loading live updates...',
+    location: '',
+    time: ''
+  };
+
+  // Freshness helpers for monitoring vibe
+  const getMinutesAgo = (dateStr: string) => {
+    if (!dateStr) return Infinity;
+    return (Date.now() - new Date(dateStr).getTime()) / 60000;
+  };
+
+  const getFreshnessBadge = (dateStr: string) => {
+    const mins = getMinutesAgo(dateStr);
+    if (mins < 5) return { label: 'NEW', className: 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 animate-pulse' };
+    if (mins < 60) return { label: 'RECENT', className: 'bg-blue-500/15 text-blue-300 border border-blue-500/30' };
+    return null;
+  };
+
+  const getIntelFreshnessClass = (dateStr: string) => {
+    const mins = getMinutesAgo(dateStr);
+    if (mins < 60) return 'border-red-500/50';
+    if (mins < 360) return 'border-orange-500/30';
+    return 'border-red-500/20';
   };
 
   const getDisplayItems = () => {
