@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import dynamic from 'next/dynamic';
@@ -8,6 +8,7 @@ import Script from 'next/script';
 import { mapClaimToCard, mapOsintToCard, sortCards, filterCards, type CardViewModel } from '@/lib/card-view-model';
 import { useAuth } from '@/contexts/AuthContext';
 import { getTierInfo } from '@/lib/user-scoring';
+import BottomSheet from '@/components/BottomSheet';
 import LinkOsintModal from '@/components/LinkOsintModal';
 import UnifiedHeader from '@/components/UnifiedHeader';
 
