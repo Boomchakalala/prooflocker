@@ -439,13 +439,36 @@ export default function GlobePage() {
         {/* Unified Header */}
         <UnifiedHeader currentView="globe" />
 
-        {/* Map Container - Mobile-First Responsive */}
-        <div className="fixed top-16 left-0 right-0 md:right-[360px] bottom-0 md:bottom-0">
+        {/* Live News Ticker - Below header, responsive */}
+        <div className="fixed top-16 left-0 right-0 md:right-[360px] z-[150] bg-slate-900/40 backdrop-blur-xl border-b border-slate-700/30 px-4 py-2.5">
+          <div className="flex items-center gap-3">
+            <span className={`inline-flex items-center gap-1.5 px-2 py-0.5 text-[10px] font-bold rounded-md uppercase tracking-wide ${
+              currentTickerItem.type === 'INTEL'
+                ? 'bg-red-600/30 border border-red-500/50 text-red-200'
+                : 'bg-purple-600/30 border border-purple-500/50 text-purple-200'
+            }`}>
+              {currentTickerItem.type}
+            </span>
+            <span className="text-sm text-white font-medium flex-1 truncate">
+              {currentTickerItem.text}
+            </span>
+            {currentTickerItem.location && (
+              <>
+                <span className="text-neutral-500">•</span>
+                <span className="text-xs text-neutral-400">{currentTickerItem.location}</span>
+              </>
+            )}
+            <span className="text-xs text-neutral-500">{currentTickerItem.time}</span>
+          </div>
+        </div>
+
+        {/* Map Container - Mobile-First Responsive - Adjusted for ticker */}
+        <div className="fixed top-[108px] left-0 right-0 md:right-[360px] bottom-0 md:bottom-0">
           <GlobeMapbox claims={filteredClaimsForMap} osint={filteredOsintForMap} mapMode={mapMode} viewMode={viewMode} />
         </div>
 
-        {/* Map Legend + Controls Overlay */}
-        <div className="hidden md:flex fixed top-20 left-4 z-[100] items-start gap-2">
+        {/* Map Legend + Controls Overlay - Adjusted for ticker */}
+        <div className="hidden md:flex fixed top-[124px] left-4 z-[100] items-start gap-2">
           {/* Compact Legend */}
           <div className="bg-[rgba(10,10,15,0.92)] backdrop-blur-xl border border-purple-500/20 rounded-xl p-3 shadow-2xl">
             <div className="flex items-center gap-4 text-[11px]">
