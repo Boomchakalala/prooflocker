@@ -95,7 +95,7 @@ export default function LandingHero() {
         </div>
 
         {/* Trust strip - compact under CTAs */}
-        <div className="flex items-center justify-center gap-4 md:gap-6 mb-5 text-xs md:text-sm text-[#F8F9FA]/70 animate-fade-in-up flex-wrap" style={{ animationDelay: '0.25s' }}>
+        <div className="flex items-center justify-center gap-4 md:gap-6 mb-6 text-xs md:text-sm text-[#F8F9FA]/70 animate-fade-in-up flex-wrap" style={{ animationDelay: '0.25s' }}>
           <div className="flex items-center gap-1.5">
             <svg className="w-3.5 h-3.5 text-purple-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
@@ -117,9 +117,9 @@ export default function LandingHero() {
         </div>
 
         {/* Stats - 3 mini tiles - more compact */}
-        <div className="flex items-center justify-center gap-3 md:gap-4 mb-4 animate-fade-in-up" style={{ animationDelay: '0.3s' }}>
+        <div className="flex items-center justify-center gap-3 md:gap-4 mb-5 animate-fade-in-up" style={{ animationDelay: '0.3s' }}>
           {/* Claims locked */}
-          <div className="px-3 py-2 bg-slate-900/50 border border-slate-700/50 rounded-lg text-center backdrop-blur-sm">
+          <div className="px-4 py-2.5 bg-slate-900/50 border border-slate-700/50 rounded-lg text-center backdrop-blur-sm">
             <div className="text-xl md:text-2xl font-bold text-purple-400 mb-0.5">
               {stats.totalClaims || '--'}
             </div>
@@ -127,7 +127,7 @@ export default function LandingHero() {
           </div>
 
           {/* Resolved */}
-          <div className="px-3 py-2 bg-slate-900/50 border border-slate-700/50 rounded-lg text-center backdrop-blur-sm">
+          <div className="px-4 py-2.5 bg-slate-900/50 border border-slate-700/50 rounded-lg text-center backdrop-blur-sm">
             <div className="text-xl md:text-2xl font-bold text-emerald-400 mb-0.5">
               {stats.resolvedClaims || '--'}
             </div>
@@ -135,7 +135,7 @@ export default function LandingHero() {
           </div>
 
           {/* Intel Articles */}
-          <div className="px-3 py-2 bg-slate-900/50 border border-slate-700/50 rounded-lg text-center backdrop-blur-sm">
+          <div className="px-4 py-2.5 bg-slate-900/50 border border-slate-700/50 rounded-lg text-center backdrop-blur-sm">
             <div className="text-xl md:text-2xl font-bold text-red-400 mb-0.5">
               {stats.intelArticles || '--'}
             </div>
