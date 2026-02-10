@@ -71,6 +71,7 @@ export default function GlobePage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedArea, setSelectedArea] = useState<{claims: Claim[], osint: OsintItem[], name: string} | null>(null);
   const [viewMode, setViewMode] = useState<'points' | 'heatmap'>('points');
+  const [mapboxReady, setMapboxReady] = useState(false);
 
   // Compute unique categories from current data
   const uniqueCategories = useMemo(() => {
@@ -335,6 +336,10 @@ export default function GlobePage() {
       <Script
         src="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js"
         strategy="afterInteractive"
+        onReady={() => {
+          console.log('[Globe] Mapbox GL JS loaded');
+          setMapboxReady(true);
+        }}
       />
 
       <style jsx global>{`
@@ -378,7 +383,7 @@ export default function GlobePage() {
 
         {/* Map Container - Mobile-First Responsive */}
         <div className="fixed top-16 left-0 right-0 md:right-[360px] bottom-0 md:bottom-0">
-          <GlobeMapbox claims={filteredClaimsForMap} osint={filteredOsintForMap} mapMode={mapMode} viewMode={viewMode} />
+          <GlobeMapbox claims={filteredClaimsForMap} osint={filteredOsintForMap} mapMode={mapMode} viewMode={viewMode} mapboxReady={mapboxReady} />
         </div>
 
         {/* Map Legend + Controls Overlay */}
