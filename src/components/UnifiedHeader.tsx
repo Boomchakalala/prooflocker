@@ -142,8 +142,7 @@ export default function UnifiedHeader({ currentView, onLockClick }: UnifiedHeade
             <svg className="w-3.5 h-3.5 md:w-4 md:h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
             </svg>
-            <span className="hidden sm:inline">Lock Claim</span>
-            <span className="sm:hidden">Lock</span>
+            <span>Lock Claim</span>
           </button>
 
           {/* User Menu / Sign In */}
@@ -151,12 +150,12 @@ export default function UnifiedHeader({ currentView, onLockClick }: UnifiedHeade
             // Not logged in - Show Sign In button with icon
             <button
               onClick={() => setShowAuthModal(true)}
-              className="flex items-center gap-2 px-4 md:px-5 py-2 rounded-lg text-sm font-semibold bg-slate-800/60 hover:bg-slate-700/60 text-white border border-slate-600/50 hover:border-purple-500/50 transition-all"
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-800/60 hover:bg-slate-700/60 text-white border border-slate-600/50 hover:border-purple-500/50 transition-all"
             >
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+              <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"/>
               </svg>
-              <span>Sign In</span>
+              <span className="hidden sm:inline">Sign In</span>
             </button>
           ) : (
             // Logged in - Show user menu
