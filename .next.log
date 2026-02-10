@@ -1,0 +1,20 @@
+
+> app@0.1.0 dev
+> next dev
+
+▲ Next.js 16.1.6 (Turbopack)
+- Local:         http://localhost:3000
+- Network:       http://172.17.0.2:3000
+- Environments: .env.local
+
+✓ Starting...
+✓ Ready in 603ms
+[🔴 PROD] Supabase client initialized: ofpzqtbhxajptpstbbme
+ GET /globe 200 in 1943ms (compile: 1725ms, render: 218ms)
+[🔴 PROD] Supabase client initialized: ofpzqtbhxajptpstbbme
+ GET /api/globe/activity?window=30d 200 in 1017ms (compile: 77ms, render: 940ms)
+[Intel API] Query error: {
+  message: 'Invalid API key',
+  hint: 'Double check your Supabase `anon` or `service_role` API key.'
+}
+ GET /api/intel?window=24&limit=10 500 in 61ms (compile: 23ms, render: 38ms)
