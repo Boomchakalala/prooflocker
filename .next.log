@@ -24,3 +24,6 @@
  GET /api/leaderboard?limit=1 200 in 317ms (compile: 44ms, render: 273ms)
 [Predictions API] Query completed in 673ms, returned 27 predictions
  GET /api/predictions 200 in 705ms (compile: 27ms, render: 678ms)
+  Reload env: .env.local
+ GET /api/globe/activity?window=30d 200 in 310ms (compile: 3ms, render: 307ms)
+[?25h
