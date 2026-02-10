@@ -15,16 +15,13 @@ const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
 
 export async function POST(request: NextRequest) {
   try {
-    const { text, userId: anonId, category } = await request.json();
+    const { text, userId: anonId, category, geotag } = await request.json();
 
-    // Automatically detect user's location from IP
-    const clientIP = getClientIP(request);
-    const autoLocation = await getCachedLocation(clientIP);
-
-    if (autoLocation) {
-      console.log(`[Lock Proof API] Auto-detected location: ${autoLocation.city}, ${autoLocation.country}`);
+    // Log location info if provided
+    if (geotag) {
+      console.log(`[Lock Proof API] Location provided: ${geotag.city || 'Unknown'}, ${geotag.country || 'Unknown'} (${geotag.lat.toFixed(4)}, ${geotag.lng.toFixed(4)})`);
     } else {
-      console.log('[Lock Proof API] Could not detect location (likely localhost)');
+      console.log('[Lock Proof API] No location provided (user may have denied permission)');
     }
 
     if (!text || typeof text !== "string") {
