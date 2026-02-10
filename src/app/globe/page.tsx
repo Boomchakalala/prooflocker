@@ -255,6 +255,12 @@ export default function GlobePage() {
     // Apply category filter
     if (categoryFilter !== 'all') {
       items = items.filter(item => {
+        // For OSINT items, check both category and tags fields
+        if (currentTab === 'osint') {
+          const cat = item.category?.toLowerCase() || (item.tags && item.tags[0]?.toLowerCase()) || 'other';
+          return cat === categoryFilter.toLowerCase();
+        }
+        // For claims and resolutions, just check category
         const cat = item.category?.toLowerCase() || 'other';
         return cat === categoryFilter.toLowerCase();
       });
