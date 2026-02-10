@@ -463,17 +463,17 @@ export default function AppFeedPage() {
                       return (
                       <div
                         key={signal.id}
-                        className={`bg-slate-900/60 border ${getIntelFreshnessClass(signal.created_at)} rounded-lg p-4 hover:border-red-500/50 transition-all duration-200 relative`}
+                        className={`bg-slate-900/60 border ${getIntelFreshnessClass(signal.createdAt || signal.created_at)} rounded-lg p-4 hover:border-red-500/50 transition-all duration-200 relative`}
                       >
                         {/* Freshness badge for intel */}
-                        {getMinutesAgo(signal.created_at) < 60 && (
+                        {getMinutesAgo(signal.createdAt || signal.created_at) < 60 && (
                           <div className="absolute top-2 right-2">
                             <span className={`text-[9px] font-bold px-1.5 py-0.5 rounded ${
-                              getMinutesAgo(signal.created_at) < 5
+                              getMinutesAgo(signal.createdAt || signal.created_at) < 5
                                 ? 'bg-red-500/30 text-red-200 border border-red-500/50 animate-pulse'
                                 : 'bg-orange-500/20 text-orange-300 border border-orange-500/30'
                             }`}>
-                              {getMinutesAgo(signal.created_at) < 5 ? 'BREAKING' : 'RECENT'}
+                              {getMinutesAgo(signal.createdAt || signal.created_at) < 5 ? 'BREAKING' : 'RECENT'}
                             </span>
                           </div>
                         )}
@@ -525,7 +525,7 @@ export default function AppFeedPage() {
                             Use as Evidence
                           </button>
                           <span className="ml-auto text-[10px] text-slate-600">
-                            {signal.created_at ? formatRelativeTime(signal.created_at) : ''}
+                            {signal.createdAt || signal.created_at ? formatRelativeTime(signal.createdAt || signal.created_at) : ''}
                           </span>
                         </div>
                       </div>
