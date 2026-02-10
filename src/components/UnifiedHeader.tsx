@@ -11,6 +11,7 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
+import ClaimModal from '@/components/ClaimModal';
 
 interface UnifiedHeaderProps {
   currentView?: 'globe' | 'feed' | 'lock' | 'leaderboard' | 'about' | 'other';
@@ -22,6 +23,7 @@ export default function UnifiedHeader({ currentView, onLockClick }: UnifiedHeade
   const { user } = useAuth();
   const [showUserMenu, setShowUserMenu] = useState(false);
   const [showMobileMenu, setShowMobileMenu] = useState(false);
+  const [showAuthModal, setShowAuthModal] = useState(false);
 
   // Determine current view from pathname if not provided
   const getActiveView = () => {
@@ -159,16 +161,18 @@ export default function UnifiedHeader({ currentView, onLockClick }: UnifiedHeade
                   <div className="p-2">
                     {!user && (
                       <>
-                        <Link
-                          href="/login"
-                          className="flex items-center gap-2 px-4 py-2 text-sm text-purple-400 hover:text-purple-300 hover:bg-purple-500/10 rounded-md transition-colors font-semibold"
-                          onClick={() => setShowUserMenu(false)}
+                        <button
+                          onClick={() => {
+                            setShowUserMenu(false);
+                            setShowAuthModal(true);
+                          }}
+                          className="w-full flex items-center gap-2 text-left px-4 py-2 text-sm text-purple-400 hover:text-purple-300 hover:bg-purple-500/10 rounded-md transition-colors font-semibold"
                         >
                           <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"/>
                           </svg>
                           Sign In
-                        </Link>
+                        </button>
                         <div className="my-2 h-px bg-slate-700" />
                       </>
                     )}
