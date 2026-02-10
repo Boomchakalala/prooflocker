@@ -24,6 +24,8 @@ export default function AppFeedPage() {
   const [showClaimModal, setShowClaimModal] = useState(false);
   const [lastUpdated, setLastUpdated] = useState<Date>(new Date());
   const [tickerIndex, setTickerIndex] = useState(0);
+  const [newItems, setNewItems] = useState<{ claims: number; intel: number } | null>(null);
+  const [prevCounts, setPrevCounts] = useState<{ claims: number; intel: number }>({ claims: 0, intel: 0 });
 
   useEffect(() => {
     fetchData();
