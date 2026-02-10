@@ -602,6 +602,7 @@ export default function GlobePage() {
                   const isResolved = isCorrect || isIncorrect;
                   const evidenceGrade = getEvidenceGrade(claim.evidence_score);
                   const repTier = getReputationTier(claim.rep || 0);
+                  const freshnessBadge = getFreshnessBadge(claim.createdAt || '');
 
                   return (
                     <div
@@ -624,6 +625,11 @@ export default function GlobePage() {
                           </span>
                         </div>
                         <div className="flex items-center gap-1.5">
+                          {freshnessBadge && (
+                            <span className={`text-[9px] font-bold px-1.5 py-0.5 rounded ${freshnessBadge.className}`}>
+                              {freshnessBadge.label}
+                            </span>
+                          )}
                           {isResolved && (
                             <span className={`text-[9px] font-bold px-1.5 py-0.5 rounded ${evidenceGrade.bgColor} ${evidenceGrade.textColor}`}>
                               {evidenceGrade.grade}
@@ -710,14 +716,27 @@ export default function GlobePage() {
               displayItems.length === 0 ? (
                 <div className="text-center py-12 text-[#94a3b8] text-sm">No intel signals found</div>
               ) : (
-                (displayItems as OsintItem[]).map((item) => (
+                (displayItems as OsintItem[]).map((item) => {
+                  const freshnessBadge = getFreshnessBadge(item.createdAt || '');
+                  const freshnessClass = getIntelFreshnessClass(item.createdAt || '');
+                  const category = item.tags?.[0] || 'Intel';
+
+                  return (
                   <div
                     key={item.id}
-                    className="bg-slate-900/80 border border-red-500/30 rounded-lg p-3 transition-all duration-200 hover:bg-slate-800/80 hover:border-red-500/50"
+                    className={`bg-slate-900/80 border ${freshnessClass} rounded-lg p-3 transition-all duration-200 hover:bg-slate-800/80 hover:border-red-500/50`}
                   >
                     <div className="flex items-center gap-1.5 mb-1.5">
                       <span className="text-[9px] font-bold px-1.5 py-0.5 rounded bg-red-600 text-white uppercase">Intel</span>
+                      {freshnessBadge && (
+                        <span className={`text-[9px] font-bold px-1.5 py-0.5 rounded ${freshnessBadge.className}`}>
+                          {freshnessBadge.label}
+                        </span>
+                      )}
                       <span className="text-[11px] text-red-400 font-semibold truncate flex-1">{item.source}</span>
+                      <span className="text-[10px] text-slate-500 bg-slate-800/50 px-1.5 py-0.5 rounded">
+                        #{category}
+                      </span>
                       <span className="text-[10px] text-slate-600">{item.timestamp}</span>
                     </div>
                     <p className="text-[13px] text-white leading-snug line-clamp-2 mb-2">{item.title}</p>
@@ -739,7 +758,8 @@ export default function GlobePage() {
                       </button>
                     </div>
                   </div>
-                ))
+                  );
+                })
               )
             )}
           </div>
