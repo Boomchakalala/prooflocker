@@ -343,7 +343,7 @@ export default function AppFeedPage() {
                 </div>
 
                 {filteredPredictions.length > 0 ? (
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+                  <div className="space-y-4">
                     {filteredPredictions.map((claim) => {
                       const isCorrect = claim.outcome === "correct";
                       const isIncorrect = claim.outcome === "incorrect";
@@ -356,146 +356,104 @@ export default function AppFeedPage() {
                         <Link
                           key={claim.id}
                           href={`/proof/${claim.publicSlug || claim.id}`}
-                          className={`group bg-slate-900/80 border hover:border-slate-600 rounded-2xl transition-all duration-300 hover:shadow-[0_0_25px_rgba(168,85,247,0.15)] hover:-translate-y-0.5 ${
+                          className={`group block bg-slate-900/60 border border-slate-700/40 rounded-xl p-5 hover:border-purple-500/40 hover:shadow-[0_0_20px_rgba(139,92,246,0.1)] transition-all duration-200 ${
                             isCorrect
-                              ? 'border-4 border-emerald-500/60 p-6'
+                              ? 'border-l-4 border-l-emerald-500'
                               : isIncorrect
-                              ? 'border-4 border-red-500/60 p-6'
-                              : 'border border-slate-700/50 p-5'
+                              ? 'border-l-4 border-l-red-500'
+                              : 'border-l-4 border-l-amber-500'
                           }`}
                         >
-                          {/* User Header */}
-                          <div className="flex items-center justify-between mb-4">
-                            <div className="flex items-center gap-3">
-                              <div className="w-11 h-11 rounded-full bg-gradient-to-br from-purple-600 to-purple-800 flex items-center justify-center text-white text-sm font-bold border-2 border-purple-500/40 shadow-lg">
-                                {claim.authorNumber?.toString().slice(-2) || "??"}
-                              </div>
-                              <div>
-                                <div className="flex items-center gap-2">
-                                  <span className="text-sm text-white font-semibold">Anon #{claim.authorNumber}</span>
-                                  <span className={`px-2 py-0.5 text-[10px] font-bold rounded border ${userTier.bg} ${userTier.border} ${userTier.color}`}>
-                                    {userTier.label}
-                                  </span>
-                                </div>
-                              </div>
+                          {/* Top row: Avatar + Author + Tier + Timestamp */}
+                          <div className="flex items-center gap-3 mb-3">
+                            <div className="w-8 h-8 rounded-full bg-gradient-to-br from-purple-600 to-purple-800 flex items-center justify-center text-white text-[11px] font-bold flex-shrink-0">
+                              {claim.authorNumber?.toString().slice(-2) || "??"}
                             </div>
+                            <span className="text-sm text-white font-medium">Anon #{claim.authorNumber}</span>
+                            <span className={`px-1.5 py-0.5 text-[10px] font-bold rounded ${userTier.bg} ${userTier.color}`}>
+                              {userTier.label}
+                            </span>
+                            <span className="ml-auto text-xs text-slate-500 flex-shrink-0">
+                              {formatRelativeTime(claim.createdAt)}
+                            </span>
+                          </div>
 
-                            {/* Status Badge */}
-                            <div className={`flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-bold rounded-lg border-2 shadow-lg ${
+                          {/* Status Badge */}
+                          <div className="mb-3">
+                            <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 text-[11px] font-bold rounded-full ${
                               isCorrect
-                                ? "bg-emerald-500/30 border-emerald-400/60 text-emerald-300 shadow-emerald-500/30"
+                                ? "bg-emerald-500/15 text-emerald-400"
                                 : isIncorrect
-                                ? "bg-red-500/30 border-red-400/60 text-red-300 shadow-red-500/30"
-                                : "bg-amber-500/30 border-amber-400/60 text-amber-300 shadow-amber-500/30"
+                                ? "bg-red-500/15 text-red-400"
+                                : "bg-amber-500/15 text-amber-400"
                             }`}>
                               {isCorrect && (
-                                <>
-                                  <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7"/>
-                                  </svg>
-                                  Correct
-                                </>
+                                <svg className="w-3 h-3" fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24">
+                                  <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7"/>
+                                </svg>
                               )}
                               {isIncorrect && (
-                                <>
-                                  <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12"/>
-                                  </svg>
-                                  Incorrect
-                                </>
+                                <svg className="w-3 h-3" fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24">
+                                  <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12"/>
+                                </svg>
                               )}
                               {isPending && (
-                                <>
-                                  <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                                    <circle cx="12" cy="12" r="10"/>
-                                  </svg>
-                                  Pending
-                                </>
+                                <svg className="w-3 h-3" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                                  <circle cx="12" cy="12" r="10"/>
+                                </svg>
                               )}
-                            </div>
+                              {isCorrect ? 'Correct' : isIncorrect ? 'Incorrect' : 'Pending'}
+                            </span>
+                            {claim.category && (
+                              <span className="ml-2 px-2 py-0.5 text-[11px] text-slate-400 bg-slate-800/50 rounded">
+                                {claim.category}
+                              </span>
+                            )}
                           </div>
 
                           {/* Claim Text */}
-                          <div className="mb-4">
-                            <p className="text-white text-[15px] leading-relaxed line-clamp-4">
-                              {claim.text}
-                            </p>
-                          </div>
+                          <p className="text-[15px] font-medium text-white leading-relaxed line-clamp-3 mb-4">
+                            {claim.text}
+                          </p>
 
-                          {/* Hash Snippet and Timestamp */}
-                          <div className="flex items-center justify-between mb-4 pb-3 border-b border-slate-700/50">
-                            <div className="flex items-center gap-2 min-w-0 flex-1">
-                              <svg className="w-3.5 h-3.5 text-slate-500 flex-shrink-0" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" d="M7 20l4-16m2 16l4-16M6 9h14M4 15h14"/>
-                              </svg>
-                              <span className="text-xs font-mono text-slate-400 truncate">
-                                {claim.hash?.slice(0, 16) || claim.id}...
-                              </span>
-                            </div>
-                            <div className="text-xs text-slate-500 flex-shrink-0 ml-2">
-                              {formatRelativeTime(claim.createdAt)}
-                            </div>
-                          </div>
-
-                          {/* Category & Evidence Grade */}
-                          <div className="flex items-center gap-2 mb-4 flex-wrap">
-                            {claim.category && (
-                              <span className="px-2 py-1 bg-slate-800/70 text-slate-400 text-xs rounded border border-slate-700/50">
-                                #{claim.category}
-                              </span>
-                            )}
-                            <span className="flex items-center gap-1 px-2 py-1 bg-purple-900/30 text-purple-400 text-xs rounded border border-purple-500/40 font-semibold">
+                          {/* Bottom row: On-chain + Evidence Grade + View */}
+                          <div className="flex items-center gap-2 pt-3 border-t border-slate-700/30">
+                            <span className="flex items-center gap-1 px-2 py-0.5 text-[10px] font-semibold text-purple-400 bg-purple-500/10 rounded">
                               <svg className="w-3 h-3" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
                               </svg>
-                              Locked
+                              On-chain
                             </span>
-                            {/* Evidence Grade Badge */}
-                            {claim.evidence_score !== undefined && (
-                              <div
-                                className={`flex items-center gap-1.5 px-2.5 py-1 border rounded-lg transition-all ${evidenceGrade.bgColor} ${evidenceGrade.borderColor}`}
-                              >
-                                <svg className={`w-3.5 h-3.5 ${evidenceGrade.textColor}`} fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                            {isResolved && claim.evidence_score !== undefined && (
+                              <span className={`flex items-center gap-1 px-2 py-0.5 text-[10px] font-bold rounded ${evidenceGrade.bgColor} ${evidenceGrade.textColor}`}>
+                                <svg className="w-3 h-3" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                                   <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
                                 </svg>
-                                <span className={`text-xs font-bold ${evidenceGrade.textColor}`}>Grade {evidenceGrade.grade}</span>
-                              </div>
+                                Grade {evidenceGrade.grade}
+                              </span>
                             )}
-                          </div>
 
-                          {/* Engagement Footer */}
-                          <div className="flex items-center justify-between pt-4 border-t border-slate-700/50 mb-3">
-                            <div className="flex items-center gap-4">
-                              {/* Vote Display */}
-                              <div className="flex items-center gap-3">
-                                <div className="flex items-center gap-1.5 text-emerald-400">
-                                  <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                            <div className="flex items-center gap-3 ml-auto">
+                              <div className="flex items-center gap-2 text-slate-500">
+                                <span className="flex items-center gap-1 text-xs">
+                                  <svg className="w-3.5 h-3.5 text-emerald-500/70" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                                     <path strokeLinecap="round" strokeLinejoin="round" d="M5 15l7-7 7 7"/>
                                   </svg>
-                                  <span className="text-xs font-semibold">{claim.upvotesCount || 0}</span>
-                                </div>
-                                <div className="flex items-center gap-1.5 text-red-400">
-                                  <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                                  {claim.upvotesCount || 0}
+                                </span>
+                                <span className="flex items-center gap-1 text-xs">
+                                  <svg className="w-3.5 h-3.5 text-red-500/70" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                                     <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7"/>
                                   </svg>
-                                  <span className="text-xs font-semibold">{claim.downvotesCount || 0}</span>
-                                </div>
+                                  {claim.downvotesCount || 0}
+                                </span>
                               </div>
-
-                              {/* Share Icon */}
-                              <div className="flex items-center gap-1.5 text-slate-400 hover:text-cyan-400 transition-colors">
-                                <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                                  <path strokeLinecap="round" strokeLinejoin="round" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"/>
+                              <span className="flex items-center gap-1 px-3 py-1 text-xs font-medium text-purple-300 bg-purple-500/10 rounded-lg group-hover:bg-purple-500/20 transition-colors">
+                                View
+                                <svg className="w-3 h-3" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7"/>
                                 </svg>
-                              </div>
-                            </div>
-
-                            {/* View Button */}
-                            <div className="flex items-center gap-1 px-3 py-1.5 bg-purple-600/10 hover:bg-purple-600/20 border border-purple-500/30 rounded-lg text-xs text-purple-300 font-semibold transition-all group-hover:border-purple-400/60">
-                              <span>View</span>
-                              <svg className="w-3 h-3" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7"/>
-                              </svg>
+                              </span>
                             </div>
                           </div>
                         </Link>

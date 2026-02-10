@@ -336,14 +336,17 @@ export default async function ProofPage({ params }: Props) {
               {/* Teal accent bar */}
               <div className="h-0.5 bg-gradient-to-r from-transparent via-cyan-500/60 to-transparent" />
               <div className="p-6 md:p-8">
-                    <span className="text-lg font-bold text-green-400">2</span>
+                {/* Step Header */}
+                <div className="flex items-center gap-4 mb-6">
+                  <div className="flex items-center justify-center w-12 h-12 rounded-xl bg-gradient-to-br from-cyan-500/20 to-teal-500/20 border border-cyan-500/30">
+                    <span className="text-lg font-bold text-cyan-400">2</span>
                   </div>
                   <div className="flex-1">
                     <h3 className="text-xl font-bold text-white mb-1">Claim Resolved</h3>
                     <p className="text-sm text-neutral-400">Resolution hash recorded on-chain</p>
                   </div>
-                  <div className="px-3 py-1 rounded-full bg-green-500/10 border border-green-500/30">
-                    <span className="text-xs font-semibold text-green-400">Verified</span>
+                  <div className="px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/30">
+                    <span className="text-xs font-semibold text-cyan-400">Verified</span>
                   </div>
                 </div>
 
