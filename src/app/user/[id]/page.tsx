@@ -211,8 +211,8 @@ export default function PublicProfilePage() {
             <div className="mb-6">
               <div className="flex items-center gap-3 mb-3">
                 <h2 className="text-lg font-semibold text-neutral-300">Reputation Score</h2>
-                <div className={`px-3 py-1 rounded-full text-xs font-bold ${tier.bgColor} ${tier.color} border border-white/20`}>
-                  {tier.label}
+                <div className={`px-3 py-1 rounded-full text-xs font-bold ${tier.bgColor} ${tier.textColor} border border-white/20`}>
+                  {tier.name}
                 </div>
               </div>
 
@@ -226,16 +226,16 @@ export default function PublicProfilePage() {
                 <div className="mb-3">
                   <div className="flex items-center justify-between text-xs text-neutral-400 mb-2">
                     <span>Current: {stats.reputationScore}</span>
-                    <span>Next: {nextMilestone.tierInfo?.label} ({nextMilestone.tierInfo?.min})</span>
+                    <span>Next: {nextMilestone.tierInfo?.name} ({nextMilestone.tierInfo?.min})</span>
                   </div>
                   <div className="h-2 bg-neutral-900 rounded-full overflow-hidden">
                     <div
-                      className={`h-full transition-all duration-500 ${tier.color.replace('text-', 'bg-')}`}
+                      className={`h-full transition-all duration-500 ${tier.textColor.replace('text-', 'bg-')}`}
                       style={{ width: `${(stats.reputationScore / 1000) * 100}%` }}
                     />
                   </div>
                   <p className="text-xs text-neutral-500 mt-2">
-                    {nextMilestone.pointsNeeded} points to {nextMilestone.tierInfo?.label}
+                    {nextMilestone.pointsNeeded} points to {nextMilestone.tierInfo?.name}
                   </p>
                 </div>
               )}
