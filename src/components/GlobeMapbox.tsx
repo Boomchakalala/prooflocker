@@ -369,18 +369,19 @@ export default function GlobeMapbox({ claims, osint, mapMode = 'both', viewMode 
                   <div className="px-5 pt-3 pb-1">
                     <div className="text-[10px] font-bold text-[#a78bfa] uppercase tracking-wider mb-2">Claims</div>
                     {areaDetail.claims.map((c) => {
-                      const sc = statusColor(c.status);
+                      const sc = statusColor(c.status, c.outcome);
                       const res = c.outcome === 'correct' || c.outcome === 'incorrect';
+                      const label = res ? c.outcome : c.status;
                       return (
                         <div key={c.id} className="py-3 border-b border-slate-700/20 last:border-0">
                           <div className="text-[13px] font-semibold text-white leading-snug mb-2">{c.claim}</div>
-                          <div className="flex items-center gap-2 mb-2">
+                          <div className="flex items-center gap-2 flex-wrap">
                             <span className="text-[11px] font-semibold text-slate-300">{c.submitter}</span>
                             <span
                               className="text-[9px] font-bold uppercase px-2 py-0.5 rounded-md"
                               style={{ background: sc + '22', color: sc }}
                             >
-                              {res ? c.outcome : c.status}
+                              {label}
                             </span>
                             <span className="text-[9px] font-semibold px-2 py-0.5 rounded-md bg-purple-500/15 text-purple-300">
                               Rep {c.rep}
@@ -388,13 +389,7 @@ export default function GlobeMapbox({ claims, osint, mapMode = 'both', viewMode 
                             {c.category && (
                               <span className="text-[9px] text-purple-400">#{c.category}</span>
                             )}
-                          </div>
-                          <div className="flex items-center gap-2">
-                            <div className="flex-1 h-1 bg-slate-700/40 rounded-full overflow-hidden">
-                              <div className="h-full rounded-full" style={{ width: `${c.confidence}%`, background: sc }} />
-                            </div>
-                            <span className="text-[11px] font-bold" style={{ color: sc }}>{c.confidence}%</span>
-                            <span className="text-[10px] text-slate-500 ml-1">{c.lockedDate}</span>
+                            <span className="text-[10px] text-slate-500 ml-auto">{c.lockedDate}</span>
                           </div>
                         </div>
                       );
