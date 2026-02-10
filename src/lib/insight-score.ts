@@ -42,9 +42,10 @@ export type Category = typeof CATEGORIES[number];
 // Milestones and levels
 export const MILESTONES = {
   NOVICE: { min: 0, max: 999, name: 'Novice' },
-  FORECASTER: { min: 1000, max: 4999, name: 'Forecaster' },
-  VISIONARY: { min: 5000, max: 14999, name: 'Visionary' },
-  ORACLE: { min: 15000, max: Infinity, name: 'Oracle' },
+  TRUSTED: { min: 1000, max: 4999, name: 'Trusted' },
+  EXPERT: { min: 5000, max: 9999, name: 'Expert' },
+  MASTER: { min: 10000, max: 14999, name: 'Master' },
+  LEGEND: { min: 15000, max: Infinity, name: 'Legend' },
 } as const;
 
 // Badges and their unlock conditions
