@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import { useAuth } from "@/contexts/AuthContext";
 import { InsightScoreResponse } from "@/lib/insight-types";
 import { BADGES, BadgeId } from "@/lib/insight-score";
@@ -8,10 +9,18 @@ import Link from "next/link";
 import UnifiedHeader from '@/components/UnifiedHeader';
 
 export default function DashboardPage() {
-  const { user } = useAuth();
+  const { user, loading: authLoading } = useAuth();
+  const router = useRouter();
   const [scoreData, setScoreData] = useState<InsightScoreResponse | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+
+  // Redirect to home if not authenticated
+  useEffect(() => {
+    if (!authLoading && !user) {
+      router.push("/");
+    }
+  }, [user, authLoading, router]);
 
   // Get anon ID from localStorage
   const getAnonId = (): string | null => {
@@ -20,6 +29,8 @@ export default function DashboardPage() {
   };
 
   useEffect(() => {
+    if (!user) return; // Don't fetch if not logged in
+
     async function fetchScore() {
       setLoading(true);
       setError(null);
