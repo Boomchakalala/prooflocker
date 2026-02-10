@@ -216,7 +216,7 @@ export default function AppFeedPage() {
         <div className="mb-4 bg-slate-900/40 backdrop-blur-xl border border-slate-700/30 rounded-xl px-4 py-2.5">
           <div className="flex items-center justify-between flex-wrap gap-4">
             <div className="flex items-center gap-5 flex-wrap">
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2" title="Refreshes every 30 seconds">
                 <div className="w-2 h-2 bg-red-500 rounded-full animate-pulse"></div>
                 <span className="text-xs font-semibold text-red-400 uppercase tracking-wide">Live</span>
               </div>
@@ -463,8 +463,20 @@ export default function AppFeedPage() {
                       return (
                       <div
                         key={signal.id}
-                        className="bg-slate-900/60 border border-red-500/30 rounded-lg p-4 hover:border-red-500/50 transition-all duration-200"
+                        className={`bg-slate-900/60 border ${getIntelFreshnessClass(signal.created_at)} rounded-lg p-4 hover:border-red-500/50 transition-all duration-200 relative`}
                       >
+                        {/* Freshness badge for intel */}
+                        {getMinutesAgo(signal.created_at) < 60 && (
+                          <div className="absolute top-2 right-2">
+                            <span className={`text-[9px] font-bold px-1.5 py-0.5 rounded ${
+                              getMinutesAgo(signal.created_at) < 5
+                                ? 'bg-red-500/30 text-red-200 border border-red-500/50 animate-pulse'
+                                : 'bg-orange-500/20 text-orange-300 border border-orange-500/30'
+                            }`}>
+                              {getMinutesAgo(signal.created_at) < 5 ? 'BREAKING' : 'RECENT'}
+                            </span>
+                          </div>
+                        )}
                         {/* Header */}
                         <div className="flex items-center gap-2 mb-2">
                           <span className="bg-red-600 text-white text-[9px] font-bold px-2 py-0.5 rounded uppercase">
@@ -507,8 +519,15 @@ export default function AppFeedPage() {
                               e.preventDefault();
                             }}
                           >
-                            Link as Evidence
+                            Use as Evidence
                           </button>
+                          <Link
+                            href={`/lock?prefill=${encodeURIComponent(signal.title || '')}`}
+                            className="px-2.5 py-1 text-[10px] font-medium rounded bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-300 transition-colors"
+                            onClick={(e) => e.stopPropagation()}
+                          >
+                            Lock as Claim
+                          </Link>
                           <span className="ml-auto text-[10px] text-slate-600 font-mono">
                             {signal.id.toString().slice(0, 8)}
                           </span>
@@ -522,7 +541,7 @@ export default function AppFeedPage() {
                     <svg className="w-10 h-10 text-slate-600 mb-3" fill="currentColor" viewBox="0 0 20 20">
                       <path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6z"/>
                     </svg>
-                    <p className="text-slate-500 text-sm">No OSINT signals found</p>
+                    <p className="text-slate-500 text-sm">No intel signals found</p>
                   </div>
                 )}
               </section>
