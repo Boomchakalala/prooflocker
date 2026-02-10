@@ -122,13 +122,13 @@ export default function ReputationImpact() {
         {/* Bottom CTA */}
         <div className="text-center mt-10 md:mt-16">
           <p className="text-sm md:text-base text-white/60 mb-4 md:mb-6 px-2">
-            Start building your track record today—every claim compounds
+            Every claim compounds. Start building your reputation.
           </p>
           <Link
             href="/lock"
             className="inline-block px-8 md:px-12 py-3 md:py-4 bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-500 hover:to-purple-600 text-white text-base md:text-lg font-bold rounded-xl transition-all shadow-lg hover:shadow-[0_0_30px_rgba(147,51,234,0.4)] hover:scale-105"
           >
-            Start Building Your Record
+            Start Building Your Reputation
           </Link>
         </div>
       </div>

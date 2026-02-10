@@ -16,7 +16,7 @@ export default function Footer() {
               ProofLocker
             </div>
             <div className="text-xs text-white/40">
-              © 2026 — Immutable accountability
+              © 2026 — Proof of Reputational Observation
             </div>
           </div>
 
