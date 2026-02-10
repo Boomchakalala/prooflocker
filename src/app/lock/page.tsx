@@ -142,7 +142,7 @@ function LockPageContent() {
                   </svg>
                 </div>
                 <div className="flex-1">
-                  <h4 className="text-white font-semibold text-sm mb-1">💡 Pro Tip</h4>
+                  <h4 className="text-white font-semibold text-sm mb-1">Pro Tip</h4>
                   <p className="text-slate-300 text-sm">
                     Claims resolved within 30 days earn 2x multipliers. Add evidence before locking for bonus credibility points.
                   </p>
@@ -296,7 +296,7 @@ function LockPageContent() {
                       No login required. Only the SHA-256 fingerprint is submitted to the blockchain.
                       {isAnonymous && (
                         <span className="block mt-2 text-green-400 font-medium text-xs">
-                          ✓ You're using ProofLocker anonymously
+                          You are using ProofLocker anonymously
                         </span>
                       )}
                     </p>
@@ -369,68 +369,42 @@ function LockPageContent() {
 
           {/* Sidebar - Stats & Recent Resolutions */}
           <div className="lg:col-span-1 space-y-6">
-            {/* Your Stats */}
-            <div className="glass border border-white/10 rounded-xl p-5">
-              <h3 className="text-white font-semibold mb-4 flex items-center gap-2">
-                <svg className="w-4 h-4 text-purple-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
-                </svg>
-                Your Stats
-              </h3>
-              <div className="space-y-3">
-                <div className="flex items-center justify-between">
-                  <span className="text-sm text-slate-400">Points:</span>
-                  <span className="text-lg font-bold text-cyan-400">892</span>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-sm text-slate-400">Current Streak:</span>
-                  <span className="text-lg font-bold text-orange-400">3 🔥</span>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-sm text-slate-400">Next Badge:</span>
-                  <span className="text-xs text-purple-400 font-semibold">1 away</span>
-                </div>
-              </div>
-              <div className="mt-4 pt-4 border-t border-white/10">
-                <Link
-                  href="/dashboard"
-                  className="text-sm text-purple-400 hover:text-purple-300 font-semibold flex items-center gap-1"
-                >
-                  View Dashboard
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7"/>
+            {/* Your Stats - only show for signed-in users */}
+            {user && (
+              <div className="glass border border-white/10 rounded-xl p-5">
+                <h3 className="text-white font-semibold mb-4 flex items-center gap-2">
+                  <svg className="w-4 h-4 text-purple-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
                   </svg>
-                </Link>
+                  Your Stats
+                </h3>
+                <p className="text-xs text-slate-400">Stats load from your dashboard once you start resolving claims.</p>
+                <div className="mt-4 pt-4 border-t border-white/10">
+                  <Link
+                    href="/dashboard"
+                    className="text-sm text-purple-400 hover:text-purple-300 font-semibold flex items-center gap-1"
+                  >
+                    View Dashboard
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7"/>
+                    </svg>
+                  </Link>
+                </div>
               </div>
-            </div>
+            )}
 
-            {/* Recent Resolutions */}
+            {/* How Constellation DAG Works */}
             <div className="glass border border-white/10 rounded-xl p-5">
-              <h3 className="text-white font-semibold mb-4 flex items-center gap-2">
-                <svg className="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7"/>
+              <h3 className="text-white font-semibold mb-3 flex items-center gap-2">
+                <svg className="w-4 h-4 text-cyan-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/>
                 </svg>
-                Recent Wins
+                On-Chain Proof
               </h3>
-              <div className="space-y-3">
-                {[
-                  { user: 'Anon #2847', points: 120, time: '2m ago' },
-                  { user: 'Anon #1923', points: 95, time: '15m ago' },
-                  { user: 'Anon #4521', points: 180, time: '1h ago' },
-                ].map((res, i) => (
-                  <div key={i} className="p-3 bg-emerald-500/5 border border-emerald-500/20 rounded-lg">
-                    <div className="flex items-center justify-between mb-1">
-                      <span className="text-xs font-semibold text-white">{res.user}</span>
-                      <span className="text-xs text-emerald-400 font-bold">+{res.points} pts</span>
-                    </div>
-                    <div className="text-[10px] text-slate-500">{res.time}</div>
-                  </div>
-                ))}
-              </div>
-              <div className="mt-4 pt-4 border-t border-white/10">
-                <p className="text-xs text-slate-400 text-center">
-                  <span className="text-white font-semibold">15 claims</span> resolved today
-                </p>
+              <div className="space-y-3 text-xs text-slate-400 leading-relaxed">
+                <p>Every locked claim is hashed (SHA-256) and timestamped on Constellation Network's DAG.</p>
+                <p>This creates an immutable digital evidence record that cannot be edited or deleted.</p>
+                <p>When you resolve a claim, the resolution is also recorded on-chain with a separate fingerprint.</p>
               </div>
             </div>
           </div>
