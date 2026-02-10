@@ -8,6 +8,54 @@ export const revalidate = 300; // Cache for 5 minutes
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
 
+/**
+ * Calculate a proper reputation score based on actual performance.
+ * Score 0-1000 based on:
+ * - Accuracy (40%): win rate drives the bulk
+ * - Volume (30%): more resolved = higher score (logarithmic)
+ * - Evidence quality (30%): grade distribution
+ */
+function calculateReputationScore(stats: {
+  total_resolved: number;
+  total_correct: number;
+  total_incorrect: number;
+  accuracy_rate: number;
+  evidence_a_count: number;
+  evidence_b_count: number;
+  evidence_c_count: number;
+  evidence_d_count: number;
+}): number {
+  const resolved = stats.total_resolved || 0;
+  const correct = stats.total_correct || 0;
+
+  if (resolved === 0) return 0;
+
+  // Accuracy component (0-400): win rate * 400
+  const winRate = correct / resolved;
+  const accuracyScore = Math.round(winRate * 400);
+
+  // Volume component (0-300): logarithmic scaling
+  // 1 resolved = ~60, 5 = ~150, 10 = ~200, 25 = ~260, 50 = ~300
+  const volumeScore = Math.min(Math.round(Math.log2(resolved + 1) * 53), 300);
+
+  // Evidence component (0-300): weighted by grade quality
+  const totalEvidence = (stats.evidence_a_count || 0) + (stats.evidence_b_count || 0) +
+    (stats.evidence_c_count || 0) + (stats.evidence_d_count || 0);
+
+  let evidenceScore = 0;
+  if (totalEvidence > 0) {
+    const weightedEvidence = (
+      (stats.evidence_a_count || 0) * 1.0 +
+      (stats.evidence_b_count || 0) * 0.75 +
+      (stats.evidence_c_count || 0) * 0.4 +
+      (stats.evidence_d_count || 0) * 0.1
+    ) / totalEvidence;
+    evidenceScore = Math.round(weightedEvidence * 300);
+  }
+
+  return Math.min(accuracyScore + volumeScore + evidenceScore, 1000);
+}
+
 export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url);
@@ -31,7 +79,7 @@ export async function GET(request: Request) {
         evidence_c_count,
         evidence_d_count
       `)
-      .gte('credibility_score', 30)
+      .gte('total_resolved', 1)
       .order('credibility_score', { ascending: false })
       .limit(limit);
 
@@ -45,10 +93,29 @@ export async function GET(request: Request) {
       );
     }
 
-    // For each user, get their display name from auth.users
+    // For each user, get their pseudonym from predictions table (NOT email)
     const topSources = await Promise.all(
       (userStats || []).map(async (stats) => {
-        const { data: userData } = await supabase.auth.admin.getUserById(stats.user_id);
+        // Get pseudonym from user's predictions
+        const { data: predData } = await supabase
+          .from('predictions')
+          .select('pseudonym, author_number')
+          .eq('user_id', stats.user_id)
+          .not('pseudonym', 'is', null)
+          .limit(1);
+
+        const pseudonym = predData?.[0]?.pseudonym;
+        const authorNumber = predData?.[0]?.author_number;
+
+        // Display name: pseudonym > Anon #number > Anon #user_id_suffix
+        const displayName = pseudonym
+          ? `@${pseudonym}`
+          : authorNumber
+          ? `Anon #${authorNumber}`
+          : `Anon #${stats.user_id.slice(-4)}`;
+
+        // Calculate proper reputation score from actual stats
+        const reputationScore = calculateReputationScore(stats);
 
         // Calculate win rate
         const resolved = stats.total_resolved || 0;
@@ -57,10 +124,7 @@ export async function GET(request: Request) {
           ? Math.round((correct / resolved) * 100)
           : 0;
 
-        // Map credibility_score (0-100) to reputation score (0-1000)
-        const reputationScore = Math.min(Math.round((stats.credibility_score || 0) * 10), 1000);
-
-        // Get tier
+        // Get tier from calculated score
         const tier = getReliabilityTier(reputationScore);
 
         // If filtering by category, check if user has predictions in that category
@@ -82,7 +146,7 @@ export async function GET(request: Request) {
 
         return {
           userId: stats.user_id,
-          displayName: userData?.user?.email?.split('@')[0] || `Anon #${stats.user_id.slice(-4)}`,
+          displayName,
           reliabilityScore: reputationScore,
           tier,
           winRate,
@@ -92,8 +156,10 @@ export async function GET(request: Request) {
       })
     );
 
-    // Filter out null entries (users who didn't match category filter)
-    const filteredSources = topSources.filter((source) => source !== null);
+    // Filter out null entries and sort by calculated reputation score
+    const filteredSources = topSources
+      .filter((source) => source !== null)
+      .sort((a, b) => b!.reliabilityScore - a!.reliabilityScore);
 
     return NextResponse.json({
       sources: filteredSources,
