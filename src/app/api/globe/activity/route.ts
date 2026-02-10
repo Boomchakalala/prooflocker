@@ -112,7 +112,7 @@ export async function GET(request: NextRequest) {
     const { data: predictions, error: claimsError } = await claimsQuery;
 
     if (claimsError) {
-      console.error('[Activity API] Error fetching claims:', claimsError);
+      console.error('[Activity API] Error fetching claims:', JSON.stringify(claimsError, null, 2));
     }
 
     // Fetch OSINT signals (no geotag requirement - we'll use fallbacks)
@@ -135,7 +135,7 @@ export async function GET(request: NextRequest) {
     const { data: osintData, error: osintError } = await osintQuery;
 
     if (osintError) {
-      console.error('[Activity API] Error fetching OSINT:', osintError);
+      console.error('[Activity API] Error fetching OSINT:', JSON.stringify(osintError, null, 2));
     }
 
     // Batch-fetch reputation scores for all users in predictions
