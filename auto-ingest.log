@@ -110,3 +110,7 @@ Tue Feb 10 22:47:50 UTC 2026: Running intel ingestion...
 
 📡 Fetching: Bellingcat - Latest
    Found 10 items
+   ✅ Inserted 0 new items
+
+✅ Ingestion complete! Total items in DB: 63
+Tue Feb 10 22:48:07 UTC 2026: Sleeping for 10 minutes...
