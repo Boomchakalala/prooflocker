@@ -59,66 +59,6 @@ export default function TopSourcesList({ category = 'all' }: TopSourcesListProps
     }
   };
 
-  // Mock data for demo
-  const mockSources: TopSource[] = sources.length === 0 ? [
-    {
-      userId: "demo-user-1",
-      displayName: "Anon #2847",
-      reliabilityScore: 892,
-      tier: 'legend',
-      winRate: 94,
-      resolvedCount: 47,
-      avgEvidenceScore: 92,
-    },
-    {
-      userId: "demo-user-2",
-      displayName: "Anon #5192",
-      reliabilityScore: 761,
-      tier: 'master',
-      winRate: 91,
-      resolvedCount: 38,
-      avgEvidenceScore: 88,
-    },
-    {
-      userId: "demo-user-3",
-      displayName: "Anon #1203",
-      reliabilityScore: 684,
-      tier: 'master',
-      winRate: 87,
-      resolvedCount: 34,
-      avgEvidenceScore: 85,
-    },
-    {
-      userId: "demo-user-4",
-      displayName: "Anon #8741",
-      reliabilityScore: 572,
-      tier: 'expert',
-      winRate: 84,
-      resolvedCount: 29,
-      avgEvidenceScore: 81,
-    },
-    {
-      userId: "demo-user-5",
-      displayName: "Anon #3492",
-      reliabilityScore: 438,
-      tier: 'trusted',
-      winRate: 82,
-      resolvedCount: 27,
-      avgEvidenceScore: 78,
-    },
-    {
-      userId: "demo-user-6",
-      displayName: "Anon #9124",
-      reliabilityScore: 312,
-      tier: 'trusted',
-      winRate: 79,
-      resolvedCount: 24,
-      avgEvidenceScore: 74,
-    },
-  ] : sources;
-
-  const isShowingMockData = sources.length === 0;
-
   if (loading) {
     return (
       <div className="flex items-center justify-center py-20">
@@ -130,7 +70,7 @@ export default function TopSourcesList({ category = 'all' }: TopSourcesListProps
     );
   }
 
-  if (mockSources.length === 0) {
+  if (sources.length === 0) {
     return (
       <div className="text-center py-20">
         <div className="max-w-3xl mx-auto">
@@ -139,9 +79,9 @@ export default function TopSourcesList({ category = 'all' }: TopSourcesListProps
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
             </svg>
           </div>
-          <h3 className="text-3xl font-bold text-white mb-4">Reputation Registry</h3>
+          <h3 className="text-3xl font-bold text-white mb-4">No Reputation Leaders Yet</h3>
           <p className="text-slate-400 text-lg mb-8 max-w-2xl mx-auto">
-            Build reputation through accurate claims backed by verifiable evidence. Your track record speaks for itself.
+            Be the first to build your reputation! Lock claims, resolve them with evidence, and watch your score grow.
           </p>
           <Link href="/lock" className="inline-flex items-center px-8 py-4 bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-500 hover:to-purple-600 text-white font-semibold rounded-xl transition-all shadow-lg hover:shadow-[0_0_30px_rgba(168,85,247,0.4)]">
             Lock Your First Claim
