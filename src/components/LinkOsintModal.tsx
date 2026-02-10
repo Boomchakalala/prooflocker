@@ -163,7 +163,7 @@ export default function LinkOsintModal({
           ) : userClaims.length === 0 ? (
             <div className="text-center py-8">
               <div className="text-gray-400 mb-2">No claims found</div>
-              <p className="text-sm text-gray-500">Make a prediction first, then link OSINT as evidence!</p>
+              <p className="text-sm text-gray-500">Lock a claim first, then link intel as evidence!</p>
             </div>
           ) : (
             <div className="space-y-3">

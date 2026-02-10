@@ -827,7 +827,7 @@ export default function GlobePage() {
                 </button>
               </div>
               <p className="text-gray-300 mb-6">
-                Lock your prediction with full evidence support and on-chain commitment.
+                Lock your claim on-chain. No edits. No deletions.
               </p>
               <Link
                 href="/lock"

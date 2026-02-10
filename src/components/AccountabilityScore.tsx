@@ -36,7 +36,7 @@ export default function AccountabilityScore() {
             </div>
             <h3 className="text-lg md:text-xl font-bold text-white mb-3">Early Predictions Win</h3>
             <p className="text-sm md:text-base text-white/75 leading-relaxed">
-              Lock your prediction before OSINT confirms it. Early accuracy earns multipliers. The earlier you call it, the more your reputation grows.
+              Lock your claim before the news confirms it. Early accuracy earns multipliers. The earlier you call it, the more your reputation grows.
             </p>
           </div>
 

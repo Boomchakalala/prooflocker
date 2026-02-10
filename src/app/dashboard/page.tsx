@@ -27,7 +27,7 @@ export default function DashboardPage() {
       try {
         const anonId = getAnonId();
         if (!anonId && !user) {
-          setError("No user identifier found. Lock a prediction to get started!");
+          setError("No user identifier found. Lock a claim to get started!");
           setLoading(false);
           return;
         }

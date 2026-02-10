@@ -43,7 +43,7 @@ export default function DisclaimerPage() {
               <section>
                 <h2 className="text-xl font-semibold text-white mb-3">1. No Financial or Investment Advice</h2>
                 <p>
-                  ProofLocker is a tool for creating immutable, timestamped predictions on a public blockchain.
+                  ProofLocker is a tool for creating immutable, timestamped claims on a public blockchain.
                   Nothing on this platform constitutes financial, investment, legal, or professional advice.
                   Predictions made by users are for informational and entertainment purposes only. You should
                   conduct your own research and consult with qualified professionals before making any financial
@@ -65,8 +65,8 @@ export default function DisclaimerPage() {
                 <h2 className="text-xl font-semibold text-white mb-3">3. User Responsibility</h2>
                 <p>
                   You are solely responsible for the content you create and lock on ProofLocker. You are
-                  responsible for ensuring that your predictions comply with all applicable laws and regulations.
-                  You acknowledge that once a prediction is locked on the blockchain, it becomes immutable and
+                  responsible for ensuring that your claims comply with all applicable laws and regulations.
+                  You acknowledge that once a claim is locked on the blockchain, it becomes immutable and
                   cannot be edited or deleted.
                 </p>
               </section>

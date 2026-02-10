@@ -270,7 +270,7 @@ export default function ClaimModal({ onClose, onSuccess }: ClaimModalProps) {
             {claiming && !success ? (
               <div className="flex flex-col items-center gap-4">
                 <div className="w-16 h-16 border-4 border-white/30 border-t-white rounded-full animate-spin" />
-                <p className="text-white text-lg">Claiming your predictions...</p>
+                <p className="text-white text-lg">Claiming your account...</p>
               </div>
             ) : (
               <div className="flex flex-col items-center gap-4">
@@ -288,7 +288,7 @@ export default function ClaimModal({ onClose, onSuccess }: ClaimModalProps) {
                       We sent a confirmation link to <span className="font-medium text-white">{confirmationEmail}</span>
                     </p>
                     <p className="text-white/60 text-sm text-center px-4">
-                      Click the link to activate your account, then sign in to claim your predictions.
+                      Click the link to activate your account, then sign in to claim your account.
                     </p>
 
                     <div className="mt-4 pt-4 border-t border-white/10 w-full">

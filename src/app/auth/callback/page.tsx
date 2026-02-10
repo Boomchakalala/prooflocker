@@ -52,7 +52,7 @@ function AuthCallbackContent() {
     async function claimPredictions(session: any) {
       try {
         setStatus("claiming");
-        setMessage("Claiming your predictions...");
+        setMessage("Claiming your account...");
 
         const user = session.user;
         const accessToken = session.access_token;
@@ -125,7 +125,7 @@ function AuthCallbackContent() {
         setStatus("error");
 
         if (claimError instanceof Error && claimError.name === 'AbortError') {
-          setMessage("Request timed out - but your predictions may have been claimed. Check your profile.");
+          setMessage("Request timed out - but your account may have been linked. Check your profile.");
         } else {
           setMessage(claimError instanceof Error ? claimError.message : "Failed to claim predictions");
         }

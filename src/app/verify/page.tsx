@@ -97,7 +97,7 @@ function VerifyContent() {
         <div className="mb-8 fade-in">
           <h1 className="text-4xl font-bold gradient-text mb-3">Verify proof</h1>
           <p className="text-[#888] text-lg">
-            Check if a prediction was locked on-chain at a specific time
+            Check if a claim was locked on-chain at a specific time
           </p>
         </div>
 
@@ -422,7 +422,7 @@ function VerifyContent() {
               <button
                 onClick={() => {
                   const shareText = result.verified && result.proofDetails
-                    ? `I locked this prediction on-chain with ProofLocker. No edits. No excuses. Verify it yourself: ${getSiteUrl()}/verify?proofId=${proofId}`
+                    ? `I locked this claim on-chain with ProofLocker. No edits. No excuses. Verify it yourself: ${getSiteUrl()}/verify?proofId=${proofId}`
                     : `Check this ProofLocker verification: ${getSiteUrl()}/verify?proofId=${proofId}`;
                   navigator.clipboard.writeText(shareText);
                   alert("Share message copied to clipboard!");

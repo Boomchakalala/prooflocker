@@ -75,7 +75,7 @@ export default function PrivacyPage() {
                 <p className="mb-3">We use collected information for the following purposes:</p>
                 <ul className="list-disc list-inside space-y-2 ml-4">
                   <li>To provide and maintain the ProofLocker service</li>
-                  <li>To process and display your predictions</li>
+                  <li>To process and display your claims</li>
                   <li>To authenticate users who claim predictions</li>
                   <li>To improve and optimize the platform</li>
                   <li>To analyze usage patterns and trends</li>

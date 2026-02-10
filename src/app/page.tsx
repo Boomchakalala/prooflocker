@@ -26,7 +26,7 @@ export default function LandingPage() {
               The Globe is Live
             </h2>
             <p className="text-lg text-slate-400 mb-8 max-w-2xl mx-auto">
-              OSINT signals and locked claims mapped in real time. Monitor events as they unfold, lock your predictions, and watch the world prove you right.
+              OSINT signals and locked claims mapped in real time. Monitor events as they unfold, lock your claims, and watch the world prove you right.
             </p>
             <Link
               href="/globe"

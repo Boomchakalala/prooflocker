@@ -51,7 +51,7 @@ export default function TechFoundation() {
               </svg>
             </div>
             <h3 className="text-xl font-bold text-white mb-3">Security</h3>
-            <p className="text-gray-400 text-sm leading-relaxed">Cryptographically guaranteed, powering immutable digital evidence via Constellation DAG. Military-grade protection for your predictions.</p>
+            <p className="text-gray-400 text-sm leading-relaxed">Cryptographically guaranteed, powering immutable digital evidence via Constellation DAG. Military-grade protection for your claims.</p>
           </div>
         </div>
       </div>

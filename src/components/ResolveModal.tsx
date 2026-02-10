@@ -287,7 +287,7 @@ export default function ResolveModal({
               </div>
 
               <p className="text-[11px] text-white/40 mt-1.5 leading-tight">
-                Use "Invalid" if the prediction can't be verified
+                Use "Invalid" if the claim can't be verified
               </p>
             </div>
 
