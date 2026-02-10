@@ -8,7 +8,7 @@ import { Prediction } from "@/lib/storage";
 import { signOut } from "@/lib/auth";
 import { supabase } from "@/lib/supabase";
 import {
-  getReliabilityTier,
+  getReputationTier,
   getTierInfo,
   getNextTierMilestone,
   formatPoints,
@@ -83,7 +83,7 @@ export default function ProfilePage() {
             ? statsData.correct_predictions / statsData.resolved_predictions
             : 0,
         reputationScore: statsData?.reputation_score || 0,
-        tier: getReliabilityTier(statsData?.reputation_score || 0),
+        tier: getReputationTier(statsData?.reputation_score || 0),
       };
 
       setStats(userStats);
