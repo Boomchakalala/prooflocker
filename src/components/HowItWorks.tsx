@@ -15,7 +15,7 @@ export default function HowItWorks() {
         {/* Three Horizontal Boxes */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 lg:gap-10">
           {/* Box 1: Lock Your Claim */}
-          <div className="bg-gradient-to-br from-purple-600/10 via-blue-600/8 to-purple-700/10 border border-[#A78BFA]/30 hover:border-[#00E0FF]/50 rounded-xl md:rounded-2xl p-5 md:p-8 lg:p-10 transition-all duration-300 hover:shadow-[0_0_40px_rgba(0,224,255,0.25)] hover:-translate-y-1">
+          <div className="bg-gradient-to-br from-purple-600/10 via-blue-600/8 to-purple-700/10 border border-slate-700/50 hover:border-[#00E0FF]/50 rounded-xl md:rounded-2xl p-5 md:p-8 lg:p-10 transition-all duration-300 hover:shadow-[0_0_40px_rgba(0,224,255,0.25)] hover:-translate-y-1">
             <div className="flex items-center justify-center mb-4 md:mb-6">
               <div className="w-12 h-12 md:w-16 md:h-16 bg-gradient-to-br from-[#00E0FF]/25 to-[#C084FC]/25 rounded-lg md:rounded-xl flex items-center justify-center shadow-[0_0_20px_rgba(0,224,255,0.3)]">
                 <svg className="w-6 h-6 md:w-8 md:h-8 text-[#00E0FF]" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
@@ -25,12 +25,12 @@ export default function HowItWorks() {
             </div>
 
             <div className="text-center mb-3 md:mb-4">
-              <h3 className="text-xl md:text-2xl lg:text-3xl font-bold text-white mb-1 md:mb-2">Make Your Call</h3>
+              <h3 className="text-xl md:text-2xl lg:text-3xl font-bold text-white mb-1 md:mb-2">Monitor</h3>
               <p className="text-xs md:text-sm text-cyan-400 font-semibold">Before anyone knows</p>
             </div>
 
             <p className="text-sm md:text-base lg:text-lg text-white/75 leading-relaxed mb-4 md:mb-6 text-center">
-              Lock your take on-chain. No signup. No excuses. Just conviction.
+              Browse live OSINT signals and news events mapped on the globe.
             </p>
 
             {/* Animation: Clock + Lock */}
@@ -58,12 +58,12 @@ export default function HowItWorks() {
               </div>
 
               <div className="text-center mb-3 md:mb-4">
-                <h3 className="text-xl md:text-2xl lg:text-3xl font-bold text-white mb-1 md:mb-2">Prove You Were Right</h3>
+                <h3 className="text-xl md:text-2xl lg:text-3xl font-bold text-white mb-1 md:mb-2">Lock</h3>
                 <p className="text-xs md:text-sm text-emerald-400 font-semibold">When the world catches up</p>
               </div>
 
               <p className="text-sm md:text-base lg:text-lg text-white/80 leading-relaxed mb-3 md:mb-4 text-center">
-                Mark correct, incorrect, or contested. Your score updates instantly.
+                Make a claim. It gets hashed and timestamped on-chain. No edits, no deletions.
               </p>
 
               {/* NEW: Resolution = Reputation callout */}
