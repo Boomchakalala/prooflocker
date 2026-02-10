@@ -494,6 +494,8 @@ export default function GlobePage() {
                 (displayItems as Claim[]).map((claim) => {
                   const isCorrect = claim.outcome === 'correct';
                   const isIncorrect = claim.outcome === 'incorrect';
+                  const isResolved = isCorrect || isIncorrect;
+                  const evidenceGrade = getEvidenceGrade(claim.evidence_score);
 
                   return (
                     <div
@@ -504,19 +506,26 @@ export default function GlobePage() {
                           ? 'border-l-[3px] border-l-emerald-500 border border-emerald-500/30'
                           : isIncorrect
                           ? 'border-l-[3px] border-l-red-500 border border-red-500/30'
-                          : 'border-l-[3px] border-l-amber-500 border border-slate-700/40'
+                          : 'border-l-[3px] border-l-purple-500 border border-slate-700/40'
                       }`}
                     >
                       {/* Top: submitter + status */}
                       <div className="flex items-center justify-between mb-1.5">
                         <span className="text-[11px] text-slate-400 font-medium">{claim.submitter}</span>
-                        <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded ${
-                          isCorrect ? 'bg-emerald-500/20 text-emerald-400' :
-                          isIncorrect ? 'bg-red-500/20 text-red-400' :
-                          'bg-amber-500/20 text-amber-400'
-                        }`}>
-                          {isCorrect ? 'Correct' : isIncorrect ? 'Incorrect' : 'Pending'}
-                        </span>
+                        <div className="flex items-center gap-1.5">
+                          {isResolved && (
+                            <span className={`text-[9px] font-bold px-1.5 py-0.5 rounded ${evidenceGrade.bgColor} ${evidenceGrade.textColor}`}>
+                              {evidenceGrade.grade}
+                            </span>
+                          )}
+                          <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded ${
+                            isCorrect ? 'bg-emerald-500/20 text-emerald-400' :
+                            isIncorrect ? 'bg-red-500/20 text-red-400' :
+                            'bg-amber-500/20 text-amber-400'
+                          }`}>
+                            {isCorrect ? 'Correct' : isIncorrect ? 'Incorrect' : 'Pending'}
+                          </span>
+                        </div>
                       </div>
 
                       {/* Claim text */}
@@ -526,10 +535,12 @@ export default function GlobePage() {
 
                       {/* Bottom: category + date */}
                       <div className="flex items-center justify-between">
-                        {claim.category && (
-                          <span className="text-[10px] text-slate-500">#{claim.category}</span>
-                        )}
-                        <span className="text-[10px] text-slate-600 ml-auto">{claim.lockedDate}</span>
+                        <div className="flex items-center gap-2">
+                          {claim.category && (
+                            <span className="text-[10px] text-slate-500">#{claim.category}</span>
+                          )}
+                        </div>
+                        <span className="text-[10px] text-slate-600">{claim.lockedDate}</span>
                       </div>
                     </div>
                   );
