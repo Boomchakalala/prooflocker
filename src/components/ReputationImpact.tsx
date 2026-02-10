@@ -19,16 +19,16 @@ export default function ReputationImpact() {
         {/* Section Header */}
         <div className="text-center mb-10 md:mb-16">
           <h2 className="text-3xl md:text-5xl lg:text-6xl font-extrabold mb-3 md:mb-4 bg-gradient-to-r from-[#5B21B6] to-[#2E5CFF] bg-clip-text text-transparent" style={{ fontFamily: 'var(--font-montserrat)' }}>
-            Your Track Record Compounds
+            Your Reputation Compounds
           </h2>
           <p className="text-base md:text-lg lg:text-xl text-white/70 max-w-3xl mx-auto px-2">
-            Each claim builds your on-chain reputation. Accuracy and evidence quality determine your standing.
+            Every correct resolution makes the next one count more. Streaks, evidence quality, and consistency — your track record is the product.
           </p>
         </div>
 
         {/* 3 Benefits - Clean Cards */}
         <div className="grid md:grid-cols-3 gap-6 md:gap-8">
-          {/* 1. Professional Edge */}
+          {/* 1. Prove Your Track Record */}
           <div className="group bg-gradient-to-br from-slate-900/80 to-slate-800/80 border border-slate-700/50 hover:border-purple-500/50 rounded-xl md:rounded-2xl p-6 md:p-8 transition-all duration-300 hover:shadow-[0_0_30px_rgba(147,51,234,0.2)] hover:-translate-y-1">
             <div className="flex items-center gap-3 mb-5 md:mb-6">
               <div className="w-12 h-12 md:w-14 md:h-14 bg-gradient-to-br from-purple-600/20 to-purple-800/20 rounded-xl flex items-center justify-center">
@@ -37,28 +37,28 @@ export default function ReputationImpact() {
                 </svg>
               </div>
               <h3 className="text-xl md:text-2xl font-bold text-white" style={{ fontFamily: 'var(--font-montserrat)' }}>
-                Prove It
+                Cryptographic Proof
               </h3>
             </div>
 
             <p className="text-sm md:text-base text-white/80 leading-relaxed mb-4 md:mb-5">
-              Show clients, investors, employers your track record with cryptographic proof. No fluff—just verifiable accuracy.
+              Every claim is hashed and timestamped on Constellation DAG. Nobody can fake when you called it — the math proves it.
             </p>
 
             <div className="px-4 py-3 bg-purple-500/10 border border-purple-500/30 rounded-lg">
-              <div className="text-[10px] text-purple-400/60 uppercase tracking-wider mb-2 font-semibold">Example</div>
+              <div className="text-[10px] text-purple-400/60 uppercase tracking-wider mb-2 font-semibold">Your Proof</div>
               <div className="flex items-center justify-between mb-2">
                 <span className="text-xs md:text-sm text-slate-400">Accuracy</span>
                 <span className="text-lg md:text-xl font-bold text-purple-400">85%</span>
               </div>
               <div className="flex items-center justify-between text-xs text-slate-500">
                 <span>23 correct / 27 total</span>
-                <span className="text-purple-400">Verified</span>
+                <span className="text-purple-400">Verified on-chain</span>
               </div>
             </div>
           </div>
 
-          {/* 2. Social Capital */}
+          {/* 2. Climb the Ranks */}
           <div className="group bg-gradient-to-br from-slate-900/80 to-slate-800/80 border border-slate-700/50 hover:border-cyan-500/50 rounded-xl md:rounded-2xl p-6 md:p-8 transition-all duration-300 hover:shadow-[0_0_30px_rgba(6,182,212,0.2)] hover:-translate-y-1">
             <div className="flex items-center gap-3 mb-5 md:mb-6">
               <div className="w-12 h-12 md:w-14 md:h-14 bg-gradient-to-br from-cyan-600/20 to-cyan-800/20 rounded-xl flex items-center justify-center">
@@ -67,23 +67,22 @@ export default function ReputationImpact() {
                 </svg>
               </div>
               <h3 className="text-xl md:text-2xl font-bold text-white" style={{ fontFamily: 'var(--font-montserrat)' }}>
-                Rise Up
+                Reputation Tiers
               </h3>
             </div>
 
             <p className="text-sm md:text-base text-white/80 leading-relaxed mb-4 md:mb-5">
-              Climb the leaderboard. Earn badges. Build streaks. Each correct resolution amplifies your influence.
+              Novice → Trusted → Expert → Master → Legend. Each tier reflects your accuracy, evidence quality, and volume of resolved claims.
             </p>
 
             <div className="space-y-2 md:space-y-3">
-              <div className="text-[10px] text-cyan-400/60 uppercase tracking-wider mb-2 font-semibold">Example</div>
               <div className="flex items-center justify-between px-4 py-2 bg-cyan-500/10 border border-cyan-500/30 rounded-lg">
-                <span className="text-xs md:text-sm text-slate-400">Current Rank</span>
-                <span className="text-lg md:text-xl font-bold text-cyan-400">#12</span>
+                <span className="text-xs md:text-sm text-slate-400">Current Tier</span>
+                <span className="text-lg md:text-xl font-bold text-cyan-400">Expert</span>
               </div>
               <div className="flex items-center gap-2 px-4 py-2 bg-orange-500/10 border border-orange-500/30 rounded-lg">
-                <span className="text-lg md:text-xl font-bold text-orange-400">S</span>
-                <span className="text-xs md:text-sm text-slate-300">5-claim streak</span>
+                <span className="text-lg md:text-xl font-bold text-orange-400">5</span>
+                <span className="text-xs md:text-sm text-slate-300">claim streak active</span>
               </div>
             </div>
           </div>
@@ -97,16 +96,16 @@ export default function ReputationImpact() {
                 </svg>
               </div>
               <h3 className="text-xl md:text-2xl font-bold text-white" style={{ fontFamily: 'var(--font-montserrat)' }}>
-                Compound
+                Compounding Returns
               </h3>
             </div>
 
             <p className="text-sm md:text-base text-white/80 leading-relaxed mb-4 md:mb-5">
-              Every resolution builds on the last. Streaks multiply points. Consistency unlocks tiers. Credibility grows exponentially.
+              Streaks multiply your points. High-risk categories earn bonuses. Grade A evidence amplifies everything. Your credibility grows exponentially.
             </p>
 
             <div className="px-4 py-3 bg-emerald-500/10 border border-emerald-500/30 rounded-lg">
-              <div className="text-[10px] text-emerald-400/60 uppercase tracking-wider mb-2 font-semibold">Example</div>
+              <div className="text-[10px] text-emerald-400/60 uppercase tracking-wider mb-2 font-semibold">Growth Example</div>
               <div className="flex items-center justify-between mb-3">
                 <span className="text-2xl md:text-3xl font-bold text-slate-600">0</span>
                 <svg className="w-6 h-6 md:w-8 md:h-8 text-emerald-500" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
@@ -114,7 +113,7 @@ export default function ReputationImpact() {
                 </svg>
                 <span className="text-2xl md:text-3xl font-bold text-emerald-400">892</span>
               </div>
-              <div className="text-center text-xs text-slate-500">After 27 resolutions</div>
+              <div className="text-center text-xs text-slate-500">After 27 resolved claims</div>
             </div>
           </div>
         </div>
