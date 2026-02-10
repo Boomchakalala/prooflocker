@@ -147,12 +147,12 @@ export default function UnifiedHeader({ currentView, onLockClick }: UnifiedHeade
                   className="fixed inset-0 z-40"
                   onClick={() => setShowUserMenu(false)}
                 />
-                <div className="absolute right-0 top-12 w-64 glass border border-slate-700 rounded-lg shadow-2xl z-50 overflow-hidden">
+                <div className="absolute right-0 top-12 w-64 bg-slate-900/98 backdrop-blur-xl border border-slate-600 rounded-lg shadow-2xl z-50 overflow-hidden">
                   <div className="p-4 border-b border-slate-700">
                     <div className="text-sm font-medium text-white">
                       {user?.email || 'Anonymous User'}
                     </div>
-                    <div className="text-xs text-gray-400 mt-1">
+                    <div className="text-xs text-slate-400 mt-1">
                       {user ? 'Logged in' : 'Local only'}
                     </div>
                   </div>
@@ -161,7 +161,7 @@ export default function UnifiedHeader({ currentView, onLockClick }: UnifiedHeade
                       <>
                         <Link
                           href="/profile"
-                          className="flex items-center gap-2 px-4 py-2 text-sm text-gray-300 hover:text-white hover:bg-white/5 rounded-md transition-colors"
+                          className="flex items-center gap-2 px-4 py-2 text-sm text-slate-200 hover:text-white hover:bg-white/10 rounded-md transition-colors"
                           onClick={() => setShowUserMenu(false)}
                         >
                           <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
@@ -171,7 +171,7 @@ export default function UnifiedHeader({ currentView, onLockClick }: UnifiedHeade
                         </Link>
                         <Link
                           href="/dashboard"
-                          className="flex items-center gap-2 px-4 py-2 text-sm text-gray-300 hover:text-white hover:bg-white/5 rounded-md transition-colors"
+                          className="flex items-center gap-2 px-4 py-2 text-sm text-slate-200 hover:text-white hover:bg-white/10 rounded-md transition-colors"
                           onClick={() => setShowUserMenu(false)}
                         >
                           <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
@@ -184,7 +184,7 @@ export default function UnifiedHeader({ currentView, onLockClick }: UnifiedHeade
                     )}
                     <Link
                       href="/app?tab=my"
-                      className="flex items-center gap-2 px-4 py-2 text-sm text-gray-300 hover:text-white hover:bg-white/5 rounded-md transition-colors"
+                      className="flex items-center gap-2 px-4 py-2 text-sm text-slate-200 hover:text-white hover:bg-white/10 rounded-md transition-colors"
                       onClick={() => setShowUserMenu(false)}
                     >
                       <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
@@ -194,7 +194,7 @@ export default function UnifiedHeader({ currentView, onLockClick }: UnifiedHeade
                     </Link>
                     <Link
                       href="/how-scoring-works"
-                      className="flex items-center gap-2 px-4 py-2 text-sm text-gray-300 hover:text-white hover:bg-white/5 rounded-md transition-colors"
+                      className="flex items-center gap-2 px-4 py-2 text-sm text-slate-200 hover:text-white hover:bg-white/10 rounded-md transition-colors"
                       onClick={() => setShowUserMenu(false)}
                     >
                       <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
