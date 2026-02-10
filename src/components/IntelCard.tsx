@@ -33,6 +33,22 @@ interface IntelCardProps {
 }
 
 export default function IntelCard({ item, compact = false }: IntelCardProps) {
+  // Map tags to category
+  const getCategory = () => {
+    if (!item.tags || item.tags.length === 0) return 'culture';
+    const tagStr = item.tags.join(' ').toLowerCase();
+
+    if (tagStr.match(/crypto|bitcoin/)) return 'crypto';
+    if (tagStr.match(/politics|election|government|diplomatic|sanctions|ceasefire|coup/)) return 'politics';
+    if (tagStr.match(/military|conflict|war|drone|missile|attack|osint|geoint|investigative/)) return 'politics';
+    if (tagStr.match(/cyber|tech|data|ransomware|disinformation/)) return 'tech';
+    if (tagStr.match(/markets|economics/)) return 'markets';
+    if (tagStr.match(/sports|olympics|football|soccer|hockey/)) return 'sports';
+    return 'culture';
+  };
+
+  const category = getCategory();
+
   // Calculate time ago
   const getTimeAgo = (dateStr: string) => {
     const date = new Date(dateStr);
@@ -76,6 +92,9 @@ export default function IntelCard({ item, compact = false }: IntelCardProps) {
         <div className="flex items-center gap-2 mb-2">
           <span className={`text-[9px] font-bold px-1.5 py-0.5 rounded uppercase ${getSourceBadgeColor()}`}>
             Intel
+          </span>
+          <span className="text-[9px] font-semibold px-1.5 py-0.5 rounded bg-slate-700/50 text-slate-300 uppercase">
+            {category}
           </span>
           <span className="text-[10px] text-red-400 font-semibold truncate flex-1">
             {item.source_name}
