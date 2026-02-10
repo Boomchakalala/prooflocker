@@ -728,50 +728,26 @@ export default function GlobePage() {
               displayItems.length === 0 ? (
                 <div className="text-center py-12 text-[#94a3b8] text-sm">No intel signals found</div>
               ) : (
-                (displayItems as OsintItem[]).map((item) => {
-                  const freshnessBadge = getFreshnessBadge(item.createdAt || '');
-                  const freshnessClass = getIntelFreshnessClass(item.createdAt || '');
-                  const category = item.category || item.tags?.[0] || 'Intel';
-
-                  return (
-                  <div
+                (displayItems as OsintItem[]).map((item) => (
+                  <IntelCard
                     key={item.id}
-                    className={`bg-slate-900/80 border ${freshnessClass} rounded-lg p-3 transition-all duration-200 hover:bg-slate-800/80 hover:border-red-500/50`}
-                  >
-                    <div className="flex items-center gap-1.5 mb-1.5">
-                      <span className="text-[9px] font-bold px-1.5 py-0.5 rounded bg-red-600 text-white uppercase">Intel</span>
-                      {freshnessBadge && (
-                        <span className={`text-[9px] font-bold px-1.5 py-0.5 rounded ${freshnessBadge.className}`}>
-                          {freshnessBadge.label}
-                        </span>
-                      )}
-                      <span className="text-[11px] text-red-400 font-semibold truncate flex-1">{item.source}</span>
-                      <span className="text-[10px] text-slate-500 bg-slate-800/50 px-1.5 py-0.5 rounded">
-                        #{category}
-                      </span>
-                      <span className="text-[10px] text-slate-600">{item.timestamp}</span>
-                    </div>
-                    <p className="text-[13px] text-white leading-snug line-clamp-2 mb-2">{item.title}</p>
-                    <div className="flex gap-1.5">
-                      <a
-                        href={item.handle ? `https://twitter.com/${item.handle.replace('@', '')}/status/${item.id}` : '#'}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="flex-1 px-2 py-1 text-[10px] font-semibold rounded bg-red-500/15 hover:bg-red-500/25 text-red-300 text-center transition-all"
-                        onClick={(e) => e.stopPropagation()}
-                      >
-                        Source
-                      </a>
-                      <button
-                        onClick={() => setSelectedOsint(item)}
-                        className="flex-1 px-2 py-1 text-[10px] font-semibold rounded bg-purple-500/15 hover:bg-purple-500/25 text-purple-300 transition-all"
-                      >
-                        Link
-                      </button>
-                    </div>
-                  </div>
-                  );
-                })
+                    item={{
+                      id: item.id,
+                      source_name: item.source || item.source_name || 'Unknown',
+                      source_type: item.source_type || 'rss',
+                      title: item.title,
+                      url: item.url || '#',
+                      summary: item.content || item.summary || null,
+                      published_at: item.publishedAt || item.published_at || null,
+                      created_at: item.createdAt || item.created_at,
+                      image_url: item.image_url || null,
+                      place_name: item.locationName || item.location_name || item.place_name || null,
+                      country_code: item.country_code || null,
+                      tags: item.tags || null,
+                    }}
+                    compact={true}
+                  />
+                ))
               )
             )}
           </div>
@@ -917,30 +893,26 @@ export default function GlobePage() {
                 displayItems.length === 0 ? (
                   <div className="text-center py-8 text-[#94a3b8] text-sm">No intel signals found</div>
                 ) : (
-                  (displayItems as OsintItem[]).map((item) => {
-                    const freshnessBadge = getFreshnessBadge(item.createdAt || '');
-                    const freshnessClass = getIntelFreshnessClass(item.createdAt || '');
-                    const category = item.category || item.tags?.[0] || 'Intel';
-
-                    return (
-                    <div key={item.id} className={`p-3 bg-slate-900/60 border ${freshnessClass} rounded-xl`}>
-                      <div className="flex items-center gap-2 mb-1.5">
-                        <span className="text-[10px] font-bold text-white bg-red-600/80 px-2 py-0.5 rounded">INTEL</span>
-                        {freshnessBadge && (
-                          <span className={`text-[9px] font-bold px-1.5 py-0.5 rounded ${freshnessBadge.className}`}>
-                            {freshnessBadge.label}
-                          </span>
-                        )}
-                        <span className="text-xs text-red-400 font-semibold truncate flex-1">{item.source}</span>
-                        <span className="text-[10px] text-slate-500 bg-slate-800/50 px-1.5 py-0.5 rounded">
-                          #{category}
-                        </span>
-                      </div>
-                      <p className="text-sm text-white line-clamp-2 mb-2">{item.title}</p>
-                      <span className="text-[10px] text-slate-500">{item.timestamp}</span>
-                    </div>
-                    );
-                  })
+                  (displayItems as OsintItem[]).map((item) => (
+                    <IntelCard
+                      key={item.id}
+                      item={{
+                        id: item.id,
+                        source_name: item.source || item.source_name || 'Unknown',
+                        source_type: item.source_type || 'rss',
+                        title: item.title,
+                        url: item.url || '#',
+                        summary: item.content || item.summary || null,
+                        published_at: item.publishedAt || item.published_at || null,
+                        created_at: item.createdAt || item.created_at,
+                        image_url: item.image_url || null,
+                        place_name: item.locationName || item.location_name || item.place_name || null,
+                        country_code: item.country_code || null,
+                        tags: item.tags || null,
+                      }}
+                      compact={true}
+                    />
+                  ))
                 )
               )}
             </div>
