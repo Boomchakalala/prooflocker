@@ -11,7 +11,8 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
-import ClaimModal from '@/components/ClaimModal';
+import { signOut } from '@/lib/auth';
+import AuthModal from '@/components/AuthModal';
 
 interface UnifiedHeaderProps {
   currentView?: 'globe' | 'feed' | 'lock' | 'leaderboard' | 'about' | 'other';
