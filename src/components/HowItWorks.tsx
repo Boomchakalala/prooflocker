@@ -76,7 +76,7 @@ export default function HowItWorks() {
           </div>
 
           {/* Box 3: Build */}
-          <div className="bg-gradient-to-br from-purple-600/10 via-blue-600/8 to-purple-700/10 border border-[#A78BFA]/30 hover:border-[#C084FC]/50 rounded-xl md:rounded-2xl p-5 md:p-8 lg:p-10 transition-all duration-300 hover:shadow-[0_0_40px_rgba(167,139,250,0.3)] hover:-translate-y-1">
+          <div className="bg-gradient-to-br from-purple-600/10 via-blue-600/8 to-purple-700/10 border border-slate-700/50 hover:border-[#C084FC]/50 rounded-xl md:rounded-2xl p-5 md:p-8 lg:p-10 transition-all duration-300 hover:shadow-[0_0_40px_rgba(167,139,250,0.3)] hover:-translate-y-1">
             <div className="flex items-center justify-center mb-4 md:mb-6">
               <div className="w-12 h-12 md:w-16 md:h-16 bg-gradient-to-br from-[#C084FC]/25 to-[#00E0FF]/25 rounded-lg md:rounded-xl flex items-center justify-center shadow-[0_0_20px_rgba(167,139,250,0.3)]">
                 <svg className="w-6 h-6 md:w-8 md:h-8 text-[#C084FC]" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
@@ -86,12 +86,12 @@ export default function HowItWorks() {
             </div>
 
             <div className="text-center mb-3 md:mb-4">
-              <h3 className="text-xl md:text-2xl lg:text-3xl font-bold text-white mb-1 md:mb-2">Compound Credibility</h3>
+              <h3 className="text-xl md:text-2xl lg:text-3xl font-bold text-white mb-1 md:mb-2">Resolve</h3>
               <p className="text-xs md:text-sm text-purple-400 font-semibold">Every resolution counts more</p>
             </div>
 
             <p className="text-sm md:text-base lg:text-lg text-white/75 leading-relaxed mb-4 md:mb-6 text-center">
-              Streaks multiply points. Top ranks get visibility. Your track record = your edge.
+              When the outcome is clear, submit evidence. Your claim gets graded and your reputation updates.
             </p>
 
             {/* Stat box: compounding example */}

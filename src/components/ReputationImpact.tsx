@@ -1,5 +1,7 @@
 "use client";
 
+import Link from "next/link";
+
 export default function ReputationImpact() {
   return (
     <div className="relative z-10 py-12 md:py-20 lg:py-28 px-4 md:px-6 bg-gradient-to-b from-[#0a0a0a] via-[#1a0033] to-[#0a0a0a]">
@@ -17,10 +19,10 @@ export default function ReputationImpact() {
         {/* Section Header */}
         <div className="text-center mb-10 md:mb-16">
           <h2 className="text-3xl md:text-5xl lg:text-6xl font-extrabold mb-3 md:mb-4 bg-gradient-to-r from-[#5B21B6] to-[#2E5CFF] bg-clip-text text-transparent" style={{ fontFamily: 'var(--font-montserrat)' }}>
-            Your Reputation Opens Doors
+            Your Track Record Compounds
           </h2>
           <p className="text-base md:text-lg lg:text-xl text-white/70 max-w-3xl mx-auto px-2">
-            On-chain proof isn't just history—it's your competitive edge
+            Each claim builds your on-chain reputation. Accuracy and evidence quality determine your standing.
           </p>
         </div>
 
