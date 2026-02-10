@@ -6,7 +6,7 @@ import Link from "next/link";
 import { Prediction } from "@/lib/storage";
 import { supabase } from "@/lib/supabase";
 import {
-  getReliabilityTier,
+  getReputationTier,
   getTierInfo,
   getNextTierMilestone,
   formatPoints,
@@ -77,7 +77,7 @@ export default function PublicProfilePage() {
 
       // Process stats
       const userStats: UserStats = {
-        totalPoints: statsData?.total_points || 0,
+        totalXP: statsData?.total_points || 0,
         totalPredictions: statsData?.total_predictions || preds.length,
         resolvedPredictions: statsData?.resolved_predictions || preds.filter(p => p.outcome !== 'pending').length,
         correctPredictions: statsData?.correct_predictions || preds.filter(p => p.outcome === 'correct').length,
@@ -87,8 +87,8 @@ export default function PublicProfilePage() {
           statsData?.resolved_predictions > 0
             ? statsData.correct_predictions / statsData.resolved_predictions
             : 0,
-        reliabilityScore: statsData?.reputation_score || 0,
-        tier: getReliabilityTier(statsData?.reputation_score || 0),
+        reputationScore: statsData?.reputation_score || 0,
+        tier: getReputationTier(statsData?.reputation_score || 0),
       };
 
       setStats(userStats);
@@ -148,7 +148,7 @@ export default function PublicProfilePage() {
   }
 
   const tier = stats ? getTierInfo(stats.tier) : null;
-  const nextMilestone = stats ? getNextTierMilestone(stats.reliabilityScore) : null;
+  const nextMilestone = stats ? getNextTierMilestone(stats.reputationScore) : null;
   const breakdown = stats ? getScoreBreakdown(stats) : [];
 
   const correctCount = predictions.filter(p => p.outcome === "correct").length;
@@ -217,7 +217,7 @@ export default function PublicProfilePage() {
               </div>
 
               <div className="flex items-baseline gap-2 mb-4">
-                <span className="text-5xl font-bold text-white">{stats.reliabilityScore}</span>
+                <span className="text-5xl font-bold text-white">{stats.reputationScore}</span>
                 <span className="text-2xl text-neutral-500">/1000</span>
               </div>
 
@@ -225,13 +225,13 @@ export default function PublicProfilePage() {
               {nextMilestone && (
                 <div className="mb-3">
                   <div className="flex items-center justify-between text-xs text-neutral-400 mb-2">
-                    <span>Current: {stats.reliabilityScore}</span>
+                    <span>Current: {stats.reputationScore}</span>
                     <span>Next: {nextMilestone.tierInfo?.label} ({nextMilestone.tierInfo?.min})</span>
                   </div>
                   <div className="h-2 bg-neutral-900 rounded-full overflow-hidden">
                     <div
                       className={`h-full transition-all duration-500 ${tier.color.replace('text-', 'bg-')}`}
-                      style={{ width: `${(stats.reliabilityScore / 1000) * 100}%` }}
+                      style={{ width: `${(stats.reputationScore / 1000) * 100}%` }}
                     />
                   </div>
                   <p className="text-xs text-neutral-500 mt-2">
@@ -272,7 +272,7 @@ export default function PublicProfilePage() {
                 <div>
                   <div className="text-sm text-neutral-400 mb-1">Total Points</div>
                   <div className="text-3xl font-bold bg-gradient-to-r from-[#2E5CFF] to-[#5B21B6] bg-clip-text text-transparent">
-                    {formatPoints(stats.totalPoints)}
+                    {formatPoints(stats.totalXP)}
                   </div>
                 </div>
                 <svg className="w-10 h-10 text-[#2E5CFF]/50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
