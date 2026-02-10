@@ -765,8 +765,26 @@ export default function GlobePage() {
           </div>
         </aside>
 
-        {/* Mobile BottomSheet */}
-        <div className="md:hidden">
+        {/* Mobile: Toggle Feed Button */}
+        <button
+          onClick={() => setShowMobileFeed(!showMobileFeed)}
+          className="md:hidden fixed bottom-[calc(5rem+env(safe-area-inset-bottom))] left-4 z-[150] w-12 h-12 rounded-full bg-slate-900/90 backdrop-blur-sm border border-purple-500/30 shadow-2xl flex items-center justify-center text-white transition-all hover:scale-110 active:scale-95"
+          title={showMobileFeed ? "Hide Feed" : "Show Feed"}
+        >
+          {showMobileFeed ? (
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+            </svg>
+          ) : (
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+            </svg>
+          )}
+        </button>
+
+        {/* Mobile BottomSheet - Conditional rendering based on toggle */}
+        {showMobileFeed && (
+          <div className="md:hidden">
           <BottomSheet
             title="Globe"
             itemCount={displayItems.length}
@@ -805,6 +823,7 @@ export default function GlobePage() {
                     const repTier = getReputationTier(claim.rep || 0);
                     const evidenceGrade = getEvidenceGrade(claim.evidence_score);
                     const isResolved = claim.outcome === 'correct' || claim.outcome === 'incorrect';
+                    const freshnessBadge = getFreshnessBadge(claim.createdAt || '');
                     return (
                     <div key={claim.id} className="p-3 bg-slate-900/60 border border-slate-700/40 rounded-xl">
                       <div className="flex items-center justify-between mb-2">
@@ -815,6 +834,11 @@ export default function GlobePage() {
                           </span>
                         </div>
                         <div className="flex items-center gap-1.5">
+                          {freshnessBadge && (
+                            <span className={`text-[9px] font-bold px-1.5 py-0.5 rounded ${freshnessBadge.className}`}>
+                              {freshnessBadge.label}
+                            </span>
+                          )}
                           {isResolved && (
                             <span className={`text-[9px] font-bold px-1.5 py-0.5 rounded ${evidenceGrade.bgColor} ${evidenceGrade.textColor}`}>
                               {evidenceGrade.grade}
@@ -910,6 +934,7 @@ export default function GlobePage() {
             </div>
           </BottomSheet>
         </div>
+        )}
 
         {/* Link OSINT Modal */}
         {selectedOsint && (
