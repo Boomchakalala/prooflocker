@@ -191,7 +191,7 @@ export default function GlobePage() {
       items.push({
         type: 'INTEL',
         text: signal.title,
-        location: signal.tags?.[0] || '',
+        location: signal.category || signal.tags?.[0] || '',
         time: signal.timestamp
       });
     });
