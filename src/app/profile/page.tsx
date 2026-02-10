@@ -455,7 +455,7 @@ export default function ProfilePage() {
           <h2 className="text-xl font-semibold text-white mb-4">Your Predictions</h2>
           {predictions.length === 0 ? (
             <div className="text-center py-12 glass border border-white/10 rounded-lg">
-              <p className="text-neutral-400 mb-4 text-sm">You haven't claimed any predictions yet.</p>
+              <p className="text-neutral-400 mb-4 text-sm">You haven't locked any claims yet.</p>
               <Link
                 href="/lock"
                 className="inline-block px-5 py-2 bg-neutral-800 hover:bg-neutral-700 text-white font-medium rounded-md transition-colors border border-white/20"

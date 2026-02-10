@@ -33,7 +33,7 @@ export default function LandingHeader() {
 
   return (
     <>
-      <header className="sticky top-0 z-50 bg-gradient-to-r from-[#0A0A0F] to-[#050509] border-b border-white/5">
+      <header className="sticky top-0 z-[300] pt-[env(safe-area-inset-top)] bg-gradient-to-r from-[#0A0A0F] to-[#050509] border-b border-white/5">
         <div className="mx-auto max-w-[1280px] px-4 md:px-6 lg:px-12 flex h-16 items-center justify-between">
           <Link href="/" className="flex-shrink-0">
             <BrandLogo />

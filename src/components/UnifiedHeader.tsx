@@ -38,7 +38,7 @@ export default function UnifiedHeader({ currentView, onLockClick }: UnifiedHeade
 
   return (
     <header
-      className="fixed top-0 left-0 right-0 h-16 md:h-16 bg-gradient-to-r from-slate-950 via-slate-900 to-slate-950 backdrop-blur-xl border-b border-purple-500/20 z-[9999] shadow-lg shadow-purple-500/5"
+      className="fixed top-0 left-0 right-0 h-16 md:h-16 bg-gradient-to-r from-slate-950 via-slate-900 to-slate-950 backdrop-blur-xl border-b border-purple-500/20 z-[300] pt-[env(safe-area-inset-top)] shadow-lg shadow-purple-500/5"
       style={{ '--header-height': '64px' } as React.CSSProperties}
     >
       <div className="h-full max-w-[2000px] mx-auto px-3 md:px-6 flex items-center justify-between">
@@ -228,10 +228,10 @@ export default function UnifiedHeader({ currentView, onLockClick }: UnifiedHeade
       {showMobileMenu && (
         <>
           <div
-            className="fixed inset-0 bg-black/50 z-40 lg:hidden"
+            className="fixed inset-0 bg-black/50 z-[290] lg:hidden"
             onClick={() => setShowMobileMenu(false)}
           />
-          <div className="fixed top-16 left-0 right-0 glass border-b border-slate-700 shadow-2xl z-50 lg:hidden">
+          <div className="fixed top-16 left-0 right-0 glass border-b border-slate-700 shadow-2xl z-[295] lg:hidden">
             <nav className="p-4 space-y-2">
               <Link
                 href="/globe"

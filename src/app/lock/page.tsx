@@ -68,8 +68,8 @@ function LockPageContent() {
         if (data.insightPoints) {
           showScoreToast(
             data.insightPoints,
-            "Prediction locked successfully!",
-            ["Earned points for locking prediction"]
+            "Claim locked successfully!",
+            ["Earned points for locking claim"]
           );
         }
 
@@ -83,12 +83,12 @@ function LockPageContent() {
           alert("Already locked — this claim fingerprint already exists.");
         } else {
           // Show the actual error message from the API (e.g., content filter errors)
-          alert(errorData.error || "Failed to lock prediction. Please try again.");
+          alert(errorData.error || "Failed to lock claim. Please try again.");
         }
       }
     } catch (error) {
-      console.error("Error locking prediction:", error);
-      alert("Failed to lock prediction. Please try again.");
+      console.error("Error locking claim:", error);
+      alert("Failed to lock claim. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -174,7 +174,7 @@ function LockPageContent() {
                     <span className="text-sm text-neutral-400">
                       {text.length} characters
                       {text.length < 20 && text.length > 0 && (
-                        <span className="ml-2 text-xs text-neutral-500">· Concise predictions work best</span>
+                        <span className="ml-2 text-xs text-neutral-500">· Concise claims work best</span>
                       )}
                     </span>
                   )}
@@ -447,7 +447,7 @@ function LockPageContent() {
               </div>
 
               <h1 className="text-4xl font-bold text-white mb-2">
-                Prediction Locked
+                Claim Locked
               </h1>
               <p className="text-xl text-neutral-300 mb-6">
                 Timestamp recorded on-chain

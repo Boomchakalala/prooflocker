@@ -295,7 +295,7 @@ export default function WallOfWins() {
             </div>
           ) : filteredPredictions.length === 0 ? (
             <div className="text-center py-20">
-              <p className="text-slate-400">No predictions found for this filter.</p>
+              <p className="text-slate-400">No claims found for this filter.</p>
             </div>
           ) : (
             <div

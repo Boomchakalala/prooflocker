@@ -161,7 +161,7 @@ export default function AdminModerationPage() {
 
         {loading ? (
           <div className="text-center text-neutral-400 py-12">
-            Loading predictions...
+            Loading claims...
           </div>
         ) : (
           <div className="space-y-4">
@@ -254,7 +254,7 @@ export default function AdminModerationPage() {
 
             {predictions.length === 0 && (
               <div className="text-center text-neutral-400 py-12">
-                No predictions found
+                No claims found
               </div>
             )}
           </div>
