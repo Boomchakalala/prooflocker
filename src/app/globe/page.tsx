@@ -382,7 +382,7 @@ export default function GlobePage() {
         </div>
 
         {/* Map Legend + Controls Overlay */}
-        <div className="fixed top-20 left-4 z-[100] space-y-2">
+        <div className="hidden md:block fixed top-20 left-4 z-[100] space-y-2">
           {/* Mode Toggle */}
           <div className="bg-[rgba(10,10,15,0.95)] backdrop-blur-xl border border-purple-500/20 rounded-xl p-2 shadow-2xl">
             <div className="text-[10px] text-[#94a3b8] font-semibold uppercase mb-2 px-2">View Mode</div>
