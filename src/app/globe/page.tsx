@@ -334,7 +334,7 @@ export default function GlobePage() {
       />
       <Script
         src="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js"
-        strategy="beforeInteractive"
+        strategy="afterInteractive"
       />
 
       <style jsx global>{`

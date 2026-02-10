@@ -49,6 +49,7 @@ export default function GlobeMapbox({ claims, osint, mapMode = 'both', viewMode 
   const [heatmapVisible, setHeatmapVisible] = useState(false);
   const [mapReady, setMapReady] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [retryCount, setRetryCount] = useState(0);
 
   // Create GeoJSON
   const createClaimsGeoJSON = () => ({
@@ -80,12 +81,16 @@ export default function GlobeMapbox({ claims, osint, mapMode = 'both', viewMode 
     // Guard: Check if mapbox loaded
     // @ts-ignore
     if (!window.mapboxgl) {
-      console.log('[Globe] Mapbox not loaded yet, retrying...');
-      const timer = setTimeout(() => {
-        // Force re-render to retry
-        setError(null);
-      }, 500);
-      return () => clearTimeout(timer);
+      console.log('[Globe] Mapbox not loaded yet, retrying... attempt:', retryCount);
+      if (retryCount < 20) {
+        const timer = setTimeout(() => {
+          setRetryCount(c => c + 1);
+        }, 300);
+        return () => clearTimeout(timer);
+      } else {
+        setError('Mapbox GL JS failed to load');
+        return;
+      }
     }
 
     // Guard: Check container exists
@@ -242,7 +247,7 @@ export default function GlobeMapbox({ claims, osint, mapMode = 'both', viewMode 
       }
       // Don't reset initAttempted here - let it stay true to prevent re-init
     };
-  }, []); // Empty deps - run once on mount
+  }, [retryCount]); // Re-run when retry triggers
 
   // Update data when it changes
   useEffect(() => {
