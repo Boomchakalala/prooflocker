@@ -43,3 +43,4 @@ STACK.md
 
 # local data storage
 /data
+.env*.local
