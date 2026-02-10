@@ -314,32 +314,37 @@ export default function GlobeMapbox({ claims, osint, mapMode = 'both', viewMode 
         {/* Area Detail Modal — centered overlay */}
         {areaDetail && (
           <div
-            className="fixed inset-0 z-[500] flex items-center justify-center"
+            className="fixed inset-0 z-[500] flex items-end sm:items-center justify-center"
             onClick={closeDetail}
             style={{ background: 'rgba(0,0,0,0.6)', backdropFilter: 'blur(4px)' }}
           >
             <div
-              className="relative w-[90vw] max-w-[520px] max-h-[75vh] overflow-hidden rounded-2xl border border-purple-500/30"
+              className="relative w-full sm:w-[90vw] sm:max-w-[520px] max-h-[85vh] sm:max-h-[75vh] overflow-hidden sm:rounded-2xl rounded-t-2xl border-t sm:border border-purple-500/30"
               onClick={(e) => e.stopPropagation()}
               style={{
                 background: 'rgba(10,10,20,0.97)',
                 boxShadow: '0 20px 60px rgba(0,0,0,0.8), 0 0 40px rgba(139,92,246,0.15)',
               }}
             >
+              {/* Mobile drag handle */}
+              <div className="sm:hidden flex justify-center pt-2 pb-1">
+                <div className="w-10 h-1 rounded-full bg-slate-600" />
+              </div>
+
               {/* Header */}
-              <div className="flex items-center justify-between px-5 py-4 border-b border-purple-500/20">
-                <div className="flex items-center gap-3">
+              <div className="flex items-center justify-between px-4 sm:px-5 py-3 sm:py-4 border-b border-purple-500/20">
+                <div className="flex items-center gap-2 sm:gap-3">
                   <div className="w-2.5 h-2.5 rounded-full bg-purple-500 shadow-[0_0_8px_rgba(139,92,246,0.6)]" />
-                  <span className="text-[13px] font-bold text-white tracking-wide uppercase">
+                  <span className="text-[12px] sm:text-[13px] font-bold text-white tracking-wide uppercase">
                     Area Intelligence
                   </span>
-                  <span className="text-[11px] text-slate-400">
+                  <span className="text-[10px] sm:text-[11px] text-slate-400">
                     {areaDetail.claims.length + areaDetail.osint.length} items
                   </span>
                 </div>
                 <button
                   onClick={closeDetail}
-                  className="w-7 h-7 rounded-lg flex items-center justify-center text-slate-400 hover:text-white hover:bg-white/10 transition-all"
+                  className="w-8 h-8 rounded-lg flex items-center justify-center text-slate-400 hover:text-white hover:bg-white/10 transition-all active:scale-95"
                 >
                   <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="2">
                     <path d="M1 1l12 12M13 1L1 13" />
@@ -348,54 +353,55 @@ export default function GlobeMapbox({ claims, osint, mapMode = 'both', viewMode 
               </div>
 
               {/* Counts bar */}
-              <div className="flex gap-4 px-5 py-3 border-b border-slate-700/30">
+              <div className="flex gap-3 sm:gap-4 px-4 sm:px-5 py-2.5 sm:py-3 border-b border-slate-700/30">
                 {areaDetail.claims.length > 0 && (
                   <div className="flex items-center gap-2">
                     <div className="w-2 h-2 rounded-full bg-[#8b5cf6]" />
-                    <span className="text-[11px] font-semibold text-[#a78bfa]">{areaDetail.claims.length} Claims</span>
+                    <span className="text-[10px] sm:text-[11px] font-semibold text-[#a78bfa]">{areaDetail.claims.length} Claims</span>
                   </div>
                 )}
                 {areaDetail.osint.length > 0 && (
                   <div className="flex items-center gap-2">
                     <div className="w-2 h-2 rounded-full bg-[#ef4444]" />
-                    <span className="text-[11px] font-semibold text-[#f87171]">{areaDetail.osint.length} Intel Signals</span>
+                    <span className="text-[10px] sm:text-[11px] font-semibold text-[#f87171]">{areaDetail.osint.length} Intel Signals</span>
                   </div>
                 )}
               </div>
 
               {/* Scrollable content */}
-              <div className="overflow-y-auto" style={{ maxHeight: 'calc(75vh - 110px)' }}>
+              <div className="overflow-y-auto overscroll-contain" style={{ maxHeight: 'calc(85vh - 130px)' }}>
                 {/* Claims section */}
                 {areaDetail.claims.length > 0 && (
-                  <div className="mx-4 mt-4 mb-2 rounded-xl overflow-hidden border border-purple-500/20" style={{ background: 'rgba(139,92,246,0.04)' }}>
-                    <div className="flex items-center gap-2.5 px-4 py-2.5" style={{ background: 'rgba(139,92,246,0.08)', borderBottom: '1px solid rgba(139,92,246,0.15)' }}>
+                  <div className="mx-3 sm:mx-4 mt-3 sm:mt-4 mb-2 rounded-xl overflow-hidden border border-purple-500/20" style={{ background: 'rgba(139,92,246,0.04)' }}>
+                    <div className="flex items-center gap-2.5 px-3 sm:px-4 py-2 sm:py-2.5" style={{ background: 'rgba(139,92,246,0.08)', borderBottom: '1px solid rgba(139,92,246,0.15)' }}>
                       <div className="w-2 h-2 rounded-full bg-[#8b5cf6] shadow-[0_0_6px_rgba(139,92,246,0.5)]" />
-                      <span className="text-[11px] font-bold text-[#a78bfa] uppercase tracking-wider">Claims</span>
+                      <span className="text-[10px] sm:text-[11px] font-bold text-[#a78bfa] uppercase tracking-wider">Claims</span>
                       <span className="text-[10px] text-slate-500">{areaDetail.claims.length}</span>
                     </div>
-                    <div className="px-4">
+                    <div className="px-3 sm:px-4">
                       {areaDetail.claims.map((c) => {
                         const sc = statusColor(c.status, c.outcome);
                         const res = c.outcome === 'correct' || c.outcome === 'incorrect';
                         const label = res ? c.outcome : c.status;
+                        const tier = getReputationTier(c.rep || 0);
                         return (
                           <div key={c.id} className="py-3 border-b border-purple-500/10 last:border-0">
-                            <div className="text-[13px] font-semibold text-white leading-snug mb-2">{c.claim}</div>
-                            <div className="flex items-center gap-2 flex-wrap">
-                              <span className="text-[11px] font-semibold text-slate-300">{c.submitter}</span>
+                            <div className="text-[12px] sm:text-[13px] font-semibold text-white leading-snug mb-2">{c.claim}</div>
+                            <div className="flex items-center gap-1.5 sm:gap-2 flex-wrap">
+                              <span className="text-[10px] sm:text-[11px] font-semibold text-slate-300">{c.submitter}</span>
                               <span
-                                className="text-[9px] font-bold uppercase px-2 py-0.5 rounded-md"
+                                className="text-[9px] font-bold uppercase px-1.5 sm:px-2 py-0.5 rounded-md"
                                 style={{ background: sc + '22', color: sc }}
                               >
                                 {label}
                               </span>
-                              <span className="text-[9px] font-semibold px-2 py-0.5 rounded-md bg-purple-500/15 text-purple-300">
-                                Rep {c.rep}
+                              <span className={`text-[9px] font-bold px-1.5 sm:px-2 py-0.5 rounded-md ${tier.bgColor} ${tier.textColor} border ${tier.borderColor}`}>
+                                {tier.name}
                               </span>
                               {c.category && (
                                 <span className="text-[9px] text-purple-400">#{c.category}</span>
                               )}
-                              <span className="text-[10px] text-slate-500 ml-auto">{c.lockedDate}</span>
+                              <span className="text-[9px] sm:text-[10px] text-slate-500 ml-auto">{c.lockedDate}</span>
                             </div>
                           </div>
                         );
@@ -406,23 +412,23 @@ export default function GlobeMapbox({ claims, osint, mapMode = 'both', viewMode 
 
                 {/* OSINT section */}
                 {areaDetail.osint.length > 0 && (
-                  <div className="mx-4 mt-3 mb-4 rounded-xl overflow-hidden border border-red-500/20" style={{ background: 'rgba(239,68,68,0.04)' }}>
-                    <div className="flex items-center gap-2.5 px-4 py-2.5" style={{ background: 'rgba(239,68,68,0.08)', borderBottom: '1px solid rgba(239,68,68,0.15)' }}>
+                  <div className="mx-3 sm:mx-4 mt-3 mb-3 sm:mb-4 rounded-xl overflow-hidden border border-red-500/20" style={{ background: 'rgba(239,68,68,0.04)' }}>
+                    <div className="flex items-center gap-2.5 px-3 sm:px-4 py-2 sm:py-2.5" style={{ background: 'rgba(239,68,68,0.08)', borderBottom: '1px solid rgba(239,68,68,0.15)' }}>
                       <div className="w-2 h-2 rounded-full bg-[#ef4444] shadow-[0_0_6px_rgba(239,68,68,0.5)]" />
-                      <span className="text-[11px] font-bold text-[#f87171] uppercase tracking-wider">Intel Signals</span>
+                      <span className="text-[10px] sm:text-[11px] font-bold text-[#f87171] uppercase tracking-wider">Intel Signals</span>
                       <span className="text-[10px] text-slate-500">{areaDetail.osint.length}</span>
                     </div>
-                    <div className="px-4">
+                    <div className="px-3 sm:px-4">
                       {areaDetail.osint.map((o) => (
                         <div key={o.id} className="py-3 border-b border-red-500/10 last:border-0">
                           <div className="flex items-center gap-2 mb-1.5">
-                            <span className="text-[11px] font-semibold text-red-400">{o.source}</span>
-                            <span className="text-[10px] text-slate-500">{o.timestamp}</span>
+                            <span className="text-[10px] sm:text-[11px] font-semibold text-red-400">{o.source}</span>
+                            <span className="text-[9px] sm:text-[10px] text-slate-500">{o.timestamp}</span>
                           </div>
-                          <div className="text-[13px] font-semibold text-white leading-snug mb-2">{o.title}</div>
+                          <div className="text-[12px] sm:text-[13px] font-semibold text-white leading-snug mb-2">{o.title}</div>
                           <div className="flex gap-1.5 flex-wrap">
                             {o.tags.map((t, i) => (
-                              <span key={i} className="px-2 py-0.5 text-[9px] font-bold uppercase rounded-md bg-red-500/15 text-red-400">
+                              <span key={i} className="px-1.5 sm:px-2 py-0.5 text-[9px] font-bold uppercase rounded-md bg-red-500/15 text-red-400">
                                 {t}
                               </span>
                             ))}
