@@ -56,7 +56,7 @@ export default function TopSourcesList({ category = 'all' }: TopSourcesListProps
     {
       userId: "demo-user-1",
       displayName: "Anon #2847",
-      reliabilityScore: 1247,
+      reliabilityScore: 892,
       tier: 'legend',
       winRate: 94,
       resolvedCount: 47,
@@ -65,7 +65,7 @@ export default function TopSourcesList({ category = 'all' }: TopSourcesListProps
     {
       userId: "demo-user-2",
       displayName: "Anon #5192",
-      reliabilityScore: 1089,
+      reliabilityScore: 761,
       tier: 'master',
       winRate: 91,
       resolvedCount: 38,
@@ -74,7 +74,7 @@ export default function TopSourcesList({ category = 'all' }: TopSourcesListProps
     {
       userId: "demo-user-3",
       displayName: "Anon #1203",
-      reliabilityScore: 943,
+      reliabilityScore: 684,
       tier: 'master',
       winRate: 87,
       resolvedCount: 34,
@@ -83,7 +83,7 @@ export default function TopSourcesList({ category = 'all' }: TopSourcesListProps
     {
       userId: "demo-user-4",
       displayName: "Anon #8741",
-      reliabilityScore: 812,
+      reliabilityScore: 572,
       tier: 'expert',
       winRate: 84,
       resolvedCount: 29,
@@ -92,8 +92,8 @@ export default function TopSourcesList({ category = 'all' }: TopSourcesListProps
     {
       userId: "demo-user-5",
       displayName: "Anon #3492",
-      reliabilityScore: 756,
-      tier: 'expert',
+      reliabilityScore: 438,
+      tier: 'trusted',
       winRate: 82,
       resolvedCount: 27,
       avgEvidenceScore: 78,
@@ -101,8 +101,8 @@ export default function TopSourcesList({ category = 'all' }: TopSourcesListProps
     {
       userId: "demo-user-6",
       displayName: "Anon #9124",
-      reliabilityScore: 689,
-      tier: 'expert',
+      reliabilityScore: 312,
+      tier: 'trusted',
       winRate: 79,
       resolvedCount: 24,
       avgEvidenceScore: 74,
@@ -203,8 +203,8 @@ export default function TopSourcesList({ category = 'all' }: TopSourcesListProps
                         </div>
                         <div>
                           <div className="text-white font-medium text-sm group-hover:text-purple-400 transition-colors">{source.displayName}</div>
-                          <div className={`inline-flex items-center px-2 py-0.5 rounded-md ${tierInfo.bgColor} ${tierInfo.color} text-[10px] font-semibold uppercase mt-1`}>
-                            {tierInfo.label}
+                          <div className={`inline-flex items-center px-2 py-0.5 rounded-md ${tierInfo.bgColor} ${tierInfo.textColor} text-[10px] font-semibold uppercase mt-1`}>
+                            {tierInfo.name}
                           </div>
                         </div>
                       </Link>
