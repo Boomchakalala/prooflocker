@@ -497,6 +497,7 @@ export default function GlobePage() {
                   const isIncorrect = claim.outcome === 'incorrect';
                   const isResolved = isCorrect || isIncorrect;
                   const evidenceGrade = getEvidenceGrade(claim.evidence_score);
+                  const repTier = getReputationTier(claim.rep || 0);
 
                   return (
                     <div
@@ -510,9 +511,14 @@ export default function GlobePage() {
                           : 'border-l-[3px] border-l-purple-500 border border-slate-700/40'
                       }`}
                     >
-                      {/* Top: submitter + status */}
+                      {/* Top: submitter + reputation + status */}
                       <div className="flex items-center justify-between mb-1.5">
-                        <span className="text-[11px] text-slate-400 font-medium">{claim.submitter}</span>
+                        <div className="flex items-center gap-1.5">
+                          <span className="text-[11px] text-slate-400 font-medium">{claim.submitter}</span>
+                          <span className={`text-[8px] font-bold px-1 py-0.5 rounded ${repTier.bgColor} ${repTier.textColor}`}>
+                            {repTier.name}
+                          </span>
+                        </div>
                         <div className="flex items-center gap-1.5">
                           {isResolved && (
                             <span className={`text-[9px] font-bold px-1.5 py-0.5 rounded ${evidenceGrade.bgColor} ${evidenceGrade.textColor}`}>
@@ -554,6 +560,7 @@ export default function GlobePage() {
                 resolutions.map((res) => {
                   const isCorrect = res.outcome === 'correct';
                   const evidenceGrade = getEvidenceGrade(res.evidence_score);
+                  const repTier = getReputationTier(res.rep || 0);
 
                   return (
                     <div
@@ -566,7 +573,12 @@ export default function GlobePage() {
                       }`}
                     >
                       <div className="flex items-center justify-between mb-1.5">
-                        <span className="text-[11px] text-slate-400 font-medium">{res.submitter}</span>
+                        <div className="flex items-center gap-1.5">
+                          <span className="text-[11px] text-slate-400 font-medium">{res.submitter}</span>
+                          <span className={`text-[8px] font-bold px-1 py-0.5 rounded ${repTier.bgColor} ${repTier.textColor}`}>
+                            {repTier.name}
+                          </span>
+                        </div>
                         <div className="flex items-center gap-1.5">
                           <span className={`text-[9px] font-bold px-1.5 py-0.5 rounded ${evidenceGrade.bgColor} ${evidenceGrade.textColor}`}>
                             {evidenceGrade.grade}
