@@ -105,27 +105,29 @@ export async function GET(request: NextRequest) {
       console.error('[Activity API] Error fetching claims:', JSON.stringify(claimsError, null, 2));
     }
 
-    // Fetch OSINT signals (no geotag requirement - we'll use fallbacks)
-    let osintQuery = supabase
-      .from('osint_signals')
-      .select('id, title, source_name, source_handle, source_url, geotag_lat, geotag_lng, location_name, tags, category, created_at, published_at, content')
-      .eq('status', 'active')
+    // Fetch OSINT/Intel items from unified intel_items table
+    // No geotag requirement - we'll use fallbacks for items without coordinates
+    let intelQuery = supabase
+      .from('intel_items')
+      .select('id, title, source_name, source_type, url, lat, lon, place_name, country_code, tags, summary, created_at, published_at, image_url')
       .gte('created_at', windowStart.toISOString())
+      .order('published_at', { ascending: false, nullsFirst: false })
       .order('created_at', { ascending: false })
       .limit(100);
 
     if (category && category !== 'all') {
-      osintQuery = osintQuery.eq('category', category);
+      // Match either category field or tags array
+      intelQuery = intelQuery.or(`tags.cs.{${category}}`);
     }
 
     if (since) {
-      osintQuery = osintQuery.gte('created_at', since);
+      intelQuery = intelQuery.gte('created_at', since);
     }
 
-    const { data: osintData, error: osintError } = await osintQuery;
+    const { data: intelData, error: intelError } = await intelQuery;
 
-    if (osintError) {
-      console.error('[Activity API] Error fetching OSINT:', JSON.stringify(osintError, null, 2));
+    if (intelError) {
+      console.error('[Activity API] Error fetching intel:', JSON.stringify(intelError, null, 2));
     }
 
     // Batch-fetch reputation scores for all users in predictions
