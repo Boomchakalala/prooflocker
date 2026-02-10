@@ -7,22 +7,22 @@ export default function LandingHero() {
   const [stats, setStats] = useState({
     totalClaims: 0,
     resolvedClaims: 0,
-    totalUsers: 0,
+    intelArticles: 0,
   });
 
   // Fetch real stats from API
   useEffect(() => {
     Promise.all([
       fetch('/api/predictions').then(r => r.json()),
-      fetch('/api/leaderboard?limit=1').then(r => r.json()),
-    ]).then(([predData, leaderboard]) => {
+      fetch('/api/intel?window=168&limit=1').then(r => r.json()),
+    ]).then(([predData, intelData]) => {
       const allPredictions = predData?.predictions || [];
       const total = allPredictions.length || predData?.count || 0;
       const resolved = allPredictions.filter((p: any) =>
         p.outcome === 'correct' || p.outcome === 'incorrect'
       ).length || 0;
-      const users = leaderboard?.total || 0;
-      setStats({ totalClaims: total, resolvedClaims: resolved, totalUsers: users });
+      const intel = intelData?.meta?.total || 0;
+      setStats({ totalClaims: total, resolvedClaims: resolved, intelArticles: intel });
     }).catch(() => {
       // Keep default values on error
     });
@@ -55,7 +55,7 @@ export default function LandingHero() {
           <br />
           <span className="gradient-text-animated font-black inline-block">Reputation</span>
           <br />
-          <span className="text-white font-black inline-block text-4xl sm:text-5xl md:text-6xl lg:text-7xl mt-1 md:mt-2">One Claim at a Time.</span>
+          <span className="text-white font-black inline-block text-5xl sm:text-6xl md:text-7xl lg:text-8xl mt-1 md:mt-2">One Claim at a Time.</span>
         </h1>
 
         {/* Subheadline */}
@@ -117,26 +117,26 @@ export default function LandingHero() {
         <div className="flex items-center justify-center gap-3 md:gap-4 mb-4 animate-fade-in-up" style={{ animationDelay: '0.3s' }}>
           {/* Claims locked */}
           <div className="px-3 py-2 bg-slate-900/50 border border-slate-700/50 rounded-lg text-center backdrop-blur-sm">
-            <div className="text-xl md:text-2xl font-bold text-emerald-400 mb-0.5">
+            <div className="text-xl md:text-2xl font-bold text-purple-400 mb-0.5">
               {stats.totalClaims || '--'}
             </div>
             <div className="text-xs text-slate-400">Claims Locked</div>
           </div>
 
-          {/* Claim makers */}
-          <div className="px-3 py-2 bg-slate-900/50 border border-slate-700/50 rounded-lg text-center backdrop-blur-sm">
-            <div className="text-xl md:text-2xl font-bold text-cyan-400 mb-0.5">
-              {stats.totalUsers || '--'}
-            </div>
-            <div className="text-xs text-slate-400">Claim Makers</div>
-          </div>
-
           {/* Resolved */}
           <div className="px-3 py-2 bg-slate-900/50 border border-slate-700/50 rounded-lg text-center backdrop-blur-sm">
-            <div className="text-xl md:text-2xl font-bold text-purple-400 mb-0.5">
+            <div className="text-xl md:text-2xl font-bold text-emerald-400 mb-0.5">
               {stats.resolvedClaims || '--'}
             </div>
             <div className="text-xs text-slate-400">Resolved</div>
+          </div>
+
+          {/* Intel Articles */}
+          <div className="px-3 py-2 bg-slate-900/50 border border-slate-700/50 rounded-lg text-center backdrop-blur-sm">
+            <div className="text-xl md:text-2xl font-bold text-red-400 mb-0.5">
+              {stats.intelArticles || '--'}
+            </div>
+            <div className="text-xs text-slate-400">Intel Articles</div>
           </div>
         </div>
 
