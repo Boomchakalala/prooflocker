@@ -73,7 +73,7 @@ export default function LandingHero() {
         </div>
 
         {/* Two big CTAs side-by-side */}
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-5 animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-6 animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
           <Link
             href="/lock"
             className="w-full sm:w-auto px-12 py-4 bg-gradient-to-r from-[#2E5CFF] to-[#5B21B6] hover:from-[#3D6CFF] hover:to-[#6B31C6] text-white text-lg font-bold rounded-xl transition-all shadow-lg hover:shadow-[0_0_30px_rgba(46,92,255,0.4)] hover:scale-[1.05] btn-glow flex items-center justify-center gap-2"
@@ -84,10 +84,13 @@ export default function LandingHero() {
             Lock a Claim
           </Link>
           <Link
-            href="/app"
-            className="w-full sm:w-auto px-12 py-4 border-2 border-[#2E5CFF]/40 hover:border-[#2E5CFF] hover:bg-[#2E5CFF]/10 text-white text-lg font-bold rounded-xl transition-all backdrop-blur-sm hover:scale-[1.05]"
+            href="/globe"
+            className="w-full sm:w-auto px-12 py-4 border-2 border-[#2E5CFF]/40 hover:border-[#2E5CFF] hover:bg-[#2E5CFF]/10 text-white text-lg font-bold rounded-xl transition-all backdrop-blur-sm hover:scale-[1.05] flex items-center justify-center gap-2"
           >
-            Explore the Live Feed
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            </svg>
+            Explore Globe
           </Link>
         </div>
 
