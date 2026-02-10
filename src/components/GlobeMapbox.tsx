@@ -1,12 +1,8 @@
 'use client';
 
 import { useEffect, useRef, useState, useCallback } from 'react';
-
-declare global {
-  interface Window {
-    mapboxgl: any;
-  }
-}
+import L from 'leaflet';
+import 'leaflet/dist/leaflet.css';
 
 interface Claim {
   id: number;
@@ -38,261 +34,176 @@ interface GlobeMapboxProps {
   viewMode?: 'points' | 'heatmap';
 }
 
-const MAPBOX_TOKEN = process.env.NEXT_PUBLIC_MAPBOX_TOKEN || 'pk.eyJ1IjoicHJvb2Zsb2NrZXIiLCJhIjoiY21sYjBxcTAwMGVoYzNlczI4YWlzampqZyJ9.nY-yqSucTzvNyK1qDCq9rQ';
+const STATUS_COLORS: Record<string, string> = {
+  verified: '#8b5cf6',
+  disputed: '#ef4444',
+  void: '#6b7280',
+  pending: '#f59e0b',
+};
 
-// Singleton: create map once, never clean up between React re-renders
-let globalMap: any = null;
-let globalMapContainer: HTMLDivElement | null = null;
-
-export default function GlobeMapbox({ claims, osint, mapMode = 'both', viewMode = 'points' }: GlobeMapboxProps) {
+export default function GlobeMapbox({ claims, osint, mapMode = 'both' }: GlobeMapboxProps) {
   const mapContainer = useRef<HTMLDivElement>(null);
-  const [mapReady, setMapReady] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [status, setStatus] = useState('Initializing...');
+  const mapRef = useRef<L.Map | null>(null);
+  const claimsLayerRef = useRef<L.LayerGroup | null>(null);
+  const osintLayerRef = useRef<L.LayerGroup | null>(null);
+  const [ready, setReady] = useState(false);
 
-  const createClaimsGeoJSON = useCallback(() => ({
-    type: 'FeatureCollection' as const,
-    features: claims.map((claim) => ({
-      type: 'Feature' as const,
-      geometry: { type: 'Point' as const, coordinates: [claim.lng, claim.lat] },
-      properties: { ...claim },
-    })),
-  }), [claims]);
-
-  const createOsintGeoJSON = useCallback(() => ({
-    type: 'FeatureCollection' as const,
-    features: osint.map((item) => ({
-      type: 'Feature' as const,
-      geometry: { type: 'Point' as const, coordinates: [item.lng, item.lat] },
-      properties: { ...item, tags: JSON.stringify(item.tags) },
-    })),
-  }), [osint]);
-
+  // Initialize map
   useEffect(() => {
-    // If map already exists from a previous render, just reuse it
-    if (globalMap && mapContainer.current) {
-      if (globalMapContainer !== mapContainer.current) {
-        // Container changed, need to move the map's canvas
-        // Just destroy and recreate
-        try { globalMap.remove(); } catch (e) {}
-        globalMap = null;
-        globalMapContainer = null;
-      } else {
-        // Same container, map still alive
-        setMapReady(true);
-        setStatus('Map ready (reused)');
-        return; // No cleanup needed - we keep the map alive
-      }
-    }
+    if (mapRef.current || !mapContainer.current) return;
 
-    let pollCount = 0;
-    let loadTimeout: ReturnType<typeof setTimeout>;
+    const map = L.map(mapContainer.current, {
+      center: [25, 15],
+      zoom: 2,
+      minZoom: 2,
+      maxZoom: 12,
+      zoomControl: false,
+      attributionControl: false,
+      worldCopyJump: true,
+    });
 
-    function tryInit() {
-      pollCount++;
-      const mapboxgl = window.mapboxgl;
+    // Dark tile layer
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+      subdomains: 'abcd',
+      maxZoom: 19,
+    }).addTo(map);
 
-      if (!mapboxgl) {
-        if (pollCount > 100) {
-          setError('Mapbox GL JS script failed to load');
-          return;
-        }
-        setStatus(`Loading Mapbox GL... (${pollCount})`);
-        setTimeout(tryInit, 100);
-        return;
-      }
+    // Zoom control bottom-left
+    L.control.zoom({ position: 'bottomleft' }).addTo(map);
 
-      if (!mapContainer.current) {
-        setTimeout(tryInit, 100);
-        return;
-      }
+    // Create layer groups
+    claimsLayerRef.current = L.layerGroup().addTo(map);
+    osintLayerRef.current = L.layerGroup().addTo(map);
 
-      const rect = mapContainer.current.getBoundingClientRect();
-      if (rect.width === 0 || rect.height === 0) {
-        if (pollCount > 60) {
-          setError('Container has no size');
-          return;
-        }
-        setStatus('Waiting for layout...');
-        setTimeout(tryInit, 100);
-        return;
-      }
+    mapRef.current = map;
 
-      setStatus('Creating map...');
-      mapboxgl.accessToken = MAPBOX_TOKEN;
+    // Resize after a tick to ensure container has dimensions
+    setTimeout(() => {
+      map.invalidateSize();
+      setReady(true);
+    }, 100);
 
-      try {
-        const m = new mapboxgl.Map({
-          container: mapContainer.current,
-          style: 'mapbox://styles/mapbox/dark-v11',
-          projection: 'globe',
-          center: [15, 35],
-          zoom: 1.5,
-          attributionControl: false,
-          failIfMajorPerformanceCaveat: false,
-        });
-
-        globalMap = m;
-        globalMapContainer = mapContainer.current;
-        setStatus('Map created, loading tiles...');
-
-        // Fallback: if load event doesn't fire in 8s, show map anyway
-        loadTimeout = setTimeout(() => {
-          if (!mapReady) {
-            setStatus('Forcing display (tiles may still be loading)...');
-            try { setupLayers(m); } catch (e) {}
-            setMapReady(true);
-          }
-        }, 8000);
-
-        m.on('load', () => {
-          clearTimeout(loadTimeout);
-          setStatus('Map loaded!');
-          m.resize();
-
-          try {
-            m.setFog({
-              range: [0.5, 10],
-              color: '#0A0A0F',
-              'horizon-blend': 0.15,
-              'high-color': '#111118',
-              'space-color': '#0A0A0F',
-              'star-intensity': 0.4,
-            });
-          } catch (e) {}
-
-          setupLayers(m);
-          setMapReady(true);
-        });
-
-        m.on('error', (e: any) => {
-          console.error('[Globe] Map error:', e);
-        });
-
-      } catch (err: any) {
-        console.error('[Globe] Init error:', err);
-        setError(err?.message || 'Failed to create map');
-      }
-    }
-
-    function setupLayers(m: any) {
-      // Check if sources already exist (from fallback timeout race)
-      if (m.getSource('osint')) return;
-
-      m.addSource('osint', {
-        type: 'geojson',
-        data: createOsintGeoJSON(),
-        cluster: true, clusterMaxZoom: 5, clusterRadius: 60,
-      });
-      m.addSource('claims', {
-        type: 'geojson',
-        data: createClaimsGeoJSON(),
-        cluster: true, clusterMaxZoom: 5, clusterRadius: 50,
-      });
-
-      // OSINT layers
-      m.addLayer({ id: 'osint-clusters', type: 'circle', source: 'osint', filter: ['has', 'point_count'], paint: { 'circle-color': '#ef4444', 'circle-radius': ['step', ['get', 'point_count'], 20, 5, 30, 10, 40], 'circle-opacity': 0.8, 'circle-stroke-width': 2, 'circle-stroke-color': '#fff' } });
-      m.addLayer({ id: 'osint-cluster-count', type: 'symbol', source: 'osint', filter: ['has', 'point_count'], layout: { 'text-field': '{point_count}', 'text-font': ['DIN Offc Pro Medium', 'Arial Unicode MS Bold'], 'text-size': 12 }, paint: { 'text-color': '#fff' } });
-      m.addLayer({ id: 'osint-points', type: 'circle', source: 'osint', filter: ['!', ['has', 'point_count']], paint: { 'circle-color': '#ef4444', 'circle-radius': 8, 'circle-opacity': 0.9, 'circle-stroke-width': 2, 'circle-stroke-color': '#fff' } });
-
-      // Claims layers
-      m.addLayer({ id: 'claims-clusters', type: 'circle', source: 'claims', filter: ['has', 'point_count'], paint: { 'circle-color': '#5B21B6', 'circle-radius': ['step', ['get', 'point_count'], 20, 5, 32, 10, 44], 'circle-opacity': 0.9, 'circle-stroke-width': 3, 'circle-stroke-color': '#2E5CFF', 'circle-blur': 0.15 } });
-      m.addLayer({ id: 'claims-cluster-count', type: 'symbol', source: 'claims', filter: ['has', 'point_count'], layout: { 'text-field': '{point_count}', 'text-font': ['DIN Offc Pro Medium', 'Arial Unicode MS Bold'], 'text-size': 13 }, paint: { 'text-color': '#fff', 'text-halo-color': 'rgba(91, 33, 182, 0.5)', 'text-halo-width': 1.5 } });
-      m.addLayer({ id: 'claims-points', type: 'circle', source: 'claims', filter: ['!', ['has', 'point_count']], paint: { 'circle-color': ['match', ['get', 'status'], 'verified', '#5B21B6', 'disputed', '#ef4444', 'void', '#6b7280', '#f59e0b'], 'circle-radius': 8, 'circle-opacity': 0.95, 'circle-stroke-width': 2.5, 'circle-stroke-color': '#fff', 'circle-blur': 0.1 } });
-      m.addLayer({ id: 'claims-heatmap', type: 'heatmap', source: 'claims', maxzoom: 9, paint: { 'heatmap-weight': 1, 'heatmap-intensity': ['interpolate', ['linear'], ['zoom'], 0, 1, 9, 3], 'heatmap-color': ['interpolate', ['linear'], ['heatmap-density'], 0, 'rgba(91,33,182,0)', 0.2, 'rgba(91,33,182,0.2)', 0.4, 'rgba(139,92,246,0.4)', 0.6, 'rgba(46,92,255,0.6)', 0.8, 'rgba(139,92,246,0.8)', 1, 'rgba(91,33,182,1)'], 'heatmap-radius': ['interpolate', ['linear'], ['zoom'], 0, 20, 9, 40], 'heatmap-opacity': ['interpolate', ['linear'], ['zoom'], 7, 0.8, 9, 0] }, layout: { visibility: 'none' } });
-
-      // Interactions
-      ['claims-clusters', 'claims-points', 'osint-clusters', 'osint-points'].forEach((layer) => {
-        m.on('mouseenter', layer, () => { m.getCanvas().style.cursor = 'pointer'; });
-        m.on('mouseleave', layer, () => { m.getCanvas().style.cursor = ''; });
-      });
-      ['claims-clusters', 'osint-clusters'].forEach((layer) => {
-        const sourceId = layer.startsWith('claims') ? 'claims' : 'osint';
-        m.on('click', layer, (e: any) => {
-          const features = m.queryRenderedFeatures(e.point, { layers: [layer] });
-          if (!features.length) return;
-          const clusterId = features[0].properties.cluster_id;
-          m.getSource(sourceId).getClusterExpansionZoom(clusterId, (err: any, zoom: any) => {
-            if (err) return;
-            m.easeTo({ center: features[0].geometry.coordinates, zoom });
-          });
-        });
-      });
-
-      // Auto-rotate
-      m.on('idle', () => {
-        if (m.getZoom() < 2.5 && !m.isMoving()) {
-          m.rotateTo(m.getBearing() + 15, { duration: 120000 });
-        }
-      });
-    }
-
-    tryInit();
-
-    // IMPORTANT: No cleanup! We keep the map alive across React strict mode re-renders.
-    // The map is stored in globalMap and reused.
     return () => {
-      clearTimeout(loadTimeout);
+      map.remove();
+      mapRef.current = null;
+      claimsLayerRef.current = null;
+      osintLayerRef.current = null;
     };
   }, []);
 
-  // Update data
+  // Update claims markers
   useEffect(() => {
-    if (!mapReady || !globalMap) return;
-    try {
-      const cs = globalMap.getSource('claims');
-      const os = globalMap.getSource('osint');
-      if (cs) cs.setData(createClaimsGeoJSON());
-      if (os) os.setData(createOsintGeoJSON());
-    } catch (e) {}
-  }, [claims, osint, mapReady, createClaimsGeoJSON, createOsintGeoJSON]);
+    if (!ready || !claimsLayerRef.current) return;
+    claimsLayerRef.current.clearLayers();
 
-  // Toggle layers
+    if (mapMode === 'osint') return; // Hide claims
+
+    claims.forEach((claim) => {
+      const color = STATUS_COLORS[claim.status] || STATUS_COLORS.pending;
+      const isResolved = claim.outcome === 'correct' || claim.outcome === 'incorrect';
+
+      const marker = L.circleMarker([claim.lat, claim.lng], {
+        radius: 7,
+        fillColor: color,
+        fillOpacity: 0.9,
+        color: '#fff',
+        weight: 2,
+        opacity: 0.9,
+      });
+
+      marker.bindPopup(`
+        <div style="font-family: system-ui; min-width: 200px; color: #e2e8f0;">
+          <div style="font-size: 13px; font-weight: 600; margin-bottom: 6px; line-height: 1.3;">${claim.claim}</div>
+          <div style="display: flex; gap: 6px; align-items: center; margin-bottom: 4px;">
+            <span style="font-size: 11px; color: #94a3b8;">${claim.submitter}</span>
+            <span style="font-size: 10px; padding: 1px 6px; border-radius: 4px; font-weight: 600; background: ${color}22; color: ${color};">
+              ${isResolved ? (claim.outcome === 'correct' ? 'Correct' : 'Incorrect') : 'Pending'}
+            </span>
+          </div>
+          <div style="font-size: 10px; color: #64748b;">${claim.lockedDate}${claim.category ? ' · #' + claim.category : ''}</div>
+        </div>
+      `, {
+        className: 'dark-popup',
+        maxWidth: 280,
+      });
+
+      marker.addTo(claimsLayerRef.current!);
+    });
+  }, [claims, ready, mapMode]);
+
+  // Update OSINT markers
   useEffect(() => {
-    if (!globalMap || !mapReady) return;
-    try {
-      const cv = mapMode === 'both' || mapMode === 'claims';
-      const ov = mapMode === 'both' || mapMode === 'osint';
-      ['claims-points', 'claims-clusters', 'claims-cluster-count'].forEach(l => {
-        if (globalMap.getLayer(l)) globalMap.setLayoutProperty(l, 'visibility', cv ? 'visible' : 'none');
+    if (!ready || !osintLayerRef.current) return;
+    osintLayerRef.current.clearLayers();
+
+    if (mapMode === 'claims') return; // Hide OSINT
+
+    osint.forEach((item) => {
+      const marker = L.circleMarker([item.lat, item.lng], {
+        radius: 6,
+        fillColor: '#ef4444',
+        fillOpacity: 0.85,
+        color: '#fff',
+        weight: 1.5,
+        opacity: 0.8,
       });
-      ['osint-points', 'osint-clusters', 'osint-cluster-count'].forEach(l => {
-        if (globalMap.getLayer(l)) globalMap.setLayoutProperty(l, 'visibility', ov ? 'visible' : 'none');
+
+      marker.bindPopup(`
+        <div style="font-family: system-ui; min-width: 180px; color: #e2e8f0;">
+          <div style="font-size: 10px; font-weight: 700; color: #ef4444; text-transform: uppercase; margin-bottom: 4px;">Intel</div>
+          <div style="font-size: 13px; font-weight: 600; margin-bottom: 4px; line-height: 1.3;">${item.title}</div>
+          <div style="font-size: 11px; color: #f87171;">${item.source}</div>
+          <div style="font-size: 10px; color: #64748b; margin-top: 2px;">${item.timestamp}</div>
+        </div>
+      `, {
+        className: 'dark-popup',
+        maxWidth: 280,
       });
-    } catch (e) {}
-  }, [mapMode, mapReady]);
+
+      marker.addTo(osintLayerRef.current!);
+    });
+  }, [osint, ready, mapMode]);
 
   return (
-    <div className="relative w-full h-full bg-[#0A0A0F]">
-      <div ref={mapContainer} className="absolute inset-0" />
+    <>
+      <style jsx global>{`
+        .dark-popup .leaflet-popup-content-wrapper {
+          background: rgba(15, 23, 42, 0.95) !important;
+          border: 1px solid rgba(139, 92, 246, 0.3) !important;
+          border-radius: 10px !important;
+          box-shadow: 0 8px 32px rgba(0,0,0,0.5) !important;
+          backdrop-filter: blur(12px) !important;
+        }
+        .dark-popup .leaflet-popup-tip {
+          background: rgba(15, 23, 42, 0.95) !important;
+          border: 1px solid rgba(139, 92, 246, 0.3) !important;
+        }
+        .dark-popup .leaflet-popup-close-button {
+          color: #94a3b8 !important;
+        }
+        .leaflet-control-zoom a {
+          background: rgba(15, 23, 42, 0.9) !important;
+          color: #e2e8f0 !important;
+          border-color: rgba(139, 92, 246, 0.3) !important;
+        }
+        .leaflet-control-zoom a:hover {
+          background: rgba(139, 92, 246, 0.2) !important;
+        }
+      `}</style>
+      <div className="relative w-full h-full bg-[#0A0A0F]">
+        <div ref={mapContainer} className="absolute inset-0" />
 
-      {!mapReady && !error && (
-        <div className="absolute inset-0 flex items-center justify-center bg-[#0A0A0F] z-10">
-          <div className="text-center">
-            <div className="relative mb-4 mx-auto w-16 h-16">
-              <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-purple-500" />
+        {!ready && (
+          <div className="absolute inset-0 flex items-center justify-center bg-[#0A0A0F] z-10">
+            <div className="text-center">
+              <div className="relative mb-4 mx-auto w-16 h-16">
+                <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-purple-500" />
+              </div>
+              <p className="text-purple-300 font-semibold text-lg">Loading Map...</p>
             </div>
-            <p className="text-purple-300 font-semibold text-lg">Loading Globe...</p>
-            <p className="text-gray-500 text-sm mt-2">{status}</p>
           </div>
-        </div>
-      )}
-
-      {error && (
-        <div className="absolute inset-0 flex items-center justify-center bg-[#0A0A0F] z-10">
-          <div className="text-center max-w-md px-6">
-            <p className="text-white text-xl font-bold mb-2">Globe Error</p>
-            <p className="text-gray-400 text-sm mb-2">{error}</p>
-            <p className="text-gray-600 text-[10px] mb-4 font-mono">{status}</p>
-            <button
-              onClick={() => window.location.reload()}
-              className="px-8 py-3 bg-gradient-to-r from-[#5B21B6] to-[#2E5CFF] text-white rounded-lg text-sm font-bold transition-all"
-            >
-              Reload
-            </button>
-          </div>
-        </div>
-      )}
-    </div>
+        )}
+      </div>
+    </>
   );
 }
