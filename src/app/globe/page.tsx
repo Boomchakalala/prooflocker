@@ -232,6 +232,100 @@ export default function GlobePage() {
 
   const displayItems = getDisplayItems();
 
+  // Filtered claims for map markers (applies same filters as sidebar)
+  const filteredClaimsForMap = useMemo(() => {
+    let items: Claim[] = [...claims];
+
+    // Apply category filter
+    if (categoryFilter !== 'all') {
+      items = items.filter(item => {
+        const cat = item.category?.toLowerCase() || 'other';
+        return cat === categoryFilter.toLowerCase();
+      });
+    }
+
+    // Apply status filter
+    if (!statusFilter.includes('all')) {
+      items = items.filter(item => {
+        const status = item.outcome || 'pending';
+        return statusFilter.includes(status);
+      });
+    }
+
+    // Apply time filter
+    if (timeFilter !== 'all') {
+      const now = Date.now();
+      const windowMs = {
+        '24h': 24 * 60 * 60 * 1000,
+        '7d': 7 * 24 * 60 * 60 * 1000,
+        '30d': 30 * 24 * 60 * 60 * 1000,
+      }[timeFilter];
+
+      items = items.filter(item => {
+        const itemDate = new Date(item.lockedDate || '').getTime();
+        return (now - itemDate) <= windowMs;
+      });
+    }
+
+    // Apply search filter
+    if (searchQuery.trim()) {
+      const query = searchQuery.toLowerCase();
+      items = items.filter(item => {
+        const text = (item.claim || '').toLowerCase();
+        const category = (item.category || '').toLowerCase();
+        return text.includes(query) || category.includes(query);
+      });
+    }
+
+    // Apply active filter
+    if (activeFilter === 'high-confidence') {
+      items = items.filter(c => c.confidence >= 75);
+    } else if (activeFilter === 'verified') {
+      items = items.filter(c => c.status === 'verified');
+    }
+
+    return items;
+  }, [claims, categoryFilter, statusFilter, timeFilter, searchQuery, activeFilter]);
+
+  // Filtered OSINT for map markers (applies same filters as sidebar)
+  const filteredOsintForMap = useMemo(() => {
+    let items: OsintItem[] = [...osint];
+
+    // Apply category filter
+    if (categoryFilter !== 'all') {
+      items = items.filter(item => {
+        const cat = item.tags?.[0]?.toLowerCase() || 'other';
+        return cat === categoryFilter.toLowerCase();
+      });
+    }
+
+    // Apply time filter
+    if (timeFilter !== 'all') {
+      const now = Date.now();
+      const windowMs = {
+        '24h': 24 * 60 * 60 * 1000,
+        '7d': 7 * 24 * 60 * 60 * 1000,
+        '30d': 30 * 24 * 60 * 60 * 1000,
+      }[timeFilter];
+
+      items = items.filter(item => {
+        const itemDate = new Date(item.createdAt || item.timestamp).getTime();
+        return (now - itemDate) <= windowMs;
+      });
+    }
+
+    // Apply search filter
+    if (searchQuery.trim()) {
+      const query = searchQuery.toLowerCase();
+      items = items.filter(item => {
+        const text = (item.title || '').toLowerCase();
+        return text.includes(query);
+      });
+    }
+
+    return items;
+  }, [osint, categoryFilter, timeFilter, searchQuery]);
+
   return (
     <>
       <link
@@ -284,7 +378,7 @@ export default function GlobePage() {
 
         {/* Map Container - Mobile-First Responsive */}
         <div className="fixed top-16 left-0 right-0 md:right-[360px] bottom-0 md:bottom-0">
-          <GlobeMapbox claims={claims} osint={osint} mapMode={mapMode} viewMode={viewMode} />
+          <GlobeMapbox claims={filteredClaimsForMap} osint={filteredOsintForMap} mapMode={mapMode} viewMode={viewMode} />
         </div>
 
         {/* Map Legend + Controls Overlay */}

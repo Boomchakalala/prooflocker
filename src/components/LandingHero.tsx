@@ -1,10 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function LandingHero() {
-  const particlesRef = useRef<HTMLDivElement>(null);
   const [stats, setStats] = useState({
     totalClaims: 0,
     resolvedClaims: 0,
@@ -28,29 +27,10 @@ export default function LandingHero() {
     });
   }, []);
 
-  useEffect(() => {
-    // Generate lightweight particles for constellation effect
-    if (particlesRef.current) {
-      const particleCount = 30;
-      for (let i = 0; i < particleCount; i++) {
-        const particle = document.createElement("div");
-        particle.className = `dag-particle ${i % 2 === 0 ? "text-[#2E5CFF]" : "text-[#5B21B6]"}`;
-        particle.style.left = `${Math.random() * 100}%`;
-        particle.style.top = `${Math.random() * 100}%`;
-        particle.style.animationDelay = `${Math.random() * 10}s`;
-        particle.style.animationDuration = `${10 + Math.random() * 8}s`;
-        particlesRef.current.appendChild(particle);
-      }
-    }
-  }, []);
-
   return (
     <div className="relative z-10 min-h-[85vh] flex items-center justify-center py-24 md:py-32 px-6 md:px-8 overflow-hidden gradient-bg">
       {/* Constellation overlay */}
       <div className="constellation-overlay" />
-
-      {/* Particles */}
-      <div ref={particlesRef} className="absolute inset-0 opacity-10 pointer-events-none" />
 
       {/* Radial glow - purple to blue */}
       <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
@@ -70,21 +50,13 @@ export default function LandingHero() {
           className="text-5xl sm:text-7xl md:text-8xl lg:text-9xl font-black mb-4 tracking-tighter leading-[0.95] animate-fade-in-up px-4"
           style={{ fontFamily: 'var(--font-montserrat)' }}
         >
-          <span className="gradient-text-animated font-black inline-block">Undeniable Credibility</span>
+          <span className="gradient-text-animated font-black inline-block">Monitor. Claim. Prove.</span>
         </h1>
 
-        {/* One Claim at a Time subtitle - BIGGER AND WHITE */}
-        <p className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-white mb-6 animate-fade-in-up px-4 tracking-tight" style={{ fontFamily: 'var(--font-montserrat)', animationDelay: '0.05s' }}>
-          One Claim at a Time
-        </p>
-
-        {/* Subheadline - 2 lines, better hierarchy */}
-        <div className="mb-7 animate-fade-in-up max-w-[560px] mx-auto px-4" style={{ animationDelay: '0.1s' }}>
-          <p className="text-lg md:text-xl font-medium text-[#F8F9FA]/95 mb-2 leading-[1.45]" style={{ fontFamily: 'var(--font-inter)' }}>
-            Build your reputation in real time.
-          </p>
-          <p className="text-lg md:text-xl font-medium text-[#F8F9FA]/75 leading-[1.45]" style={{ fontFamily: 'var(--font-inter)' }}>
-            Lock claims on-chain. Settle with receipts.
+        {/* Subheadline */}
+        <div className="mb-7 animate-fade-in-up max-w-[620px] mx-auto px-4" style={{ animationDelay: '0.1s' }}>
+          <p className="text-lg md:text-xl font-medium text-[#F8F9FA]/85 leading-[1.45]" style={{ fontFamily: 'var(--font-inter)' }}>
+            OSINT signals mapped in real time. Lock your claims on-chain. Resolve with receipts. Build a reputation that speaks for itself.
           </p>
         </div>
 
