@@ -27,7 +27,7 @@ function LockPageContent() {
   const [prefillOsint, setPrefillOsint] = useState<OsintSignal | null>(null);
   const [evidenceItems, setEvidenceItems] = useState<any[]>([]);
 
-  const categories = ["Crypto", "Politics", "Markets", "Tech", "Sports", "Culture", "OSINT", "Personal", "Other"];
+  const categories = ["Crypto", "Politics", "Markets", "Tech", "Sports", "Culture", "Intel", "Personal", "Other"];
 
   useEffect(() => {
     const id = getOrCreateUserId();
@@ -65,9 +65,9 @@ function LockPageContent() {
         const data = await response.json();
 
         // Show toast notification for Reputation Score
-        if (data.insightPoints) {
+        if (data.insightPoints || data.points || data.xp) {
           showScoreToast(
-            data.insightPoints,
+            data.insightPoints || data.points || data.xp,
             "Claim locked successfully!",
             ["Earned points for locking claim"]
           );

@@ -190,12 +190,12 @@ export default function AppFeedPage() {
               </div>
             </div>
 
-            <div className="flex items-center gap-1.5 text-[11px] text-slate-500">
+            <button onClick={fetchData} className="flex items-center gap-1.5 text-[11px] text-slate-500 hover:text-purple-400 transition-colors cursor-pointer">
               <svg className="w-3 h-3" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
               </svg>
-              <span>{getTimeSinceUpdate()}</span>
-            </div>
+              <span>{getTimeSinceUpdate()} · Refresh</span>
+            </button>
           </div>
         </div>
 
