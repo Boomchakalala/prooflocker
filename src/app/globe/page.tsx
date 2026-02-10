@@ -552,6 +552,7 @@ export default function GlobePage() {
               ) : (
                 resolutions.map((res) => {
                   const isCorrect = res.outcome === 'correct';
+                  const evidenceGrade = getEvidenceGrade(res.evidence_score);
 
                   return (
                     <div
@@ -565,18 +566,23 @@ export default function GlobePage() {
                     >
                       <div className="flex items-center justify-between mb-1.5">
                         <span className="text-[11px] text-slate-400 font-medium">{res.submitter}</span>
-                        <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded ${
-                          isCorrect ? 'bg-emerald-500/20 text-emerald-400' : 'bg-red-500/20 text-red-400'
-                        }`}>
-                          {isCorrect ? 'Correct' : 'Incorrect'}
-                        </span>
+                        <div className="flex items-center gap-1.5">
+                          <span className={`text-[9px] font-bold px-1.5 py-0.5 rounded ${evidenceGrade.bgColor} ${evidenceGrade.textColor}`}>
+                            {evidenceGrade.grade}
+                          </span>
+                          <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded ${
+                            isCorrect ? 'bg-emerald-500/20 text-emerald-400' : 'bg-red-500/20 text-red-400'
+                          }`}>
+                            {isCorrect ? 'Correct' : 'Incorrect'}
+                          </span>
+                        </div>
                       </div>
                       <p className="text-[13px] text-white leading-snug line-clamp-2 mb-1.5">
                         {res.claim}
                       </p>
                       <div className="flex items-center gap-2 text-[10px] text-slate-500">
                         {res.category && <span>#{res.category}</span>}
-                        {res.evidence_score != null && <span>Evidence: {res.evidence_score}/100</span>}
+                        <span className={evidenceGrade.textColor}>Evidence {evidenceGrade.grade}</span>
                         <span className="ml-auto">{res.lockedDate}</span>
                       </div>
                     </div>
@@ -682,26 +688,34 @@ export default function GlobePage() {
                 resolutions.length === 0 ? (
                   <div className="text-center py-8 text-[#94a3b8] text-sm">No recent resolutions</div>
                 ) : (
-                  resolutions.map((res) => (
+                  resolutions.map((res) => {
+                    const evidenceGrade = getEvidenceGrade(res.evidence_score);
+                    return (
                     <div key={res.id} className={`p-3 bg-slate-900/60 border rounded-xl ${res.outcome === 'correct' ? 'border-emerald-500/40' : 'border-red-500/40'}`}>
                       <div className="flex items-center justify-between mb-2">
                         <span className="text-xs text-slate-400">{res.submitter}</span>
-                        <span className={`text-[10px] font-semibold px-2 py-0.5 rounded ${
-                          res.outcome === 'correct' ? 'bg-emerald-500/15 text-emerald-400' : 'bg-red-500/15 text-red-400'
-                        }`}>
-                          {res.outcome === 'correct' ? 'Correct' : 'Incorrect'}
-                        </span>
+                        <div className="flex items-center gap-1.5">
+                          <span className={`text-[9px] font-bold px-1.5 py-0.5 rounded ${evidenceGrade.bgColor} ${evidenceGrade.textColor}`}>
+                            {evidenceGrade.grade}
+                          </span>
+                          <span className={`text-[10px] font-semibold px-2 py-0.5 rounded ${
+                            res.outcome === 'correct' ? 'bg-emerald-500/15 text-emerald-400' : 'bg-red-500/15 text-red-400'
+                          }`}>
+                            {res.outcome === 'correct' ? 'Correct' : 'Incorrect'}
+                          </span>
+                        </div>
                       </div>
                       <p className="text-sm text-white line-clamp-2 mb-2">{res.claim}</p>
                       <div className="flex items-center justify-between">
                         <span className="text-[10px] text-slate-500">
                           {res.category && `#${res.category}`}
-                          {res.evidence_score != null && ` | Evidence: ${res.evidence_score}/100`}
+                          {` | Evidence ${evidenceGrade.grade}`}
                         </span>
                         <button onClick={() => router.push(`/proof/${res.publicSlug}`)} className="text-[11px] text-purple-400 font-medium">View</button>
                       </div>
                     </div>
-                  ))
+                    );
+                  })
                 )
               ) : (
                 displayItems.length === 0 ? (
