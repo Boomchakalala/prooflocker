@@ -39,6 +39,7 @@ export default function UnifiedHeader({ currentView, onLockClick }: UnifiedHeade
   const activeView = getActiveView();
 
   return (
+    <>
     <header
       className="fixed top-0 left-0 right-0 h-16 md:h-16 bg-gradient-to-r from-slate-950 via-slate-900 to-slate-950 backdrop-blur-xl border-b border-purple-500/20 z-[300] pt-[env(safe-area-inset-top)] shadow-lg shadow-purple-500/5"
       style={{ '--header-height': '64px' } as React.CSSProperties}
@@ -308,5 +309,10 @@ export default function UnifiedHeader({ currentView, onLockClick }: UnifiedHeade
         </>
       )}
     </header>
+
+      {showAuthModal && (
+        <ClaimModal onClose={() => setShowAuthModal(false)} />
+      )}
+    </>
   );
 }
