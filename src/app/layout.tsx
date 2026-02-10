@@ -110,6 +110,7 @@ export default function RootLayout({
           <ToastProvider>
             <AnalyticsTracker />
             {children}
+            <CookieConsent />
           </ToastProvider>
         </AuthProvider>
       </body>
