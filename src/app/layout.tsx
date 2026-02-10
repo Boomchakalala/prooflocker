@@ -29,8 +29,8 @@ const jetbrainsMono = JetBrains_Mono({
 const siteUrl = getSiteUrl();
 
 export const metadata: Metadata = {
-  title: "ProofLocker — Lock Predictions & Commitments On-Chain Forever",
-  description: "Declare it now. Prove it later — immutable on Constellation DAG. Anonymous predictions, personal goals, and business commitments locked forever.",
+  title: "ProofLocker — OSINT & News Monitoring | Lock Claims On-Chain",
+  description: "Monitor events worldwide with OSINT + news mapping. Lock claims on-chain, resolve with evidence, and build reputation through verifiable receipts.",
   metadataBase: new URL(siteUrl),
   icons: {
     icon: [
@@ -41,8 +41,8 @@ export const metadata: Metadata = {
     apple: "/favicons/apple-touch-icon.png",
   },
   openGraph: {
-    title: "ProofLocker — Lock Predictions & Commitments On-Chain Forever",
-    description: "Declare it now. Prove it later — immutable on Constellation DAG.",
+    title: "OSINT & News Monitoring. Claims With Receipts.",
+    description: "Lock claims on-chain, prove with evidence, and build credibility over time.",
     url: siteUrl,
     type: "website",
     siteName: "ProofLocker",
@@ -57,8 +57,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary",
-    title: "ProofLocker — Lock Predictions & Commitments On-Chain Forever",
-    description: "Declare it now. Prove it later — immutable on Constellation DAG.",
+    title: "OSINT & News Monitoring. Claims With Receipts.",
+    description: "Lock claims on-chain, prove with evidence, and build credibility over time.",
     images: [getAbsoluteUrl("/favicons/icon-512.png")],
   },
 };
