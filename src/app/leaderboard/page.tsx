@@ -20,7 +20,7 @@ export default function LeaderboardPage() {
         {/* Page Header */}
         <div className="text-center mb-12">
           <h1 className="text-4xl md:text-6xl font-extrabold mb-4 bg-gradient-to-r from-slate-300 via-white to-slate-300 bg-clip-text text-transparent" style={{ fontFamily: 'var(--font-montserrat)' }}>
-            Reputation Leaderboard
+            Reputation Registry
           </h1>
           <p className="text-lg md:text-xl text-white/70 max-w-3xl mx-auto">
             Ranked by accuracy, evidence quality, and resolved claims. Reputation earned through outcomes.
