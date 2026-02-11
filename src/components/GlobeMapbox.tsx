@@ -159,54 +159,54 @@ export default function GlobeMapbox({ claims, osint, mapMode = 'both', viewMode 
       map.addSource('claims', { type: 'geojson', data: toClaimGeoJSON(claimsRef.current), cluster: true, clusterMaxZoom: 6, clusterRadius: 40 });
       map.addSource('osint', { type: 'geojson', data: toOsintGeoJSON(osintRef.current), cluster: true, clusterMaxZoom: 6, clusterRadius: 40 });
 
-      // ── Claims layers (purple) ──────────────────────────────
+      // ── Claims layers (purple, compact) ────────────────────
       // Cluster glow
       map.addLayer({ id: 'claims-clusters-glow', type: 'circle', source: 'claims', filter: ['has', 'point_count'], paint: {
-        'circle-color': '#8b5cf6', 'circle-radius': ['step', ['get', 'point_count'], 24, 5, 32, 10, 40], 'circle-blur': 0.7, 'circle-opacity': 0.18
+        'circle-color': '#8b5cf6', 'circle-radius': ['step', ['get', 'point_count'], 18, 5, 24, 10, 30], 'circle-blur': 0.7, 'circle-opacity': 0.15
       }});
       // Cluster core
       map.addLayer({ id: 'claims-clusters-core', type: 'circle', source: 'claims', filter: ['has', 'point_count'], paint: {
-        'circle-color': '#7c3aed', 'circle-radius': ['step', ['get', 'point_count'], 16, 5, 20, 10, 26], 'circle-opacity': 0.92,
+        'circle-color': '#7c3aed', 'circle-radius': ['step', ['get', 'point_count'], 12, 5, 16, 10, 20], 'circle-opacity': 0.92,
         'circle-stroke-width': 1.5, 'circle-stroke-color': '#a78bfa', 'circle-stroke-opacity': 0.6
       }});
       // Cluster count
       map.addLayer({ id: 'claims-cluster-count', type: 'symbol', source: 'claims', filter: ['has', 'point_count'], layout: {
-        'text-field': '{point_count_abbreviated}', 'text-font': ['DIN Offc Pro Bold', 'Arial Unicode MS Bold'], 'text-size': 12,
+        'text-field': '{point_count_abbreviated}', 'text-font': ['DIN Offc Pro Bold', 'Arial Unicode MS Bold'], 'text-size': 11,
         'text-allow-overlap': true, 'text-ignore-placement': true
       }, paint: { 'text-color': '#fff' }});
       // Individual glow
       map.addLayer({ id: 'claims-points-glow', type: 'circle', source: 'claims', filter: ['!', ['has', 'point_count']], paint: {
         'circle-color': ['match', ['get', 'status'], 'verified', '#8b5cf6', 'disputed', '#ef4444', 'void', '#6b7280', '#f59e0b'],
-        'circle-radius': 14, 'circle-blur': 0.6, 'circle-opacity': 0.2
+        'circle-radius': 10, 'circle-blur': 0.6, 'circle-opacity': 0.18
       }});
       // Individual core
       map.addLayer({ id: 'claims-points-core', type: 'circle', source: 'claims', filter: ['!', ['has', 'point_count']], paint: {
         'circle-color': ['match', ['get', 'status'], 'verified', '#8b5cf6', 'disputed', '#ef4444', 'void', '#6b7280', '#f59e0b'],
-        'circle-radius': 7, 'circle-opacity': 0.95, 'circle-stroke-width': 1.5, 'circle-stroke-color': '#e2e8f0', 'circle-stroke-opacity': 0.8
+        'circle-radius': 5, 'circle-opacity': 0.95, 'circle-stroke-width': 1.5, 'circle-stroke-color': '#e2e8f0', 'circle-stroke-opacity': 0.8
       }});
 
-      // ── OSINT layers (red) ─────────────────────────────────
+      // ── OSINT layers (red, compact) ──────────────────────────
       // Cluster glow
       map.addLayer({ id: 'osint-clusters-glow', type: 'circle', source: 'osint', filter: ['has', 'point_count'], paint: {
-        'circle-color': '#ef4444', 'circle-radius': ['step', ['get', 'point_count'], 24, 5, 32, 10, 40], 'circle-blur': 0.7, 'circle-opacity': 0.18
+        'circle-color': '#ef4444', 'circle-radius': ['step', ['get', 'point_count'], 18, 5, 24, 10, 30], 'circle-blur': 0.7, 'circle-opacity': 0.15
       }});
       // Cluster core
       map.addLayer({ id: 'osint-clusters-core', type: 'circle', source: 'osint', filter: ['has', 'point_count'], paint: {
-        'circle-color': '#dc2626', 'circle-radius': ['step', ['get', 'point_count'], 16, 5, 20, 10, 26], 'circle-opacity': 0.92,
+        'circle-color': '#dc2626', 'circle-radius': ['step', ['get', 'point_count'], 12, 5, 16, 10, 20], 'circle-opacity': 0.92,
         'circle-stroke-width': 1.5, 'circle-stroke-color': '#fca5a5', 'circle-stroke-opacity': 0.6
       }});
       // Cluster count
       map.addLayer({ id: 'osint-cluster-count', type: 'symbol', source: 'osint', filter: ['has', 'point_count'], layout: {
-        'text-field': '{point_count_abbreviated}', 'text-font': ['DIN Offc Pro Bold', 'Arial Unicode MS Bold'], 'text-size': 12,
+        'text-field': '{point_count_abbreviated}', 'text-font': ['DIN Offc Pro Bold', 'Arial Unicode MS Bold'], 'text-size': 11,
         'text-allow-overlap': true, 'text-ignore-placement': true
       }, paint: { 'text-color': '#fff' }});
       // Individual glow
       map.addLayer({ id: 'osint-points-glow', type: 'circle', source: 'osint', filter: ['!', ['has', 'point_count']], paint: {
-        'circle-color': '#ef4444', 'circle-radius': 14, 'circle-blur': 0.6, 'circle-opacity': 0.2
+        'circle-color': '#ef4444', 'circle-radius': 10, 'circle-blur': 0.6, 'circle-opacity': 0.18
       }});
       // Individual core
       map.addLayer({ id: 'osint-points-core', type: 'circle', source: 'osint', filter: ['!', ['has', 'point_count']], paint: {
-        'circle-color': '#ef4444', 'circle-radius': 7, 'circle-opacity': 0.92,
+        'circle-color': '#ef4444', 'circle-radius': 5, 'circle-opacity': 0.92,
         'circle-stroke-width': 1.5, 'circle-stroke-color': '#e2e8f0', 'circle-stroke-opacity': 0.8
       }});
 
