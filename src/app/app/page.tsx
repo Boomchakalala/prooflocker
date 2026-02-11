@@ -482,6 +482,11 @@ export default function AppFeedPage() {
                               <span className="text-purple-400 bg-purple-500/10 px-1.5 py-0.5 rounded font-medium">
                                 Locked
                               </span>
+                              {isResolved && (
+                                <span className="text-cyan-400 bg-cyan-500/10 px-1.5 py-0.5 rounded font-medium">
+                                  Resolved
+                                </span>
+                              )}
                               {isResolved && evidenceGradeInfo && (
                                 <span className={`px-1.5 py-0.5 rounded font-bold ${evidenceGradeInfo.bgColor} ${evidenceGradeInfo.color}`}>
                                   {evidenceGradeInfo.label}
