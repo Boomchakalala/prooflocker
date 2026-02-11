@@ -99,10 +99,10 @@ export function computeEvidenceScore(
   const itemCount = items.length;
   if (itemCount > 0) {
     let countPoints = 0;
-    if (itemCount >= 1) countPoints += 30; // 1st item
-    if (itemCount >= 2) countPoints += 20; // 2nd item (total: 50)
-    if (itemCount >= 3) countPoints += 15; // 3rd item (total: 65)
-    if (itemCount >= 4) countPoints += Math.min((itemCount - 3) * 5, 15); // 4+ items (capped at +15 more = 80 total)
+    if (itemCount >= 1) countPoints += 35; // 1st item (was 30)
+    if (itemCount >= 2) countPoints += 25; // 2nd item - total: 60 (was 50)
+    if (itemCount >= 3) countPoints += 20; // 3rd item - total: 80 (was 65)
+    if (itemCount >= 4) countPoints += Math.min((itemCount - 3) * 5, 20); // 4+ items (capped at +20 more = 100 total)
 
     score += countPoints;
     breakdown.push({
@@ -117,7 +117,7 @@ export function computeEvidenceScore(
   const files = items.filter(i => i.type === 'file').length;
 
   if (screenshots > 0) {
-    const screenshotPoints = screenshots * 5;
+    const screenshotPoints = screenshots * 8; // Was 5
     score += screenshotPoints;
     breakdown.push({
       icon: '✓',
@@ -127,7 +127,7 @@ export function computeEvidenceScore(
   }
 
   if (files > 0) {
-    const filePoints = files * 8;
+    const filePoints = files * 10; // Was 8
     score += filePoints;
     breakdown.push({
       icon: '✓',
@@ -181,11 +181,11 @@ export function computeEvidenceScore(
 
   // Signal 4: Evidence summary
   if (summary && summary.trim().length >= 50) {
-    score += 10;
+    score += 15; // Was 10
     breakdown.push({
       icon: '✓',
       text: 'Explanation provided',
-      points: 10,
+      points: 15,
     });
   }
 

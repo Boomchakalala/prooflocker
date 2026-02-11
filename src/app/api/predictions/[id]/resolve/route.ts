@@ -126,6 +126,21 @@ export async function POST(
           );
           evidenceHashes.push(created.sha256);
           createdEvidenceItems.push(created);
+        } else if (item.type === "file" && item.url && item.hash) {
+          // File already uploaded, create evidence record
+          const created = await createEvidenceFileItem(
+            id,
+            item.url, // This is actually the public URL from upload
+            item.url,
+            item.hash,
+            item.mimeType || 'application/octet-stream',
+            item.fileSizeBytes || 0,
+            item.title,
+            item.sourceKind,
+            item.notes
+          );
+          evidenceHashes.push(created.sha256);
+          createdEvidenceItems.push(created);
         } else if (item.hash) {
           // If hash is provided, use it (for files uploaded via separate endpoint)
           evidenceHashes.push(item.hash);
