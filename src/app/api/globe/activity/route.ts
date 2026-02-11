@@ -432,10 +432,23 @@ export async function GET(request: NextRequest) {
           }
         }
 
-        // IMPORTANT: Only return items with valid geolocation
-        // Items without location cannot be shown on map
+        // Fallback: use tag-based location so intel items still appear on the globe
         if (!lat || !lng) {
-          return null;
+          const tag = (signal.tags && signal.tags[0] || '').toLowerCase();
+          const tagLocations: Record<string, { lat: number; lng: number }> = {
+            crypto: { lat: 40.7128, lng: -74.0060 },
+            markets: { lat: 40.7128, lng: -74.0060 },
+            politics: { lat: 38.9072, lng: -77.0369 },
+            tech: { lat: 37.7749, lng: -122.4194 },
+            military: { lat: 38.9072, lng: -77.0369 },
+            sports: { lat: 40.7580, lng: -73.9855 },
+            culture: { lat: 51.5074, lng: -0.1278 },
+            breaking: { lat: 40.7128, lng: -74.0060 },
+            science: { lat: 51.5074, lng: -0.1278 },
+          };
+          const fallback = tagLocations[tag] || { lat: 40.7128, lng: -74.0060 };
+          lat = fallback.lat + (Math.random() - 0.5) * 4;
+          lng = fallback.lng + (Math.random() - 0.5) * 4;
         }
 
         const key = getStableKey(
