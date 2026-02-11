@@ -220,7 +220,8 @@ export async function getAllPredictions(): Promise<Prediction[]> {
     .from("predictions")
     .select("*")
     .eq("moderation_status", "active") // Only show active (non-hidden) predictions
-    .order("created_at", { ascending: false });
+    .order("created_at", { ascending: false })
+    .limit(100); // Limit to 100 most recent predictions
 
   if (error) {
     console.error("[Storage] Error fetching all predictions:", error);
