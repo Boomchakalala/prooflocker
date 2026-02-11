@@ -933,7 +933,7 @@ export default function GlobePage() {
                             {evidenceGrade.grade}
                           </span>
                           <span className={`text-[10px] font-semibold px-2 py-0.5 rounded ${
-                            res.outcome === 'correct' ? 'bg-emerald-500/15 text-emerald-400' : 'bg-red-500/15 text-red-400'
+                            res.outcome === 'correct' ? 'bg-gradient-to-r from-emerald-500 to-emerald-600 text-white' : 'bg-gradient-to-r from-red-500 to-red-600 text-white'
                           }`}>
                             {res.outcome === 'correct' ? 'Correct' : 'Incorrect'}
                           </span>
