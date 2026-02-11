@@ -4,6 +4,16 @@ import { createClient } from '@supabase/supabase-js';
 
 export const dynamic = 'force-dynamic';
 export const maxDuration = 10;
+export const revalidate = 60; // Cache for 60 seconds
+
+// In-memory cache
+let cache: {
+  data: any;
+  timestamp: number;
+  key: string;
+} | null = null;
+
+const CACHE_TTL = 30000; // 30 seconds
 
 function calculateRepScore(stats: {
   total_resolved: number;
@@ -222,6 +232,13 @@ export async function GET(request: NextRequest) {
     const window = searchParams.get('window') || '24h';
     const category = searchParams.get('category');
     const since = searchParams.get('since');
+
+    // Check cache
+    const cacheKey = `${window}-${category || 'all'}-${since || 'none'}`;
+    if (cache && cache.key === cacheKey && (Date.now() - cache.timestamp) < CACHE_TTL) {
+      console.log(`[Globe Activity] Cache hit (${Date.now() - startTime}ms)`);
+      return NextResponse.json(cache.data);
+    }
 
     const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
     const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
