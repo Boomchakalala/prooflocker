@@ -103,6 +103,13 @@ export async function GET(request: NextRequest) {
       // Extract geolocation
       const geoData = extractGeoFromArticle(article);
 
+      // IMPORTANT: Only keep articles with good geolocation (confidence > 60)
+      // This ensures clean, professional map coverage
+      if (!geoData.lat || !geoData.lon || geoData.confidence < 60) {
+        console.log(`[Cron: Fetch News] Skipping low-confidence geo: ${article.title.substring(0, 50)}... (confidence: ${geoData.confidence})`);
+        continue;
+      }
+
       // Determine tags from content
       const tags = extractTags(article.title, article.description);
 
