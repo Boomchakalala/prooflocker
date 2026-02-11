@@ -208,10 +208,6 @@ export default function GlobePage() {
 
     return items.slice(0, 5);
   };
-    text: 'Loading live updates...',
-    location: '',
-    time: ''
-  };
 
   // Freshness helpers for monitoring vibe
   const getMinutesAgo = (dateStr: string) => {
