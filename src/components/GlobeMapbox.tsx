@@ -481,15 +481,15 @@ export default function GlobeMapbox({ claims, osint, mapMode = 'both', viewMode 
                     </div>
                     <div className="px-3 sm:px-4">
                       {areaDetail.osint.map((o) => (
-                        <div key={o.id} className="py-3 border-b border-red-500/10 last:border-0">
-                          <div className="flex items-center gap-2 mb-1.5">
-                            <span className="text-[10px] sm:text-[11px] font-semibold text-red-400">{o.source}</span>
-                            <span className="text-[9px] sm:text-[10px] text-slate-500">{o.timestamp}</span>
+                        <div key={o.id} className="py-2 border-b border-red-500/10 last:border-0">
+                          <div className="flex items-center gap-2 mb-1">
+                            <span className="text-[10px] font-semibold text-red-400">{o.source}</span>
+                            <span className="text-[9px] text-slate-500">{o.timestamp}</span>
                           </div>
-                          <div className="text-[12px] sm:text-[13px] font-semibold text-white leading-snug mb-2">{o.title}</div>
-                          <div className="flex gap-1.5 flex-wrap">
-                            {o.tags.map((t, i) => (
-                              <span key={i} className="px-1.5 sm:px-2 py-0.5 text-[9px] font-bold uppercase rounded-md bg-red-500/15 text-red-400">
+                          <div className="text-[11px] sm:text-[12px] font-medium text-white leading-snug line-clamp-2 mb-1">{o.title}</div>
+                          <div className="flex gap-1 flex-wrap">
+                            {o.tags.slice(0, 3).map((t, i) => (
+                              <span key={i} className="px-1.5 py-0.5 text-[8px] font-bold uppercase rounded bg-red-500/15 text-red-400">
                                 {t}
                               </span>
                             ))}
