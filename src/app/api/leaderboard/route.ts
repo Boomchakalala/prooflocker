@@ -11,7 +11,8 @@ export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
+const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
 
 // Cache for 5 minutes
 export const revalidate = 300;
@@ -27,7 +28,12 @@ export async function GET(request: NextRequest) {
     const limit = Math.min(parseInt(searchParams.get("limit") || "100"), 100);
     const search = searchParams.get("search"); // Search by Anon ID prefix
 
-    const supabase = createClient(supabaseUrl, supabaseServiceKey);
+    // Use service key if available, fallback to anon key
+    const supabaseKey = supabaseServiceKey || supabaseAnonKey;
+    if (!supabaseServiceKey) {
+      console.warn('[Leaderboard API] Service role key not configured, using anon key. Some operations may be restricted.');
+    }
+    const supabase = createClient(supabaseUrl, supabaseKey);
 
     // Build query
     let query = supabase
