@@ -272,7 +272,20 @@ export async function GET(request: NextRequest) {
       }
     }
 
-    // Transform claims — use real geodata, then text extraction, then SKIP (no random)
+    // Category-based fallback locations for claims that can't be geolocated
+    const categoryLocations: Record<string, { lat: number; lng: number }> = {
+      Crypto: { lat: 40.7128, lng: -74.0060 },     // NYC (finance hub)
+      Markets: { lat: 40.7128, lng: -74.0060 },     // NYC
+      Politics: { lat: 38.9072, lng: -77.0369 },    // Washington DC
+      Tech: { lat: 37.7749, lng: -122.4194 },       // San Francisco
+      Sports: { lat: 40.7580, lng: -73.9855 },      // NYC (Times Square area)
+      Culture: { lat: 51.5074, lng: -0.1278 },      // London
+      Personal: { lat: 34.0522, lng: -118.2437 },   // LA
+      Other: { lat: 40.7128, lng: -74.0060 },       // NYC default
+    };
+
+    // Transform claims — use real geodata, then text extraction, then category fallback
+    let claimFallbackIdx = 0;
     const claims = (predictions || []).map((prediction: any) => {
       let lat = prediction.geotag_lat;
       let lng = prediction.geotag_lng;
@@ -281,13 +294,19 @@ export async function GET(request: NextRequest) {
       if (!lat || !lng) {
         const extracted = extractLocation(`${prediction.text} ${prediction.category || ''}`);
         if (extracted) {
-          lat = extracted.lat + (Math.random() - 0.5) * 0.5; // Small jitter to avoid stacking
+          lat = extracted.lat + (Math.random() - 0.5) * 0.5;
           lng = extracted.lng + (Math.random() - 0.5) * 0.5;
         }
       }
 
-      // If still no location, skip this claim from globe (return null, filtered later)
-      if (!lat || !lng) return null;
+      // If still no location, use category-based fallback with jitter
+      if (!lat || !lng) {
+        const cat = prediction.category || 'Other';
+        const fallback = categoryLocations[cat] || categoryLocations['Other'];
+        lat = fallback.lat + (Math.random() - 0.5) * 1.5;
+        lng = fallback.lng + (Math.random() - 0.5) * 1.5;
+        claimFallbackIdx++;
+      }
 
       const submitter = prediction.pseudonym
         ? `@${prediction.pseudonym}`
@@ -330,7 +349,7 @@ export async function GET(request: NextRequest) {
         evidence_score: prediction.evidence_score,
         key: `claim:${prediction.id}`,
       };
-    }).filter(Boolean); // Remove nulls (claims with no location)
+    }); // All claims get a location now
 
     // Transform intel items — use real geo, then text extraction, then SKIP
     const osint = (intelData || []).map((signal: any) => {
