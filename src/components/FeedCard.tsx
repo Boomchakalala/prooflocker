@@ -34,6 +34,7 @@ interface FeedCardProps {
   location?: { city?: string; country?: string; coordinates?: string };
   timeAgo: string;
   category?: string;
+  hash?: string;
 
   // Source/Author identity
   sourceOrAuthor?: {
@@ -50,10 +51,12 @@ interface FeedCardProps {
   // Actions
   onPrimaryAction: () => void;
   onSecondaryAction?: () => void;
+  onResolveClick?: () => void; // For resolve button
 
   // Engagement
   votes?: { up: number; down: number };
   comments?: number;
+  onVote?: (type: 'up' | 'down') => void; // Callback for voting
 
   // Priority indicator (optional)
   isPriority?: boolean;
@@ -67,18 +70,34 @@ export default function FeedCard({
   location,
   timeAgo,
   category,
+  hash,
   sourceOrAuthor,
   status,
   reputationScore,
   onPrimaryAction,
   onSecondaryAction,
+  onResolveClick,
   votes,
   comments,
+  onVote,
   isPriority = false,
 }: FeedCardProps) {
   const config = VARIANT_CONFIG[variant];
   const [upvoted, setUpvoted] = useState(false);
   const [downvoted, setDownvoted] = useState(false);
+
+  const handleVoteClick = (e: React.MouseEvent, type: 'up' | 'down') => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (type === 'up') {
+      setUpvoted(!upvoted);
+      if (downvoted) setDownvoted(false);
+    } else {
+      setDownvoted(!downvoted);
+      if (upvoted) setUpvoted(false);
+    }
+    onVote?.(type);
+  };
 
   // Claim cards get slightly heavier styling
   const cardPadding = variant === 'claim' ? 'p-5' : 'p-4';
