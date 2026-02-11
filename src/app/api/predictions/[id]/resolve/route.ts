@@ -211,9 +211,16 @@ export async function POST(
           .single();
 
         if (prediction) {
+          console.log('[Resolve API] Prediction data:', {
+            prediction_user_id: prediction.user_id,
+            prediction_anon_id: prediction.anon_id,
+          });
+
           const identifier = prediction.user_id
             ? { userId: prediction.user_id }
             : { anonId: prediction.anon_id };
+
+          console.log('[Resolve API] Created identifier:', identifier);
 
           const isCorrect = outcome === 'correct';
           const category = prediction.category || 'Other';
