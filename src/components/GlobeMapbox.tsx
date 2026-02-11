@@ -189,15 +189,23 @@ export default function GlobeMapbox({ claims, osint, mapMode = 'both', viewMode 
       // Sources
       map.addSource('claims', { type: 'geojson', data: toClaimGeoJSON(claimsRef.current), cluster: true, clusterMaxZoom: 6, clusterRadius: 40 });
       map.addSource('osint', { type: 'geojson', data: toOsintGeoJSON(osintRef.current), cluster: true, clusterMaxZoom: 6, clusterRadius: 40 });
+      map.addSource('combined', { type: 'geojson', data: toCombinedGeoJSON(claimsRef.current, osintRef.current), cluster: true, clusterMaxZoom: 8, clusterRadius: 50 });
 
-      // OSINT layers (added first, render below)
+      // COMBINED orange layers (visible at low zoom < 5)
+      map.addLayer({ id: 'combined-clusters-glow', type: 'circle', source: 'combined', filter: ['has', 'point_count'], paint: { 'circle-color': '#f97316', 'circle-radius': ['step', ['get', 'point_count'], 28, 5, 38, 15, 50], 'circle-blur': 0.7, 'circle-opacity': 0.25 } });
+      map.addLayer({ id: 'combined-clusters-core', type: 'circle', source: 'combined', filter: ['has', 'point_count'], paint: { 'circle-color': '#f97316', 'circle-radius': ['step', ['get', 'point_count'], 18, 5, 24, 15, 34], 'circle-opacity': 0.9, 'circle-stroke-width': 2, 'circle-stroke-color': '#fff', 'circle-stroke-opacity': 0.7 } });
+      map.addLayer({ id: 'combined-cluster-count', type: 'symbol', source: 'combined', filter: ['has', 'point_count'], layout: { 'text-field': '{point_count_abbreviated}', 'text-font': ['DIN Offc Pro Medium', 'Arial Unicode MS Bold'], 'text-size': 13 }, paint: { 'text-color': '#fff' } });
+      map.addLayer({ id: 'combined-points-glow', type: 'circle', source: 'combined', filter: ['!', ['has', 'point_count']], paint: { 'circle-color': '#f97316', 'circle-radius': 16, 'circle-blur': 0.7, 'circle-opacity': 0.2 } });
+      map.addLayer({ id: 'combined-points-core', type: 'circle', source: 'combined', filter: ['!', ['has', 'point_count']], paint: { 'circle-color': '#f97316', 'circle-radius': 8, 'circle-opacity': 0.9, 'circle-stroke-width': 2, 'circle-stroke-color': '#fff', 'circle-stroke-opacity': 0.8 } });
+
+      // OSINT layers (red, visible at zoom >= 5)
       map.addLayer({ id: 'osint-clusters-glow', type: 'circle', source: 'osint', filter: ['has', 'point_count'], paint: { 'circle-color': '#ef4444', 'circle-radius': ['step', ['get', 'point_count'], 28, 5, 38, 10, 48], 'circle-blur': 0.8, 'circle-opacity': 0.2, 'circle-translate': [8, -8] } });
       map.addLayer({ id: 'osint-clusters-core', type: 'circle', source: 'osint', filter: ['has', 'point_count'], paint: { 'circle-color': '#ef4444', 'circle-radius': ['step', ['get', 'point_count'], 18, 5, 24, 10, 32], 'circle-opacity': 0.85, 'circle-stroke-width': 2, 'circle-stroke-color': '#f8fafc', 'circle-stroke-opacity': 0.6, 'circle-translate': [8, -8] } });
       map.addLayer({ id: 'osint-cluster-count', type: 'symbol', source: 'osint', filter: ['has', 'point_count'], layout: { 'text-field': '{point_count_abbreviated}', 'text-font': ['DIN Offc Pro Medium', 'Arial Unicode MS Bold'], 'text-size': 12, 'text-offset': [0.9, -0.9] }, paint: { 'text-color': '#fff' } });
       map.addLayer({ id: 'osint-points-glow', type: 'circle', source: 'osint', filter: ['!', ['has', 'point_count']], paint: { 'circle-color': '#ef4444', 'circle-radius': 18, 'circle-blur': 0.7, 'circle-opacity': 0.25, 'circle-translate': [8, -8] } });
       map.addLayer({ id: 'osint-points-core', type: 'circle', source: 'osint', filter: ['!', ['has', 'point_count']], paint: { 'circle-color': '#ef4444', 'circle-radius': 9, 'circle-opacity': 0.9, 'circle-stroke-width': 2, 'circle-stroke-color': '#f8fafc', 'circle-stroke-opacity': 0.8, 'circle-translate': [8, -8] } });
 
-      // Claims layers (added second, render on top with offset to separate from intel)
+      // Claims layers (purple, visible at zoom >= 5)
       map.addLayer({ id: 'claims-clusters-glow', type: 'circle', source: 'claims', filter: ['has', 'point_count'], paint: { 'circle-color': '#8b5cf6', 'circle-radius': ['step', ['get', 'point_count'], 25, 5, 35, 10, 45], 'circle-blur': 0.8, 'circle-opacity': 0.2, 'circle-translate': [-8, 8] } });
       map.addLayer({ id: 'claims-clusters-core', type: 'circle', source: 'claims', filter: ['has', 'point_count'], paint: { 'circle-color': '#8b5cf6', 'circle-radius': ['step', ['get', 'point_count'], 15, 5, 20, 10, 28], 'circle-opacity': 0.9, 'circle-stroke-width': 2, 'circle-stroke-color': '#f8fafc', 'circle-stroke-opacity': 0.7, 'circle-translate': [-8, 8] } });
       map.addLayer({ id: 'claims-cluster-count', type: 'symbol', source: 'claims', filter: ['has', 'point_count'], layout: { 'text-field': '{point_count_abbreviated}', 'text-font': ['DIN Offc Pro Medium', 'Arial Unicode MS Bold'], 'text-size': 12, 'text-offset': [-0.9, 0.9] }, paint: { 'text-color': '#fff' } });
@@ -205,8 +213,23 @@ export default function GlobeMapbox({ claims, osint, mapMode = 'both', viewMode 
       map.addLayer({ id: 'claims-points-core', type: 'circle', source: 'claims', filter: ['!', ['has', 'point_count']], paint: { 'circle-color': ['match', ['get', 'status'], 'verified', '#8b5cf6', 'disputed', '#ef4444', 'void', '#6b7280', '#f59e0b'], 'circle-radius': 8, 'circle-opacity': 0.95, 'circle-stroke-width': 2, 'circle-stroke-color': '#f8fafc', 'circle-stroke-opacity': 0.9, 'circle-translate': [-8, 8] } });
       map.addLayer({ id: 'claims-heatmap', type: 'heatmap', source: 'claims', maxzoom: 9, layout: { visibility: 'none' }, paint: { 'heatmap-weight': ['interpolate', ['linear'], ['get', 'confidence'], 0, 0, 100, 1], 'heatmap-intensity': ['interpolate', ['linear'], ['zoom'], 0, 1, 9, 3], 'heatmap-color': ['interpolate', ['linear'], ['heatmap-density'], 0, 'rgba(139,92,246,0)', 0.2, 'rgba(139,92,246,0.2)', 0.4, 'rgba(139,92,246,0.4)', 0.6, 'rgba(245,158,11,0.5)', 0.8, 'rgba(239,68,68,0.6)', 1, 'rgba(239,68,68,0.8)'], 'heatmap-radius': ['interpolate', ['linear'], ['zoom'], 0, 15, 9, 30], 'heatmap-opacity': 0.7 } });
 
+      // Zoom-based visibility: orange combined at low zoom, red/purple split at high zoom
+      const updateZoomVisibility = () => {
+        const zoom = map.getZoom();
+        const mode = mapModeRef.current;
+        const showCombined = zoom < 5 && mode === 'both';
+        const showC = mode !== 'osint' && !showCombined;
+        const showO = mode !== 'claims' && !showCombined;
+        const vis = (ids: string[], show: boolean) => ids.forEach(id => { try { if (map.getLayer(id)) map.setLayoutProperty(id, 'visibility', show ? 'visible' : 'none'); } catch {} });
+        vis(['combined-clusters-glow', 'combined-clusters-core', 'combined-cluster-count', 'combined-points-glow', 'combined-points-core'], showCombined);
+        vis(['osint-clusters-glow', 'osint-clusters-core', 'osint-cluster-count', 'osint-points-glow', 'osint-points-core'], showO);
+        vis(['claims-clusters-glow', 'claims-clusters-core', 'claims-cluster-count', 'claims-points-glow', 'claims-points-core'], showC);
+      };
+      map.on('zoom', updateZoomVisibility);
+      updateZoomVisibility();
+
       // Cursor interactions
-      ['claims-clusters-core', 'claims-points-core', 'osint-clusters-core', 'osint-points-core'].forEach((l) => {
+      ['claims-clusters-core', 'claims-points-core', 'osint-clusters-core', 'osint-points-core', 'combined-clusters-core', 'combined-points-core'].forEach((l) => {
         map.on('mouseenter', l, () => { map.getCanvas().style.cursor = 'pointer'; });
         map.on('mouseleave', l, () => { map.getCanvas().style.cursor = ''; });
       });
@@ -225,6 +248,8 @@ export default function GlobeMapbox({ claims, osint, mapMode = 'both', viewMode 
 
       map.on('click', 'claims-clusters-core', handleClusterClick);
       map.on('click', 'osint-clusters-core', handleClusterClick);
+      map.on('click', 'combined-clusters-core', handleClusterClick);
+      map.on('click', 'combined-points-core', handleClusterClick);
 
       // Individual claim popup
       map.on('click', 'claims-points-core', (e) => {
@@ -302,6 +327,7 @@ export default function GlobeMapbox({ claims, osint, mapMode = 'both', viewMode 
     try {
       (m.getSource('claims') as mapboxgl.GeoJSONSource)?.setData(toClaimGeoJSON(claims));
       (m.getSource('osint') as mapboxgl.GeoJSONSource)?.setData(toOsintGeoJSON(osint));
+      (m.getSource('combined') as mapboxgl.GeoJSONSource)?.setData(toCombinedGeoJSON(claims, osint));
     } catch {}
   }, [claims, osint]);
 
