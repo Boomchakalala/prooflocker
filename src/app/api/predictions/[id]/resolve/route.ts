@@ -282,7 +282,7 @@ export async function POST(
       ok: true,
       success: true,
       outcome,
-      evidenceGrade,
+      evidenceGrade: effectiveGrade,
       resolutionFingerprint,
       evidenceItemsCreated: createdEvidenceItems.length,
       evidenceScore: evidenceScoreResult.score,
