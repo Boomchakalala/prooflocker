@@ -119,11 +119,9 @@ export default function GlobeMapbox({ claims, osint, mapMode = 'both', viewMode 
   const readyRef = useRef(false);
   const claimsRef = useRef(claims);
   const osintRef = useRef(osint);
-  const mapModeRef = useRef(mapMode);
   const [areaDetail, setAreaDetail] = useState<AreaDetail | null>(null);
   claimsRef.current = claims;
   osintRef.current = osint;
-  mapModeRef.current = mapMode;
 
   const closeDetail = useCallback(() => setAreaDetail(null), []);
 
