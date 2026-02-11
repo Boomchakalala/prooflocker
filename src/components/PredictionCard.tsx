@@ -472,7 +472,7 @@ export default function PredictionCard({ prediction, card, currentUserId, onOutc
       <div className="flex items-center justify-between gap-2 pt-2 border-t border-slate-800/50">
         <div className="flex items-center gap-1.5">
           {/* Upvote - compact */}
-          {isResolved && !isPreview && (
+          {isResolved && !isPreview && !isOsint && (
             <button
               onClick={(e) => { e.preventDefault(); e.stopPropagation(); handleVote(); }}
               disabled={!currentUserId || isVoting || isOwner}
@@ -484,6 +484,15 @@ export default function PredictionCard({ prediction, card, currentUserId, onOutc
                 <path strokeLinecap="round" strokeLinejoin="round" d="M5 15l7-7 7 7" />
               </svg>
               {voteCount}
+            </button>
+          )}
+          {/* Resolve button for pending claims */}
+          {isPending && !isPreview && !isOsint && (
+            <button
+              onClick={(e) => { e.preventDefault(); e.stopPropagation(); handleResolveClick(); }}
+              className="px-2 py-1 bg-purple-500/15 text-purple-400 hover:bg-purple-500/25 rounded text-[11px] font-medium transition-colors"
+            >
+              Resolve
             </button>
           )}
           <button
@@ -711,7 +720,7 @@ export default function PredictionCard({ prediction, card, currentUserId, onOutc
       <div className="flex items-center justify-between pt-3 border-t border-slate-800">
         <div className="flex items-center gap-3">
           {/* Upvote button - only for resolved predictions */}
-          {isResolved && !isPreview && (
+          {isResolved && !isPreview && !isOsint && (
             <button
               onClick={(e) => { e.preventDefault(); e.stopPropagation(); handleVote(); }}
               disabled={!currentUserId || isVoting || isOwner}
@@ -737,6 +746,18 @@ export default function PredictionCard({ prediction, card, currentUserId, onOutc
                   ))}
                 </div>
               )}
+            </button>
+          )}
+          {/* Resolve button for ALL pending claims (not just owners) */}
+          {isPending && !isPreview && !isOsint && (
+            <button
+              onClick={(e) => { e.preventDefault(); e.stopPropagation(); handleResolveClick(); }}
+              className="flex items-center gap-1.5 px-3 py-1.5 bg-purple-500/15 hover:bg-purple-500/25 text-purple-400 text-sm font-medium rounded-lg transition-colors border border-purple-500/30"
+            >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+              </svg>
+              Resolve
             </button>
           )}
           <button
