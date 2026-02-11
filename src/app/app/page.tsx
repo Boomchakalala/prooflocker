@@ -411,8 +411,9 @@ export default function AppFeedPage() {
                 </div>
 
                 {filteredPredictions.length > 0 ? (
-                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
-                    {filteredPredictions.map((claim) => {
+                  <div className="overflow-x-auto scrollbar-hide -mx-4 px-4 pb-2">
+                    <div className="flex gap-3 md:grid md:grid-cols-5 md:gap-3" style={{ minWidth: 'max-content' }}>
+                      {filteredPredictions.slice(0, 25).map((claim) => {
                       const isCorrect = claim.outcome === "correct";
                       const isIncorrect = claim.outcome === "incorrect";
                       const isPending = !claim.outcome || claim.outcome === "pending";
@@ -425,69 +426,56 @@ export default function AppFeedPage() {
                         <Link
                           key={claim.id}
                           href={`/proof/${claim.publicSlug || claim.id}`}
-                          className={`group block bg-slate-900/60 border border-slate-700/40 rounded-lg p-4 hover:border-purple-500/40 hover:bg-slate-800/40 transition-all duration-200 ${
+                          className={`group block w-[280px] md:w-auto flex-shrink-0 bg-slate-900/60 border border-slate-700/40 rounded-lg p-3.5 hover:border-purple-500/40 hover:bg-slate-800/40 transition-all duration-200 ${
                             isCorrect
-                              ? 'border-l-[3px] border-l-emerald-500'
+                              ? 'border-l-[3px] border-l-emerald-400'
                               : isIncorrect
-                              ? 'border-l-[3px] border-l-red-500'
-                              : 'border-l-[3px] border-l-amber-500'
+                              ? 'border-l-[3px] border-l-red-400'
+                              : 'border-l-[3px] border-l-amber-400'
                           }`}
                         >
-                          {/* Top row: Author + Reputation | Status + Time */}
+                          {/* Top row: Status badge + Time */}
                           <div className="flex items-center justify-between mb-2">
-                            <div className="flex items-center gap-2">
-                              <div className="w-6 h-6 rounded-full bg-gradient-to-br from-purple-600 to-purple-800 flex items-center justify-center text-white text-[9px] font-bold flex-shrink-0">
-                                {claim.authorNumber?.toString().slice(-2) || "??"}
-                              </div>
-                              <span className="text-xs text-slate-400 font-medium">#{claim.authorNumber}</span>
-                              <span className={`text-[8px] font-bold px-1 py-0.5 rounded ${repTier.bgColor} ${repTier.textColor}`}>
-                                {repTier.name}
-                              </span>
-                              {(() => {
-                                const badge = getFreshnessBadge(claim.createdAt || claim.timestamp);
-                                return badge ? (
-                                  <span className={`text-[9px] font-bold px-1.5 py-0.5 rounded ${badge.className}`}>
-                                    {badge.label}
-                                  </span>
-                                ) : null;
-                              })()}
-                            </div>
-                            <div className="flex items-center gap-2">
-                              <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded ${
-                                isCorrect ? "bg-gradient-to-r from-emerald-500 to-emerald-600 text-white" :
-                                isIncorrect ? "bg-gradient-to-r from-red-500 to-red-600 text-white" :
-                                "bg-gradient-to-r from-amber-500 to-orange-500 text-white"
+                            <div className="flex items-center gap-1.5">
+                              <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
+                                isCorrect ? "bg-emerald-500 text-white shadow-sm shadow-emerald-500/30" :
+                                isIncorrect ? "bg-red-500 text-white shadow-sm shadow-red-500/30" :
+                                "bg-amber-500 text-white shadow-sm shadow-amber-500/30"
                               }`}>
                                 {isCorrect ? 'Correct' : isIncorrect ? 'Incorrect' : 'Pending'}
                               </span>
-                              <span className="text-[10px] text-slate-500">
-                                {formatRelativeTime(claim.createdAt)}
-                              </span>
+                              {claim.category && (
+                                <span className="text-[9px] text-slate-500 bg-slate-800/60 px-1.5 py-0.5 rounded">
+                                  {claim.category}
+                                </span>
+                              )}
                             </div>
+                            <span className="text-[10px] text-slate-500">
+                              {formatRelativeTime(claim.createdAt)}
+                            </span>
                           </div>
 
                           {/* Claim Text */}
-                          <p className="text-sm text-white leading-snug line-clamp-2 mb-2">
+                          <p className="text-[13px] text-white leading-snug line-clamp-2 mb-2">
                             {claim.text}
                           </p>
 
                           {/* Bottom row */}
-                          <div className="flex flex-col gap-2">
-                            <div className="flex items-center gap-2 text-[10px]">
-                              {claim.category && (
-                                <span className="text-slate-500 bg-slate-800/50 px-1.5 py-0.5 rounded">
-                                  {claim.category}
-                                </span>
-                              )}
-                              <span className="text-purple-400 bg-purple-500/10 px-1.5 py-0.5 rounded font-medium">
-                                Locked
+                          <div className="flex items-center justify-between">
+                            <div className="flex items-center gap-1.5">
+                              <div className="w-5 h-5 rounded-full bg-gradient-to-br from-purple-600 to-purple-800 flex items-center justify-center text-white text-[8px] font-bold flex-shrink-0">
+                                {claim.authorNumber?.toString().slice(-2) || "??"}
+                              </div>
+                              <span className={`text-[8px] font-bold px-1 py-0.5 rounded ${repTier.bgColor} ${repTier.textColor}`}>
+                                {repTier.name}
                               </span>
                               {isResolved && evidenceGradeInfo && (
-                                <span className={`px-1.5 py-0.5 rounded font-bold ${evidenceGradeInfo.bgColor} ${evidenceGradeInfo.color}`}>
+                                <span className={`text-[8px] px-1 py-0.5 rounded font-bold ${evidenceGradeInfo.bgColor} ${evidenceGradeInfo.color}`}>
                                   {evidenceGradeInfo.label}
                                 </span>
                               )}
-                              {/* Resolve button - ONLY FOR YOUR PENDING CLAIMS */}
+                            </div>
+                            <div className="flex items-center gap-1.5">
                               {isPending && (() => {
                                 const anonId = typeof window !== 'undefined' ? localStorage.getItem("anonId") : null;
                                 const isYourClaim = (user && claim.userId === user.id) || (anonId && claim.anonId === anonId);
@@ -498,7 +486,7 @@ export default function AppFeedPage() {
                                       e.stopPropagation();
                                       window.location.href = `/resolve/${claim.id}`;
                                     }}
-                                    className="flex items-center gap-1 px-2 py-0.5 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 text-white text-[10px] font-bold rounded transition-all hover:scale-105 active:scale-95"
+                                    className="flex items-center gap-1 px-2 py-0.5 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 text-white text-[9px] font-bold rounded transition-all hover:scale-105 active:scale-95"
                                   >
                                     <svg className="w-2.5 h-2.5" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
                                       <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
@@ -507,19 +495,13 @@ export default function AppFeedPage() {
                                   </button>
                                 ) : null;
                               })()}
-                              <div className="flex items-center gap-2 ml-auto text-slate-500">
-                                <span>{claim.upvotesCount || 0} up</span>
-                                <span>{claim.downvotesCount || 0} dn</span>
-                              </div>
-                            </div>
-                            {/* Hash snippet */}
-                            <div className="flex items-center justify-end">
-                              <code className="text-[9px] text-slate-500 font-mono">{claim.hash?.slice(0, 8)}...{claim.hash?.slice(-6)}</code>
+                              <code className="text-[8px] text-slate-600 font-mono">{claim.hash?.slice(0, 6)}...</code>
                             </div>
                           </div>
                         </Link>
                       );
                     })}
+                    </div>
                   </div>
                 ) : (
                   <div className="flex flex-col items-center justify-center py-16">
@@ -541,10 +523,14 @@ export default function AppFeedPage() {
                 </div>
 
                 {filteredOsint.length > 0 ? (
-                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-                    {filteredOsint.map((signal) => (
-                      <IntelCard key={signal.id} item={signal} />
-                    ))}
+                  <div className="overflow-x-auto scrollbar-hide -mx-4 px-4 pb-2">
+                    <div className="flex gap-3 md:grid md:grid-cols-5 md:gap-3" style={{ minWidth: 'max-content' }}>
+                      {filteredOsint.slice(0, 25).map((signal) => (
+                        <div key={signal.id} className="w-[280px] md:w-auto flex-shrink-0">
+                          <IntelCard item={signal} />
+                        </div>
+                      ))}
+                    </div>
                   </div>
                 ) : (
                   <div className="flex flex-col items-center justify-center py-16">
