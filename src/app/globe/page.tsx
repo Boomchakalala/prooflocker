@@ -691,21 +691,25 @@ export default function GlobePage() {
                             {claim.category && (
                               <span className="text-[10px] text-slate-500">#{claim.category}</span>
                             )}
-                            {/* Resolve button for pending claims */}
-                            {!isResolved && (
-                              <button
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  router.push(`/resolve/${claim.id}`);
-                                }}
-                                className="flex items-center gap-1 px-2.5 py-1 bg-gradient-to-r from-emerald-600 to-emerald-700 hover:from-emerald-500 hover:to-emerald-600 text-white text-[10px] font-bold rounded shadow-md shadow-emerald-500/30 transition-all hover:scale-105"
-                              >
-                                <svg className="w-2.5 h-2.5" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
-                                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                                </svg>
-                                Resolve
-                              </button>
-                            )}
+                            {/* Resolve button - ONLY FOR YOUR PENDING CLAIMS */}
+                            {!isResolved && (() => {
+                              const anonId = typeof window !== 'undefined' ? localStorage.getItem("anonId") : null;
+                              const isYourClaim = (user && claim.anonId && user.id === claim.userId) || (anonId && claim.anonId === anonId);
+                              return isYourClaim ? (
+                                <button
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    router.push(`/resolve/${claim.id}`);
+                                  }}
+                                  className="flex items-center gap-1 px-2.5 py-1 bg-gradient-to-r from-emerald-600 to-emerald-700 hover:from-emerald-500 hover:to-emerald-600 text-white text-[10px] font-bold rounded shadow-md shadow-emerald-500/30 transition-all hover:scale-105"
+                                >
+                                  <svg className="w-2.5 h-2.5" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                  </svg>
+                                  Resolve
+                                </button>
+                              ) : null;
+                            })()}
                           </div>
                           <span className="text-[10px] text-slate-600">{claim.lockedDate}</span>
                         </div>
@@ -891,21 +895,25 @@ export default function GlobePage() {
                         <div className="flex items-center justify-between">
                           <div className="flex items-center gap-2">
                             <span className="text-[10px] text-slate-500">{claim.lockedDate}</span>
-                            {/* Resolve button for pending claims */}
-                            {claim.outcome === 'pending' && (
-                              <button
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  router.push(`/resolve/${claim.id}`);
-                                }}
-                                className="flex items-center gap-1 px-2.5 py-0.5 bg-gradient-to-r from-emerald-600 to-emerald-700 hover:from-emerald-500 hover:to-emerald-600 text-white text-[11px] font-bold rounded shadow-md shadow-emerald-500/30 transition-all hover:scale-105"
-                              >
-                                <svg className="w-3 h-3" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
-                                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                                </svg>
-                                Resolve
-                              </button>
-                            )}
+                            {/* Resolve button - ONLY FOR YOUR PENDING CLAIMS */}
+                            {claim.outcome === 'pending' && (() => {
+                              const anonId = typeof window !== 'undefined' ? localStorage.getItem("anonId") : null;
+                              const isYourClaim = (user && claim.userId && user.id === claim.userId) || (anonId && claim.anonId === anonId);
+                              return isYourClaim ? (
+                                <button
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    router.push(`/resolve/${claim.id}`);
+                                  }}
+                                  className="flex items-center gap-1 px-2.5 py-0.5 bg-gradient-to-r from-emerald-600 to-emerald-700 hover:from-emerald-500 hover:to-emerald-600 text-white text-[11px] font-bold rounded shadow-md shadow-emerald-500/30 transition-all hover:scale-105"
+                                >
+                                  <svg className="w-3 h-3" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                  </svg>
+                                  Resolve
+                                </button>
+                              ) : null;
+                            })()}
                           </div>
                           <button onClick={() => router.push(`/proof/${claim.publicSlug}`)} className="text-[11px] text-purple-400 font-medium">View</button>
                         </div>
