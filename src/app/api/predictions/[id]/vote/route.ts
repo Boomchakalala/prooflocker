@@ -1,9 +1,9 @@
-import { NextResponse } from 'next/server';
+import { NextResponse, NextRequest } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
-import { getCurrentUser } from '@/lib/auth';
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
 
 // Calculate vote weight based on reputation score
 // Formula: 1 + floor(repScore / 250), capped at 5
@@ -12,7 +12,7 @@ function calculateVoteWeight(repScore: number): number {
 }
 
 export async function POST(
-  request: Request,
+  request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
@@ -29,10 +29,24 @@ export async function POST(
       );
     }
 
-    // Get current user
-    const user = await getCurrentUser();
+    // Get the access token from Authorization header
+    const authHeader = request.headers.get('authorization');
 
-    if (!user) {
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+      return NextResponse.json(
+        { error: 'Unauthorized. You must be logged in to vote.' },
+        { status: 401 }
+      );
+    }
+
+    const accessToken = authHeader.substring(7); // Remove 'Bearer ' prefix
+
+    // Create Supabase client and validate the token
+    const authSupabase = createClient(supabaseUrl, supabaseAnonKey);
+    const { data: { user }, error: authError } = await authSupabase.auth.getUser(accessToken);
+
+    if (authError || !user) {
+      console.error('[Vote API] Auth error:', authError);
       return NextResponse.json(
         { error: 'Unauthorized. You must be logged in to vote.' },
         { status: 401 }
@@ -216,7 +230,7 @@ export async function POST(
 }
 
 export async function GET(
-  request: Request,
+  request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
@@ -224,7 +238,15 @@ export async function GET(
     const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
     // Get current user (optional for GET)
-    const user = await getCurrentUser();
+    const authHeader = request.headers.get('authorization');
+    let user = null;
+
+    if (authHeader && authHeader.startsWith('Bearer ')) {
+      const accessToken = authHeader.substring(7);
+      const authSupabase = createClient(supabaseUrl, supabaseAnonKey);
+      const { data } = await authSupabase.auth.getUser(accessToken);
+      user = data.user;
+    }
 
     // Get weighted vote totals from prediction
     const { data: prediction } = await supabase

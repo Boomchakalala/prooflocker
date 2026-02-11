@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
+import { getAccessToken } from '@/lib/auth';
 
 interface VoteButtonsProps {
   predictionId: string;
@@ -29,14 +30,31 @@ export default function VoteButtons({
   useEffect(() => {
     if (!user) return;
 
-    fetch(`/api/predictions/${predictionId}/vote`)
-      .then(res => res.json())
-      .then(data => {
+    const fetchVoteStatus = async () => {
+      try {
+        const token = await getAccessToken();
+        const headers: HeadersInit = {
+          'Content-Type': 'application/json',
+        };
+
+        if (token) {
+          headers['Authorization'] = `Bearer ${token}`;
+        }
+
+        const res = await fetch(`/api/predictions/${predictionId}/vote`, {
+          headers,
+        });
+
+        const data = await res.json();
         setUserVote(data.userVote);
         setUpvotes(data.upvotes || 0);
         setDownvotes(data.downvotes || 0);
-      })
-      .catch(err => console.error('Error fetching vote status:', err));
+      } catch (err) {
+        console.error('Error fetching vote status:', err);
+      }
+    };
+
+    fetchVoteStatus();
   }, [predictionId, user]);
 
   const handleVote = async (voteType: 'upvote' | 'downvote') => {
@@ -49,10 +67,19 @@ export default function VoteButtons({
     setError(null);
 
     try {
+      const token = await getAccessToken();
+
+      if (!token) {
+        setError('Please log in to vote');
+        setLoading(false);
+        return;
+      }
+
       const response = await fetch(`/api/predictions/${predictionId}/vote`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
         },
         body: JSON.stringify({ voteType }),
       });
