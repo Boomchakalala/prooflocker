@@ -491,7 +491,7 @@ export default function AppFeedPage() {
                                   {evidenceGradeInfo.label}
                                 </span>
                               )}
-                              {/* Resolve button for pending claims */}
+                              {/* Resolve button for pending claims - PROMINENT ACTION */}
                               {isPending && (
                                 <button
                                   onClick={(e) => {
@@ -499,8 +499,11 @@ export default function AppFeedPage() {
                                     e.stopPropagation();
                                     window.location.href = `/resolve/${claim.id}`;
                                   }}
-                                  className="px-2 py-0.5 bg-purple-500/15 text-purple-400 hover:bg-purple-500/25 rounded font-medium transition-colors"
+                                  className="flex items-center gap-1 px-3 py-1 bg-gradient-to-r from-emerald-600 to-emerald-700 hover:from-emerald-500 hover:to-emerald-600 text-white text-[11px] font-bold rounded-md shadow-lg shadow-emerald-500/30 transition-all hover:scale-105 active:scale-95"
                                 >
+                                  <svg className="w-3 h-3" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                  </svg>
                                   Resolve
                                 </button>
                               )}
