@@ -190,6 +190,31 @@ export async function resendConfirmationEmail(
 }
 
 /**
+ * Get the current access token for API calls
+ * This is for client-side use only to send to API routes
+ */
+export async function getAccessToken(): Promise<string | null> {
+  try {
+    const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+
+    if (sessionError) {
+      console.error("[Auth] Error getting session:", sessionError);
+      return null;
+    }
+
+    if (!session) {
+      console.log("[Auth] No session found");
+      return null;
+    }
+
+    return session.access_token;
+  } catch (error) {
+    console.error("[Auth] Exception in getAccessToken:", error);
+    return null;
+  }
+}
+
+/**
  * Get the current authenticated user
  * Uses getSession() to read from localStorage first for instant session restoration
  */

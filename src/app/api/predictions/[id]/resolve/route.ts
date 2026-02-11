@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
 import { updatePredictionOutcome, type PredictionOutcome } from "@/lib/storage";
-import { getCurrentUser } from "@/lib/auth";
 import type { EvidenceGrade, EvidenceItemInput } from "@/lib/evidence-types";
 import { validateEvidenceRequirements } from "@/lib/evidence-types";
 import {
@@ -19,10 +18,27 @@ export async function POST(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    // Get the authenticated user
-    const user = await getCurrentUser();
+    // Get the access token from Authorization header
+    const authHeader = request.headers.get('authorization');
 
-    if (!user) {
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+      return NextResponse.json(
+        { error: "Unauthorized - must be logged in" },
+        { status: 401 }
+      );
+    }
+
+    const accessToken = authHeader.substring(7); // Remove 'Bearer ' prefix
+
+    // Create Supabase client and validate the token
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+    const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
+    const authSupabase = createClient(supabaseUrl, supabaseAnonKey);
+
+    const { data: { user }, error: authError } = await authSupabase.auth.getUser(accessToken);
+
+    if (authError || !user) {
+      console.error("[Resolve API] Auth error:", authError);
       return NextResponse.json(
         { error: "Unauthorized - must be logged in" },
         { status: 401 }
