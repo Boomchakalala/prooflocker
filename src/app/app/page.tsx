@@ -491,22 +491,26 @@ export default function AppFeedPage() {
                                   {evidenceGradeInfo.label}
                                 </span>
                               )}
-                              {/* Resolve button for pending claims - PROMINENT ACTION */}
-                              {isPending && (
-                                <button
-                                  onClick={(e) => {
-                                    e.preventDefault();
-                                    e.stopPropagation();
-                                    window.location.href = `/resolve/${claim.id}`;
-                                  }}
-                                  className="flex items-center gap-1 px-3 py-1 bg-gradient-to-r from-emerald-600 to-emerald-700 hover:from-emerald-500 hover:to-emerald-600 text-white text-[11px] font-bold rounded-md shadow-lg shadow-emerald-500/30 transition-all hover:scale-105 active:scale-95"
-                                >
-                                  <svg className="w-3 h-3" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                                  </svg>
-                                  Resolve
-                                </button>
-                              )}
+                              {/* Resolve button - ONLY FOR YOUR PENDING CLAIMS */}
+                              {isPending && (() => {
+                                const anonId = typeof window !== 'undefined' ? localStorage.getItem("anonId") : null;
+                                const isYourClaim = (user && claim.userId === user.id) || (anonId && claim.anonId === anonId);
+                                return isYourClaim ? (
+                                  <button
+                                    onClick={(e) => {
+                                      e.preventDefault();
+                                      e.stopPropagation();
+                                      window.location.href = `/resolve/${claim.id}`;
+                                    }}
+                                    className="flex items-center gap-1 px-3 py-1 bg-gradient-to-r from-emerald-600 to-emerald-700 hover:from-emerald-500 hover:to-emerald-600 text-white text-[11px] font-bold rounded-md shadow-lg shadow-emerald-500/30 transition-all hover:scale-105 active:scale-95"
+                                  >
+                                    <svg className="w-3 h-3" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+                                      <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                    </svg>
+                                    Resolve
+                                  </button>
+                                ) : null;
+                              })()}
                               <div className="flex items-center gap-2 ml-auto text-slate-500">
                                 <span>{claim.upvotesCount || 0} up</span>
                                 <span>{claim.downvotesCount || 0} dn</span>
