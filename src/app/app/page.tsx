@@ -79,7 +79,7 @@ export default function AppFeedPage() {
   };
 
   const getTickerItems = () => {
-    const items: { type: string; text: string; location: string; time: string }[] = [];
+    const items: { type: string; text: string; location: string; time: string; source: 'intel' | 'claim' }[] = [];
 
     // Mix intel signals across categories
     osintSignals.slice(0, 4).forEach(signal => {
@@ -88,7 +88,8 @@ export default function AppFeedPage() {
         type: tag.toUpperCase() || 'INTEL',
         text: signal.title || 'Intelligence Signal',
         location: signal.place_name || signal.country_code || tag || '',
-        time: signal.created_at ? formatRelativeTime(signal.created_at) : 'Just now'
+        time: signal.created_at ? formatRelativeTime(signal.created_at) : 'Just now',
+        source: 'intel',
       });
     });
 
@@ -98,7 +99,8 @@ export default function AppFeedPage() {
         type: claim.category?.toUpperCase() || 'CLAIM',
         text: claim.text?.slice(0, 80) + (claim.text?.length > 80 ? '...' : ''),
         location: claim.category || '',
-        time: claim.timestamp ? formatRelativeTime(claim.timestamp) : 'Just now'
+        time: claim.timestamp ? formatRelativeTime(claim.timestamp) : 'Just now',
+        source: 'claim',
       });
     });
 
