@@ -4,9 +4,7 @@ import { useState, useEffect, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { PredictionOutcome } from "@/lib/storage";
 import { supabase } from "@/lib/supabase";
-import type { EvidenceGrade, EvidenceItemInput } from "@/lib/evidence-types";
-import { EvidenceGradeInfo, validateEvidenceRequirements } from "@/lib/evidence-types";
-import { sha256, sha256File } from "@/lib/evidence-hashing";
+import type { EvidenceItemInput } from "@/lib/evidence-types";
 import { computeEvidenceScore } from "@/lib/evidence-scoring";
 import EvidenceScoreMeter from "@/components/EvidenceScoreMeter";
 
@@ -24,7 +22,6 @@ export default function ResolvePage({ params }: Props) {
 
   // Form state
   const [outcome, setOutcome] = useState<PredictionOutcome>("correct");
-  const [evidenceGrade, setEvidenceGrade] = useState<EvidenceGrade>("C");
   const [evidenceSummary, setEvidenceSummary] = useState("");
   const [resolutionNote, setResolutionNote] = useState("");
   const [evidenceItems, setEvidenceItems] = useState<EvidenceItemInput[]>([]);
@@ -62,7 +59,6 @@ export default function ResolvePage({ params }: Props) {
         setOutcome(data.outcome === "pending" ? "correct" : data.outcome);
         setResolutionNote(data.resolution_note || "");
         setEvidenceSummary(data.evidence_summary || "");
-        setEvidenceGrade((data.evidence_grade as EvidenceGrade) || "C");
       } catch (err) {
         console.error("Error fetching prediction:", err);
         setError("Failed to load prediction");
@@ -81,7 +77,6 @@ export default function ResolvePage({ params }: Props) {
     }
 
     try {
-      // Create evidence item
       const item: EvidenceItemInput = {
         type: "link",
         url: newLinkUrl.trim(),
@@ -103,7 +98,6 @@ export default function ResolvePage({ params }: Props) {
     if (!file) return;
 
     try {
-      // Create evidence item
       const item: EvidenceItemInput = {
         type: file.type.startsWith("image/") ? "screenshot" : "file",
         file,
@@ -116,7 +110,6 @@ export default function ResolvePage({ params }: Props) {
       setError("Failed to add file");
     }
 
-    // Reset input
     e.target.value = "";
   };
 
@@ -130,17 +123,6 @@ export default function ResolvePage({ params }: Props) {
     setError("");
 
     try {
-      // Validate evidence requirements
-      const validation = validateEvidenceRequirements(
-        evidenceGrade,
-        evidenceSummary,
-        evidenceItems.length
-      );
-
-      if (!validation.valid) {
-        throw new Error(validation.error);
-      }
-
       const { data: { session }, error: sessionError } = await supabase.auth.getSession();
 
       if (sessionError || !session?.access_token) {
@@ -155,7 +137,6 @@ export default function ResolvePage({ params }: Props) {
         },
         body: JSON.stringify({
           outcome,
-          evidenceGrade,
           evidenceSummary: evidenceSummary.trim() || undefined,
           resolutionNote: resolutionNote.trim() || undefined,
           evidenceItems,
@@ -165,12 +146,11 @@ export default function ResolvePage({ params }: Props) {
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.error || "Failed to resolve prediction");
+        throw new Error(data.error || data.details || "Failed to resolve prediction");
       }
 
       console.log("[ResolvePage] Success:", data);
 
-      // Navigate to proof page
       if (prediction?.public_slug) {
         router.push(`/proof/${prediction.public_slug}`);
       } else {
@@ -211,14 +191,12 @@ export default function ResolvePage({ params }: Props) {
 
   return (
     <div className="min-h-screen gradient-bg text-white relative">
-      {/* Decorative gradient orbs */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-20 -left-40 w-80 h-80 bg-blue-500/10 rounded-full blur-3xl" />
         <div className="absolute top-40 -right-40 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl" />
       </div>
 
       <div className="relative z-10 max-w-4xl mx-auto px-4 py-8 md:py-12">
-        {/* Header with back button */}
         <div className="mb-8">
           <button
             onClick={() => router.back()}
@@ -231,7 +209,6 @@ export default function ResolvePage({ params }: Props) {
           </button>
         </div>
 
-        {/* Hero Card - Prediction */}
         {prediction && (
           <div className="glass border border-white/10 rounded-2xl overflow-hidden mb-6 shadow-2xl">
             <div className="p-6 md:p-8 bg-gradient-to-br from-blue-500/5 via-purple-500/5 to-transparent">
@@ -243,7 +220,7 @@ export default function ResolvePage({ params }: Props) {
                 {prediction.text_preview || prediction.text}
               </h1>
               <p className="text-sm text-neutral-400">
-                Submit evidence and mark the outcome. Your reputation score shifts based on evidence quality.
+                Select the outcome. Add evidence to boost your reputation score.
               </p>
             </div>
           </div>
@@ -261,29 +238,31 @@ export default function ResolvePage({ params }: Props) {
                 </div>
                 <div>
                   <h2 className="text-xl font-bold text-white">Outcome</h2>
-                  <p className="text-xs text-neutral-400">Select how the claim turned out</p>
+                  <p className="text-xs text-neutral-400">What happened?</p>
                 </div>
               </div>
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-                {["correct", "incorrect", "invalid"].map((o) => {
+              <div className="grid grid-cols-3 gap-3">
+                {(["correct", "incorrect", "invalid"] as const).map((o) => {
                   const isSelected = outcome === o;
-                  const colors = {
-                    correct: "bg-green-500/15 border-green-500/50 text-green-300 ring-green-500/30",
-                    incorrect: "bg-red-500/15 border-red-500/50 text-red-300 ring-red-500/30",
-                    invalid: "bg-gray-500/15 border-gray-500/50 text-gray-300 ring-gray-500/30",
-                    pending: "bg-yellow-500/15 border-yellow-500/50 text-yellow-300 ring-yellow-500/30",
+                  const config = {
+                    correct: { color: "bg-green-500/15 border-green-500/50 text-green-300 ring-green-500/30", icon: "M5 13l4 4L19 7" },
+                    incorrect: { color: "bg-red-500/15 border-red-500/50 text-red-300 ring-red-500/30", icon: "M6 18L18 6M6 6l12 12" },
+                    invalid: { color: "bg-gray-500/15 border-gray-500/50 text-gray-300 ring-gray-500/30", icon: "M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" },
                   };
                   return (
                     <button
                       key={o}
                       type="button"
-                      onClick={() => setOutcome(o as PredictionOutcome)}
-                      className={`h-12 rounded-lg border font-semibold text-sm transition-all ${
+                      onClick={() => setOutcome(o)}
+                      className={`h-12 rounded-lg border font-semibold text-sm transition-all flex items-center justify-center gap-2 ${
                         isSelected
-                          ? `${colors[o as keyof typeof colors]} ring-1`
+                          ? `${config[o].color} ring-1`
                           : "bg-white/[0.03] border-white/[0.08] text-white/60 hover:bg-white/[0.06] hover:text-white"
                       }`}
                     >
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={config[o].icon} />
+                      </svg>
                       {o.charAt(0).toUpperCase() + o.slice(1)}
                     </button>
                   );
@@ -292,10 +271,10 @@ export default function ResolvePage({ params }: Props) {
             </div>
           </div>
 
-          {/* Section 2: Evidence Pack */}
+          {/* Section 2: Evidence (Optional) */}
           <div className="glass border border-white/10 rounded-2xl overflow-hidden shadow-xl">
             <div className="p-6 md:p-8">
-              <div className="flex items-center gap-3 mb-6">
+              <div className="flex items-center gap-3 mb-2">
                 <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500/20 to-purple-500/20 flex items-center justify-center">
                   <svg className="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
@@ -303,37 +282,13 @@ export default function ResolvePage({ params }: Props) {
                 </div>
                 <div>
                   <h2 className="text-xl font-bold text-white">Evidence</h2>
-                  <p className="text-xs text-neutral-400">Add evidence to strengthen your reputation impact</p>
+                  <p className="text-xs text-neutral-400">Optional - add proof to boost your reputation score</p>
                 </div>
               </div>
 
-            {/* Evidence Grade Selector */}
-            <div className="mb-5">
-              <label className="block text-sm font-medium text-white/90 mb-3">Evidence Quality</label>
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
-                {(["A", "B", "C", "D"] as EvidenceGrade[]).map((grade) => {
-                  const info = EvidenceGradeInfo[grade];
-                  const isSelected = evidenceGrade === grade;
-                  return (
-                    <button
-                      key={grade}
-                      type="button"
-                      onClick={() => setEvidenceGrade(grade)}
-                      className={`p-3 rounded-lg border text-left transition-all ${
-                        isSelected
-                          ? "bg-white/10 border-white/30 ring-1 ring-white/20"
-                          : "bg-white/[0.03] border-white/[0.08] hover:bg-white/[0.06] hover:border-white/15"
-                      }`}
-                      title={info.description}
-                    >
-                      <div className="font-bold text-white text-sm mb-0.5">{info.label.split(" ")[0]}</div>
-                      <div className="text-[10px] text-neutral-400 line-clamp-1">{info.label.split(" ").slice(1).join(" ")}</div>
-                    </button>
-                  );
-                })}
-              </div>
-              <p className="text-xs text-neutral-500 mt-2">{EvidenceGradeInfo[evidenceGrade].description}</p>
-            </div>
+              <p className="text-xs text-neutral-500 mb-5 ml-[52px]">
+                Adding links or screenshots increases your evidence score and reputation multiplier.
+              </p>
 
             {/* Live Evidence Score Preview */}
             {evidenceItems.length > 0 && (
@@ -455,17 +410,16 @@ export default function ResolvePage({ params }: Props) {
             {/* Evidence Summary */}
             <div>
               <label htmlFor="evidence-summary" className="block text-sm font-medium text-white/90 mb-2">
-                Evidence Summary
-                {["A", "B"].includes(evidenceGrade) && <span className="text-red-400 ml-1">*</span>}
+                Evidence Summary <span className="text-neutral-500 font-normal">(optional)</span>
               </label>
               <textarea
                 id="evidence-summary"
                 name="evidence-summary"
                 value={evidenceSummary}
                 onChange={(e) => setEvidenceSummary(e.target.value)}
-                placeholder="Explain how the evidence proves the outcome..."
+                placeholder="Brief explanation of how evidence proves the outcome..."
                 maxLength={280}
-                rows={3}
+                rows={2}
                 className="w-full px-3 py-2.5 bg-white/5 border border-white/10 rounded-lg text-white text-sm placeholder-white/30 focus:outline-none focus:ring-2 focus:ring-blue-500/50 resize-none transition-all"
               />
               <p className="text-xs text-white/40 mt-1">{evidenceSummary.length}/280</p>
@@ -476,15 +430,15 @@ export default function ResolvePage({ params }: Props) {
           {/* Section 3: Optional Notes */}
           <div className="glass border border-white/10 rounded-2xl overflow-hidden shadow-xl">
             <div className="p-6 md:p-8">
-              <div className="flex items-center gap-3 mb-6">
+              <div className="flex items-center gap-3 mb-4">
                 <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-purple-500/20 to-pink-500/20 flex items-center justify-center">
                   <svg className="w-5 h-5 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z" />
                   </svg>
                 </div>
                 <div>
-                  <h2 className="text-xl font-bold text-white">Additional Notes</h2>
-                  <p className="text-xs text-neutral-400">Optional context or explanation</p>
+                  <h2 className="text-xl font-bold text-white">Notes</h2>
+                  <p className="text-xs text-neutral-400">Optional context</p>
                 </div>
               </div>
               <label htmlFor="resolution-note" className="sr-only">Additional Notes</label>
@@ -495,7 +449,7 @@ export default function ResolvePage({ params }: Props) {
                 onChange={(e) => setResolutionNote(e.target.value)}
                 placeholder="Any additional context..."
                 maxLength={280}
-                rows={3}
+                rows={2}
                 className="w-full px-3 py-2.5 bg-white/5 border border-white/10 rounded-lg text-white text-sm placeholder-white/30 focus:outline-none focus:ring-2 focus:ring-purple-500/50 resize-none transition-all"
               />
               <p className="text-xs text-white/40 mt-1">{resolutionNote.length}/280</p>
@@ -537,7 +491,7 @@ export default function ResolvePage({ params }: Props) {
                 )}
               </button>
               <p className="text-xs text-neutral-500 text-center">
-                This resolution is public and permanent. Your reputation score will be updated.
+                This resolution is public and permanent.
               </p>
             </div>
           </div>
