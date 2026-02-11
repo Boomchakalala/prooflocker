@@ -692,8 +692,8 @@ export default function PredictionCard({ prediction, card, currentUserId, onOutc
           </div>
         )}
 
-        {/* Resolve button for pending claims owned by current user */}
-        {canResolve && !isPreview && (
+        {/* Resolve button for ALL pending claims (not just owners) */}
+        {isPending && !isPreview && !isOsint && (
           <button
             onClick={(e) => { e.preventDefault(); e.stopPropagation(); handleResolveClick(); }}
             className="flex items-center gap-1.5 px-3 py-1.5 bg-purple-500/15 hover:bg-purple-500/25 text-purple-400 text-sm font-medium rounded-lg transition-colors border border-purple-500/30"
