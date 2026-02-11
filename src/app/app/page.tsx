@@ -450,9 +450,9 @@ export default function AppFeedPage() {
                               </div>
                               <span className="text-xs text-slate-400 font-medium">#{claim.authorNumber}</span>
                               <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded ${
-                                isCorrect ? "bg-emerald-500/15 text-emerald-400" :
-                                isIncorrect ? "bg-red-500/15 text-red-400" :
-                                "bg-amber-500/15 text-amber-400"
+                                isCorrect ? "bg-gradient-to-r from-emerald-500 to-emerald-600 text-white shadow-md shadow-emerald-500/30" :
+                                isIncorrect ? "bg-gradient-to-r from-red-500 to-red-600 text-white shadow-md shadow-red-500/30" :
+                                "bg-gradient-to-r from-amber-500 to-orange-500 text-white shadow-md shadow-amber-500/30 animate-pulse"
                               }`}>
                                 {isCorrect ? 'Correct' : isIncorrect ? 'Incorrect' : 'Pending'}
                               </span>
@@ -502,7 +502,7 @@ export default function AppFeedPage() {
                                       e.stopPropagation();
                                       window.location.href = `/resolve/${claim.id}`;
                                     }}
-                                    className="flex items-center gap-1 px-3 py-1 bg-gradient-to-r from-emerald-600 to-emerald-700 hover:from-emerald-500 hover:to-emerald-600 text-white text-[11px] font-bold rounded-md shadow-lg shadow-emerald-500/30 transition-all hover:scale-105 active:scale-95"
+                                    className="flex items-center gap-1.5 px-3 py-1 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 text-white text-[11px] font-bold rounded-md shadow-lg shadow-purple-500/40 transition-all hover:scale-105 active:scale-95"
                                   >
                                     <svg className="w-3 h-3" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
                                       <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
