@@ -434,21 +434,21 @@ export default function PredictionCard({ prediction, card, currentUserId, onOutc
           </span>
         )}
         {prediction.outcome === 'correct' ? (
-          <span className="flex items-center gap-1 px-2 py-0.5 bg-emerald-500/10 text-emerald-400 text-[10px] font-semibold rounded">
+          <span className="flex items-center gap-1 px-2 py-0.5 bg-gradient-to-r from-emerald-500 to-emerald-600 text-white text-[10px] font-semibold rounded">
             <svg className="w-2.5 h-2.5" fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7"/>
             </svg>
             Correct
           </span>
         ) : prediction.outcome === 'incorrect' ? (
-          <span className="flex items-center gap-1 px-2 py-0.5 bg-rose-500/10 text-rose-400 text-[10px] font-semibold rounded">
+          <span className="flex items-center gap-1 px-2 py-0.5 bg-gradient-to-r from-red-500 to-red-600 text-white text-[10px] font-semibold rounded">
             <svg className="w-2.5 h-2.5" fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12"/>
             </svg>
             Incorrect
           </span>
         ) : (
-          <span className="flex items-center gap-1 px-2 py-0.5 bg-amber-500/10 text-amber-400 text-[10px] font-semibold rounded">
+          <span className="flex items-center gap-1 px-2 py-0.5 bg-gradient-to-r from-amber-500 to-orange-500 text-white text-[10px] font-semibold rounded animate-pulse">
             <svg className="w-2.5 h-2.5" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
               <circle cx="12" cy="12" r="10"/>
             </svg>
@@ -670,21 +670,21 @@ export default function PredictionCard({ prediction, card, currentUserId, onOutc
       {/* Status & Evidence - V4 format */}
       <div className="flex items-center gap-4 mb-4">
         {prediction.outcome === 'correct' ? (
-          <div className="flex items-center gap-1.5 px-3 py-1.5 bg-emerald-500/10 text-emerald-400 text-sm font-medium rounded-lg">
+          <div className="flex items-center gap-1.5 px-3 py-1.5 bg-gradient-to-r from-emerald-500 to-emerald-600 text-white text-sm font-medium rounded-lg">
             <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7"/>
             </svg>
             Correct
           </div>
         ) : prediction.outcome === 'incorrect' ? (
-          <div className="flex items-center gap-1.5 px-3 py-1.5 bg-rose-500/10 text-rose-400 text-sm font-medium rounded-lg">
+          <div className="flex items-center gap-1.5 px-3 py-1.5 bg-gradient-to-r from-red-500 to-red-600 text-white text-sm font-medium rounded-lg">
             <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12"/>
             </svg>
             Incorrect
           </div>
         ) : (
-          <div className="flex items-center gap-1.5 px-3 py-1.5 bg-amber-500/10 text-amber-400 text-sm font-medium rounded-lg">
+          <div className="flex items-center gap-1.5 px-3 py-1.5 bg-gradient-to-r from-amber-500 to-orange-500 text-white text-sm font-medium rounded-lg animate-pulse">
             <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
               <circle cx="12" cy="12" r="10"/>
             </svg>
