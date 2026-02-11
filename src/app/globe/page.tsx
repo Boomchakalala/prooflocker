@@ -78,6 +78,11 @@ export default function GlobePage() {
   const [selectedArea, setSelectedArea] = useState<{claims: Claim[], osint: OsintItem[], name: string} | null>(null);
   const [viewMode, setViewMode] = useState<'points' | 'heatmap'>('points');
 
+  // Viewport filtering state
+  const [filterByViewport, setFilterByViewport] = useState(false);
+  const [viewportBounds, setViewportBounds] = useState<any>(null);
+  const [viewportZoom, setViewportZoom] = useState<number>(1.8);
+
   // Mobile feed toggle state - Default to false so globe is prominent
   const [showMobileFeed, setShowMobileFeed] = useState(false);
 

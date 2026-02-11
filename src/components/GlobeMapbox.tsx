@@ -311,7 +311,22 @@ export default function GlobeMapbox({ claims, osint, mapMode = 'both', viewMode 
         map.rotateTo(map.getBearing() + 15, { duration: 120000 });
       }
     });
-  }, [findNearbyItems]);
+
+    // Track viewport changes for filtering
+    if (onViewportChange) {
+      const handleViewportChange = () => {
+        const bounds = map.getBounds();
+        const zoom = map.getZoom();
+        onViewportChange(bounds, zoom);
+      };
+
+      // Call once on load
+      handleViewportChange();
+
+      // Call on every map movement
+      map.on('moveend', handleViewportChange);
+    }
+  }, [findNearbyItems, onViewportChange]);
 
   // Update data
   useEffect(() => {
