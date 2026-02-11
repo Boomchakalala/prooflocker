@@ -5,6 +5,7 @@ import type { PredictionOutcome } from "@/lib/storage";
 import type { EvidenceGrade, EvidenceItemInput } from "@/lib/evidence-types";
 import { EvidenceGradeInfo, validateEvidenceRequirements } from "@/lib/evidence-types";
 import { sha256Url, sha256File } from "@/lib/evidence-hashing";
+import { getAccessToken } from "@/lib/auth";
 
 interface ResolutionModalWithEvidenceProps {
   predictionId: string;
@@ -142,9 +143,19 @@ export default function ResolutionModalWithEvidence({
         })
       );
 
+      // Get access token for authentication
+      const token = await getAccessToken();
+
+      if (!token) {
+        throw new Error("You must be logged in to resolve a claim");
+      }
+
       const response = await fetch(`/api/predictions/${predictionId}/resolve`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`,
+        },
         body: JSON.stringify({
           outcome,
           resolutionNote: resolutionNote.trim() || undefined,
