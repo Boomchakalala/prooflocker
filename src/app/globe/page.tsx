@@ -670,9 +670,9 @@ export default function GlobePage() {
                             </span>
                           )}
                           <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded ${
-                            isCorrect ? 'bg-gradient-to-r from-emerald-500 to-emerald-600 text-white shadow-md shadow-emerald-500/30' :
-                            isIncorrect ? 'bg-gradient-to-r from-red-500 to-red-600 text-white shadow-md shadow-red-500/30' :
-                            'bg-gradient-to-r from-amber-500 to-orange-500 text-white shadow-md shadow-amber-500/30 animate-pulse'
+                            isCorrect ? 'bg-gradient-to-r from-emerald-500 to-emerald-600 text-white' :
+                            isIncorrect ? 'bg-gradient-to-r from-red-500 to-red-600 text-white' :
+                            'bg-gradient-to-r from-amber-500 to-orange-500 text-white animate-pulse'
                           }`}>
                             {isCorrect ? 'Correct' : isIncorrect ? 'Incorrect' : 'Pending'}
                           </span>
@@ -701,7 +701,7 @@ export default function GlobePage() {
                                     e.stopPropagation();
                                     router.push(`/resolve/${claim.id}`);
                                   }}
-                                  className="flex items-center gap-1 px-2.5 py-1 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 text-white text-[10px] font-bold rounded shadow-lg shadow-purple-500/40 transition-all hover:scale-105"
+                                  className="flex items-center gap-1 px-2 py-0.5 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 text-white text-[10px] font-bold rounded transition-all hover:scale-105"
                                 >
                                   <svg className="w-2.5 h-2.5" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
                                     <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
@@ -865,9 +865,9 @@ export default function GlobePage() {
                             </span>
                           )}
                           <span className={`text-[10px] font-semibold px-2 py-0.5 rounded ${
-                            claim.outcome === 'correct' ? 'bg-gradient-to-r from-emerald-500 to-emerald-600 text-white shadow-md shadow-emerald-500/30' :
-                            claim.outcome === 'incorrect' ? 'bg-gradient-to-r from-red-500 to-red-600 text-white shadow-md shadow-red-500/30' :
-                            'bg-gradient-to-r from-amber-500 to-orange-500 text-white shadow-md shadow-amber-500/30 animate-pulse'
+                            claim.outcome === 'correct' ? 'bg-gradient-to-r from-emerald-500 to-emerald-600 text-white' :
+                            claim.outcome === 'incorrect' ? 'bg-gradient-to-r from-red-500 to-red-600 text-white' :
+                            'bg-gradient-to-r from-amber-500 to-orange-500 text-white animate-pulse'
                           }`}>
                             {claim.outcome === 'correct' ? 'Correct' : claim.outcome === 'incorrect' ? 'Incorrect' : 'Pending'}
                           </span>
@@ -889,7 +889,7 @@ export default function GlobePage() {
                                     e.stopPropagation();
                                     router.push(`/resolve/${claim.id}`);
                                   }}
-                                  className="flex items-center gap-1 px-2.5 py-0.5 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 text-white text-[11px] font-bold rounded shadow-lg shadow-purple-500/40 transition-all hover:scale-105"
+                                  className="flex items-center gap-1 px-2 py-0.5 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 text-white text-[10px] font-bold rounded transition-all hover:scale-105"
                                 >
                                   <svg className="w-3 h-3" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
                                     <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
