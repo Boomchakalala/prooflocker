@@ -11,6 +11,12 @@ interface ProofResolveActionsProps {
 export default function ProofResolveActions({ prediction }: ProofResolveActionsProps) {
   const { user } = useAuth();
 
+  // Already resolved - don't show resolve actions
+  const isResolved = prediction.outcome === "correct" || prediction.outcome === "incorrect" || prediction.outcome === "invalid";
+  if (isResolved) {
+    return null;
+  }
+
   // Check if the current user owns this claim
   const isOwner = user && (
     (user.id && prediction.userId === user.id) ||
