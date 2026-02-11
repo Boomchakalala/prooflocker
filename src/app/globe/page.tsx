@@ -865,11 +865,12 @@ export default function GlobePage() {
                             </span>
                           )}
                           <span className={`text-[10px] font-semibold px-2 py-0.5 rounded ${
-                            claim.outcome === 'correct' ? 'bg-emerald-500/15 text-emerald-400' :
-                            claim.outcome === 'incorrect' ? 'bg-red-500/15 text-red-400' :
-                            'bg-amber-500/15 text-amber-400'
+                            claim.outcome === 'correct' ? 'bg-gradient-to-r from-emerald-500 to-emerald-600 text-white shadow-md shadow-emerald-500/30' :
+                            claim.outcome === 'incorrect' ? 'bg-gradient-to-r from-red-500 to-red-600 text-white shadow-md shadow-red-500/30' :
+                            'bg-gradient-to-r from-amber-500 to-orange-500 text-white shadow-md shadow-amber-500/30 animate-pulse'
                           }`}>
                             {claim.outcome === 'correct' ? 'Correct' : claim.outcome === 'incorrect' ? 'Incorrect' : 'Pending'}
+                          </span>
                           </span>
                         </div>
                       </div>
