@@ -132,6 +132,15 @@ export async function GET(request: NextRequest) {
         geo_method: geoData.method,
       };
 
+      console.log('[Cron: Fetch News] Inserting item:', {
+        title: article.title.substring(0, 50),
+        place_name: geoData.place_name,
+        country_code: geoData.country_code,
+        lat: geoData.lat,
+        lon: geoData.lon,
+        confidence: geoData.confidence,
+      });
+
       itemsToInsert.push(item);
     }
 
