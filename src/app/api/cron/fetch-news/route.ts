@@ -40,11 +40,19 @@ export async function GET(request: NextRequest) {
     const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
     const supabase = createClient(supabaseUrl, supabaseKey);
 
-    // Fetch from GNews API - top headlines, 7 articles (optimized for 1000/day limit)
-    // 144 runs/day × 7 articles = ~1000 requests/day
-    const gnewsUrl = `https://gnews.io/api/v4/top-headlines?category=general&lang=en&max=7&token=${gnewsApiKey}`;
+    // Rotate through categories to get diverse content (crypto, economics, war, tech)
+    // Categories: general, business, technology, world, nation, sports, entertainment, science, health
+    // Rotate based on time to ensure variety: business for markets/crypto, world for war/geopolitics
+    const categories = ['business', 'world', 'technology', 'general'];
+    const currentHour = new Date().getHours();
+    const categoryIndex = currentHour % categories.length;
+    const category = categories[categoryIndex];
 
-    console.log('[Cron: Fetch News] Fetching from GNews...');
+    // Fetch from GNews API - 7 articles per run (optimized for 1000/day limit)
+    // 144 runs/day × 7 articles = ~1000 requests/day
+    const gnewsUrl = `https://gnews.io/api/v4/top-headlines?category=${category}&lang=en&max=7&token=${gnewsApiKey}`;
+
+    console.log(`[Cron: Fetch News] Fetching from GNews (category: ${category})...`);
     const gnewsResponse = await fetch(gnewsUrl);
 
     if (!gnewsResponse.ok) {
@@ -327,16 +335,35 @@ function extractTags(title: string, description: string): string[] {
   const tags: string[] = [];
 
   const tagKeywords: Record<string, string> = {
-    'crypto|bitcoin|ethereum|blockchain': 'crypto',
-    'politics|election|government|congress|senate': 'politics',
-    'market|stock|trading|finance|economy': 'markets',
-    'tech|technology|ai|artificial intelligence|software': 'tech',
-    'sport|football|basketball|soccer|nfl|nba': 'sports',
-    'breaking|urgent|alert': 'breaking',
-    'war|military|conflict|defense': 'military',
-    'health|medical|hospital|covid|pandemic': 'health',
-    'climate|environment|weather|global warming': 'climate',
-    'science|research|study|discovery': 'science',
+    // Crypto - expanded to catch all crypto news
+    'crypto|bitcoin|ethereum|blockchain|btc|eth|solana|cardano|binance|coinbase|defi|nft|web3|cryptocurrency|altcoin|mining': 'crypto',
+
+    // Markets/Economics - comprehensive financial coverage
+    'market|stock|trading|finance|economy|economic|recession|inflation|fed|interest rate|central bank|wall street|dow|nasdaq|s&p|gdp|treasury|bond|forex|dollar|euro|yuan': 'markets',
+
+    // War/Military - conflict and defense news
+    'war|military|conflict|defense|battle|attack|strike|army|navy|air force|combat|invasion|troops|weapons|missile|drone|terrorist|terrorism|ceasefire|ukraine|russia|israel|gaza|hamas|nato': 'military',
+
+    // Politics - government and elections
+    'politics|election|government|congress|senate|president|minister|parliament|vote|legislation|policy|diplomatic': 'politics',
+
+    // Tech - technology and AI
+    'tech|technology|ai|artificial intelligence|software|startup|silicon valley|google|apple|microsoft|meta|amazon|openai|nvidia': 'tech',
+
+    // Sports
+    'sport|football|basketball|soccer|nfl|nba|mlb|tennis|olympics|championship': 'sports',
+
+    // Breaking news marker
+    'breaking|urgent|alert|developing': 'breaking',
+
+    // Health
+    'health|medical|hospital|disease|pandemic|vaccine|drug|fda': 'health',
+
+    // Climate/Environment
+    'climate|environment|weather|global warming|carbon|emissions|renewable|wildfire|flood|hurricane': 'climate',
+
+    // Science
+    'science|research|study|discovery|nasa|space|physics|chemistry': 'science',
   };
 
   for (const [pattern, tag] of Object.entries(tagKeywords)) {
