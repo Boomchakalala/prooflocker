@@ -294,17 +294,17 @@ export async function GET(request: NextRequest) {
       if (!lat || !lng) {
         const extracted = extractLocation(`${prediction.text} ${prediction.category || ''}`);
         if (extracted) {
-          lat = extracted.lat + (Math.random() - 0.5) * 0.5;
-          lng = extracted.lng + (Math.random() - 0.5) * 0.5;
+          lat = extracted.lat + (Math.random() - 0.5) * 3;
+          lng = extracted.lng + (Math.random() - 0.5) * 3;
         }
       }
 
-      // If still no location, use category-based fallback with jitter
+      // If still no location, use category-based fallback with wide scatter
       if (!lat || !lng) {
         const cat = prediction.category || 'Other';
         const fallback = categoryLocations[cat] || categoryLocations['Other'];
-        lat = fallback.lat + (Math.random() - 0.5) * 1.5;
-        lng = fallback.lng + (Math.random() - 0.5) * 1.5;
+        lat = fallback.lat + (Math.random() - 0.5) * 8;
+        lng = fallback.lng + (Math.random() - 0.5) * 8;
         claimFallbackIdx++;
       }
 
