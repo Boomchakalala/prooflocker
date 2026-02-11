@@ -415,8 +415,9 @@ export async function GET(request: NextRequest) {
         }
       }
 
-      // If still no location, skip from globe
-      if (!lat || !lng) return null;
+      // Note: Keep items without location in response
+      // Client-side will filter them for map display
+      // This ensures consistent counts across all pages
 
       const key = getStableKey(
         { id: signal.id, source: signal.source_name, title: signal.title },
