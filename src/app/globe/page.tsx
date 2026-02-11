@@ -291,6 +291,16 @@ export default function GlobePage() {
       });
     }
 
+    // Apply viewport filter if enabled
+    if (filterByViewport && viewportBounds) {
+      items = items.filter(item => {
+        // Skip items without coordinates
+        if (!item.lat || !item.lng) return false;
+        // Check if item is within viewport bounds
+        return viewportBounds.contains([item.lng, item.lat]);
+      });
+    }
+
     // Apply existing filters for claims tab
     if (currentTab === 'claims') {
       let filtered = items;
@@ -401,6 +411,12 @@ export default function GlobePage() {
     return items;
   }, [osint, categoryFilter, timeFilter, searchQuery]);
 
+  // Viewport change handler
+  const handleViewportChange = useCallback((bounds: any, zoom: number) => {
+    setViewportBounds(bounds);
+    setViewportZoom(zoom);
+  }, []);
+
   return (
     <>
       <style jsx global>{`
@@ -447,7 +463,13 @@ export default function GlobePage() {
 
         {/* Map Container - Mobile-First Responsive - Adjusted for ticker */}
         <div className="fixed top-[100px] left-0 right-0 md:right-[360px] bottom-0 md:bottom-0">
-          <GlobeMapbox claims={filteredClaimsForMap} osint={filteredOsintForMap} mapMode={mapMode} viewMode={viewMode} />
+          <GlobeMapbox
+            claims={filteredClaimsForMap}
+            osint={filteredOsintForMap}
+            mapMode={mapMode}
+            viewMode={viewMode}
+            onViewportChange={handleViewportChange}
+          />
         </div>
 
         {/* Map Legend + Controls Overlay - Adjusted for ticker */}
