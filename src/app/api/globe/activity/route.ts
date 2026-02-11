@@ -35,22 +35,17 @@ function calculateRepScore(stats: {
   return Math.min(accuracyScore + volumeScore + evidenceScore, 1000);
 }
 
-// Dedupe helper - creates stable key for items
+// Dedupe helper
 function getStableKey(item: any, type: 'claim' | 'osint'): string {
   if (type === 'claim') {
     return `claim:${item.id}`;
   } else {
-    // For OSINT: use source + id (or source + title hash if no id)
-    if (item.id) {
-      return `osint:${item.source}:${item.id}`;
-    }
-    // Fallback: hash title + source
+    if (item.id) return `osint:${item.source}:${item.id}`;
     const hash = `${item.source}:${item.title}`.toLowerCase().replace(/[^a-z0-9]/g, '');
     return `osint:${hash.slice(0, 50)}`;
   }
 }
 
-// Dedupe array by stable key
 function dedupeByKey<T extends { key: string }>(items: T[]): T[] {
   const seen = new Map<string, T>();
   for (const item of items) {
@@ -61,16 +56,153 @@ function dedupeByKey<T extends { key: string }>(items: T[]): T[] {
   return Array.from(seen.values());
 }
 
+// ── Text-based geotagging ─────────────────────────────────────
+// Extract location from text content (titles, summaries, claim text)
+// Returns { lat, lng, place } or null if no location detected
+
+const CITY_COORDS: { pattern: RegExp; lat: number; lng: number; place: string }[] = [
+  { pattern: /\b(washington|white house|pentagon|capitol hill)\b/i, lat: 38.9072, lng: -77.0369, place: 'Washington DC' },
+  { pattern: /\bnew york\b/i, lat: 40.7128, lng: -74.0060, place: 'New York' },
+  { pattern: /\blos angeles\b/i, lat: 34.0522, lng: -118.2437, place: 'Los Angeles' },
+  { pattern: /\bchicago\b/i, lat: 41.8781, lng: -87.6298, place: 'Chicago' },
+  { pattern: /\bsan francisco\b/i, lat: 37.7749, lng: -122.4194, place: 'San Francisco' },
+  { pattern: /\bseattle\b/i, lat: 47.6062, lng: -122.3321, place: 'Seattle' },
+  { pattern: /\bmiami\b/i, lat: 25.7617, lng: -80.1918, place: 'Miami' },
+  { pattern: /\bhouston\b/i, lat: 29.7604, lng: -95.3698, place: 'Houston' },
+  { pattern: /\bboston\b/i, lat: 42.3601, lng: -71.0589, place: 'Boston' },
+  { pattern: /\batlanta\b/i, lat: 33.749, lng: -84.388, place: 'Atlanta' },
+  { pattern: /\bkyiv\b/i, lat: 50.4501, lng: 30.5234, place: 'Kyiv' },
+  { pattern: /\bkiev\b/i, lat: 50.4501, lng: 30.5234, place: 'Kyiv' },
+  { pattern: /\bmoscow\b/i, lat: 55.7558, lng: 37.6173, place: 'Moscow' },
+  { pattern: /\bbeijing\b/i, lat: 39.9042, lng: 116.4074, place: 'Beijing' },
+  { pattern: /\bshanghai\b/i, lat: 31.2304, lng: 121.4737, place: 'Shanghai' },
+  { pattern: /\btokyo\b/i, lat: 35.6762, lng: 139.6503, place: 'Tokyo' },
+  { pattern: /\blondon\b/i, lat: 51.5074, lng: -0.1278, place: 'London' },
+  { pattern: /\bparis\b/i, lat: 48.8566, lng: 2.3522, place: 'Paris' },
+  { pattern: /\bberlin\b/i, lat: 52.5200, lng: 13.4050, place: 'Berlin' },
+  { pattern: /\btehran\b/i, lat: 35.6892, lng: 51.3890, place: 'Tehran' },
+  { pattern: /\bbaghdad\b/i, lat: 33.3152, lng: 44.3661, place: 'Baghdad' },
+  { pattern: /\bdamascus\b/i, lat: 33.5138, lng: 36.2765, place: 'Damascus' },
+  { pattern: /\bstanbul\b/i, lat: 41.0082, lng: 28.9784, place: 'Istanbul' },
+  { pattern: /\bankara\b/i, lat: 39.9334, lng: 32.8597, place: 'Ankara' },
+  { pattern: /\btel aviv\b/i, lat: 32.0853, lng: 34.7818, place: 'Tel Aviv' },
+  { pattern: /\bjerusalem\b/i, lat: 31.7683, lng: 35.2137, place: 'Jerusalem' },
+  { pattern: /\bcairo\b/i, lat: 30.0444, lng: 31.2357, place: 'Cairo' },
+  { pattern: /\briyadh\b/i, lat: 24.7136, lng: 46.6753, place: 'Riyadh' },
+  { pattern: /\bdubai\b/i, lat: 25.2048, lng: 55.2708, place: 'Dubai' },
+  { pattern: /\bdelhi\b/i, lat: 28.7041, lng: 77.1025, place: 'Delhi' },
+  { pattern: /\bmumbai\b/i, lat: 19.0760, lng: 72.8777, place: 'Mumbai' },
+  { pattern: /\bseoul\b/i, lat: 37.5665, lng: 126.9780, place: 'Seoul' },
+  { pattern: /\bpyongyang\b/i, lat: 39.0392, lng: 125.7625, place: 'Pyongyang' },
+  { pattern: /\btaipei\b/i, lat: 25.0330, lng: 121.5654, place: 'Taipei' },
+  { pattern: /\bkabul\b/i, lat: 34.5553, lng: 69.2075, place: 'Kabul' },
+  { pattern: /\bcaracas\b/i, lat: 10.4806, lng: -66.9036, place: 'Caracas' },
+  { pattern: /\bhavana\b/i, lat: 23.1136, lng: -82.3666, place: 'Havana' },
+  { pattern: /\bhong kong\b/i, lat: 22.3193, lng: 114.1694, place: 'Hong Kong' },
+  { pattern: /\bsingapore\b/i, lat: 1.3521, lng: 103.8198, place: 'Singapore' },
+  { pattern: /\bsydney\b/i, lat: -33.8688, lng: 151.2093, place: 'Sydney' },
+  { pattern: /\bmelbourne\b/i, lat: -37.8136, lng: 144.9631, place: 'Melbourne' },
+  { pattern: /\btoronto\b/i, lat: 43.6532, lng: -79.3832, place: 'Toronto' },
+  { pattern: /\bmogadishu\b/i, lat: 2.0469, lng: 45.3182, place: 'Mogadishu' },
+  { pattern: /\bkhartoum\b/i, lat: 15.5007, lng: 32.5599, place: 'Khartoum' },
+  { pattern: /\btripoli\b/i, lat: 32.8872, lng: 13.1913, place: 'Tripoli' },
+  { pattern: /\bgaza\b/i, lat: 31.3547, lng: 34.3088, place: 'Gaza' },
+  { pattern: /\bramallah\b/i, lat: 31.9038, lng: 35.2034, place: 'Ramallah' },
+  { pattern: /\bsanaa\b/i, lat: 15.3694, lng: 44.1910, place: 'Sanaa' },
+  { pattern: /\bnairobi\b/i, lat: -1.2921, lng: 36.8219, place: 'Nairobi' },
+  { pattern: /\blagos\b/i, lat: 6.5244, lng: 3.3792, place: 'Lagos' },
+  { pattern: /\baddis ababa\b/i, lat: 9.0250, lng: 38.7469, place: 'Addis Ababa' },
+  { pattern: /\bsao paulo\b/i, lat: -23.5505, lng: -46.6333, place: 'São Paulo' },
+  { pattern: /\bmexico city\b/i, lat: 19.4326, lng: -99.1332, place: 'Mexico City' },
+  { pattern: /\bbogota\b/i, lat: 4.7110, lng: -74.0721, place: 'Bogotá' },
+  { pattern: /\blima\b/i, lat: -12.0464, lng: -77.0428, place: 'Lima' },
+  { pattern: /\bbuenos aires\b/i, lat: -34.6037, lng: -58.3816, place: 'Buenos Aires' },
+];
+
+const COUNTRY_COORDS: { pattern: RegExp; lat: number; lng: number; place: string }[] = [
+  // Major powers - use broader patterns
+  { pattern: /\b(trump|u\.?s\.?\s|united states|america(?:n)?|congress|senate|fbi|cia|doj)\b/i, lat: 38.9072, lng: -77.0369, place: 'United States' },
+  { pattern: /\b(russia(?:n)?|kremlin|putin)\b/i, lat: 55.7558, lng: 37.6173, place: 'Russia' },
+  { pattern: /\b(chin(?:a|ese)|xi jinping|ccp)\b/i, lat: 39.9042, lng: 116.4074, place: 'China' },
+  { pattern: /\b(ukrain(?:e|ian)|zelensky)\b/i, lat: 50.4501, lng: 30.5234, place: 'Ukraine' },
+  { pattern: /\b(iran(?:ian)?|ayatollah)\b/i, lat: 35.6892, lng: 51.3890, place: 'Iran' },
+  { pattern: /\b(israel(?:i)?|netanyahu|idf)\b/i, lat: 31.7683, lng: 35.2137, place: 'Israel' },
+  { pattern: /\b(palestin(?:e|ian)|hamas|hezbollah)\b/i, lat: 31.3547, lng: 34.3088, place: 'Palestine' },
+  { pattern: /\b(united kingdom|britain|british|uk parliament)\b/i, lat: 51.5074, lng: -0.1278, place: 'United Kingdom' },
+  { pattern: /\b(france|french|macron)\b/i, lat: 48.8566, lng: 2.3522, place: 'France' },
+  { pattern: /\b(germany|german|scholz|bundestag)\b/i, lat: 52.5200, lng: 13.4050, place: 'Germany' },
+  { pattern: /\b(japan(?:ese)?)\b/i, lat: 35.6762, lng: 139.6503, place: 'Japan' },
+  { pattern: /\b(india(?:n)?|modi)\b/i, lat: 28.7041, lng: 77.1025, place: 'India' },
+  { pattern: /\b(brazil(?:ian)?|lula)\b/i, lat: -15.8267, lng: -47.9218, place: 'Brazil' },
+  { pattern: /\b(canada|canadian|trudeau|ottawa)\b/i, lat: 45.4215, lng: -75.6972, place: 'Canada' },
+  { pattern: /\b(australia(?:n)?)\b/i, lat: -33.8688, lng: 151.2093, place: 'Australia' },
+  { pattern: /\b(south korea(?:n)?|korean)\b/i, lat: 37.5665, lng: 126.9780, place: 'South Korea' },
+  { pattern: /\b(north korea(?:n)?|pyongyang|kim jong)\b/i, lat: 39.0392, lng: 125.7625, place: 'North Korea' },
+  { pattern: /\b(taiwan(?:ese)?)\b/i, lat: 25.0330, lng: 121.5654, place: 'Taiwan' },
+  { pattern: /\b(turkey|turkish|erdogan)\b/i, lat: 39.9334, lng: 32.8597, place: 'Turkey' },
+  { pattern: /\b(saudi|arabia|mbs)\b/i, lat: 24.7136, lng: 46.6753, place: 'Saudi Arabia' },
+  { pattern: /\b(egypt(?:ian)?|sisi)\b/i, lat: 30.0444, lng: 31.2357, place: 'Egypt' },
+  { pattern: /\b(iraq(?:i)?)\b/i, lat: 33.3152, lng: 44.3661, place: 'Iraq' },
+  { pattern: /\b(syria(?:n)?)\b/i, lat: 33.5138, lng: 36.2765, place: 'Syria' },
+  { pattern: /\b(afghanistan|afghan|taliban)\b/i, lat: 34.5553, lng: 69.2075, place: 'Afghanistan' },
+  { pattern: /\b(yemen(?:i)?|houthi)\b/i, lat: 15.3694, lng: 44.1910, place: 'Yemen' },
+  { pattern: /\b(somalia(?:n)?|al.?shabaab)\b/i, lat: 2.0469, lng: 45.3182, place: 'Somalia' },
+  { pattern: /\b(sudan(?:ese)?)\b/i, lat: 15.5007, lng: 32.5599, place: 'Sudan' },
+  { pattern: /\b(ethiopia(?:n)?)\b/i, lat: 9.0250, lng: 38.7469, place: 'Ethiopia' },
+  { pattern: /\b(nigeria(?:n)?)\b/i, lat: 9.0820, lng: 8.6753, place: 'Nigeria' },
+  { pattern: /\b(kenya(?:n)?)\b/i, lat: -1.2921, lng: 36.8219, place: 'Kenya' },
+  { pattern: /\b(south africa(?:n)?)\b/i, lat: -30.5595, lng: 22.9375, place: 'South Africa' },
+  { pattern: /\b(libya(?:n)?)\b/i, lat: 26.3351, lng: 17.2283, place: 'Libya' },
+  { pattern: /\b(mexico|mexican)\b/i, lat: 19.4326, lng: -99.1332, place: 'Mexico' },
+  { pattern: /\b(colombia(?:n)?)\b/i, lat: 4.7110, lng: -74.0721, place: 'Colombia' },
+  { pattern: /\b(venezuela(?:n)?|maduro)\b/i, lat: 10.4806, lng: -66.9036, place: 'Venezuela' },
+  { pattern: /\b(cuba(?:n)?)\b/i, lat: 23.1136, lng: -82.3666, place: 'Cuba' },
+  { pattern: /\b(argentin(?:a|e|ian))\b/i, lat: -34.6037, lng: -58.3816, place: 'Argentina' },
+  { pattern: /\b(pakistan(?:i)?)\b/i, lat: 30.3753, lng: 69.3451, place: 'Pakistan' },
+  { pattern: /\b(myanmar|burma|burmese)\b/i, lat: 19.7633, lng: 96.0785, place: 'Myanmar' },
+  { pattern: /\b(philippines|filipino)\b/i, lat: 12.8797, lng: 121.7740, place: 'Philippines' },
+  { pattern: /\b(indonesia(?:n)?)\b/i, lat: -0.7893, lng: 113.9213, place: 'Indonesia' },
+  { pattern: /\b(thailand|thai)\b/i, lat: 15.8700, lng: 100.9925, place: 'Thailand' },
+  { pattern: /\b(vietnam(?:ese)?)\b/i, lat: 14.0583, lng: 108.2772, place: 'Vietnam' },
+  { pattern: /\b(poland|polish)\b/i, lat: 51.9194, lng: 19.1451, place: 'Poland' },
+  { pattern: /\b(spain|spanish)\b/i, lat: 40.4637, lng: -3.7492, place: 'Spain' },
+  { pattern: /\b(italy|italian)\b/i, lat: 41.8719, lng: 12.5674, place: 'Italy' },
+  { pattern: /\b(greece|greek)\b/i, lat: 39.0742, lng: 21.8243, place: 'Greece' },
+  { pattern: /\b(nato)\b/i, lat: 50.8476, lng: 4.3572, place: 'NATO HQ, Brussels' },
+  { pattern: /\b(european union|eu summit|brussels)\b/i, lat: 50.8503, lng: 4.3517, place: 'Brussels' },
+  { pattern: /\b(united nations|un general assembly)\b/i, lat: 40.7489, lng: -73.9680, place: 'United Nations, NYC' },
+];
+
+function extractLocation(text: string): { lat: number; lng: number; place: string } | null {
+  if (!text) return null;
+  const lower = text.toLowerCase();
+
+  // Priority 1: City-level match (most specific)
+  for (const city of CITY_COORDS) {
+    if (city.pattern.test(lower)) {
+      return { lat: city.lat, lng: city.lng, place: city.place };
+    }
+  }
+
+  // Priority 2: Country-level match
+  for (const country of COUNTRY_COORDS) {
+    if (country.pattern.test(lower)) {
+      return { lat: country.lat, lng: country.lng, place: country.place };
+    }
+  }
+
+  return null;
+}
+
 export async function GET(request: NextRequest) {
   const startTime = Date.now();
 
   try {
     const { searchParams } = new URL(request.url);
-    const window = searchParams.get('window') || '24h'; // Time window: 24h, 7d, 30d
-    const category = searchParams.get('category'); // Optional filter
-    const since = searchParams.get('since'); // ISO timestamp for incremental updates
+    const window = searchParams.get('window') || '24h';
+    const category = searchParams.get('category');
+    const since = searchParams.get('since');
 
-    // Use service role for user_stats lookup
     const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
     const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
     const adminSupabase = (serviceKey && supabaseUrl) ? createClient(supabaseUrl, serviceKey) : supabase;
@@ -78,11 +210,10 @@ export async function GET(request: NextRequest) {
     const now = new Date();
     const asOf = now.toISOString();
 
-    // Calculate time window
     const windowMs = window === '24h' ? 24 * 3600000 : window === '7d' ? 7 * 86400000 : 30 * 86400000;
     const windowStart = new Date(Date.now() - windowMs);
 
-    // Fetch claims (predictions) with geotag data
+    // Fetch claims
     let claimsQuery = supabase
       .from('predictions')
       .select('id, text, author_number, pseudonym, created_at, outcome, status, anon_id, category, public_slug, user_id, geotag_lat, geotag_lng, geotag_city, geotag_country, evidence_score')
@@ -94,19 +225,16 @@ export async function GET(request: NextRequest) {
     if (category && category !== 'all') {
       claimsQuery = claimsQuery.eq('category', category);
     }
-
     if (since) {
       claimsQuery = claimsQuery.gte('created_at', since);
     }
 
     const { data: predictions, error: claimsError } = await claimsQuery;
-
     if (claimsError) {
       console.error('[Activity API] Error fetching claims:', JSON.stringify(claimsError, null, 2));
     }
 
-    // Fetch OSINT/Intel items from unified intel_items table
-    // No geotag requirement - we'll use fallbacks for items without coordinates
+    // Fetch intel items
     let intelQuery = supabase
       .from('intel_items')
       .select('id, title, source_name, source_type, url, lat, lon, place_name, country_code, tags, summary, created_at, published_at, image_url')
@@ -116,21 +244,18 @@ export async function GET(request: NextRequest) {
       .limit(100);
 
     if (category && category !== 'all') {
-      // Match either category field or tags array
       intelQuery = intelQuery.or(`tags.cs.{${category}}`);
     }
-
     if (since) {
       intelQuery = intelQuery.gte('created_at', since);
     }
 
     const { data: intelData, error: intelError } = await intelQuery;
-
     if (intelError) {
       console.error('[Activity API] Error fetching intel:', JSON.stringify(intelError, null, 2));
     }
 
-    // Batch-fetch reputation scores for all users in predictions
+    // Batch-fetch reputation scores
     const userIds = [...new Set((predictions || []).map((p: any) => p.user_id).filter(Boolean))];
     const userRepMap = new Map<string, number>();
 
@@ -147,35 +272,22 @@ export async function GET(request: NextRequest) {
       }
     }
 
-    // Global locations for claims (fallback if no geocoding)
-    const globalLocations = [
-      { lat: 40.7128, lng: -74.0060, city: 'New York, USA' },
-      { lat: 51.5074, lng: -0.1278, city: 'London, UK' },
-      { lat: 48.8566, lng: 2.3522, city: 'Paris, France' },
-      { lat: 35.6762, lng: 139.6503, city: 'Tokyo, Japan' },
-      { lat: -33.8688, lng: 151.2093, city: 'Sydney, Australia' },
-      { lat: 37.7749, lng: -122.4194, city: 'San Francisco, USA' },
-      { lat: 52.5200, lng: 13.4050, city: 'Berlin, Germany' },
-      { lat: 55.7558, lng: 37.6173, city: 'Moscow, Russia' },
-      { lat: 28.6139, lng: 77.2090, city: 'New Delhi, India' },
-      { lat: -15.8267, lng: -47.9218, city: 'Brasília, Brazil' },
-    ];
-
-    // Transform claims - use real geodata when available, fallback to distributed locations
-    let fallbackIndex = 0; // Shared counter for both claims and OSINT
+    // Transform claims — use real geodata, then text extraction, then SKIP (no random)
     const claims = (predictions || []).map((prediction: any) => {
-      // Use real geotag data if available
       let lat = prediction.geotag_lat;
       let lng = prediction.geotag_lng;
 
+      // If no real geotag, try to extract location from claim text + category
       if (!lat || !lng) {
-        // Fallback: distribute across global locations
-        const location = globalLocations[fallbackIndex % globalLocations.length];
-        // Add small random offset to avoid exact overlap
-        lat = location.lat + (Math.random() - 0.5) * 2;
-        lng = location.lng + (Math.random() - 0.5) * 2;
-        fallbackIndex++;
+        const extracted = extractLocation(`${prediction.text} ${prediction.category || ''}`);
+        if (extracted) {
+          lat = extracted.lat + (Math.random() - 0.5) * 0.5; // Small jitter to avoid stacking
+          lng = extracted.lng + (Math.random() - 0.5) * 0.5;
+        }
       }
+
+      // If still no location, skip this claim from globe (return null, filtered later)
+      if (!lat || !lng) return null;
 
       const submitter = prediction.pseudonym
         ? `@${prediction.pseudonym}`
@@ -195,7 +307,7 @@ export async function GET(request: NextRequest) {
         outcome = 'void';
       }
 
-      const item = {
+      return {
         id: prediction.id,
         publicSlug: prediction.public_slug,
         claim: prediction.text,
@@ -218,34 +330,33 @@ export async function GET(request: NextRequest) {
         evidence_score: prediction.evidence_score,
         key: `claim:${prediction.id}`,
       };
+    }).filter(Boolean); // Remove nulls (claims with no location)
 
-      return item;
-    });
-
-    // Transform intel items with stable keys and fallback coordinates
+    // Transform intel items — use real geo, then text extraction, then SKIP
     const osint = (intelData || []).map((signal: any) => {
       const hoursAgo = Math.floor((Date.now() - new Date(signal.created_at).getTime()) / 3600000);
       const timestamp = hoursAgo < 1 ? 'Just now' : hoursAgo < 24 ? `${hoursAgo}h ago` : `${Math.floor(hoursAgo / 24)}d ago`;
 
-      // Use real geotag data if available, otherwise assign fallback location
       let lat = signal.lat;
       let lng = signal.lon;
 
+      // If no real geotag, try to extract location from title + summary
       if (!lat || !lng) {
-        // Use same fallback mechanism as claims
-        const location = globalLocations[fallbackIndex % globalLocations.length];
-        lat = location.lat + (Math.random() - 0.5) * 2;
-        lng = location.lng + (Math.random() - 0.5) * 2;
-        fallbackIndex++;
+        const extracted = extractLocation(`${signal.title} ${signal.summary || ''}`);
+        if (extracted) {
+          lat = extracted.lat + (Math.random() - 0.5) * 0.5;
+          lng = extracted.lng + (Math.random() - 0.5) * 0.5;
+        }
       }
 
-      // Create stable key
+      // If still no location, skip from globe
+      if (!lat || !lng) return null;
+
       const key = getStableKey(
         { id: signal.id, source: signal.source_name, title: signal.title },
         'osint'
       );
 
-      // Determine category from tags if not explicitly set
       const category = signal.tags && signal.tags.length > 0 ? signal.tags[0] : 'Intel';
 
       return {
@@ -254,11 +365,11 @@ export async function GET(request: NextRequest) {
         source: signal.source_name,
         source_name: signal.source_name,
         source_type: signal.source_type,
-        handle: null, // Not applicable for RSS/intel items
+        handle: null,
         url: signal.url,
         lat,
         lng,
-        lon: lng, // Alias for compatibility
+        lon: lng,
         timestamp,
         tags: signal.tags || [],
         category,
@@ -271,21 +382,19 @@ export async function GET(request: NextRequest) {
         created_at: signal.created_at,
         publishedAt: signal.published_at,
         published_at: signal.published_at,
-        key, // Stable key for deduplication
+        key,
       };
-    });
+    }).filter(Boolean); // Remove nulls
 
-    // Deduplicate at server
-    const dedupedClaims = dedupeByKey(claims);
-    const dedupedOsint = dedupeByKey(osint);
+    // Deduplicate
+    const dedupedClaims = dedupeByKey(claims as any[]);
+    const dedupedOsint = dedupeByKey(osint as any[]);
 
-    // Filter resolved claims
-    const resolved = dedupedClaims.filter((c) => c.outcome === 'correct' || c.outcome === 'incorrect');
+    const resolved = dedupedClaims.filter((c: any) => c.outcome === 'correct' || c.outcome === 'incorrect');
 
-    // Response with metadata
     const response = {
       meta: {
-        asOf, // ISO timestamp
+        asOf,
         window,
         category: category || 'all',
         counts: {
@@ -294,7 +403,7 @@ export async function GET(request: NextRequest) {
           osint: dedupedOsint.length,
           resolved: resolved.length,
         },
-        cacheHit: false, // TODO: Implement caching
+        cacheHit: false,
         queryTime: Date.now() - startTime,
       },
       claims: dedupedClaims,
