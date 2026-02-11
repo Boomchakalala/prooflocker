@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 import type { EvidenceGrade, EvidenceItemInput } from "@/lib/evidence-types";
-import { validateEvidenceRequirements } from "@/lib/evidence-types";
 import {
   createEvidenceLinkItem,
   createEvidenceFileItem,
@@ -10,6 +9,8 @@ import {
 import { computeResolutionFingerprint } from "@/lib/evidence-hashing";
 import { computeEvidenceScore } from "@/lib/evidence-scoring";
 import { awardResolvePoints } from "@/lib/insight-db";
+import { submitToDigitalEvidence, isDigitalEvidenceEnabled } from "@/lib/digitalEvidence";
+import crypto from "crypto";
 
 // ENV CHECK (one-time log)
 console.log("[Resolve API] ENV CHECK:", {
@@ -211,7 +212,44 @@ export async function POST(
 
     console.log(`[Resolve ${requestId}] Evidence score: ${evidenceScoreResult.score}`);
 
-    // STEP 8: Update prediction
+    // STEP 8: Submit to Digital Evidence (if enabled)
+    const resolutionData = JSON.stringify({
+      predictionId: id,
+      outcome,
+      resolvedAt: new Date().toISOString(),
+      resolutionNote: resolutionNote || null,
+    });
+    const resolutionHash = crypto.createHash("sha256").update(resolutionData).digest("hex");
+
+    if (isDigitalEvidenceEnabled()) {
+      try {
+        console.log(`[Resolve ${requestId}] Submitting to Digital Evidence...`);
+        const deResult = await submitToDigitalEvidence(resolutionHash, {
+          proofId: prediction.proof_id,
+          userId: user.id,
+          type: "resolution",
+          outcome,
+        });
+
+        if (deResult.success && deResult.accepted) {
+          console.log(`[Resolve ${requestId}] Digital Evidence accepted`);
+          updateData.resolution_de_hash = resolutionHash;
+          updateData.resolution_de_timestamp = deResult.timestamp;
+          updateData.resolution_de_reference = deResult.hash || resolutionHash;
+          updateData.resolution_de_event_id = deResult.eventId;
+          updateData.resolution_de_status = "CONFIRMED";
+        } else {
+          console.warn(`[Resolve ${requestId}] Digital Evidence not accepted:`, deResult.error);
+          updateData.resolution_de_hash = resolutionHash;
+          updateData.resolution_de_event_id = deResult.eventId || null;
+          updateData.resolution_de_status = "PENDING";
+        }
+      } catch (deError) {
+        console.error(`[Resolve ${requestId}] Digital Evidence error:`, deError);
+      }
+    }
+
+    // STEP 9: Update prediction
     const updateData: Record<string, any> = {
       outcome,
       resolved_at: new Date().toISOString(),
