@@ -371,7 +371,7 @@ export default function GlobeMapbox({ claims, osint, mapMode = 'both', viewMode 
       <div className="relative w-full h-full" style={{ minHeight: 400 }}>
         <div ref={containerRef} style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }} />
 
-        {/* Area Detail Modal — centered overlay */}
+        {/* Area Detail Modal — bottom sheet on mobile, centered on desktop */}
         {areaDetail && (
           <div
             className="fixed inset-0 z-[500] flex items-end sm:items-center justify-center"
@@ -379,19 +379,19 @@ export default function GlobeMapbox({ claims, osint, mapMode = 'both', viewMode 
             style={{ background: 'rgba(0,0,0,0.6)', backdropFilter: 'blur(4px)' }}
           >
             <div
-              className="relative w-full sm:w-[90vw] sm:max-w-[520px] max-h-[85vh] sm:max-h-[75vh] overflow-hidden sm:rounded-2xl rounded-t-2xl border-t sm:border border-purple-500/30"
+              className="relative w-full sm:w-[90vw] sm:max-w-[520px] max-h-[65vh] sm:max-h-[75vh] overflow-hidden sm:rounded-2xl rounded-t-2xl border-t sm:border border-purple-500/30"
               onClick={(e) => e.stopPropagation()}
               style={{
                 background: 'rgba(10,10,20,0.97)',
                 boxShadow: '0 20px 60px rgba(0,0,0,0.8), 0 0 40px rgba(139,92,246,0.15)',
               }}
             >
-              {/* Mobile drag handle */}
-              <div className="sm:hidden flex justify-center pt-2 pb-1">
-                <div className="w-10 h-1 rounded-full bg-slate-600" />
+              {/* Mobile drag handle — tap to close */}
+              <div className="sm:hidden flex justify-center pt-2 pb-1" onClick={closeDetail}>
+                <div className="w-12 h-1.5 rounded-full bg-slate-500" />
               </div>
 
-              {/* Header */}
+              {/* Header with prominent close */}
               <div className="flex items-center justify-between px-4 sm:px-5 py-3 sm:py-4 border-b border-purple-500/20">
                 <div className="flex items-center gap-2 sm:gap-3">
                   <div className="w-2.5 h-2.5 rounded-full bg-purple-500 shadow-[0_0_8px_rgba(139,92,246,0.6)]" />
@@ -404,12 +404,12 @@ export default function GlobeMapbox({ claims, osint, mapMode = 'both', viewMode 
                 </div>
                 <button
                   onClick={closeDetail}
-                  className="flex items-center gap-2 px-3 py-2 rounded-lg bg-slate-700/60 hover:bg-slate-600/80 text-white text-sm font-semibold transition-all active:scale-95"
+                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-700/80 hover:bg-slate-600 text-white text-xs font-bold transition-all active:scale-95"
                 >
-                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="2">
+                  <svg width="12" height="12" viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="2.5">
                     <path d="M1 1l12 12M13 1L1 13" />
                   </svg>
-                  <span className="sm:hidden">Close</span>
+                  Close
                 </button>
               </div>
 
@@ -430,7 +430,7 @@ export default function GlobeMapbox({ claims, osint, mapMode = 'both', viewMode 
               </div>
 
               {/* Scrollable content */}
-              <div className="overflow-y-auto overscroll-contain" style={{ maxHeight: 'calc(85vh - 130px)' }}>
+              <div className="overflow-y-auto overscroll-contain" style={{ maxHeight: 'calc(65vh - 140px)' }}>
                 {/* Claims section */}
                 {areaDetail.claims.length > 0 && (
                   <div className="mx-3 sm:mx-4 mt-3 sm:mt-4 mb-2 rounded-xl overflow-hidden border border-purple-500/20" style={{ background: 'rgba(139,92,246,0.04)' }}>
