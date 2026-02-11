@@ -96,25 +96,12 @@ export async function POST(
       );
     }
 
-    if (!evidenceGrade || !["A", "B", "C", "D"].includes(evidenceGrade)) {
-      return NextResponse.json(
-        { ok: false, error: "Invalid evidence grade", details: `Grade must be A, B, C, or D. Got: ${evidenceGrade}` },
-        { status: 400 }
-      );
-    }
-
-    const validation = validateEvidenceRequirements(
-      evidenceGrade,
-      evidenceSummary,
-      evidenceItems?.length || 0
-    );
-
-    if (!validation.valid) {
-      return NextResponse.json(
-        { ok: false, error: "Evidence validation failed", details: validation.error },
-        { status: 400 }
-      );
-    }
+    // Auto-calculate evidence grade based on what's provided
+    const effectiveGrade = evidenceGrade && ["A", "B", "C", "D"].includes(evidenceGrade)
+      ? evidenceGrade
+      : (evidenceItems?.length > 0 && evidenceSummary ? "B"
+        : evidenceItems?.length > 0 ? "C"
+        : "D");
 
     // STEP 5: Check ownership using SERVICE ROLE
     const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
@@ -211,7 +198,7 @@ export async function POST(
       predictionId: id,
       outcome,
       resolvedAt: new Date().toISOString(),
-      evidenceGrade,
+      evidenceGrade: effectiveGrade,
       evidenceItemHashes: evidenceHashes,
       evidenceSummary: evidenceSummary || "",
     });
@@ -231,7 +218,7 @@ export async function POST(
       resolved_by: user.id,
       resolution_note: resolutionNote || null,
       resolution_url: resolutionUrl || null,
-      evidence_grade: evidenceGrade,
+      evidence_grade: effectiveGrade,
       evidence_summary: evidenceSummary || null,
       resolution_fingerprint: resolutionFingerprint,
       evidence_score: evidenceScoreResult.score,
