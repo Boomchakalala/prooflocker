@@ -17,11 +17,14 @@ export async function POST(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
+  console.log('==================== RESOLVE API CALLED ====================');
   try {
     // Get the access token from Authorization header
     const authHeader = request.headers.get('authorization');
+    console.log('[Resolve API] Auth header present:', !!authHeader);
 
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
+      console.log('[Resolve API] NO AUTH HEADER - returning 401');
       return NextResponse.json(
         { error: "Unauthorized - must be logged in" },
         { status: 401 }
@@ -45,8 +48,11 @@ export async function POST(
       );
     }
 
+    console.log('[Resolve API] User authenticated:', user.id);
+
     const { id } = await params;
     const body = await request.json();
+    console.log('[Resolve API] Request body:', JSON.stringify(body, null, 2));
     const {
       outcome,
       resolutionNote,
@@ -254,7 +260,11 @@ export async function POST(
       insightPoints, // Include insight points in response
     });
   } catch (error) {
+    console.error("==================== RESOLVE API ERROR ====================");
     console.error("[Resolve API] Error:", error);
+    console.error("[Resolve API] Error stack:", error instanceof Error ? error.stack : 'No stack');
+    console.error("[Resolve API] Error message:", error instanceof Error ? error.message : String(error));
+    console.error("===========================================================");
 
     if (error instanceof Error) {
       if (error.message.includes("Unauthorized")) {
@@ -278,7 +288,7 @@ export async function POST(
     }
 
     return NextResponse.json(
-      { error: "Failed to resolve prediction" },
+      { error: "Failed to resolve prediction", details: error instanceof Error ? error.message : String(error) },
       { status: 500 }
     );
   }
