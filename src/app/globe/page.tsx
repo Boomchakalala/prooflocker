@@ -672,7 +672,7 @@ export default function GlobePage() {
                           <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded ${
                             isCorrect ? 'bg-gradient-to-r from-emerald-500 to-emerald-600 text-white' :
                             isIncorrect ? 'bg-gradient-to-r from-red-500 to-red-600 text-white' :
-                            'bg-gradient-to-r from-amber-500 to-orange-500 text-white animate-pulse'
+                            'bg-gradient-to-r from-amber-500 to-orange-500 text-white'
                           }`}>
                             {isCorrect ? 'Correct' : isIncorrect ? 'Incorrect' : 'Pending'}
                           </span>
@@ -867,7 +867,7 @@ export default function GlobePage() {
                           <span className={`text-[10px] font-semibold px-2 py-0.5 rounded ${
                             claim.outcome === 'correct' ? 'bg-gradient-to-r from-emerald-500 to-emerald-600 text-white' :
                             claim.outcome === 'incorrect' ? 'bg-gradient-to-r from-red-500 to-red-600 text-white' :
-                            'bg-gradient-to-r from-amber-500 to-orange-500 text-white animate-pulse'
+                            'bg-gradient-to-r from-amber-500 to-orange-500 text-white'
                           }`}>
                             {claim.outcome === 'correct' ? 'Correct' : claim.outcome === 'incorrect' ? 'Incorrect' : 'Pending'}
                           </span>
