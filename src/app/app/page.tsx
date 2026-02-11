@@ -6,6 +6,7 @@ import UnifiedHeader from "@/components/UnifiedHeader";
 import ClaimModal from "@/components/ClaimModal";
 import VoteButtons from "@/components/VoteButtons";
 import IntelCard from "@/components/IntelCard";
+import BreakingNewsBanner from "@/components/BreakingNewsBanner";
 import { Prediction } from "@/lib/storage";
 import { useAuth } from "@/contexts/AuthContext";
 import { getEvidenceGrade, getEvidenceGradeInfo } from "@/lib/scoring";
@@ -25,7 +26,6 @@ export default function AppFeedPage() {
   const [loading, setLoading] = useState(true);
   const [showClaimModal, setShowClaimModal] = useState(false);
   const [lastUpdated, setLastUpdated] = useState<Date>(new Date());
-  const [tickerIndex, setTickerIndex] = useState(0);
   const [newItems, setNewItems] = useState<{ claims: number; intel: number } | null>(null);
   const [prevCounts, setPrevCounts] = useState<{ claims: number; intel: number }>({ claims: 0, intel: 0 });
 
@@ -34,13 +34,6 @@ export default function AppFeedPage() {
     const interval = setInterval(fetchData, 30000);
     return () => clearInterval(interval);
   }, [user]);
-
-  useEffect(() => {
-    const tickerInterval = setInterval(() => {
-      setTickerIndex(prev => (prev + 1) % 5);
-    }, 4000);
-    return () => clearInterval(tickerInterval);
-  }, []);
 
   const fetchData = async () => {
     try {

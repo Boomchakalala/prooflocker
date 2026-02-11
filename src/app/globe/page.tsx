@@ -431,23 +431,6 @@ export default function GlobePage() {
         body {
           font-family: 'Inter', system-ui, -apple-system, sans-serif !important;
         }
-
-        @keyframes marquee {
-          0% {
-            transform: translateX(0);
-          }
-          100% {
-            transform: translateX(-50%);
-          }
-        }
-
-        .animate-marquee {
-          animation: marquee 60s linear infinite;
-        }
-
-        .animate-marquee:hover {
-          animation-play-state: paused;
-        }
       `}</style>
 
       <div className="min-h-screen bg-gradient-to-b from-[#0A0A0F] via-[#111118] to-[#0A0A0F]">
@@ -455,32 +438,7 @@ export default function GlobePage() {
         <UnifiedHeader currentView="globe" />
 
         {/* Live News Ticker - Auto-scrolling marquee */}
-        <div className="fixed top-16 left-0 right-0 md:right-[360px] z-[150] bg-slate-900/40 backdrop-blur-xl border-b border-slate-700/30 overflow-hidden">
-          <div className="relative h-9 flex items-center">
-            <div className="animate-marquee whitespace-nowrap flex items-center gap-6 px-4">
-              {tickerItems.concat(tickerItems).map((item, idx) => (
-                <div key={idx} className="inline-flex items-center gap-2 shrink-0">
-                  <span className={`inline-flex items-center gap-1 px-1.5 py-0.5 text-[9px] font-bold rounded uppercase tracking-wide ${
-                    item.type === 'INTEL'
-                      ? 'bg-red-600/30 border border-red-500/50 text-red-200'
-                      : 'bg-purple-600/30 border border-purple-500/50 text-purple-200'
-                  }`}>
-                    {item.type}
-                  </span>
-                  <span className="text-xs text-white font-medium">
-                    {item.text}
-                  </span>
-                  {item.location && (
-                    <>
-                      <span className="text-neutral-500 text-xs">•</span>
-                      <span className="text-[10px] text-neutral-400">{item.location}</span>
-                    </>
-                  )}
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
+        <BreakingNewsBanner items={getTickerItems()} />
 
         {/* Map Container - Mobile-First Responsive - Adjusted for ticker */}
         <div className="fixed top-[100px] left-0 right-0 md:right-[360px] bottom-0 md:bottom-0">
