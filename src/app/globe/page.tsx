@@ -80,8 +80,8 @@ export default function GlobePage() {
   // Ticker state for live news rotation
   const [tickerIndex, setTickerIndex] = useState(0);
 
-  // Mobile feed toggle state
-  const [showMobileFeed, setShowMobileFeed] = useState(true);
+  // Mobile feed toggle state - Default to false so globe is prominent
+  const [showMobileFeed, setShowMobileFeed] = useState(false);
 
   // Compute unique categories from current data
   const uniqueCategories = useMemo(() => {
@@ -968,30 +968,33 @@ export default function GlobePage() {
           />
         )}
 
-        {/* Mobile Feed Toggle Button */}
+        {/* Mobile Feed Toggle Button - PROMINENT (Main Action) */}
         <button
           onClick={() => setShowMobileFeed(!showMobileFeed)}
-          className="md:hidden fixed top-20 right-4 z-[210] w-12 h-12 rounded-full bg-purple-600/90 hover:bg-purple-500 shadow-xl flex items-center justify-center text-white transition-all"
+          className="md:hidden fixed top-20 right-4 z-[210] w-16 h-16 rounded-full bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-500 hover:to-purple-600 shadow-2xl shadow-purple-500/50 flex items-center justify-center text-white transition-all hover:scale-110 active:scale-95"
+          title={showMobileFeed ? "Hide Feed" : "Show Feed"}
         >
-          <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+          <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
             {showMobileFeed ? (
               <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
             ) : (
               <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
             )}
           </svg>
+          {!showMobileFeed && (
+            <div className="absolute inset-0 rounded-full bg-purple-400 animate-ping opacity-30" />
+          )}
         </button>
 
-        {/* Floating Action Button */}
+        {/* Floating Action Button - Less Prominent (Secondary Action) */}
         <button
           onClick={() => setShowQuickLock(true)}
-          className="fixed bottom-[calc(2rem+env(safe-area-inset-bottom))] right-8 z-[100] w-16 h-16 rounded-full bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 shadow-2xl shadow-purple-500/50 flex items-center justify-center text-white transition-all hover:scale-110 active:scale-95 group"
+          className="fixed bottom-[calc(2rem+env(safe-area-inset-bottom))] right-6 z-[100] w-12 h-12 rounded-full bg-slate-800/90 hover:bg-slate-700 border border-purple-500/30 shadow-lg flex items-center justify-center text-purple-300 hover:text-purple-200 transition-all hover:scale-105 active:scale-95"
           title="Quick Lock (Space)"
         >
-          <svg className="w-7 h-7 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+          <svg className="w-5 h-5 transition-transform" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
           </svg>
-          <div className="absolute inset-0 rounded-full bg-purple-500 animate-ping opacity-20" />
         </button>
 
         {/* Quick Lock Modal */}
