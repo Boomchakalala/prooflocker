@@ -99,9 +99,6 @@ export default function AppFeedPage() {
     return items.slice(0, 5);
   };
 
-  const tickerItems = getTickerItems();
-  const currentTickerItem = tickerItems[tickerIndex] || { type: 'CLAIM', text: 'Loading live updates...', location: '', time: '' };
-
   const filteredPredictions = predictions.filter(p => {
     if (contentFilter === "osint") return false;
 
