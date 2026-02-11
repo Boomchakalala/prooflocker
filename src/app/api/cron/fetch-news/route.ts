@@ -40,8 +40,8 @@ export async function GET(request: NextRequest) {
     const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
     const supabase = createClient(supabaseUrl, supabaseKey);
 
-    // Fetch from GNews API - top headlines, last 10 articles
-    const gnewsUrl = `https://gnews.io/api/v4/top-headlines?category=general&lang=en&max=10&token=${gnewsApiKey}`;
+    // Fetch from GNews API - top headlines, 50 articles (upgraded tier)
+    const gnewsUrl = `https://gnews.io/api/v4/top-headlines?category=general&lang=en&max=50&token=${gnewsApiKey}`;
 
     console.log('[Cron: Fetch News] Fetching from GNews...');
     const gnewsResponse = await fetch(gnewsUrl);
