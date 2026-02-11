@@ -684,14 +684,34 @@ export default function GlobePage() {
                         {claim.claim}
                       </p>
 
-                      {/* Bottom: category + date */}
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-2">
-                          {claim.category && (
-                            <span className="text-[10px] text-slate-500">#{claim.category}</span>
-                          )}
+                      {/* Bottom: category + resolve + hash */}
+                      <div className="flex flex-col gap-1.5">
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center gap-2">
+                            {claim.category && (
+                              <span className="text-[10px] text-slate-500">#{claim.category}</span>
+                            )}
+                            {/* Resolve button for pending claims */}
+                            {!isResolved && (
+                              <button
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  router.push(`/resolve/${claim.id}`);
+                                }}
+                                className="text-[10px] px-2 py-0.5 bg-purple-500/15 text-purple-400 hover:bg-purple-500/25 rounded font-medium transition-colors"
+                              >
+                                Resolve
+                              </button>
+                            )}
+                          </div>
+                          <span className="text-[10px] text-slate-600">{claim.lockedDate}</span>
                         </div>
-                        <span className="text-[10px] text-slate-600">{claim.lockedDate}</span>
+                        {/* Hash snippet */}
+                        <div className="flex justify-end">
+                          <code className="text-[9px] text-slate-600 font-mono">
+                            {(claim as any).hash?.slice(0, 6)}...{(claim as any).hash?.slice(-4)}
+                          </code>
+                        </div>
                       </div>
                     </div>
                   );
@@ -864,9 +884,31 @@ export default function GlobePage() {
                         </div>
                       </div>
                       <p className="text-sm text-white line-clamp-2 mb-2">{claim.claim}</p>
-                      <div className="flex items-center justify-between">
-                        <span className="text-[10px] text-slate-500">{claim.lockedDate}</span>
-                        <button onClick={() => router.push(`/proof/${claim.publicSlug}`)} className="text-[11px] text-purple-400 font-medium">View</button>
+                      <div className="flex flex-col gap-1.5">
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center gap-2">
+                            <span className="text-[10px] text-slate-500">{claim.lockedDate}</span>
+                            {/* Resolve button for pending claims */}
+                            {claim.outcome === 'pending' && (
+                              <button
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  router.push(`/resolve/${claim.id}`);
+                                }}
+                                className="text-[11px] px-2 py-0.5 bg-purple-500/15 text-purple-400 hover:bg-purple-500/25 rounded font-medium transition-colors"
+                              >
+                                Resolve
+                              </button>
+                            )}
+                          </div>
+                          <button onClick={() => router.push(`/proof/${claim.publicSlug}`)} className="text-[11px] text-purple-400 font-medium">View</button>
+                        </div>
+                        {/* Hash snippet */}
+                        <div className="flex justify-end">
+                          <code className="text-[9px] text-slate-600 font-mono">
+                            {(claim as any).hash?.slice(0, 6)}...{(claim as any).hash?.slice(-4)}
+                          </code>
+                        </div>
                       </div>
                     </div>
                     );
