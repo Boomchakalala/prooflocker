@@ -95,14 +95,41 @@ export default function ResolutionModalWithEvidence({
     setError("");
 
     try {
+      // Upload file to server first
+      const token = await getAccessToken();
+      if (!token) {
+        throw new Error("You must be logged in to upload files");
+      }
+
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('predictionId', predictionId);
+
+      const uploadResponse = await fetch('/api/evidence/upload', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+        body: formData,
+      });
+
+      if (!uploadResponse.ok) {
+        const errorData = await uploadResponse.json();
+        throw new Error(errorData.error || 'Failed to upload file');
+      }
+
+      const uploadData = await uploadResponse.json();
+
+      // Add uploaded file info to evidence items
       setEvidenceItems([...evidenceItems, {
         type: "file",
-        file,
+        url: uploadData.publicUrl,
         title: file.name,
         sourceKind: "secondary",
+        hash: uploadData.hash,
       }]);
     } catch (err) {
-      setError("Failed to process file");
+      setError(err instanceof Error ? err.message : "Failed to upload file");
     } finally {
       setUploadingFile(false);
     }
