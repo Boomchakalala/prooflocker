@@ -130,6 +130,16 @@ export default function AppFeedPage() {
 
   const filteredOsint = osintSignals.filter(o => {
     if (contentFilter === "claims") return false;
+
+    // Apply category filters to intel based on tags
+    if (quickFilter === "crypto" && !o.tags?.some((t: string) => t.toLowerCase() === "crypto")) return false;
+    if (quickFilter === "politics" && !o.tags?.some((t: string) => t.toLowerCase() === "politics")) return false;
+    if (quickFilter === "markets" && !o.tags?.some((t: string) => t.toLowerCase() === "markets")) return false;
+    if (quickFilter === "tech" && !o.tags?.some((t: string) => t.toLowerCase() === "tech")) return false;
+    if (quickFilter === "sports" && !o.tags?.some((t: string) => t.toLowerCase() === "sports")) return false;
+    if (quickFilter === "culture" && !o.tags?.some((t: string) => t.toLowerCase() === "culture")) return false;
+
+    // Search filter
     if (searchQuery) {
       return o.title?.toLowerCase().includes(searchQuery.toLowerCase()) ||
              o.summary?.toLowerCase().includes(searchQuery.toLowerCase()) ||
