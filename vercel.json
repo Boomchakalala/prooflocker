@@ -3,6 +3,10 @@
     {
       "path": "/api/osint/ingest",
       "schedule": "0 0 * * *"
+    },
+    {
+      "path": "/api/cron/fetch-news",
+      "schedule": "*/10 * * * *"
     }
   ]
 }
