@@ -13,6 +13,7 @@ import BottomSheet from '@/components/BottomSheet';
 import LinkOsintModal from '@/components/LinkOsintModal';
 import UnifiedHeader from '@/components/UnifiedHeader';
 import IntelCard from '@/components/IntelCard';
+import BreakingNewsBanner from '@/components/BreakingNewsBanner';
 
 const GlobeMapbox = dynamic(() => import('@/components/GlobeMapbox'), {
   ssr: false,
@@ -76,9 +77,6 @@ export default function GlobePage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedArea, setSelectedArea] = useState<{claims: Claim[], osint: OsintItem[], name: string} | null>(null);
   const [viewMode, setViewMode] = useState<'points' | 'heatmap'>('points');
-
-  // Ticker state for live news rotation
-  const [tickerIndex, setTickerIndex] = useState(0);
 
   // Mobile feed toggle state - Default to false so globe is prominent
   const [showMobileFeed, setShowMobileFeed] = useState(false);
@@ -168,14 +166,6 @@ export default function GlobePage() {
     return () => clearInterval(timer);
   }, []);
 
-  // Ticker rotation: rotate through 5 items every 4 seconds
-  useEffect(() => {
-    const tickerInterval = setInterval(() => {
-      setTickerIndex(prev => (prev + 1) % 5);
-    }, 4000);
-    return () => clearInterval(tickerInterval);
-  }, []);
-
   // Format "last updated" time
   const getTimeSinceUpdate = () => {
     if (!lastUpdated) return 'Never';
@@ -213,10 +203,6 @@ export default function GlobePage() {
 
     return items.slice(0, 5);
   };
-
-  const tickerItems = getTickerItems();
-  const currentTickerItem = tickerItems[tickerIndex] || {
-    type: 'CLAIM',
     text: 'Loading live updates...',
     location: '',
     time: ''
