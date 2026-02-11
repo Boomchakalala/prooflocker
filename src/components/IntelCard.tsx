@@ -35,16 +35,38 @@ interface IntelCardProps {
 export default function IntelCard({ item, compact = false }: IntelCardProps) {
   // Map tags to category
   const getCategory = () => {
-    if (!item.tags || item.tags.length === 0) return 'culture';
+    if (!item.tags || item.tags.length === 0) return 'general';
     const tagStr = item.tags.join(' ').toLowerCase();
 
-    if (tagStr.match(/crypto|bitcoin/)) return 'crypto';
-    if (tagStr.match(/politics|election|government|diplomatic|sanctions|ceasefire|coup/)) return 'politics';
-    if (tagStr.match(/military|conflict|war|drone|missile|attack|osint|geoint|investigative/)) return 'politics';
-    if (tagStr.match(/cyber|tech|data|ransomware|disinformation/)) return 'tech';
-    if (tagStr.match(/markets|economics/)) return 'markets';
-    if (tagStr.match(/sports|olympics|football|soccer|hockey/)) return 'sports';
-    return 'culture';
+    if (tagStr.match(/crypto|bitcoin|ethereum|blockchain/)) return 'crypto';
+    if (tagStr.match(/markets|economy|finance|trading|stock/)) return 'markets';
+    if (tagStr.match(/military|war|conflict|drone|missile|attack|battle/)) return 'military';
+    if (tagStr.match(/breaking|urgent|alert/)) return 'breaking';
+    if (tagStr.match(/politics|election|government|diplomatic/)) return 'politics';
+    if (tagStr.match(/tech|technology|ai|software/)) return 'tech';
+    if (tagStr.match(/science|research|discovery|space/)) return 'science';
+    if (tagStr.match(/sports|football|basketball|soccer/)) return 'sports';
+    if (tagStr.match(/health|medical|pandemic/)) return 'health';
+    if (tagStr.match(/climate|environment|weather/)) return 'climate';
+    return 'general';
+  };
+
+  // Get color for category
+  const getCategoryColor = (cat: string) => {
+    const colors: Record<string, string> = {
+      crypto: 'bg-orange-500/20 text-orange-300 border border-orange-500/40',
+      markets: 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40',
+      military: 'bg-red-500/20 text-red-300 border border-red-500/40',
+      breaking: 'bg-yellow-500/20 text-yellow-300 border border-yellow-500/40',
+      politics: 'bg-blue-500/20 text-blue-300 border border-blue-500/40',
+      tech: 'bg-purple-500/20 text-purple-300 border border-purple-500/40',
+      science: 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/40',
+      sports: 'bg-green-500/20 text-green-300 border border-green-500/40',
+      health: 'bg-pink-500/20 text-pink-300 border border-pink-500/40',
+      climate: 'bg-teal-500/20 text-teal-300 border border-teal-500/40',
+      general: 'bg-slate-700/30 text-slate-300 border border-slate-600/40',
+    };
+    return colors[cat] || colors['general'];
   };
 
   const category = getCategory();
@@ -93,7 +115,7 @@ export default function IntelCard({ item, compact = false }: IntelCardProps) {
           <span className={`text-[9px] font-bold px-1.5 py-0.5 rounded uppercase ${getSourceBadgeColor()}`}>
             Intel
           </span>
-          <span className="text-[9px] font-semibold px-1.5 py-0.5 rounded bg-slate-700/50 text-slate-300 uppercase">
+          <span className={`text-[9px] font-semibold px-1.5 py-0.5 rounded uppercase ${getCategoryColor(category)}`}>
             {category}
           </span>
           <span className="text-[10px] text-red-400 font-semibold truncate flex-1">
@@ -151,7 +173,7 @@ export default function IntelCard({ item, compact = false }: IntelCardProps) {
           <span className={`text-[10px] font-bold px-2 py-1 rounded uppercase shrink-0 ${getSourceBadgeColor()}`}>
             Intel
           </span>
-          <span className="text-[10px] font-semibold px-2 py-1 rounded bg-slate-700/50 text-slate-300 uppercase shrink-0">
+          <span className={`text-[10px] font-semibold px-2 py-1 rounded uppercase shrink-0 ${getCategoryColor(category)}`}>
             {category}
           </span>
           <span className="text-xs text-red-400 font-semibold truncate">
