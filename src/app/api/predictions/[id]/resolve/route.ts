@@ -126,14 +126,8 @@ export async function POST(
           );
           evidenceHashes.push(created.sha256);
           createdEvidenceItems.push(created);
-        } else if (item.type === "file" && item.file) {
-          // For file uploads, we need to handle this specially
-          // Since we can't send File objects via JSON, the client should send file data differently
-          // For now, we'll skip file upload in this endpoint and handle it separately
-          // Or the client should upload files first and send URLs
-          console.warn("[Resolve API] File upload not implemented in this endpoint");
         } else if (item.hash) {
-          // If hash is provided, use it
+          // If hash is provided, use it (for files uploaded via separate endpoint)
           evidenceHashes.push(item.hash);
         }
       } catch (error) {
