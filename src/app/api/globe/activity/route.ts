@@ -171,6 +171,26 @@ const COUNTRY_COORDS: { pattern: RegExp; lat: number; lng: number; place: string
   { pattern: /\b(nato)\b/i, lat: 50.8476, lng: 4.3572, place: 'NATO HQ, Brussels' },
   { pattern: /\b(european union|eu summit|brussels)\b/i, lat: 50.8503, lng: 4.3517, place: 'Brussels' },
   { pattern: /\b(united nations|un general assembly)\b/i, lat: 40.7489, lng: -73.9680, place: 'United Nations, NYC' },
+  // Crypto / Finance entities → their HQ cities
+  { pattern: /\b(bitcoin|btc|ethereum|eth|crypto|coinbase|binance|defi)\b/i, lat: 40.7128, lng: -74.0060, place: 'New York' },
+  { pattern: /\b(wall street|nasdaq|s&p|dow jones|fed(?:eral reserve)?|treasury)\b/i, lat: 40.7128, lng: -74.0060, place: 'New York' },
+  // Tech companies → HQ locations
+  { pattern: /\b(apple|google|meta|nvidia|openai|anthropic|silicon valley)\b/i, lat: 37.7749, lng: -122.4194, place: 'San Francisco' },
+  { pattern: /\b(microsoft|amazon|aws)\b/i, lat: 47.6062, lng: -122.3321, place: 'Seattle' },
+  { pattern: /\b(tesla|spacex|elon musk)\b/i, lat: 30.2672, lng: -97.7431, place: 'Austin' },
+  // Sports leagues/teams → general US
+  { pattern: /\b(nfl|nba|mlb|nhl|super bowl|world series)\b/i, lat: 40.7128, lng: -74.0060, place: 'New York' },
+  { pattern: /\b(premier league|champions league|uefa|fifa)\b/i, lat: 51.5074, lng: -0.1278, place: 'London' },
+  { pattern: /\b(lakers|clippers|dodgers|rams|chargers)\b/i, lat: 34.0522, lng: -118.2437, place: 'Los Angeles' },
+  { pattern: /\b(warriors|49ers|giants)\b/i, lat: 37.7749, lng: -122.4194, place: 'San Francisco' },
+  { pattern: /\b(celtics|red sox|patriots)\b/i, lat: 42.3601, lng: -71.0589, place: 'Boston' },
+  { pattern: /\b(seahawks|mariners|sounders)\b/i, lat: 47.6062, lng: -122.3321, place: 'Seattle' },
+  { pattern: /\b(cowboys|rangers|mavs|mavericks)\b/i, lat: 32.7767, lng: -96.7970, place: 'Dallas' },
+  // Organizations / Events
+  { pattern: /\b(olympics|olympic)\b/i, lat: 48.8566, lng: 2.3522, place: 'Paris' },
+  { pattern: /\b(world cup)\b/i, lat: 40.4637, lng: -3.7492, place: 'Madrid' },
+  { pattern: /\b(opec)\b/i, lat: 48.2082, lng: 16.3738, place: 'Vienna' },
+  { pattern: /\b(imf|world bank)\b/i, lat: 38.9072, lng: -77.0369, place: 'Washington DC' },
 ];
 
 function extractLocation(text: string): { lat: number; lng: number; place: string } | null {
