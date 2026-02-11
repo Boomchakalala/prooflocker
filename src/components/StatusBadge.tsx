@@ -23,7 +23,7 @@ export default function StatusBadge({ status, variant = "full", className = "" }
       baseColor: "text-white",
       bgColor: "bg-gradient-to-r from-amber-500 to-orange-500",
       borderColor: "border-amber-400/30",
-      animate: "animate-pulse",
+      animate: "",
     },
     correct: {
       label: "Correct",
