@@ -552,6 +552,32 @@ export default function GlobePage() {
               </button>
             </div>
 
+            {/* Viewport Filter Toggle */}
+            <div className="flex gap-1 items-center">
+              <button
+                onClick={() => setFilterByViewport(false)}
+                className={`px-2.5 py-1.5 rounded-lg text-[10px] font-semibold transition-all ${
+                  !filterByViewport
+                    ? 'bg-blue-500/20 text-blue-300 border border-blue-500/40'
+                    : 'text-[#64748b] hover:text-white hover:bg-white/5 border border-transparent'
+                }`}
+                title="Show all items matching filters"
+              >
+                🌐 All
+              </button>
+              <button
+                onClick={() => setFilterByViewport(true)}
+                className={`px-2.5 py-1.5 rounded-lg text-[10px] font-semibold transition-all ${
+                  filterByViewport
+                    ? 'bg-purple-500/20 text-purple-300 border border-purple-500/40'
+                    : 'text-[#64748b] hover:text-white hover:bg-white/5 border border-transparent'
+                }`}
+                title="Show only items in current map view"
+              >
+                📍 Viewport
+              </button>
+            </div>
+
             {/* Inline filters: time + search */}
             <div className="flex gap-1.5 items-center">
               <div className="flex gap-0.5 bg-white/5 rounded-lg p-0.5">
