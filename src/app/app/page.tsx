@@ -81,22 +81,21 @@ export default function AppFeedPage() {
   const getTickerItems = () => {
     const items: { type: string; text: string; location: string; time: string; source: 'intel' | 'claim' }[] = [];
 
-    // Mix intel signals across categories
+    // Mix intel signals
     osintSignals.slice(0, 4).forEach(signal => {
-      const tag = signal.tags?.[0] || '';
       items.push({
-        type: tag.toUpperCase() || 'INTEL',
+        type: 'INTEL',
         text: signal.title || 'Intelligence Signal',
-        location: signal.place_name || signal.country_code || tag || '',
+        location: signal.place_name || signal.country_code || signal.tags?.[0] || '',
         time: signal.created_at ? formatRelativeTime(signal.created_at) : 'Just now',
         source: 'intel',
       });
     });
 
-    // Add recent claims with their category
+    // Add recent claims
     predictions.slice(0, 3).forEach(claim => {
       items.push({
-        type: claim.category?.toUpperCase() || 'CLAIM',
+        type: 'CLAIM',
         text: claim.text?.slice(0, 80) + (claim.text?.length > 80 ? '...' : ''),
         location: claim.category || '',
         time: claim.timestamp ? formatRelativeTime(claim.timestamp) : 'Just now',
