@@ -48,11 +48,14 @@ export async function GET(request: NextRequest) {
     const categoryIndex = currentHour % categories.length;
     const category = categories[categoryIndex];
 
+    // BOOTSTRAP: Temporarily fetching 50 articles for initial population
+    const maxArticles = 50;
+
     // Fetch from GNews API - 7 articles per run (optimized for 1000/day limit)
     // 144 runs/day × 7 articles = ~1000 requests/day
-    const gnewsUrl = `https://gnews.io/api/v4/top-headlines?category=${category}&lang=en&max=7&token=${gnewsApiKey}`;
+    const gnewsUrl = `https://gnews.io/api/v4/top-headlines?category=${category}&lang=en&max=${maxArticles}&token=${gnewsApiKey}`;
 
-    console.log(`[Cron: Fetch News] Fetching from GNews (category: ${category})...`);
+    console.log(`[Cron: Fetch News] Fetching from GNews (category: ${category}, max: ${maxArticles})...`);
     const gnewsResponse = await fetch(gnewsUrl);
 
     if (!gnewsResponse.ok) {
