@@ -127,6 +127,8 @@ export default function ResolutionModalWithEvidence({
         title: file.name,
         sourceKind: "secondary",
         hash: uploadData.hash,
+        mimeType: uploadData.mimeType,
+        fileSizeBytes: uploadData.fileSize,
       }]);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to upload file");
