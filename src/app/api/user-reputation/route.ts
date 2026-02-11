@@ -5,12 +5,19 @@ import { getReputationTier, REPUTATION_TIERS, calculateWeightedReputation, conve
 export const dynamic = 'force-dynamic';
 export const maxDuration = 10;
 
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
+
 // API route: /api/user-reputation
 // Calculates user reputation scores using weighted formula
 export async function POST(request: NextRequest) {
   try {
-    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-    const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
+    // Use service key if available, fallback to anon key
+    const supabaseKey = supabaseServiceKey || supabaseAnonKey;
+    if (!supabaseServiceKey) {
+      console.warn('[User Reputation API] Service role key not configured, using anon key. Some operations may be restricted.');
+    }
     const supabase = createClient(supabaseUrl, supabaseKey);
 
     const body = await request.json();
