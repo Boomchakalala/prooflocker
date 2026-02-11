@@ -507,10 +507,6 @@ export default function GlobePage() {
           <div className="bg-[rgba(10,10,15,0.92)] backdrop-blur-xl border border-purple-500/20 rounded-xl p-3 shadow-2xl">
             <div className="flex items-center gap-4 text-[11px]">
               <div className="flex items-center gap-1.5">
-                <div className="w-2.5 h-2.5 rounded-full bg-[#f97316] shadow-[0_0_6px_rgba(249,115,22,0.6)]"></div>
-                <span className="text-white">Activity</span>
-              </div>
-              <div className="flex items-center gap-1.5">
                 <div className="w-2.5 h-2.5 rounded-full bg-[#8b5cf6] shadow-[0_0_6px_rgba(139,92,246,0.6)]"></div>
                 <span className="text-white">Claims</span>
               </div>

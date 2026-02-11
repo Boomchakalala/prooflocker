@@ -77,34 +77,6 @@ function toOsintGeoJSON(osint: OsintItem[]) {
   };
 }
 
-function toCombinedGeoJSON(claims: Claim[], osint: OsintItem[]) {
-  const features: any[] = [];
-  const seen = new Set<string>();
-  claims.forEach(c => {
-    const key = `c-${c.id}`;
-    if (!seen.has(key)) {
-      seen.add(key);
-      features.push({
-        type: 'Feature' as const,
-        geometry: { type: 'Point' as const, coordinates: [c.lng, c.lat] },
-        properties: { itemType: 'claim', id: c.id },
-      });
-    }
-  });
-  osint.forEach(o => {
-    const key = `o-${o.id}`;
-    if (!seen.has(key)) {
-      seen.add(key);
-      features.push({
-        type: 'Feature' as const,
-        geometry: { type: 'Point' as const, coordinates: [o.lng, o.lat] },
-        properties: { itemType: 'osint', id: o.id },
-      });
-    }
-  });
-  return { type: 'FeatureCollection' as const, features };
-}
-
 function haversineDistance(lat1: number, lng1: number, lat2: number, lng2: number) {
   const R = 6371;
   const dLat = (lat2 - lat1) * Math.PI / 180;
