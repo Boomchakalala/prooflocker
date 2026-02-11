@@ -775,18 +775,18 @@ export default function GlobePage() {
           </div>
         </aside>
 
-        {/* Mobile: Toggle Feed Button */}
+        {/* Mobile: Secondary Toggle Feed Button (bottom-left) */}
         <button
           onClick={() => setShowMobileFeed(!showMobileFeed)}
-          className="md:hidden fixed bottom-[calc(5rem+env(safe-area-inset-bottom))] left-4 z-[150] w-12 h-12 rounded-full bg-slate-900/90 backdrop-blur-sm border border-purple-500/30 shadow-2xl flex items-center justify-center text-white transition-all hover:scale-110 active:scale-95"
+          className="md:hidden fixed bottom-[calc(5rem+env(safe-area-inset-bottom))] left-4 z-[150] w-10 h-10 rounded-full bg-slate-900/70 backdrop-blur-sm border border-slate-700/50 shadow-lg flex items-center justify-center text-slate-400 hover:text-white transition-all hover:scale-105 active:scale-95"
           title={showMobileFeed ? "Hide Feed" : "Show Feed"}
         >
           {showMobileFeed ? (
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
             </svg>
           ) : (
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
             </svg>
           )}
