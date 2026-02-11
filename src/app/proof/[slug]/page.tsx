@@ -10,8 +10,6 @@ import OnChainBadge from "@/components/OnChainBadge";
 import CopyButton from "@/components/CopyButton";
 import EvidenceGradeBadge from "@/components/EvidenceGradeBadge";
 import EvidenceList from "@/components/EvidenceList";
-import EvidenceScoreMeter from "@/components/EvidenceScoreMeter";
-import { LEGACY_GRADE_SCORES } from "@/lib/evidence-scoring";
 import ProofResolveActions from "@/components/ProofResolveActions";
 
 // Cache the prediction fetch to avoid duplicate queries
@@ -157,15 +155,10 @@ export default async function ProofPage({ params }: Props) {
               <div className="flex md:flex-col gap-2 flex-wrap md:flex-nowrap">
                 <OutcomeBadge outcome={prediction.outcome} size="md" showLabel="long" />
                 {isResolved && prediction.evidenceGrade && (
-                  <EvidenceScoreMeter
-                    score={LEGACY_GRADE_SCORES[prediction.evidenceGrade as keyof typeof LEGACY_GRADE_SCORES] || 0}
-                    tier={
-                      prediction.evidenceGrade === 'A' ? 'strong' :
-                      prediction.evidenceGrade === 'B' ? 'solid' :
-                      prediction.evidenceGrade === 'C' ? 'basic' : 'unverified'
-                    }
-                    breakdown={[]}
-                    variant="compact"
+                  <EvidenceGradeBadge
+                    grade={prediction.evidenceGrade as "A" | "B" | "C" | "D"}
+                    size="md"
+                    showLabel="long"
                   />
                 )}
               </div>
