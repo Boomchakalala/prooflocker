@@ -56,18 +56,18 @@ export async function GET(request: NextRequest) {
 
     console.log(`[Cron: Fetch News] Received ${articles.length} articles`);
 
-    // CLEANUP: Delete articles older than 3 days
+    // CLEANUP: Delete ALL intel articles older than 3 days (keep database lean)
+    // This applies to GNews, RSS feeds, and all intel sources
     const threeDaysAgo = new Date();
     threeDaysAgo.setDate(threeDaysAgo.getDate() - 3);
 
-    const { data: deletedItems, error: deleteError } = await supabase
+    const { error: deleteError, count: deleteCount } = await supabase
       .from('intel_items')
       .delete()
-      .eq('source_type', 'gnews_api')
       .lt('created_at', threeDaysAgo.toISOString());
 
-    if (!deleteError && deletedItems) {
-      console.log(`[Cron: Fetch News] Cleaned up ${deletedItems.length || 0} old articles (>3 days)`);
+    if (!deleteError) {
+      console.log(`[Cron: Fetch News] Cleaned up ${deleteCount || 0} old articles (>3 days old)`);
     }
 
     console.log(`[Cron: Fetch News] Received ${articles.length} articles`);
@@ -199,47 +199,96 @@ function extractGeoFromArticle(article: any): {
 } {
   const text = `${article.title} ${article.description || ''} ${article.content || ''}`.toLowerCase();
 
-  // City/location keyword matching with coordinates
+  // Expanded city/location database - 60+ major cities
   const locations: Record<string, { lat: number; lon: number; place: string; country: string }> = {
-    'washington': { lat: 38.9072, lon: -77.0369, place: 'Washington DC', country: 'US' },
-    'new york': { lat: 40.7128, lon: -74.0060, place: 'New York', country: 'US' },
-    'london': { lat: 51.5074, lon: -0.1278, place: 'London', country: 'GB' },
-    'paris': { lat: 48.8566, lon: 2.3522, place: 'Paris', country: 'FR' },
-    'beijing': { lat: 39.9042, lon: 116.4074, place: 'Beijing', country: 'CN' },
-    'tokyo': { lat: 35.6762, lon: 139.6503, place: 'Tokyo', country: 'JP' },
-    'moscow': { lat: 55.7558, lon: 37.6173, place: 'Moscow', country: 'RU' },
-    'berlin': { lat: 52.5200, lon: 13.4050, place: 'Berlin', country: 'DE' },
-    'sydney': { lat: -33.8688, lon: 151.2093, place: 'Sydney', country: 'AU' },
-    'toronto': { lat: 43.6532, lon: -79.3832, place: 'Toronto', country: 'CA' },
+    // USA
+    'washington|washington dc|dc': { lat: 38.9072, lon: -77.0369, place: 'Washington DC', country: 'US' },
+    'new york|nyc|manhattan': { lat: 40.7128, lon: -74.0060, place: 'New York', country: 'US' },
     'san francisco': { lat: 37.7749, lon: -122.4194, place: 'San Francisco', country: 'US' },
-    'los angeles': { lat: 34.0522, lon: -118.2437, place: 'Los Angeles', country: 'US' },
+    'los angeles|la': { lat: 34.0522, lon: -118.2437, place: 'Los Angeles', country: 'US' },
     'chicago': { lat: 41.8781, lon: -87.6298, place: 'Chicago', country: 'US' },
     'houston': { lat: 29.7604, lon: -95.3698, place: 'Houston', country: 'US' },
     'miami': { lat: 25.7617, lon: -80.1918, place: 'Miami', country: 'US' },
     'seattle': { lat: 47.6062, lon: -122.3321, place: 'Seattle', country: 'US' },
     'boston': { lat: 42.3601, lon: -71.0589, place: 'Boston', country: 'US' },
     'atlanta': { lat: 33.7490, lon: -84.3880, place: 'Atlanta', country: 'US' },
+    'dallas': { lat: 32.7767, lon: -96.7970, place: 'Dallas', country: 'US' },
+    'phoenix': { lat: 33.4484, lon: -112.0740, place: 'Phoenix', country: 'US' },
+    'philadelphia': { lat: 39.9526, lon: -75.1652, place: 'Philadelphia', country: 'US' },
+    'denver': { lat: 39.7392, lon: -104.9903, place: 'Denver', country: 'US' },
+    'las vegas|vegas': { lat: 36.1699, lon: -115.1398, place: 'Las Vegas', country: 'US' },
+
+    // Europe
+    'london': { lat: 51.5074, lon: -0.1278, place: 'London', country: 'GB' },
+    'paris': { lat: 48.8566, lon: 2.3522, place: 'Paris', country: 'FR' },
+    'berlin': { lat: 52.5200, lon: 13.4050, place: 'Berlin', country: 'DE' },
+    'madrid': { lat: 40.4168, lon: -3.7038, place: 'Madrid', country: 'ES' },
+    'rome': { lat: 41.9028, lon: 12.4964, place: 'Rome', country: 'IT' },
+    'amsterdam': { lat: 52.3676, lon: 4.9041, place: 'Amsterdam', country: 'NL' },
+    'brussels': { lat: 50.8503, lon: 4.3517, place: 'Brussels', country: 'BE' },
+    'vienna': { lat: 48.2082, lon: 16.3738, place: 'Vienna', country: 'AT' },
+    'zurich': { lat: 47.3769, lon: 8.5417, place: 'Zurich', country: 'CH' },
+    'moscow': { lat: 55.7558, lon: 37.6173, place: 'Moscow', country: 'RU' },
+    'istanbul': { lat: 41.0082, lon: 28.9784, place: 'Istanbul', country: 'TR' },
+    'athens': { lat: 37.9838, lon: 23.7275, place: 'Athens', country: 'GR' },
+    'lisbon': { lat: 38.7223, lon: -9.1393, place: 'Lisbon', country: 'PT' },
+    'stockholm': { lat: 59.3293, lon: 18.0686, place: 'Stockholm', country: 'SE' },
+    'copenhagen': { lat: 55.6761, lon: 12.5683, place: 'Copenhagen', country: 'DK' },
+    'warsaw': { lat: 52.2297, lon: 21.0122, place: 'Warsaw', country: 'PL' },
+    'prague': { lat: 50.0755, lon: 14.4378, place: 'Prague', country: 'CZ' },
+
+    // Asia
+    'beijing': { lat: 39.9042, lon: 116.4074, place: 'Beijing', country: 'CN' },
+    'shanghai': { lat: 31.2304, lon: 121.4737, place: 'Shanghai', country: 'CN' },
+    'tokyo': { lat: 35.6762, lon: 139.6503, place: 'Tokyo', country: 'JP' },
+    'seoul': { lat: 37.5665, lon: 126.9780, place: 'Seoul', country: 'KR' },
     'hong kong': { lat: 22.3193, lon: 114.1694, place: 'Hong Kong', country: 'HK' },
     'singapore': { lat: 1.3521, lon: 103.8198, place: 'Singapore', country: 'SG' },
-    'dubai': { lat: 25.2048, lon: 55.2708, place: 'Dubai', country: 'AE' },
+    'bangkok': { lat: 13.7563, lon: 100.5018, place: 'Bangkok', country: 'TH' },
     'mumbai': { lat: 19.0760, lon: 72.8777, place: 'Mumbai', country: 'IN' },
-    'delhi': { lat: 28.7041, lon: 77.1025, place: 'Delhi', country: 'IN' },
-    'shanghai': { lat: 31.2304, lon: 121.4737, place: 'Shanghai', country: 'CN' },
-    'seoul': { lat: 37.5665, lon: 126.9780, place: 'Seoul', country: 'KR' },
+    'delhi|new delhi': { lat: 28.7041, lon: 77.1025, place: 'Delhi', country: 'IN' },
+    'bangalore': { lat: 12.9716, lon: 77.5946, place: 'Bangalore', country: 'IN' },
+    'dubai': { lat: 25.2048, lon: 55.2708, place: 'Dubai', country: 'AE' },
+    'tel aviv': { lat: 32.0853, lon: 34.7818, place: 'Tel Aviv', country: 'IL' },
+    'jerusalem': { lat: 31.7683, lon: 35.2137, place: 'Jerusalem', country: 'IL' },
+    'riyadh': { lat: 24.7136, lon: 46.6753, place: 'Riyadh', country: 'SA' },
+    'jakarta': { lat: -6.2088, lon: 106.8456, place: 'Jakarta', country: 'ID' },
+    'manila': { lat: 14.5995, lon: 120.9842, place: 'Manila', country: 'PH' },
+    'taipei': { lat: 25.0330, lon: 121.5654, place: 'Taipei', country: 'TW' },
+    'hanoi': { lat: 21.0285, lon: 105.8542, place: 'Hanoi', country: 'VN' },
+
+    // Americas
+    'toronto': { lat: 43.6532, lon: -79.3832, place: 'Toronto', country: 'CA' },
+    'vancouver': { lat: 49.2827, lon: -123.1207, place: 'Vancouver', country: 'CA' },
+    'montreal': { lat: 45.5017, lon: -73.5673, place: 'Montreal', country: 'CA' },
     'mexico city': { lat: 19.4326, lon: -99.1332, place: 'Mexico City', country: 'MX' },
     'sao paulo': { lat: -23.5505, lon: -46.6333, place: 'São Paulo', country: 'BR' },
-    'rio de janeiro': { lat: -22.9068, lon: -43.1729, place: 'Rio de Janeiro', country: 'BR' },
+    'rio de janeiro|rio': { lat: -22.9068, lon: -43.1729, place: 'Rio de Janeiro', country: 'BR' },
     'buenos aires': { lat: -34.6037, lon: -58.3816, place: 'Buenos Aires', country: 'AR' },
-    'istanbul': { lat: 41.0082, lon: 28.9784, place: 'Istanbul', country: 'TR' },
+    'santiago': { lat: -33.4489, lon: -70.6693, place: 'Santiago', country: 'CL' },
+    'bogota': { lat: 4.7110, lon: -74.0721, place: 'Bogotá', country: 'CO' },
+    'lima': { lat: -12.0464, lon: -77.0428, place: 'Lima', country: 'PE' },
+
+    // Africa & Middle East
     'cairo': { lat: 30.0444, lon: 31.2357, place: 'Cairo', country: 'EG' },
+    'johannesburg': { lat: -26.2041, lon: 28.0473, place: 'Johannesburg', country: 'ZA' },
+    'cape town': { lat: -33.9249, lon: 18.4241, place: 'Cape Town', country: 'ZA' },
+    'nairobi': { lat: -1.2921, lon: 36.8219, place: 'Nairobi', country: 'KE' },
+    'lagos': { lat: 6.5244, lon: 3.3792, place: 'Lagos', country: 'NG' },
+
+    // Oceania
+    'sydney': { lat: -33.8688, lon: 151.2093, place: 'Sydney', country: 'AU' },
+    'melbourne': { lat: -37.8136, lon: 144.9631, place: 'Melbourne', country: 'AU' },
+    'auckland': { lat: -36.8485, lon: 174.7633, place: 'Auckland', country: 'NZ' },
   };
 
-  // Check for location mentions
-  for (const [keyword, location] of Object.entries(locations)) {
-    if (text.includes(keyword)) {
-      // Add small random offset to avoid exact duplicates
-      const latOffset = (Math.random() - 0.5) * 0.5;
-      const lonOffset = (Math.random() - 0.5) * 0.5;
+  // Check for location mentions using regex for better matching
+  for (const [pattern, location] of Object.entries(locations)) {
+    const regex = new RegExp(`\\b(${pattern})\\b`, 'i');
+    if (regex.test(text)) {
+      // Add small random offset to avoid exact duplicates on map
+      const latOffset = (Math.random() - 0.5) * 0.3;
+      const lonOffset = (Math.random() - 0.5) * 0.3;
 
       return {
         lat: location.lat + latOffset,
