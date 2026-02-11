@@ -20,10 +20,10 @@ export default function StatusBadge({ status, variant = "full", className = "" }
           <path strokeLinecap="round" d="M12 6v6l4 2"/>
         </svg>
       ),
-      baseColor: "text-amber-400",
-      bgColor: "bg-amber-500/10",
+      baseColor: "text-white",
+      bgColor: "bg-gradient-to-r from-amber-500 to-orange-500",
       borderColor: "border-amber-400/30",
-      glowColor: "shadow-[0_0_12px_rgba(251,191,36,0.2)]",
+      animate: "animate-pulse",
     },
     correct: {
       label: "Correct",
@@ -32,10 +32,10 @@ export default function StatusBadge({ status, variant = "full", className = "" }
           <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7"/>
         </svg>
       ),
-      baseColor: "text-emerald-400",
-      bgColor: "bg-emerald-500/10",
+      baseColor: "text-white",
+      bgColor: "bg-gradient-to-r from-emerald-500 to-emerald-600",
       borderColor: "border-emerald-400/30",
-      glowColor: "shadow-[0_0_12px_rgba(52,211,153,0.25)]",
+      animate: "",
     },
     incorrect: {
       label: "Incorrect",
@@ -44,10 +44,10 @@ export default function StatusBadge({ status, variant = "full", className = "" }
           <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12"/>
         </svg>
       ),
-      baseColor: "text-rose-400",
-      bgColor: "bg-rose-500/10",
-      borderColor: "border-rose-400/30",
-      glowColor: "shadow-[0_0_12px_rgba(251,113,133,0.25)]",
+      baseColor: "text-white",
+      bgColor: "bg-gradient-to-r from-red-500 to-red-600",
+      borderColor: "border-red-400/30",
+      animate: "",
     },
     verified: {
       label: "Verified",
@@ -56,10 +56,10 @@ export default function StatusBadge({ status, variant = "full", className = "" }
           <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
         </svg>
       ),
-      baseColor: "text-emerald-400",
-      bgColor: "bg-emerald-500/10",
+      baseColor: "text-white",
+      bgColor: "bg-gradient-to-r from-emerald-500 to-emerald-600",
       borderColor: "border-emerald-400/30",
-      glowColor: "shadow-[0_0_12px_rgba(52,211,153,0.25)]",
+      animate: "",
     },
     disputed: {
       label: "Disputed",
@@ -71,7 +71,7 @@ export default function StatusBadge({ status, variant = "full", className = "" }
       baseColor: "text-orange-400",
       bgColor: "bg-orange-500/10",
       borderColor: "border-orange-400/30",
-      glowColor: "shadow-[0_0_12px_rgba(251,146,60,0.25)]",
+      animate: "",
     },
     void: {
       label: "Void",
@@ -84,7 +84,7 @@ export default function StatusBadge({ status, variant = "full", className = "" }
       baseColor: "text-slate-400",
       bgColor: "bg-slate-500/10",
       borderColor: "border-slate-400/30",
-      glowColor: "shadow-[0_0_12px_rgba(148,163,184,0.15)]",
+      animate: "",
     },
   };
 
@@ -92,7 +92,7 @@ export default function StatusBadge({ status, variant = "full", className = "" }
 
   const baseClasses = `
     inline-flex items-center gap-1.5 font-semibold rounded-lg border transition-all
-    ${config.baseColor} ${config.bgColor} ${config.borderColor} ${config.glowColor}
+    ${config.baseColor} ${config.bgColor} ${config.borderColor} ${config.animate}
     hover:scale-105
   `;
 
