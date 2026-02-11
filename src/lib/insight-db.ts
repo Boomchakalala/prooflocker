@@ -44,7 +44,8 @@ export async function getOrCreateScore(
   // Create if doesn't exist
   if (!data) {
     const newScore: Partial<InsightScoreRow> = {
-      anon_id: identifier.anonId || null,
+      // IMPORTANT: Only set ONE identifier (user_id OR anon_id, never both)
+      anon_id: identifier.userId ? null : (identifier.anonId || null),
       user_id: identifier.userId || null,
       total_points: 0,
       correct_resolves: 0,
@@ -90,7 +91,8 @@ export async function logAction(params: {
   const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
   await supabase.from("insight_actions").insert({
-    anon_id: params.identifier.anonId || null,
+    // IMPORTANT: Only set ONE identifier (user_id OR anon_id, never both)
+    anon_id: params.identifier.userId ? null : (params.identifier.anonId || null),
     user_id: params.identifier.userId || null,
     action_type: params.actionType,
     points_delta: params.pointsDelta,
