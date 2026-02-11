@@ -212,7 +212,25 @@ export async function POST(
 
     console.log(`[Resolve ${requestId}] Evidence score: ${evidenceScoreResult.score}`);
 
-    // STEP 8: Submit to Digital Evidence (if enabled)
+    // STEP 8: Build update data
+    const updateData: Record<string, any> = {
+      outcome,
+      resolved_at: new Date().toISOString(),
+      resolved_by: user.id,
+      resolution_note: resolutionNote || null,
+      resolution_url: resolutionUrl || null,
+      evidence_grade: effectiveGrade,
+      evidence_summary: evidenceSummary || null,
+      resolution_fingerprint: resolutionFingerprint,
+      evidence_score: evidenceScoreResult.score,
+      evidence_score_breakdown: {
+        score: evidenceScoreResult.score,
+        tier: evidenceScoreResult.tier,
+        breakdown: evidenceScoreResult.breakdown,
+      },
+    };
+
+    // STEP 8b: Submit to Digital Evidence (if enabled)
     const resolutionData = JSON.stringify({
       predictionId: id,
       outcome,
@@ -250,22 +268,6 @@ export async function POST(
     }
 
     // STEP 9: Update prediction
-    const updateData: Record<string, any> = {
-      outcome,
-      resolved_at: new Date().toISOString(),
-      resolved_by: user.id,
-      resolution_note: resolutionNote || null,
-      resolution_url: resolutionUrl || null,
-      evidence_grade: effectiveGrade,
-      evidence_summary: evidenceSummary || null,
-      resolution_fingerprint: resolutionFingerprint,
-      evidence_score: evidenceScoreResult.score,
-      evidence_score_breakdown: {
-        score: evidenceScoreResult.score,
-        tier: evidenceScoreResult.tier,
-        breakdown: evidenceScoreResult.breakdown,
-      },
-    };
 
     const { error: updateError } = await adminSupabase
       .from("predictions")
