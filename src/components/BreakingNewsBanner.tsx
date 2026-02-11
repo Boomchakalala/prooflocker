@@ -7,6 +7,7 @@ export interface BannerItem {
   text: string;
   location: string;
   time?: string;
+  source?: 'intel' | 'claim';
 }
 
 interface BreakingNewsBannerProps {
@@ -75,7 +76,7 @@ export default function BreakingNewsBanner({ items, className = '' }: BreakingNe
             {items.concat(items).map((item, idx) => (
               <div key={idx} className="inline-flex items-center gap-2 shrink-0">
                 <span className={`inline-flex items-center gap-1 px-1.5 py-0.5 text-[9px] md:text-[9px] font-bold rounded uppercase tracking-wide ${
-                  item.type === 'INTEL'
+                  item.source === 'intel'
                     ? 'bg-red-600/30 border border-red-500/50 text-red-200'
                     : 'bg-purple-600/30 border border-purple-500/50 text-purple-200'
                 }`}>
