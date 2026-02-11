@@ -206,7 +206,7 @@ export default function GlobeMapbox({ claims, osint, mapMode = 'both', viewMode 
         'circle-radius': 5, 'circle-opacity': 0.95, 'circle-stroke-width': 1.5, 'circle-stroke-color': '#a78bfa', 'circle-stroke-opacity': 0.8
       }});
 
-      // ── OSINT layers (red, compact) ──────────────────────────
+      // ── OSINT layers (category-colored, compact) ──────────────────────────
       // Cluster glow
       map.addLayer({ id: 'osint-clusters-glow', type: 'circle', source: 'osint', filter: ['has', 'point_count'], paint: {
         'circle-color': '#ef4444', 'circle-radius': ['step', ['get', 'point_count'], 18, 5, 24, 10, 30], 'circle-blur': 0.7, 'circle-opacity': 0.15
@@ -221,13 +221,37 @@ export default function GlobeMapbox({ claims, osint, mapMode = 'both', viewMode 
         'text-field': '{point_count_abbreviated}', 'text-font': ['DIN Offc Pro Bold', 'Arial Unicode MS Bold'], 'text-size': 11,
         'text-allow-overlap': true, 'text-ignore-placement': true
       }, paint: { 'text-color': '#fff' }});
-      // Individual glow
+      // Individual glow - category colored
       map.addLayer({ id: 'osint-points-glow', type: 'circle', source: 'osint', filter: ['!', ['has', 'point_count']], paint: {
-        'circle-color': '#ef4444', 'circle-radius': 10, 'circle-blur': 0.6, 'circle-opacity': 0.18
+        'circle-color': [
+          'match',
+          ['get', 'category'],
+          'crypto', '#f97316',     // orange
+          'markets', '#10b981',    // emerald
+          'military', '#ef4444',   // red
+          'breaking', '#eab308',   // yellow
+          'politics', '#3b82f6',   // blue
+          'tech', '#a855f7',       // purple
+          'science', '#06b6d4',    // cyan
+          '#ef4444'                // default red
+        ],
+        'circle-radius': 10, 'circle-blur': 0.6, 'circle-opacity': 0.18
       }});
-      // Individual core
+      // Individual core - category colored
       map.addLayer({ id: 'osint-points-core', type: 'circle', source: 'osint', filter: ['!', ['has', 'point_count']], paint: {
-        'circle-color': '#ef4444', 'circle-radius': 5, 'circle-opacity': 0.92,
+        'circle-color': [
+          'match',
+          ['get', 'category'],
+          'crypto', '#f97316',     // orange
+          'markets', '#10b981',    // emerald
+          'military', '#ef4444',   // red
+          'breaking', '#eab308',   // yellow
+          'politics', '#3b82f6',   // blue
+          'tech', '#a855f7',       // purple
+          'science', '#06b6d4',    // cyan
+          '#ef4444'                // default red
+        ],
+        'circle-radius': 5, 'circle-opacity': 0.92,
         'circle-stroke-width': 1.5, 'circle-stroke-color': '#e2e8f0', 'circle-stroke-opacity': 0.8
       }});
 
