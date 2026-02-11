@@ -1,58 +1,84 @@
 import { NextRequest, NextResponse } from "next/server";
-import { updatePredictionOutcome, type PredictionOutcome } from "@/lib/storage";
+import { createClient } from "@supabase/supabase-js";
 import type { EvidenceGrade, EvidenceItemInput } from "@/lib/evidence-types";
 import { validateEvidenceRequirements } from "@/lib/evidence-types";
 import {
   createEvidenceLinkItem,
   createEvidenceFileItem,
-  uploadEvidenceFile,
   updateUserStats,
 } from "@/lib/evidence-storage";
 import { computeResolutionFingerprint } from "@/lib/evidence-hashing";
 import { computeEvidenceScore } from "@/lib/evidence-scoring";
 import { awardResolvePoints } from "@/lib/insight-db";
-import { createClient } from "@supabase/supabase-js";
+
+// ENV CHECK (one-time log)
+console.log("[Resolve API] ENV CHECK:", {
+  hasUrl: !!process.env.NEXT_PUBLIC_SUPABASE_URL,
+  hasAnon: !!process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
+  hasService: !!process.env.SUPABASE_SERVICE_ROLE_KEY,
+});
 
 export async function POST(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
-  console.log('==================== RESOLVE API CALLED ====================');
+  const requestId = Math.random().toString(36).substring(7);
+  console.log(`[Resolve ${requestId}] ==================== START ====================`);
+
   try {
-    // Get the access token from Authorization header
+    // STEP 1: Extract auth token
     const authHeader = request.headers.get('authorization');
-    console.log('[Resolve API] Auth header present:', !!authHeader);
+    console.log(`[Resolve ${requestId}] Auth header present:`, !!authHeader);
 
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
-      console.log('[Resolve API] NO AUTH HEADER - returning 401');
+      console.log(`[Resolve ${requestId}] NO AUTH - returning 401`);
       return NextResponse.json(
-        { error: "Unauthorized - must be logged in" },
+        { ok: false, error: "Unauthorized", details: "Must be logged in to resolve predictions" },
         { status: 401 }
       );
     }
 
-    const accessToken = authHeader.substring(7); // Remove 'Bearer ' prefix
+    const accessToken = authHeader.substring(7);
 
-    // Create Supabase client and validate the token
+    // STEP 2: Validate session
     const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
     const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
-    const authSupabase = createClient(supabaseUrl, supabaseAnonKey);
 
+    if (!supabaseUrl || !supabaseAnonKey) {
+      console.error(`[Resolve ${requestId}] MISSING ENV VARIABLES`);
+      return NextResponse.json(
+        { ok: false, error: "Configuration error", details: "Missing Supabase credentials" },
+        { status: 500 }
+      );
+    }
+
+    const authSupabase = createClient(supabaseUrl, supabaseAnonKey);
     const { data: { user }, error: authError } = await authSupabase.auth.getUser(accessToken);
 
-    if (authError || !user) {
-      console.error("[Resolve API] Auth error:", authError);
+    if (authError) {
+      console.error(`[Resolve ${requestId}] Auth error:`, authError);
       return NextResponse.json(
-        { error: "Unauthorized - must be logged in" },
+        { ok: false, error: "Authentication failed", details: authError.message },
         { status: 401 }
       );
     }
 
-    console.log('[Resolve API] User authenticated:', user.id);
+    if (!user) {
+      console.log(`[Resolve ${requestId}] No user found`);
+      return NextResponse.json(
+        { ok: false, error: "Unauthorized", details: "Invalid session" },
+        { status: 401 }
+      );
+    }
 
+    console.log(`[Resolve ${requestId}] User authenticated:`, user.id);
+
+    // STEP 3: Parse request
     const { id } = await params;
     const body = await request.json();
-    console.log('[Resolve API] Request body:', JSON.stringify(body, null, 2));
+    console.log(`[Resolve ${requestId}] Prediction ID:`, id);
+    console.log(`[Resolve ${requestId}] Body:`, JSON.stringify(body, null, 2));
+
     const {
       outcome,
       resolutionNote,
@@ -60,69 +86,92 @@ export async function POST(
       evidenceGrade,
       evidenceSummary,
       evidenceItems,
-    }: {
-      outcome: PredictionOutcome;
-      resolutionNote?: string;
-      resolutionUrl?: string;
-      evidenceGrade: EvidenceGrade;
-      evidenceSummary?: string;
-      evidenceItems: Array<EvidenceItemInput & { hash?: string }>;
     } = body;
 
-    // Validate outcome
+    // STEP 4: Validate inputs
     if (!outcome || !["correct", "incorrect", "invalid"].includes(outcome)) {
       return NextResponse.json(
-        { error: "Invalid outcome value" },
+        { ok: false, error: "Invalid outcome", details: `Outcome must be correct, incorrect, or invalid. Got: ${outcome}` },
         { status: 400 }
       );
     }
 
-    // Validate evidence grade
     if (!evidenceGrade || !["A", "B", "C", "D"].includes(evidenceGrade)) {
       return NextResponse.json(
-        { error: "Invalid evidence grade" },
+        { ok: false, error: "Invalid evidence grade", details: `Grade must be A, B, C, or D. Got: ${evidenceGrade}` },
         { status: 400 }
       );
     }
 
-    // Validate evidence requirements
     const validation = validateEvidenceRequirements(
       evidenceGrade,
       evidenceSummary,
-      evidenceItems.length
+      evidenceItems?.length || 0
     );
 
     if (!validation.valid) {
       return NextResponse.json(
-        { error: validation.error },
+        { ok: false, error: "Evidence validation failed", details: validation.error },
         { status: 400 }
       );
     }
 
-    // Validate resolution note length
-    if (resolutionNote && resolutionNote.length > 280) {
+    // STEP 5: Check ownership using SERVICE ROLE
+    const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+    if (!serviceKey) {
+      console.error(`[Resolve ${requestId}] NO SERVICE KEY`);
       return NextResponse.json(
-        { error: "Resolution note must be 280 characters or less" },
-        { status: 400 }
+        { ok: false, error: "Configuration error", details: "Missing service role key" },
+        { status: 500 }
       );
     }
 
-    // Validate evidence summary length
-    if (evidenceSummary && evidenceSummary.length > 280) {
+    const adminSupabase = createClient(supabaseUrl, serviceKey);
+
+    const { data: prediction, error: fetchError } = await adminSupabase
+      .from("predictions")
+      .select("*")
+      .eq("id", id)
+      .single();
+
+    if (fetchError) {
+      console.error(`[Resolve ${requestId}] Fetch error:`, fetchError);
       return NextResponse.json(
-        { error: "Evidence summary must be 280 characters or less" },
+        { ok: false, error: "Prediction not found", details: fetchError.message },
+        { status: 404 }
+      );
+    }
+
+    if (!prediction) {
+      return NextResponse.json(
+        { ok: false, error: "Prediction not found", details: `No prediction with id ${id}` },
+        { status: 404 }
+      );
+    }
+
+    if (!prediction.user_id) {
+      return NextResponse.json(
+        { ok: false, error: "Cannot resolve unclaimed prediction", details: "This prediction must be claimed first" },
         { status: 400 }
       );
     }
 
-    // Step 1: Process evidence items (upload files, create records)
+    if (prediction.user_id !== user.id) {
+      return NextResponse.json(
+        { ok: false, error: "Unauthorized", details: "You don't own this prediction" },
+        { status: 403 }
+      );
+    }
+
+    console.log(`[Resolve ${requestId}] Ownership verified`);
+
+    // STEP 6: Process evidence items
     const evidenceHashes: string[] = [];
     const createdEvidenceItems = [];
 
-    for (const item of evidenceItems) {
+    for (const item of evidenceItems || []) {
       try {
         if (item.type === "link" && item.url) {
-          // Create link evidence item
           const created = await createEvidenceLinkItem(
             id,
             item.url,
@@ -133,10 +182,9 @@ export async function POST(
           evidenceHashes.push(created.sha256);
           createdEvidenceItems.push(created);
         } else if (item.type === "file" && item.url && item.hash) {
-          // File already uploaded, create evidence record
           const created = await createEvidenceFileItem(
             id,
-            item.url, // This is actually the public URL from upload
+            item.url,
             item.url,
             item.hash,
             item.mimeType || 'application/octet-stream',
@@ -148,16 +196,17 @@ export async function POST(
           evidenceHashes.push(created.sha256);
           createdEvidenceItems.push(created);
         } else if (item.hash) {
-          // If hash is provided, use it (for files uploaded via separate endpoint)
           evidenceHashes.push(item.hash);
         }
       } catch (error) {
-        console.error("[Resolve API] Error processing evidence item:", error);
+        console.error(`[Resolve ${requestId}] Evidence item error:`, error);
         // Continue with other items
       }
     }
 
-    // Step 2: Compute resolution fingerprint
+    console.log(`[Resolve ${requestId}] Processed ${createdEvidenceItems.length} evidence items`);
+
+    // STEP 7: Compute fingerprint and score
     const resolutionFingerprint = await computeResolutionFingerprint({
       predictionId: id,
       outcome,
@@ -167,128 +216,104 @@ export async function POST(
       evidenceSummary: evidenceSummary || "",
     });
 
-    // Step 2.5: Compute evidence score
     const evidenceScoreResult = computeEvidenceScore(
-      evidenceItems,
+      evidenceItems || [],
       evidenceSummary,
-      false // directProofClaim - can add this parameter to body if needed
+      false
     );
 
-    // Step 3: Update prediction with resolution data
-    await updatePredictionOutcome(
-      id,
+    console.log(`[Resolve ${requestId}] Evidence score: ${evidenceScoreResult.score}`);
+
+    // STEP 8: Update prediction
+    const updateData: Record<string, any> = {
       outcome,
-      user.id,
-      resolutionNote,
-      resolutionUrl,
-      evidenceGrade,
-      evidenceSummary,
-      resolutionFingerprint,
-      evidenceScoreResult.score,
-      {
+      resolved_at: new Date().toISOString(),
+      resolved_by: user.id,
+      resolution_note: resolutionNote || null,
+      resolution_url: resolutionUrl || null,
+      evidence_grade: evidenceGrade,
+      evidence_summary: evidenceSummary || null,
+      resolution_fingerprint: resolutionFingerprint,
+      evidence_score: evidenceScoreResult.score,
+      evidence_score_breakdown: {
         score: evidenceScoreResult.score,
         tier: evidenceScoreResult.tier,
         breakdown: evidenceScoreResult.breakdown,
-      }
-    );
+      },
+    };
 
-    // Step 4: Update user stats
+    const { error: updateError } = await adminSupabase
+      .from("predictions")
+      .update(updateData)
+      .eq("id", id);
+
+    if (updateError) {
+      console.error(`[Resolve ${requestId}] Update error:`, updateError);
+      return NextResponse.json(
+        { ok: false, error: "Failed to update prediction", details: updateError.message },
+        { status: 500 }
+      );
+    }
+
+    console.log(`[Resolve ${requestId}] Prediction updated`);
+
+    // STEP 9: Update user stats (non-fatal)
     try {
       await updateUserStats(user.id);
     } catch (error) {
-      console.error("[Resolve API] Error updating user stats:", error);
-      // Non-fatal, continue
+      console.error(`[Resolve ${requestId}] User stats error:`, error);
     }
 
-    // Step 5: Award Reputation Score points for resolving
+    // STEP 10: Award reputation points (non-fatal)
     let insightPoints = 0;
     try {
-      const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-      const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+      const identifier = prediction.user_id
+        ? { userId: prediction.user_id }
+        : { anonId: prediction.anon_id };
 
-      if (supabaseServiceKey) {
-        const supabase = createClient(supabaseUrl, supabaseServiceKey);
+      console.log(`[Resolve ${requestId}] Awarding points with identifier:`, identifier);
 
-        // Get prediction data to check category and anon_id
-        const { data: prediction } = await supabase
-          .from('predictions')
-          .select('category, anon_id, user_id')
-          .eq('id', id)
-          .single();
+      const scoreResult = await awardResolvePoints({
+        identifier,
+        predictionId: id,
+        isCorrect: outcome === 'correct',
+        category: prediction.category || 'Other',
+      });
 
-        if (prediction) {
-          console.log('[Resolve API] Prediction data:', {
-            prediction_user_id: prediction.user_id,
-            prediction_anon_id: prediction.anon_id,
-          });
-
-          const identifier = prediction.user_id
-            ? { userId: prediction.user_id }
-            : { anonId: prediction.anon_id };
-
-          console.log('[Resolve API] Created identifier:', identifier);
-
-          const isCorrect = outcome === 'correct';
-          const category = prediction.category || 'Other';
-
-          const scoreResult = await awardResolvePoints({
-            identifier,
-            predictionId: id,
-            isCorrect,
-            category,
-          });
-
-          if (scoreResult) {
-            insightPoints = scoreResult.points;
-            console.log(`[Resolve API] Awarded ${insightPoints} Reputation Score points`);
-          }
-        }
-      } else {
-        console.warn('[Resolve API] No service role key available for scoring');
+      if (scoreResult) {
+        insightPoints = scoreResult.points;
+        console.log(`[Resolve ${requestId}] Awarded ${insightPoints} points`);
       }
     } catch (scoreError) {
-      console.error('[Resolve API] Failed to award Reputation Score:', scoreError);
-      // Non-fatal, continue
+      console.error(`[Resolve ${requestId}] Scoring error:`, scoreError);
+      // Don't fail the request
     }
 
+    console.log(`[Resolve ${requestId}] ==================== SUCCESS ====================`);
+
     return NextResponse.json({
+      ok: true,
       success: true,
       outcome,
       evidenceGrade,
       resolutionFingerprint,
       evidenceItemsCreated: createdEvidenceItems.length,
-      insightPoints, // Include insight points in response
+      evidenceScore: evidenceScoreResult.score,
+      insightPoints,
     });
-  } catch (error) {
-    console.error("==================== RESOLVE API ERROR ====================");
-    console.error("[Resolve API] Error:", error);
-    console.error("[Resolve API] Error stack:", error instanceof Error ? error.stack : 'No stack');
-    console.error("[Resolve API] Error message:", error instanceof Error ? error.message : String(error));
-    console.error("===========================================================");
 
-    if (error instanceof Error) {
-      if (error.message.includes("Unauthorized")) {
-        return NextResponse.json(
-          { error: error.message },
-          { status: 403 }
-        );
-      }
-      if (error.message.includes("not found")) {
-        return NextResponse.json(
-          { error: "Prediction not found" },
-          { status: 404 }
-        );
-      }
-      if (error.message.includes("unclaimed")) {
-        return NextResponse.json(
-          { error: "Cannot resolve unclaimed prediction" },
-          { status: 400 }
-        );
-      }
-    }
+  } catch (error) {
+    console.error(`[Resolve ${requestId}] ==================== ERROR ====================`);
+    console.error(`[Resolve ${requestId}] Error:`, error);
+    console.error(`[Resolve ${requestId}] Stack:`, error instanceof Error ? error.stack : 'No stack');
+    console.error(`[Resolve ${requestId}] ===========================================================`);
 
     return NextResponse.json(
-      { error: "Failed to resolve prediction", details: error instanceof Error ? error.message : String(error) },
+      {
+        ok: false,
+        error: "Internal server error",
+        details: error instanceof Error ? error.message : String(error),
+      },
       { status: 500 }
     );
   }
