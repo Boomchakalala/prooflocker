@@ -271,24 +271,50 @@ export default function ResolvePage({ params }: Props) {
             </div>
           </div>
 
-          {/* Section 2: Evidence (Optional) */}
+          {/* Section 2: Evidence */}
           <div className="glass border border-white/10 rounded-2xl overflow-hidden shadow-xl">
             <div className="p-6 md:p-8">
-              <div className="flex items-center gap-3 mb-2">
+              <div className="flex items-center gap-3 mb-4">
                 <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500/20 to-purple-500/20 flex items-center justify-center">
                   <svg className="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                   </svg>
                 </div>
                 <div>
-                  <h2 className="text-xl font-bold text-white">Evidence</h2>
-                  <p className="text-xs text-neutral-400">Optional - add proof to boost your reputation score</p>
+                  <h2 className="text-xl font-bold text-white">Evidence Pack</h2>
+                  <p className="text-xs text-neutral-400">Strengthen your resolution with sources</p>
                 </div>
               </div>
 
-              <p className="text-xs text-neutral-500 mb-5 ml-[52px]">
-                Adding links or screenshots increases your evidence score and reputation multiplier.
-              </p>
+              {/* Scoring guide */}
+              <div className="bg-white/[0.03] border border-white/[0.06] rounded-xl p-4 mb-5">
+                <p className="text-sm font-medium text-white mb-2">How evidence scoring works</p>
+                <div className="space-y-1.5 text-xs text-neutral-400">
+                  <div className="flex items-center justify-between">
+                    <span>Each source link added</span>
+                    <span className="text-blue-400 font-medium">+30 pts</span>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span>Multiple sources (2+)</span>
+                    <span className="text-blue-400 font-medium">+60 pts</span>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span>Screenshot or file upload</span>
+                    <span className="text-emerald-400 font-medium">+8 pts</span>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span>Written summary</span>
+                    <span className="text-purple-400 font-medium">+15 pts</span>
+                  </div>
+                  <div className="pt-1.5 mt-1.5 border-t border-white/[0.06] flex items-center justify-between">
+                    <span className="text-white font-medium">Target for strong evidence</span>
+                    <span className="text-amber-400 font-bold">65+ pts</span>
+                  </div>
+                </div>
+                <p className="text-[11px] text-neutral-500 mt-2">
+                  Add 2 source links + a summary to easily clear the 65-point threshold.
+                </p>
+              </div>
 
             {/* Live Evidence Score Preview */}
             {evidenceItems.length > 0 && (
