@@ -41,6 +41,7 @@ interface GlobeMapboxProps {
   osint: OsintItem[];
   mapMode?: 'both' | 'claims' | 'osint';
   viewMode?: 'points' | 'heatmap';
+  onViewportChange?: (bounds: mapboxgl.LngLatBounds, zoom: number) => void;
 }
 
 function toClaimGeoJSON(claims: Claim[]) {
