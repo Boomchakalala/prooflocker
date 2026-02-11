@@ -476,23 +476,42 @@ export default function AppFeedPage() {
                           </p>
 
                           {/* Bottom row */}
-                          <div className="flex items-center gap-2 text-[10px]">
-                            {claim.category && (
-                              <span className="text-slate-500 bg-slate-800/50 px-1.5 py-0.5 rounded">
-                                {claim.category}
+                          <div className="flex flex-col gap-2">
+                            <div className="flex items-center gap-2 text-[10px]">
+                              {claim.category && (
+                                <span className="text-slate-500 bg-slate-800/50 px-1.5 py-0.5 rounded">
+                                  {claim.category}
+                                </span>
+                              )}
+                              <span className="text-purple-400 bg-purple-500/10 px-1.5 py-0.5 rounded font-medium">
+                                Locked
                               </span>
-                            )}
-                            <span className="text-purple-400 bg-purple-500/10 px-1.5 py-0.5 rounded font-medium">
-                              Locked
-                            </span>
-                            {isResolved && evidenceGradeInfo && (
-                              <span className={`px-1.5 py-0.5 rounded font-bold ${evidenceGradeInfo.bgColor} ${evidenceGradeInfo.color}`}>
-                                {evidenceGradeInfo.label}
-                              </span>
-                            )}
-                            <div className="flex items-center gap-2 ml-auto text-slate-500">
-                              <span>{claim.upvotesCount || 0} up</span>
-                              <span>{claim.downvotesCount || 0} dn</span>
+                              {isResolved && evidenceGradeInfo && (
+                                <span className={`px-1.5 py-0.5 rounded font-bold ${evidenceGradeInfo.bgColor} ${evidenceGradeInfo.color}`}>
+                                  {evidenceGradeInfo.label}
+                                </span>
+                              )}
+                              {/* Resolve button for pending claims */}
+                              {isPending && (
+                                <button
+                                  onClick={(e) => {
+                                    e.preventDefault();
+                                    e.stopPropagation();
+                                    window.location.href = `/resolve/${claim.id}`;
+                                  }}
+                                  className="px-2 py-0.5 bg-purple-500/15 text-purple-400 hover:bg-purple-500/25 rounded font-medium transition-colors"
+                                >
+                                  Resolve
+                                </button>
+                              )}
+                              <div className="flex items-center gap-2 ml-auto text-slate-500">
+                                <span>{claim.upvotesCount || 0} up</span>
+                                <span>{claim.downvotesCount || 0} dn</span>
+                              </div>
+                            </div>
+                            {/* Hash snippet */}
+                            <div className="flex items-center justify-end">
+                              <code className="text-[9px] text-slate-500 font-mono">{claim.hash?.slice(0, 8)}...{claim.hash?.slice(-6)}</code>
                             </div>
                           </div>
                         </Link>
