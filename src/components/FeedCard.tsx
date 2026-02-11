@@ -241,72 +241,92 @@ export default function FeedCard({
       )}
 
       {/* E) Footer Actions */}
-      <div className="flex items-center justify-between pt-3 border-t border-white/5">
-        {/* Left: Primary + Secondary buttons */}
-        <div className="flex items-center gap-2">
-          <button
-            onClick={onPrimaryAction}
-            className={`
-              px-3 py-1.5 rounded-md text-sm font-medium transition-colors
-              ${variant === 'osint'
-                ? 'bg-red-500/10 text-red-400 hover:bg-red-500/20 border border-red-500/30'
-                : 'bg-purple-500/10 text-purple-400 hover:bg-purple-500/20 border border-purple-500/30'}
-            `}
-          >
-            {config.primaryAction}
-          </button>
-
-          {onSecondaryAction && (
+      <div className="flex flex-col gap-2 pt-3 border-t border-white/5">
+        <div className="flex items-center justify-between">
+          {/* Left: Primary + Secondary buttons */}
+          <div className="flex items-center gap-2">
+            {/* Resolve button for pending claims */}
+            {variant === 'claim' && status === 'pending' && onResolveClick && (
+              <button
+                onClick={(e) => { e.preventDefault(); e.stopPropagation(); onResolveClick(); }}
+                className="px-3 py-1.5 rounded-md text-sm font-medium transition-colors bg-purple-500/10 text-purple-400 hover:bg-purple-500/20 border border-purple-500/30"
+              >
+                Resolve
+              </button>
+            )}
             <button
-              onClick={onSecondaryAction}
-              className="px-3 py-1.5 rounded-md text-sm font-medium text-neutral-400 hover:text-neutral-300 hover:bg-white/5 transition-colors"
+              onClick={(e) => { e.preventDefault(); e.stopPropagation(); onPrimaryAction(); }}
+              className={`
+                px-3 py-1.5 rounded-md text-sm font-medium transition-colors
+                ${variant === 'osint'
+                  ? 'bg-red-500/10 text-red-400 hover:bg-red-500/20 border border-red-500/30'
+                  : 'bg-purple-500/10 text-purple-400 hover:bg-purple-500/20 border border-purple-500/30'}
+              `}
             >
-              {config.secondaryAction}
+              {config.primaryAction}
             </button>
-          )}
-        </div>
 
-        {/* Right: Engagement icons */}
-        <div className="flex items-center gap-4">
-          {votes && (
-            <div className="flex items-center gap-2">
+            {onSecondaryAction && (
               <button
-                onClick={() => setUpvoted(!upvoted)}
-                className={`transition-colors ${upvoted ? 'text-green-400' : 'text-neutral-500 hover:text-green-400'}`}
+                onClick={(e) => { e.preventDefault(); e.stopPropagation(); onSecondaryAction(); }}
+                className="px-3 py-1.5 rounded-md text-sm font-medium text-neutral-400 hover:text-neutral-300 hover:bg-white/5 transition-colors"
               >
-                <svg className="w-4 h-4" fill={upvoted ? 'currentColor' : 'none'} stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15l7-7 7 7" />
-                </svg>
+                {config.secondaryAction}
               </button>
-              <span className="text-xs text-neutral-400 font-medium min-w-[20px] text-center">
-                {votes.up - votes.down}
-              </span>
-              <button
-                onClick={() => setDownvoted(!downvoted)}
-                className={`transition-colors ${downvoted ? 'text-red-400' : 'text-neutral-500 hover:text-red-400'}`}
-              >
-                <svg className="w-4 h-4" fill={downvoted ? 'currentColor' : 'none'} stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                </svg>
-              </button>
-            </div>
-          )}
+            )}
+          </div>
 
-          {comments !== undefined && (
-            <div className="flex items-center gap-1.5 text-neutral-500">
+          {/* Right: Engagement icons */}
+          <div className="flex items-center gap-4">
+            {votes && (
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={(e) => handleVoteClick(e, 'up')}
+                  className={`transition-colors ${upvoted ? 'text-green-400' : 'text-neutral-500 hover:text-green-400'}`}
+                >
+                  <svg className="w-4 h-4" fill={upvoted ? 'currentColor' : 'none'} stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15l7-7 7 7" />
+                  </svg>
+                </button>
+                <span className="text-xs text-neutral-400 font-medium min-w-[20px] text-center">
+                  {votes.up - votes.down}
+                </span>
+                <button
+                  onClick={(e) => handleVoteClick(e, 'down')}
+                  className={`transition-colors ${downvoted ? 'text-red-400' : 'text-neutral-500 hover:text-red-400'}`}
+                >
+                  <svg className="w-4 h-4" fill={downvoted ? 'currentColor' : 'none'} stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  </svg>
+                </button>
+              </div>
+            )}
+
+            {comments !== undefined && (
+              <div className="flex items-center gap-1.5 text-neutral-500">
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                </svg>
+                <span className="text-xs">{comments}</span>
+              </div>
+            )}
+
+            <button
+              onClick={(e) => { e.preventDefault(); e.stopPropagation(); }}
+              className="text-neutral-500 hover:text-neutral-300 transition-colors"
+            >
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
               </svg>
-              <span className="text-xs">{comments}</span>
-            </div>
-          )}
-
-          <button className="text-neutral-500 hover:text-neutral-300 transition-colors">
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
-            </svg>
-          </button>
+            </button>
+          </div>
         </div>
+        {/* Hash snippet */}
+        {hash && (
+          <div className="flex items-center justify-end">
+            <code className="text-xs text-neutral-500 font-mono">{hash.slice(0, 8)}...{hash.slice(-6)}</code>
+          </div>
+        )}
       </div>
     </div>
   );
