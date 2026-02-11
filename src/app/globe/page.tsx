@@ -553,6 +553,7 @@ export default function GlobePage() {
                     ? 'bg-[#ef4444] text-white'
                     : 'text-[#94a3b8] hover:text-white hover:bg-white/5'
                 }`}
+                title={`${osint.length} total (${osint.filter(o => o.lat && o.lng).length} shown on map)`}
               >
                 OSINT ({osint.length})
               </button>
@@ -563,6 +564,7 @@ export default function GlobePage() {
                     ? 'bg-[#8b5cf6] text-white'
                     : 'text-[#94a3b8] hover:text-white hover:bg-white/5'
                 }`}
+                title={`${claims.length} total (${claims.filter(c => c.lat && c.lng).length} shown on map)`}
               >
                 Claims ({claims.length})
               </button>
@@ -573,6 +575,7 @@ export default function GlobePage() {
                     ? 'bg-emerald-500 text-white'
                     : 'text-[#94a3b8] hover:text-white hover:bg-white/5'
                 }`}
+                title={`${resolutions.length} total (${resolutions.filter(r => r.lat && r.lng).length} shown on map)`}
               >
                 Resolved ({resolutions.length})
               </button>

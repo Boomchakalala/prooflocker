@@ -89,11 +89,16 @@ export default function GlobeMapbox({ claims, osint, mapMode = 'both', viewMode 
   const containerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<mapboxgl.Map | null>(null);
   const readyRef = useRef(false);
-  const claimsRef = useRef(claims);
-  const osintRef = useRef(osint);
+
+  // Filter out items without geolocation (client-side filtering for map display)
+  const geotaggedClaims = claims.filter(c => c.lat != null && c.lng != null);
+  const geotaggedOsint = osint.filter(o => o.lat != null && o.lng != null);
+
+  const claimsRef = useRef(geotaggedClaims);
+  const osintRef = useRef(geotaggedOsint);
   const [areaDetail, setAreaDetail] = useState<AreaDetail | null>(null);
-  claimsRef.current = claims;
-  osintRef.current = osint;
+  claimsRef.current = geotaggedClaims;
+  osintRef.current = geotaggedOsint;
 
   const closeDetail = useCallback(() => setAreaDetail(null), []);
 
