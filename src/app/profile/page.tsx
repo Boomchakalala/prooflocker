@@ -5,16 +5,10 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useAuth } from "@/contexts/AuthContext";
 import { Prediction } from "@/lib/storage";
-import { signOut } from "@/lib/auth";
+import { signOut, getAccessToken } from "@/lib/auth";
 import { supabase } from "@/lib/supabase";
-import {
-  getReputationTier,
-  getTierInfo,
-  getNextTierMilestone,
-  formatPoints,
-  getScoreBreakdown,
-  type UserStats,
-} from "@/lib/user-scoring";
+import { InsightScoreResponse } from "@/lib/insight-types";
+import { BADGES, BadgeId } from "@/lib/insight-score";
 import UnifiedHeader from '@/components/UnifiedHeader';
 
 export default function ProfilePage() {
@@ -22,7 +16,7 @@ export default function ProfilePage() {
   const router = useRouter();
   const [predictions, setPredictions] = useState<Prediction[]>([]);
   const [loading, setLoading] = useState(true);
-  const [stats, setStats] = useState<UserStats | null>(null);
+  const [scoreData, setScoreData] = useState<InsightScoreResponse | null>(null);
   const [pseudonym, setPseudonymState] = useState<string>("");
   const [pseudonymInput, setPseudonymInput] = useState<string>("");
   const [pseudonymError, setPseudonymError] = useState<string | null>(null);
@@ -36,13 +30,54 @@ export default function ProfilePage() {
     }
   }, [user, authLoading, router]);
 
+  // Get anon ID from localStorage
+  const getAnonId = (): string | null => {
+    if (typeof window === "undefined") return null;
+    return localStorage.getItem("anonId");
+  };
+
   useEffect(() => {
     if (user) {
       fetchPredictions();
+      fetchScore();
       // Set page title
       document.title = "Your Profile - ProofLocker";
     }
   }, [user]);
+
+  const fetchScore = async () => {
+    if (!user) return;
+
+    try {
+      const anonId = getAnonId();
+      const params = new URLSearchParams();
+      if (anonId) {
+        params.append("anonId", anonId);
+      }
+
+      const token = await getAccessToken();
+      const headers: HeadersInit = {
+        'Content-Type': 'application/json',
+      };
+      if (token) {
+        headers.Authorization = `Bearer ${token}`;
+      }
+
+      const response = await fetch(`/api/insight/current?${params.toString()}`, {
+        headers,
+      });
+
+      if (!response.ok) {
+        console.error("Insight API returned", response.status);
+        return;
+      }
+
+      const data: InsightScoreResponse = await response.json();
+      setScoreData(data);
+    } catch (err) {
+      console.error("Error fetching insight score:", err);
+    }
+  };
 
   const fetchPredictions = async () => {
     if (!user) return;
@@ -59,35 +94,6 @@ export default function ProfilePage() {
       if (preds.length > 0 && preds[0].pseudonym) {
         setPseudonymState(preds[0].pseudonym);
       }
-
-      // Fetch user stats
-      const { data: statsData, error: statsError } = await supabase
-        .from("user_stats")
-        .select("*")
-        .eq("user_id", user.id)
-        .single();
-
-      if (statsError && statsError.code !== "PGRST116") {
-        console.error("Error fetching stats:", statsError);
-      }
-
-      // Process stats
-      const userStats: UserStats = {
-        totalXP: statsData?.total_points || 0,
-        totalPredictions: statsData?.total_predictions || 0,
-        resolvedPredictions: statsData?.resolved_predictions || 0,
-        correctPredictions: statsData?.correct_predictions || 0,
-        incorrectPredictions: statsData?.incorrect_predictions || 0,
-        avgEvidenceScore: statsData?.avg_evidence_score || 0,
-        winRate:
-          statsData?.resolved_predictions > 0
-            ? statsData.correct_predictions / statsData.resolved_predictions
-            : 0,
-        reputationScore: statsData?.reputation_score || 0,
-        tier: getReputationTier(statsData?.reputation_score || 0),
-      };
-
-      setStats(userStats);
     } catch (error) {
       console.error("Error fetching predictions:", error);
     } finally {
@@ -142,14 +148,6 @@ export default function ProfilePage() {
     }
   };
 
-  // Calculate stats
-  const totalPredictions = predictions.length;
-  const correctCount = predictions.filter((p) => p.outcome === "correct").length;
-  const incorrectCount = predictions.filter((p) => p.outcome === "incorrect").length;
-  const invalidCount = predictions.filter((p) => p.outcome === "invalid").length;
-  const pendingCount = predictions.filter((p) => p.outcome === "pending").length;
-  const resolvedCount = correctCount + incorrectCount;
-
   const getOutcomeBadgeColor = (outcome: string) => {
     switch (outcome) {
       case "correct":
@@ -169,81 +167,11 @@ export default function ProfilePage() {
 
   if (authLoading || loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-[#0A0A0F] via-[#111118] to-[#0A0A0F] text-white relative pt-16">
+      <div className="min-h-screen bg-gradient-to-b from-[#0A0A0F] via-[#111118] to-[#0A0A0F] text-white flex items-center justify-center pt-16">
         <UnifiedHeader currentView="other" />
-        <div className="fixed inset-0 overflow-hidden pointer-events-none">
-          <div className="absolute top-20 -left-40 w-80 h-80 bg-blue-500/10 rounded-full blur-3xl" />
-          <div className="absolute top-40 -right-40 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl" />
-        </div>
-        <div className="relative z-10 max-w-4xl mx-auto px-4 py-12">
-          {/* Header skeleton */}
-          <div className="mb-10">
-            <div className="h-4 w-32 bg-slate-800 rounded-md animate-pulse mb-8" />
-            <div className="flex items-center justify-between mb-6">
-              <div>
-                <div className="h-9 w-48 bg-slate-800 rounded-lg animate-pulse mb-2" />
-                <div className="h-4 w-36 bg-slate-800/60 rounded-md animate-pulse" />
-              </div>
-              <div className="flex items-center gap-3">
-                <div className="h-10 w-24 bg-slate-800 rounded-lg animate-pulse" />
-                <div className="h-10 w-20 bg-slate-800/60 rounded-md animate-pulse" />
-              </div>
-            </div>
-            <div className="bg-slate-900/40 border border-slate-700/30 rounded-xl p-6">
-              <div className="h-3 w-24 bg-slate-800 rounded animate-pulse mb-4" />
-              <div className="h-5 w-40 bg-slate-800 rounded animate-pulse" />
-            </div>
-          </div>
-
-          {/* KPI cards skeleton */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-            {[...Array(4)].map((_, i) => (
-              <div key={i} className="bg-slate-900/60 border border-slate-700/40 rounded-xl p-4 text-center">
-                <div className="h-7 w-16 bg-slate-800 rounded-md animate-pulse mx-auto mb-2" />
-                <div className="h-3 w-20 bg-slate-800/60 rounded animate-pulse mx-auto" />
-              </div>
-            ))}
-          </div>
-
-          {/* Reputation skeleton */}
-          <div className="bg-slate-900/40 border border-slate-700/30 rounded-xl p-8 mb-8">
-            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6 mb-6">
-              <div className="flex-1">
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="w-12 h-12 bg-slate-800 rounded-xl animate-pulse" />
-                  <div>
-                    <div className="h-3 w-24 bg-slate-800/60 rounded animate-pulse mb-2" />
-                    <div className="h-10 w-20 bg-slate-800 rounded-md animate-pulse" />
-                  </div>
-                </div>
-                <div className="h-8 w-28 bg-slate-800 rounded-lg animate-pulse" />
-              </div>
-              <div className="text-right">
-                <div className="h-3 w-20 bg-slate-800/60 rounded animate-pulse mb-2 ml-auto" />
-                <div className="h-9 w-24 bg-slate-800 rounded-md animate-pulse ml-auto" />
-              </div>
-            </div>
-            <div className="h-2 bg-slate-800 rounded-full animate-pulse" />
-          </div>
-
-          {/* Claims list skeleton */}
-          <div className="mb-8">
-            <div className="h-6 w-36 bg-slate-800 rounded-md animate-pulse mb-4" />
-            <div className="space-y-3">
-              {[...Array(3)].map((_, i) => (
-                <div key={i} className="bg-slate-900/40 border border-slate-700/30 rounded-lg p-4">
-                  <div className="flex items-start justify-between gap-4">
-                    <div className="flex-1">
-                      <div className="h-4 w-full bg-slate-800 rounded animate-pulse mb-2" />
-                      <div className="h-4 w-2/3 bg-slate-800/60 rounded animate-pulse mb-3" />
-                      <div className="h-3 w-32 bg-slate-800/40 rounded animate-pulse" />
-                    </div>
-                    <div className="h-6 w-16 bg-slate-800 rounded-md animate-pulse" />
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-500 mx-auto mb-4"></div>
+          <p className="text-slate-400">Loading your profile...</p>
         </div>
       </div>
     );
@@ -253,298 +181,154 @@ export default function ProfilePage() {
     return null; // Will redirect
   }
 
+  const score = scoreData?.score;
+  const hasPoints = (score?.totalPoints || 0) > 0;
+
   return (
-    <div className="min-h-screen bg-gradient-to-b from-[#0A0A0F] via-[#111118] to-[#0A0A0F] text-white relative pt-16">
+    <div className="min-h-screen bg-gradient-to-b from-[#0A0A0F] via-[#111118] to-[#0A0A0F] text-white relative pt-16 py-12 px-6">
       <UnifiedHeader currentView="other" />
-      {/* Decorative gradient orbs */}
-      <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-20 -left-40 w-80 h-80 bg-blue-500/10 rounded-full blur-3xl" />
-        <div className="absolute top-40 -right-40 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl" />
-      </div>
 
-      <div className="relative z-10 max-w-4xl mx-auto px-4 py-8">
+      <div className="max-w-7xl mx-auto">
         {/* Header */}
-        <div className="mb-10">
-          <div className="flex items-center justify-between mb-6">
-            <div>
-              <h1 className="text-4xl font-bold text-white mb-2 tracking-tight">Your Profile</h1>
-              <p className="text-neutral-400 text-sm">{user.email}</p>
-            </div>
-            <div className="flex items-center gap-3">
-              <Link
-                href="/dashboard"
-                className="px-6 py-2.5 text-sm font-semibold bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-500 hover:to-purple-600 text-white rounded-lg transition-all shadow-lg hover:shadow-[0_0_20px_rgba(168,85,247,0.4)]"
-              >
-                View Stats
-              </Link>
-              <button
-                onClick={handleSignOut}
-                className="px-4 py-2 text-sm font-medium text-neutral-400 hover:text-white border border-white/20 hover:border-neutral-600 rounded-md transition-all"
-              >
-                Sign out
-              </button>
-            </div>
-          </div>
-
-          {/* Pseudonym section */}
-          <div className="bg-slate-900/60 border border-slate-700/40 rounded-xl p-6">
-            <h3 className="text-xs font-semibold text-neutral-500 uppercase tracking-wider mb-3">Public Identity</h3>
-            {pseudonym ? (
-              <div>
-                <div className="flex items-center gap-3 mb-2">
-                  <span className="text-neutral-200 font-medium">{pseudonym}</span>
-                  <span className="text-xs text-green-500 bg-green-500/10 px-2 py-0.5 rounded border border-green-500/20">
-                    Set
-                  </span>
-                </div>
-                <p className="text-xs text-neutral-500">
-                  This pseudonym identifies you publicly on all your claims. It cannot be changed.
-                </p>
-              </div>
-            ) : (
-              <div>
-                <p className="text-sm text-neutral-400 mb-4">
-                  Set a pseudonym to identify yourself publicly without revealing your real identity.
-                </p>
-                <div className="flex gap-2">
-                  <input
-                    type="text"
-                    value={pseudonymInput}
-                    onChange={(e) => setPseudonymInput(e.target.value)}
-                    placeholder="Enter pseudonym (2-30 chars)"
-                    disabled={settingPseudonym}
-                    className="flex-1 px-3 py-2 bg-black/40 border border-white/20 rounded-md text-sm text-neutral-200 placeholder-neutral-600 focus:outline-none focus:border-neutral-600 disabled:opacity-50"
-                    maxLength={30}
-                  />
-                  <button
-                    onClick={handleSetPseudonym}
-                    disabled={settingPseudonym || !pseudonymInput.trim()}
-                    className="px-4 py-2 bg-neutral-800 hover:bg-neutral-700 border border-white/20 text-neutral-200 font-medium rounded-md transition-colors text-sm disabled:opacity-50 disabled:cursor-not-allowed"
-                  >
-                    {settingPseudonym ? "Setting..." : "Set"}
-                  </button>
-                </div>
-                {pseudonymError && (
-                  <p className="text-xs text-red-400 mt-2">{pseudonymError}</p>
-                )}
-                {pseudonymSuccess && (
-                  <p className="text-xs text-green-400 mt-2">Pseudonym set successfully!</p>
-                )}
-                <p className="text-xs text-neutral-500 mt-3">
-                  Note: Once set, your pseudonym is permanent and cannot be changed. Choose carefully.
-                </p>
-              </div>
-            )}
-          </div>
+        <div className="text-center mb-12">
+          <h1 className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-slate-300 via-white to-slate-300 bg-clip-text text-transparent" style={{ fontFamily: "var(--font-montserrat)" }}>
+            My Profile
+          </h1>
+          <p className="text-neutral-400 text-sm mb-4">{user.email}</p>
+          {user && (
+            <p className="text-purple-400 text-sm">
+              Sync enabled -- scores saved across devices
+            </p>
+          )}
         </div>
 
-        {/* Reputation Score Hero Section */}
-        {stats && (
-          <div className="mb-8">
-            <div className="bg-slate-900/60 border border-slate-700/40 rounded-xl p-8">
-              <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6 mb-6">
-                {/* Left: Reputation Score */}
-                <div className="flex-1">
-                  <div className="flex items-center gap-3 mb-2">
-                    <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-purple-500/20 to-blue-500/20 border border-purple-500/30 flex items-center justify-center">
-                      <svg
-                        className="w-6 h-6 text-purple-400"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-                        />
-                      </svg>
-                    </div>
-                    <div>
-                      <div className="text-xs text-neutral-500 uppercase tracking-wider">
-                        Reputation Score
-                      </div>
-                      <div className="flex items-baseline gap-2">
-                        <div className="text-5xl font-bold text-white">
-                          {stats.reputationScore}
-                        </div>
-                        <div className="text-lg text-neutral-500">/1000</div>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Tier Badge */}
-                  <div className="flex items-center gap-3 mt-4">
-                    {(() => {
-                      const tierInfo = getTierInfo(stats.tier);
-                      const nextMilestone = getNextTierMilestone(stats.reputationScore);
-                      return (
-                        <>
-                          <div
-                            className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg border ${tierInfo.bgColor} ${tierInfo.textColor} border-current`}
-                          >
-                            <svg
-                              className="w-4 h-4"
-                              fill="currentColor"
-                              viewBox="0 0 24 24"
-                            >
-                              <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" />
-                            </svg>
-                            <span className="font-semibold">{tierInfo.name}</span>
-                          </div>
-
-                          {nextMilestone.nextTier && (
-                            <div className="text-sm text-neutral-400">
-                              {nextMilestone.pointsNeeded} pts to{" "}
-                              {nextMilestone.tierInfo?.name}
-                            </div>
-                          )}
-                        </>
-                      );
-                    })()}
-                  </div>
-                </div>
-
-                {/* Right: Total Points */}
-                <div className="text-center md:text-right">
-                  <div className="text-xs text-neutral-500 uppercase tracking-wider mb-1">
-                    Total Points
-                  </div>
-                  <div className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-orange-500">
-                    {formatPoints(stats.totalXP)}
-                  </div>
-                  <div className="text-xs text-neutral-500 mt-1">Lifetime earnings</div>
+        {/* Main Score Card - Same as Dashboard */}
+        {score && (
+          <div className="bg-slate-900/60 border border-purple-500/30 rounded-xl shadow-2xl p-10 mb-8 text-center">
+            <div className="mb-6">
+              <div className="text-6xl font-bold text-purple-400 mb-2">
+                {score.totalPoints.toLocaleString()}
+              </div>
+              <div className="text-xl text-slate-300 font-semibold mb-4">
+                {scoreData.milestone.name}
+              </div>
+              <div className="flex items-center justify-center gap-6 text-base">
+                <div>
+                  Accuracy:{" "}
+                  <span
+                    className={`font-bold ${
+                      scoreData.accuracy >= 75 ? "text-emerald-400" : scoreData.accuracy >= 60 ? "text-amber-400" : "text-red-400"
+                    }`}
+                  >
+                    {scoreData.accuracy}%
+                  </span>{" "}
+                  <span className="text-slate-500">
+                    ({score.correctResolves}/{score.totalResolves})
+                  </span>
                 </div>
               </div>
-
-              {/* Progress Bar */}
-              <div className="h-2 bg-neutral-900 rounded-full overflow-hidden">
-                <div
-                  className="h-full bg-gradient-to-r from-blue-500 to-purple-500 transition-all duration-500"
-                  style={{ width: `${(stats.reputationScore / 1000) * 100}%` }}
-                />
-              </div>
-
-              {/* Score Breakdown */}
-              {(() => {
-                const breakdown = getScoreBreakdown({
-                  correctPredictions: stats.correctPredictions,
-                  incorrectPredictions: stats.incorrectPredictions,
-                  resolvedPredictions: stats.resolvedPredictions,
-                  avgEvidenceScore: stats.avgEvidenceScore,
-                });
-
-                return breakdown.length > 0 ? (
-                  <div className="mt-6 pt-6 border-t border-neutral-800">
-                    <div className="text-xs text-neutral-500 uppercase tracking-wider mb-3">
-                      Score Breakdown
-                    </div>
-                    <div className="space-y-3">
-                      {breakdown.map((item, idx) => (
-                        <div key={idx}>
-                          <div className="flex items-center justify-between text-sm mb-1">
-                            <span className="text-neutral-300">{item.label}</span>
-                            <span className="text-white font-semibold">
-                              {item.value}/{item.maxValue}
-                            </span>
-                          </div>
-                          <div className="h-1.5 bg-neutral-900 rounded-full overflow-hidden">
-                            <div
-                              className="h-full bg-gradient-to-r from-blue-500 to-purple-500"
-                              style={{ width: `${(item.value / item.maxValue) * 100}%` }}
-                            />
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                ) : null;
-              })()}
             </div>
           </div>
         )}
 
-        {/* KPI Stats Row */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-          <div className="bg-slate-900/60 border border-slate-700/40 rounded-xl p-4 text-center">
-            <div className="text-2xl font-bold text-white">
-              {stats?.reputationScore || 0}
+        {/* Stats Grid - Same as Dashboard */}
+        {score && (
+          <div className="grid md:grid-cols-4 gap-4 mb-8">
+            <div className="bg-slate-900/60 border border-slate-700/40 rounded-xl p-5">
+              <div className="text-slate-400 text-sm mb-1">Locked</div>
+              <div className="text-3xl font-bold text-white">{score.locksCount}</div>
             </div>
-            <div className="text-xs text-slate-400 mt-1">Reputation</div>
-          </div>
-          <div className="bg-slate-900/60 border border-slate-700/40 rounded-xl p-4 text-center">
-            <div className="text-2xl font-bold text-white">
-              {stats?.totalPredictions || totalPredictions}
+            <div className="bg-slate-900/60 border border-slate-700/40 rounded-xl p-5">
+              <div className="text-slate-400 text-sm mb-1">Claimed</div>
+              <div className="text-3xl font-bold text-purple-400">{score.claimsCount}</div>
             </div>
-            <div className="text-xs text-slate-400 mt-1">Total Claims</div>
-          </div>
-          <div className="bg-slate-900/60 border border-slate-700/40 rounded-xl p-4 text-center">
-            <div className="text-2xl font-bold text-white">
-              {stats && stats.resolvedPredictions > 0
-                ? `${Math.round((stats.correctPredictions / stats.resolvedPredictions) * 100)}%`
-                : resolvedCount > 0
-                ? `${Math.round((correctCount / resolvedCount) * 100)}%`
-                : "--"}
+            <div className="bg-slate-900/60 border border-slate-700/40 rounded-xl p-5">
+              <div className="text-slate-400 text-sm mb-1">Resolved</div>
+              <div className="text-3xl font-bold">
+                <span className="text-emerald-400">{score.correctResolves}</span>
+                <span className="text-slate-600">/</span>
+                <span className="text-red-400">{score.incorrectResolves}</span>
+              </div>
             </div>
-            <div className="text-xs text-slate-400 mt-1">Accuracy</div>
-          </div>
-          <div className="bg-slate-900/60 border border-slate-700/40 rounded-xl p-4 text-center">
-            <div className="text-2xl font-bold text-white">
-              {stats?.correctPredictions || correctCount}
+            <div className="bg-slate-900/60 border border-slate-700/40 rounded-xl p-5">
+              <div className="text-slate-400 text-sm mb-1">Streak</div>
+              <div className="text-3xl font-bold text-purple-400">
+                {score.currentStreak}
+              </div>
             </div>
-            <div className="text-xs text-slate-400 mt-1">Correct Streak</div>
           </div>
+        )}
+
+        {/* Pseudonym section */}
+        <div className="bg-slate-900/60 border border-slate-700/40 rounded-xl p-6 mb-8">
+          <h3 className="text-xs font-semibold text-neutral-500 uppercase tracking-wider mb-3">Public Identity</h3>
+          {pseudonym ? (
+            <div>
+              <div className="flex items-center gap-3 mb-2">
+                <span className="text-neutral-200 font-medium">{pseudonym}</span>
+                <span className="text-xs text-green-500 bg-green-500/10 px-2 py-0.5 rounded border border-green-500/20">
+                  Set
+                </span>
+              </div>
+              <p className="text-xs text-neutral-500">
+                This pseudonym identifies you publicly on all your claims. It cannot be changed.
+              </p>
+            </div>
+          ) : (
+            <div>
+              <p className="text-sm text-neutral-400 mb-4">
+                Set a pseudonym to identify yourself publicly without revealing your real identity.
+              </p>
+              <div className="flex gap-2">
+                <input
+                  type="text"
+                  value={pseudonymInput}
+                  onChange={(e) => setPseudonymInput(e.target.value)}
+                  placeholder="Enter pseudonym (2-30 chars)"
+                  disabled={settingPseudonym}
+                  className="flex-1 px-3 py-2 bg-black/40 border border-white/20 rounded-md text-sm text-neutral-200 placeholder-neutral-600 focus:outline-none focus:border-neutral-600 disabled:opacity-50"
+                  maxLength={30}
+                />
+                <button
+                  onClick={handleSetPseudonym}
+                  disabled={settingPseudonym || !pseudonymInput.trim()}
+                  className="px-4 py-2 bg-neutral-800 hover:bg-neutral-700 border border-white/20 text-neutral-200 font-medium rounded-md transition-colors text-sm disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {settingPseudonym ? "Setting..." : "Set"}
+                </button>
+              </div>
+              {pseudonymError && (
+                <p className="text-xs text-red-400 mt-2">{pseudonymError}</p>
+              )}
+              {pseudonymSuccess && (
+                <p className="text-xs text-green-400 mt-2">Pseudonym set successfully!</p>
+              )}
+              <p className="text-xs text-neutral-500 mt-3">
+                Note: Once set, your pseudonym is permanent and cannot be changed. Choose carefully.
+              </p>
+            </div>
+          )}
         </div>
 
-        {/* Detailed Stats grid */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-          <div className="bg-slate-900/60 border border-slate-700/40 rounded-lg p-6">
-            <div className="text-3xl font-bold text-neutral-200 mb-1">
-              {stats?.totalPredictions || totalPredictions}
-            </div>
-            <div className="text-xs text-neutral-500 uppercase tracking-wider">Total</div>
-          </div>
-          <div className="bg-slate-900/60 border border-slate-700/40 rounded-lg p-6">
-            <div className="text-3xl font-bold text-green-400 mb-1">
-              {stats?.correctPredictions || correctCount}
-            </div>
-            <div className="text-xs text-neutral-500 uppercase tracking-wider">Correct</div>
-          </div>
-          <div className="bg-slate-900/60 border border-slate-700/40 rounded-lg p-6">
-            <div className="text-3xl font-bold text-red-400 mb-1">
-              {stats?.incorrectPredictions || incorrectCount}
-            </div>
-            <div className="text-xs text-neutral-500 uppercase tracking-wider">Incorrect</div>
-          </div>
-          <div className="bg-slate-900/60 border border-slate-700/40 rounded-lg p-6">
-            <div className="text-3xl font-bold text-neutral-200 mb-1">
-              {stats && stats.resolvedPredictions > 0
-                ? `${stats.correctPredictions}/${stats.resolvedPredictions}`
-                : resolvedCount > 0
-                ? `${correctCount}/${resolvedCount}`
-                : "—"}
-            </div>
-            <div className="text-xs text-neutral-500 uppercase tracking-wider">Accuracy</div>
-          </div>
-        </div>
-
-        {/* Additional stats */}
-        {(pendingCount > 0 || invalidCount > 0) && (
-          <div className="bg-slate-900/60 border border-slate-700/40 rounded-lg p-6 mb-8">
-            <div className="grid grid-cols-2 gap-6">
-              {pendingCount > 0 && (
-                <div>
-                  <div className="text-xs text-neutral-500 uppercase tracking-wider mb-2">Pending</div>
-                  <div className="text-2xl font-bold text-amber-400">{pendingCount}</div>
-                </div>
-              )}
-              {invalidCount > 0 && (
-                <div>
-                  <div className="text-xs text-neutral-500 uppercase tracking-wider mb-2">Invalid</div>
-                  <div className="text-2xl font-bold text-neutral-400">{invalidCount}</div>
-                </div>
-              )}
+        {/* Badges - Same as Dashboard */}
+        {score && score.badges.length > 0 && (
+          <div className="bg-slate-900/60 border border-slate-700/40 rounded-xl p-6 mb-8">
+            <h2 className="text-xl font-bold mb-4 text-white">Badges Earned</h2>
+            <div className="flex flex-wrap gap-3">
+              {score.badges.map((badgeId) => {
+                const badge = BADGES[badgeId as BadgeId];
+                if (!badge) return null;
+                return (
+                  <div
+                    key={badgeId}
+                    className="bg-purple-500/10 border border-purple-500/30 rounded-lg p-3 min-w-[180px]"
+                    title={badge.description}
+                  >
+                    <div className="text-base font-semibold text-white mb-1">{badge.name}</div>
+                    <div className="text-xs text-slate-400">{badge.description}</div>
+                  </div>
+                );
+              })}
             </div>
           </div>
         )}
@@ -613,6 +397,22 @@ export default function ProfilePage() {
               ))}
             </div>
           )}
+        </div>
+
+        {/* CTAs */}
+        <div className="flex flex-col sm:flex-row gap-3 justify-center">
+          <Link
+            href="/dashboard"
+            className="px-8 py-3 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 text-white font-bold rounded-xl transition-all shadow-lg hover:shadow-[0_0_30px_rgba(139,92,246,0.4)] text-center"
+          >
+            View Full Stats
+          </Link>
+          <button
+            onClick={handleSignOut}
+            className="px-8 py-3 border-2 border-slate-700 hover:bg-slate-800/50 text-white font-bold rounded-xl transition-all text-center"
+          >
+            Sign Out
+          </button>
         </div>
       </div>
     </div>
