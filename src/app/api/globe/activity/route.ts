@@ -497,6 +497,13 @@ export async function GET(request: NextRequest) {
       resolved,
     };
 
+    // Store in cache
+    cache = {
+      data: response,
+      timestamp: Date.now(),
+      key: cacheKey,
+    };
+
     return NextResponse.json(response);
   } catch (error) {
     console.error('[Activity API] Unexpected error:', error);

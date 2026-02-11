@@ -6,6 +6,15 @@ import { join } from "path";
 // Set maxDuration for Vercel serverless functions (in seconds)
 export const maxDuration = 10; // 10 second timeout
 export const dynamic = 'force-dynamic'; // Disable caching
+export const revalidate = 30; // Cache for 30 seconds
+
+// In-memory cache
+let predictionsCache: {
+  data: any;
+  timestamp: number;
+} | null = null;
+
+const CACHE_TTL = 20000; // 20 seconds
 
 export async function GET(request: NextRequest) {
   const startTime = Date.now();
@@ -14,6 +23,12 @@ export async function GET(request: NextRequest) {
     const { searchParams } = new URL(request.url);
     const userId = searchParams.get("userId");
     const anonId = searchParams.get("anonId");
+
+    // Only cache when no user filters (public feed)
+    if (!userId && !anonId && predictionsCache && (Date.now() - predictionsCache.timestamp) < CACHE_TTL) {
+      console.log(`[Predictions API] Cache hit (${Date.now() - startTime}ms)`);
+      return NextResponse.json(predictionsCache.data);
+    }
 
     console.log(`[Predictions API] Starting query - userId=${userId}, anonId=${anonId}`);
 
@@ -51,10 +66,20 @@ export async function GET(request: NextRequest) {
     const elapsed = Date.now() - startTime;
     console.log(`[Predictions API] Query completed in ${elapsed}ms, returned ${predictions?.length || 0} predictions`);
 
-    return NextResponse.json({
+    const responseData = {
       predictions,
       count: predictions.length,
-    });
+    };
+
+    // Cache only public feed (no user filters)
+    if (!userId && !anonId) {
+      predictionsCache = {
+        data: responseData,
+        timestamp: Date.now(),
+      };
+    }
+
+    return NextResponse.json(responseData);
   } catch (error) {
     const elapsed = Date.now() - startTime;
     console.error(`[Predictions API] Error after ${elapsed}ms:`, error);
