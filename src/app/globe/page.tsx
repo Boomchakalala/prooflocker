@@ -698,8 +698,11 @@ export default function GlobePage() {
                                   e.stopPropagation();
                                   router.push(`/resolve/${claim.id}`);
                                 }}
-                                className="text-[10px] px-2 py-0.5 bg-purple-500/15 text-purple-400 hover:bg-purple-500/25 rounded font-medium transition-colors"
+                                className="flex items-center gap-1 px-2.5 py-1 bg-gradient-to-r from-emerald-600 to-emerald-700 hover:from-emerald-500 hover:to-emerald-600 text-white text-[10px] font-bold rounded shadow-md shadow-emerald-500/30 transition-all hover:scale-105"
                               >
+                                <svg className="w-2.5 h-2.5" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+                                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                </svg>
                                 Resolve
                               </button>
                             )}
@@ -895,8 +898,11 @@ export default function GlobePage() {
                                   e.stopPropagation();
                                   router.push(`/resolve/${claim.id}`);
                                 }}
-                                className="text-[11px] px-2 py-0.5 bg-purple-500/15 text-purple-400 hover:bg-purple-500/25 rounded font-medium transition-colors"
+                                className="flex items-center gap-1 px-2.5 py-0.5 bg-gradient-to-r from-emerald-600 to-emerald-700 hover:from-emerald-500 hover:to-emerald-600 text-white text-[11px] font-bold rounded shadow-md shadow-emerald-500/30 transition-all hover:scale-105"
                               >
+                                <svg className="w-3 h-3" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+                                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                </svg>
                                 Resolve
                               </button>
                             )}
