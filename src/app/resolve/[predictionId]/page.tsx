@@ -365,7 +365,14 @@ export default function ResolvePage({ params }: Props) {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
                   </svg>
                   Upload File
-                  <input type="file" className="hidden" onChange={handleFileUpload} accept="image/*,.pdf,.txt" />
+                  <input
+                    type="file"
+                    id="evidence-file-upload"
+                    name="evidence-file"
+                    className="hidden"
+                    onChange={handleFileUpload}
+                    accept="image/*,.pdf,.txt"
+                  />
                 </label>
               </div>
 
@@ -374,6 +381,8 @@ export default function ResolvePage({ params }: Props) {
                 <div className="p-3 bg-white/5 border border-white/10 rounded-lg space-y-2">
                   <input
                     type="url"
+                    id="evidence-link-url"
+                    name="evidence-url"
                     value={newLinkUrl}
                     onChange={(e) => setNewLinkUrl(e.target.value)}
                     placeholder="https://example.com/proof"
@@ -381,6 +390,8 @@ export default function ResolvePage({ params }: Props) {
                   />
                   <input
                     type="text"
+                    id="evidence-link-title"
+                    name="evidence-title"
                     value={newLinkTitle}
                     onChange={(e) => setNewLinkTitle(e.target.value)}
                     placeholder="Title (optional)"
@@ -449,6 +460,7 @@ export default function ResolvePage({ params }: Props) {
               </label>
               <textarea
                 id="evidence-summary"
+                name="evidence-summary"
                 value={evidenceSummary}
                 onChange={(e) => setEvidenceSummary(e.target.value)}
                 placeholder="Explain how the evidence proves the outcome..."
@@ -475,7 +487,10 @@ export default function ResolvePage({ params }: Props) {
                   <p className="text-xs text-neutral-400">Optional context or explanation</p>
                 </div>
               </div>
+              <label htmlFor="resolution-note" className="sr-only">Additional Notes</label>
               <textarea
+                id="resolution-note"
+                name="resolution-note"
                 value={resolutionNote}
                 onChange={(e) => setResolutionNote(e.target.value)}
                 placeholder="Any additional context..."
