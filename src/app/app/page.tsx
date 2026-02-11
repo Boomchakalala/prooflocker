@@ -9,6 +9,7 @@ import IntelCard from "@/components/IntelCard";
 import { Prediction } from "@/lib/storage";
 import { useAuth } from "@/contexts/AuthContext";
 import { getEvidenceGrade, getEvidenceGradeInfo } from "@/lib/scoring";
+import { getReputationTier } from "@/lib/reputation-scoring";
 import { formatRelativeTime } from "@/lib/utils";
 
 type ContentFilter = "all" | "osint" | "claims";

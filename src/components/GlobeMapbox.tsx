@@ -404,11 +404,12 @@ export default function GlobeMapbox({ claims, osint, mapMode = 'both', viewMode 
                 </div>
                 <button
                   onClick={closeDetail}
-                  className="w-8 h-8 rounded-lg flex items-center justify-center text-slate-400 hover:text-white hover:bg-white/10 transition-all active:scale-95"
+                  className="flex items-center gap-2 px-3 py-2 rounded-lg bg-slate-700/60 hover:bg-slate-600/80 text-white text-sm font-semibold transition-all active:scale-95"
                 >
                   <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="2">
                     <path d="M1 1l12 12M13 1L1 13" />
                   </svg>
+                  <span className="sm:hidden">Close</span>
                 </button>
               </div>
 
@@ -498,6 +499,16 @@ export default function GlobeMapbox({ claims, osint, mapMode = 'both', viewMode 
                     </div>
                   </div>
                 )}
+
+                {/* Mobile back button */}
+                <div className="sm:hidden px-4 py-4">
+                  <button
+                    onClick={closeDetail}
+                    className="w-full py-3 rounded-xl bg-gradient-to-r from-purple-600 to-blue-600 text-white font-bold text-sm text-center transition-all active:scale-95"
+                  >
+                    Back to Globe
+                  </button>
+                </div>
               </div>
             </div>
           </div>
