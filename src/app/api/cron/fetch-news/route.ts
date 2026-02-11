@@ -40,8 +40,9 @@ export async function GET(request: NextRequest) {
     const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
     const supabase = createClient(supabaseUrl, supabaseKey);
 
-    // Fetch from GNews API - top headlines, 50 articles (upgraded tier)
-    const gnewsUrl = `https://gnews.io/api/v4/top-headlines?category=general&lang=en&max=50&token=${gnewsApiKey}`;
+    // Fetch from GNews API - top headlines, 7 articles (optimized for 1000/day limit)
+    // 144 runs/day × 7 articles = ~1000 requests/day
+    const gnewsUrl = `https://gnews.io/api/v4/top-headlines?category=general&lang=en&max=7&token=${gnewsApiKey}`;
 
     console.log('[Cron: Fetch News] Fetching from GNews...');
     const gnewsResponse = await fetch(gnewsUrl);
@@ -52,6 +53,22 @@ export async function GET(request: NextRequest) {
 
     const gnewsData = await gnewsResponse.json();
     const articles = gnewsData.articles || [];
+
+    console.log(`[Cron: Fetch News] Received ${articles.length} articles`);
+
+    // CLEANUP: Delete articles older than 3 days
+    const threeDaysAgo = new Date();
+    threeDaysAgo.setDate(threeDaysAgo.getDate() - 3);
+
+    const { data: deletedItems, error: deleteError } = await supabase
+      .from('intel_items')
+      .delete()
+      .eq('source_type', 'gnews_api')
+      .lt('created_at', threeDaysAgo.toISOString());
+
+    if (!deleteError && deletedItems) {
+      console.log(`[Cron: Fetch News] Cleaned up ${deletedItems.length || 0} old articles (>3 days)`);
+    }
 
     console.log(`[Cron: Fetch News] Received ${articles.length} articles`);
 
