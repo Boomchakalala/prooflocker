@@ -161,48 +161,70 @@ export default function UnifiedCard({ card, variant = "full", currentUserId, onV
         </h3>
 
         {/* Footer */}
-        <div className="flex items-center justify-between gap-2 pt-2 border-t border-slate-800/50">
-          <div className="flex items-center gap-1.5">
-            {/* Upvote */}
-            <button
-              onClick={(e) => { e.preventDefault(); e.stopPropagation(); handleVote(); }}
-              disabled={!currentUserId || isVoting}
-              className={`flex items-center gap-1 px-2 py-1 rounded text-[11px] font-medium transition-colors ${
-                hasVoted ? 'text-indigo-400 bg-indigo-500/10' : 'text-slate-400 hover:text-slate-300 hover:bg-slate-800'
-              } ${!currentUserId ? 'opacity-50 cursor-not-allowed' : ''}`}
-            >
-              <svg className="w-3 h-3" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M5 15l7-7 7 7" />
-              </svg>
-              {voteCount}
-            </button>
+        <div className="flex flex-col gap-2 pt-2 border-t border-slate-800/50">
+          <div className="flex items-center justify-between gap-2">
+            <div className="flex items-center gap-1.5">
+              {/* Upvote */}
+              {card.status !== 'pending' && !isOsint && (
+                <button
+                  onClick={(e) => { e.preventDefault(); e.stopPropagation(); handleVote(); }}
+                  disabled={!currentUserId || isVoting}
+                  className={`flex items-center gap-1 px-2 py-1 rounded text-[11px] font-medium transition-colors ${
+                    hasVoted ? 'text-indigo-400 bg-indigo-500/10' : 'text-slate-400 hover:text-slate-300 hover:bg-slate-800'
+                  } ${!currentUserId ? 'opacity-50 cursor-not-allowed' : ''}`}
+                >
+                  <svg className="w-3 h-3" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M5 15l7-7 7 7" />
+                  </svg>
+                  {voteCount}
+                </button>
+              )}
 
-            <button
-              onClick={(e) => { e.preventDefault(); e.stopPropagation(); router.push(`/proof/${card.publicSlug}`); }}
-              className="px-2 py-1 text-slate-400 hover:text-white hover:bg-slate-800 rounded text-[11px] font-medium transition-colors"
-            >
-              View
-            </button>
+              {/* Resolve button for pending claims */}
+              {card.status === 'pending' && !isOsint && card._original?.id && (
+                <button
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    router.push(`/resolve/${card._original.id}`);
+                  }}
+                  className="px-2 py-1 bg-purple-500/15 text-purple-400 hover:bg-purple-500/25 rounded text-[11px] font-medium transition-colors"
+                >
+                  Resolve
+                </button>
+              )}
 
-            {/* OSINT-specific: View on X button */}
-            {isOsint && card.sourceUrl && (
               <button
-                onClick={(e) => { e.preventDefault(); e.stopPropagation(); handleViewOnX(); }}
-                className="px-2 py-1 text-red-400 hover:text-red-300 hover:bg-red-500/10 rounded text-[11px] font-medium transition-colors"
+                onClick={(e) => { e.preventDefault(); e.stopPropagation(); router.push(`/proof/${card.publicSlug}`); }}
+                className="px-2 py-1 text-slate-400 hover:text-white hover:bg-slate-800 rounded text-[11px] font-medium transition-colors"
               >
-                View on 𝕏
+                View
               </button>
-            )}
 
-            {/* View on Map button */}
-            {onViewOnMap && (
-              <button
-                onClick={(e) => { e.preventDefault(); e.stopPropagation(); onViewOnMap(); }}
-                className="px-2 py-1 text-purple-400 hover:text-purple-300 hover:bg-purple-500/10 rounded text-[11px] font-medium transition-colors"
-              >
-                Map
-              </button>
-            )}
+              {/* OSINT-specific: View on X button */}
+              {isOsint && card.sourceUrl && (
+                <button
+                  onClick={(e) => { e.preventDefault(); e.stopPropagation(); handleViewOnX(); }}
+                  className="px-2 py-1 text-red-400 hover:text-red-300 hover:bg-red-500/10 rounded text-[11px] font-medium transition-colors"
+                >
+                  View on 𝕏
+                </button>
+              )}
+
+              {/* View on Map button */}
+              {onViewOnMap && (
+                <button
+                  onClick={(e) => { e.preventDefault(); e.stopPropagation(); onViewOnMap(); }}
+                  className="px-2 py-1 text-purple-400 hover:text-purple-300 hover:bg-purple-500/10 rounded text-[11px] font-medium transition-colors"
+                >
+                  Map
+                </button>
+              )}
+            </div>
+          </div>
+          {/* Hash snippet */}
+          <div className="flex items-center justify-end">
+            <code className="text-[10px] text-slate-500 font-mono">{card.hash.slice(0, 8)}...{card.hash.slice(-6)}</code>
           </div>
         </div>
       </div>
@@ -296,18 +318,38 @@ export default function UnifiedCard({ card, variant = "full", currentUserId, onV
       {/* Footer */}
       <div className="flex items-center justify-between pt-3 border-t border-slate-800 mt-auto">
         <div className="flex items-center gap-3">
-          <button
-            onClick={(e) => { e.preventDefault(); e.stopPropagation(); handleVote(); }}
-            disabled={!currentUserId || isVoting}
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg transition-colors text-sm font-medium ${
-              hasVoted ? 'text-indigo-400 bg-indigo-500/10 hover:bg-indigo-500/15' : 'text-slate-400 hover:text-slate-300 hover:bg-slate-800'
-            } ${!currentUserId ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}
-          >
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M5 15l7-7 7 7" />
-            </svg>
-            {voteCount}
-          </button>
+          {/* Upvote for resolved items */}
+          {card.status !== 'pending' && !isOsint && (
+            <button
+              onClick={(e) => { e.preventDefault(); e.stopPropagation(); handleVote(); }}
+              disabled={!currentUserId || isVoting}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg transition-colors text-sm font-medium ${
+                hasVoted ? 'text-indigo-400 bg-indigo-500/10 hover:bg-indigo-500/15' : 'text-slate-400 hover:text-slate-300 hover:bg-slate-800'
+              } ${!currentUserId ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}
+            >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M5 15l7-7 7 7" />
+              </svg>
+              {voteCount}
+            </button>
+          )}
+
+          {/* Resolve button for pending claims */}
+          {card.status === 'pending' && !isOsint && card._original?.id && (
+            <button
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                router.push(`/resolve/${card._original.id}`);
+              }}
+              className="flex items-center gap-1.5 px-3 py-1.5 bg-purple-500/15 hover:bg-purple-500/25 text-purple-400 text-sm font-medium rounded-lg transition-colors border border-purple-500/30"
+            >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+              </svg>
+              Resolve
+            </button>
+          )}
 
           {isOsint && card.sourceUrl && (
             <button
