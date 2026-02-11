@@ -80,23 +80,29 @@ export default function AppFeedPage() {
 
   const getTickerItems = () => {
     const items: { type: string; text: string; location: string; time: string }[] = [];
-    osintSignals.slice(0, 3).forEach(signal => {
+
+    // Mix intel signals across categories
+    osintSignals.slice(0, 4).forEach(signal => {
+      const tag = signal.tags?.[0] || '';
       items.push({
-        type: 'INTEL',
+        type: tag.toUpperCase() || 'INTEL',
         text: signal.title || 'Intelligence Signal',
-        location: signal.place_name || signal.country_code || '',
+        location: signal.place_name || signal.country_code || tag || '',
         time: signal.created_at ? formatRelativeTime(signal.created_at) : 'Just now'
       });
     });
-    predictions.slice(0, 2).forEach(claim => {
+
+    // Add recent claims with their category
+    predictions.slice(0, 3).forEach(claim => {
       items.push({
-        type: 'CLAIM',
-        text: claim.text?.slice(0, 80) + '...',
-        location: claim.category,
+        type: claim.category?.toUpperCase() || 'CLAIM',
+        text: claim.text?.slice(0, 80) + (claim.text?.length > 80 ? '...' : ''),
+        location: claim.category || '',
         time: claim.timestamp ? formatRelativeTime(claim.timestamp) : 'Just now'
       });
     });
-    return items.slice(0, 5);
+
+    return items.slice(0, 7);
   };
 
   const filteredPredictions = predictions.filter(p => {
@@ -405,6 +411,11 @@ export default function AppFeedPage() {
             {contentFilter !== "osint" && (
               <section>
                 <div className="flex items-center gap-3 mb-4">
+                  <div className="w-8 h-8 rounded-lg bg-purple-500/15 border border-purple-500/30 flex items-center justify-center flex-shrink-0">
+                    <svg className="w-4 h-4 text-purple-400" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+                    </svg>
+                  </div>
                   <h2 className="text-lg font-semibold text-white">Locked Claims</h2>
                   <div className="flex-1 h-px bg-slate-700/40"></div>
                   <span className="text-xs text-slate-400">{filteredPredictions.length} total</span>
@@ -538,6 +549,11 @@ export default function AppFeedPage() {
             {contentFilter !== "claims" && (
               <section>
                 <div className="flex items-center gap-3 mb-4">
+                  <div className="w-8 h-8 rounded-lg bg-red-500/15 border border-red-500/30 flex items-center justify-center flex-shrink-0">
+                    <svg className="w-4 h-4 text-red-400" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M9.348 14.651a3.75 3.75 0 010-5.302m5.302 0a3.75 3.75 0 010 5.302m-7.425 2.122a6.75 6.75 0 010-9.546m9.546 0a6.75 6.75 0 010 9.546M5.106 18.894c-3.808-3.808-3.808-9.98 0-13.788m13.788 0c3.808 3.808 3.808 9.98 0 13.788M12 12h.008v.008H12V12zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z"/>
+                    </svg>
+                  </div>
                   <h2 className="text-lg font-semibold text-white">Intelligence Stream</h2>
                   <div className="flex-1 h-px bg-slate-700/40"></div>
                   <span className="text-xs text-slate-400">{filteredOsint.length} signals</span>
