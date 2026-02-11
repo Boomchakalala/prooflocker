@@ -63,6 +63,21 @@ function toClaimGeoJSON(claims: Claim[]) {
 
 function toOsintGeoJSON(osint: OsintItem[]) {
   const seen = new Set<string>();
+
+  // Helper to get category from tags
+  const getCategory = (tags: string[] | null) => {
+    if (!tags || tags.length === 0) return 'general';
+    const tagStr = tags.join(' ').toLowerCase();
+    if (tagStr.match(/crypto|bitcoin|ethereum/)) return 'crypto';
+    if (tagStr.match(/markets|economy|finance|trading/)) return 'markets';
+    if (tagStr.match(/military|war|conflict|drone/)) return 'military';
+    if (tagStr.match(/breaking|urgent|alert/)) return 'breaking';
+    if (tagStr.match(/politics|election|government/)) return 'politics';
+    if (tagStr.match(/tech|technology|ai/)) return 'tech';
+    if (tagStr.match(/science|research|discovery/)) return 'science';
+    return 'general';
+  };
+
   return {
     type: 'FeatureCollection' as const,
     features: osint.filter((o) => {
@@ -73,7 +88,7 @@ function toOsintGeoJSON(osint: OsintItem[]) {
     }).map((o) => ({
       type: 'Feature' as const,
       geometry: { type: 'Point' as const, coordinates: [o.lng, o.lat] },
-      properties: { ...o, tags: JSON.stringify(o.tags) },
+      properties: { ...o, tags: JSON.stringify(o.tags), category: getCategory(o.tags) },
     })),
   };
 }
