@@ -23,6 +23,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
 
 // Default retention window (hours)
@@ -47,7 +48,11 @@ export async function GET(request: NextRequest) {
   const since = searchParams.get('since') || null;
 
   try {
-    const supabase = createClient(supabaseUrl, supabaseAnonKey);
+    const supabaseKey = supabaseServiceKey || supabaseAnonKey;
+    if (!supabaseServiceKey) {
+      console.warn('[Intel API] Service role key not configured, using anon key.');
+    }
+    const supabase = createClient(supabaseUrl, supabaseKey);
 
     // Calculate time window
     const windowStart = new Date();
