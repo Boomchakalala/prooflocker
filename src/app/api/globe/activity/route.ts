@@ -233,14 +233,13 @@ export async function GET(request: NextRequest) {
     const windowMs = window === '24h' ? 24 * 3600000 : window === '7d' ? 7 * 86400000 : 30 * 86400000;
     const windowStart = new Date(Date.now() - windowMs);
 
-    // Fetch claims
+    // Fetch claims - NO TIME LIMIT, show all claims ever
     let claimsQuery = supabase
       .from('predictions')
       .select('id, text, author_number, pseudonym, created_at, outcome, status, anon_id, category, public_slug, user_id, geotag_lat, geotag_lng, geotag_city, geotag_country, evidence_score')
       .eq('moderation_status', 'active')
-      .gte('created_at', windowStart.toISOString())
       .order('created_at', { ascending: false })
-      .limit(100);
+      .limit(500);
 
     if (category && category !== 'all') {
       claimsQuery = claimsQuery.eq('category', category);
@@ -254,7 +253,7 @@ export async function GET(request: NextRequest) {
       console.error('[Activity API] Error fetching claims:', JSON.stringify(claimsError, null, 2));
     }
 
-    // Fetch intel items
+    // Fetch intel items - WITH TIME WINDOW (only recent news)
     let intelQuery = supabase
       .from('intel_items')
       .select('id, title, source_name, source_type, url, lat, lon, place_name, country_code, tags, summary, created_at, published_at, image_url')
