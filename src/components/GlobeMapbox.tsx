@@ -156,8 +156,8 @@ export default function GlobeMapbox({ claims, osint, mapMode = 'both', viewMode 
       try { map.setFog({ range: [0.5, 10], color: '#000', 'horizon-blend': 0.05, 'high-color': '#0a0a0a', 'space-color': '#000', 'star-intensity': 0.2 }); } catch {}
 
       // Two separate sources — claims (purple) and intel (red)
-      map.addSource('claims', { type: 'geojson', data: toClaimGeoJSON(claimsRef.current), cluster: true, clusterMaxZoom: 6, clusterRadius: 40 });
-      map.addSource('osint', { type: 'geojson', data: toOsintGeoJSON(osintRef.current), cluster: true, clusterMaxZoom: 6, clusterRadius: 40 });
+      map.addSource('claims', { type: 'geojson', data: toClaimGeoJSON(claimsRef.current), cluster: true, clusterMaxZoom: 8, clusterRadius: 60 });
+      map.addSource('osint', { type: 'geojson', data: toOsintGeoJSON(osintRef.current), cluster: true, clusterMaxZoom: 8, clusterRadius: 60 });
 
       // ── Claims layers (purple, compact) ────────────────────
       // Cluster glow
@@ -176,13 +176,13 @@ export default function GlobeMapbox({ claims, osint, mapMode = 'both', viewMode 
       }, paint: { 'text-color': '#fff' }});
       // Individual glow
       map.addLayer({ id: 'claims-points-glow', type: 'circle', source: 'claims', filter: ['!', ['has', 'point_count']], paint: {
-        'circle-color': ['match', ['get', 'status'], 'verified', '#8b5cf6', 'disputed', '#ef4444', 'void', '#6b7280', '#f59e0b'],
+        'circle-color': '#8b5cf6',
         'circle-radius': 10, 'circle-blur': 0.6, 'circle-opacity': 0.18
       }});
-      // Individual core
+      // Individual core — all purple to match clusters
       map.addLayer({ id: 'claims-points-core', type: 'circle', source: 'claims', filter: ['!', ['has', 'point_count']], paint: {
-        'circle-color': ['match', ['get', 'status'], 'verified', '#8b5cf6', 'disputed', '#ef4444', 'void', '#6b7280', '#f59e0b'],
-        'circle-radius': 5, 'circle-opacity': 0.95, 'circle-stroke-width': 1.5, 'circle-stroke-color': '#e2e8f0', 'circle-stroke-opacity': 0.8
+        'circle-color': '#7c3aed',
+        'circle-radius': 5, 'circle-opacity': 0.95, 'circle-stroke-width': 1.5, 'circle-stroke-color': '#a78bfa', 'circle-stroke-opacity': 0.8
       }});
 
       // ── OSINT layers (red, compact) ──────────────────────────
