@@ -41,10 +41,10 @@ export default function AppFeedPage() {
       const predData = await predRes.json();
       const newPredictions = predData.predictions || [];
 
-      // Fetch new intel items from unified intel API
-      const intelRes = await fetch("/api/intel?window=168&limit=100");
-      const intelData = await intelRes.json();
-      const newIntel = intelData.items || [];
+      // Fetch new intel items from globe activity API (only geolocated)
+      const activityRes = await fetch("/api/globe/activity?window=7d");
+      const activityData = await activityRes.json();
+      const newIntel = activityData.osint || [];
 
       // Detect new items (skip on first load)
       if (prevCounts.claims > 0 || prevCounts.intel > 0) {

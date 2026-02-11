@@ -14,14 +14,15 @@ export default function LandingHero() {
   useEffect(() => {
     Promise.all([
       fetch('/api/predictions').then(r => r.json()),
-      fetch('/api/intel?window=168&limit=1').then(r => r.json()),
-    ]).then(([predData, intelData]) => {
+      fetch('/api/globe/activity?window=7d').then(r => r.json()),
+    ]).then(([predData, activityData]) => {
       const allPredictions = predData?.predictions || [];
       const total = allPredictions.length || predData?.count || 0;
       const resolved = allPredictions.filter((p: any) =>
         p.outcome === 'correct' || p.outcome === 'incorrect'
       ).length || 0;
-      const intel = intelData?.meta?.total || 0;
+      // Use globe activity osint count (only geolocated items)
+      const intel = activityData?.meta?.counts?.osint || 0;
       setStats({ totalClaims: total, resolvedClaims: resolved, intelArticles: intel });
     }).catch(() => {
       // Keep default values on error
