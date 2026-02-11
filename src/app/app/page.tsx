@@ -14,7 +14,7 @@ import { getReputationTier } from "@/lib/reputation-scoring";
 import { formatRelativeTime } from "@/lib/utils";
 
 type ContentFilter = "all" | "osint" | "claims";
-type QuickFilter = "all" | "pending" | "verified" | "disproven" | "crypto" | "politics" | "markets" | "tech" | "sports" | "culture" | "military" | "breaking" | "science" | "osint-cat" | "personal" | "other" | "my-claims";
+type QuickFilter = "all" | "pending" | "resolved" | "crypto" | "politics" | "markets" | "tech" | "sports" | "culture" | "military" | "breaking" | "science" | "osint-cat" | "personal" | "other" | "my-claims";
 
 export default function AppFeedPage() {
   const { user } = useAuth();
@@ -116,8 +116,7 @@ export default function AppFeedPage() {
     }
 
     if (quickFilter === "pending" && p.outcome !== "pending") return false;
-    if (quickFilter === "verified" && p.outcome !== "correct") return false;
-    if (quickFilter === "disproven" && p.outcome !== "incorrect") return false;
+    if (quickFilter === "resolved" && p.outcome !== "correct" && p.outcome !== "incorrect") return false;
     if (quickFilter === "crypto" && p.category?.toLowerCase() !== "crypto") return false;
     if (quickFilter === "politics" && p.category?.toLowerCase() !== "politics") return false;
     if (quickFilter === "markets" && p.category?.toLowerCase() !== "markets") return false;
@@ -353,8 +352,7 @@ export default function AppFeedPage() {
                 {[
                   { id: 'all', label: 'All' },
                   { id: 'pending', label: 'Pending' },
-                  { id: 'verified', label: 'Verified' },
-                  { id: 'disproven', label: 'Disproven' },
+                  { id: 'resolved', label: 'Resolved' },
                 ].map(filter => (
                   <button
                     key={filter.id}
