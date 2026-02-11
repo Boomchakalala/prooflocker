@@ -59,6 +59,12 @@ export async function getOrCreateScore(
       claims_count: 0,
     };
 
+    console.log('[Insight DB] Creating new score with:', {
+      anon_id: newScore.anon_id,
+      user_id: newScore.user_id,
+      identifier_passed: identifier,
+    });
+
     const { data: created, error: createError } = await supabase
       .from("insight_scores")
       .insert(newScore)
@@ -67,6 +73,7 @@ export async function getOrCreateScore(
 
     if (createError) {
       console.error("Error creating score:", createError);
+      console.error("Attempted to insert:", newScore);
       return null;
     }
 
