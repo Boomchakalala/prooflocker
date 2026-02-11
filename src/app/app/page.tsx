@@ -42,7 +42,7 @@ export default function AppFeedPage() {
       const newPredictions = predData.predictions || [];
 
       // Fetch new intel items from unified intel API
-      const intelRes = await fetch("/api/intel?window=24&limit=100");
+      const intelRes = await fetch("/api/intel?window=168&limit=100");
       const intelData = await intelRes.json();
       const newIntel = intelData.items || [];
 
