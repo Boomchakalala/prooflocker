@@ -1016,21 +1016,22 @@ export default function GlobePage() {
           />
         )}
 
-        {/* Mobile Feed Toggle Button - PROMINENT (Main Action) */}
+        {/* Mobile Feed Toggle Button - Like Lock Claim Button */}
         <button
           onClick={() => setShowMobileFeed(!showMobileFeed)}
-          className="md:hidden fixed top-20 right-4 z-[210] w-16 h-16 rounded-full bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-500 hover:to-purple-600 shadow-2xl shadow-purple-500/50 flex items-center justify-center text-white transition-all hover:scale-110 active:scale-95"
+          className="md:hidden fixed bottom-24 right-4 z-[210] flex items-center gap-2 px-4 py-3 rounded-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-500 hover:to-blue-600 shadow-2xl shadow-blue-500/50 text-white transition-all hover:scale-110 active:scale-95 font-semibold text-sm"
           title={showMobileFeed ? "Hide Feed" : "Show Feed"}
         >
-          <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+          <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
             {showMobileFeed ? (
               <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
             ) : (
               <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
             )}
           </svg>
+          <span>{showMobileFeed ? 'Close' : 'Feed'}</span>
           {!showMobileFeed && (
-            <div className="absolute inset-0 rounded-full bg-purple-400 animate-ping opacity-30" />
+            <div className="absolute inset-0 rounded-full bg-blue-400 animate-ping opacity-30" />
           )}
         </button>
 
