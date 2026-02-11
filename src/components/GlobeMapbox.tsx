@@ -331,13 +331,17 @@ export default function GlobeMapbox({ claims, osint, mapMode = 'both', viewMode 
     } catch {}
   }, [claims, osint]);
 
-  // mapMode visibility
+  // mapMode visibility (also respects zoom-based combined/split)
   useEffect(() => {
     const m = mapRef.current;
     if (!m || !readyRef.current) return;
-    const showC = mapMode !== 'osint';
-    const showO = mapMode !== 'claims';
+    mapModeRef.current = mapMode;
+    const zoom = m.getZoom();
+    const showCombined = zoom < 5 && mapMode === 'both';
+    const showC = mapMode !== 'osint' && !showCombined;
+    const showO = mapMode !== 'claims' && !showCombined;
     const vis = (layers: string[], show: boolean) => layers.forEach((l) => { try { if (m.getLayer(l)) m.setLayoutProperty(l, 'visibility', show ? 'visible' : 'none'); } catch {} });
+    vis(['combined-clusters-glow', 'combined-clusters-core', 'combined-cluster-count', 'combined-points-glow', 'combined-points-core'], showCombined);
     vis(['claims-clusters-glow', 'claims-clusters-core', 'claims-cluster-count', 'claims-points-glow', 'claims-points-core'], showC);
     vis(['osint-clusters-glow', 'osint-clusters-core', 'osint-cluster-count', 'osint-points-glow', 'osint-points-core'], showO);
   }, [mapMode]);
