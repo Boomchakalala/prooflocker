@@ -430,6 +430,7 @@ export default function AppFeedPage() {
                       const isResolved = isCorrect || isIncorrect;
                       const evidenceGradeKey = claim.evidence_score ? getEvidenceGrade(claim.evidence_score) : null;
                       const evidenceGradeInfo = evidenceGradeKey ? getEvidenceGradeInfo(evidenceGradeKey) : null;
+                      const repTier = getReputationTier(claim.rep || 0);
 
                       return (
                         <Link
@@ -443,13 +444,16 @@ export default function AppFeedPage() {
                               : 'border-l-[3px] border-l-amber-500'
                           }`}
                         >
-                          {/* Top row: Author + Status + Time */}
+                          {/* Top row: Author + Reputation + Status + Time */}
                           <div className="flex items-center justify-between mb-2">
                             <div className="flex items-center gap-2">
                               <div className="w-6 h-6 rounded-full bg-gradient-to-br from-purple-600 to-purple-800 flex items-center justify-center text-white text-[9px] font-bold flex-shrink-0">
                                 {claim.authorNumber?.toString().slice(-2) || "??"}
                               </div>
                               <span className="text-xs text-slate-400 font-medium">#{claim.authorNumber}</span>
+                              <span className={`text-[8px] font-bold px-1 py-0.5 rounded ${repTier.bgColor} ${repTier.textColor}`}>
+                                {repTier.name}
+                              </span>
                               <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded ${
                                 isCorrect ? "bg-gradient-to-r from-emerald-500 to-emerald-600 text-white" :
                                 isIncorrect ? "bg-gradient-to-r from-red-500 to-red-600 text-white" :
