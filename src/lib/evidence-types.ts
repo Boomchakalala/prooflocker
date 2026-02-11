@@ -35,9 +35,12 @@ export interface EvidenceItemInput {
   type: EvidenceItemType;
   title?: string;
   url?: string;
-  file?: File; // For file uploads
+  file?: File; // For file uploads (legacy, now uploaded separately)
   sourceKind?: EvidenceSourceKind;
   notes?: string;
+  hash?: string; // Pre-computed hash for uploaded files
+  mimeType?: string; // For uploaded files
+  fileSizeBytes?: number; // For uploaded files
 }
 
 // Resolution with evidence
