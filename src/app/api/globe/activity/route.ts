@@ -397,56 +397,59 @@ export async function GET(request: NextRequest) {
       };
     }); // All claims get a location now
 
-    // Transform intel items — use real geo, then text extraction, then SKIP
-    const osint = (intelData || []).map((signal: any) => {
-      const hoursAgo = Math.floor((Date.now() - new Date(signal.created_at).getTime()) / 3600000);
-      const timestamp = hoursAgo < 1 ? 'Just now' : hoursAgo < 24 ? `${hoursAgo}h ago` : `${Math.floor(hoursAgo / 24)}d ago`;
+    // Transform intel items — use real geo, then text extraction, then FILTER OUT
+    const osint = (intelData || [])
+      .map((signal: any) => {
+        const hoursAgo = Math.floor((Date.now() - new Date(signal.created_at).getTime()) / 3600000);
+        const timestamp = hoursAgo < 1 ? 'Just now' : hoursAgo < 24 ? `${hoursAgo}h ago` : `${Math.floor(hoursAgo / 24)}d ago`;
 
-      let lat = signal.lat;
-      let lng = signal.lon;
+        let lat = signal.lat;
+        let lng = signal.lon;
 
-      // If no real geotag, try to extract location from title + summary
-      if (!lat || !lng) {
-        const extracted = extractLocation(`${signal.title} ${signal.summary || ''}`);
-        if (extracted) {
-          lat = extracted.lat + (Math.random() - 0.5) * 0.5;
-          lng = extracted.lng + (Math.random() - 0.5) * 0.5;
+        // If no real geotag, try to extract location from title + summary
+        if (!lat || !lng) {
+          const extracted = extractLocation(`${signal.title} ${signal.summary || ''}`);
+          if (extracted) {
+            lat = extracted.lat + (Math.random() - 0.5) * 0.5;
+            lng = extracted.lng + (Math.random() - 0.5) * 0.5;
+          }
         }
-      }
 
-      // Note: Keep items without location in response
-      // Client-side will filter them for map display
-      // This ensures consistent counts across all pages
+        // IMPORTANT: Only return items with valid geolocation
+        // Items without location cannot be shown on map
+        if (!lat || !lng) {
+          return null;
+        }
 
-      const key = getStableKey(
-        { id: signal.id, source: signal.source_name, title: signal.title },
-        'osint'
-      );
+        const key = getStableKey(
+          { id: signal.id, source: signal.source_name, title: signal.title },
+          'osint'
+        );
 
-      const category = signal.tags && signal.tags.length > 0 ? signal.tags[0] : 'Intel';
+        const category = signal.tags && signal.tags.length > 0 ? signal.tags[0] : 'Intel';
 
-      return {
-        id: signal.id,
-        title: signal.title,
-        source: signal.source_name,
-        source_name: signal.source_name,
-        source_type: signal.source_type,
-        handle: null,
-        url: signal.url,
-        lat,
-        lng,
-        lon: lng,
-        timestamp,
-        tags: signal.tags || [],
-        category,
-        locationName: signal.place_name || signal.country_code,
-        location_name: signal.place_name || signal.country_code,
-        content: signal.summary,
-        summary: signal.summary,
-        image_url: signal.image_url,
-        createdAt: signal.created_at,
-        created_at: signal.created_at,
-        publishedAt: signal.published_at,
+        return {
+          id: signal.id,
+          title: signal.title,
+          source: signal.source_name,
+          source_name: signal.source_name,
+          source_type: signal.source_type,
+          handle: null,
+          url: signal.url,
+          lat,
+          lng,
+          lon: lng,
+          timestamp,
+          tags: signal.tags || [],
+          category,
+          locationName: signal.place_name || signal.country_code,
+          location_name: signal.place_name || signal.country_code,
+          content: signal.summary,
+          summary: signal.summary,
+          image_url: signal.image_url,
+          createdAt: signal.created_at,
+          created_at: signal.created_at,
+          publishedAt: signal.published_at,
         published_at: signal.published_at,
         key,
       };
