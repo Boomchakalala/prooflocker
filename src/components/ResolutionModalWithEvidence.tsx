@@ -160,11 +160,11 @@ export default function ResolutionModalWithEvidence({
       const evidenceItemsWithHashes = await Promise.all(
         evidenceItems.map(async (item) => {
           if (item.type === "link" && item.url) {
-            const hash = await sha256Url(item.url);
+            const hash = item.hash || await sha256Url(item.url);
             return { ...item, hash };
-          } else if (item.type === "file" && item.file) {
-            const hash = await sha256File(item.file);
-            return { ...item, hash };
+          } else if (item.type === "file") {
+            // File already uploaded with hash
+            return item;
           }
           return item;
         })
