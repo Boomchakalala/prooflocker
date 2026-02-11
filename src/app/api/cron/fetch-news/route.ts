@@ -66,18 +66,19 @@ export async function GET(request: NextRequest) {
 
     console.log(`[Cron: Fetch News] Received ${articles.length} articles`);
 
-    // CLEANUP: Delete ALL intel articles older than 3 days (keep database lean)
+    // CLEANUP: Delete ALL intel articles older than 7 days (keep database fresh but substantial)
     // This applies to GNews, RSS feeds, and all intel sources
-    const threeDaysAgo = new Date();
-    threeDaysAgo.setDate(threeDaysAgo.getDate() - 3);
+    // Target: 100-150 geolocated intel items at any given time
+    const sevenDaysAgo = new Date();
+    sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
 
     const { error: deleteError, count: deleteCount } = await supabase
       .from('intel_items')
       .delete()
-      .lt('created_at', threeDaysAgo.toISOString());
+      .lt('created_at', sevenDaysAgo.toISOString());
 
     if (!deleteError) {
-      console.log(`[Cron: Fetch News] Cleaned up ${deleteCount || 0} old articles (>3 days old)`);
+      console.log(`[Cron: Fetch News] Cleaned up ${deleteCount || 0} old articles (>7 days old)`);
     }
 
     console.log(`[Cron: Fetch News] Received ${articles.length} articles`);
