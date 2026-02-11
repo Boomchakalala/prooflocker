@@ -272,6 +272,23 @@ export async function GET(request: NextRequest) {
       }
     }
 
+    // Known user → France (the app owner is in France)
+    const OWNER_USER_ID = '2393937e-906d-40f5-ad4e-37fcb57a7e5e';
+
+    // French cities for scattering the owner's claims across France
+    const FRANCE_CITIES = [
+      { lat: 48.8566, lng: 2.3522 },   // Paris
+      { lat: 43.2965, lng: 5.3698 },   // Marseille
+      { lat: 45.7640, lng: 4.8357 },   // Lyon
+      { lat: 43.6047, lng: 1.4442 },   // Toulouse
+      { lat: 43.7102, lng: 7.2620 },   // Nice
+      { lat: 47.2184, lng: -1.5536 },  // Nantes
+      { lat: 44.8378, lng: -0.5792 },  // Bordeaux
+      { lat: 48.5734, lng: 7.7521 },   // Strasbourg
+      { lat: 43.6108, lng: 3.8767 },   // Montpellier
+      { lat: 48.1173, lng: -1.6778 },  // Rennes
+    ];
+
     // Category-based fallback locations for claims that can't be geolocated
     const categoryLocations: Record<string, { lat: number; lng: number }> = {
       Crypto: { lat: 40.7128, lng: -74.0060 },     // NYC (finance hub)
@@ -284,27 +301,37 @@ export async function GET(request: NextRequest) {
       Other: { lat: 40.7128, lng: -74.0060 },       // NYC default
     };
 
-    // Transform claims — use real geodata, then text extraction, then category fallback
+    // Transform claims — owner claims → France, else text extraction, else category fallback
     let claimFallbackIdx = 0;
+    let franceCityIdx = 0;
     const claims = (predictions || []).map((prediction: any) => {
       let lat = prediction.geotag_lat;
       let lng = prediction.geotag_lng;
 
-      // If no real geotag, try to extract location from claim text + category
-      if (!lat || !lng) {
+      // Owner's claims always go to France (scattered across French cities)
+      const isOwner = prediction.user_id === OWNER_USER_ID;
+      if (isOwner) {
+        const city = FRANCE_CITIES[franceCityIdx % FRANCE_CITIES.length];
+        franceCityIdx++;
+        lat = city.lat + (Math.random() - 0.5) * 1.5;
+        lng = city.lng + (Math.random() - 0.5) * 1.5;
+      }
+
+      // If no real geotag and not the owner, try to extract location from claim text
+      if (!isOwner && (!lat || !lng)) {
         const extracted = extractLocation(`${prediction.text} ${prediction.category || ''}`);
         if (extracted) {
-          lat = extracted.lat + (Math.random() - 0.5) * 3;
-          lng = extracted.lng + (Math.random() - 0.5) * 3;
+          lat = extracted.lat + (Math.random() - 0.5) * 2;
+          lng = extracted.lng + (Math.random() - 0.5) * 2;
         }
       }
 
-      // If still no location, use category-based fallback with wide scatter
+      // If still no location, use category-based fallback with scatter
       if (!lat || !lng) {
         const cat = prediction.category || 'Other';
         const fallback = categoryLocations[cat] || categoryLocations['Other'];
-        lat = fallback.lat + (Math.random() - 0.5) * 8;
-        lng = fallback.lng + (Math.random() - 0.5) * 8;
+        lat = fallback.lat + (Math.random() - 0.5) * 4;
+        lng = fallback.lng + (Math.random() - 0.5) * 4;
         claimFallbackIdx++;
       }
 
