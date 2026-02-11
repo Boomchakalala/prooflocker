@@ -871,7 +871,6 @@ export default function GlobePage() {
                           }`}>
                             {claim.outcome === 'correct' ? 'Correct' : claim.outcome === 'incorrect' ? 'Incorrect' : 'Pending'}
                           </span>
-                          </span>
                         </div>
                       </div>
                       <p className="text-sm text-white line-clamp-2 mb-2">{claim.claim}</p>
