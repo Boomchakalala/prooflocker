@@ -40,16 +40,18 @@ export async function GET(request: NextRequest) {
     const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
     const supabase = createClient(supabaseUrl, supabaseKey);
 
-    // BOOTSTRAP: Fetch from multiple categories for diversity
-    const categories = ['world', 'technology', 'general', 'business'];
-    const bootstrapCategory = categories[Math.floor(Math.random() * categories.length)];
-    const category = bootstrapCategory;
-
-    // BOOTSTRAP: Temporarily fetching 50 articles for initial population
-    const maxArticles = 50;
+    // Rotate through categories to get diverse content (crypto, economics, war, tech)
+    // Categories: general, business, technology, world, nation, sports, entertainment, science, health
+    // Rotate based on time to ensure variety: business for markets/crypto, world for war/geopolitics
+    const categories = ['business', 'world', 'technology', 'general'];
+    const currentHour = new Date().getHours();
+    const categoryIndex = currentHour % categories.length;
+    const category = categories[categoryIndex];
 
     // Fetch from GNews API - 7 articles per run (optimized for 1000/day limit)
     // 144 runs/day × 7 articles = ~1000 requests/day
+    const maxArticles = 7;
+
     const gnewsUrl = `https://gnews.io/api/v4/top-headlines?category=${category}&lang=en&max=${maxArticles}&token=${gnewsApiKey}`;
 
     console.log(`[Cron: Fetch News] Fetching from GNews (category: ${category}, max: ${maxArticles})...`);
