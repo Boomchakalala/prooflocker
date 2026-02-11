@@ -178,17 +178,17 @@ export default function AppFeedPage() {
       <div className="min-h-screen gradient-bg text-white">
       <UnifiedHeader currentView="feed" />
 
-      <main className="max-w-7xl mx-auto px-4 pt-20 pb-12">
+      <main className="max-w-7xl mx-auto px-4 pt-20 md:pt-20 pb-12">
 
-        <div className="mb-6">
-          <h1 className="text-2xl font-bold text-white mb-1">Live Feed</h1>
-          <p className="text-sm text-slate-400">
-            Breaking intelligence and locked claims in real time. Spot it early, lock it on-chain, resolve with receipts.
+        <div className="mb-4 md:mb-6">
+          <h1 className="text-xl md:text-2xl font-bold text-white mb-0.5 md:mb-1">Live Feed</h1>
+          <p className="text-xs md:text-sm text-slate-400">
+            Breaking intelligence and locked claims in real time.
           </p>
         </div>
 
         {/* Live News Ticker */}
-        <div className="mb-4">
+        <div className="mb-3 md:mb-4">
           <BreakingNewsBanner
             items={getTickerItems()}
             className="!fixed-none !relative !top-0 !left-0 !right-0 !z-auto"
@@ -197,24 +197,24 @@ export default function AppFeedPage() {
 
         {/* New items notification pill */}
         {newItems && (newItems.claims > 0 || newItems.intel > 0) && (
-          <div className="mb-4 flex justify-center animate-fade-in-up">
+          <div className="mb-3 md:mb-4 flex justify-center animate-fade-in-up">
             <button
               onClick={() => {
                 setNewItems(null);
                 window.scrollTo({ top: 0, behavior: 'smooth' });
               }}
-              className="inline-flex items-center gap-2 px-4 py-2 bg-purple-600/20 border border-purple-500/40 rounded-full text-sm font-medium text-purple-300 hover:bg-purple-600/30 hover:border-purple-500/60 transition-all shadow-lg shadow-purple-500/10"
+              className="inline-flex items-center gap-1.5 md:gap-2 px-3 md:px-4 py-1.5 md:py-2 bg-purple-600/20 border border-purple-500/40 rounded-full text-xs md:text-sm font-medium text-purple-300 hover:bg-purple-600/30 hover:border-purple-500/60 transition-all shadow-lg shadow-purple-500/10"
             >
-              <div className="w-2 h-2 bg-purple-400 rounded-full animate-pulse" />
+              <div className="w-1.5 md:w-2 h-1.5 md:h-2 bg-purple-400 rounded-full animate-pulse" />
               {newItems.claims > 0 && `${newItems.claims} new claim${newItems.claims > 1 ? 's' : ''}`}
               {newItems.claims > 0 && newItems.intel > 0 && ' · '}
               {newItems.intel > 0 && `${newItems.intel} new intel`}
-              <span className="text-purple-400/60">· Dismiss</span>
+              <span className="text-purple-400/60 hidden md:inline">· Dismiss</span>
             </button>
           </div>
         )}
 
-        <div className="mb-4 bg-slate-900/40 backdrop-blur-xl border border-slate-700/30 rounded-xl px-4 py-2.5">
+        <div className="mb-3 md:mb-4 bg-slate-900/40 backdrop-blur-xl border border-slate-700/30 rounded-xl px-3 md:px-4 py-2 md:py-2.5">
           <div className="flex items-center justify-between flex-wrap gap-4">
             <div className="flex items-center gap-5 flex-wrap">
               <div className="flex items-center gap-2" title="Refreshes every 30 seconds">
