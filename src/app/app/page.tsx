@@ -341,51 +341,54 @@ export default function AppFeedPage() {
               </div>
             </div>
 
-            <div className="flex items-center gap-1.5 flex-wrap">
-              {[
-                { id: 'all', label: 'All' },
-                { id: 'pending', label: 'Pending' },
-                { id: 'verified', label: 'Verified' },
-                { id: 'disproven', label: 'Disproven' },
-              ].map(filter => (
-                <button
-                  key={filter.id}
-                  onClick={() => setQuickFilter(filter.id as QuickFilter)}
-                  className={`px-2.5 py-1 rounded-full text-xs font-medium transition-all ${
-                    quickFilter === filter.id
-                      ? 'bg-purple-500/20 text-purple-300 border border-purple-500/30'
-                      : 'text-slate-400 border border-transparent hover:bg-slate-800/50 hover:text-slate-300'
-                  }`}
-                >
-                  {filter.label}
-                </button>
-              ))}
+            {/* Category filters - horizontal scroll on mobile */}
+            <div className="overflow-x-auto scrollbar-hide -mx-4 px-4">
+              <div className="flex items-center gap-1.5 min-w-max">
+                {[
+                  { id: 'all', label: 'All' },
+                  { id: 'pending', label: 'Pending' },
+                  { id: 'verified', label: 'Verified' },
+                  { id: 'disproven', label: 'Disproven' },
+                ].map(filter => (
+                  <button
+                    key={filter.id}
+                    onClick={() => setQuickFilter(filter.id as QuickFilter)}
+                    className={`px-2 md:px-2.5 py-0.5 md:py-1 rounded-full text-[10px] md:text-xs font-medium transition-all whitespace-nowrap ${
+                      quickFilter === filter.id
+                        ? 'bg-purple-500/20 text-purple-300 border border-purple-500/30'
+                        : 'text-slate-400 border border-transparent hover:bg-slate-800/50 hover:text-slate-300'
+                    }`}
+                  >
+                    {filter.label}
+                  </button>
+                ))}
 
-              <div className="w-px h-4 bg-slate-700/50 mx-1"></div>
+                <div className="w-px h-3 md:h-4 bg-slate-700/50 mx-0.5 md:mx-1"></div>
 
-              {[
-                { id: 'crypto', label: 'Crypto' },
-                { id: 'markets', label: 'Markets' },
-                { id: 'military', label: 'War' },
-                { id: 'politics', label: 'Politics' },
-                { id: 'tech', label: 'Tech' },
-                { id: 'breaking', label: 'Breaking' },
-                { id: 'science', label: 'Science' },
-                { id: 'sports', label: 'Sports' },
-                { id: 'culture', label: 'Culture' },
-              ].map(filter => (
-                <button
-                  key={filter.id}
-                  onClick={() => setQuickFilter(filter.id as QuickFilter)}
-                  className={`px-2.5 py-1 rounded-full text-xs font-medium transition-all ${
-                    quickFilter === filter.id
-                      ? 'bg-purple-500/20 text-purple-300 border border-purple-500/30'
-                      : 'text-slate-400 border border-transparent hover:bg-slate-800/50 hover:text-slate-300'
-                  }`}
-                >
-                  {filter.label}
-                </button>
-              ))}
+                {[
+                  { id: 'crypto', label: 'Crypto' },
+                  { id: 'markets', label: 'Markets' },
+                  { id: 'military', label: 'War' },
+                  { id: 'politics', label: 'Politics' },
+                  { id: 'tech', label: 'Tech' },
+                  { id: 'breaking', label: 'Breaking' },
+                  { id: 'science', label: 'Science' },
+                  { id: 'sports', label: 'Sports' },
+                  { id: 'culture', label: 'Culture' },
+                ].map(filter => (
+                  <button
+                    key={filter.id}
+                    onClick={() => setQuickFilter(filter.id as QuickFilter)}
+                    className={`px-2 md:px-2.5 py-0.5 md:py-1 rounded-full text-[10px] md:text-xs font-medium transition-all whitespace-nowrap ${
+                      quickFilter === filter.id
+                        ? 'bg-purple-500/20 text-purple-300 border border-purple-500/30'
+                        : 'text-slate-400 border border-transparent hover:bg-slate-800/50 hover:text-slate-300'
+                    }`}
+                  >
+                    {filter.label}
+                  </button>
+                ))}
+              </div>
             </div>
           </div>
         </div>
