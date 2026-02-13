@@ -72,26 +72,26 @@ export default function TopSourcesList({ category = 'all' }: TopSourcesListProps
   }
 
   return (
-    <div className="space-y-8">
-      {/* Development Badge - Show when using seed data */}
-      {usingSeedData && (
-        <div className="bg-amber-500/10 border-2 border-amber-500/40 rounded-xl p-4 flex items-center gap-3 shadow-lg">
-          <div className="flex-shrink-0 w-10 h-10 rounded-lg bg-amber-500/20 border border-amber-500/40 flex items-center justify-center">
-            <svg className="w-5 h-5 text-amber-400" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-            </svg>
+    <div className="space-y-6">
+      {/* Development Badge - Always shown */}
+      <div className="bg-gradient-to-r from-amber-500/15 to-orange-500/15 border-2 border-amber-500/50 rounded-xl p-5 flex items-center gap-4 shadow-xl shadow-amber-500/20">
+        <div className="flex-shrink-0 w-12 h-12 rounded-xl bg-gradient-to-br from-amber-500/30 to-orange-500/30 border-2 border-amber-500/50 flex items-center justify-center">
+          <svg className="w-6 h-6 text-amber-300" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+          </svg>
+        </div>
+        <div className="flex-1">
+          <div className="flex items-center gap-2 mb-1">
+            <div className="font-extrabold text-amber-200 text-base">🚧 Under Construction - Demo Data</div>
           </div>
-          <div className="flex-1">
-            <div className="font-bold text-amber-300 text-sm mb-1">Demo Data - In Development</div>
-            <div className="text-xs text-amber-200/80">
-              This leaderboard shows example data. Real user rankings are being calculated in the background and will be displayed once we have sufficient verified claims.
-            </div>
+          <div className="text-sm text-amber-100/90 leading-relaxed">
+            This leaderboard displays example data while the platform builds its user base. Real user rankings are being calculated in the background and will be displayed once we have sufficient verified claims and resolutions.
           </div>
         </div>
-      )}
+      </div>
 
       {/* Header Section */}
-      <div className="text-center mb-10">
+      <div className="text-center mb-8">
         <div className="flex items-center justify-center gap-3 mb-4">
           <div className="flex items-center gap-2 px-5 py-3 bg-gradient-to-r from-purple-600/20 to-cyan-600/20 border border-purple-500/40 rounded-xl shadow-[0_0_25px_rgba(168,85,247,0.2)]">
             <svg className="w-6 h-6 text-purple-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
