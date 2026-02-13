@@ -168,7 +168,9 @@ export default function GlobeMapbox({ claims, osint, mapMode = 'both', viewMode 
         center: [15, 35],
         zoom: 1.8,
         attributionControl: false,
-        antialias: true,
+        antialias: false,
+        fadeDuration: 0,
+        trackResize: true,
       });
     } catch {
       return;
