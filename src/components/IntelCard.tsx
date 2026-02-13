@@ -38,15 +38,18 @@ export default function IntelCard({ item, compact = false }: IntelCardProps) {
     if (!item.tags || item.tags.length === 0) return 'general';
     const tagStr = item.tags.join(' ').toLowerCase();
 
-    if (tagStr.match(/crypto|bitcoin|ethereum|blockchain/)) return 'crypto';
-    if (tagStr.match(/markets|economy|finance|trading|stock/)) return 'markets';
-    if (tagStr.match(/military|war|conflict|drone|missile|attack|battle|ukraine|russia|taiwan|iran/)) return 'military';
-    if (tagStr.match(/politics|election|government|diplomatic/)) return 'politics';
-    if (tagStr.match(/tech|technology|ai|software/)) return 'tech';
-    if (tagStr.match(/science|research|discovery|space/)) return 'science';
-    if (tagStr.match(/sports|football|basketball|soccer/)) return 'sports';
-    if (tagStr.match(/health|medical|pandemic/)) return 'health';
-    if (tagStr.match(/climate|environment|weather/)) return 'climate';
+    // Primary categories with broader keyword matching
+    if (tagStr.match(/crypto|bitcoin|ethereum|blockchain|defi|nft|token/)) return 'crypto';
+    if (tagStr.match(/markets|economy|finance|trading|stock|forex|nasdaq|dow|sp500|fed|inflation/)) return 'markets';
+    if (tagStr.match(/military|war|conflict|drone|missile|attack|battle|ukraine|russia|taiwan|iran|defense|weapon|combat/)) return 'military';
+    if (tagStr.match(/politics|election|government|diplomatic|congress|senate|president|policy|legislation/)) return 'politics';
+    if (tagStr.match(/tech|technology|ai|software|hardware|apple|google|meta|microsoft|startup|cyber/)) return 'tech';
+    if (tagStr.match(/science|research|discovery|space|nasa|physics|chemistry|biology|study/)) return 'science';
+    if (tagStr.match(/sports|football|basketball|soccer|baseball|nba|nfl|olympics|tennis/)) return 'sports';
+    if (tagStr.match(/health|medical|pandemic|covid|virus|vaccine|hospital|doctor|disease|healthcare/)) return 'health';
+    if (tagStr.match(/climate|environment|weather|temperature|carbon|emissions|energy|renewable/)) return 'climate';
+    if (tagStr.match(/culture|art|music|film|entertainment|celebrity|media|movie|show|festival/)) return 'culture';
+
     return 'general';
   };
 
