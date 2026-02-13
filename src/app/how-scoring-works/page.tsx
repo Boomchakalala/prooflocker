@@ -177,7 +177,7 @@ export default function HowScoringWorksPage() {
                   </div>
                   <div className="border-t border-white/10 my-2 pt-2 flex justify-between text-lg font-bold">
                     <span className="text-white">Total Reputation:</span>
-                    <span className="text-blue-400">775</span>
+                    <span className="text-blue-400">685</span>
                   </div>
                 </div>
               </div>
