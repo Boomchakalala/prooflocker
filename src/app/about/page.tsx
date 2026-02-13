@@ -336,22 +336,40 @@ export default function AboutPage() {
 
         {/* Philosophy */}
         <section className="mb-10">
-          <div className="bg-slate-900/60 border border-slate-700/40 rounded-xl p-8">
-            <h2 className="text-2xl font-bold text-white mb-6">Our Philosophy</h2>
-            <div className="space-y-4 text-slate-300">
-              <p className="text-lg leading-relaxed font-semibold text-white">
+          <div className="bg-gradient-to-br from-slate-900/80 to-slate-800/60 border border-purple-500/30 rounded-xl p-8 shadow-[0_0_50px_rgba(168,85,247,0.1)]">
+            <div className="flex items-center gap-3 mb-6">
+              <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-purple-500/20 to-blue-500/20 border border-purple-500/40 flex items-center justify-center">
+                <svg className="w-6 h-6 text-purple-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>
+                </svg>
+              </div>
+              <h2 className="text-2xl font-bold text-white">Our Philosophy</h2>
+            </div>
+            <div className="space-y-5 text-slate-300">
+              <p className="text-xl leading-relaxed font-semibold text-white">
                 We don't care who you are. We care what you said and whether you were right.
               </p>
-              <p className="leading-relaxed">
-                ProofLocker isn't about building a social network. It's about building a truth layer -- a permanent record where words have consequences and track records matter more than follower counts.
+              <p className="leading-relaxed text-base">
+                In a world drowning in noise, ProofLocker is building something different: a truth layer where words have weight, claims have consequences, and track records matter more than blue checks or follower counts.
               </p>
-              <p className="leading-relaxed">
-                In a world of deepfakes, AI-generated content, and endless information warfare, cryptographic timestamps become the ultimate arbiters of truth. When did you say it? Can you prove it? Is there evidence?
+              <p className="leading-relaxed text-base">
+                This isn't about building another social network. It's about building permanent accountability. A place where analysts can stake their reputation, where researchers can prove discovery priority, where content creators can lock bold predictions and own their outcomes.
               </p>
-              <p className="leading-relaxed">
-                We believe the best intelligence comes from everywhere -- not just verified accounts or institutional gatekeepers. Anonymous claims, transparent outcomes, and cryptographic proof level the playing field.
+              <p className="leading-relaxed text-base">
+                In the age of deepfakes, AI-generated content, and endless information warfare, cryptographic timestamps become the ultimate arbiters of truth. <strong className="text-white">When did you say it? Can you prove it? Is there evidence?</strong> These are the only questions that matter.
               </p>
-              <p className="text-lg font-semibold text-white mt-6">
+              <p className="leading-relaxed text-base">
+                We believe the best intelligence comes from everywhere — not just verified accounts or institutional gatekeepers. Anonymous claims with transparent outcomes and cryptographic proof level the playing field. Reputation becomes earned, not bought. Track records become verifiable, not curated.
+              </p>
+              <div className="bg-slate-800/40 border border-slate-700/50 rounded-lg p-5 mt-6">
+                <p className="text-sm text-slate-400 mb-3">
+                  <strong className="text-purple-300">Built by a solo founder</strong> who believes that one person with conviction and the right tools can build infrastructure that changes how truth is verified and reputation is earned.
+                </p>
+                <p className="text-xs text-slate-500 italic">
+                  No venture capital. No committee decisions. Just ruthless focus on what matters: permanent, provable accountability.
+                </p>
+              </div>
+              <p className="text-xl font-bold text-white mt-8 bg-gradient-to-r from-purple-400 to-cyan-400 bg-clip-text text-transparent">
                 Lock it now. Prove it later. Own the outcome.
               </p>
             </div>
