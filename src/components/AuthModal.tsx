@@ -167,10 +167,10 @@ export default function AuthModal({ onClose, onSuccess, defaultMode = "signup" }
         <div className="flex justify-between items-start mb-6">
           <div>
             <h2 className="text-2xl font-bold text-white mb-1">
-              {mode === "signup" ? "Create Account" : "Welcome Back"}
+              {mode === "signup" ? "Create Account" : mode === "signin" ? "Welcome Back" : "Reset Password"}
             </h2>
             <p className="text-slate-400 text-sm">
-              {mode === "signup" ? "Get started with ProofLocker" : "Sign in to your account"}
+              {mode === "signup" ? "Get started with ProofLocker" : mode === "signin" ? "Sign in to your account" : "Enter your email to receive a reset link"}
             </p>
           </div>
           <button
@@ -183,39 +183,40 @@ export default function AuthModal({ onClose, onSuccess, defaultMode = "signup" }
           </button>
         </div>
 
-        {/* Toggle between sign up and sign in */}
-        <div className="flex gap-2 mb-6 p-1 bg-slate-800/50 rounded-lg">
-          <button
-            type="button"
-            onClick={() => {
-              setMode("signup");
-              setError("");
-            }}
-            className={`flex-1 py-2 px-4 rounded-md text-sm font-semibold transition-all ${
-              mode === "signup"
-                ? "bg-purple-600 text-white"
-                : "text-slate-400 hover:text-white"
-            }`}
-          >
-            Sign Up
-          </button>
-          <button
-            type="button"
-            onClick={() => {
-              setMode("signin");
-              setError("");
-            }}
-            className={`flex-1 py-2 px-4 rounded-md text-sm font-semibold transition-all ${
-              mode === "signin"
-                ? "bg-purple-600 text-white"
-                : "text-slate-400 hover:text-white"
-            }`}
-          >
-            Sign In
-          </button>
-        </div>
+        {mode !== "forgot" && (
+          <div className="flex gap-2 mb-6 p-1 bg-slate-800/50 rounded-lg">
+            <button
+              type="button"
+              onClick={() => {
+                setMode("signup");
+                setError("");
+              }}
+              className={`flex-1 py-2 px-4 rounded-md text-sm font-semibold transition-all ${
+                mode === "signup"
+                  ? "bg-purple-600 text-white"
+                  : "text-slate-400 hover:text-white"
+              }`}
+            >
+              Sign Up
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                setMode("signin");
+                setError("");
+              }}
+              className={`flex-1 py-2 px-4 rounded-md text-sm font-semibold transition-all ${
+                mode === "signin"
+                  ? "bg-purple-600 text-white"
+                  : "text-slate-400 hover:text-white"
+              }`}
+            >
+              Sign In
+            </button>
+          </div>
+        )}
 
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={mode === "forgot" ? handleForgotPassword : handleSubmit} className="space-y-4">
           <div>
             <label htmlFor="email" className="block text-sm font-medium text-slate-300 mb-2">
               Email Address
@@ -232,25 +233,42 @@ export default function AuthModal({ onClose, onSuccess, defaultMode = "signup" }
             />
           </div>
 
-          <div>
-            <label htmlFor="password" className="block text-sm font-medium text-slate-300 mb-2">
-              Password
-            </label>
-            <input
-              id="password"
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="••••••••"
-              className="w-full px-4 py-3 bg-slate-800/50 border border-slate-600 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 transition-all"
-              required
-              minLength={6}
-              autoComplete={mode === "signup" ? "new-password" : "current-password"}
-            />
-            {mode === "signup" && (
-              <p className="text-xs text-slate-400 mt-1">At least 6 characters</p>
-            )}
-          </div>
+          {mode !== "forgot" && (
+            <div>
+              <label htmlFor="password" className="block text-sm font-medium text-slate-300 mb-2">
+                Password
+              </label>
+              <input
+                id="password"
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="••••••••"
+                className="w-full px-4 py-3 bg-slate-800/50 border border-slate-600 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 transition-all"
+                required
+                minLength={6}
+                autoComplete={mode === "signup" ? "new-password" : "current-password"}
+              />
+              {mode === "signup" && (
+                <p className="text-xs text-slate-400 mt-1">At least 6 characters</p>
+              )}
+            </div>
+          )}
+
+          {mode === "signin" && (
+            <div className="text-right">
+              <button
+                type="button"
+                onClick={() => {
+                  setMode("forgot");
+                  setError("");
+                }}
+                className="text-xs text-purple-400 hover:text-purple-300 font-medium transition-colors"
+              >
+                Forgot password?
+              </button>
+            </div>
+          )}
 
           {error && (
             <div className="bg-red-500/10 border border-red-500/30 rounded-lg p-3 text-sm text-red-300">
@@ -269,13 +287,28 @@ export default function AuthModal({ onClose, onSuccess, defaultMode = "signup" }
                   <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                   <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                 </svg>
-                {mode === "signup" ? "Creating account..." : "Signing in..."}
+                {mode === "forgot" ? "Sending..." : mode === "signup" ? "Creating account..." : "Signing in..."}
               </span>
             ) : (
-              mode === "signup" ? "Create Account" : "Sign In"
+              mode === "forgot" ? "Send Reset Link" : mode === "signup" ? "Create Account" : "Sign In"
             )}
           </button>
         </form>
+
+        {mode === "forgot" && (
+          <div className="mt-4 text-center">
+            <button
+              type="button"
+              onClick={() => {
+                setMode("signin");
+                setError("");
+              }}
+              className="text-sm text-slate-400 hover:text-white transition-colors"
+            >
+              Back to sign in
+            </button>
+          </div>
+        )}
 
         <div className="mt-6 text-center text-xs text-slate-400">
           By continuing, you agree to our{" "}

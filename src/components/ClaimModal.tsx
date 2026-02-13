@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { signUpWithPassword, signInWithPassword, resendConfirmationEmail } from "@/lib/auth";
+import { signUpWithPassword, signInWithPassword, resendConfirmationEmail, sendPasswordResetEmail } from "@/lib/auth";
 import { getOrCreateUserId } from "@/lib/user";
 import { supabase } from "@/lib/supabase";
 import { useToast } from "@/contexts/ToastContext";
@@ -13,7 +13,7 @@ interface ClaimModalProps {
 
 export default function ClaimModal({ onClose, onSuccess }: ClaimModalProps) {
   const { showScoreToast } = useToast();
-  const [mode, setMode] = useState<"signup" | "signin">("signup");
+  const [mode, setMode] = useState<"signup" | "signin" | "forgot">("signup");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -24,6 +24,7 @@ export default function ClaimModal({ onClose, onSuccess }: ClaimModalProps) {
   const [claimedCount, setClaimedCount] = useState(0);
   const [needsEmailConfirmation, setNeedsEmailConfirmation] = useState(false);
   const [confirmationEmail, setConfirmationEmail] = useState("");
+  const [resetSent, setResetSent] = useState(false);
 
   const handleResendConfirmation = async () => {
     setResending(true);
@@ -40,6 +41,22 @@ export default function ClaimModal({ onClose, onSuccess }: ClaimModalProps) {
     }
 
     setResending(false);
+  };
+
+  const handleForgotPassword = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    setError("");
+
+    const result = await sendPasswordResetEmail(email);
+
+    if (result.success) {
+      setResetSent(true);
+    } else {
+      setError(result.error || "Failed to send reset email");
+    }
+
+    setLoading(false);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
