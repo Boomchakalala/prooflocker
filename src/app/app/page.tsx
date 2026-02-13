@@ -635,6 +635,7 @@ export default function AppFeedPage() {
                 </div>
 
                 {filteredOsint.length > 0 ? (
+                  <>
                   <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
                     {filteredOsint.slice(0, visibleIntel).map((signal) => (
                       <IntelCard key={signal.id} item={signal} />
@@ -648,6 +649,7 @@ export default function AppFeedPage() {
                       Show more ({filteredOsint.length - visibleIntel} remaining)
                     </button>
                   )}
+                  </>
                 ) : (
                   <div className="flex flex-col items-center justify-center py-16">
                     <svg className="w-10 h-10 text-slate-600 mb-3" fill="currentColor" viewBox="0 0 20 20">
