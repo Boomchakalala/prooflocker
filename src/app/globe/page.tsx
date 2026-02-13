@@ -872,42 +872,69 @@ export default function GlobePage() {
                   (displayItems as Claim[]).map((claim) => {
                     const repTier = getReputationTier(claim.rep || 0);
                     const evidenceGrade = getEvidenceGrade(claim.evidence_score);
-                    const isResolved = claim.outcome === 'correct' || claim.outcome === 'incorrect';
+                    const isCorrect = claim.outcome === 'correct';
+                    const isIncorrect = claim.outcome === 'incorrect';
+                    const isResolved = isCorrect || isIncorrect;
                     const freshnessBadge = getFreshnessBadge(claim.createdAt || '');
                     return (
-                    <div key={claim.id} className="p-3 bg-slate-900/60 border border-slate-700/40 rounded-xl">
+                    <div
+                      key={claim.id}
+                      onClick={() => router.push(`/proof/${claim.publicSlug}`)}
+                      className={`p-3 rounded-xl cursor-pointer transition-all duration-200 border-2 ${
+                        isCorrect
+                          ? 'bg-slate-900/60 border-emerald-500/60 shadow-[0_0_12px_rgba(16,185,129,0.15)]'
+                          : isIncorrect
+                          ? 'bg-slate-900/60 border-red-500/60 shadow-[0_0_12px_rgba(239,68,68,0.15)]'
+                          : 'bg-slate-900/60 border-amber-500/50 shadow-[0_0_12px_rgba(245,158,11,0.1)]'
+                      }`}
+                    >
                       <div className="flex items-center justify-between mb-2">
-                        <div className="flex items-center gap-1.5">
-                          <span className="text-xs text-slate-400">{claim.submitter}</span>
+                        <div className="flex items-center gap-2">
+                          <div className="w-6 h-6 rounded-full bg-gradient-to-br from-purple-600 to-purple-800 flex items-center justify-center text-white text-[9px] font-bold flex-shrink-0">
+                            {claim.submitter?.slice(-2) || "??"}
+                          </div>
+                          <span className="text-xs text-slate-400 font-medium">{claim.submitter}</span>
                           <span className={`text-[8px] font-bold px-1 py-0.5 rounded ${repTier.bgColor} ${repTier.textColor}`}>
                             {repTier.name}
                           </span>
-                        </div>
-                        <div className="flex items-center gap-1.5">
                           {freshnessBadge && (
                             <span className={`text-[9px] font-bold px-1.5 py-0.5 rounded ${freshnessBadge.className}`}>
                               {freshnessBadge.label}
                             </span>
                           )}
-                          {isResolved && (
+                        </div>
+                        <div className="flex items-center gap-1.5">
+                          {isResolved && evidenceGrade && (
                             <span className={`text-[9px] font-bold px-1.5 py-0.5 rounded ${evidenceGrade.bgColor} ${evidenceGrade.textColor}`}>
                               {evidenceGrade.grade}
                             </span>
                           )}
-                          <span className={`text-[10px] font-semibold px-2 py-0.5 rounded ${
-                            claim.outcome === 'correct' ? 'bg-gradient-to-r from-emerald-500 to-emerald-600 text-white' :
-                            claim.outcome === 'incorrect' ? 'bg-gradient-to-r from-red-500 to-red-600 text-white' :
-                            'bg-gradient-to-r from-amber-500 to-orange-500 text-white'
+                          <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
+                            isCorrect ? 'bg-emerald-500 text-white shadow-sm shadow-emerald-500/30' :
+                            isIncorrect ? 'bg-red-500 text-white shadow-sm shadow-red-500/30' :
+                            'bg-amber-500 text-white shadow-sm shadow-amber-500/30'
                           }`}>
-                            {claim.outcome === 'correct' ? 'Correct' : claim.outcome === 'incorrect' ? 'Incorrect' : 'Pending'}
+                            {isCorrect ? 'Correct' : isIncorrect ? 'Incorrect' : 'Pending'}
                           </span>
                         </div>
                       </div>
                       <p className="text-sm text-white line-clamp-2 mb-2">{claim.claim}</p>
-                      <div className="flex flex-col gap-1.5">
+                      <div className="flex flex-col gap-2">
                         <div className="flex items-center justify-between">
-                          <div className="flex items-center gap-2">
-                            <span className="text-[10px] text-slate-500">{claim.lockedDate}</span>
+                          <div className="flex items-center gap-2 text-[10px]">
+                            {claim.category && (
+                              <span className="text-slate-500 bg-slate-800/50 px-1.5 py-0.5 rounded">
+                                {claim.category}
+                              </span>
+                            )}
+                            <span className="text-purple-400 bg-purple-500/10 px-1.5 py-0.5 rounded font-medium">
+                              Locked
+                            </span>
+                            {isResolved && (
+                              <span className="text-cyan-400 bg-cyan-500/10 px-1.5 py-0.5 rounded font-medium">
+                                Resolved
+                              </span>
+                            )}
                             {/* Resolve button - ONLY FOR YOUR PENDING CLAIMS */}
                             {claim.outcome === 'pending' && (() => {
                               const anonId = typeof window !== 'undefined' ? localStorage.getItem("anonId") : null;
@@ -928,9 +955,8 @@ export default function GlobePage() {
                               ) : null;
                             })()}
                           </div>
-                          <button onClick={() => router.push(`/proof/${claim.publicSlug}`)} className="text-[11px] text-purple-400 font-medium">View</button>
+                          <span className="text-[10px] text-slate-500">{claim.lockedDate}</span>
                         </div>
-                        {/* Hash snippet */}
                         <div className="flex justify-end">
                           <code className="text-[9px] text-slate-600 font-mono">
                             {(claim as any).hash?.slice(0, 6)}...{(claim as any).hash?.slice(-4)}
