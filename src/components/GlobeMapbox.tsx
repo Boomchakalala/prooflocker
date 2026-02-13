@@ -295,6 +295,30 @@ export default function GlobeMapbox({ claims, osint, mapMode = 'both', viewMode 
         const displayText = isResolved ? p.outcome : p.status;
         const statusColor = p.outcome === 'correct' ? '#10b981' : p.outcome === 'incorrect' ? '#ef4444' : '#f59e0b';
 
+        // Calculate tier from rep score
+        const rep = p.rep || 0;
+        let tierName = 'Novice';
+        let tierColor = '#94a3b8'; // slate-400
+        let tierBg = 'rgba(148, 163, 184, 0.15)';
+
+        if (rep >= 800) {
+          tierName = 'Legend';
+          tierColor = '#a78bfa'; // purple-400
+          tierBg = 'rgba(139, 92, 246, 0.15)';
+        } else if (rep >= 700) {
+          tierName = 'Master';
+          tierColor = '#60a5fa'; // blue-400
+          tierBg = 'rgba(59, 130, 246, 0.15)';
+        } else if (rep >= 500) {
+          tierName = 'Expert';
+          tierColor = '#34d399'; // emerald-400
+          tierBg = 'rgba(52, 211, 153, 0.15)';
+        } else if (rep >= 300) {
+          tierName = 'Trusted';
+          tierColor = '#fbbf24'; // amber-400
+          tierBg = 'rgba(251, 191, 36, 0.15)';
+        }
+
         new mapboxgl.Popup({ offset: 25, maxWidth: '380px', closeButton: true })
           .setLngLat(coords)
           .setHTML(
@@ -302,7 +326,7 @@ export default function GlobeMapbox({ claims, osint, mapMode = 'both', viewMode 
               <div style="font-size:14px;font-weight:600;margin-bottom:10px;line-height:1.4;color:#f8fafc;">${p.claim}</div>
               <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;padding-bottom:10px;border-bottom:1px solid rgba(148,163,184,0.1);">
                 <span style="font-size:12px;font-weight:600;color:#e2e8f0;">${p.submitter}</span>
-                <span style="font-size:11px;padding:3px 8px;background:rgba(139,92,246,0.15);border-radius:10px;color:#a78bfa;font-weight:600;">Rep ${p.rep}</span>
+                <span style="font-size:11px;padding:3px 8px;background:${tierBg};border-radius:10px;color:${tierColor};font-weight:600;">${tierName}</span>
                 <span style="font-size:10px;padding:2px 8px;background:${statusColor}22;border-radius:8px;color:${statusColor};font-weight:700;text-transform:uppercase;">${displayText}</span>
               </div>
               <div style="display:flex;justify-content:space-between;font-size:11px;color:#64748b;">
