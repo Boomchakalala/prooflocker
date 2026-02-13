@@ -77,7 +77,7 @@ export default function HowScoringWorksPage() {
             </p>
             <div className="bg-white/5 rounded-lg p-3 border border-white/10">
               <div className="text-xs text-neutral-400 mb-1">Max per claim</div>
-              <div className="text-2xl font-bold text-purple-400">220 XP</div>
+              <div className="text-2xl font-bold text-purple-400">200 XP</div>
             </div>
           </div>
 
@@ -262,10 +262,6 @@ export default function HowScoringWorksPage() {
                     <td className="text-right text-green-400 font-semibold">+100</td>
                   </tr>
                   <tr>
-                    <td className="py-3 text-neutral-300">On-time resolution bonus</td>
-                    <td className="text-right text-blue-400 font-semibold">+20</td>
-                  </tr>
-                  <tr>
                     <td className="py-3 text-neutral-300">High-risk claim bonus</td>
                     <td className="text-right text-purple-400 font-semibold">+40</td>
                   </tr>
@@ -279,7 +275,7 @@ export default function HowScoringWorksPage() {
 
             <div className="mt-6 bg-purple-500/5 rounded-lg p-4 border border-purple-500/20">
               <p className="text-sm text-neutral-300">
-                <strong>Maximum XP per claim:</strong> 220 XP (Lock +30 + Resolve +50 + Correct +100 + On-time +20 + High-risk +40)
+                <strong>Maximum XP per claim:</strong> 200 XP (Lock +30 + Resolve +50 + Correct +100 + High-risk +40)
               </p>
             </div>
           </div>
