@@ -476,12 +476,12 @@ export default function AppFeedPage() {
                         <Link
                           key={claim.id}
                           href={`/proof/${claim.publicSlug || claim.id}`}
-                          className={`group block bg-slate-900/60 rounded-lg p-4 hover:border-purple-500/40 hover:bg-slate-800/40 transition-all duration-200 border-2 ${
+                          className={`group block bg-slate-900/80 rounded-lg p-3 hover:bg-slate-800/80 transition-all duration-200 border-2 ${
                             isCorrect
-                              ? 'border-emerald-500/60 shadow-[0_0_12px_rgba(16,185,129,0.15)]'
+                              ? 'border-emerald-500/60 shadow-[0_0_12px_rgba(16,185,129,0.15)] hover:border-emerald-500/80'
                               : isIncorrect
-                              ? 'border-red-500/60 shadow-[0_0_12px_rgba(239,68,68,0.15)]'
-                              : 'border-amber-500/50 shadow-[0_0_12px_rgba(245,158,11,0.1)]'
+                              ? 'border-red-500/60 shadow-[0_0_12px_rgba(239,68,68,0.15)] hover:border-red-500/80'
+                              : 'border-amber-500/50 shadow-[0_0_12px_rgba(245,158,11,0.1)] hover:border-amber-500/70'
                           }`}
                         >
                           {/* Top row: Author + Reputation | Status + Time */}
