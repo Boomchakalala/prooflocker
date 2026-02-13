@@ -184,7 +184,7 @@ export default function GlobePage() {
 
   // Ticker helper: get top 5 items (3 intel + 2 claims), prioritize breaking news
   const getTickerItems = () => {
-    const items: { type: string; text: string; location: string; time: string }[] = [];
+    const items: { type: string; text: string; location: string; time: string; source: 'intel' | 'claim' }[] = [];
 
     // Sort intel by priority: war/conflict/breaking first, then by recency
     const sortedIntel = [...osint].sort((a, b) => {
@@ -211,7 +211,8 @@ export default function GlobePage() {
         type: 'INTEL',
         text: signal.title,
         location: signal.category || signal.tags?.[0] || '',
-        time: signal.timestamp
+        time: signal.timestamp,
+        source: 'intel'
       });
     });
 
@@ -221,7 +222,8 @@ export default function GlobePage() {
         type: 'CLAIM',
         text: claim.claim.slice(0, 80) + '...',
         location: claim.category || '',
-        time: claim.lockedDate
+        time: claim.lockedDate,
+        source: 'claim'
       });
     });
 
