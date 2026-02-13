@@ -89,8 +89,8 @@ export default function HowItWorks() {
             </div>
 
             <div className="text-center mb-3 md:mb-4">
-              <h3 className="text-xl md:text-2xl lg:text-3xl font-bold text-white mb-1 md:mb-2">Resolve with Reputation</h3>
-              <p className="text-xs md:text-sm text-purple-400 font-semibold">Submit evidence, earn reputation</p>
+              <h3 className="text-xl md:text-2xl lg:text-3xl font-bold text-white mb-1 md:mb-2">Resolve with Evidence</h3>
+              <p className="text-xs md:text-sm text-purple-400 font-semibold">Submit proof, earn reputation</p>
             </div>
 
             <p className="text-sm md:text-base lg:text-lg text-white/75 leading-relaxed mb-4 md:mb-6 text-center">
