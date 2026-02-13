@@ -38,6 +38,12 @@ export default function AppFeedPage() {
     return () => clearTimeout(timer);
   }, [searchQuery]);
 
+  // Reset visible counts when filters change
+  useEffect(() => {
+    setVisibleClaims(20);
+    setVisibleIntel(20);
+  }, [contentFilter, quickFilter, debouncedSearch]);
+
   useEffect(() => {
     fetchData();
     const interval = setInterval(fetchData, 30000);
@@ -628,10 +634,18 @@ export default function AppFeedPage() {
 
                 {filteredOsint.length > 0 ? (
                   <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-                    {filteredOsint.map((signal) => (
+                    {filteredOsint.slice(0, visibleIntel).map((signal) => (
                       <IntelCard key={signal.id} item={signal} />
                     ))}
                   </div>
+                  {filteredOsint.length > visibleIntel && (
+                    <button
+                      onClick={() => setVisibleIntel(v => v + 20)}
+                      className="mt-4 w-full py-2.5 text-sm font-medium text-red-400 hover:text-red-300 bg-red-500/10 hover:bg-red-500/20 border border-red-500/20 rounded-lg transition-all"
+                    >
+                      Show more ({filteredOsint.length - visibleIntel} remaining)
+                    </button>
+                  )}
                 ) : (
                   <div className="flex flex-col items-center justify-center py-16">
                     <svg className="w-10 h-10 text-slate-600 mb-3" fill="currentColor" viewBox="0 0 20 20">

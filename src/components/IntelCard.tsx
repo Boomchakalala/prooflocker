@@ -14,6 +14,8 @@
 
 'use client';
 
+import { memo } from 'react';
+
 interface IntelCardProps {
   item: {
     id: string;
