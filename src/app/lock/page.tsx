@@ -357,19 +357,29 @@ function LockPageContent() {
                 />
               </div>
 
-              {/* Location Toggle */}
-              <div className="mb-6">
+              {/* Location Section */}
+              <div className="mb-6 glass border border-white/10 rounded-lg p-5">
                 <div className="flex items-center justify-between mb-3">
-                  <h3 className="text-sm font-medium text-white">Location</h3>
+                  <h3 className="text-sm font-medium text-white flex items-center gap-2">
+                    <svg className="w-4 h-4 text-cyan-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                    </svg>
+                    Location <span className="text-neutral-400 font-normal text-xs">(for Globe View)</span>
+                  </h3>
                   <button
                     type="button"
                     onClick={() => {
                       setUseManualLocation(!useManualLocation);
                       if (useManualLocation) setManualLocation(null);
                     }}
-                    className="text-xs text-[#2E5CFF] hover:text-blue-400 transition-colors font-medium"
+                    className={`px-3 py-1.5 text-xs font-semibold rounded-lg transition-all border ${
+                      useManualLocation
+                        ? "bg-cyan-500/10 border-cyan-500/30 text-cyan-400 hover:bg-cyan-500/20"
+                        : "bg-white/5 border-white/10 text-neutral-300 hover:bg-white/10 hover:border-white/20"
+                    }`}
                   >
-                    {useManualLocation ? "Use auto-detection" : "Set location manually"}
+                    {useManualLocation ? "Switch to auto-detect" : "Set manually"}
                   </button>
                 </div>
                 {useManualLocation ? (
@@ -379,7 +389,7 @@ function LockPageContent() {
                   />
                 ) : (
                   <p className="text-xs text-neutral-500">
-                    Location will be auto-detected when you lock (browser permission required).
+                    Location will be auto-detected when you lock (browser permission required). Click "Set manually" to choose a city instead.
                   </p>
                 )}
               </div>
