@@ -87,7 +87,7 @@ export default function AppFeedPage() {
     return `${hours}h ago`;
   };
 
-  const getTickerItems = () => {
+  const tickerItems = useMemo(() => {
     const items: { type: string; text: string; location: string; time: string; source: 'intel' | 'claim' }[] = [];
 
     // Sort intel by priority: war/conflict/breaking first, then by recency
@@ -95,7 +95,6 @@ export default function AppFeedPage() {
       const aStr = `${a.title} ${a.tags?.join(' ')}`.toLowerCase();
       const bStr = `${b.title} ${b.tags?.join(' ')}`.toLowerCase();
 
-      // Priority keywords for war/conflict/breaking
       const priorityKeywords = /ukraine|russia|taiwan|china|iran|israel|war|conflict|attack|missile|drone|breaking|urgent/;
       const aHasPriority = priorityKeywords.test(aStr);
       const bHasPriority = priorityKeywords.test(bStr);
@@ -103,13 +102,11 @@ export default function AppFeedPage() {
       if (aHasPriority && !bHasPriority) return -1;
       if (!aHasPriority && bHasPriority) return 1;
 
-      // If both priority or both not priority, sort by recency
       const aTime = new Date(a.created_at || a.published_at).getTime();
       const bTime = new Date(b.created_at || b.published_at).getTime();
       return bTime - aTime;
     });
 
-    // Add top 4 prioritized intel signals
     sortedIntel.slice(0, 4).forEach(signal => {
       items.push({
         type: 'INTEL',
@@ -120,7 +117,6 @@ export default function AppFeedPage() {
       });
     });
 
-    // Add recent claims
     predictions.slice(0, 3).forEach(claim => {
       items.push({
         type: 'CLAIM',
@@ -132,7 +128,7 @@ export default function AppFeedPage() {
     });
 
     return items.slice(0, 7);
-  };
+  }, [osintSignals, predictions]);
 
   const filteredPredictions = predictions.filter(p => {
     if (contentFilter === "osint") return false;
