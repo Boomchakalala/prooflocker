@@ -160,15 +160,15 @@ export default function ClaimModal({ onClose, onSuccess }: ClaimModalProps) {
   return (
     <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-end sm:items-center justify-center z-[500] p-0 sm:p-4">
       <div className="bg-gradient-to-br from-purple-900/95 via-blue-900/95 to-cyan-900/95 backdrop-blur-md rounded-t-3xl sm:rounded-2xl p-6 sm:p-8 w-full sm:max-w-md sm:w-full border-t sm:border border-white/10 shadow-2xl animate-slide-up sm:animate-none max-h-[90vh] overflow-y-auto pb-[env(safe-area-inset-bottom)]">
-        {!claiming && !success ? (
+        {!claiming && !success && !resetSent ? (
           <>
             <div className="flex justify-between items-start mb-6">
               <div>
                 <h2 className="text-2xl font-bold text-white mb-2">
-                  Claim my claims
+                  {mode === "forgot" ? "Reset Password" : "Claim my claims"}
                 </h2>
                 <p className="text-white/70 text-sm">
-                  Save access across devices
+                  {mode === "forgot" ? "Enter your email to receive a reset link" : "Save access across devices"}
                 </p>
               </div>
               <button
@@ -181,39 +181,40 @@ export default function ClaimModal({ onClose, onSuccess }: ClaimModalProps) {
               </button>
             </div>
 
-            {/* Toggle between sign up and sign in */}
-            <div className="flex gap-2 mb-6 p-1 bg-black/20 rounded-lg">
-              <button
-                type="button"
-                onClick={() => {
-                  setMode("signup");
-                  setError("");
-                }}
-                className={`flex-1 py-2 px-4 rounded-md text-sm font-medium transition-all ${
-                  mode === "signup"
-                    ? "bg-white/20 text-white"
-                    : "text-white/60 hover:text-white"
-                }`}
-              >
-                Create account
-              </button>
-              <button
-                type="button"
-                onClick={() => {
-                  setMode("signin");
-                  setError("");
-                }}
-                className={`flex-1 py-2 px-4 rounded-md text-sm font-medium transition-all ${
-                  mode === "signin"
-                    ? "bg-white/20 text-white"
-                    : "text-white/60 hover:text-white"
-                }`}
-              >
-                Sign in
-              </button>
-            </div>
+            {mode !== "forgot" && (
+              <div className="flex gap-2 mb-6 p-1 bg-black/20 rounded-lg">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setMode("signup");
+                    setError("");
+                  }}
+                  className={`flex-1 py-2 px-4 rounded-md text-sm font-medium transition-all ${
+                    mode === "signup"
+                      ? "bg-white/20 text-white"
+                      : "text-white/60 hover:text-white"
+                  }`}
+                >
+                  Create account
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setMode("signin");
+                    setError("");
+                  }}
+                  className={`flex-1 py-2 px-4 rounded-md text-sm font-medium transition-all ${
+                    mode === "signin"
+                      ? "bg-white/20 text-white"
+                      : "text-white/60 hover:text-white"
+                  }`}
+                >
+                  Sign in
+                </button>
+              </div>
+            )}
 
-            <form onSubmit={handleSubmit} className="space-y-4">
+            <form onSubmit={mode === "forgot" ? handleForgotPassword : handleSubmit} className="space-y-4">
               <div>
                 <label htmlFor="email" className="block text-sm font-medium text-white/80 mb-2">
                   Email
@@ -230,25 +231,42 @@ export default function ClaimModal({ onClose, onSuccess }: ClaimModalProps) {
                 />
               </div>
 
-              <div>
-                <label htmlFor="password" className="block text-sm font-medium text-white/80 mb-2">
-                  Password
-                </label>
-                <input
-                  id="password"
-                  type="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  placeholder={mode === "signup" ? "Create a password" : "Enter your password"}
-                  required
-                  autoComplete={mode === "signup" ? "new-password" : "current-password"}
-                  minLength={6}
-                  className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-white/40 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent"
-                />
-                {mode === "signup" && (
-                  <p className="text-xs text-white/50 mt-1">Minimum 6 characters</p>
-                )}
-              </div>
+              {mode !== "forgot" && (
+                <div>
+                  <label htmlFor="password" className="block text-sm font-medium text-white/80 mb-2">
+                    Password
+                  </label>
+                  <input
+                    id="password"
+                    type="password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    placeholder={mode === "signup" ? "Create a password" : "Enter your password"}
+                    required
+                    autoComplete={mode === "signup" ? "new-password" : "current-password"}
+                    minLength={6}
+                    className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-white/40 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent"
+                  />
+                  {mode === "signup" && (
+                    <p className="text-xs text-white/50 mt-1">Minimum 6 characters</p>
+                  )}
+                </div>
+              )}
+
+              {mode === "signin" && (
+                <div className="text-right">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setMode("forgot");
+                      setError("");
+                    }}
+                    className="text-xs text-cyan-400 hover:text-cyan-300 font-medium transition-colors"
+                  >
+                    Forgot password?
+                  </button>
+                </div>
+              )}
 
               {error && (
                 <div className="bg-red-500/20 border border-red-500/50 rounded-lg p-3 text-sm text-red-200">
@@ -262,11 +280,26 @@ export default function ClaimModal({ onClose, onSuccess }: ClaimModalProps) {
                 className="w-full bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600 text-white font-semibold py-3 px-6 rounded-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {loading
-                  ? (mode === "signup" ? "Creating..." : "Signing in...")
-                  : (mode === "signup" ? "Create account" : "Sign in")
+                  ? (mode === "forgot" ? "Sending..." : mode === "signup" ? "Creating..." : "Signing in...")
+                  : (mode === "forgot" ? "Send Reset Link" : mode === "signup" ? "Create account" : "Sign in")
                 }
               </button>
             </form>
+
+            {mode === "forgot" && (
+              <div className="mt-4 text-center">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setMode("signin");
+                    setError("");
+                  }}
+                  className="text-sm text-white/60 hover:text-white transition-colors"
+                >
+                  Back to sign in
+                </button>
+              </div>
+            )}
 
             <div className="mt-6 pt-6 border-t border-white/10">
               <div className="flex items-start gap-3 text-xs text-white/60">
@@ -282,6 +315,30 @@ export default function ClaimModal({ onClose, onSuccess }: ClaimModalProps) {
               </div>
             </div>
           </>
+        ) : resetSent ? (
+          <div className="text-center py-4">
+            <div className="w-16 h-16 bg-emerald-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
+              <svg className="w-8 h-8 text-emerald-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+              </svg>
+            </div>
+            <h3 className="text-2xl font-bold text-white mb-3">Reset link sent</h3>
+            <p className="text-white/70 mb-6 text-sm">
+              We sent a password reset link to <strong className="text-cyan-400">{email}</strong>.
+              Check your inbox and click the link to set a new password.
+            </p>
+            <p className="text-white/40 text-xs mb-6">Don't see it? Check your spam folder.</p>
+            <button
+              onClick={() => {
+                setResetSent(false);
+                setMode("signin");
+                setError("");
+              }}
+              className="w-full py-3 bg-white/10 hover:bg-white/20 text-white font-semibold rounded-lg transition-all"
+            >
+              Back to sign in
+            </button>
+          </div>
         ) : (
           <div className="text-center py-4">
             {claiming && !success ? (
