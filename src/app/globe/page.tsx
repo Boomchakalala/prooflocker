@@ -541,7 +541,7 @@ export default function GlobePage() {
                 }`}
                 title={`${osint.length} total (${osint.filter(o => o.lat && o.lng).length} shown on map)`}
               >
-                OSINT ({osint.length})
+                Intel ({osint.length})
               </button>
               <button
                 onClick={() => setCurrentTab('claims')}
