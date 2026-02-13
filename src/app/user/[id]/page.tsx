@@ -64,11 +64,11 @@ export default function PublicProfilePage() {
         setPseudonym(preds[0].pseudonym);
       }
 
-      // Fetch user stats
+      // Fetch user stats from insight_scores (the correct source)
       const { data: statsData, error: statsError } = await supabase
-        .from("user_stats")
+        .from("insight_scores")
         .select("*")
-        .eq("user_id", userId)
+        .eq("anon_id", userId)
         .single();
 
       if (statsError && statsError.code !== "PGRST116") {
@@ -78,17 +78,17 @@ export default function PublicProfilePage() {
       // Process stats
       const userStats: UserStats = {
         totalXP: statsData?.total_points || 0,
-        totalPredictions: statsData?.total_predictions || preds.length,
-        resolvedPredictions: statsData?.resolved_predictions || preds.filter(p => p.outcome !== 'pending').length,
-        correctPredictions: statsData?.correct_predictions || preds.filter(p => p.outcome === 'correct').length,
-        incorrectPredictions: statsData?.incorrect_predictions || preds.filter(p => p.outcome === 'incorrect').length,
-        avgEvidenceScore: statsData?.avg_evidence_score || 0,
+        totalPredictions: preds.length,
+        resolvedPredictions: preds.filter(p => p.outcome !== 'pending').length,
+        correctPredictions: preds.filter(p => p.outcome === 'correct').length,
+        incorrectPredictions: preds.filter(p => p.outcome === 'incorrect').length,
+        avgEvidenceScore: 0, // Not available in insight_scores
         winRate:
-          statsData?.resolved_predictions > 0
-            ? statsData.correct_predictions / statsData.resolved_predictions
+          preds.filter(p => p.outcome !== 'pending').length > 0
+            ? preds.filter(p => p.outcome === 'correct').length / preds.filter(p => p.outcome !== 'pending').length
             : 0,
-        reputationScore: statsData?.reputation_score || 0,
-        tier: getReputationTier(statsData?.reputation_score || 0),
+        reputationScore: statsData?.total_points || 0, // Use total_points as reputation score
+        tier: getReputationTier(statsData?.total_points || 0),
       };
 
       setStats(userStats);
