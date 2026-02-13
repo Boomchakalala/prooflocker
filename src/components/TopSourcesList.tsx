@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { getReputationTier } from "@/lib/user-scoring";
+import { SEED_LEADERBOARD, type SeedLeaderboardEntry } from "@/lib/seed-leaderboard";
 
 interface TopSource {
   userId: string;
@@ -12,6 +13,7 @@ interface TopSource {
   winRate: number;
   resolvedCount: number;
   avgEvidenceScore: number;
+  isSeedData?: boolean;
 }
 
 interface TopSourcesListProps {
@@ -21,6 +23,7 @@ interface TopSourcesListProps {
 export default function TopSourcesList({ category = 'all' }: TopSourcesListProps) {
   const [sources, setSources] = useState<TopSource[]>([]);
   const [loading, setLoading] = useState(true);
+  const [usingSeedData, setUsingSeedData] = useState(false);
 
   useEffect(() => {
     fetchTopSources();
@@ -43,17 +46,27 @@ export default function TopSourcesList({ category = 'all' }: TopSourcesListProps
       });
 
       if (!response.ok) {
-        console.warn('Top sources API unavailable, showing mock data');
-        setSources([]);
+        console.warn('Top sources API unavailable, showing seed data');
+        setSources(SEED_LEADERBOARD);
+        setUsingSeedData(true);
         return;
       }
 
       const data = await response.json();
       console.log('[TopSourcesList] Fetched sources:', data.sources?.length || 0);
-      setSources(data.sources || []);
+
+      // If no real data, use seed data
+      if (!data.sources || data.sources.length === 0) {
+        setSources(SEED_LEADERBOARD);
+        setUsingSeedData(true);
+      } else {
+        setSources(data.sources);
+        setUsingSeedData(false);
+      }
     } catch (err) {
       console.error('Error fetching top sources:', err);
-      setSources([]);
+      setSources(SEED_LEADERBOARD);
+      setUsingSeedData(true);
     } finally {
       setLoading(false);
     }
