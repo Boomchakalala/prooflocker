@@ -186,8 +186,9 @@ export default function GlobeMapbox({ claims, osint, mapMode = 'both', viewMode 
       try { map.setFog({ range: [0.5, 10], color: '#000', 'horizon-blend': 0.05, 'high-color': '#0a0a0a', 'space-color': '#000', 'star-intensity': 0.2 }); } catch {}
 
       // Two separate sources — claims (purple) and intel (red)
-      map.addSource('claims', { type: 'geojson', data: toClaimGeoJSON(claimsRef.current), cluster: true, clusterMaxZoom: 8, clusterRadius: 60 });
-      map.addSource('osint', { type: 'geojson', data: toOsintGeoJSON(osintRef.current), cluster: true, clusterMaxZoom: 8, clusterRadius: 60 });
+      // Reduced cluster radius and increased maxZoom for better granularity
+      map.addSource('claims', { type: 'geojson', data: toClaimGeoJSON(claimsRef.current), cluster: true, clusterMaxZoom: 12, clusterRadius: 40 });
+      map.addSource('osint', { type: 'geojson', data: toOsintGeoJSON(osintRef.current), cluster: true, clusterMaxZoom: 12, clusterRadius: 40 });
 
       // ── Claims layers (purple, compact) ────────────────────
       // Cluster glow (lightweight)
