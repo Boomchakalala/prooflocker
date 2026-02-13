@@ -9,7 +9,7 @@ import IntelCard from "@/components/IntelCard";
 import BreakingNewsBanner from "@/components/BreakingNewsBanner";
 import { Prediction } from "@/lib/storage";
 import { useAuth } from "@/contexts/AuthContext";
-import { getEvidenceGrade, getEvidenceGradeInfo } from "@/lib/scoring";
+import { getEvidenceGrade } from "@/lib/evidence-grading";
 import { getReputationTier } from "@/lib/reputation-scoring";
 import { formatRelativeTime } from "@/lib/utils";
 
@@ -468,15 +468,14 @@ export default function AppFeedPage() {
                       const isIncorrect = claim.outcome === "incorrect";
                       const isPending = !claim.outcome || claim.outcome === "pending";
                       const isResolved = isCorrect || isIncorrect;
-                      const evidenceGradeKey = claim.evidence_score ? getEvidenceGrade(claim.evidence_score) : null;
-                      const evidenceGradeInfo = evidenceGradeKey ? getEvidenceGradeInfo(evidenceGradeKey) : null;
+                      const evidenceGrade = claim.evidence_score ? getEvidenceGrade(claim.evidence_score) : null;
                       const repTier = getReputationTier(claim.rep || 0);
 
                       return (
                         <Link
                           key={claim.id}
                           href={`/proof/${claim.publicSlug || claim.id}`}
-                          className={`group block bg-slate-900/80 rounded-lg p-3 hover:bg-slate-800/80 transition-all duration-200 border-2 ${
+                          className={`group block bg-slate-900/80 rounded-lg p-4 hover:bg-slate-800/80 transition-all duration-200 border-2 ${
                             isCorrect
                               ? 'border-emerald-500/60 shadow-[0_0_12px_rgba(16,185,129,0.15)] hover:border-emerald-500/80'
                               : isIncorrect
