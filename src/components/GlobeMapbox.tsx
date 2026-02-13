@@ -120,7 +120,8 @@ export default function GlobeMapbox({ claims, osint, mapMode = 'both', viewMode 
 
   // Find all claims and OSINT near a coordinate
   const findNearbyItems = useCallback((lng: number, lat: number, zoom: number, filterType?: 'claims' | 'osint') => {
-    const radiusKm = zoom < 2 ? 2000 : zoom < 3 ? 1200 : zoom < 4 ? 600 : zoom < 5 ? 300 : 100;
+    // Adjusted radius based on zoom level - smaller radiuses for better granularity
+    const radiusKm = zoom < 2 ? 800 : zoom < 3 ? 400 : zoom < 4 ? 200 : zoom < 5 ? 100 : zoom < 6 ? 50 : 25;
     const nearbyClaims: Claim[] = [];
     const nearbyOsint: OsintItem[] = [];
     const seenClaims = new Set<string>();
