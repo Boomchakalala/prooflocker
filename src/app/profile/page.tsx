@@ -122,7 +122,7 @@ export default function ProfilePage() {
       const response = await fetch("/api/pseudonym", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ pseudonym: pseudonymInput }),
+        body: JSON.stringify({ pseudonym: pseudonymInput.trim() }),
       });
 
       const data = await response.json();
@@ -135,6 +135,12 @@ export default function ProfilePage() {
       setPseudonymState(data.pseudonym);
       setPseudonymSuccess(true);
       setPseudonymInput("");
+
+      // Close the editor after a short delay
+      setTimeout(() => {
+        setIsEditingPseudonym(false);
+        setPseudonymSuccess(false);
+      }, 1500);
 
       // Refresh predictions to show pseudonym
       await fetchPredictions();
@@ -190,145 +196,177 @@ export default function ProfilePage() {
 
   const score = scoreData?.score;
   const hasPoints = (score?.totalPoints || 0) > 0;
+  const displayName = pseudonym || defaultHandle || "Anonymous";
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-[#0A0A0F] via-[#111118] to-[#0A0A0F] text-white relative pt-16 py-12 px-6">
+    <div className="min-h-screen bg-gradient-to-b from-[#0A0A0F] via-[#111118] to-[#0A0A0F] text-white relative">
       <UnifiedHeader currentView="other" />
 
-      <div className="max-w-7xl mx-auto">
-        {/* Header */}
-        <div className="text-center mb-12">
-          <h1 className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-slate-300 via-white to-slate-300 bg-clip-text text-transparent" style={{ fontFamily: "var(--font-montserrat)" }}>
-            My Profile
-          </h1>
-          <p className="text-neutral-400 text-sm mb-4">{user.email}</p>
-          {user && (
-            <p className="text-purple-400 text-sm">
-              Sync enabled -- scores saved across devices
-            </p>
-          )}
-        </div>
+      {/* Spacer for fixed header */}
+      <div className="h-16" />
 
-        {/* Main Score Card - Same as Dashboard */}
-        {score && (
-          <div className="bg-slate-900/60 border border-purple-500/30 rounded-xl shadow-2xl p-10 mb-8 text-center">
-            <div className="mb-6">
-              <div className="text-6xl font-bold text-purple-400 mb-2">
-                {score.totalPoints.toLocaleString()}
+      <div className="max-w-5xl mx-auto px-4 py-12">
+
+        {/* Profile Header Card */}
+        <div className="bg-gradient-to-br from-slate-900/90 to-slate-800/80 border border-purple-500/20 rounded-2xl p-8 mb-6 relative overflow-hidden">
+          {/* Background decoration */}
+          <div className="absolute top-0 right-0 w-64 h-64 bg-purple-500/5 rounded-full blur-3xl" />
+
+          <div className="relative flex flex-col md:flex-row items-center md:items-start gap-6">
+            {/* Avatar */}
+            <div className="relative">
+              <div className="w-24 h-24 md:w-32 md:h-32 rounded-full bg-gradient-to-br from-purple-600 to-blue-600 flex items-center justify-center text-4xl md:text-5xl font-bold text-white shadow-lg shadow-purple-500/20">
+                {displayName.charAt(0).toUpperCase()}
               </div>
-              <div className="text-xl text-slate-300 font-semibold mb-4">
-                {scoreData.milestone.name}
-              </div>
-              <div className="flex items-center justify-center gap-6 text-base">
-                <div>
-                  Accuracy:{" "}
-                  <span
-                    className={`font-bold ${
-                      scoreData.accuracy >= 75 ? "text-emerald-400" : scoreData.accuracy >= 60 ? "text-amber-400" : "text-red-400"
-                    }`}
-                  >
-                    {scoreData.accuracy}%
-                  </span>{" "}
-                  <span className="text-slate-500">
-                    ({score.correctResolves}/{score.totalResolves})
-                  </span>
+              {score && (
+                <div className="absolute -bottom-2 -right-2 bg-purple-600 border-4 border-slate-900 rounded-full px-3 py-1 text-xs font-bold">
+                  {scoreData.milestone.name}
                 </div>
+              )}
+            </div>
+
+            {/* Profile Info */}
+            <div className="flex-1 text-center md:text-left">
+              <div className="mb-3">
+                <h1 className="text-3xl md:text-4xl font-bold text-white mb-2" style={{ fontFamily: 'var(--font-montserrat)' }}>
+                  {displayName}
+                </h1>
+                <p className="text-slate-400 text-sm">{user?.email}</p>
               </div>
+
+              {/* Pseudonym Editor */}
+              {!pseudonym ? (
+                <div className="inline-block">
+                  {!isEditingPseudonym ? (
+                    <button
+                      onClick={() => setIsEditingPseudonym(true)}
+                      className="inline-flex items-center gap-2 px-4 py-2 bg-purple-600/20 hover:bg-purple-600/30 border border-purple-500/40 text-purple-300 text-sm font-medium rounded-lg transition-all"
+                    >
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/>
+                      </svg>
+                      Set Custom Pseudonym
+                    </button>
+                  ) : (
+                    <div className="bg-slate-800/60 border border-slate-700/50 rounded-lg p-4 max-w-md">
+                      <p className="text-sm text-slate-300 mb-3">
+                        Choose a unique pseudonym to represent you publicly. Once set, it cannot be changed.
+                      </p>
+                      <div className="flex gap-2 mb-2">
+                        <input
+                          type="text"
+                          value={pseudonymInput}
+                          onChange={(e) => setPseudonymInput(e.target.value)}
+                          placeholder="Enter pseudonym (2-30 chars)"
+                          disabled={settingPseudonym}
+                          className="flex-1 px-3 py-2 bg-slate-900 border border-slate-600 rounded-lg text-sm text-white placeholder-slate-500 focus:outline-none focus:border-purple-500 disabled:opacity-50"
+                          maxLength={30}
+                        />
+                        <button
+                          onClick={handleSetPseudonym}
+                          disabled={settingPseudonym || !pseudonymInput.trim()}
+                          className="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white font-medium rounded-lg transition-colors text-sm disabled:opacity-50 disabled:cursor-not-allowed"
+                        >
+                          {settingPseudonym ? "Setting..." : "Set"}
+                        </button>
+                        <button
+                          onClick={() => {
+                            setIsEditingPseudonym(false);
+                            setPseudonymInput("");
+                            setPseudonymError(null);
+                          }}
+                          disabled={settingPseudonym}
+                          className="px-4 py-2 bg-slate-700 hover:bg-slate-600 text-white font-medium rounded-lg transition-colors text-sm"
+                        >
+                          Cancel
+                        </button>
+                      </div>
+                      {pseudonymError && (
+                        <p className="text-xs text-red-400">{pseudonymError}</p>
+                      )}
+                      {pseudonymSuccess && (
+                        <p className="text-xs text-green-400">Pseudonym set successfully!</p>
+                      )}
+                    </div>
+                  )}
+                </div>
+              ) : (
+                <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-green-500/10 border border-green-500/30 rounded-lg">
+                  <svg className="w-4 h-4 text-green-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                  </svg>
+                  <span className="text-sm text-green-300 font-medium">Custom pseudonym set</span>
+                </div>
+              )}
+
+              {/* Quick Stats */}
+              {score && (
+                <div className="flex items-center justify-center md:justify-start gap-6 mt-4 text-sm">
+                  <div>
+                    <span className="text-slate-400">Reputation:</span>
+                    <span className="ml-2 text-purple-400 font-bold">{score.totalPoints.toLocaleString()}</span>
+                  </div>
+                  <div>
+                    <span className="text-slate-400">Accuracy:</span>
+                    <span className={`ml-2 font-bold ${
+                      scoreData.accuracy >= 75 ? "text-emerald-400" : scoreData.accuracy >= 60 ? "text-amber-400" : "text-red-400"
+                    }`}>
+                      {scoreData.accuracy}%
+                    </span>
+                  </div>
+                  <div>
+                    <span className="text-slate-400">Streak:</span>
+                    <span className="ml-2 text-cyan-400 font-bold">{score.currentStreak}</span>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
-        )}
+        </div>
 
-        {/* Stats Grid - Same as Dashboard */}
+        {/* Stats Grid */}
         {score && (
-          <div className="grid md:grid-cols-4 gap-4 mb-8">
-            <div className="bg-slate-900/60 border border-slate-700/40 rounded-xl p-5">
-              <div className="text-slate-400 text-sm mb-1">Locked</div>
-              <div className="text-3xl font-bold text-white">{score.locksCount}</div>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+            <div className="bg-slate-900/60 border border-slate-700/40 rounded-xl p-5 text-center">
+              <div className="text-3xl md:text-4xl font-bold text-white mb-1">{score.locksCount}</div>
+              <div className="text-sm text-slate-400">Claims Locked</div>
             </div>
-            <div className="bg-slate-900/60 border border-slate-700/40 rounded-xl p-5">
-              <div className="text-slate-400 text-sm mb-1">Claimed</div>
-              <div className="text-3xl font-bold text-purple-400">{score.claimsCount}</div>
+            <div className="bg-slate-900/60 border border-slate-700/40 rounded-xl p-5 text-center">
+              <div className="text-3xl md:text-4xl font-bold text-purple-400 mb-1">{score.claimsCount}</div>
+              <div className="text-sm text-slate-400">Intel Claimed</div>
             </div>
-            <div className="bg-slate-900/60 border border-slate-700/40 rounded-xl p-5">
-              <div className="text-slate-400 text-sm mb-1">Resolved</div>
-              <div className="text-3xl font-bold">
+            <div className="bg-slate-900/60 border border-slate-700/40 rounded-xl p-5 text-center">
+              <div className="text-3xl md:text-4xl font-bold mb-1">
                 <span className="text-emerald-400">{score.correctResolves}</span>
-                <span className="text-slate-600">/</span>
+                <span className="text-slate-600 text-2xl">/</span>
                 <span className="text-red-400">{score.incorrectResolves}</span>
               </div>
+              <div className="text-sm text-slate-400">Resolved</div>
             </div>
-            <div className="bg-slate-900/60 border border-slate-700/40 rounded-xl p-5">
-              <div className="text-slate-400 text-sm mb-1">Streak</div>
-              <div className="text-3xl font-bold text-purple-400">
-                {score.currentStreak}
-              </div>
+            <div className="bg-slate-900/60 border border-slate-700/40 rounded-xl p-5 text-center">
+              <div className="text-3xl md:text-4xl font-bold text-cyan-400 mb-1">{score.currentStreak}</div>
+              <div className="text-sm text-slate-400">Streak</div>
             </div>
           </div>
         )}
 
-        {/* Pseudonym section */}
-        <div className="bg-slate-900/60 border border-slate-700/40 rounded-xl p-6 mb-8">
-          <h3 className="text-xs font-semibold text-neutral-500 uppercase tracking-wider mb-3">Public Identity</h3>
-          {pseudonym ? (
-            <div>
-              <div className="flex items-center gap-3 mb-2">
-                <span className="text-neutral-200 font-medium">{pseudonym}</span>
-                <span className="text-xs text-green-500 bg-green-500/10 px-2 py-0.5 rounded border border-green-500/20">
-                  Set
-                </span>
-              </div>
-              <p className="text-xs text-neutral-500">
-                This pseudonym identifies you publicly on all your claims. It cannot be changed.
-              </p>
-            </div>
-          ) : (
-            <div>
-              <p className="text-sm text-neutral-400 mb-4">
-                Set a pseudonym to identify yourself publicly without revealing your real identity.
-              </p>
-              <div className="flex gap-2">
-                <input
-                  type="text"
-                  value={pseudonymInput}
-                  onChange={(e) => setPseudonymInput(e.target.value)}
-                  placeholder="Enter pseudonym (2-30 chars)"
-                  disabled={settingPseudonym}
-                  className="flex-1 px-3 py-2 bg-black/40 border border-white/20 rounded-md text-sm text-neutral-200 placeholder-neutral-600 focus:outline-none focus:border-neutral-600 disabled:opacity-50"
-                  maxLength={30}
-                />
-                <button
-                  onClick={handleSetPseudonym}
-                  disabled={settingPseudonym || !pseudonymInput.trim()}
-                  className="px-4 py-2 bg-neutral-800 hover:bg-neutral-700 border border-white/20 text-neutral-200 font-medium rounded-md transition-colors text-sm disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  {settingPseudonym ? "Setting..." : "Set"}
-                </button>
-              </div>
-              {pseudonymError && (
-                <p className="text-xs text-red-400 mt-2">{pseudonymError}</p>
-              )}
-              {pseudonymSuccess && (
-                <p className="text-xs text-green-400 mt-2">Pseudonym set successfully!</p>
-              )}
-              <p className="text-xs text-neutral-500 mt-3">
-                Note: Once set, your pseudonym is permanent and cannot be changed. Choose carefully.
-              </p>
-            </div>
-          )}
-        </div>
-
-        {/* Badges - Same as Dashboard */}
+        {/* Badges Section */}
         {score && score.badges.length > 0 && (
-          <div className="bg-slate-900/60 border border-slate-700/40 rounded-xl p-6 mb-8">
-            <h2 className="text-xl font-bold mb-4 text-white">Badges Earned</h2>
-            <div className="flex flex-wrap gap-3">
+          <div className="bg-slate-900/60 border border-slate-700/40 rounded-xl p-6 mb-6">
+            <h2 className="text-xl font-bold mb-4 text-white flex items-center gap-2">
+              <svg className="w-5 h-5 text-purple-400" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" />
+              </svg>
+              Achievements
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
               {score.badges.map((badgeId) => {
                 const badge = BADGES[badgeId as BadgeId];
                 if (!badge) return null;
                 return (
                   <div
                     key={badgeId}
-                    className="bg-purple-500/10 border border-purple-500/30 rounded-lg p-3 min-w-[180px]"
+                    className="bg-purple-500/10 border border-purple-500/30 rounded-lg p-4 hover:bg-purple-500/15 transition-colors"
                     title={badge.description}
                   >
                     <div className="text-base font-semibold text-white mb-1">{badge.name}</div>
@@ -340,52 +378,62 @@ export default function ProfilePage() {
           </div>
         )}
 
-        {/* Predictions list */}
-        <div className="mb-8">
-          <h2 className="text-lg font-semibold text-white mb-4">Your Locked Claims</h2>
+        {/* Recent Claims */}
+        <div className="bg-slate-900/60 border border-slate-700/40 rounded-xl p-6 mb-6">
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-xl font-bold text-white">Recent Claims</h2>
+            <Link
+              href="/app?tab=my"
+              className="text-sm text-purple-400 hover:text-purple-300 font-medium flex items-center gap-1"
+            >
+              View All
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7"/>
+              </svg>
+            </Link>
+          </div>
+
           {predictions.length === 0 ? (
-            <div className="text-center py-16 bg-slate-900/60 border border-slate-700/40 rounded-xl">
+            <div className="text-center py-12">
               <div className="flex justify-center mb-4">
-                <div className="w-14 h-14 rounded-full bg-slate-800/80 border border-slate-700/40 flex items-center justify-center">
-                  <svg className="w-7 h-7 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                <div className="w-16 h-16 rounded-full bg-slate-800 border border-slate-700 flex items-center justify-center">
+                  <svg className="w-8 h-8 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
                   </svg>
                 </div>
               </div>
-              <p className="text-slate-400 mb-1 text-sm font-medium">You haven&apos;t locked any claims yet.</p>
-              <p className="text-slate-500 mb-6 text-xs">Lock your first claim to start building your track record.</p>
+              <p className="text-slate-400 mb-2 font-medium">No claims locked yet</p>
+              <p className="text-slate-500 text-sm mb-6">Start building your reputation by locking your first claim.</p>
               <Link
                 href="/lock"
-                className="inline-block px-6 py-2.5 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 text-white font-semibold rounded-lg transition-all shadow-lg hover:shadow-purple-500/20"
+                className="inline-block px-6 py-3 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 text-white font-semibold rounded-lg transition-all shadow-lg"
               >
-                Lock My First Claim
+                Lock Your First Claim
               </Link>
             </div>
           ) : (
             <div className="space-y-3">
-              {predictions.map((prediction) => (
+              {predictions.slice(0, 5).map((prediction) => (
                 <Link
                   key={prediction.id}
                   href={`/proof/${prediction.publicSlug}`}
-                  className="block bg-slate-900/60 border border-slate-700/40 hover:border-white/20 rounded-lg p-4 transition-all group"
+                  className="block bg-slate-800/40 border border-slate-700/40 hover:border-purple-500/40 hover:bg-slate-800/60 rounded-lg p-4 transition-all group"
                 >
                   <div className="flex items-start justify-between gap-4">
                     <div className="flex-1 min-w-0">
-                      <p className="text-neutral-200 mb-2 line-clamp-2 group-hover:text-white transition-colors">{prediction.text}</p>
-                      <div className="flex items-center gap-2 flex-wrap">
-                        <p className="text-xs text-neutral-500">
+                      <p className="text-white mb-2 line-clamp-2 group-hover:text-purple-200 transition-colors">{prediction.text}</p>
+                      <div className="flex items-center gap-2 flex-wrap text-xs">
+                        <span className="text-slate-500">
                           {new Date(prediction.timestamp).toLocaleDateString("en-US", {
-                            year: "numeric",
                             month: "short",
                             day: "numeric",
-                            hour: "2-digit",
-                            minute: "2-digit",
+                            year: "numeric",
                           })}
-                        </p>
+                        </span>
                         {prediction.category && (
                           <>
-                            <span className="text-xs text-neutral-600">•</span>
-                            <span className="px-2 py-0.5 text-[10px] font-semibold rounded-full bg-gradient-to-r from-blue-500/15 to-purple-500/15 border border-blue-500/30 text-blue-300">
+                            <span className="text-slate-600">•</span>
+                            <span className="px-2 py-0.5 text-[10px] font-semibold rounded-full bg-blue-500/15 border border-blue-500/30 text-blue-300">
                               {prediction.category}
                             </span>
                           </>
@@ -406,17 +454,23 @@ export default function ProfilePage() {
           )}
         </div>
 
-        {/* CTAs */}
-        <div className="flex flex-col sm:flex-row gap-3 justify-center">
+        {/* Actions */}
+        <div className="flex flex-col sm:flex-row gap-3">
           <Link
             href="/dashboard"
-            className="px-8 py-3 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 text-white font-bold rounded-xl transition-all shadow-lg hover:shadow-[0_0_30px_rgba(139,92,246,0.4)] text-center"
+            className="flex-1 px-6 py-3 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 text-white font-bold rounded-xl transition-all shadow-lg hover:shadow-purple-500/20 text-center"
           >
-            View Full Stats
+            View Full Dashboard
+          </Link>
+          <Link
+            href="/app"
+            className="flex-1 px-6 py-3 border-2 border-slate-700 hover:bg-slate-800/50 text-white font-bold rounded-xl transition-all text-center"
+          >
+            Browse Feed
           </Link>
           <button
             onClick={handleSignOut}
-            className="px-8 py-3 border-2 border-slate-700 hover:bg-slate-800/50 text-white font-bold rounded-xl transition-all text-center"
+            className="px-6 py-3 border-2 border-red-900/50 hover:bg-red-900/20 text-red-400 font-bold rounded-xl transition-all"
           >
             Sign Out
           </button>
