@@ -326,9 +326,7 @@ export default function GlobePage() {
     }
 
     return items;
-  };
-
-  const displayItems = getDisplayItems();
+  }, [currentTab, claims, osint, resolutions, categoryFilter, statusFilter, timeFilter, searchQuery, filterByViewport, viewportBounds, activeFilter]);
 
   // Filtered claims for map markers (applies same filters as sidebar)
   const filteredClaimsForMap = useMemo(() => {
@@ -472,7 +470,7 @@ export default function GlobePage() {
         <UnifiedHeader currentView="globe" />
 
         {/* Live News Ticker - Auto-scrolling marquee */}
-        <BreakingNewsBanner items={getTickerItems()} />
+        <BreakingNewsBanner items={tickerItems} />
 
         {/* Map Container - Mobile-First Responsive - Adjusted for ticker */}
         <div className="fixed top-[100px] left-0 right-0 md:right-[360px] bottom-0 md:bottom-0">
@@ -626,7 +624,7 @@ export default function GlobePage() {
             <div className="flex items-center justify-between mt-2 text-[10px] text-[#64748b]">
               <div className="flex items-center gap-1.5">
                 <div className={`w-1.5 h-1.5 rounded-full ${isUpdating ? 'bg-amber-400 animate-pulse' : 'bg-emerald-400'}`} />
-                <span>Updated {getTimeSinceUpdate()}</span>
+                <span>Updated <LiveTimer lastUpdated={lastUpdated} /></span>
               </div>
               <button
                 onClick={() => fetchActivity(true)}
