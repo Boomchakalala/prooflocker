@@ -81,8 +81,27 @@ export default function AppFeedPage() {
   const getTickerItems = () => {
     const items: { type: string; text: string; location: string; time: string; source: 'intel' | 'claim' }[] = [];
 
-    // Mix intel signals
-    osintSignals.slice(0, 4).forEach(signal => {
+    // Sort intel by priority: war/conflict/breaking first, then by recency
+    const sortedIntel = [...osintSignals].sort((a, b) => {
+      const aStr = `${a.title} ${a.tags?.join(' ')}`.toLowerCase();
+      const bStr = `${b.title} ${b.tags?.join(' ')}`.toLowerCase();
+
+      // Priority keywords for war/conflict/breaking
+      const priorityKeywords = /ukraine|russia|taiwan|china|iran|israel|war|conflict|attack|missile|drone|breaking|urgent/;
+      const aHasPriority = priorityKeywords.test(aStr);
+      const bHasPriority = priorityKeywords.test(bStr);
+
+      if (aHasPriority && !bHasPriority) return -1;
+      if (!aHasPriority && bHasPriority) return 1;
+
+      // If both priority or both not priority, sort by recency
+      const aTime = new Date(a.created_at || a.published_at).getTime();
+      const bTime = new Date(b.created_at || b.published_at).getTime();
+      return bTime - aTime;
+    });
+
+    // Add top 4 prioritized intel signals
+    sortedIntel.slice(0, 4).forEach(signal => {
       items.push({
         type: 'INTEL',
         text: signal.title || 'Intelligence Signal',

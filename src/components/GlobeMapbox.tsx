@@ -424,7 +424,7 @@ export default function GlobeMapbox({ claims, osint, mapMode = 'both', viewMode 
         {/* Area Detail Modal */}
         {areaDetail && (
           <div
-            className="fixed inset-0 z-[500] flex items-end sm:items-center justify-center"
+            className={`fixed inset-0 z-[500] flex ${areaDetail.claims.length + areaDetail.osint.length === 1 ? 'items-center' : 'items-end sm:items-center'} justify-center`}
             onClick={closeDetail}
             style={{ background: 'rgba(0,0,0,0.6)', backdropFilter: 'blur(4px)' }}
           >
