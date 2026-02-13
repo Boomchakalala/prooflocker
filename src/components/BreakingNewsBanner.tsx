@@ -48,7 +48,7 @@ export default memo(function BreakingNewsBanner({ items, className = '' }: Break
         }
 
         .animate-marquee-fast {
-          animation: marquee-fast 30s linear infinite;
+          animation: marquee-fast 60s linear infinite;
         }
 
         .animate-marquee-fast.paused {
@@ -58,13 +58,13 @@ export default memo(function BreakingNewsBanner({ items, className = '' }: Break
         /* Slower on mobile for better readability */
         @media (max-width: 768px) {
           .animate-marquee-fast {
-            animation-duration: 45s;
+            animation-duration: 80s;
           }
         }
       `}</style>
 
       <div
-        className={`fixed top-16 left-0 right-0 md:right-[360px] z-[150] bg-slate-900/40 backdrop-blur-xl border-b border-slate-700/30 overflow-hidden cursor-pointer ${className}`}
+        className={`fixed top-16 left-0 right-0 md:right-[360px] z-[150] bg-slate-900/60 backdrop-blur-sm border-b border-slate-700/30 overflow-hidden cursor-pointer ${className}`}
         onClick={handleTogglePause}
         onMouseEnter={() => setIsPaused(true)}
         onMouseLeave={() => setIsPaused(false)}
