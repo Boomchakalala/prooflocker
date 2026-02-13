@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getAllPredictions, getPredictionsByUserId, getPredictionsByAnonId } from "@/lib/storage";
 import { readFileSync } from "fs";
 import { join } from "path";
+import { SEED_PREDICTIONS } from "@/lib/seed-predictions";
 
 // Set maxDuration for Vercel serverless functions (in seconds)
 export const maxDuration = 10; // 10 second timeout
@@ -65,6 +66,51 @@ export async function GET(request: NextRequest) {
 
     const elapsed = Date.now() - startTime;
     console.log(`[Predictions API] Query completed in ${elapsed}ms, returned ${predictions?.length || 0} predictions`);
+
+    // Add seed predictions only for public feed (no user filters)
+    if (!userId && !anonId && predictions) {
+      const seedPredictionsAsRecords = SEED_PREDICTIONS.map(seed => ({
+        id: seed.id,
+        userId: null,
+        anonId: seed.anonId,
+        authorNumber: seed.authorNumber,
+        text: seed.claim,
+        textPreview: seed.claim.slice(0, 100),
+        hash: seed.id,
+        timestamp: seed.timestamp,
+        dagTransaction: seed.id,
+        proofId: seed.id,
+        publicSlug: seed.id,
+        onChainStatus: 'confirmed',
+        outcome: seed.outcome === 'pending' ? null : seed.outcome,
+        category: seed.category,
+        resolutionNote: seed.resolutionNote,
+        resolvedAt: seed.resolved_at,
+        resolvedBy: seed.anonId,
+        evidenceGrade: seed.evidenceGrade,
+        evidenceSummary: seed.resolvedEvidence,
+        resolutionFingerprint: null,
+        deReference: null,
+        deEventId: null,
+        deStatus: null,
+        deSubmittedAt: seed.timestamp,
+        confirmedAt: seed.timestamp,
+        claimedAt: seed.timestamp,
+        resolutionDeHash: null,
+        resolutionDeTimestamp: seed.resolved_at,
+        resolutionDeReference: null,
+        resolutionDeEventId: null,
+        resolutionDeStatus: null,
+        moderationStatus: 'active',
+        createdAt: seed.timestamp,
+        geotag_lat: seed.lat,
+        geotag_lng: seed.lng,
+        lockEvidence: seed.lockEvidence,
+        isSeedData: true,
+      }));
+
+      predictions = [...seedPredictionsAsRecords, ...predictions];
+    }
 
     const responseData = {
       predictions,
