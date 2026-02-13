@@ -110,13 +110,13 @@ export async function GET(request: NextRequest) {
 
     const supabase = createClient(supabaseUrl, supabaseKey);
 
-    // Fetch predictions from database with correct field names
+    // Fetch predictions from database with geotag fields
     const { data: predictions, error } = await supabase
       .from('predictions')
-      .select('id, text, author_number, pseudonym, created_at, outcome, status, anon_id, category, public_slug')
+      .select('id, text, author_number, pseudonym, created_at, outcome, status, anon_id, category, public_slug, geotag_lat, geotag_lng, geotag_city, geotag_country')
       .eq('moderation_status', 'active')
       .order('created_at', { ascending: false })
-      .limit(50);
+      .limit(100); // Increased to get more geotagged claims
 
     if (error) {
       console.error('[Globe API] Error fetching predictions:', error);
@@ -128,34 +128,17 @@ export async function GET(request: NextRequest) {
 
     console.log(`[Globe API] Fetched ${predictions?.length || 0} predictions from database`);
 
-    // Transform predictions to globe format
-    // For now, we'll assign random global locations to predictions
-    // In a real implementation, you'd geocode the prediction content or use user-provided locations
-    const globalLocations = [
-      { lat: 40.7128, lng: -74.0060, city: 'New York, USA' },
-      { lat: 51.5074, lng: -0.1278, city: 'London, UK' },
-      { lat: 48.8566, lng: 2.3522, city: 'Paris, France' },
-      { lat: 35.6762, lng: 139.6503, city: 'Tokyo, Japan' },
-      { lat: -33.8688, lng: 151.2093, city: 'Sydney, Australia' },
-      { lat: 37.7749, lng: -122.4194, city: 'San Francisco, USA' },
-      { lat: 52.5200, lng: 13.4050, city: 'Berlin, Germany' },
-      { lat: 55.7558, lng: 37.6173, city: 'Moscow, Russia' },
-      { lat: 28.6139, lng: 77.2090, city: 'New Delhi, India' },
-      { lat: -15.8267, lng: -47.9218, city: 'Brasília, Brazil' },
-      { lat: 31.7683, lng: 35.2137, city: 'Jerusalem, Israel' },
-      { lat: 1.3521, lng: 103.8198, city: 'Singapore' },
-      { lat: 25.2048, lng: 55.2708, city: 'Dubai, UAE' },
-      { lat: 59.3293, lng: 18.0686, city: 'Stockholm, Sweden' },
-      { lat: 37.5665, lng: 126.9780, city: 'Seoul, South Korea' },
-      { lat: 50.8503, lng: 4.3517, city: 'Brussels, Belgium' },
-      { lat: 19.4326, lng: -99.1332, city: 'Mexico City, Mexico' },
-      { lat: 43.6532, lng: -79.3832, city: 'Toronto, Canada' },
-      { lat: -33.9249, lng: 18.4241, city: 'Cape Town, South Africa' },
-      { lat: -34.6037, lng: -58.3816, city: 'Buenos Aires, Argentina' },
-    ];
+    // Filter predictions to only include those with geotags (for globe display)
+    const geotaggedPredictions = (predictions || []).filter(
+      (p: any) => p.geotag_lat !== null && p.geotag_lng !== null
+    );
 
-    const claims = (predictions || []).slice(0, 20).map((prediction: any, index: number) => {
-      const location = globalLocations[index % globalLocations.length];
+    console.log(`[Globe API] ${geotaggedPredictions.length} predictions have geotags`);
+
+    const claims = geotaggedPredictions.map((prediction: any) => {
+      // Use actual geotag coordinates from the prediction
+      const lat = parseFloat(prediction.geotag_lat);
+      const lng = parseFloat(prediction.geotag_lng);
 
       // Format user handle: use pseudonym if available, otherwise "Anon #authorNumber"
       const submitter = prediction.pseudonym
