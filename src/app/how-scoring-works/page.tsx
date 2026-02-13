@@ -328,56 +328,6 @@ export default function HowScoringWorksPage() {
           </div>
         </section>
 
-        {/* Timeframes and Overdues */}
-        <section className="mb-12">
-          <div className="glass border border-white/10 rounded-xl p-8">
-            <h2 className="text-2xl font-bold text-white mb-6">Timeframes, Overdues & Extensions</h2>
-
-            <div className="space-y-6">
-
-              <div>
-                <h3 className="text-lg font-semibold text-white mb-3">Required Timeframes</h3>
-                <div className="grid md:grid-cols-3 gap-4">
-                  <div className="bg-white/5 rounded-lg p-4 border border-white/10">
-                    <div className="text-blue-400 font-bold mb-1">Short-term</div>
-                    <div className="text-sm text-neutral-300">&lt; 6 months</div>
-                  </div>
-                  <div className="bg-white/5 rounded-lg p-4 border border-white/10">
-                    <div className="text-green-400 font-bold mb-1">Medium-term</div>
-                    <div className="text-sm text-neutral-300">6-24 months</div>
-                  </div>
-                  <div className="bg-white/5 rounded-lg p-4 border border-white/10">
-                    <div className="text-purple-400 font-bold mb-1">Long-term</div>
-                    <div className="text-sm text-neutral-300">&gt; 24 months</div>
-                  </div>
-                </div>
-              </div>
-
-              <div>
-                <h3 className="text-lg font-semibold text-white mb-3">Overdue Penalties</h3>
-                <ul className="space-y-2 text-sm text-neutral-300">
-                  <li className="flex items-start gap-2">
-                    <span className="text-red-400 mt-0.5">▸</span>
-                    <span><strong className="text-white">Overdue claim:</strong> -5 activity points per overdue claim (max -25 per month)</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="text-red-400 mt-0.5">▸</span>
-                    <span><strong className="text-white">Auto-archive:</strong> If unresolved after 2× the timeframe, claim is auto-archived with -10 activity points</span>
-                  </li>
-                </ul>
-              </div>
-
-              <div>
-                <h3 className="text-lg font-semibold text-white mb-3">Extensions</h3>
-                <p className="text-sm text-neutral-300">
-                  Long-term claims (&gt;24 months) are eligible for a <strong className="text-white">one-time extension</strong> to avoid overdue penalties if circumstances change or additional time is needed.
-                </p>
-              </div>
-
-            </div>
-          </div>
-        </section>
-
         {/* Contested Resolutions */}
         <section className="mb-12">
           <div className="glass border border-white/10 rounded-xl p-8">
