@@ -38,16 +38,16 @@ export default function HowItWorks() {
 
             <div className="text-center mb-3 md:mb-4">
               <h3 className="text-xl md:text-2xl lg:text-3xl font-bold text-white mb-1 md:mb-2">See Something</h3>
-              <p className="text-xs md:text-sm text-cyan-400 font-semibold">Browse the live intel feed</p>
+              <p className="text-xs md:text-sm text-cyan-400 font-semibold">Have a real conviction</p>
             </div>
 
             <p className="text-sm md:text-base lg:text-lg text-white/75 leading-relaxed mb-4 md:mb-6 text-center">
-              Our globe and feed show breaking intelligence and news events in real time. Spot a pattern or trend before anyone else does.
+              You notice something happening in the world. A pattern emerging. A trend forming. An event unfolding — even before it&apos;s widely known or confirmed.
             </p>
 
             <div className="px-3 md:px-4 py-2 md:py-3 bg-cyan-500/10 border border-cyan-500/30 rounded-lg text-center">
               <p className="text-xs md:text-sm text-cyan-300/80">
-                Think of it like a live newsroom — always updating.
+                Trust your conviction. Lock it before consensus forms.
               </p>
             </div>
           </div>
@@ -89,7 +89,7 @@ export default function HowItWorks() {
             </div>
 
             <div className="text-center mb-3 md:mb-4">
-              <h3 className="text-xl md:text-2xl lg:text-3xl font-bold text-white mb-1 md:mb-2">Prove It Later</h3>
+              <h3 className="text-xl md:text-2xl lg:text-3xl font-bold text-white mb-1 md:mb-2">Resolve with Reputation</h3>
               <p className="text-xs md:text-sm text-purple-400 font-semibold">Submit evidence, earn reputation</p>
             </div>
 
@@ -109,7 +109,7 @@ export default function HowItWorks() {
         {/* Bottom clarification */}
         <div className="mt-8 md:mt-12 text-center">
           <p className="text-sm md:text-base text-white/50 max-w-2xl mx-auto">
-            That&apos;s it. Your accuracy and evidence quality determine your reputation score over time. The more you prove, the more credible you become.
+            Real reputation and credibility backed by math and blockchain.
           </p>
         </div>
       </div>
