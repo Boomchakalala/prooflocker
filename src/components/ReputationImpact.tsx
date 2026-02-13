@@ -4,7 +4,7 @@ import Link from "next/link";
 
 export default function ReputationImpact() {
   return (
-    <div className="relative z-10 py-12 md:py-20 lg:py-28 px-4 md:px-6 bg-gradient-to-b from-[#0a0a0a] via-[#1a0033] to-[#0a0a0a]">
+    <div className="relative z-10 py-16 md:py-24 lg:py-32 px-4 md:px-6 bg-gradient-to-b from-[#0a0a0a] via-[#1a0033] to-[#0a0a0a]">
       {/* Background glow */}
       <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-15">
         <div
@@ -17,117 +17,141 @@ export default function ReputationImpact() {
 
       <div className="max-w-6xl mx-auto relative z-10">
         {/* Section Header */}
-        <div className="text-center mb-10 md:mb-16">
-          <h2 className="text-3xl md:text-5xl lg:text-6xl font-extrabold mb-3 md:mb-4 bg-gradient-to-r from-[#5B21B6] to-[#2E5CFF] bg-clip-text text-transparent" style={{ fontFamily: 'var(--font-montserrat)' }}>
+        <div className="text-center mb-12 md:mb-20">
+          <h2 className="text-3xl md:text-5xl lg:text-6xl font-extrabold mb-4 md:mb-5 bg-gradient-to-r from-[#5B21B6] to-[#2E5CFF] bg-clip-text text-transparent" style={{ fontFamily: 'var(--font-montserrat)' }}>
             Your Reputation Compounds
           </h2>
-          <p className="text-base md:text-lg lg:text-xl text-white/70 max-w-3xl mx-auto px-2">
-            Every correct resolution makes the next one count more. Streaks, evidence quality, and consistency — your track record is the product.
+          <p className="text-base md:text-lg lg:text-xl text-white/70 max-w-3xl mx-auto px-4">
+            Every correct claim makes the next one worth more. Math-backed credibility that grows exponentially.
           </p>
         </div>
 
-        {/* 3 Benefits - Clean Cards */}
-        <div className="grid md:grid-cols-3 gap-6 md:gap-8">
-          {/* 1. Prove Your Track Record */}
-          <div className="group bg-gradient-to-br from-slate-900/80 to-slate-800/80 border border-slate-700/50 hover:border-purple-500/50 rounded-xl md:rounded-2xl p-6 md:p-8 transition-all duration-300 hover:shadow-[0_0_30px_rgba(147,51,234,0.2)] hover:-translate-y-1">
-            <div className="flex items-center gap-3 mb-5 md:mb-6">
-              <div className="w-12 h-12 md:w-14 md:h-14 bg-gradient-to-br from-purple-600/20 to-purple-800/20 rounded-xl flex items-center justify-center">
-                <svg className="w-6 h-6 md:w-7 md:h-7 text-purple-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-                </svg>
-              </div>
-              <h3 className="text-xl md:text-2xl font-bold text-white" style={{ fontFamily: 'var(--font-montserrat)' }}>
-                Cryptographic Proof
-              </h3>
+        {/* How Reputation Grows - Visual Flow */}
+        <div className="mb-12 md:mb-16">
+          <div className="bg-gradient-to-br from-slate-900/90 to-slate-800/80 border border-slate-700/50 rounded-2xl p-6 md:p-10 max-w-4xl mx-auto">
+            <div className="text-center mb-8">
+              <h3 className="text-xl md:text-2xl font-bold text-white mb-2">The Compounding Formula</h3>
+              <p className="text-sm md:text-base text-white/60">Your reputation score is calculated from three weighted factors:</p>
             </div>
 
-            <p className="text-sm md:text-base text-white/80 leading-relaxed mb-4 md:mb-5">
-              Every claim is hashed and timestamped on Constellation DAG. Nobody can fake when you called it — the math proves it.
-            </p>
+            {/* Three Factor Cards */}
+            <div className="grid md:grid-cols-3 gap-4 md:gap-6 mb-8">
+              {/* Accuracy */}
+              <div className="bg-purple-500/10 border border-purple-500/30 rounded-xl p-5 text-center">
+                <div className="text-4xl md:text-5xl font-black text-purple-400 mb-2">50%</div>
+                <div className="text-sm md:text-base font-bold text-white mb-2">Accuracy</div>
+                <p className="text-xs text-white/60">Correct vs total claims</p>
+              </div>
 
-            <div className="px-4 py-3 bg-purple-500/10 border border-purple-500/30 rounded-lg">
-              <div className="text-[10px] text-purple-400/60 uppercase tracking-wider mb-2 font-semibold">On-Chain Proof</div>
-              <div className="text-xs text-slate-400 leading-relaxed">
-                Every prediction is cryptographically signed with a timestamp. Your track record is immutable and publicly verifiable on the blockchain.
+              {/* Evidence Quality */}
+              <div className="bg-cyan-500/10 border border-cyan-500/30 rounded-xl p-5 text-center">
+                <div className="text-4xl md:text-5xl font-black text-cyan-400 mb-2">30%</div>
+                <div className="text-sm md:text-base font-bold text-white mb-2">Evidence</div>
+                <p className="text-xs text-white/60">Quality of proof (A-F)</p>
+              </div>
+
+              {/* Activity */}
+              <div className="bg-emerald-500/10 border border-emerald-500/30 rounded-xl p-5 text-center">
+                <div className="text-4xl md:text-5xl font-black text-emerald-400 mb-2">20%</div>
+                <div className="text-sm md:text-base font-bold text-white mb-2">Activity</div>
+                <p className="text-xs text-white/60">Volume + streaks</p>
+              </div>
+            </div>
+
+            {/* Multipliers */}
+            <div className="space-y-3">
+              <div className="flex items-center justify-between px-5 py-3 bg-orange-500/10 border border-orange-500/30 rounded-lg">
+                <div className="flex items-center gap-3">
+                  <svg className="w-5 h-5 text-orange-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.656 7.343A7.975 7.975 0 0120 13a7.975 7.975 0 01-2.343 5.657z"/>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M9.879 16.121A3 3 0 1012.015 11L11 14H9c0 .768.293 1.536.879 2.121z"/>
+                  </svg>
+                  <span className="text-sm md:text-base font-semibold text-white">Active Streak</span>
+                </div>
+                <span className="text-xs md:text-sm text-orange-300 font-medium">Up to 2× multiplier</span>
+              </div>
+
+              <div className="flex items-center justify-between px-5 py-3 bg-red-500/10 border border-red-500/30 rounded-lg">
+                <div className="flex items-center gap-3">
+                  <svg className="w-5 h-5 text-red-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+                  </svg>
+                  <span className="text-sm md:text-base font-semibold text-white">High-Risk Categories</span>
+                </div>
+                <span className="text-xs md:text-sm text-red-300 font-medium">+50% bonus points</span>
+              </div>
+
+              <div className="flex items-center justify-between px-5 py-3 bg-blue-500/10 border border-blue-500/30 rounded-lg">
+                <div className="flex items-center gap-3">
+                  <svg className="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+                  </svg>
+                  <span className="text-sm md:text-base font-semibold text-white">Grade A Evidence</span>
+                </div>
+                <span className="text-xs md:text-sm text-blue-300 font-medium">Maximum points</span>
               </div>
             </div>
           </div>
+        </div>
 
-          {/* 2. Climb the Ranks */}
-          <div className="group bg-gradient-to-br from-slate-900/80 to-slate-800/80 border border-slate-700/50 hover:border-cyan-500/50 rounded-xl md:rounded-2xl p-6 md:p-8 transition-all duration-300 hover:shadow-[0_0_30px_rgba(6,182,212,0.2)] hover:-translate-y-1">
-            <div className="flex items-center gap-3 mb-5 md:mb-6">
-              <div className="w-12 h-12 md:w-14 md:h-14 bg-gradient-to-br from-cyan-600/20 to-cyan-800/20 rounded-xl flex items-center justify-center">
-                <svg className="w-6 h-6 md:w-7 md:h-7 text-cyan-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
-                </svg>
-              </div>
-              <h3 className="text-xl md:text-2xl font-bold text-white" style={{ fontFamily: 'var(--font-montserrat)' }}>
-                Reputation Tiers
-              </h3>
-            </div>
-
-            <p className="text-sm md:text-base text-white/80 leading-relaxed mb-4 md:mb-5">
-              Novice → Trusted → Expert → Master → Legend. Each tier reflects your accuracy, evidence quality, and volume of resolved claims.
-            </p>
-
-            <div className="space-y-2 md:space-y-3">
-              <div className="flex items-center justify-between px-4 py-2 bg-cyan-500/10 border border-cyan-500/30 rounded-lg">
-                <span className="text-xs md:text-sm text-slate-400">Tier System</span>
-                <span className="text-sm md:text-base font-bold text-cyan-400">5 Levels</span>
-              </div>
-              <div className="px-4 py-2 bg-orange-500/10 border border-orange-500/30 rounded-lg">
-                <p className="text-xs md:text-sm text-slate-300">Streaks multiply points. Consistency compounds reputation.</p>
-              </div>
-            </div>
+        {/* Tier Progression */}
+        <div className="mb-12 md:mb-16">
+          <div className="text-center mb-8">
+            <h3 className="text-2xl md:text-3xl font-bold text-white mb-3">Rise Through the Ranks</h3>
+            <p className="text-sm md:text-base text-white/60 max-w-2xl mx-auto">Five reputation tiers. Each unlocks higher credibility and visibility.</p>
           </div>
 
-          {/* 3. Compound Growth */}
-          <div className="group bg-gradient-to-br from-slate-900/80 to-slate-800/80 border border-slate-700/50 hover:border-emerald-500/50 rounded-xl md:rounded-2xl p-6 md:p-8 transition-all duration-300 hover:shadow-[0_0_30px_rgba(16,185,129,0.2)] hover:-translate-y-1">
-            <div className="flex items-center gap-3 mb-5 md:mb-6">
-              <div className="w-12 h-12 md:w-14 md:h-14 bg-gradient-to-br from-emerald-600/20 to-emerald-800/20 rounded-xl flex items-center justify-center">
-                <svg className="w-6 h-6 md:w-7 md:h-7 text-emerald-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-              </div>
-              <h3 className="text-xl md:text-2xl font-bold text-white" style={{ fontFamily: 'var(--font-montserrat)' }}>
-                Compounding Returns
-              </h3>
+          <div className="grid grid-cols-2 md:grid-cols-5 gap-3 md:gap-4 max-w-5xl mx-auto">
+            {/* Novice */}
+            <div className="bg-slate-800/60 border border-slate-600/40 rounded-lg p-4 text-center">
+              <div className="text-2xl mb-2">🌱</div>
+              <div className="text-sm font-bold text-slate-300 mb-1">Novice</div>
+              <div className="text-xs text-slate-500">0-100 pts</div>
             </div>
 
-            <p className="text-sm md:text-base text-white/80 leading-relaxed mb-4 md:mb-5">
-              Streaks multiply your points. High-risk categories earn bonuses. Grade A evidence amplifies everything. Your reputation grows exponentially.
-            </p>
+            {/* Trusted */}
+            <div className="bg-slate-800/60 border border-cyan-500/30 rounded-lg p-4 text-center">
+              <div className="text-2xl mb-2">⚡</div>
+              <div className="text-sm font-bold text-cyan-400 mb-1">Trusted</div>
+              <div className="text-xs text-slate-500">101-500 pts</div>
+            </div>
 
-            <div className="px-4 py-3 bg-emerald-500/10 border border-emerald-500/30 rounded-lg">
-              <div className="text-[10px] text-emerald-400/60 uppercase tracking-wider mb-2 font-semibold">Growth Formula</div>
-              <div className="space-y-2 text-xs text-slate-300">
-                <div className="flex items-center justify-between">
-                  <span className="text-slate-400">Accuracy</span>
-                  <span className="text-emerald-400 font-semibold">50% weight</span>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-slate-400">Evidence Quality</span>
-                  <span className="text-emerald-400 font-semibold">30% weight</span>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-slate-400">Activity</span>
-                  <span className="text-emerald-400 font-semibold">20% weight</span>
-                </div>
-              </div>
+            {/* Expert */}
+            <div className="bg-slate-800/60 border border-blue-500/30 rounded-lg p-4 text-center">
+              <div className="text-2xl mb-2">🎯</div>
+              <div className="text-sm font-bold text-blue-400 mb-1">Expert</div>
+              <div className="text-xs text-slate-500">501-2000 pts</div>
+            </div>
+
+            {/* Master */}
+            <div className="bg-slate-800/60 border border-purple-500/30 rounded-lg p-4 text-center">
+              <div className="text-2xl mb-2">👑</div>
+              <div className="text-sm font-bold text-purple-400 mb-1">Master</div>
+              <div className="text-xs text-slate-500">2001-5000 pts</div>
+            </div>
+
+            {/* Legend */}
+            <div className="col-span-2 md:col-span-1 bg-gradient-to-br from-amber-500/20 to-orange-500/20 border border-amber-500/40 rounded-lg p-4 text-center">
+              <div className="text-2xl mb-2">🏆</div>
+              <div className="text-sm font-bold text-amber-400 mb-1">Legend</div>
+              <div className="text-xs text-slate-500">5000+ pts</div>
             </div>
           </div>
         </div>
 
         {/* Bottom CTA */}
-        <div className="text-center mt-10 md:mt-16">
-          <p className="text-sm md:text-base text-white/60 mb-4 md:mb-6 px-2">
-            Every claim compounds. Start building your reputation.
+        <div className="text-center">
+          <p className="text-sm md:text-base text-white/60 mb-6 px-4">
+            Start building verifiable credibility. One claim at a time.
           </p>
           <Link
             href="/lock"
-            className="inline-block px-8 md:px-12 py-3 md:py-4 bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-500 hover:to-purple-600 text-white text-base md:text-lg font-bold rounded-xl transition-all shadow-lg hover:shadow-[0_0_30px_rgba(147,51,234,0.4)] hover:scale-105"
+            className="inline-flex items-center gap-2 px-8 md:px-12 py-3 md:py-4 bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-500 hover:to-purple-600 text-white text-base md:text-lg font-bold rounded-xl transition-all shadow-lg hover:shadow-[0_0_30px_rgba(147,51,234,0.4)] hover:scale-105"
           >
-            Start Building Your Reputation
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+            </svg>
+            Lock Your First Claim
           </Link>
         </div>
       </div>
