@@ -138,11 +138,23 @@ export default function TopSourcesList({ category = 'all' }: TopSourcesListProps
                   <tr key={source.userId} className="hover:bg-slate-800/40 transition-colors">
                     <td className="px-6 py-4">
                       <Link href={`/user/${source.userId}`} className="flex items-center gap-3 group">
-                        <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-purple-600/20 to-cyan-600/20 border border-purple-500/30 flex items-center justify-center text-sm font-bold text-white">
-                          {source.displayName.slice(-2)}
+                        <div className="relative">
+                          <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-purple-600/20 to-cyan-600/20 border border-purple-500/30 flex items-center justify-center text-sm font-bold text-white">
+                            {source.displayName.slice(-2)}
+                          </div>
+                          {source.isSeedData && (
+                            <div className="absolute -top-1 -right-1 w-3 h-3 bg-amber-500 rounded-full border-2 border-slate-900 shadow-lg" title="Demo data"></div>
+                          )}
                         </div>
                         <div>
-                          <div className="text-white font-medium text-sm group-hover:text-purple-400 transition-colors">{source.displayName}</div>
+                          <div className="text-white font-medium text-sm group-hover:text-purple-400 transition-colors flex items-center gap-2">
+                            {source.displayName}
+                            {source.isSeedData && (
+                              <span className="text-[9px] font-semibold px-1.5 py-0.5 bg-amber-500/20 text-amber-400 border border-amber-500/40 rounded">
+                                DEMO
+                              </span>
+                            )}
+                          </div>
                           <div className={`inline-flex items-center px-2 py-0.5 rounded-md ${tierInfo.bgColor} ${tierInfo.textColor} text-[10px] font-semibold uppercase mt-1`}>
                             {tierInfo.name}
                           </div>
