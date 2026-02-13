@@ -25,6 +25,7 @@ export default function ProfilePage() {
   const [pseudonymSuccess, setPseudonymSuccess] = useState(false);
   const [settingPseudonym, setSettingPseudonym] = useState(false);
   const [defaultHandle, setDefaultHandle] = useState<string>("");
+  const [authorNumber, setAuthorNumber] = useState<number | null>(null);
 
   useEffect(() => {
     // Redirect to home if not authenticated
@@ -97,9 +98,14 @@ export default function ProfilePage() {
       const preds = data.predictions || [];
       setPredictions(preds);
 
-      // Get pseudonym from first prediction if it exists
-      if (preds.length > 0 && preds[0].pseudonym) {
-        setPseudonymState(preds[0].pseudonym);
+      // Get pseudonym and authorNumber from first prediction if they exist
+      if (preds.length > 0) {
+        if (preds[0].pseudonym) {
+          setPseudonymState(preds[0].pseudonym);
+        }
+        if (preds[0].authorNumber) {
+          setAuthorNumber(preds[0].authorNumber);
+        }
       }
     } catch (error) {
       console.error("Error fetching predictions:", error);
@@ -206,7 +212,7 @@ export default function ProfilePage() {
 
   const score = scoreData?.score;
   const hasPoints = (score?.totalPoints || 0) > 0;
-  const displayName = pseudonym || defaultHandle || "Anonymous";
+  const displayName = pseudonym || (authorNumber ? `Anon #${authorNumber}` : defaultHandle) || "Anonymous";
 
   // Calculate real stats from predictions
   const totalLocked = predictions.length;
