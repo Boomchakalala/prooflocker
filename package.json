@@ -12,21 +12,14 @@
     "@anthropic-ai/sdk": "^0.74.0",
     "@supabase/ssr": "^0.8.0",
     "@supabase/supabase-js": "^2.89.0",
-    "@types/leaflet": "^1.9.21",
-    "@types/three": "^0.182.0",
     "@vercel/og": "^0.8.6",
     "elliptic": "^6.6.1",
-    "globe.gl": "^2.45.0",
     "json-canonicalize": "^2.0.0",
-    "leaflet": "^1.9.4",
-    "leaflet.markercluster": "^1.5.3",
     "mapbox-gl": "^2.15.0",
     "next": "^16.1.6",
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
-    "react-globe.gl": "^2.37.0",
-    "rss-parser": "^3.13.0",
-    "three": "^0.182.0"
+    "rss-parser": "^3.13.0"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
