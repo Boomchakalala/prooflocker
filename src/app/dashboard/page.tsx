@@ -25,51 +25,6 @@ interface Prediction {
   resolved_at?: string;
 }
 
-// Reputation tier thresholds
-const TIERS = [
-  { name: 'Novice', min: 0, max: 299, color: 'slate' },
-  { name: 'Trusted', min: 300, max: 499, color: 'cyan' },
-  { name: 'Expert', min: 500, max: 649, color: 'blue' },
-  { name: 'Master', min: 650, max: 799, color: 'purple' },
-  { name: 'Legend', min: 800, max: 1000, color: 'amber' },
-];
-
-function getTier(points: number) {
-  return TIERS.find(tier => points >= tier.min && points <= tier.max) || TIERS[0];
-}
-
-function getNextTier(points: number) {
-  return TIERS.find(tier => points < tier.min);
-}
-
-// Calculate reputation score (not XP)
-function calculateReputationScore(predictions: Prediction[]) {
-  const resolved = predictions.filter(p => p.outcome !== 'pending');
-  const correct = predictions.filter(p => p.outcome === 'correct').length;
-  const total = resolved.length;
-
-  if (total === 0) return 0;
-
-  // Accuracy component (50%)
-  const accuracyRate = correct / total;
-  const accuracyScore = accuracyRate * 500;
-
-  // Evidence quality component (30%)
-  const gradePoints: Record<string, number> = {
-    'A': 100, 'B': 80, 'C': 60, 'D': 40, 'F': 20
-  };
-  const avgEvidence = resolved.reduce((sum, p) => {
-    const grade = p.evidenceGrade || 'F';
-    return sum + (gradePoints[grade] || 20);
-  }, 0) / total;
-  const evidenceScore = (avgEvidence / 100) * 300;
-
-  // Activity component (20%) - max 200 points at 20 resolutions
-  const activityScore = Math.min(total * 10, 200);
-
-  return Math.round(accuracyScore + evidenceScore + activityScore);
-}
-
 export default function DashboardPage() {
   const { user, loading: authLoading } = useAuth();
   const router = useRouter();
@@ -136,14 +91,47 @@ export default function DashboardPage() {
   const totalResolved = resolvedPredictions.length;
   const accuracyRate = totalResolved > 0 ? Math.round((correctResolved / totalResolved) * 100) : 0;
 
-  // Calculate total XP earned (if available)
-  const totalXP = predictions.reduce((sum, p) => sum + (p.xp || 0), 0);
-  const hasXPData = predictions.some(p => p.xp && p.xp > 0);
+  // Calculate total XP earned (calculate if not stored)
+  const totalXP = predictions.reduce((sum, p) => {
+    if (p.xp) return sum + p.xp;
 
-  // Calculate reputation score
-  const reputationScore = calculateReputationScore(predictions);
-  const currentTier = getTier(reputationScore);
-  const nextTier = getNextTier(reputationScore);
+    // Calculate XP if not stored
+    let claimXP = calculateLockXP(p.evidenceGrade as EvidenceGrade);
+    if (p.outcome !== 'pending') {
+      claimXP += calculateResolveXP({
+        isCorrect: p.outcome === 'correct',
+        onTime: true, // We don't have timeframe data anymore
+        isHighRisk: false,
+        consecutiveCorrectStreak: 0
+      });
+    }
+    return sum + claimXP;
+  }, 0);
+  const hasXPData = totalXP > 0;
+
+  // Calculate reputation score using official formula
+  const avgEvidenceScore = totalResolved > 0
+    ? resolvedPredictions.reduce((sum, p) => sum + evidenceGradeToPoints(p.evidenceGrade as EvidenceGrade), 0) / totalResolved
+    : 0;
+
+  const reputationCalc = calculateWeightedReputation({
+    correctResolutions: correctResolved,
+    totalResolved: totalResolved,
+    averageEvidenceScore: avgEvidenceScore,
+  });
+
+  const reputationScore = reputationCalc.total;
+  const currentTier = getReputationTier(reputationScore);
+
+  // Find next tier
+  const allTiers = [
+    { name: 'Novice', min: 0 },
+    { name: 'Trusted', min: 300 },
+    { name: 'Expert', min: 500 },
+    { name: 'Master', min: 650 },
+    { name: 'Legend', min: 800 },
+  ];
+  const nextTier = allTiers.find(tier => reputationScore < tier.min);
 
   // Calculate category stats
   const categoryStats: Record<string, { correct: number; total: number; points: number }> = {};

@@ -97,7 +97,7 @@ export default function ReputationImpact() {
                   </div>
                   <div className="flex-1">
                     <div className="text-base md:text-lg font-semibold text-white mb-2">Stay Active</div>
-                    <p className="text-sm text-white/70">Resolve more claims to increase your activity score. Each resolved claim adds 10 points, maxing at 200 points (20 resolutions).</p>
+                    <p className="text-sm text-white/70">Resolve more claims to increase your activity score. Each resolved claim adds 4 points, maxing at 200 points (50 resolutions).</p>
                   </div>
                 </div>
               </div>
