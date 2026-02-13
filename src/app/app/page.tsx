@@ -130,7 +130,7 @@ export default function AppFeedPage() {
     return items.slice(0, 7);
   }, [osintSignals, predictions]);
 
-  const filteredPredictions = predictions.filter(p => {
+  const filteredPredictions = useMemo(() => predictions.filter(p => {
     if (contentFilter === "osint") return false;
 
     // My Claims filter - show only user's claims
@@ -151,14 +151,14 @@ export default function AppFeedPage() {
     if (quickFilter === "osint-cat" && p.category?.toLowerCase() !== "osint") return false;
     if (quickFilter === "personal" && p.category?.toLowerCase() !== "personal") return false;
     if (quickFilter === "other" && p.category?.toLowerCase() !== "other") return false;
-    if (searchQuery) {
-      return p.text?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-             p.category?.toLowerCase().includes(searchQuery.toLowerCase());
+    if (debouncedSearch) {
+      return p.text?.toLowerCase().includes(debouncedSearch.toLowerCase()) ||
+             p.category?.toLowerCase().includes(debouncedSearch.toLowerCase());
     }
     return true;
-  });
+  }), [predictions, contentFilter, quickFilter, debouncedSearch, user]);
 
-  const filteredOsint = osintSignals.filter(o => {
+  const filteredOsint = useMemo(() => osintSignals.filter(o => {
     if (contentFilter === "claims") return false;
 
     // Apply category filters to intel based on tags and comprehensive keyword matching
@@ -196,17 +196,17 @@ export default function AppFeedPage() {
     }
 
     // Search filter
-    if (searchQuery) {
-      return o.title?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-             o.summary?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-             o.place_name?.toLowerCase().includes(searchQuery.toLowerCase());
+    if (debouncedSearch) {
+      return o.title?.toLowerCase().includes(debouncedSearch.toLowerCase()) ||
+             o.summary?.toLowerCase().includes(debouncedSearch.toLowerCase()) ||
+             o.place_name?.toLowerCase().includes(debouncedSearch.toLowerCase());
     }
     return true;
-  });
+  }), [osintSignals, contentFilter, quickFilter, debouncedSearch]);
 
-  const resolvedCorrect = predictions.filter(p => p.outcome === "correct").length;
-  const resolvedIncorrect = predictions.filter(p => p.outcome === "incorrect").length;
-  const pendingClaims = predictions.filter(p => !p.outcome || p.outcome === "pending").length;
+  const resolvedCorrect = useMemo(() => predictions.filter(p => p.outcome === "correct").length, [predictions]);
+  const resolvedIncorrect = useMemo(() => predictions.filter(p => p.outcome === "incorrect").length, [predictions]);
+  const pendingClaims = useMemo(() => predictions.filter(p => !p.outcome || p.outcome === "pending").length, [predictions]);
 
   // Freshness helpers
   const getMinutesAgo = (dateStr: string) => {
@@ -243,7 +243,7 @@ export default function AppFeedPage() {
         {/* Live News Ticker */}
         <div className="mb-3 md:mb-4">
           <BreakingNewsBanner
-            items={getTickerItems()}
+            items={tickerItems}
             className="!fixed-none !relative !top-0 !left-0 !right-0 !z-auto"
           />
         </div>
@@ -468,7 +468,7 @@ export default function AppFeedPage() {
 
                 {filteredPredictions.length > 0 ? (
                   <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
-                    {filteredPredictions.map((claim) => {
+                    {filteredPredictions.slice(0, visibleClaims).map((claim) => {
                       const isCorrect = claim.outcome === "correct";
                       const isIncorrect = claim.outcome === "incorrect";
                       const isPending = !claim.outcome || claim.outcome === "pending";
