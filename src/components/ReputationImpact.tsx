@@ -26,115 +26,178 @@ export default function ReputationImpact() {
           </p>
         </div>
 
-        {/* How Reputation Grows - Visual Flow */}
-        <div className="mb-12 md:mb-16">
+        {/* The Compounding Formula */}
+        <div className="mb-16 md:mb-20">
           <div className="bg-gradient-to-br from-slate-900/90 to-slate-800/80 border border-slate-700/50 rounded-2xl p-6 md:p-10 max-w-4xl mx-auto">
-            <div className="text-center mb-8">
+            <div className="text-center mb-8 md:mb-10">
               <h3 className="text-xl md:text-2xl font-bold text-white mb-2">The Compounding Formula</h3>
               <p className="text-sm md:text-base text-white/60">Your reputation score is calculated from three weighted factors:</p>
             </div>
 
             {/* Three Factor Cards */}
-            <div className="grid md:grid-cols-3 gap-4 md:gap-6 mb-8">
+            <div className="grid md:grid-cols-3 gap-4 md:gap-6 mb-10">
               {/* Accuracy */}
-              <div className="bg-purple-500/10 border border-purple-500/30 rounded-xl p-5 text-center">
-                <div className="text-4xl md:text-5xl font-black text-purple-400 mb-2">50%</div>
+              <div className="bg-purple-500/10 border border-purple-500/30 rounded-xl p-5 md:p-6 text-center hover:bg-purple-500/15 transition-colors">
+                <div className="text-4xl md:text-5xl font-black text-purple-400 mb-3">50%</div>
                 <div className="text-sm md:text-base font-bold text-white mb-2">Accuracy</div>
-                <p className="text-xs text-white/60">Correct vs total claims</p>
+                <p className="text-xs md:text-sm text-white/60">Correct vs total claims</p>
               </div>
 
               {/* Evidence Quality */}
-              <div className="bg-cyan-500/10 border border-cyan-500/30 rounded-xl p-5 text-center">
-                <div className="text-4xl md:text-5xl font-black text-cyan-400 mb-2">30%</div>
+              <div className="bg-cyan-500/10 border border-cyan-500/30 rounded-xl p-5 md:p-6 text-center hover:bg-cyan-500/15 transition-colors">
+                <div className="text-4xl md:text-5xl font-black text-cyan-400 mb-3">30%</div>
                 <div className="text-sm md:text-base font-bold text-white mb-2">Evidence</div>
-                <p className="text-xs text-white/60">Quality of proof (A-F)</p>
+                <p className="text-xs md:text-sm text-white/60">Quality of proof (A-F)</p>
               </div>
 
               {/* Activity */}
-              <div className="bg-emerald-500/10 border border-emerald-500/30 rounded-xl p-5 text-center">
-                <div className="text-4xl md:text-5xl font-black text-emerald-400 mb-2">20%</div>
+              <div className="bg-emerald-500/10 border border-emerald-500/30 rounded-xl p-5 md:p-6 text-center hover:bg-emerald-500/15 transition-colors">
+                <div className="text-4xl md:text-5xl font-black text-emerald-400 mb-3">20%</div>
                 <div className="text-sm md:text-base font-bold text-white mb-2">Activity</div>
-                <p className="text-xs text-white/60">Volume + streaks</p>
+                <p className="text-xs md:text-sm text-white/60">Volume of resolutions</p>
               </div>
             </div>
 
-            {/* Multipliers */}
-            <div className="space-y-3">
-              <div className="flex items-center justify-between px-5 py-3 bg-orange-500/10 border border-orange-500/30 rounded-lg">
-                <div className="flex items-center gap-3">
-                  <svg className="w-5 h-5 text-orange-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.656 7.343A7.975 7.975 0 0120 13a7.975 7.975 0 01-2.343 5.657z"/>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M9.879 16.121A3 3 0 1012.015 11L11 14H9c0 .768.293 1.536.879 2.121z"/>
-                  </svg>
-                  <span className="text-sm md:text-base font-semibold text-white">Active Streak</span>
+            {/* How Reputation Grows */}
+            <div className="space-y-4">
+              <div className="bg-white/5 border border-white/10 rounded-lg p-5">
+                <div className="flex items-start gap-4">
+                  <div className="w-10 h-10 rounded-lg bg-purple-500/20 border border-purple-500/40 flex items-center justify-center flex-shrink-0">
+                    <svg className="w-5 h-5 text-purple-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+                    </svg>
+                  </div>
+                  <div className="flex-1">
+                    <div className="text-base md:text-lg font-semibold text-white mb-2">Be Accurate</div>
+                    <p className="text-sm text-white/70">Your correct-to-total ratio determines 50% of your reputation. The more accurate you are, the higher you score.</p>
+                  </div>
                 </div>
-                <span className="text-xs md:text-sm text-orange-300 font-medium">Up to 2× multiplier</span>
               </div>
 
-              <div className="flex items-center justify-between px-5 py-3 bg-red-500/10 border border-red-500/30 rounded-lg">
-                <div className="flex items-center gap-3">
-                  <svg className="w-5 h-5 text-red-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
-                  </svg>
-                  <span className="text-sm md:text-base font-semibold text-white">High-Risk Categories</span>
+              <div className="bg-white/5 border border-white/10 rounded-lg p-5">
+                <div className="flex items-start gap-4">
+                  <div className="w-10 h-10 rounded-lg bg-cyan-500/20 border border-cyan-500/40 flex items-center justify-center flex-shrink-0">
+                    <svg className="w-5 h-5 text-cyan-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                    </svg>
+                  </div>
+                  <div className="flex-1">
+                    <div className="text-base md:text-lg font-semibold text-white mb-2">Provide Strong Evidence</div>
+                    <p className="text-sm text-white/70">Grade A evidence (official docs, verified sources) maximizes your score. Even incorrect claims with good evidence maintain credibility.</p>
+                  </div>
                 </div>
-                <span className="text-xs md:text-sm text-red-300 font-medium">+50% bonus points</span>
               </div>
 
-              <div className="flex items-center justify-between px-5 py-3 bg-blue-500/10 border border-blue-500/30 rounded-lg">
-                <div className="flex items-center gap-3">
-                  <svg className="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
-                  </svg>
-                  <span className="text-sm md:text-base font-semibold text-white">Grade A Evidence</span>
+              <div className="bg-white/5 border border-white/10 rounded-lg p-5">
+                <div className="flex items-start gap-4">
+                  <div className="w-10 h-10 rounded-lg bg-emerald-500/20 border border-emerald-500/40 flex items-center justify-center flex-shrink-0">
+                    <svg className="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/>
+                    </svg>
+                  </div>
+                  <div className="flex-1">
+                    <div className="text-base md:text-lg font-semibold text-white mb-2">Stay Active</div>
+                    <p className="text-sm text-white/70">Resolve more claims to increase your activity score. Each resolved claim adds 10 points, maxing at 200 points (20 resolutions).</p>
+                  </div>
                 </div>
-                <span className="text-xs md:text-sm text-blue-300 font-medium">Maximum points</span>
               </div>
             </div>
           </div>
         </div>
 
-        {/* Tier Progression */}
-        <div className="mb-12 md:mb-16">
-          <div className="text-center mb-8">
-            <h3 className="text-2xl md:text-3xl font-bold text-white mb-3">Rise Through the Ranks</h3>
-            <p className="text-sm md:text-base text-white/60 max-w-2xl mx-auto">Five reputation tiers. Each unlocks higher credibility and visibility.</p>
+        {/* Reputation Tiers */}
+        <div className="mb-16 md:mb-20">
+          <div className="text-center mb-8 md:mb-10">
+            <h3 className="text-2xl md:text-3xl font-bold text-white mb-3">Reputation Tiers</h3>
+            <p className="text-sm md:text-base text-white/60 max-w-2xl mx-auto">Your reputation score determines your tier. Higher tiers unlock greater visibility and credibility.</p>
           </div>
 
-          <div className="grid grid-cols-2 md:grid-cols-5 gap-3 md:gap-4 max-w-5xl mx-auto">
-            {/* Novice */}
-            <div className="bg-slate-800/60 border border-slate-600/40 rounded-lg p-4 text-center">
-              <div className="text-2xl mb-2">🌱</div>
-              <div className="text-sm font-bold text-slate-300 mb-1">Novice</div>
-              <div className="text-xs text-slate-500">0-100 pts</div>
-            </div>
+          <div className="max-w-5xl mx-auto">
+            <div className="space-y-3">
+              {/* Novice */}
+              <div className="bg-gradient-to-r from-slate-800/60 to-slate-700/40 border border-slate-600/40 rounded-xl p-4 md:p-5 flex items-center justify-between hover:border-slate-500/60 transition-colors">
+                <div className="flex items-center gap-4">
+                  <div className="w-12 h-12 md:w-14 md:h-14 rounded-lg bg-slate-700/60 border border-slate-600/50 flex items-center justify-center">
+                    <span className="text-lg md:text-xl font-bold text-slate-400">N</span>
+                  </div>
+                  <div>
+                    <div className="text-base md:text-lg font-bold text-slate-300">Novice</div>
+                    <div className="text-xs md:text-sm text-slate-500">Starting your journey</div>
+                  </div>
+                </div>
+                <div className="text-right">
+                  <div className="text-lg md:text-xl font-bold text-slate-400">0-299</div>
+                  <div className="text-xs text-slate-600">points</div>
+                </div>
+              </div>
 
-            {/* Trusted */}
-            <div className="bg-slate-800/60 border border-cyan-500/30 rounded-lg p-4 text-center">
-              <div className="text-2xl mb-2">⚡</div>
-              <div className="text-sm font-bold text-cyan-400 mb-1">Trusted</div>
-              <div className="text-xs text-slate-500">101-500 pts</div>
-            </div>
+              {/* Trusted */}
+              <div className="bg-gradient-to-r from-cyan-900/40 to-cyan-800/20 border border-cyan-500/30 rounded-xl p-4 md:p-5 flex items-center justify-between hover:border-cyan-500/50 transition-colors">
+                <div className="flex items-center gap-4">
+                  <div className="w-12 h-12 md:w-14 md:h-14 rounded-lg bg-cyan-600/30 border border-cyan-500/40 flex items-center justify-center">
+                    <span className="text-lg md:text-xl font-bold text-cyan-400">T</span>
+                  </div>
+                  <div>
+                    <div className="text-base md:text-lg font-bold text-cyan-300">Trusted</div>
+                    <div className="text-xs md:text-sm text-cyan-500/70">Building credibility</div>
+                  </div>
+                </div>
+                <div className="text-right">
+                  <div className="text-lg md:text-xl font-bold text-cyan-400">300-499</div>
+                  <div className="text-xs text-cyan-600">points</div>
+                </div>
+              </div>
 
-            {/* Expert */}
-            <div className="bg-slate-800/60 border border-blue-500/30 rounded-lg p-4 text-center">
-              <div className="text-2xl mb-2">🎯</div>
-              <div className="text-sm font-bold text-blue-400 mb-1">Expert</div>
-              <div className="text-xs text-slate-500">501-2000 pts</div>
-            </div>
+              {/* Expert */}
+              <div className="bg-gradient-to-r from-blue-900/40 to-blue-800/20 border border-blue-500/30 rounded-xl p-4 md:p-5 flex items-center justify-between hover:border-blue-500/50 transition-colors">
+                <div className="flex items-center gap-4">
+                  <div className="w-12 h-12 md:w-14 md:h-14 rounded-lg bg-blue-600/30 border border-blue-500/40 flex items-center justify-center">
+                    <span className="text-lg md:text-xl font-bold text-blue-400">E</span>
+                  </div>
+                  <div>
+                    <div className="text-base md:text-lg font-bold text-blue-300">Expert</div>
+                    <div className="text-xs md:text-sm text-blue-500/70">Proven track record</div>
+                  </div>
+                </div>
+                <div className="text-right">
+                  <div className="text-lg md:text-xl font-bold text-blue-400">500-649</div>
+                  <div className="text-xs text-blue-600">points</div>
+                </div>
+              </div>
 
-            {/* Master */}
-            <div className="bg-slate-800/60 border border-purple-500/30 rounded-lg p-4 text-center">
-              <div className="text-2xl mb-2">👑</div>
-              <div className="text-sm font-bold text-purple-400 mb-1">Master</div>
-              <div className="text-xs text-slate-500">2001-5000 pts</div>
-            </div>
+              {/* Master */}
+              <div className="bg-gradient-to-r from-purple-900/40 to-purple-800/20 border border-purple-500/30 rounded-xl p-4 md:p-5 flex items-center justify-between hover:border-purple-500/50 transition-colors">
+                <div className="flex items-center gap-4">
+                  <div className="w-12 h-12 md:w-14 md:h-14 rounded-lg bg-purple-600/30 border border-purple-500/40 flex items-center justify-center">
+                    <span className="text-lg md:text-xl font-bold text-purple-400">M</span>
+                  </div>
+                  <div>
+                    <div className="text-base md:text-lg font-bold text-purple-300">Master</div>
+                    <div className="text-xs md:text-sm text-purple-500/70">Elite accuracy</div>
+                  </div>
+                </div>
+                <div className="text-right">
+                  <div className="text-lg md:text-xl font-bold text-purple-400">650-799</div>
+                  <div className="text-xs text-purple-600">points</div>
+                </div>
+              </div>
 
-            {/* Legend */}
-            <div className="col-span-2 md:col-span-1 bg-gradient-to-br from-amber-500/20 to-orange-500/20 border border-amber-500/40 rounded-lg p-4 text-center">
-              <div className="text-2xl mb-2">🏆</div>
-              <div className="text-sm font-bold text-amber-400 mb-1">Legend</div>
-              <div className="text-xs text-slate-500">5000+ pts</div>
+              {/* Legend */}
+              <div className="bg-gradient-to-r from-amber-900/40 to-orange-800/20 border border-amber-500/40 rounded-xl p-4 md:p-5 flex items-center justify-between hover:border-amber-500/60 transition-colors shadow-lg shadow-amber-500/10">
+                <div className="flex items-center gap-4">
+                  <div className="w-12 h-12 md:w-14 md:h-14 rounded-lg bg-gradient-to-br from-amber-600/40 to-orange-600/40 border border-amber-500/50 flex items-center justify-center">
+                    <span className="text-lg md:text-xl font-bold text-amber-400">L</span>
+                  </div>
+                  <div>
+                    <div className="text-base md:text-lg font-bold text-amber-300">Legend</div>
+                    <div className="text-xs md:text-sm text-amber-500/70">Exceptional reputation</div>
+                  </div>
+                </div>
+                <div className="text-right">
+                  <div className="text-lg md:text-xl font-bold text-amber-400">800-1000</div>
+                  <div className="text-xs text-amber-600">points</div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
