@@ -490,7 +490,37 @@ export async function GET(request: NextRequest) {
     const dedupedClaims = dedupeByKey(claims as any[]);
     const dedupedOsint = dedupeByKey(osint as any[]);
 
-    const resolved = dedupedClaims.filter((c: any) => c.outcome === 'correct' || c.outcome === 'incorrect');
+    // Add seed predictions for demo purposes
+    const seedClaims = SEED_PREDICTIONS.map(seed => ({
+      id: seed.id,
+      publicSlug: seed.id,
+      claim: seed.claim,
+      category: seed.category,
+      lat: seed.lat,
+      lng: seed.lng,
+      status: seed.outcome === 'correct' ? 'verified' : seed.outcome === 'incorrect' ? 'disputed' : 'pending',
+      submitter: `Anon #${seed.authorNumber}`,
+      anonId: seed.anonId,
+      rep: 350, // Default rep for seed data
+      confidence: 75,
+      lockedDate: seed.timestamp,
+      outcome: seed.outcome === 'pending' ? null : seed.outcome,
+      evidence_score: seed.evidenceGrade ?
+        (seed.evidenceGrade === 'A' ? 90 : seed.evidenceGrade === 'B' ? 75 : seed.evidenceGrade === 'C' ? 55 : 35) : undefined,
+      createdAt: seed.timestamp,
+      isSeedData: true,
+      lockEvidence: seed.lockEvidence,
+      resolvedEvidence: seed.resolvedEvidence,
+      evidenceGrade: seed.evidenceGrade,
+      resolutionNote: seed.resolutionNote,
+      resolved_at: seed.resolved_at,
+      key: `claim:${seed.id}`,
+    }));
+
+    // Merge seed data with real claims
+    const allClaims = [...seedClaims, ...dedupedClaims];
+
+    const resolved = allClaims.filter((c: any) => c.outcome === 'correct' || c.outcome === 'incorrect');
 
     const response = {
       meta: {
@@ -498,15 +528,15 @@ export async function GET(request: NextRequest) {
         window,
         category: category || 'all',
         counts: {
-          total: dedupedClaims.length + dedupedOsint.length,
-          claims: dedupedClaims.length,
+          total: allClaims.length + dedupedOsint.length,
+          claims: allClaims.length,
           osint: dedupedOsint.length,
           resolved: resolved.length,
         },
         cacheHit: false,
         queryTime: Date.now() - startTime,
       },
-      claims: dedupedClaims,
+      claims: allClaims,
       osint: dedupedOsint,
       resolved,
     };
