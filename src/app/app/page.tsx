@@ -594,6 +594,14 @@ export default function AppFeedPage() {
                       );
                     })}
                   </div>
+                  {filteredPredictions.length > visibleClaims && (
+                    <button
+                      onClick={() => setVisibleClaims(v => v + 20)}
+                      className="mt-4 w-full py-2.5 text-sm font-medium text-purple-400 hover:text-purple-300 bg-purple-500/10 hover:bg-purple-500/20 border border-purple-500/20 rounded-lg transition-all"
+                    >
+                      Show more ({filteredPredictions.length - visibleClaims} remaining)
+                    </button>
+                  )}
                 ) : (
                   <div className="flex flex-col items-center justify-center py-16">
                     <svg className="w-10 h-10 text-slate-600 mb-3" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24">
