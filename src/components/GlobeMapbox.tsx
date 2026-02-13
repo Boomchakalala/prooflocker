@@ -527,20 +527,44 @@ export default function GlobeMapbox({ claims, osint, mapMode = 'both', viewMode 
                         const sc = statusColor(c.status, c.outcome);
                         const res = c.outcome === 'correct' || c.outcome === 'incorrect';
                         const label = res ? c.outcome : c.status;
-                        const tier = getReputationTier(c.rep || 0);
+
+                        // Calculate tier from rep
+                        const rep = c.rep || 0;
+                        let tierName = 'Novice';
+                        let tierColor = 'text-slate-400';
+                        let tierBg = 'bg-slate-500/15';
+
+                        if (rep >= 800) {
+                          tierName = 'Legend';
+                          tierColor = 'text-purple-400';
+                          tierBg = 'bg-purple-500/15';
+                        } else if (rep >= 700) {
+                          tierName = 'Master';
+                          tierColor = 'text-blue-400';
+                          tierBg = 'bg-blue-500/15';
+                        } else if (rep >= 500) {
+                          tierName = 'Expert';
+                          tierColor = 'text-emerald-400';
+                          tierBg = 'bg-emerald-500/15';
+                        } else if (rep >= 300) {
+                          tierName = 'Trusted';
+                          tierColor = 'text-amber-400';
+                          tierBg = 'bg-amber-500/15';
+                        }
+
                         return (
                           <div key={c.id} className="py-3 border-b border-purple-500/10 last:border-0">
                             <div className="text-[12px] sm:text-[13px] font-semibold text-white leading-snug mb-2">{c.claim}</div>
                             <div className="flex items-center gap-1.5 sm:gap-2 flex-wrap">
                               <span className="text-[10px] sm:text-[11px] font-semibold text-slate-300">{c.submitter}</span>
+                              <span className={`text-[9px] font-bold px-1.5 sm:px-2 py-0.5 rounded-md ${tierBg} ${tierColor}`}>
+                                {tierName}
+                              </span>
                               <span
                                 className="text-[9px] font-bold uppercase px-1.5 sm:px-2 py-0.5 rounded-md"
                                 style={{ background: sc + '22', color: sc }}
                               >
                                 {label}
-                              </span>
-                              <span className={`text-[9px] font-bold px-1.5 sm:px-2 py-0.5 rounded-md ${tier.bgColor} ${tier.textColor} border ${tier.borderColor}`}>
-                                {tier.name}
                               </span>
                               {c.category && (
                                 <span className="text-[9px] text-purple-400">#{c.category}</span>
