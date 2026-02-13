@@ -468,7 +468,22 @@ export default function AppFeedPage() {
                       const isIncorrect = claim.outcome === "incorrect";
                       const isPending = !claim.outcome || claim.outcome === "pending";
                       const isResolved = isCorrect || isIncorrect;
-                      const evidenceGrade = claim.evidence_score ? getEvidenceGrade(claim.evidence_score) : null;
+
+                      // Get evidence grade - either from direct evidenceGrade field or calculate from score
+                      let evidenceGrade = null;
+                      if ((claim as any).evidenceGrade) {
+                        // Map letter grade to display format
+                        const gradeMap: any = {
+                          'A': { grade: 'A', bgColor: 'bg-emerald-500/20', textColor: 'text-emerald-400' },
+                          'B': { grade: 'B', bgColor: 'bg-cyan-500/20', textColor: 'text-cyan-400' },
+                          'C': { grade: 'C', bgColor: 'bg-amber-500/20', textColor: 'text-amber-400' },
+                          'D': { grade: 'D', bgColor: 'bg-red-500/20', textColor: 'text-red-400' },
+                        };
+                        evidenceGrade = gradeMap[(claim as any).evidenceGrade];
+                      } else if ((claim as any).evidence_score) {
+                        evidenceGrade = getEvidenceGrade((claim as any).evidence_score);
+                      }
+
                       const repTier = getReputationTier(claim.rep || 0);
 
                       return (
