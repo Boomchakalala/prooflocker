@@ -72,12 +72,11 @@ export default function ReputationImpact() {
 
             <div className="space-y-2 md:space-y-3">
               <div className="flex items-center justify-between px-4 py-2 bg-cyan-500/10 border border-cyan-500/30 rounded-lg">
-                <span className="text-xs md:text-sm text-slate-400">Current Tier</span>
-                <span className="text-lg md:text-xl font-bold text-cyan-400">Expert</span>
+                <span className="text-xs md:text-sm text-slate-400">Tier System</span>
+                <span className="text-sm md:text-base font-bold text-cyan-400">5 Levels</span>
               </div>
-              <div className="flex items-center gap-2 px-4 py-2 bg-orange-500/10 border border-orange-500/30 rounded-lg">
-                <span className="text-lg md:text-xl font-bold text-orange-400">5</span>
-                <span className="text-xs md:text-sm text-slate-300">claim streak active</span>
+              <div className="px-4 py-2 bg-orange-500/10 border border-orange-500/30 rounded-lg">
+                <p className="text-xs md:text-sm text-slate-300">Streaks multiply points. Consistency compounds reputation.</p>
               </div>
             </div>
           </div>
