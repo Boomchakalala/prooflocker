@@ -190,6 +190,52 @@ export async function resendConfirmationEmail(
 }
 
 /**
+ * Send a password reset email
+ */
+export async function sendPasswordResetEmail(
+  email: string
+): Promise<{ success: boolean; error?: string }> {
+  if (!email || !isValidEmail(email)) {
+    return { success: false, error: 'Please enter a valid email address.' };
+  }
+
+  const { error } = await supabase.auth.resetPasswordForEmail(email, {
+    redirectTo: `${getSiteUrl()}/auth/reset-password`,
+  });
+
+  if (error) {
+    console.error("[Auth] Error sending password reset:", error);
+    return { success: false, error: getFriendlyErrorMessage(error) };
+  }
+
+  console.log("[Auth] Password reset email sent to:", email);
+  return { success: true };
+}
+
+/**
+ * Update password (used after clicking reset link)
+ */
+export async function updatePassword(
+  newPassword: string
+): Promise<{ success: boolean; error?: string }> {
+  if (!newPassword || newPassword.length < 6) {
+    return { success: false, error: 'Password must be at least 6 characters.' };
+  }
+
+  const { error } = await supabase.auth.updateUser({
+    password: newPassword,
+  });
+
+  if (error) {
+    console.error("[Auth] Error updating password:", error);
+    return { success: false, error: getFriendlyErrorMessage(error) };
+  }
+
+  console.log("[Auth] Password updated successfully");
+  return { success: true };
+}
+
+/**
  * Get the current access token for API calls
  * This is for client-side use only to send to API routes
  */
