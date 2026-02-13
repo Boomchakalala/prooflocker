@@ -71,7 +71,60 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function ProofPage({ params }: Props) {
   const { slug } = await params;
-  const prediction = await getPredictionBySlug(slug);
+
+  let prediction: Prediction | null = null;
+  let isSeedData = false;
+
+  // Check if this is a seed prediction
+  if (slug.startsWith('seed-')) {
+    const seedPrediction = SEED_PREDICTIONS.find(sp => sp.id === slug);
+    if (seedPrediction) {
+      isSeedData = true;
+      // Create a fake prediction object from seed data
+      const fakeHash = `0x${slug.replace('seed-', '')}${'a'.repeat(56)}`;
+      const fakeProofId = `DEMO-${slug.toUpperCase()}`;
+
+      prediction = {
+        id: seedPrediction.id,
+        userId: null,
+        anonId: seedPrediction.anonId,
+        authorNumber: seedPrediction.authorNumber,
+        text: seedPrediction.claim,
+        textPreview: seedPrediction.claim.slice(0, 100),
+        hash: fakeHash,
+        timestamp: seedPrediction.timestamp,
+        dagTransaction: fakeHash,
+        proofId: fakeProofId,
+        publicSlug: seedPrediction.id,
+        onChainStatus: 'confirmed',
+        outcome: seedPrediction.outcome === 'pending' ? null : seedPrediction.outcome,
+        category: seedPrediction.category,
+        resolutionNote: seedPrediction.resolutionNote,
+        resolvedAt: seedPrediction.resolved_at,
+        resolvedBy: seedPrediction.anonId,
+        evidenceGrade: seedPrediction.evidenceGrade,
+        evidenceSummary: seedPrediction.lockEvidence,
+        resolutionFingerprint: seedPrediction.resolved_at ? `${fakeHash.slice(0, 40)}res` : null,
+        deReference: `demo-${slug}-lock`,
+        deEventId: `evt-${slug}-lock`,
+        deStatus: 'confirmed',
+        deSubmittedAt: seedPrediction.timestamp,
+        confirmedAt: seedPrediction.timestamp,
+        claimedAt: seedPrediction.timestamp,
+        resolutionDeHash: seedPrediction.resolved_at ? `${fakeHash.slice(0, 40)}res` : null,
+        resolutionDeTimestamp: seedPrediction.resolved_at,
+        resolutionDeReference: seedPrediction.resolved_at ? `demo-${slug}-resolve` : null,
+        resolutionDeEventId: seedPrediction.resolved_at ? `evt-${slug}-resolve` : null,
+        resolutionDeStatus: seedPrediction.resolved_at ? 'confirmed' : null,
+        moderationStatus: 'active',
+        createdAt: seedPrediction.timestamp,
+        geotag_lat: seedPrediction.lat,
+        geotag_lng: seedPrediction.lng,
+      } as Prediction;
+    }
+  } else {
+    prediction = await getPredictionBySlug(slug);
+  }
 
   if (!prediction) {
     notFound();
