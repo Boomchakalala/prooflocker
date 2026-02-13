@@ -147,10 +147,10 @@ export default function HowScoringWorksPage() {
                   <span className="text-purple-400 font-semibold">Max 200 points</span>
                 </div>
                 <p className="text-neutral-300 text-sm mb-3">
-                  <strong>Formula:</strong> 10 points per resolved claim, capped at 20 resolutions
+                  <strong>Formula:</strong> 4 points per resolved claim, capped at 50 resolutions
                 </p>
                 <p className="text-neutral-400 text-sm">
-                  Rewards consistent engagement. Reaches maximum at 20 resolved claims.
+                  Rewards consistent engagement. Reaches maximum at 50 resolved claims.
                 </p>
               </div>
 
@@ -173,7 +173,7 @@ export default function HowScoringWorksPage() {
                   </div>
                   <div className="flex justify-between mb-2">
                     <span className="text-neutral-400">Activity:</span>
-                    <span className="text-white">15 × 10 = <strong className="text-purple-400">150</strong></span>
+                    <span className="text-white">15 × 4 = <strong className="text-purple-400">60</strong></span>
                   </div>
                   <div className="border-t border-white/10 my-2 pt-2 flex justify-between text-lg font-bold">
                     <span className="text-white">Total Reputation:</span>
