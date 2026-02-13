@@ -32,39 +32,27 @@ export default function TopSourcesList({ category = 'all' }: TopSourcesListProps
   const fetchTopSources = async () => {
     setLoading(true);
     try {
+      // ALWAYS use seed data for now (leaderboard under construction)
+      setSources(SEED_LEADERBOARD);
+      setUsingSeedData(true);
+
+      // Still fetch real data in background for calculations (but don't display)
       const url = category && category !== 'all'
         ? `/api/top-sources?category=${encodeURIComponent(category)}`
         : '/api/top-sources';
 
-      const response = await fetch(url, {
+      fetch(url, {
         cache: 'no-store',
         headers: {
           'Cache-Control': 'no-cache, no-store, must-revalidate',
           'Pragma': 'no-cache',
           'Expires': '0'
         }
+      }).catch(() => {
+        // Silent fail - we're showing seed data anyway
       });
-
-      if (!response.ok) {
-        console.warn('Top sources API unavailable, showing seed data');
-        setSources(SEED_LEADERBOARD);
-        setUsingSeedData(true);
-        return;
-      }
-
-      const data = await response.json();
-      console.log('[TopSourcesList] Fetched sources:', data.sources?.length || 0);
-
-      // If no real data, use seed data
-      if (!data.sources || data.sources.length === 0) {
-        setSources(SEED_LEADERBOARD);
-        setUsingSeedData(true);
-      } else {
-        setSources(data.sources);
-        setUsingSeedData(false);
-      }
     } catch (err) {
-      console.error('Error fetching top sources:', err);
+      console.error('Error in leaderboard:', err);
       setSources(SEED_LEADERBOARD);
       setUsingSeedData(true);
     } finally {
