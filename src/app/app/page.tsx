@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo, useCallback, useRef } from "react";
 import Link from "next/link";
 import UnifiedHeader from "@/components/UnifiedHeader";
 import ClaimModal from "@/components/ClaimModal";
@@ -28,6 +28,15 @@ export default function AppFeedPage() {
   const [lastUpdated, setLastUpdated] = useState<Date>(new Date());
   const [newItems, setNewItems] = useState<{ claims: number; intel: number } | null>(null);
   const [prevCounts, setPrevCounts] = useState<{ claims: number; intel: number }>({ claims: 0, intel: 0 });
+  const [debouncedSearch, setDebouncedSearch] = useState("");
+  const [visibleClaims, setVisibleClaims] = useState(20);
+  const [visibleIntel, setVisibleIntel] = useState(20);
+
+  // Debounce search input - prevent filtering on every keystroke
+  useEffect(() => {
+    const timer = setTimeout(() => setDebouncedSearch(searchQuery), 250);
+    return () => clearTimeout(timer);
+  }, [searchQuery]);
 
   useEffect(() => {
     fetchData();
