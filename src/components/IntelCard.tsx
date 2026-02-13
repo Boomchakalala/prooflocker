@@ -265,4 +265,4 @@ export default memo(function IntelCard({ item, compact = false }: IntelCardProps
       </div>
     </div>
   );
-}
+})

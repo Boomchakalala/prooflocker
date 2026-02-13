@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, memo } from 'react';
 
 export interface BannerItem {
   type: string;
@@ -24,7 +24,7 @@ interface BreakingNewsBannerProps {
  * - Mobile-responsive with larger text on small screens
  * - Seamless loop by duplicating items
  */
-export default function BreakingNewsBanner({ items, className = '' }: BreakingNewsBannerProps) {
+export default memo(function BreakingNewsBanner({ items, className = '' }: BreakingNewsBannerProps) {
   const [isPaused, setIsPaused] = useState(false);
 
   if (!items || items.length === 0) {
