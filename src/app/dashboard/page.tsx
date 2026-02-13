@@ -5,6 +5,14 @@ import { useRouter } from "next/navigation";
 import { useAuth } from "@/contexts/AuthContext";
 import Link from "next/link";
 import UnifiedHeader from '@/components/UnifiedHeader';
+import {
+  calculateWeightedReputation,
+  getReputationTier,
+  evidenceGradeToPoints,
+  calculateLockXP,
+  calculateResolveXP,
+  type EvidenceGrade
+} from '@/lib/reputation-scoring';
 
 interface Prediction {
   id: string;

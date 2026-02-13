@@ -47,8 +47,8 @@ export const EVIDENCE_WEIGHT = 0.3;
 export const EVIDENCE_MAX = 300;
 export const ACTIVITY_WEIGHT = 0.2;
 export const ACTIVITY_MAX = 200;
-export const ACTIVITY_POINTS_PER_RESOLUTION = 10;
-export const ACTIVITY_MAX_RESOLUTIONS = 20;
+export const ACTIVITY_POINTS_PER_RESOLUTION = 4;
+export const ACTIVITY_MAX_RESOLUTIONS = 50;
 
 // Reputation Penalties
 export const OVERRULED_PENALTY = -25; // Direct subtraction
