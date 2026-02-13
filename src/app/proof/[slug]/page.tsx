@@ -144,6 +144,14 @@ export default async function ProofPage({ params }: Props) {
                   {prediction.onChainStatus === 'confirmed' && (
                     <OnChainBadge variant="full" />
                   )}
+                  {prediction.id?.startsWith('seed-') && (
+                    <div className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-amber-500/10 border border-amber-500/30 text-amber-400">
+                      <svg className="w-3 h-3" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                      </svg>
+                      <span className="text-xs font-semibold uppercase tracking-wider">Demo Data</span>
+                    </div>
+                  )}
                   <div className="h-px flex-1 bg-gradient-to-r from-blue-500/30 to-transparent"></div>
                 </div>
                 <h1 className="text-2xl md:text-3xl leading-relaxed text-white font-semibold break-words">
