@@ -291,7 +291,8 @@ export default function DashboardPage() {
                       <div className="flex justify-between items-center mb-1.5">
                         <span className="font-medium text-sm text-white">{category}</span>
                         <span className="text-xs text-slate-400">
-                          {stats.correct}/{stats.total} ({catAccuracy}%) -- {stats.points} XP
+                          {stats.correct}/{stats.total} ({catAccuracy}%)
+                          {hasXPData && ` -- ${stats.points} XP`}
                         </span>
                       </div>
                       <div className="w-full bg-slate-800 rounded-full h-2">
