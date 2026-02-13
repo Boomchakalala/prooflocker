@@ -86,7 +86,14 @@ export default function HowScoringWorksPage() {
         {/* Reputation Score Breakdown */}
         <section className="mb-12">
           <div className="glass border border-white/10 rounded-xl p-8">
-            <h2 className="text-2xl font-bold text-white mb-6">Reputation Score Calculation</h2>
+            <div className="flex items-center gap-3 mb-6">
+              <div className="w-10 h-10 rounded-lg bg-blue-500/10 border border-blue-500/30 flex items-center justify-center">
+                <svg className="w-5 h-5 text-blue-400" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" />
+                </svg>
+              </div>
+              <h2 className="text-2xl font-bold text-white">Reputation Score Calculation</h2>
+            </div>
 
             <p className="text-neutral-300 mb-6">
               Your Reputation Score is recalculated after every resolution or contest outcome. It's a weighted combination of three factors:
@@ -218,7 +225,14 @@ export default function HowScoringWorksPage() {
         {/* XP System */}
         <section className="mb-12">
           <div className="glass border border-white/10 rounded-xl p-8">
-            <h2 className="text-2xl font-bold text-white mb-6">XP System</h2>
+            <div className="flex items-center gap-3 mb-6">
+              <div className="w-10 h-10 rounded-lg bg-purple-500/10 border border-purple-500/30 flex items-center justify-center">
+                <svg className="w-5 h-5 text-purple-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+                </svg>
+              </div>
+              <h2 className="text-2xl font-bold text-white">XP System</h2>
+            </div>
 
             <p className="text-neutral-300 mb-6">
               XP is uncapped and never decreases. It rewards all activity and unlocks milestones as you progress.
