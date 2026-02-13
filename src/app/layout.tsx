@@ -32,7 +32,7 @@ const siteUrl = getSiteUrl();
 
 export const metadata: Metadata = {
   title: "ProofLocker — Lock Claims On-Chain. Prove It With Receipts.",
-  description: "Lock claims on-chain. Resolve with evidence. Build math-backed reputation. Proof of Reputational Observation — powered by Constellation DAG.",
+  description: "Lock claims on-chain. Resolve with evidence. Build math-backed reputation. Proof of Observable Reputation — powered by Constellation DAG.",
   metadataBase: new URL(siteUrl),
   icons: {
     icon: [
@@ -44,7 +44,7 @@ export const metadata: Metadata = {
   },
   openGraph: {
     title: "Build Your Reputation. Claims With Receipts.",
-    description: "Lock claims on-chain. Resolve with evidence. Build math-backed reputation. Proof of Reputational Observation.",
+    description: "Lock claims on-chain. Resolve with evidence. Build math-backed reputation. Proof of Observable Reputation.",
     url: siteUrl,
     type: "website",
     siteName: "ProofLocker",
@@ -60,7 +60,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary",
     title: "Build Your Reputation. Claims With Receipts.",
-    description: "Lock claims on-chain. Resolve with evidence. Build math-backed reputation. Proof of Reputational Observation.",
+    description: "Lock claims on-chain. Resolve with evidence. Build math-backed reputation. Proof of Observable Reputation.",
     images: [getAbsoluteUrl("/favicons/icon-512.png")],
   },
 };

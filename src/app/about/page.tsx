@@ -37,7 +37,7 @@ export default function AboutPage() {
             About ProofLocker
           </h1>
           <p className="text-slate-400 text-lg">
-            Proof of Reputational Observation
+            Proof of Observable Reputation
           </p>
         </div>
 

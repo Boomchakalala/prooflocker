@@ -16,7 +16,7 @@ export default function Footer() {
               ProofLocker
             </div>
             <div className="text-xs text-white/40">
-              © 2026 — Proof of Reputational Observation
+              © 2026 — Proof of Observable Reputation
             </div>
           </div>
 
