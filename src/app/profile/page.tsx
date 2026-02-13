@@ -340,6 +340,10 @@ export default function ProfilePage() {
         </div>
 
         {/* Stats Overview */}
+        <div className="bg-purple-500/10 border-2 border-purple-500 rounded-xl p-3 mb-4 text-center">
+          <p className="text-purple-300 font-bold text-sm">✨ NEW PROFILE LAYOUT - Stats are now calculated in real-time from your predictions</p>
+        </div>
+
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
           {/* Total Locked */}
           <div className="bg-slate-900/60 border border-slate-700/40 rounded-xl p-5 text-center group hover:border-purple-500/40 transition-colors">
