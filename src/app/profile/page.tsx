@@ -314,28 +314,27 @@ export default function ProfilePage() {
               )}
 
               {/* Quick Stats */}
-              {score && (
-                <div className="flex items-center justify-center md:justify-start gap-6 mt-4 text-sm">
-                  <div>
-                    <span className="text-slate-400">Reputation:</span>
-                    <span className="ml-2 text-purple-400 font-bold">{score.totalPoints.toLocaleString()}</span>
-                  </div>
-                  <div>
-                    <span className="text-slate-400">Accuracy:</span>
-                    <span className={`ml-2 font-bold ${
-                      accuracyRate >= 75 ? "text-emerald-400" : accuracyRate >= 60 ? "text-amber-400" : "text-red-400"
-                    }`}>
-                      {accuracyRate}%
-                    </span>
-                  </div>
-                  <div>
-                    <span className="text-slate-400">Member Since:</span>
-                    <span className="ml-2 text-cyan-400 font-bold">
-                      {memberSince.toLocaleDateString("en-US", { month: "short", year: "numeric" })}
-                    </span>
-                  </div>
+              <div className="flex items-center justify-center md:justify-start gap-4 md:gap-6 mt-4 text-sm flex-wrap">
+                <div>
+                  <span className="text-slate-400">Reputation:</span>
+                  <span className="ml-2 text-purple-400 font-bold">{score?.totalPoints?.toLocaleString() || 0}</span>
                 </div>
-              )}
+                <div>
+                  <span className="text-slate-400">Accuracy:</span>
+                  <span className={`ml-2 font-bold ${
+                    accuracyRate >= 75 ? "text-emerald-400" : accuracyRate >= 60 ? "text-amber-400" : accuracyRate >= 50 ? "text-orange-400" : "text-red-400"
+                  }`}>
+                    {accuracyRate}%
+                  </span>
+                  <span className="ml-1 text-slate-500 text-xs">({correctResolved}/{totalResolved})</span>
+                </div>
+                <div>
+                  <span className="text-slate-400">Member Since:</span>
+                  <span className="ml-2 text-cyan-400 font-bold">
+                    {memberSince.toLocaleDateString("en-US", { month: "short", year: "numeric" })}
+                  </span>
+                </div>
+              </div>
             </div>
           </div>
         </div>
