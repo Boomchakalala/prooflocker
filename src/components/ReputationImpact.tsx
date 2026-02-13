@@ -99,15 +99,21 @@ export default function ReputationImpact() {
             </p>
 
             <div className="px-4 py-3 bg-emerald-500/10 border border-emerald-500/30 rounded-lg">
-              <div className="text-[10px] text-emerald-400/60 uppercase tracking-wider mb-2 font-semibold">Growth Example</div>
-              <div className="flex items-center justify-between mb-3">
-                <span className="text-2xl md:text-3xl font-bold text-slate-600">0</span>
-                <svg className="w-6 h-6 md:w-8 md:h-8 text-emerald-500" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/>
-                </svg>
-                <span className="text-2xl md:text-3xl font-bold text-emerald-400">892</span>
+              <div className="text-[10px] text-emerald-400/60 uppercase tracking-wider mb-2 font-semibold">Growth Formula</div>
+              <div className="space-y-2 text-xs text-slate-300">
+                <div className="flex items-center justify-between">
+                  <span className="text-slate-400">Accuracy</span>
+                  <span className="text-emerald-400 font-semibold">50% weight</span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-slate-400">Evidence Quality</span>
+                  <span className="text-emerald-400 font-semibold">30% weight</span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-slate-400">Activity</span>
+                  <span className="text-emerald-400 font-semibold">20% weight</span>
+                </div>
               </div>
-              <div className="text-center text-xs text-slate-500">After 27 resolved claims</div>
             </div>
           </div>
         </div>
