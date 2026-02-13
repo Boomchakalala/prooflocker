@@ -19,7 +19,7 @@ interface BreakingNewsBannerProps {
  * BreakingNewsBanner - Reusable auto-scrolling news ticker
  *
  * Features:
- * - Fast scroll: 30s desktop, 45s mobile
+ * - Scroll: 60s desktop, 80s mobile
  * - Click/hover to pause
  * - Mobile-responsive with larger text on small screens
  * - Seamless loop by duplicating items
@@ -49,6 +49,7 @@ export default memo(function BreakingNewsBanner({ items, className = '' }: Break
 
         .animate-marquee-fast {
           animation: marquee-fast 60s linear infinite;
+          will-change: transform;
         }
 
         .animate-marquee-fast.paused {
