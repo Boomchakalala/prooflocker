@@ -182,12 +182,31 @@ export default function GlobePage() {
     return `${hours}h ago`;
   };
 
-  // Ticker helper: get top 5 items (3 intel + 2 claims)
+  // Ticker helper: get top 5 items (3 intel + 2 claims), prioritize breaking news
   const getTickerItems = () => {
     const items: { type: string; text: string; location: string; time: string }[] = [];
 
-    // Add top 3 OSINT items
-    osint.slice(0, 3).forEach(signal => {
+    // Sort intel by priority: war/conflict/breaking first, then by recency
+    const sortedIntel = [...osint].sort((a, b) => {
+      const aStr = `${a.title} ${a.tags?.join(' ')}`.toLowerCase();
+      const bStr = `${b.title} ${b.tags?.join(' ')}`.toLowerCase();
+
+      // Priority keywords for war/conflict/breaking
+      const priorityKeywords = /ukraine|russia|taiwan|china|iran|israel|war|conflict|attack|missile|drone|breaking|urgent/;
+      const aHasPriority = priorityKeywords.test(aStr);
+      const bHasPriority = priorityKeywords.test(bStr);
+
+      if (aHasPriority && !bHasPriority) return -1;
+      if (!aHasPriority && bHasPriority) return 1;
+
+      // If both priority or both not priority, sort by recency
+      const aTime = new Date(a.created_at || a.timestamp).getTime();
+      const bTime = new Date(b.created_at || b.timestamp).getTime();
+      return bTime - aTime;
+    });
+
+    // Add top 3 prioritized OSINT items
+    sortedIntel.slice(0, 3).forEach(signal => {
       items.push({
         type: 'INTEL',
         text: signal.title,
