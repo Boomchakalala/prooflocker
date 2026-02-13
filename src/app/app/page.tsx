@@ -156,15 +156,39 @@ export default function AppFeedPage() {
   const filteredOsint = osintSignals.filter(o => {
     if (contentFilter === "claims") return false;
 
-    // Apply category filters to intel based on tags
-    if (quickFilter === "crypto" && !o.tags?.some((t: string) => t.toLowerCase() === "crypto")) return false;
-    if (quickFilter === "politics" && !o.tags?.some((t: string) => t.toLowerCase() === "politics")) return false;
-    if (quickFilter === "markets" && !o.tags?.some((t: string) => t.toLowerCase() === "markets")) return false;
-    if (quickFilter === "tech" && !o.tags?.some((t: string) => t.toLowerCase() === "tech")) return false;
-    if (quickFilter === "sports" && !o.tags?.some((t: string) => t.toLowerCase() === "sports")) return false;
-    if (quickFilter === "culture" && !o.tags?.some((t: string) => t.toLowerCase() === "culture")) return false;
-    if (quickFilter === "military" && !o.tags?.some((t: string) => t.toLowerCase() === "military")) return false;
-    if (quickFilter === "science" && !o.tags?.some((t: string) => t.toLowerCase() === "science")) return false;
+    // Apply category filters to intel based on tags and comprehensive keyword matching
+    if (quickFilter === "crypto") {
+      const matchStr = `${o.title} ${o.tags?.join(' ') || ''}`.toLowerCase();
+      return matchStr.match(/crypto|bitcoin|ethereum|blockchain|defi|nft|token/);
+    }
+    if (quickFilter === "politics") {
+      const matchStr = `${o.title} ${o.tags?.join(' ') || ''}`.toLowerCase();
+      return matchStr.match(/politics|election|government|diplomatic|congress|senate|president|policy|legislation/);
+    }
+    if (quickFilter === "markets") {
+      const matchStr = `${o.title} ${o.tags?.join(' ') || ''}`.toLowerCase();
+      return matchStr.match(/markets|economy|finance|trading|stock|forex|nasdaq|dow|sp500|fed|inflation/);
+    }
+    if (quickFilter === "tech") {
+      const matchStr = `${o.title} ${o.tags?.join(' ') || ''}`.toLowerCase();
+      return matchStr.match(/tech|technology|ai|software|hardware|apple|google|meta|microsoft|startup|cyber/);
+    }
+    if (quickFilter === "sports") {
+      const matchStr = `${o.title} ${o.tags?.join(' ') || ''}`.toLowerCase();
+      return matchStr.match(/sports|football|basketball|soccer|baseball|nba|nfl|olympics|tennis/);
+    }
+    if (quickFilter === "culture") {
+      const matchStr = `${o.title} ${o.tags?.join(' ') || ''}`.toLowerCase();
+      return matchStr.match(/culture|art|music|film|entertainment|celebrity|media|movie|show|festival/);
+    }
+    if (quickFilter === "military") {
+      const matchStr = `${o.title} ${o.tags?.join(' ') || ''}`.toLowerCase();
+      return matchStr.match(/military|war|conflict|drone|missile|attack|battle|ukraine|russia|taiwan|iran|defense|weapon|combat/);
+    }
+    if (quickFilter === "science") {
+      const matchStr = `${o.title} ${o.tags?.join(' ') || ''}`.toLowerCase();
+      return matchStr.match(/science|research|discovery|space|nasa|physics|chemistry|biology|study/);
+    }
 
     // Search filter
     if (searchQuery) {
