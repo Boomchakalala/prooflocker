@@ -34,7 +34,7 @@ interface IntelCardProps {
   compact?: boolean; // Compact layout for globe sidebar
 }
 
-export default function IntelCard({ item, compact = false }: IntelCardProps) {
+export default memo(function IntelCard({ item, compact = false }: IntelCardProps) {
   // Map tags to category
   const getCategory = () => {
     if (!item.tags || item.tags.length === 0) return 'general';
