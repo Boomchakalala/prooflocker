@@ -323,14 +323,16 @@ export default function ProfilePage() {
                   <div>
                     <span className="text-slate-400">Accuracy:</span>
                     <span className={`ml-2 font-bold ${
-                      scoreData.accuracy >= 75 ? "text-emerald-400" : scoreData.accuracy >= 60 ? "text-amber-400" : "text-red-400"
+                      accuracyRate >= 75 ? "text-emerald-400" : accuracyRate >= 60 ? "text-amber-400" : "text-red-400"
                     }`}>
-                      {scoreData.accuracy}%
+                      {accuracyRate}%
                     </span>
                   </div>
                   <div>
-                    <span className="text-slate-400">Streak:</span>
-                    <span className="ml-2 text-cyan-400 font-bold">{score.currentStreak}</span>
+                    <span className="text-slate-400">Member Since:</span>
+                    <span className="ml-2 text-cyan-400 font-bold">
+                      {memberSince.toLocaleDateString("en-US", { month: "short", year: "numeric" })}
+                    </span>
                   </div>
                 </div>
               )}
@@ -338,31 +340,117 @@ export default function ProfilePage() {
           </div>
         </div>
 
-        {/* Stats Grid */}
-        {score && (
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-            <div className="bg-slate-900/60 border border-slate-700/40 rounded-xl p-5 text-center">
-              <div className="text-3xl md:text-4xl font-bold text-white mb-1">{score.locksCount}</div>
-              <div className="text-sm text-slate-400">Claims Locked</div>
+        {/* Stats Overview */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+          {/* Total Locked */}
+          <div className="bg-slate-900/60 border border-slate-700/40 rounded-xl p-5 text-center group hover:border-purple-500/40 transition-colors">
+            <div className="text-3xl md:text-4xl font-bold text-white mb-1">{totalLocked}</div>
+            <div className="text-sm text-slate-400">Claims Locked</div>
+          </div>
+
+          {/* Resolved */}
+          <div className="bg-slate-900/60 border border-slate-700/40 rounded-xl p-5 text-center group hover:border-blue-500/40 transition-colors">
+            <div className="text-3xl md:text-4xl font-bold text-blue-400 mb-1">{totalResolved}</div>
+            <div className="text-sm text-slate-400">Resolved</div>
+          </div>
+
+          {/* Pending */}
+          <div className="bg-slate-900/60 border border-slate-700/40 rounded-xl p-5 text-center group hover:border-amber-500/40 transition-colors">
+            <div className="text-3xl md:text-4xl font-bold text-amber-400 mb-1">{pendingPredictions.length}</div>
+            <div className="text-sm text-slate-400">Pending</div>
+          </div>
+
+          {/* Accuracy Rate */}
+          <div className="bg-slate-900/60 border border-slate-700/40 rounded-xl p-5 text-center group hover:border-emerald-500/40 transition-colors">
+            <div className={`text-3xl md:text-4xl font-bold mb-1 ${
+              accuracyRate >= 75 ? "text-emerald-400" : accuracyRate >= 60 ? "text-amber-400" : accuracyRate >= 50 ? "text-orange-400" : "text-red-400"
+            }`}>
+              {accuracyRate}%
             </div>
-            <div className="bg-slate-900/60 border border-slate-700/40 rounded-xl p-5 text-center">
-              <div className="text-3xl md:text-4xl font-bold text-purple-400 mb-1">{score.claimsCount}</div>
-              <div className="text-sm text-slate-400">Intel Claimed</div>
-            </div>
-            <div className="bg-slate-900/60 border border-slate-700/40 rounded-xl p-5 text-center">
-              <div className="text-3xl md:text-4xl font-bold mb-1">
-                <span className="text-emerald-400">{score.correctResolves}</span>
-                <span className="text-slate-600 text-2xl">/</span>
-                <span className="text-red-400">{score.incorrectResolves}</span>
+            <div className="text-sm text-slate-400">Accuracy</div>
+          </div>
+        </div>
+
+        {/* Detailed Stats */}
+        <div className="grid md:grid-cols-2 gap-4 mb-6">
+          {/* Resolution Breakdown */}
+          <div className="bg-slate-900/60 border border-slate-700/40 rounded-xl p-6">
+            <h3 className="text-lg font-bold text-white mb-4 flex items-center gap-2">
+              <svg className="w-5 h-5 text-purple-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+              </svg>
+              Resolution Breakdown
+            </h3>
+            <div className="space-y-3">
+              <div className="flex items-center justify-between">
+                <span className="text-sm text-slate-400">Correct</span>
+                <div className="flex items-center gap-2">
+                  <div className="w-32 h-2 bg-slate-800 rounded-full overflow-hidden">
+                    <div
+                      className="h-full bg-emerald-500"
+                      style={{ width: `${totalResolved > 0 ? (correctResolved / totalResolved) * 100 : 0}%` }}
+                    />
+                  </div>
+                  <span className="text-emerald-400 font-bold text-lg w-12 text-right">{correctResolved}</span>
+                </div>
               </div>
-              <div className="text-sm text-slate-400">Resolved</div>
-            </div>
-            <div className="bg-slate-900/60 border border-slate-700/40 rounded-xl p-5 text-center">
-              <div className="text-3xl md:text-4xl font-bold text-cyan-400 mb-1">{score.currentStreak}</div>
-              <div className="text-sm text-slate-400">Streak</div>
+              <div className="flex items-center justify-between">
+                <span className="text-sm text-slate-400">Incorrect</span>
+                <div className="flex items-center gap-2">
+                  <div className="w-32 h-2 bg-slate-800 rounded-full overflow-hidden">
+                    <div
+                      className="h-full bg-red-500"
+                      style={{ width: `${totalResolved > 0 ? (incorrectResolved / totalResolved) * 100 : 0}%` }}
+                    />
+                  </div>
+                  <span className="text-red-400 font-bold text-lg w-12 text-right">{incorrectResolved}</span>
+                </div>
+              </div>
+              <div className="flex items-center justify-between">
+                <span className="text-sm text-slate-400">Pending</span>
+                <div className="flex items-center gap-2">
+                  <div className="w-32 h-2 bg-slate-800 rounded-full overflow-hidden">
+                    <div
+                      className="h-full bg-amber-500"
+                      style={{ width: `${totalLocked > 0 ? (pendingPredictions.length / totalLocked) * 100 : 0}%` }}
+                    />
+                  </div>
+                  <span className="text-amber-400 font-bold text-lg w-12 text-right">{pendingPredictions.length}</span>
+                </div>
+              </div>
             </div>
           </div>
-        )}
+
+          {/* Overall Performance */}
+          <div className="bg-slate-900/60 border border-slate-700/40 rounded-xl p-6">
+            <h3 className="text-lg font-bold text-white mb-4 flex items-center gap-2">
+              <svg className="w-5 h-5 text-cyan-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/>
+              </svg>
+              Overall Performance
+            </h3>
+            <div className="space-y-4">
+              <div className="flex items-center justify-between">
+                <span className="text-sm text-slate-400">Correct vs Locked</span>
+                <span className="text-white font-bold text-lg">
+                  {totalLocked > 0 ? Math.round((correctResolved / totalLocked) * 100) : 0}%
+                </span>
+              </div>
+              <div className="flex items-center justify-between">
+                <span className="text-sm text-slate-400">Resolution Rate</span>
+                <span className="text-white font-bold text-lg">
+                  {totalLocked > 0 ? Math.round((totalResolved / totalLocked) * 100) : 0}%
+                </span>
+              </div>
+              {score && (
+                <div className="flex items-center justify-between">
+                  <span className="text-sm text-slate-400">Reputation Score</span>
+                  <span className="text-purple-400 font-bold text-lg">{score.totalPoints}</span>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
 
         {/* Badges Section */}
         {score && score.badges.length > 0 && (
