@@ -135,6 +135,18 @@ export async function GET(request: NextRequest) {
 
     console.log(`[Globe API] ${geotaggedPredictions.length} predictions have geotags`);
 
+    // Fetch reputation scores for all users in one query
+    const anonIds = [...new Set(geotaggedPredictions.map((p: any) => p.anon_id).filter(Boolean))];
+    const { data: reputationData } = await supabase
+      .from('insight_scores')
+      .select('anon_id, total_points')
+      .in('anon_id', anonIds);
+
+    // Create a map of anon_id -> reputation score
+    const reputationMap = new Map(
+      (reputationData || []).map((r: any) => [r.anon_id, r.total_points])
+    );
+
     const claims = geotaggedPredictions.map((prediction: any) => {
       // Use actual geotag coordinates from the prediction
       const lat = parseFloat(prediction.geotag_lat);
@@ -163,8 +175,8 @@ export async function GET(request: NextRequest) {
       // Calculate confidence score (mock for now, can be enhanced with actual scoring)
       const confidence = Math.floor(60 + Math.random() * 35);
 
-      // Calculate mock reputation (will be replaced with actual user stats)
-      const rep = Math.floor(50 + Math.random() * 50);
+      // Get actual reputation score from insight_scores table
+      const rep = reputationMap.get(prediction.anon_id) || 0;
 
       return {
         id: prediction.id,
