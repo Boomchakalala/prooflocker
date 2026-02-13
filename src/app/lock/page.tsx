@@ -6,12 +6,14 @@ import Link from "next/link";
 import BrandLogo from "@/components/BrandLogo";
 import UnifiedHeader from "@/components/UnifiedHeader";
 import EvidenceBundleUploader from "@/components/EvidenceBundleUploader";
+import LocationPicker from "@/components/LocationPicker";
 import { getOrCreateUserId, isAnonymousUser } from "@/lib/user";
 import { getSiteUrl } from "@/lib/config";
 import { supabase } from "@/lib/supabase";
 import { useToast } from "@/contexts/ToastContext";
 import { getUserLocation } from "@/lib/geolocation";
 import type { OsintSignal } from "@/lib/osint-types";
+import type { LocationResult } from "@/lib/geocode";
 
 function LockPageContent() {
   const router = useRouter();
@@ -27,6 +29,8 @@ function LockPageContent() {
   const [howItWorksExpanded, setHowItWorksExpanded] = useState(false);
   const [prefillOsint, setPrefillOsint] = useState<OsintSignal | null>(null);
   const [evidenceItems, setEvidenceItems] = useState<any[]>([]);
+  const [useManualLocation, setUseManualLocation] = useState(false);
+  const [manualLocation, setManualLocation] = useState<LocationResult | null>(null);
 
   const categories = ["Crypto", "Politics", "Markets", "Tech", "Sports", "Culture", "Intel", "Personal", "Other"];
 
@@ -55,7 +59,20 @@ function LockPageContent() {
 
       // Automatically capture user's location (if consent given)
       console.log("[Lock] Attempting to capture location...");
-      const location = await getUserLocation(true); // true = try precise location first
+      let location: { lat: number; lng: number; city?: string; country?: string; accuracy?: string } | null = null;
+
+      if (useManualLocation && manualLocation) {
+        location = {
+          lat: manualLocation.lat,
+          lng: manualLocation.lng,
+          city: manualLocation.city,
+          country: manualLocation.country,
+          accuracy: "manual",
+        };
+        console.log("[Lock] Using manual location:", location);
+      } else {
+        location = await getUserLocation(true); // true = try precise location first
+      }
 
       if (location) {
         console.log("[Lock] ✓ Location captured:", {
