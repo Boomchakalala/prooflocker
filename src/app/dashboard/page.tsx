@@ -295,30 +295,25 @@ export default function DashboardPage() {
         </div>
 
         {/* Stats Grid */}
-        <div className="grid md:grid-cols-4 gap-4 mb-8">
-          <div className="bg-slate-900/60 border border-slate-700/40 rounded-xl p-5">
-            <div className="text-slate-400 text-sm mb-1">Locked</div>
-            <div className="text-3xl font-bold text-white">{score.locksCount}</div>
+        <div className="grid md:grid-cols-3 gap-4 mb-8">
+          <div className="bg-slate-900/60 border border-slate-700/40 rounded-xl p-6">
+            <div className="text-slate-400 text-sm mb-2 font-medium">Claims Locked</div>
+            <div className="text-4xl font-bold text-white">{score.locksCount}</div>
+            <div className="text-xs text-slate-500 mt-2">Total predictions made</div>
           </div>
-          {user && (
-            <div className="bg-slate-900/60 border border-slate-700/40 rounded-xl p-5">
-              <div className="text-slate-400 text-sm mb-1">Claimed</div>
-              <div className="text-3xl font-bold text-purple-400">{score.claimsCount}</div>
-            </div>
-          )}
-          <div className="bg-slate-900/60 border border-slate-700/40 rounded-xl p-5">
-            <div className="text-slate-400 text-sm mb-1">Resolved</div>
-            <div className="text-3xl font-bold">
-              <span className="text-emerald-400">{score.correctResolves}</span>
-              <span className="text-slate-600">/</span>
-              <span className="text-red-400">{score.incorrectResolves}</span>
+          <div className="bg-slate-900/60 border border-slate-700/40 rounded-xl p-6">
+            <div className="text-slate-400 text-sm mb-2 font-medium">Resolved</div>
+            <div className="text-4xl font-bold text-white">{score.totalResolves}</div>
+            <div className="text-xs text-slate-500 mt-2">
+              <span className="text-emerald-400">{score.correctResolves} correct</span>
+              <span className="text-slate-600"> • </span>
+              <span className="text-red-400">{score.incorrectResolves} incorrect</span>
             </div>
           </div>
-          <div className="bg-slate-900/60 border border-slate-700/40 rounded-xl p-5">
-            <div className="text-slate-400 text-sm mb-1">Streak</div>
-            <div className="text-3xl font-bold text-purple-400">
-              {score.currentStreak}
-            </div>
+          <div className="bg-slate-900/60 border border-slate-700/40 rounded-xl p-6">
+            <div className="text-slate-400 text-sm mb-2 font-medium">Pending</div>
+            <div className="text-4xl font-bold text-amber-400">{score.locksCount - score.totalResolves}</div>
+            <div className="text-xs text-slate-500 mt-2">Awaiting resolution</div>
           </div>
         </div>
 
@@ -399,7 +394,7 @@ export default function DashboardPage() {
         {/* Next Badge Goals */}
         <div className="bg-slate-900/60 border border-slate-700/40 rounded-xl p-6 mb-8">
           <h2 className="text-xl font-bold mb-4 text-white">Next Achievements</h2>
-          <div className="grid md:grid-cols-3 gap-3">
+          <div className="grid md:grid-cols-2 gap-3">
             {score.totalResolves < 25 && (
               <div className="bg-slate-800/40 border border-slate-700/30 rounded-lg p-4">
                 <div className="text-white font-semibold mb-1">25 Resolves</div>
@@ -410,20 +405,6 @@ export default function DashboardPage() {
                   <div
                     className="bg-purple-500 h-1.5 rounded-full transition-all"
                     style={{ width: `${(score.totalResolves / 25) * 100}%` }}
-                  />
-                </div>
-              </div>
-            )}
-            {score.currentStreak < 5 && (
-              <div className="bg-slate-800/40 border border-slate-700/30 rounded-lg p-4">
-                <div className="text-white font-semibold mb-1">5-Streak</div>
-                <div className="text-xs text-slate-400">
-                  {score.currentStreak === 0 ? 'Start a streak' : `Keep streak for ${5 - score.currentStreak} more`}
-                </div>
-                <div className="w-full bg-slate-700 rounded-full h-1.5 mt-3">
-                  <div
-                    className="bg-amber-500 h-1.5 rounded-full transition-all"
-                    style={{ width: `${(score.currentStreak / 5) * 100}%` }}
                   />
                 </div>
               </div>
@@ -442,10 +423,24 @@ export default function DashboardPage() {
                 </div>
               </div>
             )}
-            {score.totalResolves >= 25 && score.currentStreak >= 5 && Object.keys(score.categoryStats).length >= 3 && (
-              <div className="col-span-3 text-center py-6">
-                <p className="text-lg text-white font-bold mb-1">All near-term goals achieved</p>
-                <p className="text-sm text-slate-400">Keep building your reputation to unlock legendary status</p>
+            {accuracy >= 75 && score.totalResolves >= 10 && (
+              <div className="bg-slate-800/40 border border-slate-700/30 rounded-lg p-4">
+                <div className="text-white font-semibold mb-1">High Accuracy</div>
+                <div className="text-xs text-slate-400">
+                  Maintain {accuracy}% accuracy (75%+ target)
+                </div>
+                <div className="w-full bg-slate-700 rounded-full h-1.5 mt-3">
+                  <div
+                    className="bg-emerald-500 h-1.5 rounded-full transition-all"
+                    style={{ width: `${Math.min((accuracy / 75) * 100, 100)}%` }}
+                  />
+                </div>
+              </div>
+            )}
+            {score.totalPoints >= 300 && score.totalResolves >= 25 && Object.keys(score.categoryStats).length >= 3 && (
+              <div className="col-span-2 text-center py-6">
+                <p className="text-lg text-white font-bold mb-1">Major milestones achieved</p>
+                <p className="text-sm text-slate-400">Keep building your reputation to reach legendary status</p>
               </div>
             )}
           </div>
