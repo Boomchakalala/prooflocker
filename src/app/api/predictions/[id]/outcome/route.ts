@@ -65,6 +65,7 @@ export async function PATCH(
           const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
           // Get prediction data
+          // Note: predictions table uses camelCase (anon_id) in database
           const { data: prediction } = await supabase
             .from('predictions')
             .select('category, anon_id, user_id')
@@ -72,23 +73,30 @@ export async function PATCH(
             .single();
 
           if (prediction) {
+            // Use user_id if available, otherwise fall back to anon_id
             const identifier = prediction.user_id
               ? { userId: prediction.user_id }
-              : { anonId: prediction.anon_id };
+              : prediction.anon_id
+              ? { anonId: prediction.anon_id }
+              : null;
 
-            const isCorrect = outcome === 'correct';
-            const category = prediction.category || 'Other';
+            if (identifier) {
+              const isCorrect = outcome === 'correct';
+              const category = prediction.category || 'Other';
 
-            const scoreResult = await awardResolvePoints({
-              identifier,
-              predictionId: id,
-              isCorrect,
-              category,
-            });
+              const scoreResult = await awardResolvePoints({
+                identifier,
+                predictionId: id,
+                isCorrect,
+                category,
+              });
 
-            if (scoreResult) {
-              insightPoints = scoreResult.points;
-              console.log(`[Outcome API] Awarded ${insightPoints} Reputation Score points`);
+              if (scoreResult) {
+                insightPoints = scoreResult.points;
+                console.log(`[Outcome API] Awarded ${insightPoints} Reputation Score points to ${JSON.stringify(identifier)}`);
+              }
+            } else {
+              console.warn('[Outcome API] No valid user identifier found for scoring');
             }
           }
         } else {
