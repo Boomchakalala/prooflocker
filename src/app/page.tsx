@@ -4,7 +4,7 @@ import LandingHero from "@/components/LandingHero";
 import HowItWorks from "@/components/HowItWorks";
 import ReputationImpact from "@/components/ReputationImpact";
 import Footer from "@/components/Footer";
-import LandingGlobeSection from "@/components/LandingGlobeSection";
+import ActiveClaimsStat from "@/components/ActiveClaimsStat";
 
 export default function LandingPage() {
   return (
@@ -24,7 +24,7 @@ export default function LandingPage() {
         <HowItWorks />
 
         {/* Globe Preview - Enhanced */}
-        <LandingGlobeSection />
+        <section className="relative py-16 md:py-24 px-4 overflow-hidden">
           {/* Dramatic background */}
           <div className="absolute inset-0 bg-gradient-to-b from-[#0a0a0a] via-[#0a0a1a] to-[#0a0a0a]" />
           <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-20">
