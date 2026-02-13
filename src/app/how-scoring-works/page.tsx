@@ -89,7 +89,7 @@ export default function HowScoringWorksPage() {
             <h2 className="text-2xl font-bold text-white mb-6">Reputation Score Calculation</h2>
 
             <p className="text-neutral-300 mb-6">
-              Your Reputation Score is recalculated after every resolution, contest outcome, or overdue event. It's a weighted combination of three factors:
+              Your Reputation Score is recalculated after every resolution or contest outcome. It's a weighted combination of three factors:
             </p>
 
             <div className="space-y-6">
