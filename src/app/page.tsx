@@ -165,8 +165,7 @@ export default function LandingPage() {
                 </div>
 
                 <div className="absolute top-1/2 -translate-y-1/2 left-4 md:left-8 bg-slate-900/95 border border-cyan-500/40 rounded-xl px-3 py-2 backdrop-blur-md shadow-[0_0_20px_rgba(34,211,238,0.15)]">
-                  <div className="text-2xl md:text-3xl font-bold text-cyan-400">47</div>
-                  <div className="text-[10px] text-cyan-300/70 uppercase tracking-wide">Active Claims</div>
+                  <ActiveClaimsStat />
                 </div>
               </div>
             </div>
