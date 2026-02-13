@@ -178,31 +178,23 @@ export default function GlobePage() {
     return () => clearInterval(interval);
   }, []);
 
-  // Ticker helper: get top 5 items (3 intel + 2 claims), prioritize breaking news
+  // Ticker helper: rotate through intel + claims, shuffled for variety
   const tickerItems = useMemo(() => {
     const items: { type: string; text: string; location: string; time: string; source: 'intel' | 'claim' }[] = [];
 
-    // Sort intel by priority: war/conflict/breaking first, then by recency
-    const sortedIntel = [...osint].sort((a, b) => {
-      const aStr = `${a.title} ${a.tags?.join(' ')}`.toLowerCase();
-      const bStr = `${b.title} ${b.tags?.join(' ')}`.toLowerCase();
+    // Shuffle helper
+    const shuffle = <T,>(arr: T[]): T[] => {
+      const a = [...arr];
+      for (let i = a.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [a[i], a[j]] = [a[j], a[i]];
+      }
+      return a;
+    };
 
-      // Priority keywords for war/conflict/breaking
-      const priorityKeywords = /ukraine|russia|taiwan|china|iran|israel|war|conflict|attack|missile|drone|breaking|urgent/;
-      const aHasPriority = priorityKeywords.test(aStr);
-      const bHasPriority = priorityKeywords.test(bStr);
-
-      if (aHasPriority && !bHasPriority) return -1;
-      if (!aHasPriority && bHasPriority) return 1;
-
-      // If both priority or both not priority, sort by recency
-      const aTime = new Date(a.created_at || a.timestamp).getTime();
-      const bTime = new Date(b.created_at || b.timestamp).getTime();
-      return bTime - aTime;
-    });
-
-    // Add top 3 prioritized OSINT items
-    sortedIntel.slice(0, 3).forEach(signal => {
+    // Take up to 15 intel items, shuffled
+    const shuffledIntel = shuffle(osint).slice(0, 15);
+    shuffledIntel.forEach(signal => {
       items.push({
         type: 'INTEL',
         text: signal.title,
@@ -212,18 +204,20 @@ export default function GlobePage() {
       });
     });
 
-    // Add top 2 claims
-    claims.slice(0, 2).forEach(claim => {
+    // Take up to 10 claims, shuffled
+    const shuffledClaims = shuffle(claims).slice(0, 10);
+    shuffledClaims.forEach(claim => {
       items.push({
         type: 'CLAIM',
-        text: claim.claim.slice(0, 80) + '...',
+        text: claim.claim.slice(0, 80) + (claim.claim.length > 80 ? '...' : ''),
         location: claim.category || '',
         time: claim.lockedDate,
         source: 'claim'
       });
     });
 
-    return items.slice(0, 5);
+    // Shuffle the combined list and cap at 20
+    return shuffle(items).slice(0, 20);
   }, [osint, claims]);
 
   // Freshness helpers for monitoring vibe

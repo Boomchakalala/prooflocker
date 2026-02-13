@@ -321,6 +321,94 @@ function extractGeoFromArticle(article: any): {
     }
   }
 
+  // Country-level fallback: match country names to centroids
+  const countryFallbacks: Record<string, { lat: number; lon: number; place: string; country: string }> = {
+    'ireland|irish': { lat: 53.3498, lon: -6.2603, place: 'Ireland', country: 'IE' },
+    'scotland|scottish': { lat: 55.9533, lon: -3.1883, place: 'Scotland', country: 'GB' },
+    'wales|welsh': { lat: 51.4816, lon: -3.1791, place: 'Wales', country: 'GB' },
+    'ukraine|ukrainian|kyiv|kiev': { lat: 50.4501, lon: 30.5234, place: 'Ukraine', country: 'UA' },
+    'russia|russian|kremlin': { lat: 55.7558, lon: 37.6173, place: 'Russia', country: 'RU' },
+    'china|chinese|beijing': { lat: 39.9042, lon: 116.4074, place: 'China', country: 'CN' },
+    'taiwan|taiwanese': { lat: 25.0330, lon: 121.5654, place: 'Taiwan', country: 'TW' },
+    'japan|japanese': { lat: 35.6762, lon: 139.6503, place: 'Japan', country: 'JP' },
+    'south korea|korean': { lat: 37.5665, lon: 126.9780, place: 'South Korea', country: 'KR' },
+    'north korea|pyongyang': { lat: 39.0392, lon: 125.7625, place: 'North Korea', country: 'KP' },
+    'india|indian': { lat: 28.6139, lon: 77.2090, place: 'India', country: 'IN' },
+    'pakistan|pakistani': { lat: 33.6844, lon: 73.0479, place: 'Pakistan', country: 'PK' },
+    'iran|iranian|tehran': { lat: 35.6892, lon: 51.3890, place: 'Iran', country: 'IR' },
+    'iraq|iraqi|baghdad': { lat: 33.3152, lon: 44.3661, place: 'Iraq', country: 'IQ' },
+    'syria|syrian|damascus': { lat: 33.5138, lon: 36.2765, place: 'Syria', country: 'SY' },
+    'israel|israeli|gaza|hamas|hezbollah': { lat: 31.7683, lon: 35.2137, place: 'Israel', country: 'IL' },
+    'palestine|palestinian': { lat: 31.9522, lon: 35.2332, place: 'Palestine', country: 'PS' },
+    'lebanon|lebanese|beirut': { lat: 33.8938, lon: 35.5018, place: 'Lebanon', country: 'LB' },
+    'saudi|saudi arabia': { lat: 24.7136, lon: 46.6753, place: 'Saudi Arabia', country: 'SA' },
+    'turkey|turkish|ankara': { lat: 39.9334, lon: 32.8597, place: 'Turkey', country: 'TR' },
+    'germany|german': { lat: 52.5200, lon: 13.4050, place: 'Germany', country: 'DE' },
+    'france|french': { lat: 48.8566, lon: 2.3522, place: 'France', country: 'FR' },
+    'spain|spanish': { lat: 40.4168, lon: -3.7038, place: 'Spain', country: 'ES' },
+    'italy|italian': { lat: 41.9028, lon: 12.4964, place: 'Italy', country: 'IT' },
+    'poland|polish': { lat: 52.2297, lon: 21.0122, place: 'Poland', country: 'PL' },
+    'netherlands|dutch': { lat: 52.3676, lon: 4.9041, place: 'Netherlands', country: 'NL' },
+    'belgium|belgian': { lat: 50.8503, lon: 4.3517, place: 'Belgium', country: 'BE' },
+    'portugal|portuguese': { lat: 38.7223, lon: -9.1393, place: 'Portugal', country: 'PT' },
+    'greece|greek': { lat: 37.9838, lon: 23.7275, place: 'Greece', country: 'GR' },
+    'sweden|swedish': { lat: 59.3293, lon: 18.0686, place: 'Sweden', country: 'SE' },
+    'norway|norwegian|oslo': { lat: 59.9139, lon: 10.7522, place: 'Norway', country: 'NO' },
+    'finland|finnish|helsinki': { lat: 60.1699, lon: 24.9384, place: 'Finland', country: 'FI' },
+    'denmark|danish': { lat: 55.6761, lon: 12.5683, place: 'Denmark', country: 'DK' },
+    'switzerland|swiss': { lat: 47.3769, lon: 8.5417, place: 'Switzerland', country: 'CH' },
+    'austria|austrian': { lat: 48.2082, lon: 16.3738, place: 'Austria', country: 'AT' },
+    'hungary|hungarian|budapest': { lat: 47.4979, lon: 19.0402, place: 'Hungary', country: 'HU' },
+    'romania|romanian|bucharest': { lat: 44.4268, lon: 26.1025, place: 'Romania', country: 'RO' },
+    'czech|czechia': { lat: 50.0755, lon: 14.4378, place: 'Czech Republic', country: 'CZ' },
+    'canada|canadian|ottawa': { lat: 45.4215, lon: -75.6972, place: 'Canada', country: 'CA' },
+    'mexico|mexican': { lat: 19.4326, lon: -99.1332, place: 'Mexico', country: 'MX' },
+    'brazil|brazilian': { lat: -15.7975, lon: -47.8919, place: 'Brazil', country: 'BR' },
+    'argentina|argentinian': { lat: -34.6037, lon: -58.3816, place: 'Argentina', country: 'AR' },
+    'colombia|colombian': { lat: 4.7110, lon: -74.0721, place: 'Colombia', country: 'CO' },
+    'venezuela|venezuelan|caracas': { lat: 10.4806, lon: -66.9036, place: 'Venezuela', country: 'VE' },
+    'australia|australian|canberra': { lat: -35.2809, lon: 149.1300, place: 'Australia', country: 'AU' },
+    'new zealand': { lat: -41.2866, lon: 174.7756, place: 'New Zealand', country: 'NZ' },
+    'south africa': { lat: -25.7479, lon: 28.2293, place: 'South Africa', country: 'ZA' },
+    'nigeria|nigerian': { lat: 9.0579, lon: 7.4951, place: 'Nigeria', country: 'NG' },
+    'kenya|kenyan': { lat: -1.2921, lon: 36.8219, place: 'Kenya', country: 'KE' },
+    'egypt|egyptian': { lat: 30.0444, lon: 31.2357, place: 'Egypt', country: 'EG' },
+    'ethiopia|ethiopian|addis ababa': { lat: 9.0250, lon: 38.7469, place: 'Ethiopia', country: 'ET' },
+    'sudan|sudanese|khartoum': { lat: 15.5007, lon: 32.5599, place: 'Sudan', country: 'SD' },
+    'congo|congolese|kinshasa': { lat: -4.4419, lon: 15.2663, place: 'Congo', country: 'CD' },
+    'philippines|filipino': { lat: 14.5995, lon: 120.9842, place: 'Philippines', country: 'PH' },
+    'indonesia|indonesian': { lat: -6.2088, lon: 106.8456, place: 'Indonesia', country: 'ID' },
+    'vietnam|vietnamese': { lat: 21.0285, lon: 105.8542, place: 'Vietnam', country: 'VN' },
+    'thailand|thai': { lat: 13.7563, lon: 100.5018, place: 'Thailand', country: 'TH' },
+    'myanmar|burmese|burma': { lat: 16.8661, lon: 96.1951, place: 'Myanmar', country: 'MM' },
+    'afghanistan|afghan|kabul': { lat: 34.5553, lon: 69.2075, place: 'Afghanistan', country: 'AF' },
+    'yemen|yemeni|houthi|sanaa': { lat: 15.3694, lon: 44.1910, place: 'Yemen', country: 'YE' },
+    'somalia|somali|mogadishu': { lat: 2.0469, lon: 45.3182, place: 'Somalia', country: 'SO' },
+    'libya|libyan|tripoli': { lat: 32.8872, lon: 13.1913, place: 'Libya', country: 'LY' },
+    'pentagon|white house|congress|senate|capitol hill': { lat: 38.9072, lon: -77.0369, place: 'Washington DC', country: 'US' },
+    'nato|brussels summit': { lat: 50.8503, lon: 4.3517, place: 'Brussels', country: 'BE' },
+    'united nations|un general assembly': { lat: 40.7489, lon: -73.9680, place: 'New York', country: 'US' },
+    'european union|eu summit|eu commission': { lat: 50.8503, lon: 4.3517, place: 'Brussels', country: 'BE' },
+    'uk|britain|british|england|english': { lat: 51.5074, lon: -0.1278, place: 'United Kingdom', country: 'GB' },
+  };
+
+  for (const [pattern, location] of Object.entries(countryFallbacks)) {
+    const regex = new RegExp(`\\b(${pattern})\\b`, 'i');
+    if (regex.test(text)) {
+      const latOffset = (Math.random() - 0.5) * 1.5;
+      const lonOffset = (Math.random() - 0.5) * 1.5;
+
+      return {
+        lat: location.lat + latOffset,
+        lon: location.lon + lonOffset,
+        country_code: location.country,
+        place_name: location.place,
+        confidence: 65,
+        method: 'country_extraction',
+      };
+    }
+  }
+
   // Default: No geolocation found
   return {
     lat: null,
