@@ -128,8 +128,9 @@ export default function DashboardPage() {
   const totalResolved = resolvedPredictions.length;
   const accuracyRate = totalResolved > 0 ? Math.round((correctResolved / totalResolved) * 100) : 0;
 
-  // Calculate total XP earned
+  // Calculate total XP earned (if available)
   const totalXP = predictions.reduce((sum, p) => sum + (p.xp || 0), 0);
+  const hasXPData = predictions.some(p => p.xp && p.xp > 0);
 
   // Calculate reputation score
   const reputationScore = calculateReputationScore(predictions);
@@ -211,10 +212,12 @@ export default function DashboardPage() {
                 </span>
               </div>
             </div>
-            <div className="mt-4 pt-4 border-t border-slate-700/50">
-              <div className="text-sm text-slate-400 mb-1">Total XP Earned</div>
-              <div className="text-2xl font-bold text-cyan-400">{totalXP.toLocaleString()} XP</div>
-            </div>
+            {hasXPData && (
+              <div className="mt-4 pt-4 border-t border-slate-700/50">
+                <div className="text-sm text-slate-400 mb-1">Total XP Earned</div>
+                <div className="text-2xl font-bold text-cyan-400">{totalXP.toLocaleString()} XP</div>
+              </div>
+            )}
           </div>
         </div>
 
