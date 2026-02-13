@@ -305,16 +305,9 @@ export default function GlobeMapbox({ claims, osint, mapMode = 'both', viewMode 
                 <span style="font-size:11px;padding:3px 8px;background:rgba(139,92,246,0.15);border-radius:10px;color:#a78bfa;font-weight:600;">Rep ${p.rep}</span>
                 <span style="font-size:10px;padding:2px 8px;background:${statusColor}22;border-radius:8px;color:${statusColor};font-weight:700;text-transform:uppercase;">${displayText}</span>
               </div>
-              <div style="display:flex;justify-content:space-between;font-size:11px;color:#64748b;margin-bottom:8px;">
+              <div style="display:flex;justify-content:space-between;font-size:11px;color:#64748b;">
                 <span>Locked: <b style="color:#f8fafc">${p.lockedDate}</b></span>
                 ${p.category ? '<span style="color:#a78bfa;">#' + p.category + '</span>' : ''}
-              </div>
-              <div style="display:flex;align-items:center;gap:10px;padding:8px 10px;background:${statusColor}11;border-radius:8px;">
-                <span style="font-size:10px;color:#94a3b8;text-transform:uppercase;">Confidence</span>
-                <div style="flex:1;height:5px;background:rgba(148,163,184,0.15);border-radius:3px;overflow:hidden;">
-                  <div style="height:100%;width:${p.confidence}%;background:${statusColor};border-radius:3px;"></div>
-                </div>
-                <span style="font-size:13px;font-weight:700;color:${statusColor};">${p.confidence}%</span>
               </div>
             </div>`
           )
