@@ -602,7 +602,7 @@ export default async function ProofPage({ params }: Props) {
         </div>
 
         {/* Resolve Actions for Owner (pending claims only) */}
-        <ProofResolveActions prediction={prediction} />
+        {!isSeedData && <ProofResolveActions prediction={prediction} />}
 
         {/* Footer */}
         <div className="mt-12 text-center">
