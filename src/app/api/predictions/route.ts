@@ -104,29 +104,44 @@ export async function GET(request: NextRequest) {
     const elapsed = Date.now() - startTime;
     console.log(`[Predictions API] Query completed in ${elapsed}ms, returned ${predictions?.length || 0} predictions`);
 
-    // Batch-fetch reputation scores for all users
-    const userIds = [...new Set((predictions || []).map((p: any) => p.userId).filter(Boolean))];
-    const userRepMap = new Map<string, number>();
+    // Batch-fetch reputation scores from insight_scores table (correct source)
+    const anonIds = [...new Set((predictions || []).map((p: any) => p.anonId || p.anon_id).filter(Boolean))];
+    const userReputationMap = new Map<string, { totalPoints: number; tier: number }>();
 
-    if (userIds.length > 0) {
-      const { data: userStats } = await adminSupabase
-        .from('user_stats')
-        .select('user_id, total_resolved, total_correct, accuracy_rate, evidence_a_count, evidence_b_count, evidence_c_count, evidence_d_count')
-        .in('user_id', userIds);
+    if (anonIds.length > 0) {
+      const { data: insightScores } = await adminSupabase
+        .from('insight_scores')
+        .select('anon_id, total_points, correct_resolves, total_resolves')
+        .in('anon_id', anonIds);
 
-      if (userStats) {
-        for (const stats of userStats) {
-          userRepMap.set(stats.user_id, calculateRepScore(stats));
+      if (insightScores) {
+        for (const score of insightScores) {
+          // Calculate tier based on total_points (same logic as user-scoring.ts)
+          let tier = 0; // Novice
+          if (score.total_points >= 800) tier = 4; // Legend
+          else if (score.total_points >= 700) tier = 3; // Master
+          else if (score.total_points >= 500) tier = 2; // Expert
+          else if (score.total_points >= 300) tier = 1; // Trusted
+
+          userReputationMap.set(score.anon_id, {
+            totalPoints: score.total_points,
+            tier: tier
+          });
         }
       }
     }
 
-    // Add reputation to each prediction
+    // Add reputation and tier to each prediction
     if (predictions) {
-      predictions = predictions.map((p: any) => ({
-        ...p,
-        rep: p.userId ? (userRepMap.get(p.userId) ?? 0) : 0,
-      }));
+      predictions = predictions.map((p: any) => {
+        const anonId = p.anonId || p.anon_id;
+        const repData = anonId ? userReputationMap.get(anonId) : null;
+        return {
+          ...p,
+          rep: repData?.totalPoints ?? 0,
+          author_reputation_tier: repData?.tier ?? 0,
+        };
+      });
     }
 
     // Add seed predictions only for public feed (no user filters)
