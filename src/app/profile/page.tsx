@@ -119,9 +119,19 @@ export default function ProfilePage() {
     setPseudonymSuccess(false);
 
     try {
+      const token = await getAccessToken();
+      if (!token) {
+        setPseudonymError("Authentication error. Please try signing out and back in.");
+        setSettingPseudonym(false);
+        return;
+      }
+
       const response = await fetch("/api/pseudonym", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`,
+        },
         body: JSON.stringify({ pseudonym: pseudonymInput.trim() }),
       });
 

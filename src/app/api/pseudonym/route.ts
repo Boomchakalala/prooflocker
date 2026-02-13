@@ -1,13 +1,28 @@
 import { NextRequest, NextResponse } from "next/server";
 import { setPseudonym } from "@/lib/storage";
-import { getCurrentUser } from "@/lib/auth";
+import { createClient } from "@supabase/supabase-js";
 
 export async function POST(request: NextRequest) {
   try {
-    // Get the authenticated user
-    const user = await getCurrentUser();
+    // Get the access token from Authorization header
+    const authHeader = request.headers.get("Authorization");
+    const token = authHeader?.replace("Bearer ", "");
 
-    if (!user) {
+    if (!token) {
+      return NextResponse.json(
+        { error: "Unauthorized - must be logged in" },
+        { status: 401 }
+      );
+    }
+
+    // Verify token server-side with Supabase
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+    const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
+    const supabase = createClient(supabaseUrl, supabaseServiceKey);
+
+    const { data: { user }, error: authError } = await supabase.auth.getUser(token);
+
+    if (authError || !user) {
       return NextResponse.json(
         { error: "Unauthorized - must be logged in" },
         { status: 401 }
