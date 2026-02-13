@@ -98,4 +98,4 @@ export default memo(function BreakingNewsBanner({ items, className = '' }: Break
       </div>
     </>
   );
-}
+})
