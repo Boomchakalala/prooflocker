@@ -11,6 +11,7 @@ import CopyButton from "@/components/CopyButton";
 import EvidenceGradeBadge from "@/components/EvidenceGradeBadge";
 import EvidenceList from "@/components/EvidenceList";
 import ProofResolveActions from "@/components/ProofResolveActions";
+import ShareOnXButton from "@/components/ShareOnXButton";
 import { SEED_PREDICTIONS } from "@/lib/seed-predictions";
 
 // Cache the prediction fetch to avoid duplicate queries
@@ -47,8 +48,27 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   const shortProofId = prediction.proofId.substring(0, 8);
 
-  const title = `${previewText} | ProofLocker`;
-  const description = `Locked on ${dateStr} • Proof ${shortProofId} • Immutable timestamp proof on Constellation Network`;
+  const isCorrect = prediction.outcome === "correct";
+  const isIncorrect = prediction.outcome === "incorrect";
+
+  let title: string;
+  let ogTitle: string;
+  let description: string;
+
+  if (isCorrect) {
+    title = `Called it! | Resolved correct | ProofLocker`;
+    ogTitle = `Called it! | Resolved correct`;
+    description = `"${previewText}" — Locked ${dateStr}, resolved CORRECT. Immutable proof on Constellation Network.`;
+  } else if (isIncorrect) {
+    title = `Didn't age well | Resolved incorrect | ProofLocker`;
+    ogTitle = `Didn't age well | Resolved incorrect`;
+    description = `"${previewText}" — Locked ${dateStr}, resolved incorrect. Immutable proof on Constellation Network.`;
+  } else {
+    title = `Claim locked on-chain | ${dateStr} | ProofLocker`;
+    ogTitle = `Claim locked on-chain | ${dateStr}`;
+    description = `"${previewText}" — Locked ${dateStr} • Proof ${shortProofId} • Immutable timestamp proof on Constellation Network`;
+  }
+
   const pageUrl = getAbsoluteUrl(`/proof/${slug}`);
 
   return {
