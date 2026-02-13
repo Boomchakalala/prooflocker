@@ -357,7 +357,7 @@ export default function ProfilePage() {
 
         {/* Stats Overview */}
         <div className="bg-purple-500/10 border-2 border-purple-500 rounded-xl p-3 mb-4 text-center">
-          <p className="text-purple-300 font-bold text-sm">✨ NEW PROFILE LAYOUT - Stats are now calculated in real-time from your predictions</p>
+          <p className="text-purple-300 font-bold text-sm">✨ NEW PROFILE LAYOUT - Stats are now calculated in real-time from your claims</p>
         </div>
 
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
