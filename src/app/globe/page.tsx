@@ -487,23 +487,23 @@ export default function GlobePage() {
 
         {/* Bottom-left map controls */}
         <div className="hidden md:flex fixed bottom-6 left-4 z-[100] gap-2">
-          <button
-            onClick={() => setMapMode(mapMode === 'claims' ? 'both' : mapMode === 'both' ? 'osint' : mapMode === 'osint' ? 'claims' : 'both')}
+          <Link
+            href="/app"
             className="bg-[rgba(10,10,15,0.92)] backdrop-blur-xl border border-purple-500/20 rounded-xl px-3 py-2 text-[11px] font-semibold text-white shadow-2xl hover:bg-purple-500/10 transition-all"
           >
-            View: {mapMode === 'both' ? 'All' : mapMode === 'claims' ? 'Claims' : 'Intel'}
-          </button>
-          <Link
-            href="/dashboard"
-            className="bg-[rgba(10,10,15,0.92)] backdrop-blur-xl border border-slate-700/30 rounded-xl px-3 py-2 text-[11px] font-medium text-slate-400 hover:text-white shadow-2xl hover:bg-white/5 transition-all"
-          >
-            My Stats
+            Claims
           </Link>
           <Link
             href="/profile"
             className="bg-[rgba(10,10,15,0.92)] backdrop-blur-xl border border-slate-700/30 rounded-xl px-3 py-2 text-[11px] font-medium text-slate-400 hover:text-white shadow-2xl hover:bg-white/5 transition-all"
           >
             My Claims
+          </Link>
+          <Link
+            href="/dashboard"
+            className="bg-[rgba(10,10,15,0.92)] backdrop-blur-xl border border-slate-700/30 rounded-xl px-3 py-2 text-[11px] font-medium text-slate-400 hover:text-white shadow-2xl hover:bg-white/5 transition-all"
+          >
+            Stats
           </Link>
         </div>
 
@@ -1023,46 +1023,7 @@ export default function GlobePage() {
           )}
         </button>
 
-        {/* Floating Lock Button - Secondary Position */}
-        <button
-          onClick={() => setShowQuickLock(true)}
-          className="fixed bottom-6 left-4 z-[100] w-14 h-14 rounded-full bg-slate-800/90 hover:bg-slate-700/90 border-2 border-purple-500/40 shadow-xl shadow-purple-500/20 flex items-center justify-center text-purple-300 hover:text-purple-200 transition-all hover:scale-105 active:scale-95 md:bottom-8 md:right-8 md:w-16 md:h-16 md:bg-gradient-to-r md:from-purple-600 md:to-blue-600 md:hover:from-purple-500 md:hover:to-blue-500 md:text-white md:shadow-2xl md:shadow-purple-500/50"
-          title="Quick Lock (Space)"
-          style={{ WebkitTapHighlightColor: 'transparent' }}
-        >
-          <svg className="w-6 h-6 transition-transform" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-          </svg>
-        </button>
-
-        {/* Quick Lock Modal */}
-        {showQuickLock && (
-          <div className="fixed inset-0 z-[500] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
-            <div className="w-full max-w-lg glass border border-purple-500/30 rounded-xl p-6 animate-in fade-in zoom-in duration-200">
-              <div className="flex items-center justify-between mb-4">
-                <h3 className="text-xl font-bold text-white">Quick Lock Claim</h3>
-                <button
-                  onClick={() => setShowQuickLock(false)}
-                  className="text-gray-400 hover:text-white transition-colors"
-                >
-                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                  </svg>
-                </button>
-              </div>
-              <p className="text-gray-300 mb-6">
-                Lock your claim on-chain. No edits. No deletions.
-              </p>
-              <Link
-                href="/lock"
-                className="block w-full py-3 rounded-lg bg-gradient-to-r from-purple-600 to-blue-600 text-white font-semibold text-center hover:from-purple-500 hover:to-blue-500 transition-all shadow-lg"
-                onClick={() => setShowQuickLock(false)}
-              >
-                Go to Lock Page
-              </Link>
-            </div>
-          </div>
-        )}
+        {/* Floating Lock Button - Removed */}
       </div>
     </>
   );
