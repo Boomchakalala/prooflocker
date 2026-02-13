@@ -96,24 +96,19 @@ export default function AppFeedPage() {
   const tickerItems = useMemo(() => {
     const items: { type: string; text: string; location: string; time: string; source: 'intel' | 'claim' }[] = [];
 
-    // Sort intel by priority: war/conflict/breaking first, then by recency
-    const sortedIntel = [...osintSignals].sort((a, b) => {
-      const aStr = `${a.title} ${a.tags?.join(' ')}`.toLowerCase();
-      const bStr = `${b.title} ${b.tags?.join(' ')}`.toLowerCase();
+    // Shuffle helper
+    const shuffle = <T,>(arr: T[]): T[] => {
+      const a = [...arr];
+      for (let i = a.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [a[i], a[j]] = [a[j], a[i]];
+      }
+      return a;
+    };
 
-      const priorityKeywords = /ukraine|russia|taiwan|china|iran|israel|war|conflict|attack|missile|drone|breaking|urgent/;
-      const aHasPriority = priorityKeywords.test(aStr);
-      const bHasPriority = priorityKeywords.test(bStr);
-
-      if (aHasPriority && !bHasPriority) return -1;
-      if (!aHasPriority && bHasPriority) return 1;
-
-      const aTime = new Date(a.created_at || a.published_at).getTime();
-      const bTime = new Date(b.created_at || b.published_at).getTime();
-      return bTime - aTime;
-    });
-
-    sortedIntel.slice(0, 4).forEach(signal => {
+    // Take up to 15 intel items, shuffled
+    const shuffledIntel = shuffle(osintSignals).slice(0, 15);
+    shuffledIntel.forEach(signal => {
       items.push({
         type: 'INTEL',
         text: signal.title || 'Intelligence Signal',
@@ -123,7 +118,9 @@ export default function AppFeedPage() {
       });
     });
 
-    predictions.slice(0, 3).forEach(claim => {
+    // Take up to 10 claims, shuffled
+    const shuffledClaims = shuffle(predictions).slice(0, 10);
+    shuffledClaims.forEach(claim => {
       items.push({
         type: 'CLAIM',
         text: claim.text?.slice(0, 80) + (claim.text?.length > 80 ? '...' : ''),
@@ -133,7 +130,8 @@ export default function AppFeedPage() {
       });
     });
 
-    return items.slice(0, 7);
+    // Shuffle combined and cap at 20
+    return shuffle(items).slice(0, 20);
   }, [osintSignals, predictions]);
 
   const filteredPredictions = useMemo(() => predictions.filter(p => {
