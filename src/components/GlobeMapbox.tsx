@@ -119,32 +119,38 @@ export default function GlobeMapbox({ claims, osint, mapMode = 'both', viewMode 
   const closeDetail = useCallback(() => setAreaDetail(null), []);
 
   // Find all claims and OSINT near a coordinate
-  const findNearbyItems = useCallback((lng: number, lat: number, zoom: number) => {
+  const findNearbyItems = useCallback((lng: number, lat: number, zoom: number, filterType?: 'claims' | 'osint') => {
     const radiusKm = zoom < 2 ? 2000 : zoom < 3 ? 1200 : zoom < 4 ? 600 : zoom < 5 ? 300 : 100;
     const nearbyClaims: Claim[] = [];
     const nearbyOsint: OsintItem[] = [];
     const seenClaims = new Set<string>();
     const seenOsint = new Set<string>();
 
-    claimsRef.current.forEach((c) => {
-      if (haversineDistance(lat, lng, c.lat, c.lng) <= radiusKm) {
-        const key = String(c.id);
-        if (!seenClaims.has(key)) {
-          seenClaims.add(key);
-          nearbyClaims.push(c);
+    // Only search claims if not filtering for osint only
+    if (filterType !== 'osint') {
+      claimsRef.current.forEach((c) => {
+        if (haversineDistance(lat, lng, c.lat, c.lng) <= radiusKm) {
+          const key = String(c.id);
+          if (!seenClaims.has(key)) {
+            seenClaims.add(key);
+            nearbyClaims.push(c);
+          }
         }
-      }
-    });
+      });
+    }
 
-    osintRef.current.forEach((o) => {
-      if (haversineDistance(lat, lng, o.lat, o.lng) <= radiusKm) {
-        const key = String(o.id);
-        if (!seenOsint.has(key)) {
-          seenOsint.add(key);
-          nearbyOsint.push(o);
+    // Only search osint if not filtering for claims only
+    if (filterType !== 'claims') {
+      osintRef.current.forEach((o) => {
+        if (haversineDistance(lat, lng, o.lat, o.lng) <= radiusKm) {
+          const key = String(o.id);
+          if (!seenOsint.has(key)) {
+            seenOsint.add(key);
+            nearbyOsint.push(o);
+          }
         }
-      }
-    });
+      });
+    }
 
     return { claims: nearbyClaims, osint: nearbyOsint };
   }, []);
@@ -269,19 +275,21 @@ export default function GlobeMapbox({ claims, osint, mapMode = 'both', viewMode 
         map.on('mouseleave', l, () => { map.getCanvas().style.cursor = ''; });
       });
 
-      // Cluster click → area detail
-      const handleClusterClick = (e: mapboxgl.MapMouseEvent & { features?: mapboxgl.MapboxGeoJSONFeature[] }) => {
+      // Cluster click → area detail (filtered by type)
+      const handleClusterClick = (layerId: string) => (e: mapboxgl.MapMouseEvent & { features?: mapboxgl.MapboxGeoJSONFeature[] }) => {
         if (!e.features?.length) return;
         const coords = (e.features[0].geometry as any).coordinates;
         const zoom = map.getZoom();
-        const nearby = findNearbyItems(coords[0], coords[1], zoom);
+        // Determine filter type based on which layer was clicked
+        const filterType = layerId.includes('claims') ? 'claims' : 'osint';
+        const nearby = findNearbyItems(coords[0], coords[1], zoom, filterType);
         if (nearby.claims.length > 0 || nearby.osint.length > 0) {
           setAreaDetail(nearby);
           map.easeTo({ center: coords, zoom: Math.min(zoom + 1.5, 6), duration: 800 });
         }
       };
-      map.on('click', 'claims-clusters-core', handleClusterClick);
-      map.on('click', 'osint-clusters-core', handleClusterClick);
+      map.on('click', 'claims-clusters-core', handleClusterClick('claims-clusters-core'));
+      map.on('click', 'osint-clusters-core', handleClusterClick('osint-clusters-core'));
 
       // Individual claim popup
       map.on('click', 'claims-points-core', (e) => {
