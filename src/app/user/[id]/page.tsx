@@ -303,9 +303,9 @@ export default function PublicProfilePage() {
           </div>
         </div>
 
-        {/* Predictions List */}
+        {/* Claims List */}
         <div>
-          <h2 className="text-xl font-bold text-white mb-4">Predictions</h2>
+          <h2 className="text-xl font-bold text-white mb-4">Claims</h2>
           <div className="space-y-4">
             {predictions.map((prediction) => (
               <PredictionCard
