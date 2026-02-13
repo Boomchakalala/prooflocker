@@ -183,7 +183,7 @@ export async function GET(request: NextRequest) {
 
       return {
         id: prediction.id,
-        publicSlug: prediction.public_slug,
+        publicSlug: prediction.public_slug || prediction.publicSlug,
         claim: prediction.text,
         category: prediction.category || 'Other',
         lat: lat,
@@ -191,10 +191,10 @@ export async function GET(request: NextRequest) {
         locationName: prediction.geotag_city || prediction.geotag_country || 'Unknown',
         status,
         submitter,
-        anonId: prediction.anon_id,
+        anonId: prediction.anonId || prediction.anon_id,
         rep,
         confidence,
-        lockedDate: new Date(prediction.created_at).toLocaleDateString('en-US', {
+        lockedDate: new Date(prediction.created_at || prediction.createdAt).toLocaleDateString('en-US', {
           year: 'numeric',
           month: 'short',
           day: 'numeric',
