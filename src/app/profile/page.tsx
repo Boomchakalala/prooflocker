@@ -10,6 +10,7 @@ import { supabase } from "@/lib/supabase";
 import { InsightScoreResponse } from "@/lib/insight-types";
 import { BADGES, BadgeId } from "@/lib/insight-score";
 import UnifiedHeader from '@/components/UnifiedHeader';
+import { getPublicHandle } from '@/lib/public-handle';
 
 export default function ProfilePage() {
   const { user, loading: authLoading } = useAuth();
@@ -18,10 +19,12 @@ export default function ProfilePage() {
   const [loading, setLoading] = useState(true);
   const [scoreData, setScoreData] = useState<InsightScoreResponse | null>(null);
   const [pseudonym, setPseudonymState] = useState<string>("");
+  const [isEditingPseudonym, setIsEditingPseudonym] = useState(false);
   const [pseudonymInput, setPseudonymInput] = useState<string>("");
   const [pseudonymError, setPseudonymError] = useState<string | null>(null);
   const [pseudonymSuccess, setPseudonymSuccess] = useState(false);
   const [settingPseudonym, setSettingPseudonym] = useState(false);
+  const [defaultHandle, setDefaultHandle] = useState<string>("");
 
   useEffect(() => {
     // Redirect to home if not authenticated
@@ -38,6 +41,10 @@ export default function ProfilePage() {
 
   useEffect(() => {
     if (user) {
+      // Set default handle
+      const handle = getPublicHandle(user);
+      setDefaultHandle(handle);
+
       fetchPredictions();
       fetchScore();
       // Set page title
