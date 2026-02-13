@@ -40,8 +40,7 @@ export default function IntelCard({ item, compact = false }: IntelCardProps) {
 
     if (tagStr.match(/crypto|bitcoin|ethereum|blockchain/)) return 'crypto';
     if (tagStr.match(/markets|economy|finance|trading|stock/)) return 'markets';
-    if (tagStr.match(/military|war|conflict|drone|missile|attack|battle/)) return 'military';
-    if (tagStr.match(/breaking|urgent|alert/)) return 'breaking';
+    if (tagStr.match(/military|war|conflict|drone|missile|attack|battle|ukraine|russia|taiwan|iran/)) return 'military';
     if (tagStr.match(/politics|election|government|diplomatic/)) return 'politics';
     if (tagStr.match(/tech|technology|ai|software/)) return 'tech';
     if (tagStr.match(/science|research|discovery|space/)) return 'science';
@@ -57,7 +56,6 @@ export default function IntelCard({ item, compact = false }: IntelCardProps) {
       crypto: 'bg-orange-500/20 text-orange-300 border border-orange-500/40',
       markets: 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40',
       military: 'bg-red-500/20 text-red-300 border border-red-500/40',
-      breaking: 'bg-yellow-500/20 text-yellow-300 border border-yellow-500/40',
       politics: 'bg-blue-500/20 text-blue-300 border border-blue-500/40',
       tech: 'bg-purple-500/20 text-purple-300 border border-purple-500/40',
       science: 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/40',

@@ -278,7 +278,7 @@ export async function GET(request: NextRequest) {
       .gte('created_at', windowStart.toISOString())
       .order('published_at', { ascending: false, nullsFirst: false })
       .order('created_at', { ascending: false })
-      .limit(100);
+      .limit(200);
 
     if (category && category !== 'all') {
       intelQuery = intelQuery.or(`tags.cs.{${category}}`);
