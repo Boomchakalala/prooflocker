@@ -504,6 +504,11 @@ export default function AppFeedPage() {
                               })()}
                             </div>
                             <div className="flex items-center gap-2">
+                              {isResolved && evidenceGradeInfo && (
+                                <span className={`text-[9px] font-bold px-1.5 py-0.5 rounded ${evidenceGradeInfo.bgColor} ${evidenceGradeInfo.color}`}>
+                                  Grade {evidenceGradeKey?.toUpperCase()}
+                                </span>
+                              )}
                               <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
                                 isCorrect ? "bg-emerald-500 text-white shadow-sm shadow-emerald-500/30" :
                                 isIncorrect ? "bg-red-500 text-white shadow-sm shadow-red-500/30" :
@@ -536,11 +541,6 @@ export default function AppFeedPage() {
                               {isResolved && (
                                 <span className="text-cyan-400 bg-cyan-500/10 px-1.5 py-0.5 rounded font-medium">
                                   Resolved
-                                </span>
-                              )}
-                              {isResolved && evidenceGradeInfo && (
-                                <span className={`px-1.5 py-0.5 rounded font-bold ${evidenceGradeInfo.bgColor} ${evidenceGradeInfo.color}`}>
-                                  {evidenceGradeInfo.label}
                                 </span>
                               )}
                               {isPending && (() => {
