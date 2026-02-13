@@ -473,6 +473,7 @@ export default function AppFeedPage() {
                 </div>
 
                 {filteredPredictions.length > 0 ? (
+                  <>
                   <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
                     {filteredPredictions.slice(0, visibleClaims).map((claim) => {
                       const isCorrect = claim.outcome === "correct";
@@ -608,6 +609,7 @@ export default function AppFeedPage() {
                       Show more ({filteredPredictions.length - visibleClaims} remaining)
                     </button>
                   )}
+                  </>
                 ) : (
                   <div className="flex flex-col items-center justify-center py-16">
                     <svg className="w-10 h-10 text-slate-600 mb-3" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24">
