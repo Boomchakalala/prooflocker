@@ -282,33 +282,33 @@ export default function AppFeedPage() {
             {/* Top row: Content tabs + Search + Quick actions */}
             <div className="flex items-center gap-2 md:gap-3 flex-wrap">
               {/* Content tabs */}
-              <div className="flex items-center bg-slate-800/40 rounded-lg p-0.5">
+              <div className="flex items-center bg-slate-800/60 border border-slate-700/40 rounded-lg p-1">
                 <button
                   onClick={() => setContentFilter("all")}
-                  className={`px-2.5 md:px-4 py-1 md:py-1.5 rounded-md font-medium text-xs md:text-sm transition-all ${
+                  className={`px-3 md:px-5 py-1.5 md:py-2 rounded-md font-bold text-xs md:text-sm transition-all ${
                     contentFilter === "all"
-                      ? "bg-white/10 text-white shadow-sm"
-                      : "text-neutral-400 hover:text-white"
+                      ? "bg-white/15 text-white shadow-lg border border-white/20"
+                      : "text-neutral-400 hover:text-white hover:bg-white/5"
                   }`}
                 >
                   All
                 </button>
                 <button
                   onClick={() => setContentFilter("claims")}
-                  className={`px-2.5 md:px-4 py-1 md:py-1.5 rounded-md font-medium text-xs md:text-sm transition-all ${
+                  className={`px-3 md:px-5 py-1.5 md:py-2 rounded-md font-bold text-xs md:text-sm transition-all ${
                     contentFilter === "claims"
-                      ? "bg-purple-500/20 text-purple-300 shadow-sm"
-                      : "text-neutral-400 hover:text-purple-300"
+                      ? "bg-purple-500/30 text-purple-200 shadow-lg border border-purple-400/40"
+                      : "text-neutral-400 hover:text-purple-300 hover:bg-purple-500/10"
                   }`}
                 >
                   Claims
                 </button>
                 <button
                   onClick={() => setContentFilter("osint")}
-                  className={`px-2.5 md:px-4 py-1 md:py-1.5 rounded-md font-medium text-xs md:text-sm transition-all ${
+                  className={`px-3 md:px-5 py-1.5 md:py-2 rounded-md font-bold text-xs md:text-sm transition-all ${
                     contentFilter === "osint"
-                      ? "bg-red-500/20 text-red-300 shadow-sm"
-                      : "text-neutral-400 hover:text-red-300"
+                      ? "bg-red-500/30 text-red-200 shadow-lg border border-red-400/40"
+                      : "text-neutral-400 hover:text-red-300 hover:bg-red-500/10"
                   }`}
                 >
                   Intel
