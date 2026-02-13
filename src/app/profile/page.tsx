@@ -198,6 +198,20 @@ export default function ProfilePage() {
   const hasPoints = (score?.totalPoints || 0) > 0;
   const displayName = pseudonym || defaultHandle || "Anonymous";
 
+  // Calculate real stats from predictions
+  const totalLocked = predictions.length;
+  const resolvedPredictions = predictions.filter(p => p.outcome === 'correct' || p.outcome === 'incorrect');
+  const pendingPredictions = predictions.filter(p => p.outcome === 'pending');
+  const correctResolved = predictions.filter(p => p.outcome === 'correct').length;
+  const incorrectResolved = predictions.filter(p => p.outcome === 'incorrect').length;
+  const totalResolved = resolvedPredictions.length;
+  const accuracyRate = totalResolved > 0 ? Math.round((correctResolved / totalResolved) * 100) : 0;
+
+  // Calculate member since date
+  const memberSince = predictions.length > 0
+    ? new Date(predictions[predictions.length - 1].timestamp)
+    : new Date();
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-[#0A0A0F] via-[#111118] to-[#0A0A0F] text-white relative">
       <UnifiedHeader currentView="other" />
