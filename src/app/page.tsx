@@ -215,7 +215,7 @@ export default function LandingPage() {
               </div>
 
               <h2 className="text-3xl md:text-5xl lg:text-6xl font-extrabold mb-4 bg-gradient-to-r from-[#516aec] via-[#8594FF] to-[#C084FC] bg-clip-text text-transparent" style={{ fontFamily: 'var(--font-montserrat)' }}>
-                Proof of Reputational Observation
+                Proof of Observable Reputation
               </h2>
               <p className="text-base md:text-lg text-white/70 max-w-3xl mx-auto">
                 Every claim you lock passes through Constellation&apos;s Digital Evidence framework — the same tamper-proof infrastructure trusted by the U.S. Department of Defense. Your reputation isn&apos;t just a number. It&apos;s cryptographically proven.

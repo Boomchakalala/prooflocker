@@ -46,14 +46,9 @@ export default function ReputationImpact() {
             </p>
 
             <div className="px-4 py-3 bg-purple-500/10 border border-purple-500/30 rounded-lg">
-              <div className="text-[10px] text-purple-400/60 uppercase tracking-wider mb-2 font-semibold">Your Proof</div>
-              <div className="flex items-center justify-between mb-2">
-                <span className="text-xs md:text-sm text-slate-400">Accuracy</span>
-                <span className="text-lg md:text-xl font-bold text-purple-400">85%</span>
-              </div>
-              <div className="flex items-center justify-between text-xs text-slate-500">
-                <span>23 correct / 27 total</span>
-                <span className="text-purple-400">Verified on-chain</span>
+              <div className="text-[10px] text-purple-400/60 uppercase tracking-wider mb-2 font-semibold">On-Chain Proof</div>
+              <div className="text-xs text-slate-400 leading-relaxed">
+                Every prediction is cryptographically signed with a timestamp. Your track record is immutable and publicly verifiable on the blockchain.
               </div>
             </div>
           </div>
