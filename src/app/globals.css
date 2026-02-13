@@ -307,7 +307,7 @@ body {
   width: 4px;
   height: 4px;
   border-radius: 50%;
-  animation: particleFloat 8s ease-in-out infinite;
+  opacity: 0.1;
 }
 
 .dag-particle::after {

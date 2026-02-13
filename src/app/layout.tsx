@@ -5,26 +5,27 @@ import "./globals.css";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { ToastProvider } from "@/contexts/ToastContext";
 import AnalyticsTracker from "@/components/AnalyticsTracker";
-import AuthDebugPanel from "@/components/AuthDebugPanel";
-import EnvIndicator from "@/components/EnvIndicator";
 import CookieConsent from "@/components/CookieConsent";
 import { getSiteUrl, getAbsoluteUrl } from "@/lib/config";
 
 const interTight = Inter_Tight({
   variable: "--font-inter",
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700", "800"],
+  weight: ["400", "500", "600", "700"],
+  display: "swap",
 });
 
 const montserrat = Montserrat({
   variable: "--font-montserrat",
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700", "800", "900"],
+  weight: ["600", "700", "800"],
+  display: "swap",
 });
 
 const jetbrainsMono = JetBrains_Mono({
   variable: "--font-mono",
   subsets: ["latin"],
+  display: "swap",
 });
 
 const siteUrl = getSiteUrl();
