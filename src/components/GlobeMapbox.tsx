@@ -289,8 +289,12 @@ export default function GlobeMapbox({ claims, osint, mapMode = 'both', viewMode 
         const p = e.features[0].properties as any;
         const coords = (e.features[0].geometry as any).coordinates.slice();
         while (Math.abs(e.lngLat.lng - coords[0]) > 180) coords[0] += e.lngLat.lng > coords[0] ? 360 : -360;
-        const sc = p.status === 'verified' ? '#8b5cf6' : p.status === 'disputed' ? '#ef4444' : p.status === 'void' ? '#6b7280' : '#f59e0b';
-        const res = p.outcome === 'correct' || p.outcome === 'incorrect';
+
+        // Status/outcome colors: green for correct, red for incorrect, orange for pending
+        const isResolved = p.outcome === 'correct' || p.outcome === 'incorrect';
+        const displayText = isResolved ? p.outcome : p.status;
+        const statusColor = p.outcome === 'correct' ? '#10b981' : p.outcome === 'incorrect' ? '#ef4444' : '#f59e0b';
+
         new mapboxgl.Popup({ offset: 25, maxWidth: '380px', closeButton: true })
           .setLngLat(coords)
           .setHTML(
@@ -299,18 +303,18 @@ export default function GlobeMapbox({ claims, osint, mapMode = 'both', viewMode 
               <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;padding-bottom:10px;border-bottom:1px solid rgba(148,163,184,0.1);">
                 <span style="font-size:12px;font-weight:600;color:#e2e8f0;">${p.submitter}</span>
                 <span style="font-size:11px;padding:3px 8px;background:rgba(139,92,246,0.15);border-radius:10px;color:#a78bfa;font-weight:600;">Rep ${p.rep}</span>
-                <span style="font-size:10px;padding:2px 8px;background:${sc}22;border-radius:8px;color:${sc};font-weight:700;text-transform:uppercase;">${res ? p.outcome : p.status}</span>
+                <span style="font-size:10px;padding:2px 8px;background:${statusColor}22;border-radius:8px;color:${statusColor};font-weight:700;text-transform:uppercase;">${displayText}</span>
               </div>
               <div style="display:flex;justify-content:space-between;font-size:11px;color:#64748b;margin-bottom:8px;">
                 <span>Locked: <b style="color:#f8fafc">${p.lockedDate}</b></span>
                 ${p.category ? '<span style="color:#a78bfa;">#' + p.category + '</span>' : ''}
               </div>
-              <div style="display:flex;align-items:center;gap:10px;padding:8px 10px;background:${sc}11;border-radius:8px;">
+              <div style="display:flex;align-items:center;gap:10px;padding:8px 10px;background:${statusColor}11;border-radius:8px;">
                 <span style="font-size:10px;color:#94a3b8;text-transform:uppercase;">Confidence</span>
                 <div style="flex:1;height:5px;background:rgba(148,163,184,0.15);border-radius:3px;overflow:hidden;">
-                  <div style="height:100%;width:${p.confidence}%;background:${sc};border-radius:3px;"></div>
+                  <div style="height:100%;width:${p.confidence}%;background:${statusColor};border-radius:3px;"></div>
                 </div>
-                <span style="font-size:13px;font-weight:700;color:${sc};">${p.confidence}%</span>
+                <span style="font-size:13px;font-weight:700;color:${statusColor};">${p.confidence}%</span>
               </div>
             </div>`
           )
