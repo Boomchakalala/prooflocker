@@ -189,11 +189,11 @@ export default function GlobeMapbox({ claims, osint, mapMode = 'both', viewMode 
       map.addSource('osint', { type: 'geojson', data: toOsintGeoJSON(osintRef.current), cluster: true, clusterMaxZoom: 8, clusterRadius: 60 });
 
       // ── Claims layers (purple, compact) ────────────────────
-      // Cluster glow
+      // Cluster glow (lightweight)
       map.addLayer({ id: 'claims-clusters-glow', type: 'circle', source: 'claims', filter: ['has', 'point_count'], paint: {
         'circle-color': '#8b5cf6',
         'circle-radius': ['interpolate', ['linear'], ['zoom'], 0, ['step', ['get', 'point_count'], 14, 5, 18, 10, 22], 5, ['step', ['get', 'point_count'], 18, 5, 24, 10, 30]],
-        'circle-blur': 0.7, 'circle-opacity': 0.15
+        'circle-blur': 0.5, 'circle-opacity': 0.12
       }});
       // Cluster core
       map.addLayer({ id: 'claims-clusters-core', type: 'circle', source: 'claims', filter: ['has', 'point_count'], paint: {
@@ -208,23 +208,23 @@ export default function GlobeMapbox({ claims, osint, mapMode = 'both', viewMode 
         'text-size': ['interpolate', ['linear'], ['zoom'], 0, 9, 3, 10, 6, 11],
         'text-allow-overlap': true, 'text-ignore-placement': true
       }, paint: { 'text-color': '#fff' }});
-      // Individual glow
+      // Individual glow (lightweight)
       map.addLayer({ id: 'claims-points-glow', type: 'circle', source: 'claims', filter: ['!', ['has', 'point_count']], paint: {
         'circle-color': '#8b5cf6',
-        'circle-radius': ['interpolate', ['linear'], ['zoom'], 0, 6, 4, 8, 8, 10], 'circle-blur': 0.6, 'circle-opacity': 0.18
+        'circle-radius': ['interpolate', ['linear'], ['zoom'], 0, 5, 4, 7, 8, 9], 'circle-blur': 0.4, 'circle-opacity': 0.15
       }});
       // Individual core — all purple
       map.addLayer({ id: 'claims-points-core', type: 'circle', source: 'claims', filter: ['!', ['has', 'point_count']], paint: {
         'circle-color': '#7c3aed',
-        'circle-radius': ['interpolate', ['linear'], ['zoom'], 0, 3, 4, 4, 8, 5], 'circle-opacity': 0.95, 'circle-stroke-width': 1.5, 'circle-stroke-color': '#a78bfa', 'circle-stroke-opacity': 0.8
+        'circle-radius': ['interpolate', ['linear'], ['zoom'], 0, 3, 4, 4, 8, 5], 'circle-opacity': 0.95, 'circle-stroke-width': 1, 'circle-stroke-color': '#a78bfa', 'circle-stroke-opacity': 0.7
       }});
 
       // ── OSINT layers (ALL red, compact) ──────────────────────────
-      // Cluster glow
+      // Cluster glow (lightweight)
       map.addLayer({ id: 'osint-clusters-glow', type: 'circle', source: 'osint', filter: ['has', 'point_count'], paint: {
         'circle-color': '#ef4444',
         'circle-radius': ['interpolate', ['linear'], ['zoom'], 0, ['step', ['get', 'point_count'], 14, 5, 18, 10, 22], 5, ['step', ['get', 'point_count'], 18, 5, 24, 10, 30]],
-        'circle-blur': 0.7, 'circle-opacity': 0.15
+        'circle-blur': 0.5, 'circle-opacity': 0.12
       }});
       // Cluster core
       map.addLayer({ id: 'osint-clusters-core', type: 'circle', source: 'osint', filter: ['has', 'point_count'], paint: {
@@ -239,16 +239,16 @@ export default function GlobeMapbox({ claims, osint, mapMode = 'both', viewMode 
         'text-size': ['interpolate', ['linear'], ['zoom'], 0, 9, 3, 10, 6, 11],
         'text-allow-overlap': true, 'text-ignore-placement': true
       }, paint: { 'text-color': '#fff' }});
-      // Individual glow - ALL RED
+      // Individual glow (lightweight)
       map.addLayer({ id: 'osint-points-glow', type: 'circle', source: 'osint', filter: ['!', ['has', 'point_count']], paint: {
         'circle-color': '#ef4444',
-        'circle-radius': ['interpolate', ['linear'], ['zoom'], 0, 6, 4, 8, 8, 10], 'circle-blur': 0.6, 'circle-opacity': 0.18
+        'circle-radius': ['interpolate', ['linear'], ['zoom'], 0, 5, 4, 7, 8, 9], 'circle-blur': 0.4, 'circle-opacity': 0.15
       }});
       // Individual core - ALL RED
       map.addLayer({ id: 'osint-points-core', type: 'circle', source: 'osint', filter: ['!', ['has', 'point_count']], paint: {
         'circle-color': '#dc2626',
         'circle-radius': ['interpolate', ['linear'], ['zoom'], 0, 3, 4, 4, 8, 5], 'circle-opacity': 0.92,
-        'circle-stroke-width': 1.5, 'circle-stroke-color': '#fca5a5', 'circle-stroke-opacity': 0.8
+        'circle-stroke-width': 1, 'circle-stroke-color': '#fca5a5', 'circle-stroke-opacity': 0.7
       }});
 
       // Heatmap
@@ -342,25 +342,45 @@ export default function GlobeMapbox({ claims, osint, mapMode = 'both', viewMode 
       });
     });
 
-    // Slow rotation
-    map.on('idle', () => {
-      if (map.getZoom() < 2.5 && !map.isMoving()) {
-        map.rotateTo(map.getBearing() + 15, { duration: 120000 });
-      }
-    });
+    // Slow rotation — only when user isn't interacting
+    let userInteracting = false;
+    let rotationTimeout: ReturnType<typeof setTimeout>;
 
-    // Track viewport changes for filtering
+    const startRotation = () => {
+      if (userInteracting || map.getZoom() >= 2.5) return;
+      map.rotateTo(map.getBearing() + 15, { duration: 120000 });
+    };
+
+    map.on('mousedown', () => { userInteracting = true; map.stop(); });
+    map.on('touchstart', () => { userInteracting = true; map.stop(); });
+    map.on('wheel', () => { userInteracting = true; map.stop(); clearTimeout(rotationTimeout); rotationTimeout = setTimeout(() => { userInteracting = false; startRotation(); }, 3000); });
+    map.on('mouseup', () => { clearTimeout(rotationTimeout); rotationTimeout = setTimeout(() => { userInteracting = false; startRotation(); }, 3000); });
+    map.on('touchend', () => { clearTimeout(rotationTimeout); rotationTimeout = setTimeout(() => { userInteracting = false; startRotation(); }, 3000); });
+    map.on('dragend', () => { clearTimeout(rotationTimeout); rotationTimeout = setTimeout(() => { userInteracting = false; startRotation(); }, 3000); });
+
+    // Initial rotation after load
+    rotationTimeout = setTimeout(startRotation, 2000);
+
+    // Track viewport changes for filtering (throttled to avoid re-render lag during scroll)
     if (onViewportChange) {
+      let viewportThrottleTimer: ReturnType<typeof setTimeout> | null = null;
+
       const handleViewportChange = () => {
-        const bounds = map.getBounds();
-        const zoom = map.getZoom();
-        onViewportChange(bounds, zoom);
+        if (viewportThrottleTimer) return;
+        viewportThrottleTimer = setTimeout(() => {
+          viewportThrottleTimer = null;
+          const bounds = map.getBounds();
+          const zoom = map.getZoom();
+          onViewportChange(bounds, zoom);
+        }, 300);
       };
 
       // Call once on load
-      handleViewportChange();
+      const bounds = map.getBounds();
+      const zoom = map.getZoom();
+      onViewportChange(bounds, zoom);
 
-      // Call on every map movement
+      // Call on map movement (throttled)
       map.on('moveend', handleViewportChange);
     }
   }, [findNearbyItems, onViewportChange]);
