@@ -3,11 +3,17 @@ import { getAllPredictions, getPredictionsByUserId, getPredictionsByAnonId } fro
 import { readFileSync } from "fs";
 import { join } from "path";
 import { SEED_PREDICTIONS } from "@/lib/seed-predictions";
+import { createClient } from "@supabase/supabase-js";
 
 // Set maxDuration for Vercel serverless functions (in seconds)
 export const maxDuration = 10; // 10 second timeout
 export const dynamic = 'force-dynamic'; // Disable caching
 export const revalidate = 30; // Cache for 30 seconds
+
+// Admin Supabase client for fetching user stats
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
+const adminSupabase = createClient(supabaseUrl, supabaseServiceKey);
 
 // In-memory cache
 let predictionsCache: {
@@ -16,6 +22,37 @@ let predictionsCache: {
 } | null = null;
 
 const CACHE_TTL = 20000; // 20 seconds
+
+// Calculate reputation score from user stats
+function calculateRepScore(stats: {
+  total_resolved: number;
+  total_correct: number;
+  accuracy_rate: number;
+  evidence_a_count: number;
+  evidence_b_count: number;
+  evidence_c_count: number;
+  evidence_d_count: number;
+}): number {
+  const resolved = stats.total_resolved || 0;
+  const correct = stats.total_correct || 0;
+  if (resolved === 0) return 0;
+  const winRate = correct / resolved;
+  const accuracyScore = Math.round(winRate * 400);
+  const volumeScore = Math.min(Math.round(Math.log2(resolved + 1) * 53), 300);
+  const totalEvidence = (stats.evidence_a_count || 0) + (stats.evidence_b_count || 0) +
+    (stats.evidence_c_count || 0) + (stats.evidence_d_count || 0);
+  let evidenceScore = 0;
+  if (totalEvidence > 0) {
+    const weightedEvidence = (
+      (stats.evidence_a_count || 0) * 1.0 +
+      (stats.evidence_b_count || 0) * 0.75 +
+      (stats.evidence_c_count || 0) * 0.4 +
+      (stats.evidence_d_count || 0) * 0.1
+    ) / totalEvidence;
+    evidenceScore = Math.round(weightedEvidence * 300);
+  }
+  return Math.min(accuracyScore + volumeScore + evidenceScore, 1000);
+}
 
 export async function GET(request: NextRequest) {
   const startTime = Date.now();
@@ -67,6 +104,31 @@ export async function GET(request: NextRequest) {
     const elapsed = Date.now() - startTime;
     console.log(`[Predictions API] Query completed in ${elapsed}ms, returned ${predictions?.length || 0} predictions`);
 
+    // Batch-fetch reputation scores for all users
+    const userIds = [...new Set((predictions || []).map((p: any) => p.userId).filter(Boolean))];
+    const userRepMap = new Map<string, number>();
+
+    if (userIds.length > 0) {
+      const { data: userStats } = await adminSupabase
+        .from('user_stats')
+        .select('user_id, total_resolved, total_correct, accuracy_rate, evidence_a_count, evidence_b_count, evidence_c_count, evidence_d_count')
+        .in('user_id', userIds);
+
+      if (userStats) {
+        for (const stats of userStats) {
+          userRepMap.set(stats.user_id, calculateRepScore(stats));
+        }
+      }
+    }
+
+    // Add reputation to each prediction
+    if (predictions) {
+      predictions = predictions.map((p: any) => ({
+        ...p,
+        rep: p.userId ? (userRepMap.get(p.userId) ?? 0) : 0,
+      }));
+    }
+
     // Add seed predictions only for public feed (no user filters)
     if (!userId && !anonId && predictions) {
       const seedPredictionsAsRecords = SEED_PREDICTIONS.map(seed => ({
@@ -107,9 +169,19 @@ export async function GET(request: NextRequest) {
         geotag_lng: seed.lng,
         lockEvidence: seed.lockEvidence,
         isSeedData: true,
+        rep: 350, // Default rep for seed data
       }));
 
       predictions = [...seedPredictionsAsRecords, ...predictions];
+    }
+
+    // Sort by createdAt/timestamp descending (newest first)
+    if (predictions) {
+      predictions.sort((a: any, b: any) => {
+        const aTime = new Date(a.createdAt || a.timestamp).getTime();
+        const bTime = new Date(b.createdAt || b.timestamp).getTime();
+        return bTime - aTime; // Descending order (newest first)
+      });
     }
 
     const responseData = {
