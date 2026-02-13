@@ -129,6 +129,38 @@ export default function AuthModal({ onClose, onSuccess, defaultMode = "signup" }
     );
   }
 
+  if (resetSent) {
+    return (
+      <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-[500] p-4">
+        <div className="bg-slate-900/95 backdrop-blur-xl border border-emerald-500/30 rounded-2xl p-8 w-full max-w-md shadow-2xl">
+          <div className="text-center">
+            <div className="w-16 h-16 bg-emerald-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
+              <svg className="w-8 h-8 text-emerald-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+              </svg>
+            </div>
+            <h3 className="text-2xl font-bold text-white mb-3">Reset link sent</h3>
+            <p className="text-slate-300 mb-6">
+              We sent a password reset link to <strong className="text-purple-400">{email}</strong>.
+              Check your inbox and click the link to set a new password.
+            </p>
+            <p className="text-slate-500 text-xs mb-6">Don't see it? Check your spam folder.</p>
+            <button
+              onClick={() => {
+                setResetSent(false);
+                setMode("signin");
+                setError("");
+              }}
+              className="w-full py-3 bg-slate-800 hover:bg-slate-700 text-white font-semibold rounded-lg transition-all"
+            >
+              Back to sign in
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-[500] p-4">
       <div className="bg-slate-900/95 backdrop-blur-xl border border-slate-700/50 rounded-2xl p-8 w-full max-w-md shadow-2xl">
