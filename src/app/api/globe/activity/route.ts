@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { supabase } from '@/lib/supabase';
 import { createClient } from '@supabase/supabase-js';
+import { SEED_PREDICTIONS } from '@/lib/seed-predictions';
 
 export const dynamic = 'force-dynamic';
 export const maxDuration = 10;
