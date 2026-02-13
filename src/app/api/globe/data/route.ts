@@ -136,7 +136,8 @@ export async function GET(request: NextRequest) {
     console.log(`[Globe API] ${geotaggedPredictions.length} predictions have geotags`);
 
     // Fetch reputation scores for all users in one query
-    const anonIds = [...new Set(geotaggedPredictions.map((p: any) => p.anon_id).filter(Boolean))];
+    // Use both anonId (camelCase) and anon_id (snake_case) for compatibility
+    const anonIds = [...new Set(geotaggedPredictions.map((p: any) => p.anonId || p.anon_id).filter(Boolean))];
     const { data: reputationData } = await supabase
       .from('insight_scores')
       .select('anon_id, total_points')
@@ -155,7 +156,7 @@ export async function GET(request: NextRequest) {
       // Format user handle: use pseudonym if available, otherwise "Anon #authorNumber"
       const submitter = prediction.pseudonym
         ? `@${prediction.pseudonym}`
-        : `Anon #${prediction.author_number}`;
+        : `Anon #${prediction.author_number || prediction.authorNumber}`;
 
       // Determine status from outcome - keep outcome names for proper color mapping
       let status: 'verified' | 'disputed' | 'void' | 'pending' = 'pending';
@@ -176,7 +177,9 @@ export async function GET(request: NextRequest) {
       const confidence = Math.floor(60 + Math.random() * 35);
 
       // Get actual reputation score from insight_scores table
-      const rep = reputationMap.get(prediction.anon_id) || 0;
+      // Use both anonId and anon_id for compatibility
+      const anonId = prediction.anonId || prediction.anon_id;
+      const rep = anonId ? (reputationMap.get(anonId) || 0) : 0;
 
       return {
         id: prediction.id,

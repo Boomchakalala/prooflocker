@@ -105,6 +105,7 @@ export async function GET(request: NextRequest) {
     console.log(`[Predictions API] Query completed in ${elapsed}ms, returned ${predictions?.length || 0} predictions`);
 
     // Batch-fetch reputation scores from insight_scores table (correct source)
+    // Use both anonId (camelCase) and anon_id (snake_case) for compatibility
     const anonIds = [...new Set((predictions || []).map((p: any) => p.anonId || p.anon_id).filter(Boolean))];
     const userReputationMap = new Map<string, { totalPoints: number; tier: number }>();
 
