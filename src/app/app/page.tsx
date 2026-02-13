@@ -14,7 +14,7 @@ import { getReputationTier } from "@/lib/reputation-scoring";
 import { formatRelativeTime } from "@/lib/utils";
 
 type ContentFilter = "all" | "osint" | "claims";
-type QuickFilter = "all" | "pending" | "resolved" | "crypto" | "politics" | "markets" | "tech" | "sports" | "culture" | "military" | "breaking" | "science" | "osint-cat" | "personal" | "other" | "my-claims";
+type QuickFilter = "all" | "pending" | "resolved" | "crypto" | "politics" | "markets" | "tech" | "sports" | "culture" | "military" | "science" | "osint-cat" | "personal" | "other" | "my-claims";
 
 export default function AppFeedPage() {
   const { user } = useAuth();
@@ -164,7 +164,6 @@ export default function AppFeedPage() {
     if (quickFilter === "sports" && !o.tags?.some((t: string) => t.toLowerCase() === "sports")) return false;
     if (quickFilter === "culture" && !o.tags?.some((t: string) => t.toLowerCase() === "culture")) return false;
     if (quickFilter === "military" && !o.tags?.some((t: string) => t.toLowerCase() === "military")) return false;
-    if (quickFilter === "breaking" && !o.tags?.some((t: string) => t.toLowerCase() === "breaking")) return false;
     if (quickFilter === "science" && !o.tags?.some((t: string) => t.toLowerCase() === "science")) return false;
 
     // Search filter
@@ -395,7 +394,6 @@ export default function AppFeedPage() {
                   { id: 'military', label: 'War' },
                   { id: 'politics', label: 'Politics' },
                   { id: 'tech', label: 'Tech' },
-                  { id: 'breaking', label: 'Breaking' },
                   { id: 'science', label: 'Science' },
                   { id: 'sports', label: 'Sports' },
                   { id: 'culture', label: 'Culture' },
