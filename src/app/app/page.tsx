@@ -503,9 +503,9 @@ export default function AppFeedPage() {
                               })()}
                             </div>
                             <div className="flex items-center gap-2">
-                              {isResolved && evidenceGradeInfo && (
-                                <span className={`text-[9px] font-bold px-1.5 py-0.5 rounded ${evidenceGradeInfo.bgColor} ${evidenceGradeInfo.color}`}>
-                                  Grade {evidenceGradeKey?.toUpperCase()}
+                              {isResolved && evidenceGrade && (
+                                <span className={`text-[9px] font-bold px-1.5 py-0.5 rounded ${evidenceGrade.bgColor} ${evidenceGrade.textColor}`}>
+                                  {evidenceGrade.grade}
                                 </span>
                               )}
                               <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
