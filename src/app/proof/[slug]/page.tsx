@@ -11,6 +11,7 @@ import CopyButton from "@/components/CopyButton";
 import EvidenceGradeBadge from "@/components/EvidenceGradeBadge";
 import EvidenceList from "@/components/EvidenceList";
 import ProofResolveActions from "@/components/ProofResolveActions";
+import { SEED_PREDICTIONS } from "@/lib/seed-predictions";
 
 // Cache the prediction fetch to avoid duplicate queries
 const getPredictionBySlug = cache(_getPredictionBySlug);
