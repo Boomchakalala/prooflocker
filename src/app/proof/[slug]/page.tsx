@@ -150,12 +150,15 @@ export default async function ProofPage({ params }: Props) {
     );
   }
 
+  // For seed predictions, get additional evidence data
+  const seedPrediction = isSeedData ? SEED_PREDICTIONS.find(sp => sp.id === slug) : null;
+
   const lockedDate = new Date(prediction.timestamp);
   const isResolved = prediction.outcome === "correct" || prediction.outcome === "incorrect";
-  const explorerUrl = prediction.deReference
+  const explorerUrl = prediction.deReference && !isSeedData
     ? getDigitalEvidenceFingerprintUrl(prediction.deReference)
     : null;
-  const resolutionExplorerUrl = prediction.resolutionDeReference
+  const resolutionExplorerUrl = prediction.resolutionDeReference && !isSeedData
     ? getDigitalEvidenceFingerprintUrl(prediction.resolutionDeReference)
     : null;
 
@@ -542,13 +545,57 @@ export default async function ProofPage({ params }: Props) {
 
                 <div className="border-b border-slate-700/30 mb-6" />
 
-                <EvidenceList
-                  predictionId={prediction.id}
-                  evidenceSummary={prediction.evidenceSummary}
-                  resolutionFingerprint={prediction.resolutionFingerprint}
-                  legacyResolutionUrl={prediction.resolutionUrl}
-                  legacyResolutionNote={prediction.resolutionNote}
-                />
+                {isSeedData && seedPrediction ? (
+                  <div className="space-y-4">
+                    <div className="bg-slate-900/50 rounded-lg p-4 border border-slate-700/30">
+                      <div className="flex items-center gap-2 mb-3">
+                        <svg className="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                        </svg>
+                        <div className="text-xs font-semibold text-blue-400 uppercase tracking-wider">Lock Evidence</div>
+                      </div>
+                      <p className="text-sm text-white/90 leading-relaxed">
+                        {seedPrediction.lockEvidence}
+                      </p>
+                    </div>
+
+                    {seedPrediction.resolvedEvidence && (
+                      <div className="bg-slate-900/50 rounded-lg p-4 border border-slate-700/30">
+                        <div className="flex items-center gap-2 mb-3">
+                          <svg className="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                          </svg>
+                          <div className="text-xs font-semibold text-emerald-400 uppercase tracking-wider">Resolution Evidence</div>
+                        </div>
+                        <p className="text-sm text-white/90 leading-relaxed">
+                          {seedPrediction.resolvedEvidence}
+                        </p>
+                      </div>
+                    )}
+
+                    {seedPrediction.resolutionNote && (
+                      <div className="bg-purple-500/5 rounded-lg p-4 border border-purple-500/20">
+                        <div className="flex items-center gap-2 mb-2">
+                          <svg className="w-4 h-4 text-purple-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z" />
+                          </svg>
+                          <div className="text-xs font-semibold text-purple-400 uppercase tracking-wider">Note</div>
+                        </div>
+                        <p className="text-sm text-white/80 italic">
+                          {seedPrediction.resolutionNote}
+                        </p>
+                      </div>
+                    )}
+                  </div>
+                ) : (
+                  <EvidenceList
+                    predictionId={prediction.id}
+                    evidenceSummary={prediction.evidenceSummary}
+                    resolutionFingerprint={prediction.resolutionFingerprint}
+                    legacyResolutionUrl={prediction.resolutionUrl}
+                    legacyResolutionNote={prediction.resolutionNote}
+                  />
+                )}
               </div>
             </div>
           )}
