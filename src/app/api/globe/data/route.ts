@@ -157,16 +157,16 @@ export async function GET(request: NextRequest) {
         ? `@${prediction.pseudonym}`
         : `Anon #${prediction.author_number}`;
 
-      // Determine status from outcome
+      // Determine status from outcome - keep outcome names for proper color mapping
       let status: 'verified' | 'disputed' | 'void' | 'pending' = 'pending';
       let outcome: string | null = null;
 
       if (prediction.outcome === 'correct') {
         status = 'verified';
-        outcome = 'true';
+        outcome = 'correct';
       } else if (prediction.outcome === 'incorrect') {
         status = 'disputed';
-        outcome = 'false';
+        outcome = 'incorrect';
       } else if (prediction.outcome === 'invalid') {
         status = 'void';
         outcome = 'void';
