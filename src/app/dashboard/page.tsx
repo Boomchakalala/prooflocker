@@ -95,7 +95,7 @@ export default function DashboardPage() {
         }
 
         const data = await response.json();
-        setPredictions(data || []);
+        setPredictions(data.predictions || []);
       } catch (err) {
         console.error("Error fetching predictions:", err);
         setPredictions([]);
