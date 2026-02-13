@@ -20,7 +20,7 @@ export default function HowScoringWorksPage() {
         <div className="mb-12">
           <h1 className="text-4xl font-bold text-white mb-4">How Reputation Works</h1>
           <p className="text-lg text-neutral-300 leading-relaxed">
-            Your reputation is calculated from accuracy, evidence quality, and consistency. Only claims are scored — intel signals are a monitoring layer, not a scoring input. This is proof of reputational observation: math-backed reputation from outcomes, not opinions.
+            Your reputation is calculated from accuracy, evidence quality, and consistency. Only claims are scored — intel signals are a monitoring layer, not a scoring input. This is proof of observable reputation: math-backed credibility from outcomes, not opinions.
           </p>
         </div>
 
@@ -41,7 +41,7 @@ export default function HowScoringWorksPage() {
               </div>
             </div>
             <p className="text-neutral-300 mb-4">
-              Weighted calculation of accuracy, evidence quality, and activity. Recalculated after each resolution, contest, or overdue event.
+              Weighted calculation of accuracy, evidence quality, and activity. Recalculated after each resolution or contest outcome.
             </p>
             <div className="space-y-2 text-sm">
               <div className="flex justify-between">
@@ -432,30 +432,6 @@ export default function HowScoringWorksPage() {
                     </div>
                   </div>
                   <p className="text-neutral-400 text-xs">Strong evidence quality helps maintain high reputation despite incorrect outcome.</p>
-                </div>
-              </div>
-
-              {/* Example 3 - Overdue impact */}
-              <div className="bg-white/5 rounded-lg p-6 border border-white/10">
-                <h3 className="text-lg font-bold text-white mb-4">Example: Impact of Overdue Claims</h3>
-                <div className="space-y-2 text-sm">
-                  <p className="text-neutral-300">User has 3 overdue claims this month</p>
-                  <p className="text-neutral-300">Previous reputation: 650 (Master tier)</p>
-                  <div className="border-t border-white/10 my-3 pt-3">
-                    <div className="flex justify-between mb-2">
-                      <span className="text-neutral-400">Base calculation:</span>
-                      <span className="text-white"><strong>650</strong></span>
-                    </div>
-                    <div className="flex justify-between mb-2">
-                      <span className="text-neutral-400">Overdue penalty:</span>
-                      <span className="text-red-400">-15 activity (3 claims × -5)</span>
-                    </div>
-                    <div className="border-t border-white/10 my-2 pt-2 flex justify-between text-lg font-bold">
-                      <span className="text-white">New Reputation:</span>
-                      <span className="text-blue-400">635</span>
-                    </div>
-                  </div>
-                  <p className="text-neutral-400 text-xs">Still maintains Master tier (650-799) but score is reduced by activity penalties.</p>
                 </div>
               </div>
 
