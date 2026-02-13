@@ -11,6 +11,9 @@ export default function LandingPage() {
       {/* Header */}
       <UnifiedHeader currentView="other" />
 
+      {/* Spacer for fixed header */}
+      <div className="h-16" />
+
       {/* Main content */}
       <main className="space-y-0 relative">
         {/* Hero Section */}
