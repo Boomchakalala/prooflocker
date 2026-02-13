@@ -357,6 +357,33 @@ function LockPageContent() {
                 />
               </div>
 
+              {/* Location Toggle */}
+              <div className="mb-6">
+                <div className="flex items-center justify-between mb-3">
+                  <h3 className="text-sm font-medium text-white">Location</h3>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setUseManualLocation(!useManualLocation);
+                      if (useManualLocation) setManualLocation(null);
+                    }}
+                    className="text-xs text-[#2E5CFF] hover:text-blue-400 transition-colors font-medium"
+                  >
+                    {useManualLocation ? "Use auto-detection" : "Set location manually"}
+                  </button>
+                </div>
+                {useManualLocation ? (
+                  <LocationPicker
+                    onLocationSelect={(loc) => setManualLocation(loc)}
+                    selectedLocation={manualLocation}
+                  />
+                ) : (
+                  <p className="text-xs text-neutral-500">
+                    Location will be auto-detected when you lock (browser permission required).
+                  </p>
+                )}
+              </div>
+
               {/* Primary CTA */}
               <button
                 onClick={handleLock}
@@ -448,6 +475,26 @@ function LockPageContent() {
                 <p>When you resolve a claim, the resolution is also recorded on-chain with a separate fingerprint.</p>
               </div>
             </div>
+
+            {/* Follow on X */}
+            <a
+              href="https://twitter.com/prooflocker"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="glass border border-white/10 rounded-xl p-5 block hover:border-white/20 transition-all group"
+            >
+              <div className="flex items-center gap-3">
+                <div className="flex items-center justify-center w-9 h-9 rounded-lg bg-white/5 group-hover:bg-white/10 transition-colors">
+                  <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+                  </svg>
+                </div>
+                <div>
+                  <p className="text-white font-semibold text-sm">Follow @ProofLocker</p>
+                  <p className="text-xs text-slate-400">Updates, resolved claims & more</p>
+                </div>
+              </div>
+            </a>
           </div>
         </div>
           </>
