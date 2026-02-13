@@ -75,16 +75,16 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     title,
     description,
     openGraph: {
-      title: "ProofLocker - Immutable Claim Proof",
-      description: `Locked ${dateStr} • Proof ${shortProofId}`,
+      title: ogTitle,
+      description,
       url: pageUrl,
       type: "website",
       siteName: "ProofLocker",
     },
     twitter: {
       card: "summary_large_image",
-      title: "ProofLocker - Immutable Claim Proof",
-      description: `Locked ${dateStr} • Proof ${shortProofId}`,
+      title: ogTitle,
+      description,
     },
   };
 }
@@ -623,6 +623,16 @@ export default async function ProofPage({ params }: Props) {
 
         {/* Resolve Actions for Owner (pending claims only) */}
         {!isSeedData && <ProofResolveActions prediction={prediction} />}
+
+        {/* Share on X */}
+        <div className="mt-8 flex justify-center">
+          <ShareOnXButton
+            text={prediction.text}
+            outcome={prediction.outcome || null}
+            slug={slug}
+            timestamp={prediction.timestamp}
+          />
+        </div>
 
         {/* Footer */}
         <div className="mt-12 text-center">
