@@ -62,14 +62,14 @@ export default function LandingHero() {
         {/* Subheadline */}
         <div className="mb-4 animate-fade-in-up max-w-[620px] mx-auto px-4" style={{ animationDelay: '0.1s' }}>
           <p className="text-base md:text-xl font-medium text-[#F8F9FA]/85 leading-[1.45]" style={{ fontFamily: 'var(--font-inter)' }}>
-            Lock claims on-chain. Resolve with receipts. Your track record is permanent, evidence-graded, and cryptographically provable.
+            Have a conviction, lock a claim on-chain, resolve with evidence and stack reputation.
           </p>
         </div>
 
-        {/* Supporting line - Proof of Reputational Observation */}
+        {/* Supporting line - Proof of Observable Reputation */}
         <div className="mb-7 animate-fade-in-up" style={{ animationDelay: '0.15s' }}>
           <p className="text-sm md:text-base font-semibold text-purple-400/90 tracking-wide">
-            Proof of Reputational Observation — powered by Constellation DAG.
+            Proof of Observable Reputation - Powered by Digital Evidence on Constellation DAG.
           </p>
         </div>
 
