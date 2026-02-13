@@ -461,6 +461,11 @@ export default function AppFeedPage() {
                                   </span>
                                 ) : null;
                               })()}
+                              {claim.id?.startsWith('seed-') && (
+                                <span className="text-[9px] font-bold px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-400 border border-amber-500/30">
+                                  DEMO
+                                </span>
+                              )}
                             </div>
                             <div className="flex items-center gap-2">
                               <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
