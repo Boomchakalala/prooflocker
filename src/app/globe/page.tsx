@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useMemo, useCallback } from 'react';
+import { useState, useEffect, useMemo, useCallback, memo } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import dynamic from 'next/dynamic';
@@ -14,6 +14,23 @@ import LinkOsintModal from '@/components/LinkOsintModal';
 import UnifiedHeader from '@/components/UnifiedHeader';
 import IntelCard from '@/components/IntelCard';
 import BreakingNewsBanner from '@/components/BreakingNewsBanner';
+
+// Isolated timer component - only this re-renders every second, not the entire page
+const LiveTimer = memo(function LiveTimer({ lastUpdated }: { lastUpdated: Date | null }) {
+  const [, setTick] = useState(0);
+  useEffect(() => {
+    const timer = setInterval(() => setTick(t => t + 1), 1000);
+    return () => clearInterval(timer);
+  }, []);
+
+  if (!lastUpdated) return <span>Never</span>;
+  const seconds = Math.floor((Date.now() - lastUpdated.getTime()) / 1000);
+  if (seconds < 60) return <span>{seconds}s ago</span>;
+  const minutes = Math.floor(seconds / 60);
+  if (minutes < 60) return <span>{minutes}m ago</span>;
+  const hours = Math.floor(minutes / 60);
+  return <span>{hours}h ago</span>;
+});
 
 const GlobeMapbox = dynamic(() => import('@/components/GlobeMapbox'), {
   ssr: false,
@@ -161,29 +178,8 @@ export default function GlobePage() {
     return () => clearInterval(interval);
   }, []);
 
-  // Live timer: Update "Xs ago" display every second
-  const [, setTick] = useState(0);
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setTick(t => t + 1); // Force re-render every second
-    }, 1000);
-
-    return () => clearInterval(timer);
-  }, []);
-
-  // Format "last updated" time
-  const getTimeSinceUpdate = () => {
-    if (!lastUpdated) return 'Never';
-    const seconds = Math.floor((Date.now() - lastUpdated.getTime()) / 1000);
-    if (seconds < 60) return `${seconds}s ago`;
-    const minutes = Math.floor(seconds / 60);
-    if (minutes < 60) return `${minutes}m ago`;
-    const hours = Math.floor(minutes / 60);
-    return `${hours}h ago`;
-  };
-
   // Ticker helper: get top 5 items (3 intel + 2 claims), prioritize breaking news
-  const getTickerItems = () => {
+  const tickerItems = useMemo(() => {
     const items: { type: string; text: string; location: string; time: string; source: 'intel' | 'claim' }[] = [];
 
     // Sort intel by priority: war/conflict/breaking first, then by recency
@@ -228,7 +224,7 @@ export default function GlobePage() {
     });
 
     return items.slice(0, 5);
-  };
+  }, [osint, claims]);
 
   // Freshness helpers for monitoring vibe
   const getMinutesAgo = (dateStr: string) => {
@@ -250,7 +246,7 @@ export default function GlobePage() {
     return 'border-red-500/20';
   };
 
-  const getDisplayItems = () => {
+  const displayItems = useMemo(() => {
     let items: any[] = [];
 
     if (currentTab === 'claims') {
