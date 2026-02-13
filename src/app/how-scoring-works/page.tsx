@@ -152,16 +152,6 @@ export default function HowScoringWorksPage() {
                 <p className="text-neutral-400 text-sm">
                   Rewards consistent engagement. Reaches maximum at 20 resolved claims.
                 </p>
-                <div className="mt-4 space-y-2">
-                  <div className="flex justify-between text-sm">
-                    <span className="text-neutral-400">Overdue penalty:</span>
-                    <span className="text-red-400">-5 per overdue (max -25/month)</span>
-                  </div>
-                  <div className="flex justify-between text-sm">
-                    <span className="text-neutral-400">Auto-archive (2× timeframe):</span>
-                    <span className="text-red-400">-10 activity</span>
-                  </div>
-                </div>
               </div>
 
             </div>
