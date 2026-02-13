@@ -170,12 +170,13 @@ export async function GET(request: NextRequest) {
         id: prediction.id,
         publicSlug: prediction.public_slug,
         claim: prediction.text,
-        category: prediction.category || 'Other', // Use actual category from database
-        lat: location.lat,
-        lng: location.lng,
+        category: prediction.category || 'Other',
+        lat: lat,
+        lng: lng,
+        locationName: prediction.geotag_city || prediction.geotag_country || 'Unknown',
         status,
         submitter,
-        anonId: prediction.anon_id, // Include anon_id for user profile link
+        anonId: prediction.anon_id,
         rep,
         confidence,
         lockedDate: new Date(prediction.created_at).toLocaleDateString('en-US', {
